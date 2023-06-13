@@ -121,15 +121,15 @@ spec:
         MAX(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -144,16 +144,16 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         (SELECT
-            MAX(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            MAX(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
         ) AS expected_value,
-        MAX(analyzed_table."target_column") AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        MAX(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -223,6 +223,40 @@ spec:
         MAX(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            MAX(referenced_table."customer_id")
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        MAX(analyzed_table."target_column") AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -256,40 +290,6 @@ spec:
         ) AS expected_value,
         MAX(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-       {{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        (SELECT
-            MAX(referenced_table.`customer_id`)
-        FROM `dim_customer` AS referenced_table
-        ) AS expected_value,
-        MAX(analyzed_table.`target_column`) AS actual_value
-    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -375,15 +375,15 @@ spec:
             MAX(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
         {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+           {{- lib.quote_identifier(referenced_table) -}}
         {%- else -%}
            {{ referenced_table }}
         {%- endif -%}
@@ -398,15 +398,15 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             (SELECT
-                MAX(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                MAX(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
             ) AS expected_value,
-            MAX(analyzed_table."target_column") AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            MAX(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -474,6 +474,39 @@ spec:
             MAX(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                MAX(referenced_table."customer_id")
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            MAX(analyzed_table."target_column") AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -506,39 +539,6 @@ spec:
             ) AS expected_value,
             MAX(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-           {{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            (SELECT
-                MAX(referenced_table.`customer_id`)
-            FROM `dim_customer` AS referenced_table
-            ) AS expected_value,
-            MAX(analyzed_table.`target_column`) AS actual_value
-        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -666,15 +666,15 @@ spec:
         MAX(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -689,16 +689,16 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         (SELECT
-            MAX(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            MAX(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
         ) AS expected_value,
-        MAX(analyzed_table."target_column") AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        MAX(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -768,6 +768,40 @@ spec:
         MAX(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            MAX(referenced_table."customer_id")
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        MAX(analyzed_table."target_column") AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -801,40 +835,6 @@ spec:
         ) AS expected_value,
         MAX(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-       {{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        (SELECT
-            MAX(referenced_table.`customer_id`)
-        FROM `dim_customer` AS referenced_table
-        ) AS expected_value,
-        MAX(analyzed_table.`target_column`) AS actual_value
-    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -921,15 +921,15 @@ spec:
             MAX(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
         {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+           {{- lib.quote_identifier(referenced_table) -}}
         {%- else -%}
            {{ referenced_table }}
         {%- endif -%}
@@ -944,15 +944,15 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             (SELECT
-                MAX(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                MAX(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
             ) AS expected_value,
-            MAX(analyzed_table."target_column") AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            MAX(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -1020,6 +1020,39 @@ spec:
             MAX(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                MAX(referenced_table."customer_id")
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            MAX(analyzed_table."target_column") AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -1052,39 +1085,6 @@ spec:
             ) AS expected_value,
             MAX(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-           {{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            (SELECT
-                MAX(referenced_table.`customer_id`)
-            FROM `dim_customer` AS referenced_table
-            ) AS expected_value,
-            MAX(analyzed_table.`target_column`) AS actual_value
-        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -1212,15 +1212,15 @@ spec:
         MAX(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -1235,16 +1235,16 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         (SELECT
-            MAX(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            MAX(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
         ) AS expected_value,
-        MAX(analyzed_table."target_column") AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        MAX(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -1314,6 +1314,40 @@ spec:
         MAX(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            MAX(referenced_table."customer_id")
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        MAX(analyzed_table."target_column") AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -1347,40 +1381,6 @@ spec:
         ) AS expected_value,
         MAX(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-       {{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        (SELECT
-            MAX(referenced_table.`customer_id`)
-        FROM `dim_customer` AS referenced_table
-        ) AS expected_value,
-        MAX(analyzed_table.`target_column`) AS actual_value
-    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1467,15 +1467,15 @@ spec:
             MAX(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
         {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+           {{- lib.quote_identifier(referenced_table) -}}
         {%- else -%}
            {{ referenced_table }}
         {%- endif -%}
@@ -1490,15 +1490,15 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             (SELECT
-                MAX(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                MAX(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
             ) AS expected_value,
-            MAX(analyzed_table."target_column") AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            MAX(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -1566,6 +1566,39 @@ spec:
             MAX(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                MAX(referenced_table."customer_id")
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            MAX(analyzed_table."target_column") AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -1598,39 +1631,6 @@ spec:
             ) AS expected_value,
             MAX(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-           {{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            (SELECT
-                MAX(referenced_table.`customer_id`)
-            FROM `dim_customer` AS referenced_table
-            ) AS expected_value,
-            MAX(analyzed_table.`target_column`) AS actual_value
-        FROM `<target_table>` AS analyzed_table
         ```
     
 

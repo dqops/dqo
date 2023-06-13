@@ -169,8 +169,9 @@ public class SchemasController {
         filters.setEnabled(checkEnabled.orElse(null));
 
         List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModel.size() != 1) {
-            LOG.warn("Unexpected result size in getSchemaProfilingChecksUI: " + uiAllChecksModel.size());
+
+        if (uiAllChecksModel.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new UIAllChecksModel()), HttpStatus.OK); // 200
         }
 
         return new ResponseEntity<>(Mono.just(uiAllChecksModel.get(0)), HttpStatus.OK); // 200
@@ -242,8 +243,9 @@ public class SchemasController {
         filters.setEnabled(checkEnabled.orElse(null));
 
         List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModel.size() != 1) {
-            LOG.warn("Unexpected result size in getSchemaRecurringChecksUI: " + uiAllChecksModel.size());
+
+        if (uiAllChecksModel.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new UIAllChecksModel()), HttpStatus.OK); // 200
         }
 
         return new ResponseEntity<>(Mono.just(uiAllChecksModel.get(0)), HttpStatus.OK); // 200
@@ -315,8 +317,9 @@ public class SchemasController {
         filters.setEnabled(checkEnabled.orElse(null));
 
         List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModel.size() != 1) {
-            LOG.warn("Unexpected result size in getSchemaPartitionedChecksUI: " + uiAllChecksModel.size());
+
+        if (uiAllChecksModel.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new UIAllChecksModel()), HttpStatus.OK); // 200
         }
 
         return new ResponseEntity<>(Mono.just(uiAllChecksModel.get(0)), HttpStatus.OK); // 200

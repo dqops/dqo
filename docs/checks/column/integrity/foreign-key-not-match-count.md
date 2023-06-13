@@ -137,56 +137,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_foreign_table(foreign_table) -%}
-    {%- if foreign_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-    {%- else -%}
-       {{ foreign_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-    ON analyzed_table."target_column" = foreign_table."customer_id"
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -291,6 +241,56 @@ spec:
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -445,57 +445,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_foreign_table(foreign_table) -%}
-        {%- if foreign_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-        {%- else -%}
-           {{ foreign_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-        ON analyzed_table."target_column" = foreign_table."customer_id"
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -602,6 +551,57 @@ spec:
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -803,56 +803,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_foreign_table(foreign_table) -%}
-    {%- if foreign_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-    {%- else -%}
-       {{ foreign_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-    ON analyzed_table."target_column" = foreign_table."customer_id"
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -957,6 +907,56 @@ spec:
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1112,57 +1112,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_foreign_table(foreign_table) -%}
-        {%- if foreign_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-        {%- else -%}
-           {{ foreign_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-        ON analyzed_table."target_column" = foreign_table."customer_id"
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -1269,6 +1218,57 @@ spec:
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1470,56 +1470,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_foreign_table(foreign_table) -%}
-    {%- if foreign_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-    {%- else -%}
-       {{ foreign_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-    ON analyzed_table."target_column" = foreign_table."customer_id"
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -1624,6 +1574,56 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1779,57 +1779,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_foreign_table(foreign_table) -%}
-        {%- if foreign_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-        {%- else -%}
-           {{ foreign_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-        ON analyzed_table."target_column" = foreign_table."customer_id"
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -1936,6 +1885,57 @@ spec:
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2137,56 +2137,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_foreign_table(foreign_table) -%}
-    {%- if foreign_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-    {%- else -%}
-       {{ foreign_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-    ON analyzed_table."target_column" = foreign_table."customer_id"
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -2291,6 +2241,56 @@ spec:
         CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(analyzed_table."" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2450,57 +2450,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_foreign_table(foreign_table) -%}
-        {%- if foreign_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-        {%- else -%}
-           {{ foreign_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-        ON analyzed_table."target_column" = foreign_table."customer_id"
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -2607,6 +2556,57 @@ spec:
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(analyzed_table."" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2806,56 +2806,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_foreign_table(foreign_table) -%}
-    {%- if foreign_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-    {%- else -%}
-       {{ foreign_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        SUM(
-            CASE
-                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                    THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-    ON analyzed_table."target_column" = foreign_table."customer_id"
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -2960,6 +2910,56 @@ spec:
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+    ON analyzed_table."target_column" = foreign_table."customer_id"
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+    {%- if foreign_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3119,57 +3119,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_foreign_table(foreign_table) -%}
-        {%- if foreign_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-        {%- else -%}
-           {{ foreign_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            SUM(
-                CASE
-                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
-        ON analyzed_table."target_column" = foreign_table."customer_id"
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -3276,6 +3225,57 @@ spec:
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc

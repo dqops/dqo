@@ -133,19 +133,19 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast() -%}
         {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
+        {{ lib.render_target_column('analyzed_table') }}
         {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
@@ -166,22 +166,22 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LOCALTIMESTAMP AS time_period,
+        LOCALTIMESTAMP AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -293,6 +293,58 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -360,58 +412,6 @@ spec:
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        CASE
-            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -514,19 +514,19 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {% macro render_date_format_cast() -%}
             {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ render_target_column('analyzed_table') }}
+            {{ lib.render_target_column('analyzed_table') }}
             {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
@@ -547,23 +547,23 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            LOCALTIMESTAMP AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -677,6 +677,59 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_format_cast() -%}
+            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            {{ render_target_column('analyzed_table') }}
+            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- else -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -748,59 +801,6 @@ spec:
         GROUP BY analyzed_table.[country], analyzed_table.[state]
                 , 
             level_1, level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {% macro render_date_format_cast() -%}
-            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ lib.render_target_column('analyzed_table') }}
-            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- else -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -940,19 +940,19 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast() -%}
         {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
+        {{ lib.render_target_column('analyzed_table') }}
         {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
@@ -973,22 +973,22 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1100,6 +1100,58 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -1167,58 +1219,6 @@ spec:
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        CASE
-            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1322,19 +1322,19 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {% macro render_date_format_cast() -%}
             {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ render_target_column('analyzed_table') }}
+            {{ lib.render_target_column('analyzed_table') }}
             {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
@@ -1355,23 +1355,23 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -1485,6 +1485,59 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_format_cast() -%}
+            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            {{ render_target_column('analyzed_table') }}
+            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- else -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -1556,59 +1609,6 @@ spec:
         GROUP BY analyzed_table.[country], analyzed_table.[state]
                 , 
             level_1, level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {% macro render_date_format_cast() -%}
-            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ lib.render_target_column('analyzed_table') }}
-            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- else -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1748,19 +1748,19 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast() -%}
         {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
+        {{ lib.render_target_column('analyzed_table') }}
         {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1781,22 +1781,22 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1908,6 +1908,58 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -1975,58 +2027,6 @@ spec:
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        CASE
-            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2130,19 +2130,19 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {% macro render_date_format_cast() -%}
             {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ render_target_column('analyzed_table') }}
+            {{ lib.render_target_column('analyzed_table') }}
             {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
@@ -2163,23 +2163,23 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -2293,6 +2293,59 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_format_cast() -%}
+            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            {{ render_target_column('analyzed_table') }}
+            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- else -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -2364,59 +2417,6 @@ spec:
         GROUP BY analyzed_table.[country], analyzed_table.[state]
                 , 
             level_1, level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {% macro render_date_format_cast() -%}
-            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ lib.render_target_column('analyzed_table') }}
-            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- else -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-            CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -2556,19 +2556,19 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast() -%}
         {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
+        {{ lib.render_target_column('analyzed_table') }}
         {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2589,22 +2589,22 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -2716,6 +2716,58 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -2784,58 +2836,6 @@ spec:
         CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     GROUP BY CAST([] AS date), CAST([] AS date)ORDER BY CAST([] AS date)
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        CASE
-            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        analyzed_table.`` AS time_period,
-        CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2939,19 +2939,19 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {% macro render_date_format_cast() -%}
             {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ render_target_column('analyzed_table') }}
+            {{ lib.render_target_column('analyzed_table') }}
             {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
@@ -2972,23 +2972,23 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -3102,6 +3102,59 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_format_cast() -%}
+            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            {{ render_target_column('analyzed_table') }}
+            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- else -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(analyzed_table."" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -3171,59 +3224,6 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)ORDER BY CAST([] AS date)level_1, level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {% macro render_date_format_cast() -%}
-            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ lib.render_target_column('analyzed_table') }}
-            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- else -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            analyzed_table.`` AS time_period,
-            CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -3363,19 +3363,19 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast() -%}
         {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
+        {{ lib.render_target_column('analyzed_table') }}
         {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3396,22 +3396,22 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -3523,6 +3523,58 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -3591,58 +3643,6 @@ spec:
         CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        CASE
-            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-        CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -3746,19 +3746,19 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {% macro render_date_format_cast() -%}
             {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ render_target_column('analyzed_table') }}
+            {{ lib.render_target_column('analyzed_table') }}
             {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
@@ -3779,23 +3779,23 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -3909,6 +3909,59 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_format_cast() -%}
+            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            {{ render_target_column('analyzed_table') }}
+            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- else -%}
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -3978,59 +4031,6 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)level_1, level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {% macro render_date_format_cast() -%}
-            {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            {{ lib.render_target_column('analyzed_table') }}
-            {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- else -%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-            CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

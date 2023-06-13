@@ -213,11 +213,11 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -293,7 +293,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
@@ -317,12 +317,12 @@ spec:
         FROM
         (
             SELECT
-                analyzed_table."target_column" AS top_value,
+                analyzed_table.`target_column` AS top_value,
                 COUNT(*) AS total_values,
-                TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-                TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+                LOCALTIMESTAMP AS time_period,
+                LOCALTIMESTAMP AS time_period_utc
             FROM
-                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
             ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -567,6 +567,124 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX(3) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period
+                ORDER BY top_col_values.total_values) as top_values_rank
+        FROM
+        (
+            SELECT
+                analyzed_table."target_column" AS top_value,
+                COUNT(*) AS total_values,
+                TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+                TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+            FROM
+                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc, top_value
+            ORDER BY time_period, time_period_utc, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= 
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -692,124 +810,6 @@ spec:
     ) AS top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_from_subquery() -%}
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-        FROM
-        (
-            SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-            FROM
-                {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
-            {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= {{ parameters.top }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
-        MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX({{ parameters.expected_values | length }}) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-    {{ render_from_subquery() }}
-    {%- endif -%}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX(3) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period
-                ORDER BY top_col_values.total_values) as top_values_rank
-        FROM
-        (
-            SELECT
-                analyzed_table.`target_column` AS top_value,
-                COUNT(*) AS total_values,
-                LOCALTIMESTAMP AS time_period,
-                CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-            FROM
-                `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc, top_value
-            ORDER BY time_period, time_period_utc, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= 
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -985,11 +985,11 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
             {%- for i in values_list -%}
@@ -1065,7 +1065,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             COUNT(DISTINCT
@@ -1090,14 +1090,14 @@ spec:
             FROM
             (
                 SELECT
-                    analyzed_table."target_column" AS top_value,
+                    analyzed_table.`target_column` AS top_value,
                     COUNT(*) AS total_values,
-                    analyzed_table."country" AS stream_level_1,
-                    analyzed_table."state" AS stream_level_2,
-                    TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-                    TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+                    analyzed_table.`country` AS stream_level_1,
+                    analyzed_table.`state` AS stream_level_2,
+                    LOCALTIMESTAMP AS time_period,
+                    LOCALTIMESTAMP AS time_period_utc
                 FROM
-                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    `<target_table>` AS analyzed_table
                 GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
                 ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -1348,6 +1348,127 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ',' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc,
+            top_values.stream_level_1,
+            top_values.stream_level_2
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM
+            (
+                SELECT
+                    analyzed_table."target_column" AS top_value,
+                    COUNT(*) AS total_values,
+                    analyzed_table."country" AS stream_level_1,
+                    analyzed_table."state" AS stream_level_2,
+                    TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+                    TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+                FROM
+                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
+                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -1474,127 +1595,6 @@ spec:
         ) AS top_values
         WHERE top_values_rank <= 
         GROUP BY time_period, time_period_utc, top_values.stream_level_1, top_values.stream_level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro extract_in_list(values_list) -%}
-            {%- for i in values_list -%}
-                {%- if not loop.last -%}
-                    {{lib.make_text_constant(i)}}{{", "}}
-                {%- else -%}
-                    {{lib.make_text_constant(i)}}
-                {%- endif -%}
-            {%- endfor -%}
-        {%- endmacro -%}
-        
-        {%- macro render_from_subquery() -%}
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-            FROM
-            (
-                SELECT
-                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                    COUNT(*) AS total_values
-                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-                FROM
-                    {{ lib.render_target_table() }} AS analyzed_table
-                {{- lib.render_where_clause(indentation = '        ') }}
-                {{- lib.render_group_by(indentation = '        ') }}, top_value
-                {{- lib.render_order_by(indentation = '        ') }}, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= {{ parameters.top }}
-        {%- endmacro -%}
-        
-        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {{ ',' }}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                        {%- endif -%}
-                    {%- endwith %}
-                {%- endfor -%}
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-            NULL AS actual_value,
-            MAX(0) AS expected_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-            {%- else %}
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX({{ parameters.expected_values | length }}) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc
-            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-        {{ render_from_subquery() }}
-        {%- endif -%}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX(3) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc,
-            top_values.stream_level_1,
-            top_values.stream_level_2
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
-            FROM
-            (
-                SELECT
-                    analyzed_table.`target_column` AS top_value,
-                    COUNT(*) AS total_values,
-                    analyzed_table.`country` AS stream_level_1,
-                    analyzed_table.`state` AS stream_level_2,
-                    LOCALTIMESTAMP AS time_period,
-                    CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-                FROM
-                    `<target_table>` AS analyzed_table
-                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
-                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= 
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1810,11 +1810,11 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -1890,7 +1890,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
@@ -1914,12 +1914,12 @@ spec:
         FROM
         (
             SELECT
-                analyzed_table."target_column" AS top_value,
+                analyzed_table.`target_column` AS top_value,
                 COUNT(*) AS total_values,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM
-                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
             ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -2164,6 +2164,124 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX(3) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period
+                ORDER BY top_col_values.total_values) as top_values_rank
+        FROM
+        (
+            SELECT
+                analyzed_table."target_column" AS top_value,
+                COUNT(*) AS total_values,
+                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+            FROM
+                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc, top_value
+            ORDER BY time_period, time_period_utc, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= 
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -2289,124 +2407,6 @@ spec:
     ) AS top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_from_subquery() -%}
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-        FROM
-        (
-            SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-            FROM
-                {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
-            {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= {{ parameters.top }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
-        MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX({{ parameters.expected_values | length }}) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-    {{ render_from_subquery() }}
-    {%- endif -%}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX(3) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period
-                ORDER BY top_col_values.total_values) as top_values_rank
-        FROM
-        (
-            SELECT
-                analyzed_table.`target_column` AS top_value,
-                COUNT(*) AS total_values,
-                LOCALTIMESTAMP AS time_period,
-                CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-            FROM
-                `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc, top_value
-            ORDER BY time_period, time_period_utc, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= 
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2583,11 +2583,11 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
             {%- for i in values_list -%}
@@ -2663,7 +2663,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             COUNT(DISTINCT
@@ -2688,14 +2688,14 @@ spec:
             FROM
             (
                 SELECT
-                    analyzed_table."target_column" AS top_value,
+                    analyzed_table.`target_column` AS top_value,
                     COUNT(*) AS total_values,
-                    analyzed_table."country" AS stream_level_1,
-                    analyzed_table."state" AS stream_level_2,
-                    CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                    TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                    analyzed_table.`country` AS stream_level_1,
+                    analyzed_table.`state` AS stream_level_2,
+                    DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                 FROM
-                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    `<target_table>` AS analyzed_table
                 GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
                 ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -2946,6 +2946,127 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ',' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc,
+            top_values.stream_level_1,
+            top_values.stream_level_2
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM
+            (
+                SELECT
+                    analyzed_table."target_column" AS top_value,
+                    COUNT(*) AS total_values,
+                    analyzed_table."country" AS stream_level_1,
+                    analyzed_table."state" AS stream_level_2,
+                    CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+                    TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                FROM
+                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
+                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -3072,127 +3193,6 @@ spec:
         ) AS top_values
         WHERE top_values_rank <= 
         GROUP BY time_period, time_period_utc, top_values.stream_level_1, top_values.stream_level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro extract_in_list(values_list) -%}
-            {%- for i in values_list -%}
-                {%- if not loop.last -%}
-                    {{lib.make_text_constant(i)}}{{", "}}
-                {%- else -%}
-                    {{lib.make_text_constant(i)}}
-                {%- endif -%}
-            {%- endfor -%}
-        {%- endmacro -%}
-        
-        {%- macro render_from_subquery() -%}
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-            FROM
-            (
-                SELECT
-                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                    COUNT(*) AS total_values
-                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-                FROM
-                    {{ lib.render_target_table() }} AS analyzed_table
-                {{- lib.render_where_clause(indentation = '        ') }}
-                {{- lib.render_group_by(indentation = '        ') }}, top_value
-                {{- lib.render_order_by(indentation = '        ') }}, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= {{ parameters.top }}
-        {%- endmacro -%}
-        
-        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {{ ',' }}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                        {%- endif -%}
-                    {%- endwith %}
-                {%- endfor -%}
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-            NULL AS actual_value,
-            MAX(0) AS expected_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-            {%- else %}
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX({{ parameters.expected_values | length }}) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc
-            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-        {{ render_from_subquery() }}
-        {%- endif -%}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX(3) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc,
-            top_values.stream_level_1,
-            top_values.stream_level_2
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
-            FROM
-            (
-                SELECT
-                    analyzed_table.`target_column` AS top_value,
-                    COUNT(*) AS total_values,
-                    analyzed_table.`country` AS stream_level_1,
-                    analyzed_table.`state` AS stream_level_2,
-                    LOCALTIMESTAMP AS time_period,
-                    CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-                FROM
-                    `<target_table>` AS analyzed_table
-                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
-                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= 
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -3408,11 +3408,11 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -3488,7 +3488,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
@@ -3512,12 +3512,12 @@ spec:
         FROM
         (
             SELECT
-                analyzed_table."target_column" AS top_value,
+                analyzed_table.`target_column` AS top_value,
                 COUNT(*) AS total_values,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM
-                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
             ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -3762,6 +3762,124 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX(3) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period
+                ORDER BY top_col_values.total_values) as top_values_rank
+        FROM
+        (
+            SELECT
+                analyzed_table."target_column" AS top_value,
+                COUNT(*) AS total_values,
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+            FROM
+                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc, top_value
+            ORDER BY time_period, time_period_utc, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= 
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -3887,124 +4005,6 @@ spec:
     ) AS top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_from_subquery() -%}
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-        FROM
-        (
-            SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-            FROM
-                {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
-            {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= {{ parameters.top }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
-        MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX({{ parameters.expected_values | length }}) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-    {{ render_from_subquery() }}
-    {%- endif -%}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX(3) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period
-                ORDER BY top_col_values.total_values) as top_values_rank
-        FROM
-        (
-            SELECT
-                analyzed_table.`target_column` AS top_value,
-                COUNT(*) AS total_values,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-            FROM
-                `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc, top_value
-            ORDER BY time_period, time_period_utc, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= 
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -4181,11 +4181,11 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
             {%- for i in values_list -%}
@@ -4261,7 +4261,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             COUNT(DISTINCT
@@ -4286,14 +4286,14 @@ spec:
             FROM
             (
                 SELECT
-                    analyzed_table."target_column" AS top_value,
+                    analyzed_table.`target_column` AS top_value,
                     COUNT(*) AS total_values,
-                    analyzed_table."country" AS stream_level_1,
-                    analyzed_table."state" AS stream_level_2,
-                    DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                    TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                    analyzed_table.`country` AS stream_level_1,
+                    analyzed_table.`state` AS stream_level_2,
+                    DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                 FROM
-                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    `<target_table>` AS analyzed_table
                 GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
                 ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -4544,6 +4544,127 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ',' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc,
+            top_values.stream_level_1,
+            top_values.stream_level_2
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM
+            (
+                SELECT
+                    analyzed_table."target_column" AS top_value,
+                    COUNT(*) AS total_values,
+                    analyzed_table."country" AS stream_level_1,
+                    analyzed_table."state" AS stream_level_2,
+                    DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                    TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                FROM
+                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
+                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -4670,127 +4791,6 @@ spec:
         ) AS top_values
         WHERE top_values_rank <= 
         GROUP BY time_period, time_period_utc, top_values.stream_level_1, top_values.stream_level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro extract_in_list(values_list) -%}
-            {%- for i in values_list -%}
-                {%- if not loop.last -%}
-                    {{lib.make_text_constant(i)}}{{", "}}
-                {%- else -%}
-                    {{lib.make_text_constant(i)}}
-                {%- endif -%}
-            {%- endfor -%}
-        {%- endmacro -%}
-        
-        {%- macro render_from_subquery() -%}
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-            FROM
-            (
-                SELECT
-                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                    COUNT(*) AS total_values
-                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-                FROM
-                    {{ lib.render_target_table() }} AS analyzed_table
-                {{- lib.render_where_clause(indentation = '        ') }}
-                {{- lib.render_group_by(indentation = '        ') }}, top_value
-                {{- lib.render_order_by(indentation = '        ') }}, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= {{ parameters.top }}
-        {%- endmacro -%}
-        
-        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {{ ',' }}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                        {%- endif -%}
-                    {%- endwith %}
-                {%- endfor -%}
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-            NULL AS actual_value,
-            MAX(0) AS expected_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-            {%- else %}
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX({{ parameters.expected_values | length }}) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc
-            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-        {{ render_from_subquery() }}
-        {%- endif -%}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX(3) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc,
-            top_values.stream_level_1,
-            top_values.stream_level_2
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
-            FROM
-            (
-                SELECT
-                    analyzed_table.`target_column` AS top_value,
-                    COUNT(*) AS total_values,
-                    analyzed_table.`country` AS stream_level_1,
-                    analyzed_table.`state` AS stream_level_2,
-                    DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                    CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-                FROM
-                    `<target_table>` AS analyzed_table
-                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
-                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= 
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -5006,11 +5006,11 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -5086,7 +5086,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
@@ -5110,12 +5110,12 @@ spec:
         FROM
         (
             SELECT
-                analyzed_table."target_column" AS top_value,
+                analyzed_table.`target_column` AS top_value,
                 COUNT(*) AS total_values,
-                CAST(analyzed_table."" AS date) AS time_period,
-                TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+                DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM
-                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
             ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -5360,6 +5360,124 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX(3) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period
+                ORDER BY top_col_values.total_values) as top_values_rank
+        FROM
+        (
+            SELECT
+                analyzed_table."target_column" AS top_value,
+                COUNT(*) AS total_values,
+                CAST(analyzed_table."" AS date) AS time_period,
+                TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+            FROM
+                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc, top_value
+            ORDER BY time_period, time_period_utc, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= 
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -5485,124 +5603,6 @@ spec:
     ) AS top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_from_subquery() -%}
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-        FROM
-        (
-            SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-            FROM
-                {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
-            {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= {{ parameters.top }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
-        MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX({{ parameters.expected_values | length }}) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-    {{ render_from_subquery() }}
-    {%- endif -%}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX(3) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period
-                ORDER BY top_col_values.total_values) as top_values_rank
-        FROM
-        (
-            SELECT
-                analyzed_table.`target_column` AS top_value,
-                COUNT(*) AS total_values,
-                analyzed_table.`` AS time_period,
-                CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
-            FROM
-                `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc, top_value
-            ORDER BY time_period, time_period_utc, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= 
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -5779,11 +5779,11 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
             {%- for i in values_list -%}
@@ -5859,7 +5859,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             COUNT(DISTINCT
@@ -5884,14 +5884,14 @@ spec:
             FROM
             (
                 SELECT
-                    analyzed_table."target_column" AS top_value,
+                    analyzed_table.`target_column` AS top_value,
                     COUNT(*) AS total_values,
-                    analyzed_table."country" AS stream_level_1,
-                    analyzed_table."state" AS stream_level_2,
-                    CAST(analyzed_table."" AS date) AS time_period,
-                    TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+                    analyzed_table.`country` AS stream_level_1,
+                    analyzed_table.`state` AS stream_level_2,
+                    DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                 FROM
-                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    `<target_table>` AS analyzed_table
                 GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
                 ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -6142,6 +6142,127 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ',' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc,
+            top_values.stream_level_1,
+            top_values.stream_level_2
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM
+            (
+                SELECT
+                    analyzed_table."target_column" AS top_value,
+                    COUNT(*) AS total_values,
+                    analyzed_table."country" AS stream_level_1,
+                    analyzed_table."state" AS stream_level_2,
+                    CAST(analyzed_table."" AS date) AS time_period,
+                    TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+                FROM
+                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
+                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -6268,127 +6389,6 @@ spec:
         ) AS top_values
         WHERE top_values_rank <= 
         GROUP BY time_period, time_period_utc, top_values.stream_level_1, top_values.stream_level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro extract_in_list(values_list) -%}
-            {%- for i in values_list -%}
-                {%- if not loop.last -%}
-                    {{lib.make_text_constant(i)}}{{", "}}
-                {%- else -%}
-                    {{lib.make_text_constant(i)}}
-                {%- endif -%}
-            {%- endfor -%}
-        {%- endmacro -%}
-        
-        {%- macro render_from_subquery() -%}
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-            FROM
-            (
-                SELECT
-                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                    COUNT(*) AS total_values
-                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-                FROM
-                    {{ lib.render_target_table() }} AS analyzed_table
-                {{- lib.render_where_clause(indentation = '        ') }}
-                {{- lib.render_group_by(indentation = '        ') }}, top_value
-                {{- lib.render_order_by(indentation = '        ') }}, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= {{ parameters.top }}
-        {%- endmacro -%}
-        
-        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {{ ',' }}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                        {%- endif -%}
-                    {%- endwith %}
-                {%- endfor -%}
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-            NULL AS actual_value,
-            MAX(0) AS expected_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-            {%- else %}
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX({{ parameters.expected_values | length }}) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc
-            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-        {{ render_from_subquery() }}
-        {%- endif -%}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX(3) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc,
-            top_values.stream_level_1,
-            top_values.stream_level_2
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
-            FROM
-            (
-                SELECT
-                    analyzed_table.`target_column` AS top_value,
-                    COUNT(*) AS total_values,
-                    analyzed_table.`country` AS stream_level_1,
-                    analyzed_table.`state` AS stream_level_2,
-                    analyzed_table.`` AS time_period,
-                    CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
-                FROM
-                    `<target_table>` AS analyzed_table
-                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
-                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= 
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -6604,11 +6604,11 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -6684,7 +6684,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
@@ -6708,12 +6708,12 @@ spec:
         FROM
         (
             SELECT
-                analyzed_table."target_column" AS top_value,
+                analyzed_table.`target_column` AS top_value,
                 COUNT(*) AS total_values,
-                DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+                DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM
-                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
             ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -6958,6 +6958,124 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX(3) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period
+                ORDER BY top_col_values.total_values) as top_values_rank
+        FROM
+        (
+            SELECT
+                analyzed_table."target_column" AS top_value,
+                COUNT(*) AS total_values,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+            FROM
+                "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc, top_value
+            ORDER BY time_period, time_period_utc, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= 
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -7083,124 +7201,6 @@ spec:
     ) AS top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_from_subquery() -%}
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-        FROM
-        (
-            SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-            FROM
-                {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
-            {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= {{ parameters.top }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
-        MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX({{ parameters.expected_values | length }}) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-    {{ render_from_subquery() }}
-    {%- endif -%}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        COUNT(DISTINCT
-            CASE
-                WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                ELSE NULL
-            END
-        ) AS actual_value,
-        MAX(3) AS expected_value,
-        top_values.time_period,
-        top_values.time_period_utc
-    FROM
-    (
-        SELECT
-            top_col_values.top_value as top_value,
-            top_col_values.time_period as time_period,
-            top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period
-                ORDER BY top_col_values.total_values) as top_values_rank
-        FROM
-        (
-            SELECT
-                analyzed_table.`target_column` AS top_value,
-                COUNT(*) AS total_values,
-                DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-                CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-            FROM
-                `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc, top_value
-            ORDER BY time_period, time_period_utc, total_values
-        ) AS top_col_values
-    ) AS top_values
-    WHERE top_values_rank <= 
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -7377,11 +7377,11 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
             {%- for i in values_list -%}
@@ -7457,7 +7457,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             COUNT(DISTINCT
@@ -7482,14 +7482,14 @@ spec:
             FROM
             (
                 SELECT
-                    analyzed_table."target_column" AS top_value,
+                    analyzed_table.`target_column` AS top_value,
                     COUNT(*) AS total_values,
-                    analyzed_table."country" AS stream_level_1,
-                    analyzed_table."state" AS stream_level_2,
-                    DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-                    TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+                    analyzed_table.`country` AS stream_level_1,
+                    analyzed_table.`state` AS stream_level_2,
+                    DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
                 FROM
-                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    `<target_table>` AS analyzed_table
                 GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
                 ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -7740,6 +7740,127 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ',' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc,
+            top_values.stream_level_1,
+            top_values.stream_level_2
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM
+            (
+                SELECT
+                    analyzed_table."target_column" AS top_value,
+                    COUNT(*) AS total_values,
+                    analyzed_table."country" AS stream_level_1,
+                    analyzed_table."state" AS stream_level_2,
+                    DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+                    TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+                FROM
+                    "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
+                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -7866,127 +7987,6 @@ spec:
         ) AS top_values
         WHERE top_values_rank <= 
         GROUP BY time_period, time_period_utc, top_values.stream_level_1, top_values.stream_level_2
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro extract_in_list(values_list) -%}
-            {%- for i in values_list -%}
-                {%- if not loop.last -%}
-                    {{lib.make_text_constant(i)}}{{", "}}
-                {%- else -%}
-                    {{lib.make_text_constant(i)}}
-                {%- endif -%}
-            {%- endfor -%}
-        {%- endmacro -%}
-        
-        {%- macro render_from_subquery() -%}
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
-            FROM
-            (
-                SELECT
-                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
-                    COUNT(*) AS total_values
-                    {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
-                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
-                FROM
-                    {{ lib.render_target_table() }} AS analyzed_table
-                {{- lib.render_where_clause(indentation = '        ') }}
-                {{- lib.render_group_by(indentation = '        ') }}, top_value
-                {{- lib.render_order_by(indentation = '        ') }}, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= {{ parameters.top }}
-        {%- endmacro -%}
-        
-        {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {{ ',' }}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
-                        {%- endif -%}
-                    {%- endwith %}
-                {%- endfor -%}
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-            NULL AS actual_value,
-            MAX(0) AS expected_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-            {%- else %}
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX({{ parameters.expected_values | length }}) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc
-            {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
-        {{ render_from_subquery() }}
-        {%- endif -%}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(DISTINCT
-                CASE
-                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
-                    ELSE NULL
-                END
-            ) AS actual_value,
-            MAX(3) AS expected_value,
-            top_values.time_period,
-            top_values.time_period_utc,
-            top_values.stream_level_1,
-            top_values.stream_level_2
-        FROM
-        (
-            SELECT
-                top_col_values.top_value as top_value,
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-                    ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
-            FROM
-            (
-                SELECT
-                    analyzed_table.`target_column` AS top_value,
-                    COUNT(*) AS total_values,
-                    analyzed_table.`country` AS stream_level_1,
-                    analyzed_table.`state` AS stream_level_2,
-                    DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-                    CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-                FROM
-                    `<target_table>` AS analyzed_table
-                GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_value
-                ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-            ) AS top_col_values
-        ) AS top_values
-        WHERE top_values_rank <= 
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

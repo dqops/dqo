@@ -17,7 +17,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -45,7 +45,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     WHERE sample_table.sample_index <= {{ parameters.limit }}
     ORDER BY sample_index DESC
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -73,7 +73,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     WHERE sample_table.sample_index <= {{ parameters.limit }}
     ORDER BY sample_index DESC
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -101,7 +101,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     WHERE sample_table.sample_index <= {{ parameters.limit }}
     ORDER BY sample_index DESC
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -129,7 +129,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     WHERE sample_table.sample_index <= {{ parameters.limit }}
     ORDER BY sample_index DESC
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -157,7 +157,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     WHERE sample_table.sample_index <= {{ parameters.limit }}
     ORDER BY sample_index DESC
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}

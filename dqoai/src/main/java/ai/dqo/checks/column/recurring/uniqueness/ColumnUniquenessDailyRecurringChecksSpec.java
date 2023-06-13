@@ -16,10 +16,10 @@
 package ai.dqo.checks.column.recurring.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,18 +39,18 @@ import java.util.Objects;
 public class ColumnUniquenessDailyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_unique_count", o -> o.dailyUniqueCount);
-            put("daily_unique_percent", o -> o.dailyUniquePercent);
+            put("daily_distinct_count", o -> o.dailyDistinctCount);
+            put("daily_distinct_percent", o -> o.dailyDistinctPercent);
             put("daily_duplicate_count", o -> o.dailyDuplicateCount);
             put("daily_duplicate_percent", o -> o.dailyDuplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnUniqueCountCheckSpec dailyUniqueCount;
+    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnDistinctCountCheckSpec dailyDistinctCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnUniquePercentCheckSpec dailyUniquePercent;
+    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnDistinctPercentCheckSpec dailyDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDuplicateCountCheckSpec dailyDuplicateCount;
@@ -59,39 +59,39 @@ public class ColumnUniquenessDailyRecurringChecksSpec extends AbstractCheckCateg
     private ColumnDuplicatePercentCheckSpec dailyDuplicatePercent;
 
     /**
-     * Returns a unique values count check specification.
-     * @return Unique values count check specification.
+     * Returns a distinct values count check specification.
+     * @return Distinct values count check specification.
      */
-    public ColumnUniqueCountCheckSpec getDailyUniqueCount() {
-        return dailyUniqueCount;
+    public ColumnDistinctCountCheckSpec getDailyDistinctCount() {
+        return dailyDistinctCount;
     }
 
     /**
-     * Sets a new specification of a unique values count check.
-     * @param dailyUniqueCount Unique values count check specification.
+     * Sets a new specification of a distinct values count check.
+     * @param dailyDistinctCount Distinct values count check specification.
      */
-    public void setDailyUniqueCount(ColumnUniqueCountCheckSpec dailyUniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyUniqueCount, dailyUniqueCount));
-        this.dailyUniqueCount = dailyUniqueCount;
-        propagateHierarchyIdToField(dailyUniqueCount, "daily_unique_count");
+    public void setDailyDistinctCount(ColumnDistinctCountCheckSpec dailyDistinctCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyDistinctCount, dailyDistinctCount));
+        this.dailyDistinctCount = dailyDistinctCount;
+        propagateHierarchyIdToField(dailyDistinctCount, "daily_distinct_count");
     }
 
     /**
-     * Returns a unique values percent check specification.
-     * @return Unique values percent check specification.
+     * Returns a distinct values percent check specification.
+     * @return Distinct values percent check specification.
      */
-    public ColumnUniquePercentCheckSpec getDailyUniquePercent() {
-        return dailyUniquePercent;
+    public ColumnDistinctPercentCheckSpec getDailyDistinctPercent() {
+        return dailyDistinctPercent;
     }
 
     /**
-     * Sets a new specification of a unique values percent check.
-     * @param dailyUniquePercent Unique values count percent specification.
+     * Sets a new specification of a distinct values percent check.
+     * @param dailyDistinctPercent Distinct values count percent specification.
      */
-    public void setDailyUniquePercent(ColumnUniquePercentCheckSpec dailyUniquePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyUniquePercent, dailyUniquePercent));
-        this.dailyUniquePercent = dailyUniquePercent;
-        propagateHierarchyIdToField(dailyUniquePercent, "daily_unique_percent");
+    public void setDailyDistinctPercent(ColumnDistinctPercentCheckSpec dailyDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyDistinctPercent, dailyDistinctPercent));
+        this.dailyDistinctPercent = dailyDistinctPercent;
+        propagateHierarchyIdToField(dailyDistinctPercent, "daily_distinct_percent");
     }
 
     /**

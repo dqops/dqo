@@ -1396,20 +1396,20 @@ Counts the number or percent of duplicate or unique values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[unique_count](./column/uniqueness/unique-count/#unique-count)|profiling|Verifies that the number of unique values in a column does not fall below the minimum accepted count.|
-|[daily_unique_count](./column/uniqueness/unique-count/#daily-unique-count)|recurring|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_unique_count](./column/uniqueness/unique-count/#monthly-unique-count)|recurring|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_unique_count](./column/uniqueness/unique-count/#daily-partition-unique-count)|partitioned|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_unique_count](./column/uniqueness/unique-count/#monthly-partition-unique-count)|partitioned|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[distinct_count](./column/uniqueness/distinct-count/#distinct-count)|profiling|Verifies that the number of distinct values in a column does not fall below the minimum accepted count.|
+|[daily_distinct_count](./column/uniqueness/distinct-count/#daily-distinct-count)|recurring|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_distinct_count](./column/uniqueness/distinct-count/#monthly-distinct-count)|recurring|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_distinct_count](./column/uniqueness/distinct-count/#daily-partition-distinct-count)|partitioned|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_distinct_count](./column/uniqueness/distinct-count/#monthly-partition-distinct-count)|partitioned|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[unique_percent](./column/uniqueness/unique-percent/#unique-percent)|profiling|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent.|
-|[daily_unique_percent](./column/uniqueness/unique-percent/#daily-unique-percent)|recurring|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_unique_percent](./column/uniqueness/unique-percent/#monthly-unique-percent)|recurring|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_unique_percent](./column/uniqueness/unique-percent/#daily-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_unique_percent](./column/uniqueness/unique-percent/#monthly-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[distinct_percent](./column/uniqueness/distinct-percent/#distinct-percent)|profiling|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.|
+|[daily_distinct_percent](./column/uniqueness/distinct-percent/#daily-distinct-percent)|recurring|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_distinct_percent](./column/uniqueness/distinct-percent/#monthly-distinct-percent)|recurring|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_distinct_percent](./column/uniqueness/distinct-percent/#daily-partition-distinct-percent)|partitioned|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_distinct_percent](./column/uniqueness/distinct-percent/#monthly-partition-distinct-percent)|partitioned|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |

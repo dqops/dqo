@@ -1361,8 +1361,9 @@ public class TablesController {
         filters.setEnabled(checkEnabled.orElse(null));
 
         List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsProfilingChecksUI: " + uiAllChecksModels.size());
+
+        if (uiAllChecksModels.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new UITableColumnChecksModel()), HttpStatus.OK); // 200
         }
         
         UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
@@ -1428,8 +1429,9 @@ public class TablesController {
         filters.setEnabled(checkEnabled.orElse(null));
 
         List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsRecurringChecksUI: " + uiAllChecksModels.size());
+
+        if (uiAllChecksModels.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new UITableColumnChecksModel()), HttpStatus.OK); // 200
         }
 
         UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
@@ -1495,8 +1497,9 @@ public class TablesController {
         filters.setEnabled(checkEnabled.orElse(null));
 
         List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsPartitionedChecksUI: " + uiAllChecksModels.size());
+
+        if (uiAllChecksModels.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new UITableColumnChecksModel()), HttpStatus.OK); // 200
         }
 
         UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));

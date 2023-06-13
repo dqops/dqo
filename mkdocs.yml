@@ -270,8 +270,8 @@ nav:
         - expected strings in top values count: 'checks/column/strings/expected-strings-in-top-values-count.md'
         - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
       - uniqueness:
-        - unique count: 'checks/column/uniqueness/unique-count.md'
-        - unique percent: 'checks/column/uniqueness/unique-percent.md'
+        - distinct count: 'checks/column/uniqueness/distinct-count.md'
+        - distinct percent: 'checks/column/uniqueness/distinct-percent.md'
         - duplicate count: 'checks/column/uniqueness/duplicate-count.md'
         - duplicate percent: 'checks/column/uniqueness/duplicate-percent.md'
     - index: 'checks/index.md'
@@ -324,10 +324,10 @@ nav:
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
       - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings
