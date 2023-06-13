@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.uniqueness;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,27 +30,27 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnUniquenessUniqueCountSensorParametersSpec sut;
+public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnUniquenessDistinctPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnUniqueCountCheckSpec checkSpec;
+    private ColumnDistinctPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sut = new ColumnUniquenessUniqueCountSensorParametersSpec();
+        this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
         this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnUniqueCountCheckSpec();
+        this.checkSpec = new ColumnDistinctPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -85,7 +85,7 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/uniqueness/unique_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/uniqueness/distinct_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -96,9 +96,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -124,9 +126,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -150,9 +154,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -176,9 +182,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -209,9 +217,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -237,9 +247,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -267,9 +279,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -307,9 +321,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,
@@ -341,9 +357,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,
@@ -375,9 +393,11 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                COUNT(
-                    DISTINCT(%s)
-                ) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,

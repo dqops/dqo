@@ -16,10 +16,10 @@
 package ai.dqo.checks.column.recurring.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,18 +39,18 @@ import java.util.Objects;
 public class ColumnUniquenessMonthlyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessMonthlyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_unique_count", o -> o.monthlyUniqueCount);
-            put("monthly_unique_percent", o -> o.monthlyUniquePercent);
+            put("monthly_distinct_count", o -> o.monthlyDistinctCount);
+            put("monthly_distinct_percent", o -> o.monthlyDistinctPercent);
             put("monthly_duplicate_count", o -> o.monthlyDuplicateCount);
             put("monthly_duplicate_percent", o -> o.monthlyDuplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnUniqueCountCheckSpec monthlyUniqueCount;
+    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnDistinctCountCheckSpec monthlyDistinctCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnUniquePercentCheckSpec monthlyUniquePercent;
+    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnDistinctPercentCheckSpec monthlyDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnDuplicateCountCheckSpec monthlyDuplicateCount;
@@ -59,39 +59,39 @@ public class ColumnUniquenessMonthlyRecurringChecksSpec extends AbstractCheckCat
     private ColumnDuplicatePercentCheckSpec monthlyDuplicatePercent;
 
     /**
-     * Returns a unique values count check specification.
-     * @return Unique values count check specification.
+     * Returns a distinct values count check specification.
+     * @return Distinct values count check specification.
      */
-    public ColumnUniqueCountCheckSpec getMonthlyUniqueCount() {
-        return monthlyUniqueCount;
+    public ColumnDistinctCountCheckSpec getMonthlyDistinctCount() {
+        return monthlyDistinctCount;
     }
 
     /**
-     * Sets a new specification of a unique values count check.
-     * @param monthlyUniqueCount Unique values count check specification.
+     * Sets a new specification of a distinct values count check.
+     * @param monthlyDistinctCount Distinct values count check specification.
      */
-    public void setMonthlyUniqueCount(ColumnUniqueCountCheckSpec monthlyUniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyUniqueCount, monthlyUniqueCount));
-        this.monthlyUniqueCount = monthlyUniqueCount;
-        propagateHierarchyIdToField(monthlyUniqueCount, "monthly_unique_count");
+    public void setMonthlyDistinctCount(ColumnDistinctCountCheckSpec monthlyDistinctCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyDistinctCount, monthlyDistinctCount));
+        this.monthlyDistinctCount = monthlyDistinctCount;
+        propagateHierarchyIdToField(monthlyDistinctCount, "monthly_distinct_count");
     }
 
     /**
-     * Returns a unique values percent check specification.
-     * @return Unique values percent check specification.
+     * Returns a distinct values percent check specification.
+     * @return Distinct values percent check specification.
      */
-    public ColumnUniquePercentCheckSpec getMonthlyUniquePercent() {
-        return monthlyUniquePercent;
+    public ColumnDistinctPercentCheckSpec getMonthlyDistinctPercent() {
+        return monthlyDistinctPercent;
     }
 
     /**
-     * Sets a new specification of a unique values percent check.
-     * @param monthlyUniquePercent Unique values count percent specification.
+     * Sets a new specification of a distinct values percent check.
+     * @param monthlyDistinctPercent Distinct values count percent specification.
      */
-    public void setMonthlyUniquePercent(ColumnUniquePercentCheckSpec monthlyUniquePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyUniquePercent, monthlyUniquePercent));
-        this.monthlyUniquePercent = monthlyUniquePercent;
-        propagateHierarchyIdToField(monthlyUniquePercent, "monthly_unique_percent");
+    public void setMonthlyDistinctPercent(ColumnDistinctPercentCheckSpec monthlyDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyDistinctPercent, monthlyDistinctPercent));
+        this.monthlyDistinctPercent = monthlyDistinctPercent;
+        propagateHierarchyIdToField(monthlyDistinctPercent, "monthly_distinct_percent");
     }
 
     /**

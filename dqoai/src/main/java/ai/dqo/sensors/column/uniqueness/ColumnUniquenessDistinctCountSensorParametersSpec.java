@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnUniquenessUniqueCountSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessUniqueCountSensorParametersSpec> FIELDS =
+public class ColumnUniquenessDistinctCountSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDistinctCountSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
@@ -53,6 +53,6 @@ public class ColumnUniquenessUniqueCountSensorParametersSpec extends AbstractSen
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/uniqueness/unique_count";
+        return "column/uniqueness/distinct_count";
     }
 }

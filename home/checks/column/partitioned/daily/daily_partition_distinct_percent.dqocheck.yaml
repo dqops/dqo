@@ -2,8 +2,8 @@
 apiVersion: dqo/v1
 kind: check
 spec:
-  sensor_name: column/uniqueness/unique_percent
+  sensor_name: column/uniqueness/distinct_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of unique values in a column does not fall
+  help_text: Verifies that the percentage of distinct values in a column does not fall
     below the minimum accepted percent. Creates a separate data quality check (and
     an alert) for each daily partition.

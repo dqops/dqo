@@ -5,16 +5,16 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_uniqueness_unique_count_sensor_parameters_spec import (
-        ColumnUniquenessUniqueCountSensorParametersSpec,
+    from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
+        ColumnUniquenessDistinctCountSensorParametersSpec,
     )
 
 
-T = TypeVar("T", bound="ColumnUniquenessUniqueCountStatisticsCollectorSpec")
+T = TypeVar("T", bound="ColumnUniquenessDistinctCountStatisticsCollectorSpec")
 
 
 @attr.s(auto_attribs=True)
-class ColumnUniquenessUniqueCountStatisticsCollectorSpec:
+class ColumnUniquenessDistinctCountStatisticsCollectorSpec:
     """
     Attributes:
         disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
@@ -44,31 +44,31 @@ class ColumnUniquenessUniqueCountStatisticsCollectorSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_uniqueness_unique_count_sensor_parameters_spec import (
-            ColumnUniquenessUniqueCountSensorParametersSpec,
+        from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
+            ColumnUniquenessDistinctCountSensorParametersSpec,
         )
 
         d = src_dict.copy()
         disabled = d.pop("disabled", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnUniquenessUniqueCountSensorParametersSpec]
+        parameters: Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = ColumnUniquenessUniqueCountSensorParametersSpec.from_dict(
+            parameters = ColumnUniquenessDistinctCountSensorParametersSpec.from_dict(
                 _parameters
             )
 
-        column_uniqueness_unique_count_statistics_collector_spec = cls(
+        column_uniqueness_distinct_count_statistics_collector_spec = cls(
             disabled=disabled,
             parameters=parameters,
         )
 
-        column_uniqueness_unique_count_statistics_collector_spec.additional_properties = (
+        column_uniqueness_distinct_count_statistics_collector_spec.additional_properties = (
             d
         )
-        return column_uniqueness_unique_count_statistics_collector_spec
+        return column_uniqueness_distinct_count_statistics_collector_spec
 
     @property
     def additional_keys(self) -> List[str]:
