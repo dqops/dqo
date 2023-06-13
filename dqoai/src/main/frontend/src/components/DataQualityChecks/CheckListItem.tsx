@@ -17,11 +17,11 @@ import { JobApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { Tooltip } from '@material-tailwind/react';
-import moment from "moment";
-import CheckDetails from "./CheckDetails/CheckDetails";
-import { CheckTypes } from "../../shared/routes";
-import { useParams } from "react-router-dom";
-import Checkbox from "../Checkbox";
+import moment from 'moment';
+import CheckDetails from './CheckDetails/CheckDetails';
+import { CheckTypes } from '../../shared/routes';
+import { useParams } from 'react-router-dom';
+import Checkbox from '../Checkbox';
 
 export interface ITab {
   label: string;
@@ -57,7 +57,9 @@ const CheckListItem = ({
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const [showDetails, setShowDetails] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [jobId, setJobId] = useState<number>();
@@ -131,9 +133,11 @@ const CheckListItem = ({
     await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: check?.run_checks_job_template,
-      ...checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
+      ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
+        ? { timeWindowFilter }
+        : {})
     });
-    setJobId(res.data?.jobId?.jobId);
+    // setJobId(res.data?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;
@@ -156,17 +160,22 @@ const CheckListItem = ({
   };
 
   useEffect(() => {
-    if (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded || job?.status === DqoJobHistoryEntryModelStatusEnum.failed) {
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
       getCheckOverview();
     }
   }, [job?.status]);
 
-  const getStatusLabel = (status: CheckResultsOverviewDataModelStatusesEnum) => {
+  const getStatusLabel = (
+    status: CheckResultsOverviewDataModelStatusesEnum
+  ) => {
     if (status === 'valid') {
       return 'Valid';
     }
     if (status === CheckResultsOverviewDataModelStatusesEnum.execution_error) {
-      return 'Execution Error'
+      return 'Execution Error';
     }
     return status;
   };
@@ -196,10 +205,7 @@ const CheckListItem = ({
             {mode ? (
               <div className="w-5 h-5 block flex items-center">
                 {check?.configured && (
-                  <Checkbox
-                    checked={checkedCopyUI}
-                    onChange={changeCopyUI}
-                  />
+                  <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
                 )}
               </div>
             ) : (
@@ -241,7 +247,11 @@ const CheckListItem = ({
               </div>
             </Tooltip>
             <Tooltip
-              content={check?.schedule_override?.disabled ? 'Schedule disabled' : 'Schedule enabled'}
+              content={
+                check?.schedule_override?.disabled
+                  ? 'Schedule disabled'
+                  : 'Schedule enabled'
+              }
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
               <div>
@@ -251,9 +261,7 @@ const CheckListItem = ({
                   }
                   className={clsx(
                     'w-5 h-5 cursor-pointer',
-                    check?.schedule_override
-                      ? 'text-gray-700'
-                      : 'font-bold',
+                    check?.schedule_override ? 'text-gray-700' : 'font-bold',
                     check?.schedule_override?.disabled ? 'line-through' : ''
                   )}
                   strokeWidth={check?.schedule_override ? 4 : 2}
@@ -263,18 +271,18 @@ const CheckListItem = ({
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-                <Tooltip
-                  content="Run Check"
-                  className="max-w-80 py-4 px-4 bg-gray-800"
-                >
-                  <div>
-                    <SvgIcon
-                      name="play"
-                      className="text-primary h-5 cursor-pointer"
-                      onClick={onRunCheck}
-                    />
-                  </div>
-                </Tooltip>
+              <Tooltip
+                content="Run Check"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div>
+                  <SvgIcon
+                    name="play"
+                    className="text-primary h-5 cursor-pointer"
+                    onClick={onRunCheck}
+                  />
+                </div>
+              </Tooltip>
             )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <Tooltip
@@ -326,7 +334,7 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
-    
+
             {checkResult && (
               <div className="flex space-x-1">
                 {checkResult?.statuses?.map((status, index) => (
@@ -335,22 +343,46 @@ const CheckListItem = ({
                     content={
                       <div className="text-gray-900">
                         <div>Sensor value: {checkResult?.results?.[index]}</div>
-                        <div>Most severe status: <span className="capitalize">{getStatusLabel(status)}</span></div>
-                        <div>Executed at: {checkResult?.executedAtTimestamps ? moment(checkResult.executedAtTimestamps[index]).format('YYYY-MM-DD HH:mm:ss') + ' UTC' : ''}</div>
-                        <div>Time period: {checkResult?.timePeriodDisplayTexts ? checkResult.timePeriodDisplayTexts[index] : ''}</div>                        
-                        <div>Data stream: {checkResult?.dataStreams ? checkResult.dataStreams[index] : ''}</div>
+                        <div>
+                          Most severe status:{' '}
+                          <span className="capitalize">
+                            {getStatusLabel(status)}
+                          </span>
+                        </div>
+                        <div>
+                          Executed at:{' '}
+                          {checkResult?.executedAtTimestamps
+                            ? moment(
+                                checkResult.executedAtTimestamps[index]
+                              ).format('YYYY-MM-DD HH:mm:ss') + ' UTC'
+                            : ''}
+                        </div>
+                        <div>
+                          Time period:{' '}
+                          {checkResult?.timePeriodDisplayTexts
+                            ? checkResult.timePeriodDisplayTexts[index]
+                            : ''}
+                        </div>
+                        <div>
+                          Data stream:{' '}
+                          {checkResult?.dataStreams
+                            ? checkResult.dataStreams[index]
+                            : ''}
+                        </div>
                       </div>
                     }
                     className="max-w-80 py-4 px-4 bg-white shadow-2xl"
                   >
-                    <div className={clsx("w-3 h-3", getColor(status))} />
+                    <div className={clsx('w-3 h-3', getColor(status))} />
                   </Tooltip>
                 ))}
               </div>
             )}
             <div className="text-sm relative">
               <p>{check.check_name}</p>
-              <p className="absolute left-0 top-full text-xxs">{check.quality_dimension}</p>
+              <p className="absolute left-0 top-full text-xxs">
+                {check.quality_dimension}
+              </p>
             </div>
           </div>
         </td>
@@ -434,11 +466,7 @@ const CheckListItem = ({
       {showDetails && (
         <tr>
           <td colSpan={6}>
-            <CheckDetails
-              check={check}
-              onClose={closeCheckDetails}
-              job={job}
-            />
+            <CheckDetails check={check} onClose={closeCheckDetails} job={job} />
           </td>
         </tr>
       )}
