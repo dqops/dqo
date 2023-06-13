@@ -76,6 +76,8 @@ const ContextMenu = ({
     e.stopPropagation();
   };
 
+  console.log(checkTypes);
+
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
       <PopoverHandler onClick={openPopover}>
@@ -88,14 +90,25 @@ const ContextMenu = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div onClick={(e) => e.stopPropagation()}>
-          {node.level !== TREE_LEVEL.COLUMNS && (
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={handleRunChecks}
-            >
-              Run checks
-            </div>
-          )}
+          {node.level !== TREE_LEVEL.COLUMNS &&
+            checkTypes !== 'partitioned' && (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={handleRunChecks}
+              >
+                Run checks
+              </div>
+            )}
+          {checkTypes === 'partitioned' &&
+            (node.level === TREE_LEVEL.COLUMN ||
+              node.level === TREE_LEVEL.TABLE) && (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={handleRunChecks}
+              >
+                Run checks part
+              </div>
+            )}
           {[
             TREE_LEVEL.DATABASE,
             TREE_LEVEL.SCHEMA,
