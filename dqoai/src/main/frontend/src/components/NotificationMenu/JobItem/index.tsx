@@ -177,7 +177,14 @@ const JobItem = ({
                   </div>
                 </div>
                 {job.jobType === 'run checks' && (
-                  <div className="hidden group-hover:block absolute p-2 w-50 h-40 rounded-md border border-gray-400 z-50 top-10 right-50 bg-white">
+                  <div
+                    className="hidden group-hover:block absolute p-2 w-50 h-40 rounded-md border border-gray-400 z-50  bg-white"
+                    style={{
+                      transform: 'translate(50%, -50%)',
+                      top: '-50%',
+                      right: '-50%'
+                    }}
+                  >
                     <div className="flex gap-x-2">
                       <div className="font-light">Highest severity:</div>
                       <div

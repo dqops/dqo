@@ -131,7 +131,7 @@ const NotificationMenu = () => {
             )}
           </div>
         </div>
-        <div className="overflow-auto max-h-100 py-4 px-4 relative">
+        <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
           {data.map((notification: any, index) =>
             notification.type === 'error' ? (
               <ErrorItem error={notification.item} key={index} />
