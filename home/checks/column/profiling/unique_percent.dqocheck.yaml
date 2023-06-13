@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/uniqueness/unique_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of unique values in a column does not fall
-    below the minimum accepted percent.
