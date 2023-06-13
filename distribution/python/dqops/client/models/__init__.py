@@ -896,8 +896,8 @@ from .column_strings_string_whitespace_percent_sensor_parameters_spec import (
 from .column_sum_in_range_check_spec import ColumnSumInRangeCheckSpec
 from .column_true_percent_check_spec import ColumnTruePercentCheckSpec
 from .column_type_snapshot_spec import ColumnTypeSnapshotSpec
-from .column_unique_count_check_spec import ColumnUniqueCountCheckSpec
-from .column_unique_percent_check_spec import ColumnUniquePercentCheckSpec
+from .column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+from .column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 from .column_uniqueness_daily_partitioned_checks_spec import (
     ColumnUniquenessDailyPartitionedChecksSpec,
 )
@@ -926,17 +926,17 @@ from .column_uniqueness_profiling_checks_spec import ColumnUniquenessProfilingCh
 from .column_uniqueness_statistics_collectors_spec import (
     ColumnUniquenessStatisticsCollectorsSpec,
 )
-from .column_uniqueness_unique_count_sensor_parameters_spec import (
-    ColumnUniquenessUniqueCountSensorParametersSpec,
+from .column_uniqueness_distinct_count_sensor_parameters_spec import (
+    ColumnUniquenessDistinctCountSensorParametersSpec,
 )
-from .column_uniqueness_unique_count_statistics_collector_spec import (
-    ColumnUniquenessUniqueCountStatisticsCollectorSpec,
+from .column_uniqueness_distinct_count_statistics_collector_spec import (
+    ColumnUniquenessDistinctCountStatisticsCollectorSpec,
 )
-from .column_uniqueness_unique_percent_sensor_parameters_spec import (
-    ColumnUniquenessUniquePercentSensorParametersSpec,
+from .column_uniqueness_distinct_percent_sensor_parameters_spec import (
+    ColumnUniquenessDistinctPercentSensorParametersSpec,
 )
-from .column_uniqueness_unique_percent_statistics_collector_spec import (
-    ColumnUniquenessUniquePercentStatisticsCollectorSpec,
+from .column_uniqueness_distinct_percent_statistics_collector_spec import (
+    ColumnUniquenessDistinctPercentStatisticsCollectorSpec,
 )
 from .column_valid_latitude_percent_check_spec import (
     ColumnValidLatitudePercentCheckSpec,
@@ -1976,7 +1976,7 @@ __all__ = (
     "ColumnSumInRangeCheckSpec",
     "ColumnTruePercentCheckSpec",
     "ColumnTypeSnapshotSpec",
-    "ColumnUniqueCountCheckSpec",
+    "ColumnDistinctCountCheckSpec",
     "ColumnUniquenessDailyPartitionedChecksSpec",
     "ColumnUniquenessDailyRecurringChecksSpec",
     "ColumnUniquenessDuplicateCountSensorParametersSpec",
@@ -1987,11 +1987,11 @@ __all__ = (
     "ColumnUniquenessMonthlyRecurringChecksSpec",
     "ColumnUniquenessProfilingChecksSpec",
     "ColumnUniquenessStatisticsCollectorsSpec",
-    "ColumnUniquenessUniqueCountSensorParametersSpec",
-    "ColumnUniquenessUniqueCountStatisticsCollectorSpec",
-    "ColumnUniquenessUniquePercentSensorParametersSpec",
-    "ColumnUniquenessUniquePercentStatisticsCollectorSpec",
-    "ColumnUniquePercentCheckSpec",
+    "ColumnUniquenessDistinctCountSensorParametersSpec",
+    "ColumnUniquenessDistinctCountStatisticsCollectorSpec",
+    "ColumnUniquenessDistinctPercentSensorParametersSpec",
+    "ColumnUniquenessDistinctPercentStatisticsCollectorSpec",
+    "ColumnDistinctPercentCheckSpec",
     "ColumnValidLatitudePercentCheckSpec",
     "ColumnValidLongitudePercentCheckSpec",
     "ColumnValueAboveMaxValueCountCheckSpec",

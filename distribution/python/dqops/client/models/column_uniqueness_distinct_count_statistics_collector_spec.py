@@ -19,11 +19,11 @@ class ColumnUniquenessDistinctCountStatisticsCollectorSpec:
     Attributes:
         disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
             process.
-        parameters (Union[Unset, ColumnUniquenessUniqueCountSensorParametersSpec]):
+        parameters (Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]):
     """
 
     disabled: Union[Unset, bool] = UNSET
-    parameters: Union[Unset, "ColumnUniquenessUniqueCountSensorParametersSpec"] = UNSET
+    parameters: Union[Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

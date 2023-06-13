@@ -5,8 +5,8 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_uniqueness_unique_percent_sensor_parameters_spec import (
-        ColumnUniquenessUniquePercentSensorParametersSpec,
+    from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
+        ColumnUniquenessDistinctPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
     from ..models.min_percent_rule_95_parameters_spec import (
@@ -21,11 +21,11 @@ if TYPE_CHECKING:
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
 
 
-T = TypeVar("T", bound="ColumnUniquePercentCheckSpec")
+T = TypeVar("T", bound="ColumnDistinctPercentCheckSpec")
 
 
 @attr.s(auto_attribs=True)
-class ColumnUniquePercentCheckSpec:
+class ColumnDistinctPercentCheckSpec:
     """
     Attributes:
         schedule_override (Union[Unset, RecurringScheduleSpec]):
@@ -49,7 +49,7 @@ class ColumnUniquePercentCheckSpec:
             stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
-        parameters (Union[Unset, ColumnUniquenessUniquePercentSensorParametersSpec]):
+        parameters (Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]):
         warning (Union[Unset, MinPercentRule100ParametersSpec]):
         error (Union[Unset, MinPercentRule99ParametersSpec]):
         fatal (Union[Unset, MinPercentRule95ParametersSpec]):
@@ -64,7 +64,7 @@ class ColumnUniquePercentCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[
-        Unset, "ColumnUniquenessUniquePercentSensorParametersSpec"
+        Unset, "ColumnUniquenessDistinctPercentSensorParametersSpec"
     ] = UNSET
     warning: Union[Unset, "MinPercentRule100ParametersSpec"] = UNSET
     error: Union[Unset, "MinPercentRule99ParametersSpec"] = UNSET
@@ -138,8 +138,8 @@ class ColumnUniquePercentCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_uniqueness_unique_percent_sensor_parameters_spec import (
-            ColumnUniquenessUniquePercentSensorParametersSpec,
+        from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
+            ColumnUniquenessDistinctPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
         from ..models.min_percent_rule_95_parameters_spec import (
@@ -181,11 +181,11 @@ class ColumnUniquePercentCheckSpec:
         data_stream = d.pop("data_stream", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnUniquenessUniquePercentSensorParametersSpec]
+        parameters: Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = ColumnUniquenessUniquePercentSensorParametersSpec.from_dict(
+            parameters = ColumnUniquenessDistinctPercentSensorParametersSpec.from_dict(
                 _parameters
             )
 
@@ -210,7 +210,7 @@ class ColumnUniquePercentCheckSpec:
         else:
             fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
 
-        column_unique_percent_check_spec = cls(
+        column_distinct_percent_check_spec = cls(
             schedule_override=schedule_override,
             comments=comments,
             disabled=disabled,
@@ -225,8 +225,8 @@ class ColumnUniquePercentCheckSpec:
             fatal=fatal,
         )
 
-        column_unique_percent_check_spec.additional_properties = d
-        return column_unique_percent_check_spec
+        column_distinct_percent_check_spec.additional_properties = d
+        return column_distinct_percent_check_spec
 
     @property
     def additional_keys(self) -> List[str]:

@@ -23,6 +23,7 @@ Constants with the column names in the sensor readout parquet tables.
  | stream_level_9 | Column name for the data stream. | text |
  | data_stream_hash | The data stream hash, it is a hash of the data stream level names. | long |
  | data_stream_name | The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
+ | data_stream_mapping_name | The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check. | text |
  | connection_hash | A hash calculated from the connection name (the data source name). | long |
  | connection_name | The connection name (the data source name). | text |
  | provider | The provider name, which is the type of the data source. | text |

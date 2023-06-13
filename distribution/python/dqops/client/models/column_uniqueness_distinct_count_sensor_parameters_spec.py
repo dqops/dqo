@@ -4,11 +4,11 @@ import attr
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ColumnUniquenessUniqueCountSensorParametersSpec")
+T = TypeVar("T", bound="ColumnUniquenessDistinctCountSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
-class ColumnUniquenessUniqueCountSensorParametersSpec:
+class ColumnUniquenessDistinctCountSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
@@ -34,12 +34,12 @@ class ColumnUniquenessUniqueCountSensorParametersSpec:
         d = src_dict.copy()
         filter_ = d.pop("filter", UNSET)
 
-        column_uniqueness_unique_count_sensor_parameters_spec = cls(
+        column_uniqueness_distinct_count_sensor_parameters_spec = cls(
             filter_=filter_,
         )
 
-        column_uniqueness_unique_count_sensor_parameters_spec.additional_properties = d
-        return column_uniqueness_unique_count_sensor_parameters_spec
+        column_uniqueness_distinct_count_sensor_parameters_spec.additional_properties = d
+        return column_uniqueness_distinct_count_sensor_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:
