@@ -12,6 +12,8 @@ import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from '../../shared/routes';
 import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
+import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
+import { TimeWindowFilterParameters } from '../../api';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -34,7 +36,7 @@ const ContextMenu = ({
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
-
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const handleRefresh = () => {
     refreshNode(node);
     setOpen(false);
@@ -76,7 +78,7 @@ const ContextMenu = ({
     e.stopPropagation();
   };
 
-  console.log(checkTypes);
+  console.log(RUN_CHECK_TIME_WINDOW_FILTERS);
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -103,12 +105,29 @@ const ContextMenu = ({
             (node.level === TREE_LEVEL.COLUMN ||
               node.level === TREE_LEVEL.TABLE) && (
               <div
-                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={handleRunChecks}
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded flex items-center"
+                // onClick={handleRunChecks}
               >
                 Run checks part
+                <SvgIcon
+                  name="info"
+                  className="w-5 h-5"
+                  onClick={() => setIsClicked(!isClicked)}
+                />
               </div>
             )}
+          {isClicked && (
+            <div className="w-80 h-81 bg-white absolute left-50 top-0 rounded border">
+              {Object.entries(RUN_CHECK_TIME_WINDOW_FILTERS).map(([key]) => (
+                <div
+                  className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                  key={key}
+                >
+                  {key}
+                </div>
+              ))}
+            </div>
+          )}
           {[
             TREE_LEVEL.DATABASE,
             TREE_LEVEL.SCHEMA,
