@@ -190,9 +190,8 @@ const CheckListItem = ({
     }
     setShowDetails(!showDetails);
   };
-
-  const getLocalDateInTimeZone = (timeZone: string): string => {
-    const date = new Date();
+  const getLocalDateInUserTimeZone = (date: Date): string => {
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: '2-digit',
@@ -201,15 +200,11 @@ const CheckListItem = ({
       minute: '2-digit',
       second: '2-digit',
       hour12: false,
-      timeZone
+      timeZone: userTimeZone
     };
 
     return date.toLocaleString('en-US', options);
   };
-
-  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const localDate = getLocalDateInTimeZone(userTimeZone);
-  console.log('Local date in user time zone:', localDate);
 
   return (
     <>
@@ -372,9 +367,13 @@ const CheckListItem = ({
                         <div>
                           Executed at:{' '}
                           {checkResult?.executedAtTimestamps
-                            ? moment(
-                                checkResult.executedAtTimestamps[index]
-                              ).format('YYYY-MM-DD HH:mm:ss') + ' UTC'
+                            ? getLocalDateInUserTimeZone(
+                                new Date(
+                                  moment(
+                                    checkResult.executedAtTimestamps[index]
+                                  ).format('YYYY-MM-DD HH:mm:ss')
+                                )
+                              )
                             : ''}
                         </div>
                         <div>
