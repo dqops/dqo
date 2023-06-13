@@ -18,7 +18,7 @@ Column level sensor that calculates the percentage of values that match values i
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -48,7 +48,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -78,7 +78,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -108,7 +108,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -138,7 +138,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -189,7 +189,7 @@ Column level sensor that calculates the count of values that does not match valu
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -219,7 +219,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -253,7 +253,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -287,7 +287,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -317,7 +317,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}

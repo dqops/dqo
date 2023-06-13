@@ -17,7 +17,7 @@ Table level sensor that calculates percentage of the difference of the total row
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -39,7 +39,7 @@ Table level sensor that calculates percentage of the difference of the total row
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -61,7 +61,7 @@ Table level sensor that calculates percentage of the difference of the total row
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -83,7 +83,7 @@ Table level sensor that calculates percentage of the difference of the total row
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -105,7 +105,7 @@ Table level sensor that calculates percentage of the difference of the total row
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}

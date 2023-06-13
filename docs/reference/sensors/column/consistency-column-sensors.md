@@ -17,7 +17,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -52,7 +52,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -86,7 +86,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -121,7 +121,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -157,7 +157,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -193,7 +193,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}

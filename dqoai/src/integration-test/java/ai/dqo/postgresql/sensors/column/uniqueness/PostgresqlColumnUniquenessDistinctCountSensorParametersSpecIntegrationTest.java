@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.uniqueness;
+package ai.dqo.postgresql.sensors.column.uniqueness;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -25,11 +24,12 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniquePercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,19 +37,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class BigQueryColumnUniquenessUniquePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnUniquenessUniquePercentSensorParametersSpec sut;
+public class PostgresqlColumnUniquenessDistinctCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+    private ColumnUniquenessDistinctCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnUniquePercentCheckSpec checkSpec;
+    private ColumnDistinctCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnUniquenessUniquePercentSensorParametersSpec();
-        this.checkSpec = new ColumnUniquePercentCheckSpec();
+		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+		this.sut = new ColumnUniquenessDistinctCountSensorParametersSpec();
+		this.checkSpec = new ColumnDistinctCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -63,7 +63,7 @@ public class BigQueryColumnUniquenessUniquePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class BigQueryColumnUniquenessUniquePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class BigQueryColumnUniquenessUniquePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class BigQueryColumnUniquenessUniquePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,6 +115,6 @@ public class BigQueryColumnUniquenessUniquePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 }

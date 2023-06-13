@@ -19,7 +19,7 @@ Column level sensor that counts how many expected numeric values are used in a t
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -52,7 +52,7 @@ Column level sensor that counts how many expected numeric values are used in a t
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -85,7 +85,7 @@ Column level sensor that counts how many expected numeric values are used in a t
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -121,7 +121,7 @@ Column level sensor that counts how many expected numeric values are used in a t
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -157,7 +157,7 @@ Column level sensor that counts how many expected numeric values are used in a t
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -193,7 +193,7 @@ Column level sensor that counts how many expected numeric values are used in a t
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -243,7 +243,7 @@ Column level sensor that counts invalid latitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -261,7 +261,7 @@ Column level sensor that counts invalid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -279,7 +279,7 @@ Column level sensor that counts invalid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -297,7 +297,7 @@ Column level sensor that counts invalid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -315,7 +315,7 @@ Column level sensor that counts invalid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -333,7 +333,7 @@ Column level sensor that counts invalid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -365,7 +365,7 @@ Column level sensor that counts invalid longitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -383,7 +383,7 @@ Column level sensor that counts invalid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -401,7 +401,7 @@ Column level sensor that counts invalid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -419,7 +419,7 @@ Column level sensor that counts invalid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -437,7 +437,7 @@ Column level sensor that counts invalid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -455,7 +455,7 @@ Column level sensor that counts invalid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -487,7 +487,7 @@ Column level sensor that counts the average (mean) of values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -500,7 +500,7 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -513,7 +513,7 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -526,7 +526,7 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -539,7 +539,7 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -552,7 +552,7 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -579,7 +579,7 @@ Column level sensor that counts negative values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -597,7 +597,7 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -615,7 +615,7 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -633,7 +633,7 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -651,7 +651,7 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -669,7 +669,7 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -701,7 +701,7 @@ Column level sensor that counts percentage of negative values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -722,7 +722,7 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -743,7 +743,7 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -764,7 +764,7 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -785,7 +785,7 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -806,7 +806,7 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -841,7 +841,7 @@ Column level sensor that counts non negative values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -859,7 +859,7 @@ Column level sensor that counts non negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -877,7 +877,7 @@ Column level sensor that counts non negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -895,7 +895,7 @@ Column level sensor that counts non negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -913,7 +913,7 @@ Column level sensor that counts non negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -931,7 +931,7 @@ Column level sensor that counts non negative values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -963,7 +963,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -981,7 +981,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -999,7 +999,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1017,7 +1017,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1035,7 +1035,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1053,7 +1053,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1093,7 +1093,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1129,7 +1129,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -1165,7 +1165,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1200,7 +1200,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1234,7 +1234,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1269,7 +1269,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1324,7 +1324,7 @@ Column level sensor that finds the median in a given column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1371,22 +1371,7 @@ Column level sensor that finds the median in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    SELECT
-    PERCENTILE_CONT({{ parameters.percentile_value }})
-    WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-    {{- lib.render_data_stream_projections('analyzed_table') }}
-    {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1401,7 +1386,7 @@ Column level sensor that finds the median in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1416,7 +1401,7 @@ Column level sensor that finds the median in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1431,7 +1416,7 @@ Column level sensor that finds the median in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1491,7 +1476,7 @@ Column level sensor that calculates population standard deviation in a given col
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1504,7 +1489,7 @@ Column level sensor that calculates population standard deviation in a given col
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -1517,7 +1502,7 @@ Column level sensor that calculates population standard deviation in a given col
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1530,7 +1515,7 @@ Column level sensor that calculates population standard deviation in a given col
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1543,7 +1528,7 @@ Column level sensor that calculates population standard deviation in a given col
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1556,7 +1541,7 @@ Column level sensor that calculates population standard deviation in a given col
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1583,7 +1568,7 @@ Column level sensor that calculates population variance in a given column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1596,7 +1581,7 @@ Column level sensor that calculates population variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -1609,7 +1594,7 @@ Column level sensor that calculates population variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1622,7 +1607,7 @@ Column level sensor that calculates population variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1635,7 +1620,7 @@ Column level sensor that calculates population variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1648,7 +1633,7 @@ Column level sensor that calculates population variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1675,7 +1660,7 @@ Column level sensor that calculates sample standard deviation in a given column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1688,7 +1673,7 @@ Column level sensor that calculates sample standard deviation in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -1701,7 +1686,7 @@ Column level sensor that calculates sample standard deviation in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1714,7 +1699,7 @@ Column level sensor that calculates sample standard deviation in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1727,7 +1712,7 @@ Column level sensor that calculates sample standard deviation in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1740,7 +1725,7 @@ Column level sensor that calculates sample standard deviation in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1767,7 +1752,7 @@ Column level sensor that calculates sample variance in a given column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1780,7 +1765,7 @@ Column level sensor that calculates sample variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -1793,7 +1778,7 @@ Column level sensor that calculates sample variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1806,7 +1791,7 @@ Column level sensor that calculates sample variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1819,7 +1804,7 @@ Column level sensor that calculates sample variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1832,7 +1817,7 @@ Column level sensor that calculates sample variance in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1859,7 +1844,7 @@ Column level sensor that counts the sum of values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1872,7 +1857,7 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -1885,7 +1870,7 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -1898,7 +1883,7 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -1911,7 +1896,7 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -1924,7 +1909,7 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1951,7 +1936,7 @@ Column level sensor that counts percentage of valid latitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -1969,7 +1954,7 @@ Column level sensor that counts percentage of valid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -1987,7 +1972,7 @@ Column level sensor that counts percentage of valid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2005,7 +1990,7 @@ Column level sensor that counts percentage of valid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2023,7 +2008,7 @@ Column level sensor that counts percentage of valid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2041,7 +2026,7 @@ Column level sensor that counts percentage of valid latitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2073,7 +2058,7 @@ Column level sensor that counts percentage of valid longitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -2091,7 +2076,7 @@ Column level sensor that counts percentage of valid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -2109,7 +2094,7 @@ Column level sensor that counts percentage of valid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2127,7 +2112,7 @@ Column level sensor that counts percentage of valid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2145,7 +2130,7 @@ Column level sensor that counts percentage of valid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2163,7 +2148,7 @@ Column level sensor that counts percentage of valid longitude in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2201,7 +2186,7 @@ Column level sensor that calculates the count of values that are above than a gi
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -2219,7 +2204,7 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -2237,7 +2222,7 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2256,7 +2241,7 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2275,7 +2260,7 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2293,7 +2278,7 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2331,7 +2316,7 @@ Column level sensor that calculates the percentage of values that are above than
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -2350,7 +2335,7 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -2369,7 +2354,7 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2388,7 +2373,7 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2407,7 +2392,7 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2426,7 +2411,7 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2465,7 +2450,7 @@ Column level sensor that calculates the count of values that are below than a gi
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -2483,7 +2468,7 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -2501,7 +2486,7 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2520,7 +2505,7 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2539,7 +2524,7 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2557,7 +2542,7 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2595,7 +2580,7 @@ Column level sensor that calculates the percentage of values that are below than
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -2613,7 +2598,7 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -2631,7 +2616,7 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2650,7 +2635,7 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2669,7 +2654,7 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2687,7 +2672,7 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2727,7 +2712,7 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -2745,7 +2730,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -2763,7 +2748,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2782,7 +2767,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2801,7 +2786,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2820,7 +2805,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2862,7 +2847,7 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -2880,7 +2865,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "mysql"
+=== "MySQL"
       
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
@@ -2898,7 +2883,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -2917,7 +2902,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -2936,7 +2921,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -2954,7 +2939,7 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}

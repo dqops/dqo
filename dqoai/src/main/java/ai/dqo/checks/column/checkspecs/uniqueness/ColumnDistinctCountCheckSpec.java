@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
 import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,9 +39,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnUniqueCountCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessUniqueCountSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule0ParametersSpec, MinCountRuleFatalParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniqueCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnDistinctCountCheckSpec
+        extends AbstractCheckSpec<ColumnUniquenessDistinctCountSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule0ParametersSpec, MinCountRuleFatalParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class ColumnUniqueCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniqueCountSensorParametersSpec parameters = new ColumnUniquenessUniqueCountSensorParametersSpec();
+    private ColumnUniquenessDistinctCountSensorParametersSpec parameters = new ColumnUniquenessDistinctCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnUniqueCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessUniqueCountSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnUniqueCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessUniqueCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctCountSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

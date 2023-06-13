@@ -17,7 +17,7 @@ Table level sensor that executes a given SQL expression on a table.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -31,7 +31,21 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -45,7 +59,7 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -59,7 +73,7 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -73,7 +87,7 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -107,7 +121,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -127,7 +141,27 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN NOT ({{ parameters.sql_condition |
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                     THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -147,7 +181,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -167,7 +201,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -187,7 +221,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -227,7 +261,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -249,7 +283,29 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT (*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                             CASE
+                                 WHEN NOT ({{ parameters.sql_condition |
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                                      THEN 1
+                                 ELSE 0
+                             END) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -271,7 +327,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -293,7 +349,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -315,7 +371,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -357,7 +413,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -377,7 +433,27 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN ({{ parameters.sql_condition |
+                         replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                     THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -397,7 +473,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -417,7 +493,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -437,7 +513,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -477,7 +553,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
@@ -499,7 +575,29 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                             CASE
+                                 WHEN ({{ parameters.sql_condition |
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                                      THEN 1
+                                 ELSE 0
+                             END) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
@@ -521,7 +619,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
@@ -543,7 +641,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
@@ -565,7 +663,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}

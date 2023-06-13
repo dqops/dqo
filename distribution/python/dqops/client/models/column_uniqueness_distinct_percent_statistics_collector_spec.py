@@ -5,25 +5,27 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_uniqueness_unique_count_sensor_parameters_spec import (
-        ColumnUniquenessUniqueCountSensorParametersSpec,
+    from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
+        ColumnUniquenessDistinctPercentSensorParametersSpec,
     )
 
 
-T = TypeVar("T", bound="ColumnUniquenessUniqueCountStatisticsCollectorSpec")
+T = TypeVar("T", bound="ColumnUniquenessDistinctPercentStatisticsCollectorSpec")
 
 
 @attr.s(auto_attribs=True)
-class ColumnUniquenessUniqueCountStatisticsCollectorSpec:
+class ColumnUniquenessDistinctPercentStatisticsCollectorSpec:
     """
     Attributes:
         disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
             process.
-        parameters (Union[Unset, ColumnUniquenessUniqueCountSensorParametersSpec]):
+        parameters (Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]):
     """
 
     disabled: Union[Unset, bool] = UNSET
-    parameters: Union[Unset, "ColumnUniquenessUniqueCountSensorParametersSpec"] = UNSET
+    parameters: Union[
+        Unset, "ColumnUniquenessDistinctPercentSensorParametersSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -44,31 +46,31 @@ class ColumnUniquenessUniqueCountStatisticsCollectorSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_uniqueness_unique_count_sensor_parameters_spec import (
-            ColumnUniquenessUniqueCountSensorParametersSpec,
+        from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
+            ColumnUniquenessDistinctPercentSensorParametersSpec,
         )
 
         d = src_dict.copy()
         disabled = d.pop("disabled", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnUniquenessUniqueCountSensorParametersSpec]
+        parameters: Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = ColumnUniquenessUniqueCountSensorParametersSpec.from_dict(
+            parameters = ColumnUniquenessDistinctPercentSensorParametersSpec.from_dict(
                 _parameters
             )
 
-        column_uniqueness_unique_count_statistics_collector_spec = cls(
+        column_uniqueness_distinct_percent_statistics_collector_spec = cls(
             disabled=disabled,
             parameters=parameters,
         )
 
-        column_uniqueness_unique_count_statistics_collector_spec.additional_properties = (
+        column_uniqueness_distinct_percent_statistics_collector_spec.additional_properties = (
             d
         )
-        return column_uniqueness_unique_count_statistics_collector_spec
+        return column_uniqueness_distinct_percent_statistics_collector_spec
 
     @property
     def additional_keys(self) -> List[str]:

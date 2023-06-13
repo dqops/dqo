@@ -18,7 +18,7 @@ package ai.dqo.statistics.column.uniqueness;
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniquePercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,8 +36,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnUniquenessUniquePercentStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnUniquenessUniquePercentSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessUniquePercentStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnUniquenessDistinctCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnUniquenessDistinctCountSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDistinctCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnUniquenessUniquePercentStatisticsCollectorSpec extends Abstra
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniquePercentSensorParametersSpec parameters = new ColumnUniquenessUniquePercentSensorParametersSpec();
+    private ColumnUniquenessDistinctCountSensorParametersSpec parameters = new ColumnUniquenessDistinctCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnUniquenessUniquePercentSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnUniquenessUniquePercentStatisticsCollectorSpec extends Abstra
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnUniquenessUniquePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

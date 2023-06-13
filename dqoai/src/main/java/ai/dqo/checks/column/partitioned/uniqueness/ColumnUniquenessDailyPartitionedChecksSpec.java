@@ -16,10 +16,10 @@
 package ai.dqo.checks.column.partitioned.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,18 +39,18 @@ import java.util.Objects;
 public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_unique_count", o -> o.dailyPartitionUniqueCount);
-            put("daily_partition_unique_percent", o -> o.dailyPartitionUniquePercent);
+            put("daily_partition_distinct_count", o -> o.dailyPartitionDistinctCount);
+            put("daily_partition_distinct_percent", o -> o.dailyPartitionDistinctPercent);
             put("daily_partition_duplicate_count", o -> o.dailyPartitionDuplicateCount);
             put("daily_partition_duplicate_percent", o -> o.dailyPartitionDuplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnUniqueCountCheckSpec dailyPartitionUniqueCount;
+    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDistinctCountCheckSpec dailyPartitionDistinctCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnUniquePercentCheckSpec dailyPartitionUniquePercent;
+    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDistinctPercentCheckSpec dailyPartitionDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnDuplicateCountCheckSpec dailyPartitionDuplicateCount;
@@ -59,39 +59,39 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
     private ColumnDuplicatePercentCheckSpec dailyPartitionDuplicatePercent;
 
     /**
-     * Returns a unique values count check specification.
-     * @return Unique values count check specification.
+     * Returns a distinct values count check specification.
+     * @return Distinct values count check specification.
      */
-    public ColumnUniqueCountCheckSpec getDailyPartitionUniqueCount() {
-        return dailyPartitionUniqueCount;
+    public ColumnDistinctCountCheckSpec getDailyPartitionDistinctCount() {
+        return dailyPartitionDistinctCount;
     }
 
     /**
-     * Sets a new specification of a unique values count check.
-     * @param dailyPartitionUniqueCount Unique values count check specification.
+     * Sets a new specification of a distinct values count check.
+     * @param dailyPartitionDistinctCount Distinct values count check specification.
      */
-    public void setDailyPartitionUniqueCount(ColumnUniqueCountCheckSpec dailyPartitionUniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionUniqueCount, dailyPartitionUniqueCount));
-        this.dailyPartitionUniqueCount = dailyPartitionUniqueCount;
-        propagateHierarchyIdToField(dailyPartitionUniqueCount, "daily_partition_unique_count");
+    public void setDailyPartitionDistinctCount(ColumnDistinctCountCheckSpec dailyPartitionDistinctCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDistinctCount, dailyPartitionDistinctCount));
+        this.dailyPartitionDistinctCount = dailyPartitionDistinctCount;
+        propagateHierarchyIdToField(dailyPartitionDistinctCount, "daily_partition_distinct_count");
     }
 
     /**
-     * Returns a unique values percent check specification.
-     * @return Unique values percent check specification.
+     * Returns a distinct values percent check specification.
+     * @return Distinct values percent check specification.
      */
-    public ColumnUniquePercentCheckSpec getDailyPartitionUniquePercent() {
-        return dailyPartitionUniquePercent;
+    public ColumnDistinctPercentCheckSpec getDailyPartitionDistinctPercent() {
+        return dailyPartitionDistinctPercent;
     }
 
     /**
-     * Sets a new specification of a unique values percent check.
-     * @param dailyPartitionUniquePercent Unique values percent check specification.
+     * Sets a new specification of a distinct values percent check.
+     * @param dailyPartitionDistinctPercent Distinct values percent check specification.
      */
-    public void setDailyPartitionUniquePercent(ColumnUniquePercentCheckSpec dailyPartitionUniquePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionUniquePercent, dailyPartitionUniquePercent));
-        this.dailyPartitionUniquePercent = dailyPartitionUniquePercent;
-        propagateHierarchyIdToField(dailyPartitionUniquePercent, "daily_partition_unique_percent");
+    public void setDailyPartitionDistinctPercent(ColumnDistinctPercentCheckSpec dailyPartitionDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDistinctPercent, dailyPartitionDistinctPercent));
+        this.dailyPartitionDistinctPercent = dailyPartitionDistinctPercent;
+        propagateHierarchyIdToField(dailyPartitionDistinctPercent, "daily_partition_distinct_percent");
     }
 
     /**

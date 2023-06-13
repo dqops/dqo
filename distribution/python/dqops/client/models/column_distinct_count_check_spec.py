@@ -5,8 +5,8 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_uniqueness_unique_count_sensor_parameters_spec import (
-        ColumnUniquenessUniqueCountSensorParametersSpec,
+    from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
+        ColumnUniquenessDistinctCountSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
     from ..models.min_count_rule_0_parameters_spec import MinCountRule0ParametersSpec
@@ -19,11 +19,11 @@ if TYPE_CHECKING:
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
 
 
-T = TypeVar("T", bound="ColumnUniqueCountCheckSpec")
+T = TypeVar("T", bound="ColumnDistinctCountCheckSpec")
 
 
 @attr.s(auto_attribs=True)
-class ColumnUniqueCountCheckSpec:
+class ColumnDistinctCountCheckSpec:
     """
     Attributes:
         schedule_override (Union[Unset, RecurringScheduleSpec]):
@@ -47,7 +47,7 @@ class ColumnUniqueCountCheckSpec:
             stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
-        parameters (Union[Unset, ColumnUniquenessUniqueCountSensorParametersSpec]):
+        parameters (Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]):
         warning (Union[Unset, MinCountRuleWarningParametersSpec]):
         error (Union[Unset, MinCountRule0ParametersSpec]):
         fatal (Union[Unset, MinCountRuleFatalParametersSpec]):
@@ -61,7 +61,7 @@ class ColumnUniqueCountCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
-    parameters: Union[Unset, "ColumnUniquenessUniqueCountSensorParametersSpec"] = UNSET
+    parameters: Union[Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"] = UNSET
     warning: Union[Unset, "MinCountRuleWarningParametersSpec"] = UNSET
     error: Union[Unset, "MinCountRule0ParametersSpec"] = UNSET
     fatal: Union[Unset, "MinCountRuleFatalParametersSpec"] = UNSET
@@ -134,8 +134,8 @@ class ColumnUniqueCountCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_uniqueness_unique_count_sensor_parameters_spec import (
-            ColumnUniquenessUniqueCountSensorParametersSpec,
+        from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
+            ColumnUniquenessDistinctCountSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
         from ..models.min_count_rule_0_parameters_spec import (
@@ -177,11 +177,11 @@ class ColumnUniqueCountCheckSpec:
         data_stream = d.pop("data_stream", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnUniquenessUniqueCountSensorParametersSpec]
+        parameters: Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = ColumnUniquenessUniqueCountSensorParametersSpec.from_dict(
+            parameters = ColumnUniquenessDistinctCountSensorParametersSpec.from_dict(
                 _parameters
             )
 
@@ -206,7 +206,7 @@ class ColumnUniqueCountCheckSpec:
         else:
             fatal = MinCountRuleFatalParametersSpec.from_dict(_fatal)
 
-        column_unique_count_check_spec = cls(
+        column_distinct_count_check_spec = cls(
             schedule_override=schedule_override,
             comments=comments,
             disabled=disabled,
@@ -221,8 +221,8 @@ class ColumnUniqueCountCheckSpec:
             fatal=fatal,
         )
 
-        column_unique_count_check_spec.additional_properties = d
-        return column_unique_count_check_spec
+        column_distinct_count_check_spec.additional_properties = d
+        return column_distinct_count_check_spec
 
     @property
     def additional_keys(self) -> List[str]:

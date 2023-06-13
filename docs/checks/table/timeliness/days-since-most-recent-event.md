@@ -140,67 +140,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {% macro render_current_event_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_DATE
-        )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -290,6 +229,67 @@ spec:
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -452,68 +452,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {% macro render_current_event_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_DATE
-            )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- else -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            {{ render_current_event_diff() }} AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -605,6 +543,68 @@ spec:
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_DATE
+            )
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- else -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ render_current_event_diff() }} AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
+            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -811,67 +811,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {% macro render_current_event_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_DATE
-        )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -961,6 +900,67 @@ spec:
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1124,68 +1124,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {% macro render_current_event_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_DATE
-            )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- else -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            {{ render_current_event_diff() }} AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -1277,6 +1215,68 @@ spec:
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_DATE
+            )
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- else -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ render_current_event_diff() }} AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -1483,67 +1483,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {% macro render_current_event_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_DATE
-        )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -1633,6 +1572,67 @@ spec:
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1796,68 +1796,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {% macro render_current_event_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_DATE
-            )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- else -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            {{ render_current_event_diff() }} AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -1949,6 +1887,68 @@ spec:
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_DATE
+            )
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- else -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ render_current_event_diff() }} AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -2155,67 +2155,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {% macro render_current_event_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_DATE
-        )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -2305,6 +2244,67 @@ spec:
         CAST(analyzed_table."" AS date) AS time_period,
         CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+        CAST(analyzed_table."" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -2472,68 +2472,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {% macro render_current_event_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_DATE
-            )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- else -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            {{ render_current_event_diff() }} AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -2625,6 +2563,68 @@ spec:
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_DATE
+            )
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- else -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ render_current_event_diff() }} AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(analyzed_table."" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
@@ -2829,67 +2829,6 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {% macro render_current_event_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_DATE
-        )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        TIMESTAMPDIFF(
-            MILLISECOND,
-            MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-            )
-            CURRENT_TIMESTAMP
-        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -2979,6 +2918,67 @@ spec:
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        TIMESTAMPDIFF(
+            MILLISECOND,
+            MAX(
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -3146,68 +3146,6 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {% macro render_current_event_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_DATE
-            )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- else -%}
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0
-            {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            {{ render_current_event_diff() }} AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            TIMESTAMPDIFF(
-                MILLISECOND,
-                MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
-                )
-                CURRENT_TIMESTAMP
-            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -3299,6 +3237,68 @@ spec:
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_DATE
+            )
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- else -%}
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ render_current_event_diff() }} AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            TIMESTAMPDIFF(
+                MILLISECOND,
+                MAX(
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
+                CURRENT_TIMESTAMP
+            ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```

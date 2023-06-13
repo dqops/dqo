@@ -16,10 +16,10 @@
 package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,18 +39,18 @@ import java.util.Objects;
 public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("unique_count", o -> o.uniqueCount);
-            put("unique_percent", o -> o.uniquePercent);
+            put("distinct_count", o -> o.distinctCount);
+            put("distinct_percent", o -> o.distinctPercent);
             put("duplicate_count", o -> o.duplicateCount);
             put("duplicate_percent", o -> o.duplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count.")
-    private ColumnUniqueCountCheckSpec uniqueCount;
+    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count.")
+    private ColumnDistinctCountCheckSpec distinctCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent.")
-    private ColumnUniquePercentCheckSpec uniquePercent;
+    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.")
+    private ColumnDistinctPercentCheckSpec distinctPercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.")
     private ColumnDuplicateCountCheckSpec duplicateCount;
@@ -59,39 +59,39 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     private ColumnDuplicatePercentCheckSpec duplicatePercent;
 
     /**
-     * Returns a unique count check specification.
-     * @return Unique count check specification.
+     * Returns a distinct count check specification.
+     * @return Distinct count check specification.
      */
-    public ColumnUniqueCountCheckSpec getUniqueCount() {
-        return uniqueCount;
+    public ColumnDistinctCountCheckSpec getDistinctCount() {
+        return distinctCount;
     }
 
     /**
-     * Sets a new specification of a unique count check.
-     * @param uniqueCount Unique count check specification.
+     * Sets a new specification of a distinct count check.
+     * @param distinctCount Distinct count check specification.
      */
-    public void setUniqueCount(ColumnUniqueCountCheckSpec uniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.uniqueCount, uniqueCount));
-        this.uniqueCount = uniqueCount;
-        propagateHierarchyIdToField(uniqueCount, "unique_count");
+    public void setDistinctCount(ColumnDistinctCountCheckSpec distinctCount) {
+        this.setDirtyIf(!Objects.equals(this.distinctCount, distinctCount));
+        this.distinctCount = distinctCount;
+        propagateHierarchyIdToField(distinctCount, "distinct_count");
     }
 
     /**
-     * Returns a unique percent check specification.
-     * @return Unique percent check specification.
+     * Returns a distinct percent check specification.
+     * @return Distinct percent check specification.
      */
-    public ColumnUniquePercentCheckSpec getUniquePercent() {
-        return uniquePercent;
+    public ColumnDistinctPercentCheckSpec getDistinctPercent() {
+        return distinctPercent;
     }
 
     /**
-     * Sets a new specification of a unique percent check.
-     * @param uniquePercent Unique percent check specification.
+     * Sets a new specification of a distinct percent check.
+     * @param distinctPercent Distinct percent check specification.
      */
-    public void setUniquePercent(ColumnUniquePercentCheckSpec uniquePercent) {
-        this.setDirtyIf(!Objects.equals(this.uniquePercent, uniquePercent));
-        this.uniquePercent = uniquePercent;
-        propagateHierarchyIdToField(uniquePercent, "unique_percent");
+    public void setDistinctPercent(ColumnDistinctPercentCheckSpec distinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.distinctPercent, distinctPercent));
+        this.distinctPercent = distinctPercent;
+        propagateHierarchyIdToField(distinctPercent, "distinct_percent");
     }
 
     /**
