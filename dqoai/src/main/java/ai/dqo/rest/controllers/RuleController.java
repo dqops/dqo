@@ -214,7 +214,7 @@ public class RuleController {
     @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Custom rule definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 204, message = "Custom rule definition successfully deleted"),
             @ApiResponse(code = 404, message = "Custom rule not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })

@@ -40,7 +40,7 @@ type ColumnNavigationProps = {
 
 const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
   const dispatch = useDispatch();
-  const { connection, schema, table, column, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, column: string, tab: string, checkTypes: CheckTypes } = useParams();
+  const { connection, schema, table, column, checkTypes }: { connection: string, schema: string, table: string, column: string, tab: string, checkTypes: CheckTypes } = useParams();
   const history = useHistory();
 
   const activeIndex = useMemo(() => {

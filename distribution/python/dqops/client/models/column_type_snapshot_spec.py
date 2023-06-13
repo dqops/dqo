@@ -14,23 +14,23 @@ class ColumnTypeSnapshotSpec:
         column_type (Union[Unset, str]): Column data type using the monitored database type names.
         nullable (Union[Unset, bool]): Column is nullable.
         length (Union[Unset, int]): Maximum length of text and binary columns.
-        scale (Union[Unset, int]): Scale of a numeric (decimal) data type.
         precision (Union[Unset, int]): Precision of a numeric (decimal) data type.
+        scale (Union[Unset, int]): Scale of a numeric (decimal) data type.
     """
 
     column_type: Union[Unset, str] = UNSET
     nullable: Union[Unset, bool] = UNSET
     length: Union[Unset, int] = UNSET
-    scale: Union[Unset, int] = UNSET
     precision: Union[Unset, int] = UNSET
+    scale: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         column_type = self.column_type
         nullable = self.nullable
         length = self.length
-        scale = self.scale
         precision = self.precision
+        scale = self.scale
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -41,10 +41,10 @@ class ColumnTypeSnapshotSpec:
             field_dict["nullable"] = nullable
         if length is not UNSET:
             field_dict["length"] = length
-        if scale is not UNSET:
-            field_dict["scale"] = scale
         if precision is not UNSET:
             field_dict["precision"] = precision
+        if scale is not UNSET:
+            field_dict["scale"] = scale
 
         return field_dict
 
@@ -57,16 +57,16 @@ class ColumnTypeSnapshotSpec:
 
         length = d.pop("length", UNSET)
 
-        scale = d.pop("scale", UNSET)
-
         precision = d.pop("precision", UNSET)
+
+        scale = d.pop("scale", UNSET)
 
         column_type_snapshot_spec = cls(
             column_type=column_type,
             nullable=nullable,
             length=length,
-            scale=scale,
             precision=precision,
+            scale=scale,
         )
 
         column_type_snapshot_spec.additional_properties = d

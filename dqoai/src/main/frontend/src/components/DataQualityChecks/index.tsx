@@ -59,6 +59,8 @@ const DataQualityChecks = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
   const [timeWindow, setTimeWindow] = useState('Default incremental time window');
+  const [mode, setMode] = useState<string>();
+  const [copyUI, setCopyUI] = useState<UICheckContainerModel>();
 
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
@@ -250,6 +252,19 @@ const DataQualityChecks = ({
     history.push(url);
   };
 
+  const changeCopyUI = (category: string, checkName: string, checked: boolean) => {
+    setCopyUI({
+      ...copyUI,
+      categories: copyUI?.categories?.map((item) => item.category === category ? ({
+        ...item,
+        checks: item.checks?.map((check) => check.check_name === checkName ? ({
+          ...check,
+          configured: checked
+        }) : check)
+      }) : item)
+    })
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center min-h-80">
@@ -371,7 +386,14 @@ const DataQualityChecks = ({
         </div>
       )}
       <table className="w-full">
-        <TableHeader checksUI={checksUI} timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]} />
+        <TableHeader
+          checksUI={checksUI}
+          timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
+          mode={mode}
+          setMode={setMode}
+          copyUI={copyUI}
+          setCopyUI={setCopyUI}
+        />
         <tbody>
           {checksUI?.categories.map((category, index) => (
             <CheckCategoriesView
@@ -384,6 +406,9 @@ const DataQualityChecks = ({
               }
               onUpdate={onUpdate}
               getCheckOverview={getCheckOverview}
+              mode={mode}
+              changeCopyUI={changeCopyUI}
+              copyCategory={copyUI?.categories?.find(item => item.category === category.category)}
             />
           ))}
         </tbody>

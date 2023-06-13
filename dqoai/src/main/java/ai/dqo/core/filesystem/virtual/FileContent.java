@@ -15,9 +15,11 @@
  */
 package ai.dqo.core.filesystem.virtual;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -26,6 +28,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class FileContent implements Cloneable {
     private String textContent;
+    @JsonIgnore
+    private Instant lastModified;
 
     /**
      * Creates an empty file content with no content.
@@ -39,6 +43,17 @@ public class FileContent implements Cloneable {
      */
     public FileContent(String textContent) {
         this.textContent = textContent;
+        this.lastModified = Instant.now();
+    }
+
+    /**
+     * Creates a file content with a text, storing also the file modified timestamp.
+     * @param textContent Text content of the file.
+     * @param lastModified Last modified timestamp from the file.
+     */
+    public FileContent(String textContent, Instant lastModified) {
+        this.textContent = textContent;
+        this.lastModified = lastModified;
     }
 
     /**
@@ -55,6 +70,22 @@ public class FileContent implements Cloneable {
      */
     public void setTextContent(String textContent) {
         this.textContent = textContent;
+    }
+
+    /**
+     * Returns the file last modified timestamp.
+     * @return File last modified timestamp.
+     */
+    public Instant getLastModified() {
+        return lastModified;
+    }
+
+    /**
+     * Sets the file last modified timestamp.
+     * @param lastModified Last modified timestamp.
+     */
+    public void setLastModified(Instant lastModified) {
+        this.lastModified = lastModified;
     }
 
     @Override

@@ -31,15 +31,13 @@ const SourceSchemasView = () => {
   ]);
 
   const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
     setLoading(true);
     DataSourcesApi.getRemoteDataSourceSchemas(connection)
       .then((res) => {
         setSchemas(res.data);
-      })
-      .catch(err => {
       })
       .finally(() => {
         setLoading(false);
@@ -51,7 +49,7 @@ const SourceSchemasView = () => {
   };
 
   const isExist = (schema: SchemaRemoteModel) => {
-    const job = jobs?.jobs?.find((item) =>
+    const job = Object.values(job_dictionary_state)?.find((item) =>
       isEqual(
         item.parameters?.importTableParameters,
         schema.importTableJobParameters

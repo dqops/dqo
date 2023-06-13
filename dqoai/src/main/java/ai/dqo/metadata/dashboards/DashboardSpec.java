@@ -16,18 +16,15 @@
 package ai.dqo.metadata.dashboards;
 
 import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.id.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Description of a single dashboard that is available in the platform.
@@ -140,6 +137,27 @@ public class DashboardSpec extends AbstractSpec implements Cloneable {
     public void setParameters(Map<String, String> parameters) {
         setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
+    }
+
+    /**
+     * Retrieves the folder path to this dashboard.
+     * @param rootNode Root node, used to find folder nodes to retrieve their names.
+     * @return Folder path to this dashboard.
+     */
+    @JsonIgnore
+    public List<String> getFolderPath(HierarchyNode rootNode) {
+        List<String> folderPath = new ArrayList<>();
+        HierarchyId hierarchyId = this.getHierarchyId();
+        HierarchyNode[] nodesOnPath = hierarchyId.getNodesOnPath(rootNode);
+
+        for (HierarchyNode nodeOnPath : nodesOnPath) {
+            if (nodeOnPath instanceof DashboardsFolderSpec) {
+                DashboardsFolderSpec folderSpec = (DashboardsFolderSpec) nodeOnPath;
+                folderPath.add(folderSpec.getFolderName());
+            }
+        }
+
+        return folderPath;
     }
 
     /**

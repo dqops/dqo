@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     )
     from ..models.data_stream_mapping_spec import DataStreamMappingSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
+    from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
     from ..models.recurring_schedules_spec import RecurringSchedulesSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
@@ -27,14 +28,14 @@ T = TypeVar("T", bound="ConnectionSpec")
 class ConnectionSpec:
     """
     Attributes:
-        provider_type (Union[Unset, ConnectionSpecProviderType]): Database provider type (required). Accepts: bigquery,
-            snowflake.
+        provider_type (Union[Unset, ConnectionSpecProviderType]): Database provider type (required).
         bigquery (Union[Unset, BigQueryParametersSpec]):
         snowflake (Union[Unset, SnowflakeParametersSpec]):
         postgresql (Union[Unset, PostgresqlParametersSpec]):
         redshift (Union[Unset, RedshiftParametersSpec]):
         sqlserver (Union[Unset, SqlServerParametersSpec]):
         mysql (Union[Unset, MysqlParametersSpec]):
+        oracle (Union[Unset, OracleParametersSpec]):
         parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_data_stream_mapping (Union[Unset, DataStreamMappingSpec]):
@@ -54,6 +55,7 @@ class ConnectionSpec:
     redshift: Union[Unset, "RedshiftParametersSpec"] = UNSET
     sqlserver: Union[Unset, "SqlServerParametersSpec"] = UNSET
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
+    oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     parallel_runs_limit: Union[Unset, int] = UNSET
     default_data_stream_mapping: Union[Unset, "DataStreamMappingSpec"] = UNSET
     schedules: Union[Unset, "RecurringSchedulesSpec"] = UNSET
@@ -90,6 +92,10 @@ class ConnectionSpec:
         mysql: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.mysql, Unset):
             mysql = self.mysql.to_dict()
+
+        oracle: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.oracle, Unset):
+            oracle = self.oracle.to_dict()
 
         parallel_runs_limit = self.parallel_runs_limit
         default_data_stream_mapping: Union[Unset, Dict[str, Any]] = UNSET
@@ -133,6 +139,8 @@ class ConnectionSpec:
             field_dict["sqlserver"] = sqlserver
         if mysql is not UNSET:
             field_dict["mysql"] = mysql
+        if oracle is not UNSET:
+            field_dict["oracle"] = oracle
         if parallel_runs_limit is not UNSET:
             field_dict["parallel_runs_limit"] = parallel_runs_limit
         if default_data_stream_mapping is not UNSET:
@@ -157,6 +165,7 @@ class ConnectionSpec:
         )
         from ..models.data_stream_mapping_spec import DataStreamMappingSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
+        from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
         from ..models.recurring_schedules_spec import RecurringSchedulesSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
@@ -213,6 +222,13 @@ class ConnectionSpec:
         else:
             mysql = MysqlParametersSpec.from_dict(_mysql)
 
+        _oracle = d.pop("oracle", UNSET)
+        oracle: Union[Unset, OracleParametersSpec]
+        if isinstance(_oracle, Unset):
+            oracle = UNSET
+        else:
+            oracle = OracleParametersSpec.from_dict(_oracle)
+
         parallel_runs_limit = d.pop("parallel_runs_limit", UNSET)
 
         _default_data_stream_mapping = d.pop("default_data_stream_mapping", UNSET)
@@ -257,6 +273,7 @@ class ConnectionSpec:
             redshift=redshift,
             sqlserver=sqlserver,
             mysql=mysql,
+            oracle=oracle,
             parallel_runs_limit=parallel_runs_limit,
             default_data_stream_mapping=default_data_stream_mapping,
             schedules=schedules,

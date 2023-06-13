@@ -26,6 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,7 +146,9 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
             }
 
             String textContent = Files.readString(absolutePath, StandardCharsets.UTF_8);
-            return new FileContent(textContent);
+            FileTime lastModifiedFileTime = Files.getLastModifiedTime(absolutePath);
+            Instant lastModifiedInstant = lastModifiedFileTime.toInstant();
+            return new FileContent(textContent, lastModifiedInstant);
         } catch (Exception ex) {
             throw new LocalFileSystemException("Cannot read a text file", ex);
         }
@@ -172,6 +176,10 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
             if (textContent != null) {
                 Files.writeString(absoluteFilePath, textContent, StandardCharsets.UTF_8,
                         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+                FileTime lastModifiedFileTime = Files.getLastModifiedTime(absoluteFilePath);
+                Instant lastModifiedInstant = lastModifiedFileTime.toInstant();
+                fileContent.setLastModified(lastModifiedInstant);
             } else {
                 throw new LocalFileSystemException("File content type not supported");
             }
@@ -215,7 +223,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                 return null;
             }
 
-            try(Stream<Path> fileList = Files.list(absolutePath)) {
+            try (Stream<Path> fileList = Files.list(absolutePath)) {
                 List<HomeFolderPath> folders = fileList
                         .filter(path -> Files.isDirectory(path))
                         .map(path -> {

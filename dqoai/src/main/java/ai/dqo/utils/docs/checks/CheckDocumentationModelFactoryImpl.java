@@ -24,6 +24,8 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.mysql.MysqlConnectionProvider;
 import ai.dqo.connectors.mysql.MysqlParametersSpec;
+import ai.dqo.connectors.oracle.OracleConnectionProvider;
+import ai.dqo.connectors.oracle.OracleParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
@@ -46,7 +48,6 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.HomeType;
-import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
 import ai.dqo.metadata.userhome.UserHomeImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
@@ -57,6 +58,7 @@ import ai.dqo.services.check.matching.SimilarCheckMatchingService;
 import ai.dqo.services.check.matching.SimilarCheckModel;
 import ai.dqo.services.check.matching.SimilarChecksContainer;
 import ai.dqo.services.check.matching.SimilarChecksGroup;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import ai.dqo.utils.docs.rules.RuleDocumentationModelFactory;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModel;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactory;
@@ -347,8 +349,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         checkDocumentationModel.setCheckSample(createCheckSample(yamlSample, similarCheckModel, checkDocumentationModel));
 
+        Comparator<CheckProviderRenderedSqlDocumentationModel> checkProviderRenderedSqlDocumentationModelComparator =
+                Comparator.comparing(model -> model.getProviderTypeModel().getProviderTypeDisplayName().toLowerCase());
+
         List<CheckProviderRenderedSqlDocumentationModel> providerSamples = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
-        providerSamples.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        providerSamples.sort(checkProviderRenderedSqlDocumentationModelComparator);
         checkDocumentationModel.setProviderTemplates(providerSamples);
 
         trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
@@ -365,7 +370,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
         List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
-        providerSamplesDataStream.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        providerSamplesDataStream.sort(checkProviderRenderedSqlDocumentationModelComparator);
         checkDocumentationModel.setProviderTemplatesDataStreams(providerSamplesDataStream);
 
 
@@ -462,7 +467,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             ProviderType providerType = providerSensorDefinitionWrapper.getProvider();
 
             CheckProviderRenderedSqlDocumentationModel providerDocModel = new CheckProviderRenderedSqlDocumentationModel();
-            providerDocModel.setProviderType(providerType);
+            providerDocModel.setProviderTypeModel(ProviderTypeModel.fromProviderType(providerType));
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
             if (sqlTemplate != null) {
                 providerDocModel.setJinjaTemplate(sqlTemplate);
@@ -490,6 +495,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setMysql(new MysqlParametersSpec() {{
                     setDatabase("your_my_sql_database");
+                }});
+                connectionSpec.setOracle(new OracleParametersSpec() {{
+                    setDatabase("your_oracle_database");
                 }});
                 connectionSpec.setProviderType(providerType);
 
@@ -550,6 +558,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return SqlServerConnectionProvider.DIALECT_SETTINGS;
             case mysql:
                 return MysqlConnectionProvider.DIALECT_SETTINGS;
+            case oracle:
+                return OracleConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

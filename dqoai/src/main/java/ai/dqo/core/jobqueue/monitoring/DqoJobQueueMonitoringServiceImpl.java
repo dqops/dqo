@@ -515,4 +515,18 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             }
         }
     }
+
+    /**
+     * Finds the job identified by a job id.
+     *
+     * @param jobId Job id to find.
+     * @return Job history entry model (with the most recent job's status) or null, when the job is no longer tracked or is missing.
+     */
+    @Override
+    public DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId) {
+        synchronized (this.lock) {
+            DqoJobHistoryEntryModel dqoJobHistoryEntryModel = this.allJobs.get(jobId);
+            return dqoJobHistoryEntryModel;
+        }
+    }
 }

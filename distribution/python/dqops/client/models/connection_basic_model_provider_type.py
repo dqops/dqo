@@ -4,6 +4,7 @@ from enum import Enum
 class ConnectionBasicModelProviderType(str, Enum):
     BIGQUERY = "bigquery"
     MYSQL = "mysql"
+    ORACLE = "oracle"
     POSTGRESQL = "postgresql"
     REDSHIFT = "redshift"
     SNOWFLAKE = "snowflake"

@@ -4,6 +4,7 @@ from enum import Enum
 class ProviderSensorModelProviderType(str, Enum):
     BIGQUERY = "bigquery"
     MYSQL = "mysql"
+    ORACLE = "oracle"
     POSTGRESQL = "postgresql"
     REDSHIFT = "redshift"
     SNOWFLAKE = "snowflake"

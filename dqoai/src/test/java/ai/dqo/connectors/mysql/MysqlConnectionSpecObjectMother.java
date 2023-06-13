@@ -26,8 +26,8 @@ public class MysqlConnectionSpecObjectMother {
     private static final int PORT = 3306;
 
     /**
-     * Creates a shared MySQL Server container using Testcontainers. The container will be stopped when the unit/integration session will finish.
-     * @return Shared container with a started postgresql instance.
+     * Creates a shared MySQL container using Testcontainers. The container will be stopped when the unit/integration session will finish.
+     * @return Shared container with a started MySQL instance.
      */
     public static MySQLContainer<?> getSharedContainer() {
         if (sharedContainer == null) {
@@ -50,7 +50,7 @@ public class MysqlConnectionSpecObjectMother {
     public static final String CONNECTION_NAME = "mysql_connection";
 
     /**
-     * Creates a default connection spec to sql server database that should be started by test containers.
+     * Creates a default connection spec to MySQL database that should be started by test containers.
      * @return Connection spec to a test container instance.
      */
     public static ConnectionSpec create() {

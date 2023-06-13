@@ -187,13 +187,12 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   useEffect(() => {
     if (
-      job &&
-      (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-        job.status === DqoJobHistoryEntryModelStatusEnum.failed)
+      (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+        job?.status === DqoJobHistoryEntryModelStatusEnum.failed)
     ) {
       refetch(filters.month, filters.dataStreamName);
     }
-  }, [job]);
+  }, [job?.status]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);

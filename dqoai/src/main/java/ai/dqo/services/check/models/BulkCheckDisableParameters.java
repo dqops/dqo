@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +36,8 @@ import java.util.Map;
 public class BulkCheckDisableParameters {
     @JsonPropertyDescription("Filters addressing basic tree search parameters. These filters takes precedence over other selectors.")
     @NotNull
-    CheckSearchFilters checkSearchFilters;
+    CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
 
     @JsonPropertyDescription("List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.")
-    Map<String, List<String>> selectedTablesToColumns;
+    Map<String, List<String>> selectedTablesToColumns = new LinkedHashMap<>();
 }

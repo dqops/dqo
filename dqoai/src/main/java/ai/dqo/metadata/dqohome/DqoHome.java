@@ -16,7 +16,7 @@
 package ai.dqo.metadata.dqohome;
 
 import ai.dqo.metadata.basespecs.Flushable;
-import ai.dqo.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
+import ai.dqo.metadata.dashboards.DashboardFolderListSpecWrapper;
 import ai.dqo.metadata.definitions.checks.CheckDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
@@ -49,5 +49,5 @@ public interface DqoHome extends Flushable, HierarchyNode {
      * Returns a list of dashboards definitions.
      * @return Collection of dashboards definitions.
      */
-    DashboardFolderListSpecWrapperImpl getDashboards();
+    DashboardFolderListSpecWrapper getDashboards();
 }

@@ -16,6 +16,7 @@
 package ai.dqo.utils.docs.sensors;
 
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import lombok.Data;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class SensorDocumentationModel {
      * Templates are split by end of line and load as list because of mkdocs rendering require add extra spaces
      * before each line.
      */
-    private Map<String, List<String>> sqlTemplates;
+    private Map<ProviderTypeModel, List<String>> sqlTemplates;
 
     /**
      * Sensor definition wrapper.

@@ -41,6 +41,7 @@ import org.springframework.context.annotation.Lazy;
 import picocli.CommandLine;
 import picocli.shell.jline3.PicocliCommands;
 
+import java.io.PushbackInputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
@@ -179,6 +180,7 @@ public class CliConfiguration {
     @Bean(name = "terminalReader")
     public TerminalReader terminalReader(TerminalWriter terminalWriter) {
         if (CliApplication.isRunningOneShotMode()) {
+            System.setIn(new PushbackInputStream(System.in));
             return new TerminalReaderSystemImpl(terminalWriter);
         }
 

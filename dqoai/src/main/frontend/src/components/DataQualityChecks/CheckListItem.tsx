@@ -16,12 +16,19 @@ import CheckRuleItem from './CheckRuleItem';
 import { JobApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { isEqual } from 'lodash';
 import { Tooltip } from '@material-tailwind/react';
 import moment from "moment";
 import CheckDetails from "./CheckDetails/CheckDetails";
 import { CheckTypes } from "../../shared/routes";
 import { useParams } from "react-router-dom";
+import Checkbox from "../Checkbox";
+
+export interface ITab {
+  label: string;
+  value: string;
+  type?: string;
+  field?: UIFieldModel;
+}
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -31,29 +38,30 @@ interface ICheckListItemProps {
   getCheckOverview: () => void;
   onUpdate: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
+  mode?: string;
+  changeCopyUI: (checked: boolean) => void;
+  checkedCopyUI?: boolean;
 }
 
-export interface ITab {
-  label: string;
-  value: string;
-  type?: string;
-  field?: UIFieldModel;
-}
-
-const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdate, timeWindowFilter }: ICheckListItemProps) => {
+const CheckListItem = ({
+  mode,
+  check,
+  onChange,
+  checkResult,
+  getCheckOverview,
+  onUpdate,
+  timeWindowFilter,
+  changeCopyUI,
+  checkedCopyUI
+}: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const [showDetails, setShowDetails] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-
-  const job = jobs?.jobs?.find((item) =>
-    isEqual(
-      item.parameters?.runChecksParameters?.checkSearchFilters,
-      check.run_checks_job_template
-    )
-  );
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const openCheckSettings = () => {
     if (showDetails) {
@@ -121,10 +129,11 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
       return;
     }
     await onUpdate();
-    JobApiClient.runChecks(false, undefined, {
+    const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: check?.run_checks_job_template,
       ...checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
     });
+    setJobId(res.data?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;
@@ -184,15 +193,23 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
       >
         <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
           <div className="flex space-x-1 items-center">
-            {/*<div className="w-5">*/}
-            {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
-            {/*</div>*/}
-            <div>
-              <Switch
-                checked={!!check?.configured}
-                onChange={onChangeConfigured}
-              />
-            </div>
+            {mode ? (
+              <div className="w-5 h-5 block flex items-center">
+                {check?.configured && (
+                  <Checkbox
+                    checked={checkedCopyUI}
+                    onChange={changeCopyUI}
+                  />
+                )}
+              </div>
+            ) : (
+              <div>
+                <Switch
+                  checked={!!check?.configured}
+                  onChange={onChangeConfigured}
+                />
+              </div>
+            )}
             <Tooltip
               content={!check?.disabled ? 'Enabled' : 'Disabled'}
               className="max-w-80 py-4 px-4 bg-gray-800"

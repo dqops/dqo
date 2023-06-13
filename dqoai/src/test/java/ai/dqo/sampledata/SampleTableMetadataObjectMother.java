@@ -20,6 +20,7 @@ import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.connectors.mysql.MysqlConnectionSpecObjectMother;
+import ai.dqo.connectors.oracle.OracleConnectionSpecObjectMother;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import ai.dqo.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
@@ -62,6 +63,9 @@ public class SampleTableMetadataObjectMother {
 
             case mysql:
                 return MysqlConnectionSpecObjectMother.create();
+
+            case oracle:
+                return OracleConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -92,6 +96,9 @@ public class SampleTableMetadataObjectMother {
 
             case mysql:
                 return MysqlConnectionSpecObjectMother.getSchemaName();
+
+            case oracle:
+                return OracleConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

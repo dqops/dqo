@@ -28,7 +28,7 @@ public class SqlServerConnectionSpecObjectMother {
     private static final String SQLSERVERPASSWORD = "Te$t_sqlserver1";
     /**
      * Creates a shared MSSQL Server container using Testcontainers. The container will be stopped when the unit/integration session will finish.
-     * @return Shared container with a started postgresql instance.
+     * @return Shared container with a started MSSQL Server instance.
      */
     public static MSSQLServerContainer<?> getSharedContainer() {
         if (sharedContainer == null) {
@@ -45,7 +45,7 @@ public class SqlServerConnectionSpecObjectMother {
     }
 
     /**
-     * Connection name to big query.
+     * Connection name to MSSQL Server.
      */
     public static final String CONNECTION_NAME = "sqlserver_connection";
 
