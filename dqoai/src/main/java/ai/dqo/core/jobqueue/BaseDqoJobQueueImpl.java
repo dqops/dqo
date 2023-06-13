@@ -24,6 +24,7 @@ import ai.dqo.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -37,7 +38,7 @@ import java.util.function.Consumer;
  * The other subclass is the {@link ParentDqoJobQueueImpl} that runs only {@link ParentDqoQueueJob} jobs that should not perform too much logic, they should just start child jobs on the {@link DqoJobQueueImpl} main queue and wait.
  */
 @Slf4j
-public abstract class BaseDqoJobQueueImpl implements DisposableBean {
+public abstract class BaseDqoJobQueueImpl implements DisposableBean, InitializingBean {
     public static final int MAX_THREADS = 1024;
     public static final int MAX_WAIT_FOR_THREAD_STOP_MS = 5000;
 
@@ -281,7 +282,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      */
     protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId) {
         if (!this.started) {
-            throw new IllegalStateException("Cannot publish a job because the job queue is not started yet.");
+            throw new IllegalStateException("Cannot publish a job because DQO is shutting down or has not started yet.");
         }
 
         boolean newThreadStarted = this.startNewThreadWhenRequired();
@@ -320,6 +321,15 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
 
 
         // TODO: cancel also a job before it even started execution (remove from the queue, notify the job queue monitoring service)
+    }
+
+    /**
+     * Starts the job queue when the application is started.
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.start();
     }
 
     /**
