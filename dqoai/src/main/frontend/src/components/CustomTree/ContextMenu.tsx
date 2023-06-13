@@ -13,7 +13,11 @@ import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from '../../shared/routes';
 import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
-import { TimeWindowFilterParameters } from '../../api';
+import {
+  TimeWindowFilterParameters,
+  RunChecksQueueJobParameters
+} from '../../api';
+import { JobApiClient } from '../../services/apiClient';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -78,7 +82,20 @@ const ContextMenu = ({
     e.stopPropagation();
   };
 
-  console.log(RUN_CHECK_TIME_WINDOW_FILTERS);
+  const runPartitionedChecks = async (obj: RunChecksQueueJobParameters) => {
+    const res = await JobApiClient.runChecks(false, undefined, obj);
+    console.log(res.data);
+  };
+
+  const setSetectedRun = (selected: TimeWindowFilterParameters) => {
+    const obj: RunChecksQueueJobParameters = {
+      timeWindowFilter: selected
+    };
+    // console.log(obj);
+    return obj;
+  };
+
+  // console.log(RUN_CHECK_TIME_WINDOW_FILTERS);
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -118,14 +135,21 @@ const ContextMenu = ({
             )}
           {isClicked && (
             <div className="w-80 h-81 bg-white absolute left-50 top-0 rounded border">
-              {Object.entries(RUN_CHECK_TIME_WINDOW_FILTERS).map(([key]) => (
-                <div
-                  className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                  key={key}
-                >
-                  {key}
-                </div>
-              ))}
+              {Object.entries(RUN_CHECK_TIME_WINDOW_FILTERS).map(
+                ([key, value]) => (
+                  <div
+                    className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                    key={key}
+                    onClick={() =>
+                      value
+                        ? runPartitionedChecks(setSetectedRun(value))
+                        : setIsClicked(true)
+                    }
+                  >
+                    {key}
+                  </div>
+                )
+              )}
             </div>
           )}
           {[
