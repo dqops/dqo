@@ -1,20 +1,20 @@
-import React, { Fragment, useState } from "react";
-import SvgIcon from "../SvgIcon";
-import CheckListItem from "./CheckListItem";
+import React, { Fragment, useState } from 'react';
+import SvgIcon from '../SvgIcon';
+import CheckListItem from './CheckListItem';
 import {
   CheckResultsOverviewDataModel,
   DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
   UICheckModel,
   UIQualityCategoryModel
-} from "../../api";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
-import { JobApiClient } from "../../services/apiClient";
-import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
-import CheckMenu from "./CheckMenu";
-import { useParams } from "react-router-dom";
-import { CheckTypes } from "../../shared/routes";
+} from '../../api';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import { JobApiClient } from '../../services/apiClient';
+import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
+import CheckMenu from './CheckMenu';
+import { useParams } from 'react-router-dom';
+import { CheckTypes } from '../../shared/routes';
 
 interface CheckCategoriesViewProps {
   category: UIQualityCategoryModel;
@@ -25,7 +25,7 @@ interface CheckCategoriesViewProps {
   timeWindowFilter?: TimeWindowFilterParameters | null;
   mode?: string;
   changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
-  copyCategory?: UIQualityCategoryModel
+  copyCategory?: UIQualityCategoryModel;
 }
 const CheckCategoriesView = ({
   mode,
@@ -38,7 +38,9 @@ const CheckCategoriesView = ({
   changeCopyUI,
   copyCategory
 }: CheckCategoriesViewProps) => {
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [jobId, setJobId] = useState<number>();
@@ -48,10 +50,12 @@ const CheckCategoriesView = ({
   const onRunChecks = async () => {
     const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: category?.run_checks_job_template,
-      ... checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
+      ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
+        ? { timeWindowFilter }
+        : {})
     });
 
-    setJobId(res.data?.jobId?.jobId);
+    // setJobId(res.data?.jobId?.jobId);
 
     if (getCheckOverview) {
       getCheckOverview();
@@ -61,10 +65,7 @@ const CheckCategoriesView = ({
   return (
     <Fragment>
       <tr>
-        <td
-          className="py-2 px-4 bg-gray-50 border-b border-t"
-          colSpan={2}
-        >
+        <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
           <div className="flex items-center gap-2">
             <div className="font-semibold text-gray-700 capitalize">
               {category.category}
@@ -103,16 +104,28 @@ const CheckCategoriesView = ({
           <CheckListItem
             check={check}
             key={index}
-            onChange={(item) =>
-              handleChangeDataDataStreams(item, index)
-            }
-            checkResult={checkResultsOverview.find((item) => item.checkName === check.check_name && category.category === item.checkCategory)}
+            onChange={(item) => handleChangeDataDataStreams(item, index)}
+            checkResult={checkResultsOverview.find(
+              (item) =>
+                item.checkName === check.check_name &&
+                category.category === item.checkCategory
+            )}
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}
             timeWindowFilter={timeWindowFilter}
             mode={mode}
-            changeCopyUI={(value: boolean) => changeCopyUI(category.category ?? '', check.check_name ?? '', value)}
-            checkedCopyUI={copyCategory?.checks?.find(item => item.check_name === check.check_name)?.configured}
+            changeCopyUI={(value: boolean) =>
+              changeCopyUI(
+                category.category ?? '',
+                check.check_name ?? '',
+                value
+              )
+            }
+            checkedCopyUI={
+              copyCategory?.checks?.find(
+                (item) => item.check_name === check.check_name
+              )?.configured
+            }
           />
         ))}
       <DeleteOnlyDataDialog
@@ -122,7 +135,7 @@ const CheckCategoriesView = ({
           setDeleteDataDialogOpened(false);
           JobApiClient.deleteStoredData({
             ...category.data_clean_job_template,
-            ...params,
+            ...params
           });
         }}
       />
