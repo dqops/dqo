@@ -26,7 +26,7 @@ export const HistogramChart = () => {
         incidentId
       })
     );
-  }, [])
+  }, [connection, year, month, incidentId])
 
   useEffect(() => {
     if (!histogramFilter) return;

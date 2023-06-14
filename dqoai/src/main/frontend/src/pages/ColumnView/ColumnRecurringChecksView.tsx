@@ -36,7 +36,6 @@ const ColumnRecurringChecksView = () => {
   const history = useHistory();
 
   const {
-    columnBasic,
     dailyRecurring,
     monthlyRecurring,
     isUpdatedDailyRecurring,
