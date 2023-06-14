@@ -5,9 +5,10 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { useParams } from "react-router-dom";
 import { CheckTypes } from "../../shared/routes";
-import { SchemaApiClient } from "../../services/apiClient";
-import { UIAllChecksModel } from "../../api";
+import { ConnectionApiClient, SchemaApiClient } from "../../services/apiClient";
+import { AllChecksModel, CheckTemplate } from "../../api";
 import Tabs from "../../components/Tabs";
+import { AxiosResponse } from "axios";
 
 const tabs = [
   {
@@ -30,43 +31,123 @@ export const MultiChecks = () => {
   const [tableNamePattern, setTableNamePattern] = useState('');
   const [columnNamePattern, setColumnNamePattern] = useState('');
   const [columnDataType, setColumnDataType] = useState('');
-  const [checks, setChecks] = useState<UIAllChecksModel>();
-  const [activeTab, setActiveTab] = useState('daily');
+  const [checks, setChecks] = useState<AllChecksModel>();
+  const [activeTab, setActiveTab] = useState<'daily' | 'monthly'>('daily');
+  const [selectedData, setSelectedData] = useState<string[]>([]);
 
   useEffect(() => {
-    if (checkTypes === CheckTypes.PROFILING) {
-      SchemaApiClient.getSchemaProfilingChecksTemplates(connection, schema, checkTarget).then((res) => {
-        const possibleCategories = Array.from(new Set(res.data.map((item) => item.check_category)));
-        const possibleCheckNames = Array.from(new Set(res.data.map((item) => item.check_name)));
+    const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
+      const possibleCategories = Array.from(new Set(res.data.map((item) => item.check_category)));
+      const possibleCheckNames = Array.from(new Set(res.data.map((item) => item.check_name)));
 
-        setCheckCategoryOptions(possibleCategories.map((item) => ({
-          label: item ?? '',
-          value: item ?? ''
-        })));
-        setCheckNameOptions(possibleCheckNames.map((item) => ({
-          label: item ?? '',
-          value: item ?? ''
-        })));
-      });
+      setCheckCategoryOptions(possibleCategories.map((item) => ({
+        label: item ?? '',
+        value: item ?? ''
+      })));
+      setCheckNameOptions(possibleCheckNames.map((item) => ({
+        label: item ?? '',
+        value: item ?? ''
+      })));
+    };
+
+    if (checkTypes === CheckTypes.PROFILING) {
+      SchemaApiClient.getSchemaProfilingChecksTemplates(connection, schema, checkTarget).then(processResult);
+    } else if (checkTypes === CheckTypes.RECURRING) {
+      SchemaApiClient.getSchemaRecurringChecksTemplates(connection, schema, activeTab, checkTarget).then(processResult);
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
+      SchemaApiClient.getSchemaPartitionedChecksTemplates(connection, schema, activeTab, checkTarget).then(processResult);
     }
   }, [connection, schema, checkTypes, checkTarget]);
 
   const searchChecks = () => {
-    SchemaApiClient.getSchemaProfilingChecksUI(
-      connection,
-      schema,
-      tableNamePattern,
-      columnNamePattern,
-      columnDataType,
-      checkTarget,
-      checkCategory,
-      checkName
-    ).then((res) => {
-      setChecks(res.data);
-    }).catch(err => {
+    if (checkTypes === CheckTypes.PROFILING) {
+      SchemaApiClient.getSchemaProfilingChecksModel(
+        connection,
+        schema,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName
+      ).then((res) => {
+        setChecks(res.data);
+      }).catch(err => {
 
-    });
+      });
+    } else if (checkTypes === CheckTypes.RECURRING) {
+      SchemaApiClient.getSchemaRecurringChecksModel(
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName
+      ).then((res) => {
+        setChecks(res.data);
+      }).catch(err => {
+
+      });
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
+      SchemaApiClient.getSchemaPartitionedChecksModel(
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName
+      ).then((res) => {
+        setChecks(res.data);
+      }).catch(err => {
+
+      });
+    }
   };
+
+
+  const bulkEnableChecks = () => {
+    ConnectionApiClient.bulkEnableConnectionChecks(connection, schema)
+  };
+
+  const selectAll = () => {
+    if (checkTarget === 'table') {
+      setSelectedData(
+        checks
+          ?.table_checks_model
+          ?.schema_table_checks_models
+          ?.map(schemaTable => schemaTable.table_checks_models?.map(item => item.table_name || '') || [])
+          ?.reduce((arr, item) => [...arr, ...item], [])
+        || []
+      )
+    } else {
+      setSelectedData(
+        checks
+          ?.column_checks_model
+          ?.table_column_checks_models
+          ?.map(tableColumn => tableColumn.column_checks_models?.map(item => item.column_name || '') || [])
+          ?.reduce((arr, item) => [...arr, ...item], [])
+        || []
+      )
+    }
+  };
+
+  const deselectAll = () => {
+    setSelectedData([]);
+  };
+
+  const onChangeSelection = (name: string) => {
+    if (selectedData.includes(name)) {
+      setSelectedData(selectedData.filter((item) => item !== name));
+    } else {
+      setSelectedData([...selectedData, name]);
+    }
+  }
 
   return (
     <div className="text-sm py-4">
@@ -144,8 +225,14 @@ export const MultiChecks = () => {
 
         <div className="border border-gray-300 rounded-lg p-4 my-4">
           <div className="flex justify-end gap-4">
-            <Button className="text-sm py-2.5" label="Select All" color="primary" />
-            <Button className="text-sm py-2.5" label="Unselect All" disabled color="primary" />
+            <Button
+              className="text-sm py-2.5" label="Select All" color="primary"
+              onClick={selectAll}
+            />
+            <Button
+              className="text-sm py-2.5" label="Unselect All" color="secondary"
+              onClick={deselectAll}
+            />
             <Button className="text-sm py-2.5" label="Update selected" disabled color="primary" />
             <Button className="text-sm py-2.5" label="Update all" color="primary" />
             <Button className="text-sm py-2.5" label="Disable selected" color="primary" />
@@ -161,6 +248,11 @@ export const MultiChecks = () => {
                 <th className="px-4 py-2 text-left">
                   Table
                 </th>
+                {checkTarget === 'column' && (
+                  <th className="px-4 py-2 text-left">
+                    Column
+                  </th>
+                )}
                 <th className="px-4 py-2 text-left">
                   Sensor parameters
                 </th>
@@ -176,46 +268,78 @@ export const MultiChecks = () => {
               </tr>
               </thead>
               <tbody>
-              {checks?.table_checks_model?.ui_schema_table_checks_models?.map((schemaTable, index) => (
-                <React.Fragment key={index}>
-                  {schemaTable?.ui_table_checks_models?.map((tableCheck, index2) => (
-                    <React.Fragment key={index2}>
-                      {Object.values(tableCheck.check_containers || {}).map((item, index3) => (
-                        <React.Fragment key={index3}>
-                          {item.categories?.map((category, index4) => (
-                            <React.Fragment key={index4}>
-                              {category.checks?.map((check, index5) => (
-                                <tr key={index5}>
-                                  <td className="px-4 py-2 text-left">
-                                    <div className="flex">
-                                      <Checkbox onChange={() => {}} />
-                                    </div>
-                                  </td>
-                                  <td className="px-4 py-2 text-left">
-                                    {tableCheck.table_name}
-                                  </td>
-                                  <td className="px-4 py-2 text-left">
-                                    {check.sensor_name}
-                                  </td>
-                                  <td className="px-4 py-2 text-left truncate">
-                                    {check.rule?.warning?.rule_name}
-                                  </td>
-                                  <td className="px-4 py-2 text-left truncate">
-                                    {check.rule?.error?.rule_name}
-                                  </td>
-                                  <td className="px-4 py-2 text-left truncate">
-                                    {check.rule?.fatal?.rule_name}
-                                  </td>
-                                </tr>
-                              ))}
-                            </React.Fragment>
-                          ))}
-                        </React.Fragment>
+              {checkTarget === 'column' ? (
+                <>
+                  {checks?.column_checks_model?.table_column_checks_models?.map((columnTable, index) => (
+                    <React.Fragment key={index}>
+                      {columnTable?.column_checks_models?.map((columnCheck, index2) => (
+                        <tr key={index2}>
+                          <td className="px-4 py-2 text-left">
+                            <div className="flex">
+                              <Checkbox
+                                onChange={() => onChangeSelection(columnCheck.column_name ?? '')}
+                                checked={selectedData.includes(columnCheck.column_name || '')}
+                              />
+                            </div>
+                          </td>
+                          <td className="px-4 py-2 text-left">
+                            {columnTable.schema_table_name?.table_name}
+                          </td>
+                          <td className="px-4 py-2 text-left">
+                            {columnCheck.column_name}
+                          </td>
+                          <td className="px-4 py-2 text-left">
+                            {/*{check.sensor_name}*/}
+                          </td>
+                          <td className="px-4 py-2 text-left truncate">
+                            {/*{check.rule?.warning?.rule_name}*/}
+                          </td>
+                          <td className="px-4 py-2 text-left truncate">
+                            {/*{check.rule?.error?.rule_name}*/}
+                          </td>
+                          <td className="px-4 py-2 text-left truncate">
+                            {/*{check.rule?.fatal?.rule_name}*/}
+                          </td>
+                        </tr>
                       ))}
                     </React.Fragment>
                   ))}
-                </React.Fragment>
-              ))}
+                </>
+              ) : (
+                <>
+                  {checks?.table_checks_model?.schema_table_checks_models?.map((schemaTable, index) => (
+                    <React.Fragment key={index}>
+                      {schemaTable?.table_checks_models?.map((tableCheck, index2) => (
+                        <tr key={index2}>
+                          <td className="px-4 py-2 text-left">
+                            <div className="flex">
+                              <Checkbox
+                                onChange={() => onChangeSelection(tableCheck.table_name ?? '')}
+                                checked={selectedData.includes(tableCheck.table_name || '')}
+                              />
+                            </div>
+                          </td>
+                          <td className="px-4 py-2 text-left">
+                            {tableCheck.table_name}
+                          </td>
+                          <td className="px-4 py-2 text-left">
+                            {/*{check.sensor_name}*/}
+                          </td>
+                          <td className="px-4 py-2 text-left truncate">
+                            {/*{check.rule?.warning?.rule_name}*/}
+                          </td>
+                          <td className="px-4 py-2 text-left truncate">
+                            {/*{check.rule?.error?.rule_name}*/}
+                          </td>
+                          <td className="px-4 py-2 text-left truncate">
+                            {/*{check.rule?.fatal?.rule_name}*/}
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
               </tbody>
             </table>
           </div>
