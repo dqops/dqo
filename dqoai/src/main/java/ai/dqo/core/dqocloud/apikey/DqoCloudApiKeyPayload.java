@@ -32,7 +32,7 @@ public class DqoCloudApiKeyPayload {
     /**
      * API Key format version.
      */
-    public static final long CURRENT_API_KEY_VERSION = 7;
+    public static final long CURRENT_API_KEY_VERSION = 8;
 
     @JsonProperty("sub")
     private String subject;
