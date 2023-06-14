@@ -2,7 +2,6 @@ import { CheckResultDetailedSingleModel, IncidentModel } from "../../api";
 import React, { useEffect, useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
-import { ChecksApi } from "../../services/apiClient";
 import { SortableColumn } from "../IncidentConnection/SortableColumn";
 import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
 import moment from "moment";
