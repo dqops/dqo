@@ -22,19 +22,19 @@ import ai.dqo.cloud.rest.model.TenantQueryAccessTokenModel;
 import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import ai.dqo.core.dqocloud.client.DqoCloudApiClientFactory;
 import ai.dqo.metadata.dashboards.DashboardSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -72,23 +72,32 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
      */
     @Override
     public String getLookerStudioQueryApiKey() {
-        synchronized (this.lock) {
-            if (this.lookerStudioApiKeyValidUntil != null && this.lookerStudioApiKeyValidUntil.isAfter(Instant.now())) {
-                return this.lookerStudioApiKey;
+        try {
+            synchronized (this.lock) {
+                if (this.lookerStudioApiKeyValidUntil != null && this.lookerStudioApiKeyValidUntil.isAfter(Instant.now())) {
+                    return this.lookerStudioApiKey;
+                }
             }
+
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
+            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey();
+
+            synchronized (this.lock) {
+                DqoCloudApiKey decodedApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(queryApiKey);
+                this.lookerStudioApiKeyValidUntil = decodedApiKey.getApiKeyPayload().getExpiresAt().minus(10, ChronoUnit.MINUTES);
+                this.lookerStudioApiKey = queryApiKey;
+            }
+
+            return queryApiKey;
         }
+        catch (HttpClientErrorException httpClientErrorException) {
+            if (httpClientErrorException.getStatusCode().is4xxClientError()) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+            }
 
-        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
-        LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
-        String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey();
-
-        synchronized (this.lock) {
-            DqoCloudApiKey decodedApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(queryApiKey);
-            this.lookerStudioApiKeyValidUntil = decodedApiKey.getApiKeyPayload().getExpiresAt().minus(10, ChronoUnit.MINUTES);
-            this.lookerStudioApiKey = queryApiKey;
+            throw new DqoRuntimeException("Failed to receive a refresh token from DQO Cloud", httpClientErrorException);
         }
-
-        return queryApiKey;
     }
 
     /**
@@ -98,34 +107,41 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     public TenantQueryAccessTokenModel getLookerStudioAccessToken() {
         String lookerStudioQueryApiKey = getLookerStudioQueryApiKey();
 
-        synchronized (this.lock) {
-            if (this.accessTokenValidUntil != null && this.accessTokenValidUntil.isAfter(Instant.now())) {
-                return this.queryAccessTokenModel;
-            }
-        }
-
-        ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
-        apiClient.setApiKey(lookerStudioQueryApiKey);
-        apiClient.getAuthentication("api_key");
-        AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(apiClient);
-        TenantQueryAccessTokenModel tenantQueryAccessTokenModel = accessTokenIssueApi.issueTenantDataROQueryAccessToken();
-
-        Instant expiresAt = Instant.now().plus(1, ChronoUnit.HOURS);
         try {
-            Date parsedDate = DateUtils.parseDate(tenantQueryAccessTokenModel.getExpiresAt());
-            expiresAt = parsedDate.toInstant();
-        }
-        catch (ParseException pe) {
-            throw new DqoRuntimeException("Cannot parse expires at: " + tenantQueryAccessTokenModel.getExpiresAt(), pe);
-        }
+            synchronized (this.lock) {
+                if (this.accessTokenValidUntil != null && this.accessTokenValidUntil.isAfter(Instant.now())) {
+                    return this.queryAccessTokenModel;
+                }
+            }
 
-        synchronized (this.lock) {
-            this.accessTokenValidUntil = expiresAt.minus(30, ChronoUnit.MINUTES);
-            this.queryAccessTokenModel = tenantQueryAccessTokenModel;
-        }
+            ApiClient apiClient = new ApiClient();
+            apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
+            apiClient.setApiKey(lookerStudioQueryApiKey);
+            apiClient.getAuthentication("api_key");
+            AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(apiClient);
+            TenantQueryAccessTokenModel tenantQueryAccessTokenModel = accessTokenIssueApi.issueTenantDataROQueryAccessToken();
 
-        return tenantQueryAccessTokenModel;
+            Instant expiresAt = Instant.now().plus(1, ChronoUnit.HOURS);
+            try {
+                expiresAt = Instant.parse(tenantQueryAccessTokenModel.getExpiresAt());
+            } catch (DateTimeParseException pe) {
+                throw new DqoRuntimeException("Cannot parse expires at: " + tenantQueryAccessTokenModel.getExpiresAt(), pe);
+            }
+
+            synchronized (this.lock) {
+                this.accessTokenValidUntil = expiresAt.minus(30, ChronoUnit.MINUTES);
+                this.queryAccessTokenModel = tenantQueryAccessTokenModel;
+            }
+
+            return tenantQueryAccessTokenModel;
+        }
+        catch (HttpClientErrorException httpClientErrorException) {
+            if (httpClientErrorException.getStatusCode().is4xxClientError()) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+            }
+
+            throw new DqoRuntimeException("Failed to receive an access token from DQO Cloud", httpClientErrorException);
+        }
     }
 
     /**
@@ -141,6 +157,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
         String token = refreshToken +
                 ",t=" + lookerStudioAccessToken.getAccessToken() +
                 ",p=" + lookerStudioAccessToken.getBillingProjectId() +
+                ",d=" + lookerStudioAccessToken.getDataSetName() +
                 ",e=" + this.accessTokenValidUntil.toEpochMilli();
 
         StringBuilder stringBuilder = new StringBuilder();
