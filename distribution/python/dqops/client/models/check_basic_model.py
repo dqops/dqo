@@ -9,57 +9,58 @@ T = TypeVar("T", bound="CheckBasicModel")
 
 @attr.s(auto_attribs=True)
 class CheckBasicModel:
-    """Check basic model
+    """Simplistic model that returns a single data quality check, it's name and "configured" flag
 
     Attributes:
-        check_name (Union[Unset, str]): Check name
-        full_check_name (Union[Unset, str]): Full check name
-        custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
-        built_in (Union[Unset, bool]): This check is provided with DQO as a built-in check.
+        check_category (Union[Unset, str]): Check category.
+        check_name (Union[Unset, str]): Data quality check name that is used in YAML.
+        help_text (Union[Unset, str]): Help text that describes the data quality check.
+        configured (Union[Unset, bool]): True if the data quality check is configured (not null). When saving the data
+            quality check configuration, set the flag to true for storing the check.
     """
 
+    check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
-    full_check_name: Union[Unset, str] = UNSET
-    custom: Union[Unset, bool] = UNSET
-    built_in: Union[Unset, bool] = UNSET
+    help_text: Union[Unset, str] = UNSET
+    configured: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        check_category = self.check_category
         check_name = self.check_name
-        full_check_name = self.full_check_name
-        custom = self.custom
-        built_in = self.built_in
+        help_text = self.help_text
+        configured = self.configured
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if check_category is not UNSET:
+            field_dict["check_category"] = check_category
         if check_name is not UNSET:
             field_dict["check_name"] = check_name
-        if full_check_name is not UNSET:
-            field_dict["full_check_name"] = full_check_name
-        if custom is not UNSET:
-            field_dict["custom"] = custom
-        if built_in is not UNSET:
-            field_dict["built_in"] = built_in
+        if help_text is not UNSET:
+            field_dict["help_text"] = help_text
+        if configured is not UNSET:
+            field_dict["configured"] = configured
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
+        check_category = d.pop("check_category", UNSET)
+
         check_name = d.pop("check_name", UNSET)
 
-        full_check_name = d.pop("full_check_name", UNSET)
+        help_text = d.pop("help_text", UNSET)
 
-        custom = d.pop("custom", UNSET)
-
-        built_in = d.pop("built_in", UNSET)
+        configured = d.pop("configured", UNSET)
 
         check_basic_model = cls(
+            check_category=check_category,
             check_name=check_name,
-            full_check_name=full_check_name,
-            custom=custom,
-            built_in=built_in,
+            help_text=help_text,
+            configured=configured,
         )
 
         check_basic_model.additional_properties = d
