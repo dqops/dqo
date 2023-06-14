@@ -48,9 +48,9 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
   useEffect(() => {
     if (!issue?.checkName) return;
 
-    ChecksApi.getCheck(issue?.checkName).then((res) => {
-      console.log('res', res);
-    });
+    // ChecksApi.getCheck(issue?.checkName).then((res) => {
+    //   console.log('res', res);
+    // });
   }, []);
   const closeCheckDetails = () => {
     setOpen(false);
