@@ -33,7 +33,7 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIQualityCategoryModel", description = "Model that returns the form definition and the form data to edit all checks within a single category.")
+@ApiModel(value = "QualityCategoryModel", description = "Model that returns the form definition and the form data to edit all checks within a single category.")
 public class QualityCategoryModel {
     @JsonPropertyDescription("Data quality check category name.")
     private String category;

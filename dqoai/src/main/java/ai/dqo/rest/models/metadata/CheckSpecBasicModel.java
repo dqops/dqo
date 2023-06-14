@@ -23,13 +23,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Check basic model that is returned by the REST API.
+ * CheckSpec basic model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "CheckBasicModel", description = "Check basic model")
-public class CheckBasicModel {
+@ApiModel(value = "CheckSpecBasicModel", description = "Check spec basic model")
+public class CheckSpecBasicModel {
     /**
      * Check name at the leaf level of the check tree.
      */
@@ -54,6 +54,6 @@ public class CheckBasicModel {
     @JsonPropertyDescription("This check is provided with DQO as a built-in check.")
     public boolean builtIn;
 
-    public CheckBasicModel() {
+    public CheckSpecBasicModel() {
     }
 }

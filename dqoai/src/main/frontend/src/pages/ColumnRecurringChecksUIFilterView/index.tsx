@@ -5,7 +5,7 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import {
-  getColumnRecurringChecksUIFilter, setColumnUpdatedRecurringChecksUIFilter,
+  getColumnRecurringChecksModelFilter, setColumnUpdatedRecurringChecksModelFilter,
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
@@ -47,19 +47,19 @@ const ColumnRecurringChecksUIFilterView = () => {
       recurringChecksUIFilter
     );
     await dispatch(
-      getColumnRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
+      getColumnRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   useEffect(() => {
     dispatch(
-      getColumnRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+      getColumnRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName]);
 
   const onChange = (ui: CheckContainerModel) => {
-    dispatch(setColumnUpdatedRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, ui));
+    dispatch(setColumnUpdatedRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

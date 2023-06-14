@@ -25,25 +25,25 @@ import lombok.Data;
 import java.util.*;
 
 /**
- * Check basic folder model that is returned by the REST API.
+ * CheckSpec basic folder model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "CheckBasicFolderModel", description = "Check basic folder model")
-public class CheckBasicFolderModel {
+@ApiModel(value = "CheckSpecFolderBasicModel", description = "Check spec folder basic model")
+public class CheckSpecFolderBasicModel {
     @JsonPropertyDescription("A map of folder-level children checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, CheckBasicFolderModel> folders = new LinkedHashMap<>();
+    private LinkedHashMap<String, CheckSpecFolderBasicModel> folders = new LinkedHashMap<>();
 
     @JsonPropertyDescription("Check basic model list of checks defined at this level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<CheckBasicModel> checks = new ArrayList<>();
+    private List<CheckSpecBasicModel> checks = new ArrayList<>();
 
     /**
      * Creates a new instance of RuleBasicFolderModel with empty lists.
      */
-    public CheckBasicFolderModel() {
+    public CheckSpecFolderBasicModel() {
     }
 
     /**
@@ -56,27 +56,27 @@ public class CheckBasicFolderModel {
 
         String[] checkFolders = fullCheckName.split("/");
         String checkName = checkFolders[checkFolders.length - 1];
-        CheckBasicFolderModel folderModel = this;
+        CheckSpecFolderBasicModel folderModel = this;
 
         for (int i = 0; i < checkFolders.length - 1; i++) {
             String name = checkFolders[i];
-            CheckBasicFolderModel nextCheckFolder = folderModel.folders.get(name);
+            CheckSpecFolderBasicModel nextCheckFolder = folderModel.folders.get(name);
             if (nextCheckFolder == null) {
-                nextCheckFolder = new CheckBasicFolderModel();
+                nextCheckFolder = new CheckSpecFolderBasicModel();
                 folderModel.folders.put(name, nextCheckFolder);
             }
             folderModel = nextCheckFolder;
         }
 
-        Optional<CheckBasicModel> existingCheck = folderModel.checks.stream().filter(m -> Objects.equals(m.getCheckName(), checkName)).findFirst();
+        Optional<CheckSpecBasicModel> existingCheck = folderModel.checks.stream().filter(m -> Objects.equals(m.getCheckName(), checkName)).findFirst();
 
         if (!existingCheck.isPresent()) {
-            CheckBasicModel checkBasicModel = new CheckBasicModel();
-            checkBasicModel.setCheckName(checkName);
-            checkBasicModel.setFullCheckName(fullCheckName);
-            checkBasicModel.setCustom(isCustom);
-            checkBasicModel.setBuiltIn(isBuiltIn);
-            folderModel.checks.add(checkBasicModel);
+            CheckSpecBasicModel checkSpecBasicModel = new CheckSpecBasicModel();
+            checkSpecBasicModel.setCheckName(checkName);
+            checkSpecBasicModel.setFullCheckName(fullCheckName);
+            checkSpecBasicModel.setCustom(isCustom);
+            checkSpecBasicModel.setBuiltIn(isBuiltIn);
+            folderModel.checks.add(checkSpecBasicModel);
         } else {
             if (isCustom){
                 existingCheck.get().setCustom(true);
@@ -91,9 +91,9 @@ public class CheckBasicFolderModel {
      * Collects all checks from all tree levels.
      * @return A list of all checks.
      */
-    public List<CheckBasicModel> getAllChecks() {
-        List<CheckBasicModel> allChecks = new ArrayList<>(this.getChecks());
-        for (CheckBasicFolderModel folder : this.folders.values()) {
+    public List<CheckSpecBasicModel> getAllChecks() {
+        List<CheckSpecBasicModel> allChecks = new ArrayList<>(this.getChecks());
+        for (CheckSpecFolderBasicModel folder : this.folders.values()) {
             allChecks.addAll(folder.getAllChecks());
         }
 

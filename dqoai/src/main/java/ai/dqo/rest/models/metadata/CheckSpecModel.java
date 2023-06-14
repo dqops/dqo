@@ -27,13 +27,13 @@ import lombok.Data;
 import java.util.Objects;
 
 /**
- * Check model that is returned by the REST API. Describes a single unique data quality check.
+ * CheckSpec model that is returned by the REST API. Describes a single unique data quality check.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "CheckModel", description = "Check model")
-public class CheckModel {
+@ApiModel(value = "CheckSpecModel", description = "Check spec model")
+public class CheckSpecModel {
     /**
      * Data quality check name.
      */
@@ -73,7 +73,7 @@ public class CheckModel {
     /**
      * Default constructor for CheckModel.
      */
-    public CheckModel() {
+    public CheckSpecModel() {
     }
 
     /**
@@ -83,7 +83,7 @@ public class CheckModel {
      * @param custom Whether the check is a custom check.
      * @param builtIn Whether the check is a built-in check.
      */
-    public CheckModel(CheckDefinitionWrapper checkDefinitionWrapper, boolean custom, boolean builtIn) {
+    public CheckSpecModel(CheckDefinitionWrapper checkDefinitionWrapper, boolean custom, boolean builtIn) {
         this.checkName = checkDefinitionWrapper.getCheckName();
         this.sensorName = checkDefinitionWrapper.getSpec().getSensorName();
         this.ruleName = checkDefinitionWrapper.getSpec().getRuleName();

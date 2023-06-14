@@ -177,12 +177,12 @@ public class SchemasControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getSchemaProfilingChecksUI_whenAllChecksRequested_thenReturnsAllProfilingChecks() {
+    void getSchemaProfilingChecksModel_whenAllChecksRequested_thenReturnsAllProfilingChecks() {
         UserHomeContext userHomeContext = this.createHierarchyTree();
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksUI(
+        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -249,12 +249,12 @@ public class SchemasControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getSchemaProfilingChecksUI_whenColumnChecksRequested_thenReturnsColumnProfilingChecks() {
+    void getSchemaProfilingChecksModel_whenColumnChecksRequested_thenReturnsColumnProfilingChecks() {
         UserHomeContext userHomeContext = this.createHierarchyTree();
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksUI(
+        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -309,12 +309,12 @@ public class SchemasControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getSchemaProfilingChecksUI_whenColumnChecksOnNumericColumnsRequested_thenReturnsCorrectProfilingChecks() {
+    void getSchemaProfilingChecksModel_whenColumnChecksOnNumericColumnsRequested_thenReturnsCorrectProfilingChecks() {
         UserHomeContext userHomeContext = this.createHierarchyTree();
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksUI(
+        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),

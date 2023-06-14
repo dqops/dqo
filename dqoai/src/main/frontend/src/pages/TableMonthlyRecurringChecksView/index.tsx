@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableMonthlyRecurring,
-  updateTableMonthlyRecurring
+  getTableMonthlyRecurringChecks,
+  updateTableMonthlyRecurringChecks
 } from '../../redux/actions/table.actions';
 import Button from '../../components/Button';
 import { CheckResultOverviewApi } from "../../services/apiClient";
@@ -36,14 +36,14 @@ const TableMonthlyChecksView = () => {
   }, [monthlyRecurring]);
 
   useEffect(() => {
-    dispatch(getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    dispatch(getTableMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateTableMonthlyRecurring(
+      updateTableMonthlyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -55,7 +55,7 @@ const TableMonthlyChecksView = () => {
     setIsUpdated(false);
 
     await dispatch(
-      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+      getTableMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
   };
 

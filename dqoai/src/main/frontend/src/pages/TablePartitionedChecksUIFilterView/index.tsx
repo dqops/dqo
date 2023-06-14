@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTablePartitionedChecksUIFilter,
-  setTableUpdatedPartitionedChecksUiFilter,
+  getTablePartitionedChecksModelFilter,
+  setTableUpdatedPartitionedChecksModelFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -31,7 +31,7 @@ const TablePartitionedChecksUIFilterView = () => {
 
   useEffect(() => {
     dispatch(
-      getTablePartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTablePartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -46,13 +46,13 @@ const TablePartitionedChecksUIFilterView = () => {
     );
 
     await dispatch(
-      getTablePartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
+      getTablePartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   const onChange = (ui: CheckContainerModel) => {
-    dispatch(setTableUpdatedPartitionedChecksUiFilter(checkTypes, firstLevelActiveTab, ui));
+    dispatch(setTableUpdatedPartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

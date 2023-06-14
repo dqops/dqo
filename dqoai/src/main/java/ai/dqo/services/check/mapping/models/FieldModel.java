@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIFieldModel", description = "Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the field and the current value.")
+@ApiModel(value = "FieldModel", description = "Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the field and the current value.")
 public class FieldModel implements Cloneable {
     @JsonPropertyDescription("Field name that matches the field name (snake_case) used in the YAML specification.")
     private ParameterDefinitionSpec definition;

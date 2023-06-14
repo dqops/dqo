@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 import { CheckResultsOverviewDataModel, ColumnStatisticsModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getColumnChecksUi,
-  setUpdatedChecksUi,
-  updateColumnCheckUI
+  getColumnProfilingChecksModel,
+  setUpdatedChecksModel,
+  updateColumnProfilingChecksModel
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient, JobApiClient } from "../../services/apiClient";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
@@ -67,7 +67,7 @@ const ColumnProfilingChecksView = ({
 
   useEffect(() => {
     dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
 
@@ -76,7 +76,7 @@ const ColumnProfilingChecksView = ({
       return;
     }
     await dispatch(
-      updateColumnCheckUI(
+      updateColumnProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -87,12 +87,12 @@ const ColumnProfilingChecksView = ({
       )
     );
     await dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
   };
 
   const handleChange = (value: CheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
+    dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
   };
 
   const onCollectStatistics = async () => {

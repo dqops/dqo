@@ -6,8 +6,8 @@ import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnMonthlyRecurring,
-  updateColumnMonthlyRecurring
+  getColumnMonthlyRecurringChecks,
+  updateColumnMonthlyRecurringChecks
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
@@ -37,7 +37,7 @@ const ColumnMonthlyChecksView = () => {
 
   useEffect(() => {
     dispatch(
-      getColumnMonthlyRecurring(
+      getColumnMonthlyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -52,7 +52,7 @@ const ColumnMonthlyChecksView = () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateColumnMonthlyRecurring(
+      updateColumnMonthlyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -63,7 +63,7 @@ const ColumnMonthlyChecksView = () => {
       )
     );
     await dispatch(
-      getColumnMonthlyRecurring(
+      getColumnMonthlyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,

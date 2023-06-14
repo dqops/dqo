@@ -28,7 +28,7 @@ import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksS
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
+import ai.dqo.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.ExecutionContextFactory;
@@ -187,16 +187,16 @@ public class CheckCliServiceImplTests extends BaseTest {
     void updateAllChecksPatch_whenConnectionAndCheckGiven_enablesRequestedChecks() {
         UserHome userHome = createHierarchyTree();
 
-        UIAllChecksCliPatchParameters uiAllChecksCliPatchParameters = new UIAllChecksCliPatchParameters();
+        AllChecksModelCliPatchParameters allChecksModelCliPatchParameters = new AllChecksModelCliPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
             setCheckName("nulls_count");
         }};
-        uiAllChecksCliPatchParameters.setCheckSearchFilters(checkSearchFilters);
-        uiAllChecksCliPatchParameters.setFatalLevelOptions(getRuleOptionMap("max_count", 50));
-        uiAllChecksCliPatchParameters.setDisableFatalLevel(false);
+        allChecksModelCliPatchParameters.setCheckSearchFilters(checkSearchFilters);
+        allChecksModelCliPatchParameters.setFatalLevelOptions(getRuleOptionMap("max_count", 50));
+        allChecksModelCliPatchParameters.setDisableFatalLevel(false);
 
-        this.sut.updateAllChecksPatch(uiAllChecksCliPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksModelCliPatchParameters);
 
         userHome = userHomeContextFactory.openLocalUserHome().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);

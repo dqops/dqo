@@ -9,9 +9,9 @@ import TableActionGroup from '../../components/Connection/TableView/TableActionG
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableProfilingChecksUI,
-  updateTableProfilingChecksUI,
-  setUpdatedChecksUi
+  getTableProfilingChecksModel,
+  updateTableProfilingChecksModel,
+  setUpdatedChecksModel
 } from '../../redux/actions/table.actions';
 import {
   getFirstLevelState,
@@ -42,7 +42,7 @@ const TableAdvancedProfiling = () => {
 
   useEffect(() => {
     dispatch(
-      getTableProfilingChecksUI(
+      getTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -64,7 +64,7 @@ const TableAdvancedProfiling = () => {
       return;
     }
     await dispatch(
-      updateTableProfilingChecksUI(
+      updateTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -74,7 +74,7 @@ const TableAdvancedProfiling = () => {
       )
     );
     await dispatch(
-      getTableProfilingChecksUI(
+      getTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -86,7 +86,7 @@ const TableAdvancedProfiling = () => {
   };
 
   const handleChange = (value: CheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
+    dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
   };
 
   const getCheckOverview = () => {

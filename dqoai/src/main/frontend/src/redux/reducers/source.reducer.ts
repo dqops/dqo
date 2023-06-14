@@ -501,33 +501,33 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         checks: action.data,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         checksUI: action.data,
         isUpdatedChecksUi: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -562,170 +562,170 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING:
+    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         dailyRecurring: action.data,
         isUpdatedDailyRecurring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_ERROR:
+    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         monthlyRecurring: action.data,
         isUpdatedMonthlyRecurring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_ERROR:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS:
+    case SOURCE_ACTION.GET_TABLE_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_DAILY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         dailyPartitionedChecks: action.data,
         isUpdatedDailyPartitionedChecks: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_TABLE_DAILY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         monthlyPartitionedChecks: action.data,
         isUpdatedMonthlyPartitionedChecks: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         checksUIFilter: action.data,
         isUpdatedChecksUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_ERROR:
+    case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER:
+    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         recurringUIFilter: action.data,
         isUpdatedRecurringUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR:
+    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER:
+    case SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         partitionedChecksUIFilter: action.data,
         isUpdatedPartitionedChecksUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_ERROR:
+    case SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -740,28 +740,28 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedSchedule: true,
         schedule: action.data
       });
-    case SOURCE_ACTION.SET_UPDATED_CHECKS_UI:
+    case SOURCE_ACTION.SET_UPDATED_CHECKS_MODEL:
       return setActiveTabState(state, action, {
         ...state,
         isUpdatedChecksUi: true,
         checksUI: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_DAILY_RECURRING:
+    case SOURCE_ACTION.SET_TABLE_DAILY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedDailyRecurring: true,
         dailyRecurring: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_MONTHLY_RECURRING:
+    case SOURCE_ACTION.SET_TABLE_MONTHLY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedMonthlyRecurring: true,
         monthlyRecurring: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS:
+    case SOURCE_ACTION.SET_TABLE_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedDailyPartitionedChecks: true,
         dailyPartitionedChecks: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_PARTITIONED_MONTHLY_CHECKS:
+    case SOURCE_ACTION.SET_TABLE_MONTHLY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedMonthlyPartitionedChecks: true,
         monthlyPartitionedChecks: action.data
@@ -771,17 +771,17 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedDataStreamsMapping: true,
         dataStreamsMapping: action.data
       });
-    case SOURCE_ACTION.SET_UPDATED_CHECKS_UI_FILTER:
+    case SOURCE_ACTION.SET_UPDATED_PROFILING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         isUpdatedChecksUIFilter: true,
         checksUIFilter: action.data
       });
-    case SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER:
+    case SOURCE_ACTION.SET_UPDATED_RECURRING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         isUpdatedRecurringUIFilter: true,
         recurringUIFilter: action.data
       });
-    case SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
+    case SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         isUpdatedPartitionedChecksUIFilter: true,
         partitionedChecksUIFilter: action.data
@@ -910,138 +910,138 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_CHECKS_UI:
+    case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         checksUI: action.data,
         isUpdatedChecksUi: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_CHECKS_UI_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         dailyRecurring: action.data,
         isUpdatedDailyRecurring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         monthlyRecurring: action.data,
         isUpdatedMonthlyRecurring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         dailyPartitionedChecks: action.data,
         isUpdatedDailyPartitionedChecks: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         monthlyPartitionedChecks: action.data,
         isUpdatedMonthlyPartitionedChecks: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_PARTITIONED_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
@@ -1051,70 +1051,70 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedColumnBasic: true,
         columnBasic: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_DAILY_RECURRING:
+    case SOURCE_ACTION.SET_COLUMN_DAILY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedDailyRecurring: true,
         dailyRecurring: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_MONTHLY_RECURRING:
+    case SOURCE_ACTION.SET_COLUMN_MONTHLY_RECURRING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedMonthlyRecurring: true,
         monthlyRecurring: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS:
+    case SOURCE_ACTION.SET_COLUMN_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedDailyPartitionedChecks: true,
         dailyPartitionedChecks: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_PARTITIONED_MONTHLY_CHECKS:
+    case SOURCE_ACTION.SET_COLUMN_MONTHLY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
         isUpdatedMonthlyPartitionedChecks: true,
         monthlyPartitionedChecks: action.data
       });
-    case SOURCE_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER:
+    case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         checksUIFilter: action.data,
         isUpdatedChecksUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER:
+    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         recurringUIFilter: action.data,
         isUpdatedRecurringUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER:
+    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
         partitionedChecksUIFilter: action.data,
         isUpdatedPartitionedChecksUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error

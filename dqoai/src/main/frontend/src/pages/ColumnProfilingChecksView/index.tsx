@@ -6,8 +6,8 @@ import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnChecksUi,
-  updateColumnCheckUI
+  getColumnProfilingChecksModel,
+  updateColumnProfilingChecksModel
 } from '../../redux/actions/column.actions';
 import { isEqual } from 'lodash';
 import { CheckResultOverviewApi } from '../../services/apiClient';
@@ -37,7 +37,7 @@ const ColumnProfilingsView = () => {
 
   useEffect(() => {
     dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
   }, [connectionName, schemaName, tableName, columnName]);
 
@@ -46,7 +46,7 @@ const ColumnProfilingsView = () => {
       return;
     }
     await dispatch(
-      updateColumnCheckUI(
+      updateColumnProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -57,7 +57,7 @@ const ColumnProfilingsView = () => {
       )
     );
     await dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
   };
 

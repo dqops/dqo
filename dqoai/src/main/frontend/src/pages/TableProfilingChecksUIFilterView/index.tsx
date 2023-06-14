@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableProfilingChecksUIFilter, setTableUpdatedCheckUiFilter,
+  getTableProfilingChecksModelFilter, setTableUpdatedProfilingChecksModelFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -30,7 +30,7 @@ const TableProfilingChecksUIFilterView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -43,13 +43,13 @@ const TableProfilingChecksUIFilterView = () => {
       checksUIFilter
     );
     dispatch(
-      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName, false)
+      getTableProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   const onChange = (data: CheckContainerModel) => {
-    dispatch(setTableUpdatedCheckUiFilter(checkTypes, firstLevelActiveTab, data));
+    dispatch(setTableUpdatedProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, data));
   };
 
   return (

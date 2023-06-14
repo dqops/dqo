@@ -35,7 +35,7 @@ import java.util.function.Function;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIEffectiveScheduleModel", description = "Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.")
+@ApiModel(value = "EffectiveScheduleModel", description = "Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.")
 public class EffectiveScheduleModel {
     @JsonPropertyDescription("Field value for a schedule group to which this schedule belongs.")
     private CheckRunRecurringScheduleGroup scheduleGroup;

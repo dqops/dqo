@@ -15,7 +15,7 @@
  */
 package ai.dqo.cli.commands.check.impl;
 
-import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
+import ai.dqo.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
@@ -52,5 +52,5 @@ public interface CheckCliService {
      * @param parameters Parameters for creating the patches and updating.
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
-    List<AllChecksModel> updateAllChecksPatch(UIAllChecksCliPatchParameters parameters);
+    List<AllChecksModel> updateAllChecksPatch(AllChecksModelCliPatchParameters parameters);
 }

@@ -220,7 +220,7 @@ public class CheckServiceImpl implements CheckService {
                 .collect(Collectors.toList());
 
         for (CheckModel check: checks) {
-            patchUICheckModel(check, parameters);
+            patchCheckModel(check, parameters);
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -241,8 +241,8 @@ public class CheckServiceImpl implements CheckService {
         return patches;
     }
 
-    protected void patchUICheckModel(CheckModel model,
-                                     AllChecksPatchParameters parameters) {
+    protected void patchCheckModel(CheckModel model,
+                                   AllChecksPatchParameters parameters) {
         RuleThresholdsModel ruleThresholdsModel = model.getRule();
         if (ruleThresholdsModel == null) {
             ruleThresholdsModel = new RuleThresholdsModel();

@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableDailyRecurring,
-  updateTableDailyRecurring
+  getTableDailyRecurringChecks,
+  updateTableDailyRecurringChecks
 } from '../../redux/actions/table.actions';
 import Button from '../../components/Button';
 import { CheckResultOverviewApi } from "../../services/apiClient";
@@ -36,14 +36,14 @@ const TableDailyChecksView = () => {
   }, [dailyRecurring]);
 
   useEffect(() => {
-    dispatch(getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    dispatch(getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateTableDailyRecurring(
+      updateTableDailyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -53,7 +53,7 @@ const TableDailyChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+      getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };

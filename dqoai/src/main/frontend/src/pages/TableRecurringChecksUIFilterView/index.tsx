@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableRecurringChecksUIFilter, setTableUpdatedRecurringChecksUIFilter,
+  getTableRecurringChecksModelFilter, setTableUpdatedRecurringChecksModelFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -30,7 +30,7 @@ const TableRecurringChecksUIFilterView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTableRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -45,13 +45,13 @@ const TableRecurringChecksUIFilterView = () => {
     );
 
     await dispatch(
-      getTableRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
+      getTableRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   const onChange = (ui: CheckContainerModel) => {
-    dispatch(setTableUpdatedRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, ui));
+    dispatch(setTableUpdatedRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

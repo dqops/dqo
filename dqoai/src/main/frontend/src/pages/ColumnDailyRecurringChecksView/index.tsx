@@ -6,8 +6,8 @@ import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnDailyRecurring,
-  updateColumnDailyRecurring
+  getColumnDailyRecurringChecks,
+  updateColumnDailyRecurringChecks
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
@@ -38,7 +38,7 @@ const ColumnDailyChecksView = () => {
 
   useEffect(() => {
     dispatch(
-      getColumnDailyRecurring(
+      getColumnDailyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -53,7 +53,7 @@ const ColumnDailyChecksView = () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateColumnDailyRecurring(
+      updateColumnDailyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -64,7 +64,7 @@ const ColumnDailyChecksView = () => {
       )
     );
     await dispatch(
-      getColumnDailyRecurring(
+      getColumnDailyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,

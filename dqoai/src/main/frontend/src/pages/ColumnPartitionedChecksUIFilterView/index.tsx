@@ -5,7 +5,7 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import {
-  getColumnPartitionedChecksUIFilter, setColumnUpdatedPartitionedChecksUiFilter,
+  getColumnPartitionedChecksModelFilter, setColumnUpdatedPartitionedChecksModelFilter,
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
@@ -49,19 +49,19 @@ const ColumnPartitionedChecksUIFilterView = () => {
     );
 
     await dispatch(
-      getColumnPartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
+      getColumnPartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   useEffect(() => {
     dispatch(
-      getColumnPartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+      getColumnPartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName]);
 
   const onChange = (ui: CheckContainerModel) => {
-    dispatch(setColumnUpdatedPartitionedChecksUiFilter(checkTypes, firstLevelActiveTab, ui));
+    dispatch(setColumnUpdatedPartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

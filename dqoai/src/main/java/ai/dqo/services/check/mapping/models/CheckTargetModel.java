@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
- * Enumeration of possible targets for UI check model request result.
+ * Enumeration of possible targets for check model request result.
  */
 public enum CheckTargetModel {
     @JsonProperty("table")
@@ -32,9 +32,9 @@ public enum CheckTargetModel {
     column;
 
     /**
-     * Creates a UI check target from a backend check target.
+     * Creates a check target model from a backend check target.
      * @param checkTarget Check target.
-     * @return UI Check target.
+     * @return Check target model.
      */
     public static CheckTargetModel fromCheckTarget(CheckTarget checkTarget) {
         switch (checkTarget) {

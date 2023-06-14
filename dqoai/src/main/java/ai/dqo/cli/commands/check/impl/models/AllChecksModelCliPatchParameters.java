@@ -26,7 +26,7 @@ import java.util.Map;
  * Parameter object for creating pruned patch trees of all checks that fit the filters.
  */
 @Data
-public class UIAllChecksCliPatchParameters {
+public class AllChecksModelCliPatchParameters {
     @NotNull
     CheckSearchFilters checkSearchFilters;
 

@@ -15,7 +15,7 @@
  */
 package ai.dqo.cli.commands.check.impl;
 
-import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
+import ai.dqo.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
@@ -87,10 +87,10 @@ public class CheckCliServiceImpl implements CheckCliService {
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
     @Override
-    public List<AllChecksModel> updateAllChecksPatch(UIAllChecksCliPatchParameters parameters) {
+    public List<AllChecksModel> updateAllChecksPatch(AllChecksModelCliPatchParameters parameters) {
         CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters());
         prepareSampleCheckModelForUpdates(sampleModel);
-        patchUICheckModel(sampleModel, parameters);
+        patchCheckModel(sampleModel, parameters);
 
         AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters(){{
             setCheckSearchFilters(parameters.getCheckSearchFilters());
@@ -104,28 +104,28 @@ public class CheckCliServiceImpl implements CheckCliService {
 
     protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters) {
         List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
-        Optional<CheckModel> sampleUiCheckModelFromTables = patches.stream()
+        Optional<CheckModel> sampleCheckModelFromTables = patches.stream()
                 .map(AllChecksModel::getTableChecksModel)
                 .flatMap(allTableChecksModel -> allTableChecksModel.getSchemaTableChecksModels().stream())
-                .flatMap(uiSchemaTableChecksModel -> uiSchemaTableChecksModel.getTableChecksModels().stream())
+                .flatMap(schemaTableChecksModel -> schemaTableChecksModel.getTableChecksModels().stream())
                 .flatMap(tableChecksModel -> tableChecksModel.getCheckContainers().values().stream())
-                .flatMap(uiCheckContainerModel -> uiCheckContainerModel.getCategories().stream())
-                .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
+                .flatMap(checkContainerModel -> checkContainerModel.getCategories().stream())
+                .flatMap(qualityCategoryModel -> qualityCategoryModel.getChecks().stream())
                 .findAny();
-        if (sampleUiCheckModelFromTables.isPresent()) {
-            return sampleUiCheckModelFromTables.get();
+        if (sampleCheckModelFromTables.isPresent()) {
+            return sampleCheckModelFromTables.get();
         }
 
-        Optional<CheckModel> sampleUiCheckModelFromColumns = patches.stream()
+        Optional<CheckModel> sampleCheckModelFromColumns = patches.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(allColumnChecksModel -> allColumnChecksModel.getTableColumnChecksModels().stream())
-                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getColumnChecksModels().stream())
+                .flatMap(tableColumnChecksModel -> tableColumnChecksModel.getColumnChecksModels().stream())
                 .flatMap(columnChecksModel -> columnChecksModel.getCheckContainers().values().stream())
-                .flatMap(uiCheckContainerModel -> uiCheckContainerModel.getCategories().stream())
-                .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
+                .flatMap(checkContainerModel -> checkContainerModel.getCategories().stream())
+                .flatMap(qualityCategoryModel -> qualityCategoryModel.getChecks().stream())
                 .findAny();
 
-        return sampleUiCheckModelFromColumns.orElse(null);
+        return sampleCheckModelFromColumns.orElse(null);
     }
 
     protected void prepareSampleCheckModelForUpdates(CheckModel checkModel) {
@@ -176,8 +176,8 @@ public class CheckCliServiceImpl implements CheckCliService {
         checkModel.setConfigurationRequirementsErrors(null);
     }
 
-    protected void patchUICheckModel(CheckModel model,
-                                     UIAllChecksCliPatchParameters parameters) {
+    protected void patchCheckModel(CheckModel model,
+                                   AllChecksModelCliPatchParameters parameters) {
         RuleThresholdsModel ruleThresholdsModel = model.getRule();
         patchRuleThresholdsModel(ruleThresholdsModel, parameters);
 
@@ -202,7 +202,7 @@ public class CheckCliServiceImpl implements CheckCliService {
         model.setSensorParameters(new ArrayList<>(modelSensorParamsByName.values()));
     }
 
-    protected void patchRuleThresholdsModel(RuleThresholdsModel ruleThresholdsModel, UIAllChecksCliPatchParameters parameters) {
+    protected void patchRuleThresholdsModel(RuleThresholdsModel ruleThresholdsModel, AllChecksModelCliPatchParameters parameters) {
         if (parameters.getWarningLevelOptions() != null) {
             Map<String, String> options = parameters.getWarningLevelOptions();
             List<FieldModel> newParameterFields = this.optionMapToFields(options);
@@ -257,13 +257,13 @@ public class CheckCliServiceImpl implements CheckCliService {
             parameterDefinition.setFieldName(option.getKey());
             fieldModel.setDefinition(parameterDefinition);
 
-            this.assignUiFieldModelValue(fieldModel, option.getValue());
+            this.assignFieldModelValue(fieldModel, option.getValue());
             result.add(fieldModel);
         }
         return result;
     }
 
-    protected void assignUiFieldModelValue(FieldModel fieldModel, String value) {
+    protected void assignFieldModelValue(FieldModel fieldModel, String value) {
         Integer valInt = StringTypeCaster.tryParseInt(value);
         if (valInt != null) {
             fieldModel.setIntegerValue(valInt);

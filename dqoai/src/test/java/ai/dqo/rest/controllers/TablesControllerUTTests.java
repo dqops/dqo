@@ -170,7 +170,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
+        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksModel(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -181,7 +181,7 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableRecurringDaily_whenTableRequested_thenReturnsRecurring() {
+    void getTableDailyRecurringChecks_whenTableRequested_thenReturnsRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
@@ -201,7 +201,7 @@ public class TablesControllerUTTests extends BaseTest {
         
         this.sampleTable.getTableSpec().setRecurringChecks(sampleRecurring);
 
-        ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableRecurringChecksDaily(
+        ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableDailyRecurringChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
@@ -231,7 +231,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         this.sampleTable.getTableSpec().setPartitionedChecks(samplePartitionedCheck);
 
-        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedChecksDaily(
+        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTableDailyPartitionedChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
@@ -241,11 +241,11 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableProfilingChecksUI_whenTableRequested_thenReturnsProfilingChecksUi() {
+    void getTableProfilingChecksModel_whenTableRequested_thenReturnsProfilingChecksUi() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
+        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksModel(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -257,10 +257,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableRecurringChecksUI_whenTableRequested_thenReturnsRecurringChecksUI(CheckTimeScale timePartition) {
+    void getTableRecurringChecksModel_whenTableRequested_thenReturnsRecurringChecksModel(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableRecurringChecksUI(
+        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableRecurringChecksModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -278,10 +278,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTablePartitionedChecksUI_whenTableRequested_thenReturnsPartitionedChecksUi(CheckTimeScale timePartition) {
+    void getTablePartitionedChecksModel_whenTableRequested_thenReturnsPartitionedChecksUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
+        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTablePartitionedChecksModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -298,11 +298,11 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableProfilingChecksUIBasic_whenTableRequested_thenReturnsProfilingChecksUiBasic() {
+    void getTableProfilingChecksBasicModel_whenTableRequested_thenReturnsProfilingChecksUiBasic() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingChecksUIBasic(
+        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingChecksBasicModel(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -314,10 +314,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableRecurringChecksUIBasic_whenTableRequested_thenReturnsRecurringChecksUIBasic(CheckTimeScale timePartition) {
+    void getTableRecurringChecksBasicModel_whenTableRequested_thenReturnsRecurringChecksBasicModel(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringChecksUIBasic(
+        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringChecksBasicModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -334,10 +334,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTablePartitionedChecksUIBasic_whenTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
+    void getTablePartitionedChecksBasicModel_whenTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedChecksUIBasic(
+        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedChecksBasicModel(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -381,7 +381,7 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateTableRecurringDaily_whenTableAndRecurringRequested_updatesRecurring() {
+    void updateTableDailyRecurringChecks_whenTableAndRecurringRequested_updatesRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
@@ -399,7 +399,7 @@ public class TablesControllerUTTests extends BaseTest {
         TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
         sampleRecurring.setDaily(dailyRecurring);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableRecurringChecksDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableDailyRecurringChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -444,5 +444,5 @@ public class TablesControllerUTTests extends BaseTest {
                 samplePartitionedCheck.getDaily());
     }
 
-    // TODO: updateTableProfilingChecksUI, and the following check types.
+    // TODO: updateTableProfilingChecksModel, and the remaining check types.
 }
