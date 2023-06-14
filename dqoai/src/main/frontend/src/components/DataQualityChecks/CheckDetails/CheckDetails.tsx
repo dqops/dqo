@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum,
-  UICheckModel
+  CheckModel
 } from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
@@ -42,7 +42,7 @@ const tabs = [
 ];
 
 interface CheckDetailsProps {
-  check?: UICheckModel;
+  check?: CheckModel;
   onClose: () => void;
   job?: DqoJobHistoryEntryModel;
 }

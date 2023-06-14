@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.check_basic_model import CheckBasicModel
+from ...models.check_spec_basic_model import CheckSpecBasicModel
 from ...types import Response
 
 
@@ -30,12 +30,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[List["CheckBasicModel"]]:
+) -> Optional[List["CheckSpecBasicModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = CheckBasicModel.from_dict(response_200_item_data)
+            response_200_item = CheckSpecBasicModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -48,7 +48,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[List["CheckBasicModel"]]:
+) -> Response[List["CheckSpecBasicModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -60,7 +60,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-) -> Response[List["CheckBasicModel"]]:
+) -> Response[List["CheckSpecBasicModel"]]:
     """getAllChecks
 
      Returns a flat list of all checks available in DQO, both built-in checks and user defined or
@@ -71,7 +71,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckBasicModel']]
+        Response[List['CheckSpecBasicModel']]
     """
 
     kwargs = _get_kwargs(
@@ -89,7 +89,7 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-) -> Optional[List["CheckBasicModel"]]:
+) -> Optional[List["CheckSpecBasicModel"]]:
     """getAllChecks
 
      Returns a flat list of all checks available in DQO, both built-in checks and user defined or
@@ -100,7 +100,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckBasicModel']
+        List['CheckSpecBasicModel']
     """
 
     return sync_detailed(
@@ -111,7 +111,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-) -> Response[List["CheckBasicModel"]]:
+) -> Response[List["CheckSpecBasicModel"]]:
     """getAllChecks
 
      Returns a flat list of all checks available in DQO, both built-in checks and user defined or
@@ -122,7 +122,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckBasicModel']]
+        Response[List['CheckSpecBasicModel']]
     """
 
     kwargs = _get_kwargs(
@@ -138,7 +138,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-) -> Optional[List["CheckBasicModel"]]:
+) -> Optional[List["CheckSpecBasicModel"]]:
     """getAllChecks
 
      Returns a flat list of all checks available in DQO, both built-in checks and user defined or
@@ -149,7 +149,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckBasicModel']
+        List['CheckSpecBasicModel']
     """
 
     return (

@@ -4,8 +4,8 @@ import {
   CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
-  UICheckModel,
-  UIFieldModel
+  CheckModel,
+  FieldModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import CheckSettings from './CheckSettings';
@@ -27,12 +27,12 @@ export interface ITab {
   label: string;
   value: string;
   type?: string;
-  field?: UIFieldModel;
+  field?: FieldModel;
 }
 
 interface ICheckListItemProps {
-  check: UICheckModel;
-  onChange: (check: UICheckModel) => void;
+  check: CheckModel;
+  onChange: (check: CheckModel) => void;
   category?: string;
   checkResult?: CheckResultsOverviewDataModel;
   getCheckOverview: () => void;
@@ -410,7 +410,7 @@ const CheckListItem = ({
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
                 parameters={check.sensor_parameters || []}
-                onChange={(parameters: UIFieldModel[]) =>
+                onChange={(parameters: FieldModel[]) =>
                   handleChange({ sensor_parameters: parameters })
                 }
                 disabled={!check?.configured || check.disabled}

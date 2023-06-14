@@ -3,15 +3,15 @@ import Tabs from '../../components/Tabs';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getColumnDailyRecurring,
-  getColumnMonthlyRecurring,
-  setUpdatedDailyRecurring,
-  setUpdatedMonthlyRecurring,
-  updateColumnDailyRecurring,
-  updateColumnMonthlyRecurring
+  getColumnDailyRecurringChecks,
+  getColumnMonthlyRecurringChecks,
+  setUpdatedDailyRecurringChecks,
+  setUpdatedMonthlyRecurringChecks,
+  updateColumnDailyRecurringChecks,
+  updateColumnMonthlyRecurringChecks
 } from '../../redux/actions/column.actions';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import ColumnActionGroup from './ColumnActionGroup';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useHistory, useParams } from "react-router-dom";
@@ -56,7 +56,7 @@ const ColumnRecurringChecksView = () => {
 
   useEffect(() => {
     dispatch(
-      getColumnDailyRecurring(
+      getColumnDailyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connection,
@@ -66,7 +66,7 @@ const ColumnRecurringChecksView = () => {
       )
     );
     dispatch(
-      getColumnMonthlyRecurring(
+      getColumnMonthlyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connection,
@@ -82,7 +82,7 @@ const ColumnRecurringChecksView = () => {
       if (!dailyRecurring) return;
 
       await dispatch(
-        updateColumnDailyRecurring(
+        updateColumnDailyRecurringChecks(
           checkTypes,
           firstLevelActiveTab,
           connection,
@@ -93,7 +93,7 @@ const ColumnRecurringChecksView = () => {
         )
       );
       await dispatch(
-        getColumnDailyRecurring(
+        getColumnDailyRecurringChecks(
           checkTypes,
           firstLevelActiveTab,
           connection,
@@ -107,7 +107,7 @@ const ColumnRecurringChecksView = () => {
       if (!monthlyRecurring) return;
 
       await dispatch(
-        updateColumnMonthlyRecurring(
+        updateColumnMonthlyRecurringChecks(
           checkTypes,
           firstLevelActiveTab,
           connection,
@@ -118,7 +118,7 @@ const ColumnRecurringChecksView = () => {
         )
       );
       await dispatch(
-        getColumnMonthlyRecurring(
+        getColumnMonthlyRecurringChecks(
           checkTypes,
           firstLevelActiveTab,
           connection,
@@ -131,12 +131,12 @@ const ColumnRecurringChecksView = () => {
     }
   };
 
-  const onDailyRecurringChange = (ui: UICheckContainerModel) => {
-    dispatch(setUpdatedDailyRecurring(checkTypes, firstLevelActiveTab, ui));
+  const onDailyRecurringChange = (ui: CheckContainerModel) => {
+    dispatch(setUpdatedDailyRecurringChecks(checkTypes, firstLevelActiveTab, ui));
   };
 
-  const onMonthlyRecurringChange = (ui: UICheckContainerModel) => {
-    dispatch(setUpdatedMonthlyRecurring(checkTypes, firstLevelActiveTab, ui));
+  const onMonthlyRecurringChange = (ui: CheckContainerModel) => {
+    dispatch(setUpdatedMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, ui));
   };
 
   useEffect(() => {

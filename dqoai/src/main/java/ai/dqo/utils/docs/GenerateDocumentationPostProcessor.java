@@ -22,8 +22,8 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
 import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
 import ai.dqo.utils.docs.checks.CheckDocumentationGenerator;
 import ai.dqo.utils.docs.checks.CheckDocumentationGeneratorImpl;
@@ -120,7 +120,7 @@ public class GenerateDocumentationPostProcessor {
      * @return Sensor documentation model factory.
      */
     private static SensorDocumentationModelFactory createSensorDocumentationModelFactory(DqoHomeContext dqoHomeContext) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
         return sensorDocumentationModelFactory;
@@ -153,7 +153,7 @@ public class GenerateDocumentationPostProcessor {
      * @return Rule documentation model factory.
      */
     private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
         return ruleDocumentationModelFactory;
@@ -203,7 +203,7 @@ public class GenerateDocumentationPostProcessor {
      */
     public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext){
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl());
         DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
         configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
@@ -220,7 +220,7 @@ public class GenerateDocumentationPostProcessor {
                 new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService),
                 createSensorDocumentationModelFactory(dqoHomeContext),
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
-                new UiToSpecCheckMappingServiceImpl(reflectionService),
+                new ModelToSpecCheckMappingServiceImpl(reflectionService),
                 new YamlSerializerImpl(configurationProperties),
                 new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties));
         return checkDocumentationModelFactory;
