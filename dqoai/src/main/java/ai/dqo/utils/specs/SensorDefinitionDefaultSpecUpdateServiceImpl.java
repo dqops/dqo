@@ -16,6 +16,7 @@
 package ai.dqo.utils.specs;
 
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.definitions.sensors.*;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
@@ -23,6 +24,7 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.CustomSensorParametersSpec;
+import ai.dqo.sensors.table.availability.TableAvailabilitySensorRunner;
 import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
 import ai.dqo.utils.reflection.TargetClassSearchUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +118,9 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                     providerSensorWrapper = providerSensors.createAndAddNew(providerType);
                     providerSensorWrapper.setSpec(new ProviderSensorDefinitionSpec());
                     ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorWrapper.getSpec();
+                    boolean isSqlTemplateRunner = abstractSensorParametersSpec.getSensorRunnerClass() == JinjaSqlTemplateSensorRunner.class ||
+                            abstractSensorParametersSpec.getSensorRunnerClass() == TableAvailabilitySensorRunner.class;
+                    providerSensorDefinitionSpec.setType(isSqlTemplateRunner ? ProviderSensorRunnerType.sql_template : ProviderSensorRunnerType.java_class);
                     providerSensorDefinitionSpec.setJavaClassName(abstractSensorParametersSpec.getSensorRunnerClass().getName());
                     providerSensorDefinitionSpec.setSupportsGroupingByDataStream(abstractSensorParametersSpec.getSupportsDataStreams());
                     providerSensorDefinitionSpec.setSupportsPartitionedChecks(abstractSensorParametersSpec.getSupportsPartitionedChecks());

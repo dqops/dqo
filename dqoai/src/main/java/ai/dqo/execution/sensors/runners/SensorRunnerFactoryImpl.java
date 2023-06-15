@@ -54,7 +54,7 @@ public class SensorRunnerFactoryImpl implements SensorRunnerFactory {
         switch (sensorType) {
             case sql_template:
                 return this.sqlTemplateSensorRunner;
-            case custom_class:
+            case java_class:
                 return createCustomSensorByJavaClass(sensorRunnerClassName);
             default:
                 throw new IllegalArgumentException("Unsupported provider sensor type: " + sensorType);
