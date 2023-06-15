@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import ai.dqo.core.dqocloud.dashboards.LookerStudioUrlService;
 import ai.dqo.metadata.dashboards.DashboardSpec;
 import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
@@ -23,6 +24,7 @@ import ai.dqo.rest.models.dashboards.AuthenticatedDashboardModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.metadata.DashboardsProvider;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,7 @@ import java.util.Optional;
 @RequestMapping("/api/dashboards")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Dashboards", description = "Provides access to data quality dashboards")
+@Slf4j
 public class DashboardsController {
     private final LookerStudioUrlService lookerStudioUrlService;
     private DashboardsProvider dashboardsProvider;
@@ -94,6 +97,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -115,9 +119,16 @@ public class DashboardsController {
         }
 
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
-        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(folder, dashboard, authenticatedDashboardUrl);
-        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+
+        try {
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(folder, dashboard, authenticatedDashboardUrl);
+            return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+        }
+        catch (DqoCloudInvalidKeyException invalidKeyException) {
+            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
+        }
     }
 
     /**
@@ -133,6 +144,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -160,10 +172,17 @@ public class DashboardsController {
         }
 
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
-        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
-                folder1 + "/" + folder2, dashboard, authenticatedDashboardUrl);
-        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+
+        try {
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
+                    folder1 + "/" + folder2, dashboard, authenticatedDashboardUrl);
+            return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+        }
+        catch (DqoCloudInvalidKeyException invalidKeyException) {
+            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
+        }
     }
 
     /**
@@ -180,6 +199,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -213,10 +233,17 @@ public class DashboardsController {
         }
 
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
-        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
-                folder1 + "/" + folder2 + "/" + folder3, dashboard, authenticatedDashboardUrl);
-        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+
+        try {
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
+                    folder1 + "/" + folder2 + "/" + folder3, dashboard, authenticatedDashboardUrl);
+            return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+        }
+        catch (DqoCloudInvalidKeyException invalidKeyException) {
+            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
+        }
     }
 
     /**
@@ -234,6 +261,7 @@ public class DashboardsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
             @ApiResponse(code = 404, message = "Dashboard not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -273,9 +301,16 @@ public class DashboardsController {
         }
 
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
-        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
-                folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4, dashboard, authenticatedDashboardUrl);
-        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+
+        try {
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
+                    folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4, dashboard, authenticatedDashboardUrl);
+            return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+        }
+        catch (DqoCloudInvalidKeyException invalidKeyException) {
+            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
+        }
     }
 }

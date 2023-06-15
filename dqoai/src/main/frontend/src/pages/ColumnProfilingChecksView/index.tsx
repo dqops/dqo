@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnChecksUi,
-  updateColumnCheckUI
+  getColumnProfilingChecksModel,
+  updateColumnProfilingChecksModel
 } from '../../redux/actions/column.actions';
 import { isEqual } from 'lodash';
 import { CheckResultOverviewApi } from '../../services/apiClient';
@@ -20,7 +20,7 @@ import ColumnNavigation from "../../components/ColumnNavigation";
 const ColumnProfilingsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
   const { checksUI, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -37,7 +37,7 @@ const ColumnProfilingsView = () => {
 
   useEffect(() => {
     dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
   }, [connectionName, schemaName, tableName, columnName]);
 
@@ -46,7 +46,7 @@ const ColumnProfilingsView = () => {
       return;
     }
     await dispatch(
-      updateColumnCheckUI(
+      updateColumnProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -57,7 +57,7 @@ const ColumnProfilingsView = () => {
       )
     );
     await dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
   };
 

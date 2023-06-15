@@ -5,11 +5,11 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.check_model import CheckModel
     from ..models.check_search_filters import CheckSearchFilters
     from ..models.ui_all_checks_patch_parameters_selected_tables_to_columns import (
         UIAllChecksPatchParametersSelectedTablesToColumns,
     )
-    from ..models.ui_check_model import UICheckModel
 
 
 T = TypeVar("T", bound="UIAllChecksPatchParameters")
@@ -22,8 +22,8 @@ class UIAllChecksPatchParameters:
     Attributes:
         check_search_filters (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
-        ui_check_model_patch (Union[Unset, UICheckModel]): UI model that returns the form definition and the form data
-            to edit a single data quality check.
+        check_model_patch (Union[Unset, CheckModel]): Model that returns the form definition and the form data to edit a
+            single data quality check.
         selected_tables_to_columns (Union[Unset, UIAllChecksPatchParametersSelectedTablesToColumns]): List of concrete
             table and column names which will be the target. Column mappings are ignored for table level checks. This filter
             is applied at the end.
@@ -32,7 +32,7 @@ class UIAllChecksPatchParameters:
     """
 
     check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
-    ui_check_model_patch: Union[Unset, "UICheckModel"] = UNSET
+    check_model_patch: Union[Unset, "CheckModel"] = UNSET
     selected_tables_to_columns: Union[
         Unset, "UIAllChecksPatchParametersSelectedTablesToColumns"
     ] = UNSET
@@ -44,9 +44,9 @@ class UIAllChecksPatchParameters:
         if not isinstance(self.check_search_filters, Unset):
             check_search_filters = self.check_search_filters.to_dict()
 
-        ui_check_model_patch: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.ui_check_model_patch, Unset):
-            ui_check_model_patch = self.ui_check_model_patch.to_dict()
+        check_model_patch: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.check_model_patch, Unset):
+            check_model_patch = self.check_model_patch.to_dict()
 
         selected_tables_to_columns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.selected_tables_to_columns, Unset):
@@ -59,8 +59,8 @@ class UIAllChecksPatchParameters:
         field_dict.update({})
         if check_search_filters is not UNSET:
             field_dict["check_search_filters"] = check_search_filters
-        if ui_check_model_patch is not UNSET:
-            field_dict["ui_check_model_patch"] = ui_check_model_patch
+        if check_model_patch is not UNSET:
+            field_dict["check_model_patch"] = check_model_patch
         if selected_tables_to_columns is not UNSET:
             field_dict["selected_tables_to_columns"] = selected_tables_to_columns
         if override_conflicts is not UNSET:
@@ -70,11 +70,11 @@ class UIAllChecksPatchParameters:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.check_model import CheckModel
         from ..models.check_search_filters import CheckSearchFilters
         from ..models.ui_all_checks_patch_parameters_selected_tables_to_columns import (
             UIAllChecksPatchParametersSelectedTablesToColumns,
         )
-        from ..models.ui_check_model import UICheckModel
 
         d = src_dict.copy()
         _check_search_filters = d.pop("check_search_filters", UNSET)
@@ -84,12 +84,12 @@ class UIAllChecksPatchParameters:
         else:
             check_search_filters = CheckSearchFilters.from_dict(_check_search_filters)
 
-        _ui_check_model_patch = d.pop("ui_check_model_patch", UNSET)
-        ui_check_model_patch: Union[Unset, UICheckModel]
-        if isinstance(_ui_check_model_patch, Unset):
-            ui_check_model_patch = UNSET
+        _check_model_patch = d.pop("check_model_patch", UNSET)
+        check_model_patch: Union[Unset, CheckModel]
+        if isinstance(_check_model_patch, Unset):
+            check_model_patch = UNSET
         else:
-            ui_check_model_patch = UICheckModel.from_dict(_ui_check_model_patch)
+            check_model_patch = CheckModel.from_dict(_check_model_patch)
 
         _selected_tables_to_columns = d.pop("selected_tables_to_columns", UNSET)
         selected_tables_to_columns: Union[
@@ -108,7 +108,7 @@ class UIAllChecksPatchParameters:
 
         ui_all_checks_patch_parameters = cls(
             check_search_filters=check_search_filters,
-            ui_check_model_patch=ui_check_model_patch,
+            check_model_patch=check_model_patch,
             selected_tables_to_columns=selected_tables_to_columns,
             override_conflicts=override_conflicts,
         )

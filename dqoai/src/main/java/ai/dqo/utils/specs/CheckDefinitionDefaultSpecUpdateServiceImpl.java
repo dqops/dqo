@@ -23,7 +23,7 @@ import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
-import ai.dqo.services.check.mapping.models.UICheckModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
 import ai.dqo.services.check.matching.SimilarCheckMatchingService;
 import ai.dqo.services.check.matching.SimilarCheckModel;
 import ai.dqo.services.check.matching.SimilarChecksContainer;
@@ -64,7 +64,7 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
 
         for (SimilarChecksGroup similarChecksGroup : allCheckGroups) {
             for (SimilarCheckModel similarCheckModel : similarChecksGroup.getSimilarChecks()) {
-                UICheckModel checkModel = similarCheckModel.getCheckModel();
+                CheckModel checkModel = similarCheckModel.getCheckModel();
                 String fullCheckName = CheckDefinitionList.makeCheckName(similarCheckModel.getCheckTarget(),
                         similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), checkModel.getCheckName());
 

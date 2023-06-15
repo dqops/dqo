@@ -15,15 +15,26 @@
  */
 package ai.dqo.core.dqocloud.dashboards;
 
+import ai.dqo.cloud.rest.api.AccessTokenIssueApi;
 import ai.dqo.cloud.rest.api.LookerStudioKeyRequestApi;
 import ai.dqo.cloud.rest.handler.ApiClient;
+import ai.dqo.cloud.rest.model.TenantQueryAccessTokenModel;
+import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import ai.dqo.core.dqocloud.client.DqoCloudApiClientFactory;
 import ai.dqo.metadata.dashboards.DashboardSpec;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 /**
@@ -32,14 +43,27 @@ import java.util.Map;
 @Service
 public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     private final DqoCloudApiClientFactory dqoCloudApiClientFactory;
+    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
+    private final Object lock = new Object();
+    private String lookerStudioApiKey = null;
+    private Instant lookerStudioApiKeyValidUntil = null;
+    private TenantQueryAccessTokenModel queryAccessTokenModel = null;
+    private Instant accessTokenValidUntil = null;
 
     /**
      * Dependency injection constructor that receives all required dependencies.
      * @param dqoCloudApiClientFactory Creates a rest api client for contacting the cloud.dqo.ai using the API key.
+     * @param dqoCloudApiKeyProvider DQO Cloud api key provider.
+     * @param dqoCloudConfigurationProperties DQO Cloud configuration properties.
      */
     @Autowired
-    public LookerStudioUrlServiceImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory) {
+    public LookerStudioUrlServiceImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory,
+                                      DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                      DqoCloudConfigurationProperties dqoCloudConfigurationProperties) {
         this.dqoCloudApiClientFactory = dqoCloudApiClientFactory;
+        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
     }
 
     /**
@@ -47,12 +71,77 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
      * @return API key scoped for accessing dashboards for the client's credentials.
      */
     @Override
-    public String issueLookerStudioQueryApiKey() {
-        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
-        LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
-        String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey();
+    public String getLookerStudioQueryApiKey() {
+        try {
+            synchronized (this.lock) {
+                if (this.lookerStudioApiKeyValidUntil != null && this.lookerStudioApiKeyValidUntil.isAfter(Instant.now())) {
+                    return this.lookerStudioApiKey;
+                }
+            }
 
-        return queryApiKey;
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
+            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey();
+
+            synchronized (this.lock) {
+                DqoCloudApiKey decodedApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(queryApiKey);
+                this.lookerStudioApiKeyValidUntil = decodedApiKey.getApiKeyPayload().getExpiresAt().minus(10, ChronoUnit.MINUTES);
+                this.lookerStudioApiKey = queryApiKey;
+            }
+
+            return queryApiKey;
+        }
+        catch (HttpClientErrorException httpClientErrorException) {
+            if (httpClientErrorException.getStatusCode().is4xxClientError()) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+            }
+
+            throw new DqoRuntimeException("Failed to receive a refresh token from DQO Cloud", httpClientErrorException);
+        }
+    }
+
+    /**
+     * Returns a looker studio access token that could be sent to the connector to speed up setting up a connection to the quality data warehouse.
+     * @return Looker studio access token model.
+     */
+    public TenantQueryAccessTokenModel getLookerStudioAccessToken() {
+        String lookerStudioQueryApiKey = getLookerStudioQueryApiKey();
+
+        try {
+            synchronized (this.lock) {
+                if (this.accessTokenValidUntil != null && this.accessTokenValidUntil.isAfter(Instant.now())) {
+                    return this.queryAccessTokenModel;
+                }
+            }
+
+            ApiClient apiClient = new ApiClient();
+            apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
+            apiClient.setApiKey(lookerStudioQueryApiKey);
+            apiClient.getAuthentication("api_key");
+            AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(apiClient);
+            TenantQueryAccessTokenModel tenantQueryAccessTokenModel = accessTokenIssueApi.issueTenantDataROQueryAccessToken();
+
+            Instant expiresAt = Instant.now().plus(1, ChronoUnit.HOURS);
+            try {
+                expiresAt = Instant.parse(tenantQueryAccessTokenModel.getExpiresAt());
+            } catch (DateTimeParseException pe) {
+                throw new DqoRuntimeException("Cannot parse expires at: " + tenantQueryAccessTokenModel.getExpiresAt(), pe);
+            }
+
+            synchronized (this.lock) {
+                this.accessTokenValidUntil = expiresAt.minus(30, ChronoUnit.MINUTES);
+                this.queryAccessTokenModel = tenantQueryAccessTokenModel;
+            }
+
+            return tenantQueryAccessTokenModel;
+        }
+        catch (HttpClientErrorException httpClientErrorException) {
+            if (httpClientErrorException.getStatusCode().is4xxClientError()) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQO shell to receive a current DQO Cloud API Key.");
+            }
+
+            throw new DqoRuntimeException("Failed to receive an access token from DQO Cloud", httpClientErrorException);
+        }
     }
 
     /**
@@ -63,10 +152,16 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
      */
     @Override
     public String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec, String dqoWindowLocationOrigin) {
-        String refreshToken = this.issueLookerStudioQueryApiKey();
+        String refreshToken = this.getLookerStudioQueryApiKey();
+        TenantQueryAccessTokenModel lookerStudioAccessToken = this.getLookerStudioAccessToken();
+        String token = refreshToken +
+                ",t=" + lookerStudioAccessToken.getAccessToken() +
+                ",p=" + lookerStudioAccessToken.getBillingProjectId() +
+                ",d=" + lookerStudioAccessToken.getDataSetName() +
+                ",e=" + this.accessTokenValidUntil.toEpochMilli();
 
         StringBuilder stringBuilder = new StringBuilder();
-        String jsonParameters = formatDashboardParameters(dashboardSpec.getParameters(), refreshToken, dqoWindowLocationOrigin);
+        String jsonParameters = formatDashboardParameters(dashboardSpec.getParameters(), token, dqoWindowLocationOrigin);
         String urlEncodedLookerStudioParameters = URLEncoder.encode(jsonParameters, StandardCharsets.UTF_8);
         stringBuilder.append(dashboardSpec.getUrl());
         stringBuilder.append("?params=");

@@ -13,19 +13,19 @@ export const BarChart = ({ histograms }: BarChartProps) => {
     datasets: [
       {
         label: 'Warnings',
-        data: Object.values(histograms?.days || {}).map((item: IncidentDailyIssuesCount) => item.warnings || 1),
+        data: Object.values(histograms?.days || {}).map((item: IncidentDailyIssuesCount) => item.warnings),
         backgroundColor: '#EBE51E',
         barThickness: 60,
       },
       {
         label: 'Errors',
-        data: Object.values(histograms?.days || {}).map((item: IncidentDailyIssuesCount) => item.errors || 1),
+        data: Object.values(histograms?.days || {}).map((item: IncidentDailyIssuesCount) => item.errors),
         backgroundColor: '#FF9900',
         barThickness: 60,
       },
       {
         label: 'Fatals',
-        data: Object.values(histograms?.days || {}).map((item: IncidentDailyIssuesCount) => item.fatals || 1),
+        data: Object.values(histograms?.days || {}).map((item: IncidentDailyIssuesCount) => item.fatals),
         backgroundColor: '#E3170A',
         barThickness: 60,
       },

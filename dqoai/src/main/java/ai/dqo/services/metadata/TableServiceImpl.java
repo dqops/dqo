@@ -33,10 +33,10 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
-import ai.dqo.services.check.mapping.models.UICheckModel;
+import ai.dqo.services.check.mapping.AllChecksModelFactory;
+import ai.dqo.services.check.mapping.models.AllChecksModel;
+import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -53,17 +53,17 @@ public class TableServiceImpl implements TableService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final DqoQueueJobFactory dqoQueueJobFactory;
     private final DqoJobQueue dqoJobQueue;
-    private final UIAllChecksModelFactory uiAllChecksModelFactory;
+    private final AllChecksModelFactory allChecksModelFactory;
 
     @Autowired
     public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
                             DqoQueueJobFactory dqoQueueJobFactory,
                             DqoJobQueue dqoJobQueue,
-                            UIAllChecksModelFactory uiAllChecksModelFactory) {
+                            AllChecksModelFactory allChecksModelFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
+        this.allChecksModelFactory = allChecksModelFactory;
     }
 
     /**
@@ -121,21 +121,21 @@ public class TableServiceImpl implements TableService {
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
 
-        UICheckContainerTypeModel uiCheckContainerTypeModel = new UICheckContainerTypeModel(checkType, checkTimeScale);
+        CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 
-        return uiAllChecksModels.stream()
+        return allChecksModels.stream()
                 // Get only column-level checks
-                .map(UIAllChecksModel::getColumnChecksModel)
-                .flatMap(model -> model.getUiTableColumnChecksModels().stream())
-                .flatMap(model -> model.getUiColumnChecksModels().stream())
+                .map(AllChecksModel::getColumnChecksModel)
+                .flatMap(model -> model.getTableColumnChecksModels().stream())
+                .flatMap(model -> model.getColumnChecksModels().stream())
                 .flatMap(model -> model.getCheckContainers().values().stream())
                 .flatMap(model -> model.getCategories().stream())
                 // For each category get check templates
                 .map(categoryModel -> {
-                    Map<String, UICheckModel> checkNameToExampleCheck = new HashMap<>();
-                    for (UICheckModel checkModel: categoryModel.getChecks()) {
+                    Map<String, CheckModel> checkNameToExampleCheck = new HashMap<>();
+                    for (CheckModel checkModel: categoryModel.getChecks()) {
                         if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
                             checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
                         }
@@ -143,7 +143,7 @@ public class TableServiceImpl implements TableService {
 
                     return checkNameToExampleCheck.values().stream()
                             .map(uiCheckModel -> CheckTemplate.fromUiCheckModel(
-                                    uiCheckModel, categoryModel.getCategory(), uiCheckContainerTypeModel, CheckTarget.column)
+                                    uiCheckModel, categoryModel.getCategory(), checkContainerTypeModel, CheckTarget.column)
                             );
                 })
                 .reduce(Stream.empty(), Stream::concat)

@@ -19,7 +19,7 @@ import ai.dqo.BaseTest;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMatchRegexPercentSensorParametersSpec;
 import ai.dqo.utils.docs.ProviderTypeModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -39,7 +39,7 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
     void setUp() {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         this.sut = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
     }

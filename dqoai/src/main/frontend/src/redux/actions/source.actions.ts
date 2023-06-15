@@ -25,7 +25,7 @@ import {
   ErrorsDetailedDataModel,
   ConnectionIncidentGroupingSpec,
   SensorReadoutsDetailedDataModel,
-  UICheckModel,
+  CheckModel,
   CheckSearchFiltersCheckTypeEnum,
   TableIncidentGroupingSpec
 } from "../../api";
@@ -210,7 +210,7 @@ export const getCheckResults = (
     table: string;
     column?: string;
     dataStreamName?: string;
-    check?: UICheckModel;
+    check?: CheckModel;
     startDate: string;
     endDate: string;
   }) => (dispatch: any) => {
@@ -353,7 +353,7 @@ export const getCheckReadouts = (
     table: string;
     column?: string;
     dataStreamName?: string;
-    check?: UICheckModel;
+    check?: CheckModel;
     startDate: string;
     endDate: string;
   }) => (dispatch: any) => {
@@ -487,7 +487,7 @@ export const getCheckErrors = (
     table: string;
     column?: string;
     dataStreamName?: string;
-    check?: UICheckModel;
+    check?: CheckModel;
     startDate: string;
     endDate: string;
   }) => (dispatch: any) => {

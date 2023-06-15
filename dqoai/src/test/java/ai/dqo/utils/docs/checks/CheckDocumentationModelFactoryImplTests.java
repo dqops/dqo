@@ -20,9 +20,9 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
 import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
 import ai.dqo.utils.docs.rules.RuleDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
@@ -48,15 +48,15 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
     void setUp() {
         Path projectRoot = Path.of(".");
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        SpecToUiCheckMappingService specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingService specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl());
-        SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService);
+        SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService);
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
+        ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.sut = new CheckDocumentationModelFactoryImpl(
                 similarCheckMatchingService,
-                new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService),
-                new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService),
+                new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToModelCheckMappingService),
+                new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToModelCheckMappingService),
                 uiToSpecCheckMappingService,
                 YamlSerializerObjectMother.getDefault(),
                 JinjaTemplateRenderServiceObjectMother.getDefault()

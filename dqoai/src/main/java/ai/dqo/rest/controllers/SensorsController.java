@@ -16,9 +16,11 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.metadata.basespecs.ElementWrapper;
-import ai.dqo.metadata.definitions.sensors.*;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionList;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -37,7 +39,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**

@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableProfilingChecksUI,
-  updateTableProfilingChecksUI
+  getTableProfilingChecksModel,
+  updateTableProfilingChecksModel
 } from '../../redux/actions/table.actions';
 import Button from '../../components/Button';
 import { isEqual } from 'lodash';
@@ -21,7 +21,7 @@ const TableProfilingsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
 
   const { checksUI, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -31,7 +31,7 @@ const TableProfilingsView = () => {
   }, [checksUI]);
 
   useEffect(() => {
-    dispatch(getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    dispatch(getTableProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
@@ -40,7 +40,7 @@ const TableProfilingsView = () => {
     }
 
     await dispatch(
-      updateTableProfilingChecksUI(
+      updateTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -50,7 +50,7 @@ const TableProfilingsView = () => {
       )
     );
     await dispatch(
-      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+      getTableProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
   };
 

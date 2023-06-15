@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.check_model import CheckModel
+from ...models.check_spec_model import CheckSpecModel
 from ...models.mono_object import MonoObject
 from ...types import Response
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     full_check_name: str,
     *,
     client: Client,
-    json_body: CheckModel,
+    json_body: CheckSpecModel,
 ) -> Dict[str, Any]:
     url = "{}/api/checks/{fullCheckName}".format(
         client.base_url, fullCheckName=full_check_name
@@ -64,7 +64,7 @@ def sync_detailed(
     full_check_name: str,
     *,
     client: Client,
-    json_body: CheckModel,
+    json_body: CheckSpecModel,
 ) -> Response[MonoObject]:
     """updateCheck
 
@@ -72,7 +72,7 @@ def sync_detailed(
 
     Args:
         full_check_name (str):
-        json_body (CheckModel): Check model
+        json_body (CheckSpecModel): Check spec model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -100,7 +100,7 @@ def sync(
     full_check_name: str,
     *,
     client: Client,
-    json_body: CheckModel,
+    json_body: CheckSpecModel,
 ) -> Optional[MonoObject]:
     """updateCheck
 
@@ -108,7 +108,7 @@ def sync(
 
     Args:
         full_check_name (str):
-        json_body (CheckModel): Check model
+        json_body (CheckSpecModel): Check spec model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -129,7 +129,7 @@ async def asyncio_detailed(
     full_check_name: str,
     *,
     client: Client,
-    json_body: CheckModel,
+    json_body: CheckSpecModel,
 ) -> Response[MonoObject]:
     """updateCheck
 
@@ -137,7 +137,7 @@ async def asyncio_detailed(
 
     Args:
         full_check_name (str):
-        json_body (CheckModel): Check model
+        json_body (CheckSpecModel): Check spec model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -163,7 +163,7 @@ async def asyncio(
     full_check_name: str,
     *,
     client: Client,
-    json_body: CheckModel,
+    json_body: CheckSpecModel,
 ) -> Optional[MonoObject]:
     """updateCheck
 
@@ -171,7 +171,7 @@ async def asyncio(
 
     Args:
         full_check_name (str):
-        json_body (CheckModel): Check model
+        json_body (CheckSpecModel): Check spec model
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

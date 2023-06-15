@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import SvgIcon from "../../components/SvgIcon";
 import Tabs from "../../components/Tabs";
@@ -8,21 +8,29 @@ import { TableBasicModel } from "../../api";
 import { TableApiClient } from "../../services/apiClient";
 import Button from "../../components/Button";
 import AddTableDialog from "../../components/CustomTree/AddTableDialog";
-
-const tabs = [
-  {
-    label: 'Tables',
-    value: 'tables'
-  }
-];
+import { SchemaTables } from "./SchemaTables";
+import { MultiChecks } from "./MultiChecks";
 
 const SchemaPage = () => {
-  const { connection, schema, tab: activeTab, checkTypes }: { connection: string, schema: string, tab: string, checkTypes: string } = useParams();
+  const { connection, schema, tab: activeTab, checkTypes }: { connection: string, schema: string, tab: string, checkTypes: CheckTypes } = useParams();
   const [tables, setTables] = useState<TableBasicModel[]>([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
 
   const history = useHistory();
+
+  const tabs = useMemo(() => [
+    {
+      label: 'Tables',
+      value: 'tables'
+    },
+    ...checkTypes !== CheckTypes.SOURCES ? [
+      {
+        label: 'Multiple checks edit',
+        value: 'multiple_checks'
+      }
+    ] : []
+  ], [checkTypes]);
 
   useEffect(() => {
     TableApiClient.getTables(connection, schema).then((res) => {
@@ -55,36 +63,18 @@ const SchemaPage = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <div className="p-4">
-        <table className="w-full">
-          <thead>
-          <tr>
-            <th className="px-4 text-left">Connection</th>
-            <th className="px-4 text-left">Schema</th>
-            <th className="px-4 text-left">Table</th>
-            <th className="px-4 text-left">Disabled</th>
-            <th className="px-4 text-left">Stage</th>
-            <th className="px-4 text-left">Filter</th>
-          </tr>
-          </thead>
-          <tbody>
-          {tables.map((item, index) => (
-            <tr key={index}>
-              <td className="px-4">{item.connection_name}</td>
-              <td className="px-4">{item.target?.schema_name}</td>
-              <td className="px-4">{item.target?.table_name}</td>
-              <td className="px-4">{item?.disabled}</td>
-              <td className="px-4">{item?.stage}</td>
-              <td className="px-4">{item?.filter}</td>
-            </tr>
-          ))}
-          </tbody>
-        </table>
-        <AddTableDialog
-          open={addTableDialogOpen}
-          onClose={() => setAddTableDialogOpen(false)}
-        />
-      </div>
+      {activeTab === 'tables' && (
+        <div className="p-4">
+          <SchemaTables tables={tables} />
+        </div>
+      )}
+      {checkTypes !== CheckTypes.SOURCES && activeTab === 'multiple_checks' && (
+        <MultiChecks />
+      )}
+      <AddTableDialog
+        open={addTableDialogOpen}
+        onClose={() => setAddTableDialogOpen(false)}
+      />
     </ConnectionLayout>
   );
 };

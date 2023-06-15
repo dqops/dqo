@@ -6,8 +6,8 @@ from ..models.check_template_check_target import CheckTemplateCheckTarget
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.check_container_type_model import CheckContainerTypeModel
     from ..models.parameter_definition_spec import ParameterDefinitionSpec
-    from ..models.ui_check_container_type_model import UICheckContainerTypeModel
 
 
 T = TypeVar("T", bound="CheckTemplate")
@@ -23,8 +23,8 @@ class CheckTemplate:
             check_category (Union[Unset, str]): Data quality check category.
             check_name (Union[Unset, str]): Data quality check name that is used in YAML.
             help_text (Union[Unset, str]): Help text that describes the data quality check.
-            check_container_type (Union[Unset, UICheckContainerTypeModel]): UI model identifying the check type and
-                timescale of checks belonging to a container.
+            check_container_type (Union[Unset, CheckContainerTypeModel]): Model identifying the check type and timescale of
+                checks belonging to a container.
             sensor_name (Union[Unset, str]): Full sensor name.
             sensor_parameters_definitions (Union[Unset, List['ParameterDefinitionSpec']]): List of sensor parameter fields
                 definitions.
@@ -36,7 +36,7 @@ class CheckTemplate:
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
-    check_container_type: Union[Unset, "UICheckContainerTypeModel"] = UNSET
+    check_container_type: Union[Unset, "CheckContainerTypeModel"] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     sensor_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     rule_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
@@ -103,8 +103,8 @@ class CheckTemplate:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.check_container_type_model import CheckContainerTypeModel
         from ..models.parameter_definition_spec import ParameterDefinitionSpec
-        from ..models.ui_check_container_type_model import UICheckContainerTypeModel
 
         d = src_dict.copy()
         _check_target = d.pop("check_target", UNSET)
@@ -121,11 +121,11 @@ class CheckTemplate:
         help_text = d.pop("help_text", UNSET)
 
         _check_container_type = d.pop("check_container_type", UNSET)
-        check_container_type: Union[Unset, UICheckContainerTypeModel]
+        check_container_type: Union[Unset, CheckContainerTypeModel]
         if isinstance(_check_container_type, Unset):
             check_container_type = UNSET
         else:
-            check_container_type = UICheckContainerTypeModel.from_dict(
+            check_container_type = CheckContainerTypeModel.from_dict(
                 _check_container_type
             )
 

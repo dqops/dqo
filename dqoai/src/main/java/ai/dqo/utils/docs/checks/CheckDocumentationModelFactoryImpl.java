@@ -50,10 +50,10 @@ import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.HomeType;
 import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
 import ai.dqo.metadata.userhome.UserHomeImpl;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.UICheckModel;
-import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
+import ai.dqo.services.check.mapping.ModelToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.models.CheckContainerModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
+import ai.dqo.services.check.mapping.models.QualityCategoryModel;
 import ai.dqo.services.check.matching.SimilarCheckMatchingService;
 import ai.dqo.services.check.matching.SimilarCheckModel;
 import ai.dqo.services.check.matching.SimilarChecksContainer;
@@ -107,7 +107,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private SimilarCheckMatchingService similarCheckMatchingService;
     private SensorDocumentationModelFactory sensorDocumentationModelFactory;
     private RuleDocumentationModelFactory ruleDocumentationModelFactory;
-    private UiToSpecCheckMappingService uiToSpecCheckMappingService;
+    private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private YamlSerializer yamlSerializer;
     private JinjaTemplateRenderService jinjaTemplateRenderService;
 
@@ -116,7 +116,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
      * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
      * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
-     * @param uiToSpecCheckMappingService UI check model to specification adapter that can generate a sample usage for us.
+     * @param modelToSpecCheckMappingService UI check model to specification adapter that can generate a sample usage for us.
      * @param yamlSerializer Yaml serializer, used to render the table yaml files with a sample usage.
      * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
      */
@@ -124,13 +124,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     public CheckDocumentationModelFactoryImpl(SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
-                                              UiToSpecCheckMappingService uiToSpecCheckMappingService,
+                                              ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
                                               JinjaTemplateRenderService jinjaTemplateRenderService) {
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
-        this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
+        this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.yamlSerializer = yamlSerializer;
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
     }
@@ -282,7 +282,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                                                                 TableSpec tableSpec,
                                                                 SensorDocumentationModel sensorDocumentation) {
         CheckDocumentationModel checkDocumentationModel = new CheckDocumentationModel();
-        UICheckModel checkModel = similarCheckModel.getCheckModel();
+        CheckModel checkModel = similarCheckModel.getCheckModel();
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
         checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
@@ -316,9 +316,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             columnSpec.setColumnCheckRootContainer(checkRootContainer);
         }
 
-        UICheckContainerModel allChecksModel = new UICheckContainerModel();
-        UIQualityCategoryModel uiCategoryModel = new UIQualityCategoryModel(similarCheckModel.getCategory());
-        UICheckModel sampleCheckModel = checkModel.cloneForUpdate();
+        CheckContainerModel allChecksModel = new CheckContainerModel();
+        QualityCategoryModel uiCategoryModel = new QualityCategoryModel(similarCheckModel.getCategory());
+        CheckModel sampleCheckModel = checkModel.cloneForUpdate();
         sampleCheckModel.setConfigured(true);
         if (sampleCheckModel.getRule().getError() != null) {
             sampleCheckModel.getRule().getError().setConfigured(true);
@@ -332,7 +332,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         sampleCheckModel.applySampleValues();
         uiCategoryModel.getChecks().add(sampleCheckModel);
         allChecksModel.getCategories().add(uiCategoryModel);
-        this.uiToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
         if (checkCategoryContainer == null) {
