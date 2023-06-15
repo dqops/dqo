@@ -1,10 +1,11 @@
 import { CheckResultDetailedSingleModel, IncidentModel } from "../../api";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
 import { SortableColumn } from "../IncidentConnection/SortableColumn";
 import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
 import moment from "moment";
+import { CheckTypes } from "../../shared/routes";
 
 type IncidentIssueRowProps = {
   issue: CheckResultDetailedSingleModel;
@@ -44,13 +45,6 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
     return '';
   };
 
-  useEffect(() => {
-    if (!issue?.checkName) return;
-
-    // ChecksApi.getCheck(issue?.checkName).then((res) => {
-    //   console.log('res', res);
-    // });
-  }, []);
   const closeCheckDetails = () => {
     setOpen(false);
   };
@@ -133,7 +127,14 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <tr>
           <td colSpan={12}>
             <CheckDetails
+              checkTypes={(incidentDetail?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+              connection={incidentDetail?.connection ?? ''}
+              schema={incidentDetail?.schema ?? ''}
+              table={incidentDetail?.table ?? ''}
+              checkName={issue.checkName}
+              runCheckType={issue.checkType}
               onClose={closeCheckDetails}
+              defaultFilters={moment(issue.timePeriod).format("MMMM YYYY")}
             />
           </td>
         </tr>

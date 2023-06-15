@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Tabs from '../../Tabs';
-import { useParams } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum,
-  CheckModel
+  CheckModel, DeleteStoredDataQueueJobParameters
 } from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
@@ -42,26 +41,36 @@ const tabs = [
 ];
 
 interface CheckDetailsProps {
+  checkTypes: CheckTypes;
+  connection: string;
+  schema: string;
+  table: string;
+  column?: string;
   check?: CheckModel;
+  runCheckType?: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName?: string;
   onClose: () => void;
   job?: DqoJobHistoryEntryModel;
+  data_clean_job_template?: DeleteStoredDataQueueJobParameters;
+  defaultFilters?: any;
 }
 
-const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
+const CheckDetails = ({
+  checkTypes,
+  connection,
+  schema,
+  table,
+  column,
+  data_clean_job_template,
+  runCheckType,
+  checkName,
+  timeScale,
+  onClose,
+  job,
+  defaultFilters
+}: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
-  const {
-    checkTypes,
-    connection,
-    schema,
-    table,
-    column
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-    column: string;
-  } = useParams();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const {
     checkResults: resultsData,
@@ -72,41 +81,21 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const checkResults = resultsData
-    ? resultsData[check?.check_name ?? ''] || []
+    ? resultsData[checkName ?? ''] || []
     : [];
   const sensorReadouts = readoutsData
-    ? readoutsData[check?.check_name ?? ''] || []
+    ? readoutsData[checkName ?? ''] || []
     : [];
   const sensorErrors = errorsData
-    ? errorsData[check?.check_name ?? ''] || []
+    ? errorsData[checkName ?? ''] || []
     : [];
-  const filters = filtersData ? filtersData[check?.check_name ?? ''] || {
+  const filters = filtersData && filtersData[checkName ?? ''] ? filtersData[checkName ?? ''] : (defaultFilters || {
     month: moment().format('MMMM YYYY')
-  } : {
-    month: moment().format('MMMM YYYY')
-  };
+  });
 
   const dispatch = useActionDispatch();
 
   const { sidebarWidth } = useTree();
-
-  useEffect(() => {
-    if (!sensorErrors.length) {
-      fetchCheckErrors(filters.month, filters.dataStreamName);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!sensorReadouts.length) {
-      fetchCheckReadouts(filters.month, filters.dataStreamName);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!checkResults.length) {
-      fetchCheckResults(filters.month, filters.dataStreamName);
-    }
-  }, []);
 
   const fetchCheckErrors = useCallback(
     (month: string, dataStreamName?: string) => {
@@ -125,10 +114,12 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         dataStreamName,
         startDate,
         endDate,
-        check
+        runCheckType,
+        timeScale,
+        checkName: checkName ?? ''
       }));
     },
-    [check, connection, schema, table, column]
+    [checkName, timeScale, runCheckType, connection, schema, table, column]
   );
 
   const fetchCheckReadouts = useCallback(
@@ -149,13 +140,15 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           table,
           column,
           dataStreamName,
-          check,
           startDate,
-          endDate
+          endDate,
+          runCheckType,
+          timeScale,
+          checkName: checkName ?? ''
         }
       ));
     },
-    [check, connection, schema, table, column]
+    [runCheckType, checkName, timeScale, connection, schema, table, column]
   );
 
   const fetchCheckResults = useCallback(
@@ -176,14 +169,34 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           table,
           column,
           dataStreamName,
-          check,
           startDate,
-          endDate
+          endDate,
+          runCheckType,
+          checkName: checkName ?? '',
+          timeScale,
         }
       ));
     },
-    [check, connection, schema, table, column]
+    [runCheckType, checkName, timeScale, connection, schema, table, column]
   );
+
+  useEffect(() => {
+    if (!sensorErrors?.length) {
+      fetchCheckErrors(filters.month, filters.dataStreamName);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!sensorReadouts?.length) {
+      fetchCheckReadouts(filters.month, filters.dataStreamName);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!checkResults?.length) {
+      fetchCheckResults(filters.month, filters.dataStreamName);
+    }
+  }, []);
 
   useEffect(() => {
     if (
@@ -201,7 +214,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const onChangeDataStream = (value: string) => {
     dispatch(
       setCheckFilters(checkTypes, firstLevelActiveTab,
-      check?.check_name ?? '', {
+      checkName ?? '', {
         ...filters,
         dataStreamName: value
       })
@@ -211,7 +224,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   const onChangeMonth = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, check?.check_name ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
         ...filters,
         month: value
       })
@@ -252,7 +265,9 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         {activeTab === 'check_results' && (
           <CheckResultsTab
-            check={check}
+            runCheckType={runCheckType || ''}
+            checkName={checkName || ''}
+            timeScale={timeScale}
             results={checkResults || []}
             dataStreamName={filters.dataStreamName}
             month={filters.month}
@@ -285,7 +300,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
-              ...check?.data_clean_job_template,
+              ...data_clean_job_template || {},
               ...params
             });
           }}

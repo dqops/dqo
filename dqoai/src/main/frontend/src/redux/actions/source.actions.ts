@@ -201,19 +201,24 @@ export const getCheckResults = (
     table,
     column,
     dataStreamName,
-    check,
+    checkName,
+    runCheckType,
     startDate,
     endDate,
+    timeScale
   } : {
     connection: string;
     schema: string;
     table: string;
     column?: string;
     dataStreamName?: string;
-    check?: CheckModel;
     startDate: string;
     endDate: string;
+    timeScale?: 'daily' | 'monthly';
+    checkName: string;
+    runCheckType?: string
   }) => (dispatch: any) => {
+
   dispatch(getCheckResultsRequest(checkType, activeTab));
 
   const successCallback = (res: AxiosResponse<CheckResultsDetailedDataModel[]>) => {
@@ -221,8 +226,8 @@ export const getCheckResults = (
       getCheckResultsSuccess(
         checkType,
         activeTab,
-        check?.check_name ?? '',
-        res.data.filter((item) => item.checkName === check?.check_name)
+        checkName,
+        res.data.filter((item) => item.checkName === checkName)
       )
     );
 
@@ -230,8 +235,8 @@ export const getCheckResults = (
       setCheckResults(
         checkType,
         activeTab,
-        check?.check_name ?? '',
-        res.data.filter((item) => item.checkName === check?.check_name)
+        checkName,
+        res.data.filter((item) => item.checkName === checkName)
       )
     );
   };
@@ -245,7 +250,7 @@ export const getCheckResults = (
   }
 
   if (column) {
-    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+    if (checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
       CheckResultApi.getColumnProfilingChecksResults(
         connection,
         schema,
@@ -255,31 +260,31 @@ export const getCheckResults = (
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
       CheckResultApi.getColumnRecurringChecksResults(
         connection,
         schema,
         table,
         column,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       CheckResultApi.getColumnPartitionedChecksResults(
         connection,
         schema,
         table,
         column,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
     }
   } else {
-    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+    if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
       CheckResultApi.getTableProfilingChecksResults(
         connection,
         schema,
@@ -288,22 +293,22 @@ export const getCheckResults = (
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
       CheckResultApi.getTableRecurringChecksResults(
         connection,
         schema,
         table,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       CheckResultApi.getTablePartitionedChecksResults(
         connection,
         schema,
         table,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
@@ -344,9 +349,11 @@ export const getCheckReadouts = (
     table,
     column,
     dataStreamName,
-    check,
     startDate,
     endDate,
+    checkName,
+    runCheckType,
+    timeScale
   } : {
     connection: string;
     schema: string;
@@ -356,6 +363,9 @@ export const getCheckReadouts = (
     check?: CheckModel;
     startDate: string;
     endDate: string;
+    timeScale?: 'daily' | 'monthly';
+    checkName: string;
+    runCheckType?: string;
   }) => (dispatch: any) => {
   dispatch(getCheckReadoutsRequest(checkType, activeTab));
 
@@ -364,8 +374,8 @@ export const getCheckReadouts = (
       setSensorReadouts(
         checkType,
         activeTab,
-        check?.check_name ?? '',
-        res.data.filter((item) =>item.singleSensorReadouts && item.singleSensorReadouts[0]?.checkName === check?.check_name)
+        checkName,
+        res.data.filter((item) =>item.singleSensorReadouts && item.singleSensorReadouts[0]?.checkName === checkName)
       )
     );
   };
@@ -379,7 +389,7 @@ export const getCheckReadouts = (
   }
 
   if (column) {
-    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+    if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
       SensorReadoutsApi.getColumnProfilingSensorReadouts(
         connection,
         schema,
@@ -389,31 +399,31 @@ export const getCheckReadouts = (
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
       SensorReadoutsApi.getColumnRecurringSensorReadouts(
         connection,
         schema,
         table,
         column,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       SensorReadoutsApi.getColumnPartitionedSensorReadouts(
         connection,
         schema,
         table,
         column,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
     }
   } else {
-    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+    if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
       SensorReadoutsApi.getTableProfilingSensorReadouts(
         connection,
         schema,
@@ -422,22 +432,22 @@ export const getCheckReadouts = (
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
       SensorReadoutsApi.getTableRecurringSensorReadouts(
         connection,
         schema,
         table,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       SensorReadoutsApi.getTablePartitionedSensorReadouts(
         connection,
         schema,
         table,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
@@ -478,18 +488,22 @@ export const getCheckErrors = (
     table,
     column,
     dataStreamName,
-    check,
     startDate,
     endDate,
+    checkName,
+    runCheckType,
+    timeScale
   } : {
     connection: string;
     schema: string;
     table: string;
     column?: string;
     dataStreamName?: string;
-    check?: CheckModel;
     startDate: string;
     endDate: string;
+    timeScale?: 'daily' | 'monthly';
+    checkName: string;
+    runCheckType?: string
   }) => (dispatch: any) => {
   dispatch(getCheckErrorsRequest(checkType, activeTab));
 
@@ -498,8 +512,8 @@ export const getCheckErrors = (
       setSensorErrors(
         checkType,
         activeTab,
-        check?.check_name ?? '',
-        res.data.filter((item) => item.checkName === check?.check_name)
+        checkName,
+        res.data.filter((item) => item.checkName === checkName)
       )
     )
   };
@@ -513,7 +527,7 @@ export const getCheckErrors = (
   }
 
   if (column) {
-    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+    if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
       ErrorsApi.getColumnProfilingErrors(
         connection,
         schema,
@@ -523,31 +537,31 @@ export const getCheckErrors = (
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
       ErrorsApi.getColumnRecurringErrors(
         connection,
         schema,
         table,
         column,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       ErrorsApi.getColumnPartitionedErrors(
         connection,
         schema,
         table,
         column,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
     }
   } else {
-    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+    if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
       ErrorsApi.getTableProfilingErrors(
         connection,
         schema,
@@ -556,22 +570,22 @@ export const getCheckErrors = (
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
       ErrorsApi.getTableRecurringErrors(
         connection,
         schema,
         table,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
-    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+    } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       ErrorsApi.getTablePartitionedErrors(
         connection,
         schema,
         table,
-        check?.run_checks_job_template?.timeScale || 'daily',
+        timeScale || 'daily',
         dataStreamName,
         startDate,
         endDate
