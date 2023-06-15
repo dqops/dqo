@@ -111,6 +111,7 @@ public class SchemasController {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return List of profiling check configurations on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/profiling/model", produces = "application/json")
@@ -137,7 +138,9 @@ public class SchemasController {
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
             Optional<String> checkName,
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
+            Optional<Boolean> checkEnabled,
+            @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkConfigured) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -154,7 +157,8 @@ public class SchemasController {
                 checkTarget.orElse(null),
                 checkCategory.orElse(null),
                 checkName.orElse(null),
-                checkEnabled.orElse(null)
+                checkEnabled.orElse(null),
+                checkConfigured.orElse(null)
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -172,6 +176,7 @@ public class SchemasController {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return UI friendly data quality recurring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/recurring/{timeScale}/model", produces = "application/json")
@@ -199,7 +204,9 @@ public class SchemasController {
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
             Optional<String> checkName,
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
+            Optional<Boolean> checkEnabled,
+            @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkConfigured) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -216,7 +223,8 @@ public class SchemasController {
                 checkTarget.orElse(null),
                 checkCategory.orElse(null),
                 checkName.orElse(null),
-                checkEnabled.orElse(null)
+                checkEnabled.orElse(null),
+                checkConfigured.orElse(null)
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
@@ -234,6 +242,7 @@ public class SchemasController {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/model", produces = "application/json")
@@ -261,7 +270,9 @@ public class SchemasController {
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
             Optional<String> checkName,
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
+            Optional<Boolean> checkEnabled,
+            @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkConfigured) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -278,7 +289,8 @@ public class SchemasController {
                 checkTarget.orElse(null),
                 checkCategory.orElse(null),
                 checkName.orElse(null),
-                checkEnabled.orElse(null)
+                checkEnabled.orElse(null),
+                checkConfigured.orElse(null)
         );
 
         return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200

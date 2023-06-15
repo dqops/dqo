@@ -46,6 +46,8 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectM
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
+import ai.dqo.services.check.CheckFlatConfigurationFactory;
+import ai.dqo.services.check.CheckFlatConfigurationFactoryImpl;
 import ai.dqo.services.check.mapping.utils.CheckContainerBasicModelUtility;
 import ai.dqo.services.check.mapping.models.CheckContainerModel;
 import ai.dqo.services.check.mapping.basicmodels.CheckContainerBasicModel;
@@ -99,8 +101,9 @@ public class TablesControllerUTTests extends BaseTest {
 
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 
-        TableService tableService = new TableServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue, allChecksModelFactory);
+        TableService tableService = new TableServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue, allChecksModelFactory, checkFlatConfigurationFactory);
 
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
 

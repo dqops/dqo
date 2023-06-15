@@ -71,6 +71,7 @@ public interface SchemaService {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     List<CheckConfigurationModel> getCheckConfigurationsOnSchema(
@@ -83,5 +84,6 @@ public interface SchemaService {
             CheckTarget checkTarget,
             String checkCategory,
             String checkName,
-            Boolean checkEnabled);
+            Boolean checkEnabled,
+            Boolean checkConfigured);
 }

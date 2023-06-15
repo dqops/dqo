@@ -16,12 +16,25 @@
 
 package ai.dqo.services.check;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.ConnectionSearchFilters;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
+import ai.dqo.metadata.sources.ColumnSpec;
+import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.sources.TableWrapper;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.services.check.mapping.AllChecksModelFactory;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.mapping.models.column.AllColumnChecksModel;
 import ai.dqo.services.check.mapping.models.column.ColumnChecksModel;
@@ -30,10 +43,12 @@ import ai.dqo.services.check.mapping.models.table.AllTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.SchemaTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.TableChecksModel;
 import ai.dqo.services.check.models.CheckConfigurationModel;
+import ai.dqo.utils.reflection.FieldInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -122,8 +137,7 @@ public class CheckFlatConfigurationFactoryImpl implements CheckFlatConfiguration
      */
     @Override
     public List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
-        return allChecksModels.stream()
+        return this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters).stream()
                 .flatMap(allChecksModel -> this.fromAllChecksModel(allChecksModel).stream())
                 .collect(Collectors.toList());
     }
@@ -149,6 +163,9 @@ public class CheckFlatConfigurationFactoryImpl implements CheckFlatConfiguration
             CheckContainerModel checkContainerModel) {
         List<CheckConfigurationModel> containerResults = new ArrayList<>();
         for (QualityCategoryModel qualityCategoryModel : checkContainerModel.getCategories()) {
+            if (qualityCategoryModel == null) {
+                continue;
+            }
             String categoryName = qualityCategoryModel.getCategory();
             containerResults.addAll(qualityCategoryModel.getChecks().stream()
                     .map(checkModel -> {

@@ -164,7 +164,8 @@ public class TableServiceImpl implements TableService {
                                                                        CheckTarget checkTarget,
                                                                        String checkCategory,
                                                                        String checkName,
-                                                                       Boolean checkEnabled) {
+                                                                       Boolean checkEnabled,
+                                                                       Boolean checkConfigured) {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
         filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
@@ -176,6 +177,7 @@ public class TableServiceImpl implements TableService {
         filters.setCheckCategory(checkCategory);
         filters.setCheckName(checkName);
         filters.setEnabled(checkEnabled);
+        filters.setCheckConfigured(checkConfigured);
 
         return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
     }

@@ -312,7 +312,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param checkTimeScale            Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Check model.
      */
-    protected CheckModel createCheckModel(FieldInfo checkFieldInfo,
+    @Override
+    public CheckModel createCheckModel(FieldInfo checkFieldInfo,
                                           AbstractCheckSpec<?,?,?,?> checkSpec,
                                           CheckRunRecurringScheduleGroup scheduleGroup,
                                           CheckSearchFilters runChecksCategoryTemplate,

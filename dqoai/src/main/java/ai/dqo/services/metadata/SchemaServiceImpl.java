@@ -174,6 +174,7 @@ public class SchemaServiceImpl implements SchemaService {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     @Override
@@ -186,7 +187,8 @@ public class SchemaServiceImpl implements SchemaService {
                                                                         CheckTarget checkTarget,
                                                                         String checkCategory,
                                                                         String checkName,
-                                                                        Boolean checkEnabled) {
+                                                                        Boolean checkEnabled,
+                                                                        Boolean checkConfigured) {
         String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
                 new PhysicalTableName(schemaName, Optional.ofNullable(tableNamePattern).orElse(""))
                         .toTableSearchFilter()
@@ -203,6 +205,7 @@ public class SchemaServiceImpl implements SchemaService {
         filters.setCheckCategory(checkCategory);
         filters.setCheckName(checkName);
         filters.setEnabled(checkEnabled);
+        filters.setCheckConfigured(checkConfigured);
 
         return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
     }

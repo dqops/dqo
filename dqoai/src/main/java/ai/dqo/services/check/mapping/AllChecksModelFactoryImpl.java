@@ -337,8 +337,11 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         result.setCategory(baseModel.getCategory());
         result.setHelpText(baseModel.getHelpText());
         for (CheckModel checkModel: baseModel.getChecks()) {
-            if (checkSearchFilters.getCheckName() == null
-                    || checkSearchFilters.getCheckName().equals(checkModel.getCheckName())) {
+            boolean checkNamePredicate = checkSearchFilters.getCheckName() == null
+                    || checkSearchFilters.getCheckName().equals(checkModel.getCheckName());
+            boolean checkConfiguredPredicate = checkSearchFilters.getCheckConfigured() == null
+                    || checkSearchFilters.getCheckConfigured().equals(checkModel.isConfigured());
+            if (checkNamePredicate && checkConfiguredPredicate) {
                 result.getChecks().add(checkModel);
             }
         }

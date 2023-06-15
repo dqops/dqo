@@ -73,6 +73,7 @@ public interface TableService {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
     List<CheckConfigurationModel> getCheckConfigurationsOnTable(
@@ -84,7 +85,8 @@ public interface TableService {
             CheckTarget checkTarget,
             String checkCategory,
             String checkName,
-            Boolean checkEnabled);
+            Boolean checkEnabled,
+            Boolean checkConfigured);
 
     /**
      * Deletes table from metadata and flushes user context.
