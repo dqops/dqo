@@ -15,9 +15,10 @@
  */
 package ai.dqo.services.check.mapping;
 
-import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.*;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.ExecutionContext;
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -25,7 +26,9 @@ import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.services.check.mapping.basicmodels.CheckContainerBasicModel;
 import ai.dqo.services.check.mapping.models.CheckContainerModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
 import ai.dqo.services.check.mapping.models.FieldModel;
+import ai.dqo.utils.reflection.FieldInfo;
 
 import java.util.List;
 
@@ -69,6 +72,17 @@ public interface SpecToModelCheckMappingService {
      * @return List of fields for all sensor parameter fields.
      */
     List<FieldModel> createFieldsForSensorParameters(AbstractSensorParametersSpec parametersSpec);
+
+    CheckModel createCheckModel(FieldInfo checkFieldInfo,
+                                AbstractCheckSpec<?, ?, ?, ?> checkSpec,
+                                CheckRunRecurringScheduleGroup scheduleGroup,
+                                CheckSearchFilters runChecksCategoryTemplate,
+                                TableSpec tableSpec,
+                                ExecutionContext executionContext,
+                                ProviderType providerType,
+                                CheckTarget checkTarget,
+                                CheckType checkType,
+                                CheckTimeScale checkTimeScale);
 
     /**
      * Creates a list of fields to edit all values in the rule parameters specification.

@@ -19,7 +19,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceImpl;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;

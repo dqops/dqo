@@ -22,21 +22,28 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
+import ai.dqo.services.check.CheckFlatConfigurationFactory;
 import ai.dqo.services.check.mapping.AllChecksModelFactory;
 import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,12 +52,15 @@ import java.util.stream.Stream;
 public class SchemaServiceImpl implements SchemaService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final AllChecksModelFactory allChecksModelFactory;
+    private final CheckFlatConfigurationFactory checkFlatConfigurationFactory;
 
     @Autowired
     public SchemaServiceImpl(UserHomeContextFactory userHomeContextFactory,
-                             AllChecksModelFactory allChecksModelFactory) {
+                             AllChecksModelFactory allChecksModelFactory,
+                             CheckFlatConfigurationFactory checkFlatConfigurationFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.allChecksModelFactory = allChecksModelFactory;
+        this.checkFlatConfigurationFactory = checkFlatConfigurationFactory;
     }
 
     /**
@@ -153,6 +163,54 @@ public class SchemaServiceImpl implements SchemaService {
     }
 
     /**
+     * Retrieves a UI friendly data quality profiling check configuration list on a requested schema.
+     * @param connectionName    Connection name.
+     * @param schemaName        Schema name.
+     * @param checkContainerTypeModel Check container type model.
+     * @param tableNamePattern  (Optional) Table search pattern filter.
+     * @param columnNamePattern (Optional) Column search pattern filter.
+     * @param columnDataType    (Optional) Filter on column data-type.
+     * @param checkTarget       (Optional) Filter on check target.
+     * @param checkCategory     (Optional) Filter on check category.
+     * @param checkName         (Optional) Filter on check name.
+     * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
+     * @return UI friendly data quality profiling check configuration list on a requested schema.
+     */
+    @Override
+    public List<CheckConfigurationModel> getCheckConfigurationsOnSchema(String connectionName,
+                                                                        String schemaName,
+                                                                        CheckContainerTypeModel checkContainerTypeModel,
+                                                                        String tableNamePattern,
+                                                                        String columnNamePattern,
+                                                                        String columnDataType,
+                                                                        CheckTarget checkTarget,
+                                                                        String checkCategory,
+                                                                        String checkName,
+                                                                        Boolean checkEnabled,
+                                                                        Boolean checkConfigured) {
+        String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
+                new PhysicalTableName(schemaName, Optional.ofNullable(tableNamePattern).orElse(""))
+                        .toTableSearchFilter()
+        ).toTableSearchFilter();
+
+        CheckSearchFilters filters = new CheckSearchFilters();
+        filters.setCheckType(checkContainerTypeModel.getCheckType());
+        filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
+        filters.setConnectionName(connectionName);
+        filters.setSchemaTableName(tableSearchPattern);
+        filters.setColumnName(columnNamePattern);
+        filters.setColumnDataType(columnDataType);
+        filters.setCheckTarget(checkTarget);
+        filters.setCheckCategory(checkCategory);
+        filters.setCheckName(checkName);
+        filters.setEnabled(checkEnabled);
+        filters.setCheckConfigured(checkConfigured);
+
+        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
+    }
+
+    /**
      * Generates a distinct {@link CheckTemplate} stream from {@link CheckContainerModel} stream,
      * provided parameters specifying the source of the base stream.
      * @param checkContainers    Base check containers stream.
@@ -180,4 +238,6 @@ public class SchemaServiceImpl implements SchemaService {
                 })
                 .reduce(Stream.empty(), Stream::concat);
     }
+
+
 }

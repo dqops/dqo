@@ -15,7 +15,7 @@
  */
 package ai.dqo.sensors.column.schema;
 
-import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.AbstractSensorParametersSpec;

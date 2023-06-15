@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
+import ai.dqo.checks.column.profiling.ColumnNumericProfilingChecksSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnStringsProfilingChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
@@ -42,6 +43,8 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectM
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.*;
+import ai.dqo.services.check.CheckFlatConfigurationFactory;
+import ai.dqo.services.check.CheckFlatConfigurationFactoryImpl;
 import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.AllChecksModelFactory;
 import ai.dqo.services.check.mapping.AllChecksModelFactoryImpl;
@@ -54,6 +57,7 @@ import ai.dqo.services.check.mapping.models.column.TableColumnChecksModel;
 import ai.dqo.services.check.mapping.models.table.AllTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.SchemaTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.TableChecksModel;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 import ai.dqo.services.metadata.SchemaService;
 import ai.dqo.services.metadata.SchemaServiceImpl;
 import ai.dqo.utils.reflection.ReflectionService;
@@ -63,6 +67,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -88,9 +93,10 @@ public class SchemasControllerUTTests extends BaseTest {
 
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 
-        SchemaService schemaService = new SchemaServiceImpl(userHomeContextFactory, allChecksModelFactory);
-        this.sut = new SchemasController(schemaService, this.userHomeContextFactory, allChecksModelFactory);
+        SchemaService schemaService = new SchemaServiceImpl(userHomeContextFactory, allChecksModelFactory, checkFlatConfigurationFactory);
+        this.sut = new SchemasController(schemaService, this.userHomeContextFactory);
     }
 
     private ColumnSpec createColumn(String type, boolean nullable) {
@@ -160,14 +166,12 @@ public class SchemasControllerUTTests extends BaseTest {
         col21categoriesSpec.setStrings(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
-        ColumnRecurringChecksRootSpec col23recurringSpec = new ColumnRecurringChecksRootSpec();
-        col23.setRecurringChecks(col23recurringSpec);
-        ColumnDailyRecurringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
-        col23recurringSpec.setDaily(col23categoriesSpec);
-        ColumnNumericDailyRecurringChecksSpec col23numericChecksSpec = new ColumnNumericDailyRecurringChecksSpec();
+        ColumnProfilingCheckCategoriesSpec col23categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+        col23.setProfilingChecks(col23categoriesSpec);
+        ColumnNumericProfilingChecksSpec col23numericChecksSpec = new ColumnNumericProfilingChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
+        col23numericChecksSpec.setNegativeCount(columnNegativeCountCheckSpec);
         MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);
@@ -182,7 +186,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -191,61 +195,33 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.empty());
+                Optional.empty(),
+                Optional.of(true));
         Assertions.assertNotNull(responseEntity.getBody());
 
-        AllChecksModel result = responseEntity.getBody().blockOptional().orElse(null);
+        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
-        AllTableChecksModel resultAllTables = result.getTableChecksModel();
+        List<CheckConfigurationModel> resultAllTables = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.table)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllTables);
-        List<SchemaTableChecksModel> resultSchemaTables = resultAllTables.getSchemaTableChecksModels();
-        Assertions.assertEquals(1, resultSchemaTables.size());
-        List<TableChecksModel> resultTables = resultSchemaTables.get(0).getTableChecksModels();
-        Assertions.assertEquals(2, resultTables.size());
-        for (TableChecksModel resultTable: resultTables) {
-            Set<Map.Entry<CheckContainerTypeModel, CheckContainerModel>> checkContainers = resultTable.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<CheckContainerTypeModel, CheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(2, resultAllTables.size());
+        resultAllTables.forEach(Assertions::assertNotNull);
+        resultAllTables.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        AllColumnChecksModel resultAllColumns = result.getColumnChecksModel();
+        List<CheckConfigurationModel> resultAllColumns = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.column)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllColumns);
-        List<TableColumnChecksModel> resultTableColumns = resultAllColumns.getTableColumnChecksModels();
-        Assertions.assertEquals(2, resultTableColumns.size());
+        Assertions.assertEquals(2, resultAllColumns.size());
+        resultAllColumns.forEach(Assertions::assertNotNull);
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        TableColumnChecksModel resultTableColumn1 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab1")))
-                .findAny().get();
-        List<ColumnChecksModel> resultColumns1 = resultTableColumn1.getColumnChecksModels();
-        Assertions.assertEquals(1, resultColumns1.size());
-        for (ColumnChecksModel resultColumn: resultColumns1) {
-            Set<Map.Entry<CheckContainerTypeModel, CheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<CheckContainerTypeModel, CheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
 
-        TableColumnChecksModel resultTableColumn2 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab2")))
-                .findAny().get();
-        List<ColumnChecksModel> resultColumns2 = resultTableColumn2.getColumnChecksModels();
-        Assertions.assertEquals(3, resultColumns2.size());
-        for (ColumnChecksModel resultColumn: resultColumns2) {
-            Set<Map.Entry<CheckContainerTypeModel, CheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<CheckContainerTypeModel, CheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(1, result.stream().filter(c -> c.getTableName().equals("tab1")).count());
+        Assertions.assertEquals(3, result.stream().filter(c -> c.getTableName().equals("tab2")).count());
     }
 
     @Test
@@ -254,7 +230,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -263,49 +239,31 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.of(CheckTarget.column),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.empty());
+                Optional.empty(),
+                Optional.of(true));
         Assertions.assertNotNull(responseEntity.getBody());
 
-        AllChecksModel result = responseEntity.getBody().blockOptional().orElse(null);
+        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
-        AllTableChecksModel resultAllTables = result.getTableChecksModel();
-        Assertions.assertNull(resultAllTables);
+        List<CheckConfigurationModel> resultAllTables = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.table)
+                .collect(Collectors.toList());
+        Assertions.assertNotNull(resultAllTables);
+        Assertions.assertEquals(0, resultAllTables.size());
 
-        AllColumnChecksModel resultAllColumns = result.getColumnChecksModel();
+        List<CheckConfigurationModel> resultAllColumns = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.column)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllColumns);
-        List<TableColumnChecksModel> resultTableColumns = resultAllColumns.getTableColumnChecksModels();
-        Assertions.assertEquals(2, resultTableColumns.size());
+        Assertions.assertEquals(2, resultAllColumns.size());
+        resultAllColumns.forEach(Assertions::assertNotNull);
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        TableColumnChecksModel resultTableColumn1 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab1")))
-                .findAny().get();
-        List<ColumnChecksModel> resultColumns1 = resultTableColumn1.getColumnChecksModels();
-        Assertions.assertEquals(1, resultColumns1.size());
-        for (ColumnChecksModel resultColumn: resultColumns1) {
-            Set<Map.Entry<CheckContainerTypeModel, CheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<CheckContainerTypeModel, CheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
 
-        TableColumnChecksModel resultTableColumn2 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab2")))
-                .findAny().get();
-        List<ColumnChecksModel> resultColumns2 = resultTableColumn2.getColumnChecksModels();
-        Assertions.assertEquals(3, resultColumns2.size());
-        for (ColumnChecksModel resultColumn: resultColumns2) {
-            Set<Map.Entry<CheckContainerTypeModel, CheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<CheckContainerTypeModel, CheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(0, resultAllColumns.stream().filter(c -> c.getTableName().equals("tab1")).count());
+        Assertions.assertEquals(2, resultAllColumns.stream().filter(c -> c.getTableName().equals("tab2")).count());
     }
 
     @Test
@@ -314,7 +272,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<AllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -323,35 +281,32 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.of(CheckTarget.column),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.empty());
+                Optional.empty(),
+                Optional.of(true));
         Assertions.assertNotNull(responseEntity.getBody());
 
-        AllChecksModel result = responseEntity.getBody().blockOptional().orElse(null);
+        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
-        AllTableChecksModel resultAllTables = result.getTableChecksModel();
-        Assertions.assertNull(resultAllTables);
+        List<CheckConfigurationModel> resultAllTables = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.table)
+                .collect(Collectors.toList());
+        Assertions.assertNotNull(resultAllTables);
+        Assertions.assertEquals(0, resultAllTables.size());
 
-        AllColumnChecksModel resultAllColumns = result.getColumnChecksModel();
+        List<CheckConfigurationModel> resultAllColumns = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.column)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllColumns);
-        List<TableColumnChecksModel> resultTableColumns = resultAllColumns.getTableColumnChecksModels();
-        Assertions.assertEquals(1, resultTableColumns.size());
+        Assertions.assertEquals(1, resultAllColumns.size());
+        resultAllColumns.forEach(Assertions::assertNotNull);
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        TableColumnChecksModel resultTableColumn = resultTableColumns.get(0);
-        List<ColumnChecksModel> resultColumns = resultTableColumn.getColumnChecksModels();
-        Assertions.assertEquals(2, resultColumns.size());
+        Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
+
         Assertions.assertIterableEquals(
-                Stream.of("col2", "col3").collect(Collectors.toList()),
-                resultColumns.stream().map(ColumnChecksModel::getColumnName).sorted().collect(Collectors.toList())
+                Stream.of("col3").collect(Collectors.toList()),
+                resultAllColumns.stream().map(CheckConfigurationModel::getColumnName).sorted().collect(Collectors.toList())
         );
-
-        for (ColumnChecksModel resultColumn: resultColumns) {
-            Set<Map.Entry<CheckContainerTypeModel, CheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<CheckContainerTypeModel, CheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
     }
 }

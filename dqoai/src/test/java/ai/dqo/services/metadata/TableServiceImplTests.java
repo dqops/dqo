@@ -38,6 +38,8 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.check.CheckFlatConfigurationFactory;
+import ai.dqo.services.check.CheckFlatConfigurationFactoryImpl;
 import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.AllChecksModelFactory;
 import ai.dqo.services.check.mapping.AllChecksModelFactoryImpl;
@@ -75,12 +77,14 @@ public class TableServiceImplTests extends BaseTest {
 
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 
         this.sut = new TableServiceImpl(
                 this.userHomeContextFactory,
                 dqoQueueJobFactory,
                 this.dqoJobQueue,
-                allChecksModelFactory
+                allChecksModelFactory,
+                checkFlatConfigurationFactory
         );
     }
 

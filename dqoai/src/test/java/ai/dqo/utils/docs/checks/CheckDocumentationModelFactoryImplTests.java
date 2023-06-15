@@ -17,7 +17,7 @@ package ai.dqo.utils.docs.checks;
 
 import ai.dqo.BaseTest;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
