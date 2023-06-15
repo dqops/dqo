@@ -235,11 +235,21 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 progressListener.onPreparingSensor(new PreparingSensorEvent(tableSpec, sensorRunParameters));
                 SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
 
+                if (!sensorPrepareResult.isSuccess()) {
+                    erroredSensors++;
+                    SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
+                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                            sensorExecutionResultFailedPrepare, timeGradient, sensorRunParameters);
+                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                    progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorPrepareResult.getPrepareException(), exactCheckSearchFilters));
+                    continue;
+                }
+
                 jobCancellationToken.throwIfCancelled();
                 progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorPrepareResult));
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
                         sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
-                jobCancellationToken.throwIfCancelled();
 
                 if (!sensorResult.isSuccess()) {
                     erroredSensors++;

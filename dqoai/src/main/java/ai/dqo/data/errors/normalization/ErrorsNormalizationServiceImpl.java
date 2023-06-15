@@ -107,8 +107,6 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
                                                                SensorExecutionRunParameters sensorRunParameters,
                                                                ErrorSource errorSource,
                                                                Throwable exception) {
-        assert sensorExecutionResult.getException() == null && sensorExecutionResult.getResultTable() != null;
-
         SensorReadoutsNormalizedResult normalizedSensorReadout = this.sensorReadoutsNormalizationService.normalizeResults(
                 sensorExecutionResult, timePeriodGradient, sensorRunParameters);
         normalizedSensorReadout.getIdColumn().setName(ErrorsColumnNames.READOUT_ID_COLUMN_NAME); // renaming the ID column
