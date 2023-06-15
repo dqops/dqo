@@ -33,10 +33,12 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
+import ai.dqo.services.check.CheckFlatConfigurationFactory;
 import ai.dqo.services.check.mapping.AllChecksModelFactory;
 import ai.dqo.services.check.mapping.models.AllChecksModel;
 import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
 import ai.dqo.services.check.mapping.models.CheckModel;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -54,16 +56,19 @@ public class TableServiceImpl implements TableService {
     private final DqoQueueJobFactory dqoQueueJobFactory;
     private final DqoJobQueue dqoJobQueue;
     private final AllChecksModelFactory allChecksModelFactory;
+    private final CheckFlatConfigurationFactory checkFlatConfigurationFactory;
 
     @Autowired
     public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
                             DqoQueueJobFactory dqoQueueJobFactory,
                             DqoJobQueue dqoJobQueue,
-                            AllChecksModelFactory allChecksModelFactory) {
+                            AllChecksModelFactory allChecksModelFactory,
+                            CheckFlatConfigurationFactory checkFlatConfigurationFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.allChecksModelFactory = allChecksModelFactory;
+        this.checkFlatConfigurationFactory = checkFlatConfigurationFactory;
     }
 
     /**
@@ -148,6 +153,31 @@ public class TableServiceImpl implements TableService {
                 })
                 .reduce(Stream.empty(), Stream::concat)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CheckConfigurationModel> getCheckConfigurationsOnTable(String connectionName,
+                                                                       PhysicalTableName physicalTableName,
+                                                                       CheckContainerTypeModel checkContainerTypeModel,
+                                                                       String columnNamePattern,
+                                                                       String columnDataType,
+                                                                       CheckTarget checkTarget,
+                                                                       String checkCategory,
+                                                                       String checkName,
+                                                                       Boolean checkEnabled) {
+        CheckSearchFilters filters = new CheckSearchFilters();
+        filters.setCheckType(checkContainerTypeModel.getCheckType());
+        filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
+        filters.setConnectionName(connectionName);
+        filters.setSchemaTableName(physicalTableName.toTableSearchFilter());
+        filters.setColumnName(columnNamePattern);
+        filters.setColumnDataType(columnDataType);
+        filters.setCheckTarget(checkTarget);
+        filters.setCheckCategory(checkCategory);
+        filters.setCheckName(checkName);
+        filters.setEnabled(checkEnabled);
+
+        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
     }
 
     /**

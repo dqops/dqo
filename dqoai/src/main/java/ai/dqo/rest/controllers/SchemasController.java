@@ -18,10 +18,8 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -29,8 +27,6 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
 import ai.dqo.rest.models.metadata.SchemaModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.services.check.mapping.AllChecksModelFactory;
-import ai.dqo.services.check.mapping.models.AllChecksModel;
 import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
 import ai.dqo.services.check.models.CheckConfigurationModel;
 import ai.dqo.services.metadata.SchemaService;
@@ -42,7 +38,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,15 +55,12 @@ public class SchemasController {
     private static final Logger LOG = LoggerFactory.getLogger(SchemasController.class);
     private final SchemaService schemaService;
     private final UserHomeContextFactory userHomeContextFactory;
-    private final AllChecksModelFactory allChecksModelFactory;
 
     @Autowired
     public SchemasController(SchemaService schemaService,
-                             UserHomeContextFactory userHomeContextFactory,
-                             AllChecksModelFactory allChecksModelFactory) {
+                             UserHomeContextFactory userHomeContextFactory) {
         this.schemaService = schemaService;
         this.userHomeContextFactory = userHomeContextFactory;
-        this.allChecksModelFactory = allChecksModelFactory;
     }
 
     /**

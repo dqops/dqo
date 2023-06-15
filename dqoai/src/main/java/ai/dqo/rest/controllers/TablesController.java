@@ -52,14 +52,12 @@ import ai.dqo.rest.models.metadata.TableModel;
 import ai.dqo.rest.models.metadata.TablePartitioningModel;
 import ai.dqo.rest.models.metadata.TableStatisticsModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
-import ai.dqo.services.check.mapping.AllChecksModelFactory;
 import ai.dqo.services.check.mapping.ModelToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
 import ai.dqo.services.check.mapping.basicmodels.CheckContainerBasicModel;
-import ai.dqo.services.check.mapping.models.AllChecksModel;
 import ai.dqo.services.check.mapping.models.CheckContainerModel;
-import ai.dqo.services.check.mapping.models.column.AllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.column.TableColumnChecksModel;
+import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 import ai.dqo.services.metadata.TableService;
 import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
@@ -96,7 +94,6 @@ public class TablesController {
     private DqoHomeContextFactory dqoHomeContextFactory;
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
-    private final AllChecksModelFactory allChecksModelFactory;
     private StatisticsDataService statisticsDataService;
 
     /**
@@ -106,7 +103,6 @@ public class TablesController {
      * @param dqoHomeContextFactory            DQO home context factory, used to retrieve the definition of built-in sensors.
      * @param specToModelCheckMappingService   Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService   Check mapper to convert the check model to a check specification.
-     * @param allChecksModelFactory            Factory for producing complex UI friendly views of check configurations.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
      */
     @Autowired
@@ -115,14 +111,12 @@ public class TablesController {
                             DqoHomeContextFactory dqoHomeContextFactory,
                             SpecToModelCheckMappingService specToModelCheckMappingService,
                             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-                            AllChecksModelFactory allChecksModelFactory,
                             StatisticsDataService statisticsDataService) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
-        this.allChecksModelFactory = allChecksModelFactory;
         this.statisticsDataService = statisticsDataService;
     }
 
@@ -1319,14 +1313,14 @@ public class TablesController {
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsProfilingChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table", response = TableColumnChecksModel.class)
+    @ApiOperation(value = "getTableColumnsProfilingChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = TableColumnChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableColumnChecksModel>> getTableColumnsProfilingChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsProfilingChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1346,32 +1340,20 @@ public class TablesController {
         PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
         TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
         if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.PROFILING);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setCheckTarget(CheckTarget.column);
-        filters.setEnabled(checkEnabled.orElse(null));
+        List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.PROFILING, null),
+                columnNamePattern.orElse(null),
+                columnDataType.orElse(null),
+                CheckTarget.column,
+                checkCategory.orElse(null),
+                checkName.orElse(null),
+                checkEnabled.orElse(null)
+        );
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(filters);
-
-        if (allChecksModels.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new TableColumnChecksModel()), HttpStatus.OK); // 200
-        }
-
-        if (allChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsProfilingChecksModel: " + allChecksModels.size());
-        }
-        
-        TableColumnChecksModel tableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(allChecksModels.get(0));
-        return new ResponseEntity<>(Mono.justOrEmpty(tableColumnChecksModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -1388,14 +1370,14 @@ public class TablesController {
      * @return UI friendly data quality recurring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsRecurringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality recurring checks on a table", response = TableColumnChecksModel.class)
+    @ApiOperation(value = "getTableColumnsRecurringChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality recurring checks on a table", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = TableColumnChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableColumnChecksModel>> getTableColumnsRecurringChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsRecurringChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1416,33 +1398,20 @@ public class TablesController {
         PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
         TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
         if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.RECURRING);
-        filters.setTimeScale(timeScale);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setCheckTarget(CheckTarget.column);
-        filters.setEnabled(checkEnabled.orElse(null));
+        List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.RECURRING, timeScale),
+                columnNamePattern.orElse(null),
+                columnDataType.orElse(null),
+                CheckTarget.column,
+                checkCategory.orElse(null),
+                checkName.orElse(null),
+                checkEnabled.orElse(null)
+        );
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(filters);
-
-        if (allChecksModels.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new TableColumnChecksModel()), HttpStatus.OK); // 200
-        }
-
-        if (allChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsRecurringChecksModel: " + allChecksModels.size());
-        }
-
-        TableColumnChecksModel tableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(allChecksModels.get(0));
-        return new ResponseEntity<>(Mono.justOrEmpty(tableColumnChecksModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -1459,14 +1428,14 @@ public class TablesController {
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getTableColumnsPartitionedChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table", response = TableColumnChecksModel.class)
+    @ApiOperation(value = "getTableColumnsPartitionedChecksModel", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = TableColumnChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableColumnChecksModel>> getTableColumnsPartitionedChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsPartitionedChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1487,57 +1456,20 @@ public class TablesController {
         PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
         TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
         if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.PARTITIONED);
-        filters.setTimeScale(timeScale);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setCheckTarget(CheckTarget.column);
-        filters.setEnabled(checkEnabled.orElse(null));
+        List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.PARTITIONED, timeScale),
+                columnNamePattern.orElse(null),
+                columnDataType.orElse(null),
+                CheckTarget.column,
+                checkCategory.orElse(null),
+                checkName.orElse(null),
+                checkEnabled.orElse(null)
+        );
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(filters);
-
-        if (allChecksModels.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new TableColumnChecksModel()), HttpStatus.OK); // 200
-        }
-
-        if (allChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsPartitionedChecksModel: " + allChecksModels.size());
-        }
-
-        TableColumnChecksModel tableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(allChecksModels.get(0));
-        return new ResponseEntity<>(Mono.justOrEmpty(tableColumnChecksModel), HttpStatus.OK); // 200
-    }
-
-    /**
-     * Gets a {@link TableColumnChecksModel} from {@link AllChecksModel}. Additional assumptions apply and unexpected states are logged.
-     * 
-     * @param allChecksModel All checks model with only column-level checks on a single table.
-     * @return Extracted checks model for the specific table.
-     */
-    protected TableColumnChecksModel getTableColumnChecksFromAllChecksModel(AllChecksModel allChecksModel) {
-        if (allChecksModel.getTableChecksModel() != null) {
-            LOG.warn("Unexpected table checks where only column checks are permitted");
-        }
-
-        AllColumnChecksModel allColumnChecksModel = allChecksModel.getColumnChecksModel();
-        if (allColumnChecksModel == null) {
-            return null;
-        }
-        
-        List<TableColumnChecksModel> tableColumnChecksModels = allColumnChecksModel.getTableColumnChecksModels();
-        if (tableColumnChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnChecksFromAllChecksModel: " + tableColumnChecksModels.size());
-        }
-        
-        return tableColumnChecksModels.get(0);
+        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
     }
 
     /**
