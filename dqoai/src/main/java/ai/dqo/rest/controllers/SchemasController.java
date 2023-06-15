@@ -18,10 +18,8 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -29,8 +27,8 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
 import ai.dqo.rest.models.metadata.SchemaModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.services.check.mapping.AllChecksModelFactory;
-import ai.dqo.services.check.mapping.models.AllChecksModel;
+import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 import ai.dqo.services.metadata.SchemaService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -40,7 +38,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,15 +55,12 @@ public class SchemasController {
     private static final Logger LOG = LoggerFactory.getLogger(SchemasController.class);
     private final SchemaService schemaService;
     private final UserHomeContextFactory userHomeContextFactory;
-    private final AllChecksModelFactory allChecksModelFactory;
 
     @Autowired
     public SchemasController(SchemaService schemaService,
-                             UserHomeContextFactory userHomeContextFactory,
-                             AllChecksModelFactory allChecksModelFactory) {
+                             UserHomeContextFactory userHomeContextFactory) {
         this.schemaService = schemaService;
         this.userHomeContextFactory = userHomeContextFactory;
-        this.allChecksModelFactory = allChecksModelFactory;
     }
 
     /**
@@ -107,7 +101,7 @@ public class SchemasController {
     }
 
     /**
-     * Retrieves a UI friendly data quality profiling check configuration list on a requested schema.
+     * Retrieves a list of profiling check configurations on a requested schema.
      * @param connectionName    Connection name.
      * @param schemaName        Schema name.
      * @param tableNamePattern  (Optional) Table search pattern filter.
@@ -117,17 +111,18 @@ public class SchemasController {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
-     * @return UI friendly data quality profiling check configuration list on a requested schema.
+     * @param checkConfigured   (Optional) Filter on check configured status.
+     * @return List of profiling check configurations on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getSchemaProfilingChecksModel", notes = "Return a UI friendly model of configurations for data quality profiling checks on a schema", response = AllChecksModel.class)
+    @ApiOperation(value = "getSchemaProfilingChecksModel", notes = "Return a flat list of configurations for profiling checks on a schema", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = AllChecksModel.class),
+            @ApiResponse(code = 200, message = "List of profiling checks configurations on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<AllChecksModel>> getSchemaProfilingChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaProfilingChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(value = "Table name pattern", required = false) @RequestParam(required = false)
@@ -143,42 +138,30 @@ public class SchemasController {
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
             Optional<String> checkName,
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
+            Optional<Boolean> checkEnabled,
+            @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkConfigured) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
         if (tableWrappers == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        // TODO: Move this functionality to a dedicated service.
-        String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
-                new PhysicalTableName(schemaName, tableNamePattern.orElse("")).toTableSearchFilter()
-        ).toTableSearchFilter();
+        List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
+                connectionName, schemaName, new CheckContainerTypeModel(CheckType.PROFILING, null),
+                tableNamePattern.orElse(null),
+                columnNamePattern.orElse(null),
+                columnDataType.orElse(null),
+                checkTarget.orElse(null),
+                checkCategory.orElse(null),
+                checkName.orElse(null),
+                checkEnabled.orElse(null),
+                checkConfigured.orElse(null)
+        );
 
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.PROFILING);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(tableSearchPattern);
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckTarget(checkTarget.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setEnabled(checkEnabled.orElse(null));
-
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(filters);
-
-        if (allChecksModel.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new AllChecksModel()), HttpStatus.OK); // 200
-        }
-
-        if (allChecksModel.size() != 1) {
-            LOG.warn("Unexpected result size in getSchemaProfilingChecksModel: " + allChecksModel.size());
-        }
-
-        return new ResponseEntity<>(Mono.just(allChecksModel.get(0)), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -193,17 +176,18 @@ public class SchemasController {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return UI friendly data quality recurring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getSchemaRecurringChecksModel", notes = "Return a UI friendly model of configurations for data quality recurring checks on a schema", response = AllChecksModel.class)
+    @ApiOperation(value = "getSchemaRecurringChecksModel", notes = "Return a UI friendly model of configurations for data quality recurring checks on a schema", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = AllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<AllChecksModel>> getSchemaRecurringChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaRecurringChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
@@ -220,43 +204,30 @@ public class SchemasController {
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
             Optional<String> checkName,
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
+            Optional<Boolean> checkEnabled,
+            @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkConfigured) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
         if (tableWrappers == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        // TODO: Move this functionality to a dedicated service.
-        String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
-                new PhysicalTableName(schemaName, tableNamePattern.orElse("")).toTableSearchFilter()
-        ).toTableSearchFilter();
+        List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
+                connectionName, schemaName, new CheckContainerTypeModel(CheckType.RECURRING, timeScale),
+                tableNamePattern.orElse(null),
+                columnNamePattern.orElse(null),
+                columnDataType.orElse(null),
+                checkTarget.orElse(null),
+                checkCategory.orElse(null),
+                checkName.orElse(null),
+                checkEnabled.orElse(null),
+                checkConfigured.orElse(null)
+        );
 
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.RECURRING);
-        filters.setTimeScale(timeScale);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(tableSearchPattern);
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckTarget(checkTarget.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setEnabled(checkEnabled.orElse(null));
-
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(filters);
-
-        if (allChecksModel.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new AllChecksModel()), HttpStatus.OK); // 200
-        }
-
-        if (allChecksModel.size() != 1) {
-            LOG.warn("Unexpected result size in getSchemaRecurringChecksModel: " + allChecksModel.size());
-        }
-
-        return new ResponseEntity<>(Mono.just(allChecksModel.get(0)), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -271,17 +242,18 @@ public class SchemasController {
      * @param checkCategory     (Optional) Filter on check category.
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getSchemaPartitionedChecksModel", notes = "Return a UI friendly model of configurations for data quality partitioned checks on a schema", response = AllChecksModel.class)
+    @ApiOperation(value = "getSchemaPartitionedChecksModel", notes = "Return a UI friendly model of configurations for data quality partitioned checks on a schema", response = CheckConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = AllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = CheckConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<AllChecksModel>> getSchemaPartitionedChecksModel(
+    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaPartitionedChecksModel(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
@@ -298,43 +270,30 @@ public class SchemasController {
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
             Optional<String> checkName,
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
+            Optional<Boolean> checkEnabled,
+            @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkConfigured) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
         if (tableWrappers == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        // TODO: Move this functionality to a dedicated service.
-        String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
-                new PhysicalTableName(schemaName, tableNamePattern.orElse("")).toTableSearchFilter()
-        ).toTableSearchFilter();
+        List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
+                connectionName, schemaName, new CheckContainerTypeModel(CheckType.PARTITIONED, timeScale),
+                tableNamePattern.orElse(null),
+                columnNamePattern.orElse(null),
+                columnDataType.orElse(null),
+                checkTarget.orElse(null),
+                checkCategory.orElse(null),
+                checkName.orElse(null),
+                checkEnabled.orElse(null),
+                checkConfigured.orElse(null)
+        );
 
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.PARTITIONED);
-        filters.setTimeScale(timeScale);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(tableSearchPattern);
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckTarget(checkTarget.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setEnabled(checkEnabled.orElse(null));
-
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(filters);
-
-        if (allChecksModel.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new AllChecksModel()), HttpStatus.OK); // 200
-        }
-
-        if (allChecksModel.size() != 1) {
-            LOG.warn("Unexpected result size in getSchemaPartitionedChecksModel: " + allChecksModel.size());
-        }
-
-        return new ResponseEntity<>(Mono.just(allChecksModel.get(0)), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
     }
 
     /**

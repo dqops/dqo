@@ -31,7 +31,7 @@ import java.util.Map;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksPatchParameters", description = "Parameter object for creating pruned patch trees of all checks that fit the filters.")
+@ApiModel(value = "AllChecksPatchParameters", description = "Parameter object for creating pruned patch trees of all checks that fit the filters.")
 public class AllChecksPatchParameters {
     @JsonPropertyDescription("Filters addressing basic tree search parameters. These filters takes precedence over other selectors.")
     @NotNull

@@ -39,6 +39,9 @@ public class TableColumnChecksModel {
     @JsonPropertyDescription("Physical table name.")
     private PhysicalTableName schemaTableName;
 
+    @JsonPropertyDescription("SQL WHERE clause added to the sensor query for every check on this table.")
+    private String tableLevelFilter;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
