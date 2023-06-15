@@ -165,6 +165,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         // TODO: Add templates
 
         TableSpec tableSpec = tableWrapper.getSpec();
+        tableChecksModel.setTableLevelFilter(tableSpec.getFilter());
 
         List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
@@ -233,6 +234,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         tableColumnChecksModel.setSchemaTableName(schemaTableName);
 
         TableSpec tableSpec = tableWrapper.getSpec();
+        tableColumnChecksModel.setTableLevelFilter(tableSpec.getFilter());
 
         // TODO: Add templates.
 
