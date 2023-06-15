@@ -61,7 +61,7 @@ const CheckListItem = ({
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
@@ -485,7 +485,19 @@ const CheckListItem = ({
       {showDetails && (
         <tr>
           <td colSpan={6}>
-            <CheckDetails check={check} onClose={closeCheckDetails} job={job} />
+            <CheckDetails
+              checkTypes={checkTypes}
+              connection={connection}
+              schema={schema}
+              table={table}
+              column={column}
+              runCheckType={check.run_checks_job_template?.checkType}
+              checkName={check.check_name}
+              timeScale={check.run_checks_job_template?.timeScale}
+              check={check}
+              onClose={closeCheckDetails}
+              job={job}
+            />
           </td>
         </tr>
       )}
