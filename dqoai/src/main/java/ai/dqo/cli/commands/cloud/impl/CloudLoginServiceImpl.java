@@ -135,7 +135,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             }
 
             if (waitForConsoleInputMono.isDone() && Objects.equals(true, waitForConsoleInputMono.get())) {
-                this.terminalFactory.getReader().tryReadChar(0); // read that character that was typed
+                this.terminalFactory.getReader().tryReadChar(0, true); // read that character that was typed
                 terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
             }
         }
