@@ -62,7 +62,7 @@ const TableHeader = ({
         ? { timeWindowFilter }
         : {})
     });
-    // setJobId(res.data?.jobId?.jobId);
+    setJobId((res.data as any)?.jobId?.jobId);
   };
 
   const onChangeMode = (newMode: string) => {

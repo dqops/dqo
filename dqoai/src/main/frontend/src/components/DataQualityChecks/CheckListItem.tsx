@@ -137,7 +137,7 @@ const CheckListItem = ({
         ? { timeWindowFilter }
         : {})
     });
-    // setJobId(res.data?.jobId?.jobId);
+    setJobId((res.data as any)?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;

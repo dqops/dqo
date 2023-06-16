@@ -87,6 +87,7 @@ const schemaReducer = (state = initialState, action: any) => {
       jobChanges.map((jobChange) => {
         if (!jobChange.jobId?.jobId) return;
         if (job_dictionary_state[jobChange.jobId?.jobId]) {
+          console.log('jobChange', jobChange);
           if (jobChange.status) {
             job_dictionary_state[jobChange.jobId?.jobId].status = jobChange.status;
           }
