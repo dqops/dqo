@@ -378,27 +378,32 @@ const DataQualityChecks = ({
       </div>
       {checkTypes === CheckTypes.PARTITIONED && (
         <div className="flex items-center mb-3 gap-6">
-          <div className="text-sm">
-            <span className="mr-3">
+          <div className="text-sm text-red-500">
+            <span className="mr-3 text-black">
               The results are partitioned (grouped) by a timestamp column:
             </span>
-            {checksUI.partition_by_column || 'Not configured'}
+            {checksUI.partition_by_column ? (
+              <span className="text-black">{checksUI.partition_by_column}</span>
+            ) : (
+              'Warning: Partition checks will not be run, please configure the date or datetime column'
+            )}
           </div>
-          <span
-            className="text-primary underline text-sm cursor-pointer"
+          <Button
+            label="Configure the partition by column"
+            color="primary"
+            variant={checksUI.partition_by_column ? 'outlined' : 'contained'}
             onClick={goToTableTimestamps}
-          >
-            Configure the partition by column
-          </span>
-
-          <div className="flex gap-2 text-sm items-center">
-            <span>Time window:</span>
-            <Select
-              options={timeWindowOptions}
-              value={timeWindow}
-              onChange={setTimeWindow}
-            />
-          </div>
+          />
+          {checksUI.partition_by_column && (
+            <div className="flex gap-2 text-sm items-center">
+              <span>Time window:</span>
+              <Select
+                options={timeWindowOptions}
+                value={timeWindow}
+                onChange={setTimeWindow}
+              />
+            </div>
+          )}
         </div>
       )}
       <table className="w-full">
