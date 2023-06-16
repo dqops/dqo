@@ -103,11 +103,13 @@ const ProvideSensor = ({
         />
       </SectionWrapper>
 
+          {providerSensor?.providerSensorDefinitionSpec?.type !== ProviderSensorDefinitionSpecTypeEnum.java_class &&
 
-      <Jinja2Code
-        providerSensor={providerSensor}
-        onChange={handleChangeTemplate}
-      />
+            <Jinja2Code
+            providerSensor={providerSensor}
+            onChange={handleChangeTemplate}
+            />
+          }
     </div>
   );
 };
