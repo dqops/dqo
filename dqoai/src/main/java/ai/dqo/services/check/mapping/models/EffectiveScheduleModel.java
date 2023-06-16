@@ -52,8 +52,8 @@ public class EffectiveScheduleModel {
     @JsonPropertyDescription("Field value for the time left until the execution of scheduled checks.")
     private Duration timeUntilExecution;
 
-    @JsonPropertyDescription("Field value for one of the multiple ways a schedule can be enabled.")
-    private UIScheduleEnabledStatus scheduleEnabledStatus;
+    @JsonPropertyDescription("Field value stating if the schedule has been explicitly disabled.")
+    private Boolean disabled;
 
     /**
      * Creates {@link EffectiveScheduleModel} based on provided <code>scheduleSpec</code>.
@@ -85,7 +85,7 @@ public class EffectiveScheduleModel {
                                 .truncatedTo(ChronoUnit.SECONDS);
             }
         }
-        uiEffectiveScheduleModel.disabled = scheduleSpec.isDisabled();
+        effectiveScheduleModel.disabled = scheduleSpec.isDisabled();
 
         return effectiveScheduleModel;
     }
