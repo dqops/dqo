@@ -89,7 +89,7 @@ const TableProfilingsView = () => {
           onUpdate={onUpdate}
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}
-          className="max-h-checks-1"
+          className="max-h-checks-2"
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
           loading={loading}
