@@ -31,5 +31,5 @@ public enum ProviderSensorRunnerType {
      * Sensor is implemented as a Java class.
      */
     @JsonProperty("java_class")
-    custom_class
+    java_class
 }

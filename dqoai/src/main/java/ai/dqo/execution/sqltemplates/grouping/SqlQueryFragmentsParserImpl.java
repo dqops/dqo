@@ -66,11 +66,11 @@ public class SqlQueryFragmentsParserImpl implements SqlQueryFragmentsParser {
 
         FragmentedSqlQuery componentList = new FragmentedSqlQuery(sql);
         componentList.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT,
-                combineLines(listOfLines, 0, indexIfSelect + 1)));
+                combineLines(listOfLines, 0, indexIfSelect + 1, true)));
         componentList.add(new SqlQueryFragment(SqlQueryFragmentType.ACTUAL_VALUE,
-                combineLines(listOfLines, indexIfSelect + 1, indexOfActualValueAlias + 1)));
+                combineLines(listOfLines, indexIfSelect + 1, indexOfActualValueAlias + 1, true)));
         componentList.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT,
-                combineLines(listOfLines, indexOfActualValueAlias + 1, listOfLines.size())));
+                combineLines(listOfLines, indexOfActualValueAlias + 1, listOfLines.size(), false)));
 
         return componentList;
     }
@@ -117,15 +117,19 @@ public class SqlQueryFragmentsParserImpl implements SqlQueryFragmentsParser {
      * @param lines List of lines to combine.
      * @param firstLineIndex The first index (inclusive).
      * @param lastLineIndex The last index (exclusive).
+     * @param eolAfterLastLine True when an end-of-line sequence should be added after the last line.
      * @return Combined text with line endings between combined lines.
      */
-    protected String combineLines(List<String> lines, int firstLineIndex, int lastLineIndex) {
+    protected String combineLines(List<String> lines, int firstLineIndex, int lastLineIndex, boolean eolAfterLastLine) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = firstLineIndex; i < lastLineIndex; i++) {
             if (i != firstLineIndex) {
-                stringBuilder.append(System.lineSeparator());
+                stringBuilder.append('\n');
             }
             stringBuilder.append(lines.get(i));
+        }
+        if (eolAfterLastLine) {
+            stringBuilder.append('\n');
         }
         String combinedText = stringBuilder.toString();
         return combinedText;

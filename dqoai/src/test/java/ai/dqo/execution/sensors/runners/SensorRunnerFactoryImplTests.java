@@ -41,7 +41,7 @@ public class SensorRunnerFactoryImplTests extends BaseTest {
 
     @Test
     void getSensorRunner_whenCustomClassRequested_thenCreatesRequestedRunner() {
-        AbstractSensorRunner sensorRunner = this.sut.getSensorRunner(ProviderSensorRunnerType.custom_class, JinjaSqlTemplateSensorRunner.CLASS_NAME);
+        AbstractSensorRunner sensorRunner = this.sut.getSensorRunner(ProviderSensorRunnerType.java_class, JinjaSqlTemplateSensorRunner.CLASS_NAME);
         Assertions.assertNotNull(sensorRunner);
         Assertions.assertInstanceOf(JinjaSqlTemplateSensorRunner.class, sensorRunner);
     }
