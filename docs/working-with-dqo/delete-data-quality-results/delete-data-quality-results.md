@@ -1,6 +1,6 @@
 # Delete data quality results
 
-In DQO, there are two ways to delete stored data quality check results:
+In DQO, there are two ways to delete stored data quality results:
 
 - using the graphical interface 
 - using DQO Shell

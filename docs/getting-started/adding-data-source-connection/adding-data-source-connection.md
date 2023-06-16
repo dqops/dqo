@@ -4,6 +4,7 @@ After [installation and starting DQO](../installation/installation.md), we descr
 using the graphical interface.
 
 For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQO section](../../working-with-dqo/adding-data-source-connection/index.md).
+You can find more information about [navigating the DQO graphical interface here](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md). 
 
 ## Prerequisite credentials
 
@@ -15,7 +16,7 @@ To add BigQuery data source connection to DQO you need the following:
 
 ## Adding BigQuery connection using the graphical interface
 
-1. In DQO User Interface Console go to the Data Sources section and click **+ Add connection** button in the upper left corner.
+1. Go to the Data Sources section and click **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/getting-started/adding-test-connection-test-connection.jpg)
    
