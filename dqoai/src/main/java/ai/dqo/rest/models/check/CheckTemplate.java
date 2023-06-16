@@ -16,11 +16,10 @@
 package ai.dqo.rest.models.check;
 
 import ai.dqo.checks.CheckTarget;
-import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
-import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
-import ai.dqo.services.check.mapping.models.UICheckModel;
-import ai.dqo.services.check.mapping.models.UIFieldModel;
+import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
+import ai.dqo.services.check.mapping.models.FieldModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -53,7 +52,7 @@ public class CheckTemplate {
     private String helpText;
 
     @JsonPropertyDescription("Check type with time-scale.")
-    private UICheckContainerTypeModel checkContainerType;
+    private CheckContainerTypeModel checkContainerType;
 
     @JsonPropertyDescription("Full sensor name.")
     private String sensorName;
@@ -67,35 +66,35 @@ public class CheckTemplate {
 
     /**
      * Creates a {@link CheckTemplate} instance based on <code>uiCheckModel</code>.
-     * @param uiCheckModel              Base uiCheckModel.
+     * @param checkModel              Base uiCheckModel.
      * @param checkCategory             Check category.
      * @param uiCheckContainerTypeModel Check container type parameter for the new instance.
      * @param checkTarget               Check target.
      * @return New instance of {@link CheckTemplate}.
      */
-    public static CheckTemplate fromUiCheckModel(UICheckModel uiCheckModel,
+    public static CheckTemplate fromUiCheckModel(CheckModel checkModel,
                                                  String checkCategory,
-                                                 UICheckContainerTypeModel uiCheckContainerTypeModel,
+                                                 CheckContainerTypeModel uiCheckContainerTypeModel,
                                                  CheckTarget checkTarget) {
         CheckTemplate checkTemplate = new CheckTemplate();
-        checkTemplate.setCheckName(uiCheckModel.getCheckName());
-        checkTemplate.setHelpText(uiCheckModel.getHelpText());
-        checkTemplate.setSensorName(uiCheckModel.getSensorName());
+        checkTemplate.setCheckName(checkModel.getCheckName());
+        checkTemplate.setHelpText(checkModel.getHelpText());
+        checkTemplate.setSensorName(checkModel.getSensorName());
         checkTemplate.setCheckTarget(checkTarget);
         checkTemplate.setCheckCategory(checkCategory);
 
-        UICheckContainerTypeModel checkContainerTypeModel = new UICheckContainerTypeModel(
+        CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(
                 uiCheckContainerTypeModel.getCheckType(), uiCheckContainerTypeModel.getCheckTimeScale());
         checkTemplate.setCheckContainerType(checkContainerTypeModel);
 
-        List<ParameterDefinitionSpec> sensorParameterDefinitions = uiCheckModel.getSensorParameters().stream()
-                .map(UIFieldModel::getDefinition)
+        List<ParameterDefinitionSpec> sensorParameterDefinitions = checkModel.getSensorParameters().stream()
+                .map(FieldModel::getDefinition)
                 .map(ParameterDefinitionSpec::deepClone)
                 .collect(Collectors.toList());
         checkTemplate.setSensorParametersDefinitions(sensorParameterDefinitions);
 
-        List<ParameterDefinitionSpec> ruleParameterDefinitions = uiCheckModel.getRule().findFirstNotNullRule().getRuleParameters().stream()
-                .map(UIFieldModel::getDefinition)
+        List<ParameterDefinitionSpec> ruleParameterDefinitions = checkModel.getRule().findFirstNotNullRule().getRuleParameters().stream()
+                .map(FieldModel::getDefinition)
                 .map(ParameterDefinitionSpec::deepClone)
                 .collect(Collectors.toList());
         checkTemplate.setRuleParametersDefinitions(ruleParameterDefinitions);

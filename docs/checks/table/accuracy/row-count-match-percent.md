@@ -116,40 +116,6 @@ spec:
         COUNT(*) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            COUNT(*)
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        COUNT(*) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        (SELECT
-            COUNT(*)
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
-        ) AS expected_value,
-        COUNT(*) AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -217,6 +183,40 @@ spec:
         ) AS expected_value,
         COUNT(*) AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
@@ -332,39 +332,6 @@ spec:
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                COUNT(*)
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            COUNT(*) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            (SELECT
-                COUNT(*)
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
-            ) AS expected_value,
-            COUNT(*) AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -430,6 +397,39 @@ spec:
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **SQL Server**  
       
@@ -585,40 +585,6 @@ spec:
         COUNT(*) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            COUNT(*)
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        COUNT(*) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        (SELECT
-            COUNT(*)
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
-        ) AS expected_value,
-        COUNT(*) AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -686,6 +652,40 @@ spec:
         ) AS expected_value,
         COUNT(*) AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
@@ -802,39 +802,6 @@ spec:
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                COUNT(*)
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            COUNT(*) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            (SELECT
-                COUNT(*)
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
-            ) AS expected_value,
-            COUNT(*) AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -900,6 +867,39 @@ spec:
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **SQL Server**  
       
@@ -1055,40 +1055,6 @@ spec:
         COUNT(*) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            COUNT(*)
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        COUNT(*) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        (SELECT
-            COUNT(*)
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
-        ) AS expected_value,
-        COUNT(*) AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -1156,6 +1122,40 @@ spec:
         ) AS expected_value,
         COUNT(*) AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
@@ -1272,39 +1272,6 @@ spec:
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                COUNT(*)
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            COUNT(*) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            (SELECT
-                COUNT(*)
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
-            ) AS expected_value,
-            COUNT(*) AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        ```
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
@@ -1370,6 +1337,39 @@ spec:
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **SQL Server**  
       

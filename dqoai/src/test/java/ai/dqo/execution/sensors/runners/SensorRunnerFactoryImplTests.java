@@ -16,7 +16,7 @@
 package ai.dqo.execution.sensors.runners;
 
 import ai.dqo.BaseTest;
-import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorRunnerType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ public class SensorRunnerFactoryImplTests extends BaseTest {
 
     @Test
     void getSensorRunner_whenCustomClassRequested_thenCreatesRequestedRunner() {
-        AbstractSensorRunner sensorRunner = this.sut.getSensorRunner(ProviderSensorRunnerType.custom_class, JinjaSqlTemplateSensorRunner.CLASS_NAME);
+        AbstractSensorRunner sensorRunner = this.sut.getSensorRunner(ProviderSensorRunnerType.java_class, JinjaSqlTemplateSensorRunner.CLASS_NAME);
         Assertions.assertNotNull(sensorRunner);
         Assertions.assertInstanceOf(JinjaSqlTemplateSensorRunner.class, sensorRunner);
     }

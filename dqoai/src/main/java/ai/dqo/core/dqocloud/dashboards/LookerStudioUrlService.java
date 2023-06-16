@@ -26,7 +26,7 @@ public interface LookerStudioUrlService {
      *
      * @return API key scoped for accessing dashboards for the client's credentials.
      */
-    String issueLookerStudioQueryApiKey();
+    String getLookerStudioQueryApiKey();
 
     /**
      * Creates an authenticated URL for a looker studio dashboard.

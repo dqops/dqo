@@ -408,6 +408,8 @@ definitions:
         type: "string"
       billingProjectId:
         type: "string"
+      dataSetName:
+        type: "string"
       sensorReadoutsTableName:
         type: "string"
       checkResultsTableName:

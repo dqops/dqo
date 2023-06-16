@@ -20,8 +20,8 @@ import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.models.UIFieldModel;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
+import ai.dqo.services.check.mapping.models.FieldModel;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
@@ -40,19 +40,20 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
     private static final CommentFormatter commentFormatter = new CommentFormatter();
     private Path projectRoot;
     private DqoHomeContext dqoHomeContext;
-    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
 
     /**
      * Creates a rule documentation model factory.
      * @param projectRoot Project root path.
      * @param dqoHomeContext DQO User home context.
-     * @param specToUiCheckMappingService Specification to UI model factory, used to get documentation of the rule parameters.
+     * @param specToModelCheckMappingService Specification to the model factory, used to get documentation of the rule parameters.
      */
-    public RuleDocumentationModelFactoryImpl(Path projectRoot, DqoHomeContext dqoHomeContext,
-                                             SpecToUiCheckMappingService specToUiCheckMappingService) {
+    public RuleDocumentationModelFactoryImpl(Path projectRoot,
+                                             DqoHomeContext dqoHomeContext,
+                                             SpecToModelCheckMappingService specToModelCheckMappingService) {
         this.projectRoot = projectRoot;
         this.dqoHomeContext = dqoHomeContext;
-        this.specToUiCheckMappingService = specToUiCheckMappingService;
+        this.specToModelCheckMappingService = specToModelCheckMappingService;
     }
 
     /**
@@ -89,7 +90,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
 
         documentationModel.setDefinition(ruleDefinitionWrapper);
 
-        List<UIFieldModel> fieldsForRuleParameters = this.specToUiCheckMappingService.createFieldsForRuleParameters(ruleParametersSpec);
+        List<FieldModel> fieldsForRuleParameters = this.specToModelCheckMappingService.createFieldsForRuleParameters(ruleParametersSpec);
         ParameterDefinitionsListSpec fieldDefinitionsList = new ParameterDefinitionsListSpec();
         fieldsForRuleParameters.forEach(uiFieldModel -> fieldDefinitionsList.add(uiFieldModel.getDefinition()));
         ruleDefinitionWrapper.getSpec().setFields(fieldDefinitionsList);  // replacing to use the most recent definition from the code

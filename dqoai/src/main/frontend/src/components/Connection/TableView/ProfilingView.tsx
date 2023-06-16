@@ -4,8 +4,8 @@ import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 
 import {
-  getTableProfilingChecksUI,
-  updateTableProfilingChecksUI
+  getTableProfilingChecksModel,
+  updateTableProfilingChecksModel
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useParams } from 'react-router-dom';
@@ -52,7 +52,7 @@ const ProfilingView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableProfilingChecksUI(
+      getTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -74,7 +74,7 @@ const ProfilingView = () => {
       return;
     }
     await dispatch(
-      updateTableProfilingChecksUI(
+      updateTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -84,7 +84,7 @@ const ProfilingView = () => {
       )
     );
     await dispatch(
-      getTableProfilingChecksUI(
+      getTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,

@@ -18,7 +18,7 @@ package ai.dqo.services.check.matching;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.services.check.mapping.models.UICheckModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -69,7 +69,7 @@ public class SimilarCheckModel {
      * A check model.
      */
     @JsonIgnore
-    private UICheckModel checkModel;
+    private CheckModel checkModel;
 
     public SimilarCheckModel() {
     }
@@ -77,16 +77,16 @@ public class SimilarCheckModel {
     /**
      * Creates a similar check model.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type.
-     * @param timeScale Time scale (optional, null for experiments).
-     * @param category Check category name.
-     * @param checkModel Check UI model with the check name and additional information about the check.
+     * @param checkType   Check type.
+     * @param timeScale   Time scale (optional, null for experiments).
+     * @param category    Check category name.
+     * @param checkModel  Check model with the check name and additional information about the check.
      */
     public SimilarCheckModel(CheckTarget checkTarget,
                              CheckType checkType,
                              CheckTimeScale timeScale,
                              String category,
-                             UICheckModel checkModel) {
+                             CheckModel checkModel) {
         this.checkTarget = checkTarget;
         this.checkType = checkType;
         this.timeScale = timeScale;

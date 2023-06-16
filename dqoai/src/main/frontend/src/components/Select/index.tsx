@@ -11,7 +11,7 @@ import {
   MenuHandler
 } from '@material-tailwind/react';
 
-interface Option {
+export interface Option {
   label: string | number;
   value?: string | number;
   icon?: ReactNode;

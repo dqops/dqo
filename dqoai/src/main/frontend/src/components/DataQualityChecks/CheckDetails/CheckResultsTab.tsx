@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel, UICheckModel } from "../../../api";
+import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel } from "../../../api";
 import Select from "../../Select";
 import { Table } from "../../Table";
 import { useTree } from "../../../contexts/treeContext";
@@ -20,10 +20,21 @@ interface CheckResultsTabProps {
   month?: string;
   onChangeMonth: (month: string) => void;
   onChangeDataStream: (name: string) => void;
-  check?: UICheckModel
+  runCheckType: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName: string;
 }
 
-const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChangeDataStream, check }: CheckResultsTabProps) => {
+const CheckResultsTab = ({
+  results,
+  dataStreamName,
+  month,
+  onChangeMonth,
+  onChangeDataStream,
+  runCheckType,
+  timeScale,
+  checkName
+}: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
   const [mode, setMode] = useState('table');
   const dispatch = useActionDispatch();
@@ -183,7 +194,9 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
           table,
           column,
           dataStreamName,
-          check,
+          runCheckType,
+          checkName,
+          timeScale,
           startDate,
           endDate
         }
@@ -205,7 +218,9 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
           table,
           column,
           dataStreamName,
-          check,
+          runCheckType,
+          checkName,
+          timeScale,
           startDate,
           endDate
         }

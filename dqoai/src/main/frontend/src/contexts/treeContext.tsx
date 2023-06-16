@@ -7,7 +7,7 @@ import {
   ConnectionBasicModel,
   SchemaModel,
   TableBasicModel,
-  UICheckBasicModel
+  CheckBasicModel
 } from '../api';
 import {
   ColumnApiClient,
@@ -514,7 +514,7 @@ function TreeProvider(props: any) {
 
   const refreshTableChecksNode = async (node: CustomTreeNode, reset = true) => {
     const { connection, schema, table } = parseNodeId(node.id);
-    const res = await TableApiClient.getTableProfilingChecksUIBasic(
+    const res = await TableApiClient.getTableProfilingChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? ''
@@ -534,7 +534,7 @@ function TreeProvider(props: any) {
   ) => {
     const { connection, schema, table } = parseNodeId(node.id);
 
-    const res = await TableApiClient.getTableRecurringChecksUIBasic(
+    const res = await TableApiClient.getTableRecurringChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? '',
@@ -555,7 +555,7 @@ function TreeProvider(props: any) {
   ) => {
     const { connection, schema, table } = parseNodeId(node.id);
 
-    const res = await TableApiClient.getTablePartitionedChecksUIBasic(
+    const res = await TableApiClient.getTablePartitionedChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? '',
@@ -574,7 +574,7 @@ function TreeProvider(props: any) {
     reset = true
   ) => {
     const { connection, schema, table } = parseNodeId(node.id);
-    const res = await ColumnApiClient.getColumnProfilingChecksUIBasic(
+    const res = await ColumnApiClient.getColumnProfilingChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? '',
@@ -594,7 +594,7 @@ function TreeProvider(props: any) {
     reset = true
   ) => {
     const { connection, schema, table } = parseNodeId(node.id);
-    const res = await ColumnApiClient.getColumnRecurringChecksUIBasic(
+    const res = await ColumnApiClient.getColumnRecurringChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? '',
@@ -615,7 +615,7 @@ function TreeProvider(props: any) {
     reset = true
   ) => {
     const { connection, schema, table } = parseNodeId(node.id);
-    const res = await ColumnApiClient.getColumnPartitionedChecksUIBasic(
+    const res = await ColumnApiClient.getColumnPartitionedChecksBasicModel(
       connection ?? '',
       schema ?? '',
       table ?? '',
@@ -631,7 +631,7 @@ function TreeProvider(props: any) {
   };
 
   const addChecks = (
-    checks: UICheckBasicModel[],
+    checks: CheckBasicModel[],
     node: CustomTreeNode,
     tooltipSuffix: string,
     reset = true
@@ -922,7 +922,7 @@ function TreeProvider(props: any) {
     }
 
     if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-      const res = await TableApiClient.getTableProfilingChecksUI(
+      const res = await TableApiClient.getTableProfilingChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
@@ -933,7 +933,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringChecksUI(
+      const res = await TableApiClient.getTableRecurringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -945,7 +945,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringChecksUI(
+      const res = await TableApiClient.getTableRecurringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -957,7 +957,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
-      const res = await TableApiClient.getTablePartitionedChecksUI(
+      const res = await TableApiClient.getTablePartitionedChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -969,7 +969,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
-      const res = await TableApiClient.getTablePartitionedChecksUI(
+      const res = await TableApiClient.getTablePartitionedChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -982,7 +982,7 @@ function TreeProvider(props: any) {
     }
 
     if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
-      const res = await ColumnApiClient.getColumnProfilingChecksUI(
+      const res = await ColumnApiClient.getColumnProfilingChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -994,7 +994,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringChecksUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -1007,7 +1007,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringChecksUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -1020,7 +1020,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
-      const res = await ColumnApiClient.getColumnPartitionedChecksUI(
+      const res = await ColumnApiClient.getColumnPartitionedChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -1033,7 +1033,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
-      const res = await ColumnApiClient.getColumnPartitionedChecksUI(
+      const res = await ColumnApiClient.getColumnPartitionedChecksModel(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',

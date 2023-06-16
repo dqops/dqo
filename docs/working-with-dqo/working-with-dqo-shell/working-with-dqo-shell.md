@@ -16,7 +16,7 @@ To use DQO Shell, just start DQO application in the terminal using the following
     ./dqo
     ```
 
-A welcome message will appear and you can start entering commands in the DQO Shell.
+A welcome message will appear, and you can start entering commands in the DQO Shell.
 
 ```
   ___     ___     ___
@@ -47,7 +47,7 @@ DQO Shell supports autocompletion, so you only need to start typing the command,
 a list available options.
 
 For example, if you want to add a new connection using the `connection add` command, just start typing `c`.
-The suggested command will be displayed below and you can select the `connection` using the Tab key.
+The suggested command will be displayed below, and you can select the `connection` using the Tab key.
 
 ![Autocomplete-commands](https://dqops.com/docs/images/working-with-dqo/working-with-dqo-shell/autocomplete-commands.png)
 

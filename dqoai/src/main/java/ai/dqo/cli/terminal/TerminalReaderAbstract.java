@@ -63,10 +63,11 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      * Tries to read one character from the terminal.
      *
      * @param timeoutMillis Read timeout.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
      * @return Character that was read.
      */
     @Override
-    public abstract Character tryReadChar(long timeoutMillis);
+    public abstract Character tryReadChar(long timeoutMillis, boolean peekOnly);
 
     /**
      * Starts a background job that will wait for any input on the console.
@@ -76,7 +77,7 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
     @Override
     public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration) {
         return CompletableFuture.supplyAsync(() -> {
-            Character c = this.tryReadChar(waitDuration.toMillis());
+            Character c = this.tryReadChar(waitDuration.toMillis(), true);
             return c != null;
         });
     }
@@ -92,7 +93,7 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
         this.getWriter().writeLine("Press any key to stop the application.");
 
         while (true) {
-            Character character = this.tryReadChar(1000);
+            Character character = this.tryReadChar(1000, true);
             if (character != null) {
                 if (this.promptBoolean("Exit the application", false)) {
                     return;

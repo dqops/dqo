@@ -5,8 +5,8 @@ import {
   CheckResultsOverviewDataModel,
   DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
-  UICheckModel,
-  UIQualityCategoryModel
+  CheckModel,
+  QualityCategoryModel
 } from '../../api';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
@@ -17,15 +17,15 @@ import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../shared/routes';
 
 interface CheckCategoriesViewProps {
-  category: UIQualityCategoryModel;
+  category: QualityCategoryModel;
   checkResultsOverview: CheckResultsOverviewDataModel[];
-  handleChangeDataDataStreams: (check: UICheckModel, index: number) => void;
+  handleChangeDataDataStreams: (check: CheckModel, index: number) => void;
   onUpdate: () => void;
   getCheckOverview: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
   mode?: string;
   changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
-  copyCategory?: UIQualityCategoryModel;
+  copyCategory?: QualityCategoryModel;
 }
 const CheckCategoriesView = ({
   mode,
@@ -55,7 +55,7 @@ const CheckCategoriesView = ({
         : {})
     });
 
-    // setJobId(res.data?.jobId?.jobId);
+    setJobId((res.data as any)?.jobId?.jobId);
 
     if (getCheckOverview) {
       getCheckOverview();

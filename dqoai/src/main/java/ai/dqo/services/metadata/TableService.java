@@ -15,6 +15,7 @@
  */
 package ai.dqo.services.metadata;
 
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.PushJobResult;
@@ -23,6 +24,8 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
+import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +61,32 @@ public interface TableService {
                                           CheckTimeScale checkTimeScale,
                                           String checkCategory,
                                           String checkName);
+
+    /**
+     * Retrieves a UI friendly data quality profiling check configuration list on a requested table.
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param checkContainerTypeModel Check container type model.
+     * @param columnNamePattern (Optional) Column search pattern filter.
+     * @param columnDataType    (Optional) Filter on column data-type.
+     * @param checkTarget       (Optional) Filter on check target.
+     * @param checkCategory     (Optional) Filter on check category.
+     * @param checkName         (Optional) Filter on check name.
+     * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
+     * @return UI friendly data quality profiling check configuration list on a requested table.
+     */
+    List<CheckConfigurationModel> getCheckConfigurationsOnTable(
+            String connectionName,
+            PhysicalTableName physicalTableName,
+            CheckContainerTypeModel checkContainerTypeModel,
+            String columnNamePattern,
+            String columnDataType,
+            CheckTarget checkTarget,
+            String checkCategory,
+            String checkName,
+            Boolean checkEnabled,
+            Boolean checkConfigured);
 
     /**
      * Deletes table from metadata and flushes user context.

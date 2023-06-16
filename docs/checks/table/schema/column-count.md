@@ -87,12 +87,12 @@ spec:
       
     ```sql
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     ```
@@ -114,21 +114,21 @@ spec:
       
     ```sql
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
     ```sql+jinja
     ```
 === "Rendered SQL for SQL Server"
-      
-    ```sql
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    ```
-=== "Rendered SQL for MySQL"
       
     ```sql
     ```
@@ -185,12 +185,12 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         ```
     **PostgreSQL**  
@@ -209,20 +209,20 @@ spec:
     === "Rendered SQL for Redshift"
         ```sql
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
         ```sql+jinja
         ```
     === "Rendered SQL for SQL Server"
-        ```sql
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        ```
-    === "Rendered SQL for MySQL"
         ```sql
         ```
     
@@ -317,12 +317,12 @@ spec:
       
     ```sql
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     ```
@@ -344,21 +344,21 @@ spec:
       
     ```sql
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
     ```sql+jinja
     ```
 === "Rendered SQL for SQL Server"
-      
-    ```sql
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    ```
-=== "Rendered SQL for MySQL"
       
     ```sql
     ```
@@ -416,12 +416,12 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         ```
     **PostgreSQL**  
@@ -440,20 +440,20 @@ spec:
     === "Rendered SQL for Redshift"
         ```sql
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
         ```sql+jinja
         ```
     === "Rendered SQL for SQL Server"
-        ```sql
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        ```
-    === "Rendered SQL for MySQL"
         ```sql
         ```
     
@@ -548,12 +548,12 @@ spec:
       
     ```sql
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     ```
@@ -575,21 +575,21 @@ spec:
       
     ```sql
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
     ```sql+jinja
     ```
 === "Rendered SQL for SQL Server"
-      
-    ```sql
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    ```
-=== "Rendered SQL for MySQL"
       
     ```sql
     ```
@@ -647,12 +647,12 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         ```
     **PostgreSQL**  
@@ -671,20 +671,20 @@ spec:
     === "Rendered SQL for Redshift"
         ```sql
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
         ```sql+jinja
         ```
     === "Rendered SQL for SQL Server"
-        ```sql
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        ```
-    === "Rendered SQL for MySQL"
         ```sql
         ```
     

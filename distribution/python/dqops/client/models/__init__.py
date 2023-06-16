@@ -1,5 +1,10 @@
 """ Contains all the data models used in inputs/outputs """
 
+from .all_checks_model import AllChecksModel
+from .all_column_checks_model import AllColumnChecksModel
+from .all_column_checks_model_check_target import AllColumnChecksModelCheckTarget
+from .all_table_checks_model import AllTableChecksModel
+from .all_table_checks_model_check_target import AllTableChecksModelCheckTarget
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
 from .big_query_parameters_spec import BigQueryParametersSpec
@@ -19,10 +24,23 @@ from .change_percentile_moving_within_30_days_rule_parameters_spec import (
 from .change_percentile_moving_within_60_days_rule_parameters_spec import (
     ChangePercentileMovingWithin60DaysRuleParametersSpec,
 )
-from .check_basic_folder_model import CheckBasicFolderModel
-from .check_basic_folder_model_folders import CheckBasicFolderModelFolders
 from .check_basic_model import CheckBasicModel
+from .check_container_basic_model import CheckContainerBasicModel
+from .check_container_model import CheckContainerModel
+from .check_container_model_effective_schedule_enabled_status import (
+    CheckContainerModelEffectiveScheduleEnabledStatus,
+)
+from .check_container_type_model import CheckContainerTypeModel
+from .check_container_type_model_check_time_scale import (
+    CheckContainerTypeModelCheckTimeScale,
+)
+from .check_container_type_model_check_type import CheckContainerTypeModelCheckType
 from .check_model import CheckModel
+from .check_model_check_target import CheckModelCheckTarget
+from .check_model_configuration_requirements_errors_item import (
+    CheckModelConfigurationRequirementsErrorsItem,
+)
+from .check_model_schedule_enabled_status import CheckModelScheduleEnabledStatus
 from .check_result_detailed_single_model import CheckResultDetailedSingleModel
 from .check_results_detailed_data_model import CheckResultsDetailedDataModel
 from .check_results_overview_data_model import CheckResultsOverviewDataModel
@@ -33,6 +51,10 @@ from .check_search_filters import CheckSearchFilters
 from .check_search_filters_check_target import CheckSearchFiltersCheckTarget
 from .check_search_filters_check_type import CheckSearchFiltersCheckType
 from .check_search_filters_time_scale import CheckSearchFiltersTimeScale
+from .check_spec_basic_model import CheckSpecBasicModel
+from .check_spec_folder_basic_model import CheckSpecFolderBasicModel
+from .check_spec_folder_basic_model_folders import CheckSpecFolderBasicModelFolders
+from .check_spec_model import CheckSpecModel
 from .check_template import CheckTemplate
 from .check_template_check_target import CheckTemplateCheckTarget
 from .cloud_synchronization_folders_status_model import (
@@ -216,6 +238,8 @@ from .column_change_sum_since_30_days_check_spec import (
 from .column_change_sum_since_yesterday_check_spec import (
     ColumnChangeSumSinceYesterdayCheckSpec,
 )
+from .column_checks_model import ColumnChecksModel
+from .column_checks_model_check_containers import ColumnChecksModelCheckContainers
 from .column_column_exists_sensor_parameters_spec import (
     ColumnColumnExistsSensorParametersSpec,
 )
@@ -896,8 +920,8 @@ from .column_strings_string_whitespace_percent_sensor_parameters_spec import (
 from .column_sum_in_range_check_spec import ColumnSumInRangeCheckSpec
 from .column_true_percent_check_spec import ColumnTruePercentCheckSpec
 from .column_type_snapshot_spec import ColumnTypeSnapshotSpec
-from .column_unique_count_check_spec import ColumnUniqueCountCheckSpec
-from .column_unique_percent_check_spec import ColumnUniquePercentCheckSpec
+from .column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+from .column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 from .column_uniqueness_daily_partitioned_checks_spec import (
     ColumnUniquenessDailyPartitionedChecksSpec,
 )
@@ -926,17 +950,17 @@ from .column_uniqueness_profiling_checks_spec import ColumnUniquenessProfilingCh
 from .column_uniqueness_statistics_collectors_spec import (
     ColumnUniquenessStatisticsCollectorsSpec,
 )
-from .column_uniqueness_unique_count_sensor_parameters_spec import (
-    ColumnUniquenessUniqueCountSensorParametersSpec,
+from .column_uniqueness_distinct_count_sensor_parameters_spec import (
+    ColumnUniquenessDistinctCountSensorParametersSpec,
 )
-from .column_uniqueness_unique_count_statistics_collector_spec import (
-    ColumnUniquenessUniqueCountStatisticsCollectorSpec,
+from .column_uniqueness_distinct_count_statistics_collector_spec import (
+    ColumnUniquenessDistinctCountStatisticsCollectorSpec,
 )
-from .column_uniqueness_unique_percent_sensor_parameters_spec import (
-    ColumnUniquenessUniquePercentSensorParametersSpec,
+from .column_uniqueness_distinct_percent_sensor_parameters_spec import (
+    ColumnUniquenessDistinctPercentSensorParametersSpec,
 )
-from .column_uniqueness_unique_percent_statistics_collector_spec import (
-    ColumnUniquenessUniquePercentStatisticsCollectorSpec,
+from .column_uniqueness_distinct_percent_statistics_collector_spec import (
+    ColumnUniquenessDistinctPercentStatisticsCollectorSpec,
 )
 from .column_valid_latitude_percent_check_spec import (
     ColumnValidLatitudePercentCheckSpec,
@@ -1012,16 +1036,29 @@ from .dqo_settings_model_properties_additional_property import (
 )
 from .dqo_user_profile_model import DqoUserProfileModel
 from .duration import Duration
+from .effective_schedule_model import EffectiveScheduleModel
+from .effective_schedule_model_schedule_group import EffectiveScheduleModelScheduleGroup
+from .effective_schedule_model_schedule_level import EffectiveScheduleModelScheduleLevel
 from .equals_integer_1_rule_parameters_spec import EqualsInteger1RuleParametersSpec
 from .equals_integer_rule_parameters_spec import EqualsIntegerRuleParametersSpec
 from .error_detailed_single_model import ErrorDetailedSingleModel
 from .errors_detailed_data_model import ErrorsDetailedDataModel
 from .external_log_entry import ExternalLogEntry
+from .field_model import FieldModel
 from .find_recent_incidents_on_connection_direction import (
     FindRecentIncidentsOnConnectionDirection,
 )
 from .find_recent_incidents_on_connection_order import (
     FindRecentIncidentsOnConnectionOrder,
+)
+from .get_column_partitioned_checks_basic_model_time_scale import (
+    GetColumnPartitionedChecksBasicModelTimeScale,
+)
+from .get_column_partitioned_checks_model_filter_time_scale import (
+    GetColumnPartitionedChecksModelFilterTimeScale,
+)
+from .get_column_partitioned_checks_model_time_scale import (
+    GetColumnPartitionedChecksModelTimeScale,
 )
 from .get_column_partitioned_checks_overview_time_scale import (
     GetColumnPartitionedChecksOverviewTimeScale,
@@ -1029,35 +1066,26 @@ from .get_column_partitioned_checks_overview_time_scale import (
 from .get_column_partitioned_checks_results_time_scale import (
     GetColumnPartitionedChecksResultsTimeScale,
 )
-from .get_column_partitioned_checks_ui_basic_time_scale import (
-    GetColumnPartitionedChecksUIBasicTimeScale,
-)
-from .get_column_partitioned_checks_ui_filter_time_scale import (
-    GetColumnPartitionedChecksUIFilterTimeScale,
-)
-from .get_column_partitioned_checks_ui_time_scale import (
-    GetColumnPartitionedChecksUITimeScale,
-)
 from .get_column_partitioned_errors_time_scale import (
     GetColumnPartitionedErrorsTimeScale,
 )
 from .get_column_partitioned_sensor_readouts_time_scale import (
     GetColumnPartitionedSensorReadoutsTimeScale,
 )
+from .get_column_recurring_checks_basic_model_time_scale import (
+    GetColumnRecurringChecksBasicModelTimeScale,
+)
+from .get_column_recurring_checks_model_filter_time_scale import (
+    GetColumnRecurringChecksModelFilterTimeScale,
+)
+from .get_column_recurring_checks_model_time_scale import (
+    GetColumnRecurringChecksModelTimeScale,
+)
 from .get_column_recurring_checks_overview_time_scale import (
     GetColumnRecurringChecksOverviewTimeScale,
 )
 from .get_column_recurring_checks_results_time_scale import (
     GetColumnRecurringChecksResultsTimeScale,
-)
-from .get_column_recurring_checks_ui_basic_time_scale import (
-    GetColumnRecurringChecksUIBasicTimeScale,
-)
-from .get_column_recurring_checks_ui_filter_time_scale import (
-    GetColumnRecurringChecksUIFilterTimeScale,
-)
-from .get_column_recurring_checks_ui_time_scale import (
-    GetColumnRecurringChecksUITimeScale,
 )
 from .get_column_recurring_errors_time_scale import GetColumnRecurringErrorsTimeScale
 from .get_column_recurring_sensor_readouts_time_scale import (
@@ -1068,23 +1096,29 @@ from .get_connection_scheduling_group_scheduling_group import (
 )
 from .get_incident_issues_direction import GetIncidentIssuesDirection
 from .get_incident_issues_order import GetIncidentIssuesOrder
+from .get_schema_partitioned_checks_model_check_target import (
+    GetSchemaPartitionedChecksModelCheckTarget,
+)
+from .get_schema_partitioned_checks_model_time_scale import (
+    GetSchemaPartitionedChecksModelTimeScale,
+)
 from .get_schema_partitioned_checks_templates_check_target import (
     GetSchemaPartitionedChecksTemplatesCheckTarget,
 )
 from .get_schema_partitioned_checks_templates_time_scale import (
     GetSchemaPartitionedChecksTemplatesTimeScale,
 )
-from .get_schema_partitioned_checks_ui_check_target import (
-    GetSchemaPartitionedChecksUICheckTarget,
-)
-from .get_schema_partitioned_checks_ui_time_scale import (
-    GetSchemaPartitionedChecksUITimeScale,
+from .get_schema_profiling_checks_model_check_target import (
+    GetSchemaProfilingChecksModelCheckTarget,
 )
 from .get_schema_profiling_checks_templates_check_target import (
     GetSchemaProfilingChecksTemplatesCheckTarget,
 )
-from .get_schema_profiling_checks_ui_check_target import (
-    GetSchemaProfilingChecksUICheckTarget,
+from .get_schema_recurring_checks_model_check_target import (
+    GetSchemaRecurringChecksModelCheckTarget,
+)
+from .get_schema_recurring_checks_model_time_scale import (
+    GetSchemaRecurringChecksModelTimeScale,
 )
 from .get_schema_recurring_checks_templates_check_target import (
     GetSchemaRecurringChecksTemplatesCheckTarget,
@@ -1092,17 +1126,20 @@ from .get_schema_recurring_checks_templates_check_target import (
 from .get_schema_recurring_checks_templates_time_scale import (
     GetSchemaRecurringChecksTemplatesTimeScale,
 )
-from .get_schema_recurring_checks_ui_check_target import (
-    GetSchemaRecurringChecksUICheckTarget,
+from .get_table_columns_partitioned_checks_model_time_scale import (
+    GetTableColumnsPartitionedChecksModelTimeScale,
 )
-from .get_schema_recurring_checks_ui_time_scale import (
-    GetSchemaRecurringChecksUITimeScale,
+from .get_table_columns_recurring_checks_model_time_scale import (
+    GetTableColumnsRecurringChecksModelTimeScale,
 )
-from .get_table_columns_partitioned_checks_ui_time_scale import (
-    GetTableColumnsPartitionedChecksUITimeScale,
+from .get_table_partitioned_checks_basic_model_time_scale import (
+    GetTablePartitionedChecksBasicModelTimeScale,
 )
-from .get_table_columns_recurring_checks_ui_time_scale import (
-    GetTableColumnsRecurringChecksUITimeScale,
+from .get_table_partitioned_checks_model_filter_time_scale import (
+    GetTablePartitionedChecksModelFilterTimeScale,
+)
+from .get_table_partitioned_checks_model_time_scale import (
+    GetTablePartitionedChecksModelTimeScale,
 )
 from .get_table_partitioned_checks_overview_time_scale import (
     GetTablePartitionedChecksOverviewTimeScale,
@@ -1113,18 +1150,18 @@ from .get_table_partitioned_checks_results_time_scale import (
 from .get_table_partitioned_checks_templates_time_scale import (
     GetTablePartitionedChecksTemplatesTimeScale,
 )
-from .get_table_partitioned_checks_ui_basic_time_scale import (
-    GetTablePartitionedChecksUIBasicTimeScale,
-)
-from .get_table_partitioned_checks_ui_filter_time_scale import (
-    GetTablePartitionedChecksUIFilterTimeScale,
-)
-from .get_table_partitioned_checks_ui_time_scale import (
-    GetTablePartitionedChecksUITimeScale,
-)
 from .get_table_partitioned_errors_time_scale import GetTablePartitionedErrorsTimeScale
 from .get_table_partitioned_sensor_readouts_time_scale import (
     GetTablePartitionedSensorReadoutsTimeScale,
+)
+from .get_table_recurring_checks_basic_model_time_scale import (
+    GetTableRecurringChecksBasicModelTimeScale,
+)
+from .get_table_recurring_checks_model_filter_time_scale import (
+    GetTableRecurringChecksModelFilterTimeScale,
+)
+from .get_table_recurring_checks_model_time_scale import (
+    GetTableRecurringChecksModelTimeScale,
 )
 from .get_table_recurring_checks_overview_time_scale import (
     GetTableRecurringChecksOverviewTimeScale,
@@ -1135,13 +1172,6 @@ from .get_table_recurring_checks_results_time_scale import (
 from .get_table_recurring_checks_templates_time_scale import (
     GetTableRecurringChecksTemplatesTimeScale,
 )
-from .get_table_recurring_checks_ui_basic_time_scale import (
-    GetTableRecurringChecksUIBasicTimeScale,
-)
-from .get_table_recurring_checks_ui_filter_time_scale import (
-    GetTableRecurringChecksUIFilterTimeScale,
-)
-from .get_table_recurring_checks_ui_time_scale import GetTableRecurringChecksUITimeScale
 from .get_table_recurring_errors_time_scale import GetTableRecurringErrorsTimeScale
 from .get_table_recurring_sensor_readouts_time_scale import (
     GetTableRecurringSensorReadoutsTimeScale,
@@ -1201,6 +1231,7 @@ from .mono_object import MonoObject
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .optional import Optional
+from .optional_check_container_model import OptionalCheckContainerModel
 from .optional_column_daily_partitioned_check_categories_spec import (
     OptionalColumnDailyPartitionedCheckCategoriesSpec,
 )
@@ -1239,7 +1270,6 @@ from .optional_table_monthly_recurring_check_categories_spec import (
 from .optional_table_profiling_check_categories_spec import (
     OptionalTableProfilingCheckCategoriesSpec,
 )
-from .optional_ui_check_container_model import OptionalUICheckContainerModel
 from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_definition_spec import ParameterDefinitionSpec
@@ -1269,6 +1299,7 @@ from .provider_sensor_definition_spec_parameters import (
 from .provider_sensor_definition_spec_type import ProviderSensorDefinitionSpecType
 from .provider_sensor_model import ProviderSensorModel
 from .provider_sensor_model_provider_type import ProviderSensorModelProviderType
+from .quality_category_model import QualityCategoryModel
 from .recurring_schedule_spec import RecurringScheduleSpec
 from .recurring_schedules_spec import RecurringSchedulesSpec
 from .redshift_parameters_spec import RedshiftParametersSpec
@@ -1281,6 +1312,8 @@ from .rule_model import RuleModel
 from .rule_model_mode import RuleModelMode
 from .rule_model_parameters import RuleModelParameters
 from .rule_model_type import RuleModelType
+from .rule_parameters_model import RuleParametersModel
+from .rule_thresholds_model import RuleThresholdsModel
 from .rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
 from .rule_time_window_settings_spec_historic_data_point_grouping import (
     RuleTimeWindowSettingsSpecHistoricDataPointGrouping,
@@ -1293,6 +1326,7 @@ from .run_checks_queue_job_result_highest_severity import (
 )
 from .schema_model import SchemaModel
 from .schema_remote_model import SchemaRemoteModel
+from .schema_table_checks_model import SchemaTableChecksModel
 from .sensor_basic_folder_model import SensorBasicFolderModel
 from .sensor_basic_folder_model_folders import SensorBasicFolderModelFolders
 from .sensor_basic_model import SensorBasicModel
@@ -1391,6 +1425,9 @@ from .table_change_row_count_since_30_days_check_spec import (
 from .table_change_row_count_since_yesterday_check_spec import (
     TableChangeRowCountSinceYesterdayCheckSpec,
 )
+from .table_checks_model import TableChecksModel
+from .table_checks_model_check_containers import TableChecksModelCheckContainers
+from .table_column_checks_model import TableColumnChecksModel
 from .table_column_count_sensor_parameters_spec import (
     TableColumnCountSensorParametersSpec,
 )
@@ -1550,63 +1587,24 @@ from .table_volume_statistics_collectors_spec import TableVolumeStatisticsCollec
 from .temporal_unit import TemporalUnit
 from .time_window_filter_parameters import TimeWindowFilterParameters
 from .timestamp_columns_spec import TimestampColumnsSpec
-from .ui_all_checks_model import UIAllChecksModel
 from .ui_all_checks_patch_parameters import UIAllChecksPatchParameters
 from .ui_all_checks_patch_parameters_selected_tables_to_columns import (
     UIAllChecksPatchParametersSelectedTablesToColumns,
 )
-from .ui_all_column_checks_model import UIAllColumnChecksModel
-from .ui_all_column_checks_model_check_target import UIAllColumnChecksModelCheckTarget
-from .ui_all_table_checks_model import UIAllTableChecksModel
-from .ui_all_table_checks_model_check_target import UIAllTableChecksModelCheckTarget
-from .ui_check_basic_model import UICheckBasicModel
-from .ui_check_container_basic_model import UICheckContainerBasicModel
-from .ui_check_container_model import UICheckContainerModel
-from .ui_check_container_model_effective_schedule_enabled_status import (
-    UICheckContainerModelEffectiveScheduleEnabledStatus,
+from .update_column_partitioned_checks_model_time_scale import (
+    UpdateColumnPartitionedChecksModelTimeScale,
 )
-from .ui_check_container_type_model import UICheckContainerTypeModel
-from .ui_check_container_type_model_check_time_scale import (
-    UICheckContainerTypeModelCheckTimeScale,
-)
-from .ui_check_container_type_model_check_type import UICheckContainerTypeModelCheckType
-from .ui_check_model import UICheckModel
-from .ui_check_model_check_target import UICheckModelCheckTarget
-from .ui_check_model_configuration_requirements_errors_item import (
-    UICheckModelConfigurationRequirementsErrorsItem,
-)
-from .ui_check_model_schedule_enabled_status import UICheckModelScheduleEnabledStatus
-from .ui_column_checks_model import UIColumnChecksModel
-from .ui_column_checks_model_check_containers import UIColumnChecksModelCheckContainers
-from .ui_effective_schedule_model import UIEffectiveScheduleModel
-from .ui_effective_schedule_model_schedule_group import (
-    UIEffectiveScheduleModelScheduleGroup,
-)
-from .ui_effective_schedule_model_schedule_level import (
-    UIEffectiveScheduleModelScheduleLevel,
-)
-from .ui_field_model import UIFieldModel
-from .ui_quality_category_model import UIQualityCategoryModel
-from .ui_rule_parameters_model import UIRuleParametersModel
-from .ui_rule_thresholds_model import UIRuleThresholdsModel
-from .ui_schema_table_checks_model import UISchemaTableChecksModel
-from .ui_table_checks_model import UITableChecksModel
-from .ui_table_checks_model_check_containers import UITableChecksModelCheckContainers
-from .ui_table_column_checks_model import UITableColumnChecksModel
-from .update_column_partitioned_checks_ui_time_scale import (
-    UpdateColumnPartitionedChecksUITimeScale,
-)
-from .update_column_recurring_checks_ui_time_scale import (
-    UpdateColumnRecurringChecksUITimeScale,
+from .update_column_recurring_checks_model_time_scale import (
+    UpdateColumnRecurringChecksModelTimeScale,
 )
 from .update_connection_scheduling_group_scheduling_group import (
     UpdateConnectionSchedulingGroupSchedulingGroup,
 )
-from .update_table_partitioned_checks_ui_time_scale import (
-    UpdateTablePartitionedChecksUITimeScale,
+from .update_table_partitioned_checks_model_time_scale import (
+    UpdateTablePartitionedChecksModelTimeScale,
 )
-from .update_table_recurring_checks_ui_time_scale import (
-    UpdateTableRecurringChecksUITimeScale,
+from .update_table_recurring_checks_model_time_scale import (
+    UpdateTableRecurringChecksModelTimeScale,
 )
 from .update_table_scheduling_group_override_scheduling_group import (
     UpdateTableSchedulingGroupOverrideSchedulingGroup,
@@ -1622,6 +1620,11 @@ from .within_change_30_days_rule_parameters_spec import (
 from .within_change_rule_parameters_spec import WithinChangeRuleParametersSpec
 
 __all__ = (
+    "AllChecksModel",
+    "AllColumnChecksModel",
+    "AllColumnChecksModelCheckTarget",
+    "AllTableChecksModel",
+    "AllTableChecksModelCheckTarget",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
     "BigQueryParametersSpec",
@@ -1631,10 +1634,17 @@ __all__ = (
     "ChangePercentileMovingWithin30DaysRuleParametersSpec",
     "ChangePercentileMovingWithin60DaysRuleParametersSpec",
     "ChangePercentileMovingWithin7DaysRuleParametersSpec",
-    "CheckBasicFolderModel",
-    "CheckBasicFolderModelFolders",
     "CheckBasicModel",
+    "CheckContainerBasicModel",
+    "CheckContainerModel",
+    "CheckContainerModelEffectiveScheduleEnabledStatus",
+    "CheckContainerTypeModel",
+    "CheckContainerTypeModelCheckTimeScale",
+    "CheckContainerTypeModelCheckType",
     "CheckModel",
+    "CheckModelCheckTarget",
+    "CheckModelConfigurationRequirementsErrorsItem",
+    "CheckModelScheduleEnabledStatus",
     "CheckResultDetailedSingleModel",
     "CheckResultsDetailedDataModel",
     "CheckResultsOverviewDataModel",
@@ -1643,6 +1653,10 @@ __all__ = (
     "CheckSearchFiltersCheckTarget",
     "CheckSearchFiltersCheckType",
     "CheckSearchFiltersTimeScale",
+    "CheckSpecBasicModel",
+    "CheckSpecFolderBasicModel",
+    "CheckSpecFolderBasicModelFolders",
+    "CheckSpecModel",
     "CheckTemplate",
     "CheckTemplateCheckTarget",
     "CloudSynchronizationFoldersStatusModel",
@@ -1718,6 +1732,8 @@ __all__ = (
     "ColumnChangeSumSince30DaysCheckSpec",
     "ColumnChangeSumSince7DaysCheckSpec",
     "ColumnChangeSumSinceYesterdayCheckSpec",
+    "ColumnChecksModel",
+    "ColumnChecksModelCheckContainers",
     "ColumnColumnExistsSensorParametersSpec",
     "ColumnColumnTypeHashSensorParametersSpec",
     "ColumnConsistencyDailyPartitionedChecksSpec",
@@ -1978,7 +1994,7 @@ __all__ = (
     "ColumnSumInRangeCheckSpec",
     "ColumnTruePercentCheckSpec",
     "ColumnTypeSnapshotSpec",
-    "ColumnUniqueCountCheckSpec",
+    "ColumnDistinctCountCheckSpec",
     "ColumnUniquenessDailyPartitionedChecksSpec",
     "ColumnUniquenessDailyRecurringChecksSpec",
     "ColumnUniquenessDuplicateCountSensorParametersSpec",
@@ -1989,11 +2005,11 @@ __all__ = (
     "ColumnUniquenessMonthlyRecurringChecksSpec",
     "ColumnUniquenessProfilingChecksSpec",
     "ColumnUniquenessStatisticsCollectorsSpec",
-    "ColumnUniquenessUniqueCountSensorParametersSpec",
-    "ColumnUniquenessUniqueCountStatisticsCollectorSpec",
-    "ColumnUniquenessUniquePercentSensorParametersSpec",
-    "ColumnUniquenessUniquePercentStatisticsCollectorSpec",
-    "ColumnUniquePercentCheckSpec",
+    "ColumnUniquenessDistinctCountSensorParametersSpec",
+    "ColumnUniquenessDistinctCountStatisticsCollectorSpec",
+    "ColumnUniquenessDistinctPercentSensorParametersSpec",
+    "ColumnUniquenessDistinctPercentStatisticsCollectorSpec",
+    "ColumnDistinctPercentCheckSpec",
     "ColumnValidLatitudePercentCheckSpec",
     "ColumnValidLongitudePercentCheckSpec",
     "ColumnValueAboveMaxValueCountCheckSpec",
@@ -2042,56 +2058,60 @@ __all__ = (
     "DqoSettingsModelPropertiesAdditionalProperty",
     "DqoUserProfileModel",
     "Duration",
+    "EffectiveScheduleModel",
+    "EffectiveScheduleModelScheduleGroup",
+    "EffectiveScheduleModelScheduleLevel",
     "EqualsInteger1RuleParametersSpec",
     "EqualsIntegerRuleParametersSpec",
     "ErrorDetailedSingleModel",
     "ErrorsDetailedDataModel",
     "ExternalLogEntry",
+    "FieldModel",
     "FindRecentIncidentsOnConnectionDirection",
     "FindRecentIncidentsOnConnectionOrder",
+    "GetColumnPartitionedChecksBasicModelTimeScale",
+    "GetColumnPartitionedChecksModelFilterTimeScale",
+    "GetColumnPartitionedChecksModelTimeScale",
     "GetColumnPartitionedChecksOverviewTimeScale",
     "GetColumnPartitionedChecksResultsTimeScale",
-    "GetColumnPartitionedChecksUIBasicTimeScale",
-    "GetColumnPartitionedChecksUIFilterTimeScale",
-    "GetColumnPartitionedChecksUITimeScale",
     "GetColumnPartitionedErrorsTimeScale",
     "GetColumnPartitionedSensorReadoutsTimeScale",
+    "GetColumnRecurringChecksBasicModelTimeScale",
+    "GetColumnRecurringChecksModelFilterTimeScale",
+    "GetColumnRecurringChecksModelTimeScale",
     "GetColumnRecurringChecksOverviewTimeScale",
     "GetColumnRecurringChecksResultsTimeScale",
-    "GetColumnRecurringChecksUIBasicTimeScale",
-    "GetColumnRecurringChecksUIFilterTimeScale",
-    "GetColumnRecurringChecksUITimeScale",
     "GetColumnRecurringErrorsTimeScale",
     "GetColumnRecurringSensorReadoutsTimeScale",
     "GetConnectionSchedulingGroupSchedulingGroup",
     "GetIncidentIssuesDirection",
     "GetIncidentIssuesOrder",
+    "GetSchemaPartitionedChecksModelCheckTarget",
+    "GetSchemaPartitionedChecksModelTimeScale",
     "GetSchemaPartitionedChecksTemplatesCheckTarget",
     "GetSchemaPartitionedChecksTemplatesTimeScale",
-    "GetSchemaPartitionedChecksUICheckTarget",
-    "GetSchemaPartitionedChecksUITimeScale",
+    "GetSchemaProfilingChecksModelCheckTarget",
     "GetSchemaProfilingChecksTemplatesCheckTarget",
-    "GetSchemaProfilingChecksUICheckTarget",
+    "GetSchemaRecurringChecksModelCheckTarget",
+    "GetSchemaRecurringChecksModelTimeScale",
     "GetSchemaRecurringChecksTemplatesCheckTarget",
     "GetSchemaRecurringChecksTemplatesTimeScale",
-    "GetSchemaRecurringChecksUICheckTarget",
-    "GetSchemaRecurringChecksUITimeScale",
-    "GetTableColumnsPartitionedChecksUITimeScale",
-    "GetTableColumnsRecurringChecksUITimeScale",
+    "GetTableColumnsPartitionedChecksModelTimeScale",
+    "GetTableColumnsRecurringChecksModelTimeScale",
+    "GetTablePartitionedChecksBasicModelTimeScale",
+    "GetTablePartitionedChecksModelFilterTimeScale",
+    "GetTablePartitionedChecksModelTimeScale",
     "GetTablePartitionedChecksOverviewTimeScale",
     "GetTablePartitionedChecksResultsTimeScale",
     "GetTablePartitionedChecksTemplatesTimeScale",
-    "GetTablePartitionedChecksUIBasicTimeScale",
-    "GetTablePartitionedChecksUIFilterTimeScale",
-    "GetTablePartitionedChecksUITimeScale",
     "GetTablePartitionedErrorsTimeScale",
     "GetTablePartitionedSensorReadoutsTimeScale",
+    "GetTableRecurringChecksBasicModelTimeScale",
+    "GetTableRecurringChecksModelFilterTimeScale",
+    "GetTableRecurringChecksModelTimeScale",
     "GetTableRecurringChecksOverviewTimeScale",
     "GetTableRecurringChecksResultsTimeScale",
     "GetTableRecurringChecksTemplatesTimeScale",
-    "GetTableRecurringChecksUIBasicTimeScale",
-    "GetTableRecurringChecksUIFilterTimeScale",
-    "GetTableRecurringChecksUITimeScale",
     "GetTableRecurringErrorsTimeScale",
     "GetTableRecurringSensorReadoutsTimeScale",
     "GetTableSchedulingGroupOverrideSchedulingGroup",
@@ -2147,6 +2167,7 @@ __all__ = (
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "Optional",
+    "OptionalCheckContainerModel",
     "OptionalColumnDailyPartitionedCheckCategoriesSpec",
     "OptionalColumnDailyRecurringCheckCategoriesSpec",
     "OptionalColumnMonthlyPartitionedCheckCategoriesSpec",
@@ -2163,7 +2184,6 @@ __all__ = (
     "OptionalTableMonthlyPartitionedCheckCategoriesSpec",
     "OptionalTableMonthlyRecurringCheckCategoriesSpec",
     "OptionalTableProfilingCheckCategoriesSpec",
-    "OptionalUICheckContainerModel",
     "OracleParametersSpec",
     "OracleParametersSpecProperties",
     "ParameterDefinitionSpec",
@@ -2183,6 +2203,7 @@ __all__ = (
     "ProviderSensorDefinitionSpecType",
     "ProviderSensorModel",
     "ProviderSensorModelProviderType",
+    "QualityCategoryModel",
     "RecurringScheduleSpec",
     "RecurringSchedulesSpec",
     "RedshiftParametersSpec",
@@ -2195,6 +2216,8 @@ __all__ = (
     "RuleModelMode",
     "RuleModelParameters",
     "RuleModelType",
+    "RuleParametersModel",
+    "RuleThresholdsModel",
     "RuleTimeWindowSettingsSpec",
     "RuleTimeWindowSettingsSpecHistoricDataPointGrouping",
     "RunChecksOnTableQueueJobParameters",
@@ -2203,6 +2226,7 @@ __all__ = (
     "RunChecksQueueJobResultHighestSeverity",
     "SchemaModel",
     "SchemaRemoteModel",
+    "SchemaTableChecksModel",
     "SensorBasicFolderModel",
     "SensorBasicFolderModelFolders",
     "SensorBasicModel",
@@ -2253,6 +2277,9 @@ __all__ = (
     "TableChangeRowCountSince30DaysCheckSpec",
     "TableChangeRowCountSince7DaysCheckSpec",
     "TableChangeRowCountSinceYesterdayCheckSpec",
+    "TableChecksModel",
+    "TableChecksModelCheckContainers",
+    "TableColumnChecksModel",
     "TableColumnCountSensorParametersSpec",
     "TableColumnListOrderedHashSensorParametersSpec",
     "TableColumnListUnorderedHashSensorParametersSpec",
@@ -2326,42 +2353,13 @@ __all__ = (
     "TemporalUnit",
     "TimestampColumnsSpec",
     "TimeWindowFilterParameters",
-    "UIAllChecksModel",
     "UIAllChecksPatchParameters",
     "UIAllChecksPatchParametersSelectedTablesToColumns",
-    "UIAllColumnChecksModel",
-    "UIAllColumnChecksModelCheckTarget",
-    "UIAllTableChecksModel",
-    "UIAllTableChecksModelCheckTarget",
-    "UICheckBasicModel",
-    "UICheckContainerBasicModel",
-    "UICheckContainerModel",
-    "UICheckContainerModelEffectiveScheduleEnabledStatus",
-    "UICheckContainerTypeModel",
-    "UICheckContainerTypeModelCheckTimeScale",
-    "UICheckContainerTypeModelCheckType",
-    "UICheckModel",
-    "UICheckModelCheckTarget",
-    "UICheckModelConfigurationRequirementsErrorsItem",
-    "UICheckModelScheduleEnabledStatus",
-    "UIColumnChecksModel",
-    "UIColumnChecksModelCheckContainers",
-    "UIEffectiveScheduleModel",
-    "UIEffectiveScheduleModelScheduleGroup",
-    "UIEffectiveScheduleModelScheduleLevel",
-    "UIFieldModel",
-    "UIQualityCategoryModel",
-    "UIRuleParametersModel",
-    "UIRuleThresholdsModel",
-    "UISchemaTableChecksModel",
-    "UITableChecksModel",
-    "UITableChecksModelCheckContainers",
-    "UITableColumnChecksModel",
-    "UpdateColumnPartitionedChecksUITimeScale",
-    "UpdateColumnRecurringChecksUITimeScale",
+    "UpdateColumnPartitionedChecksModelTimeScale",
+    "UpdateColumnRecurringChecksModelTimeScale",
     "UpdateConnectionSchedulingGroupSchedulingGroup",
-    "UpdateTablePartitionedChecksUITimeScale",
-    "UpdateTableRecurringChecksUITimeScale",
+    "UpdateTablePartitionedChecksModelTimeScale",
+    "UpdateTableRecurringChecksModelTimeScale",
     "UpdateTableSchedulingGroupOverrideSchedulingGroup",
     "ValueChangedParametersSpec",
     "WithinChange1DayRuleParametersSpec",

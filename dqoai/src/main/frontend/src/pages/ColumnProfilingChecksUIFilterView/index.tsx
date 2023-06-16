@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
-import { getColumnProfilingChecksUIFilter, setColumnUpdatedCheckUiFilter } from '../../redux/actions/column.actions';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
+import { getColumnProfilingChecksModelFilter, setColumnUpdatedProfilingChecksModelFilter } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
@@ -36,7 +36,7 @@ const ColumnProfilingChecksUIFilterView = () => {
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await ColumnApiClient.updateColumnProfilingChecksUI(
+    await ColumnApiClient.updateColumnProfilingChecksModel(
       connectionName,
       schemaName,
       tableName,
@@ -44,19 +44,19 @@ const ColumnProfilingChecksUIFilterView = () => {
       checksUIFilter
     );
     await dispatch(
-      getColumnProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName, false)
+      getColumnProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   useEffect(() => {
     dispatch(
-      getColumnProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName)
+      getColumnProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName)
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName]);
 
-  const onChange = (ui: UICheckContainerModel) => {
-    dispatch(setColumnUpdatedCheckUiFilter(checkTypes, firstLevelActiveTab, ui));
+  const onChange = (ui: CheckContainerModel) => {
+    dispatch(setColumnUpdatedProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

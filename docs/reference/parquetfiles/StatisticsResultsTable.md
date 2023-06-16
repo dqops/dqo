@@ -31,6 +31,7 @@ Constants with the column names of the &quot;statistics&quot; table that contain
  | stream_level_9 | Column name for the data stream. | text |
  | data_stream_hash | Column name for a data stream hash, it is a hash of the data stream level names. | long |
  | data_stream_name | Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
+ | data_stream_mapping_name | The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check. | text |
  | connection_hash | Column name for a connection hash. | long |
  | connection_name | Column name for a connection name. | text |
  | provider | Column name for a provider name. | text |

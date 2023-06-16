@@ -32,12 +32,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A service that detects if a Python virtual environment was configured or sets up a venv.
@@ -165,13 +164,32 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
      */
     public Path findInterpreterPath(Path directoryPath) {
         String[] pythonInterpreters = StringUtils.split(pythonConfigurationProperties.getInterpreter(), ',');
+        Set<String> filesInFolder = null;
 
-        for (String pythonInterpreter: pythonInterpreters) {
+        try {
+            try (Stream<Path> filesStream = Files.list(directoryPath)) {
+                filesInFolder = filesStream
+                        .map(p -> p.getFileName().toString())
+                        .collect(Collectors.toSet());
+            }
+        }
+        catch (IOException ioe) {
+            // ignore
+        }
+
+        for (String pythonInterpreter : pythonInterpreters) {
             Path pythonPath = directoryPath.resolve(pythonInterpreter);
             File pythonInterpreterFile = pythonPath.toFile();
 
-            if (pythonInterpreterFile.exists() && pythonInterpreterFile.canExecute()) {
-                return pythonPath;
+            if (pythonInterpreterFile.exists()) {
+                if (pythonInterpreterFile.canExecute()) {
+                    return pythonPath;
+                }
+            } else {
+                // Windows 11: python installed from Store
+                if (filesInFolder != null && filesInFolder.contains(pythonInterpreter)) {
+                    return pythonPath;
+                }
             }
         }
         return null;

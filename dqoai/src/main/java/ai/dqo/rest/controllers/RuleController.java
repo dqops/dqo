@@ -15,7 +15,6 @@
  */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
@@ -24,7 +23,9 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.*;
+import ai.dqo.rest.models.metadata.RuleBasicFolderModel;
+import ai.dqo.rest.models.metadata.RuleBasicModel;
+import ai.dqo.rest.models.metadata.RuleModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;

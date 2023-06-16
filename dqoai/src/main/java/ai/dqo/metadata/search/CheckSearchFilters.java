@@ -50,6 +50,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private String checkCategory;
     private String checkName;
     private String sensorName;
+    private Boolean checkConfigured;
 
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> checkHierarchyIds;
@@ -211,6 +212,22 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     public void setCheckCategory(String checkCategory) {
         this.checkCategory = checkCategory;
+    }
+
+    /**
+     * Get the check configured filter flag.
+     * @return Check configured filter.
+     */
+    public Boolean getCheckConfigured() {
+        return checkConfigured;
+    }
+
+    /**
+     * Sets the check configured filter flag.
+     * @param checkConfigured New check configured filter.
+     */
+    public void setCheckConfigured(Boolean checkConfigured) {
+        this.checkConfigured = checkConfigured;
     }
 
     /**

@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   CheckResultsOverviewDataModel,
-  UICheckContainerModel
+  CheckContainerModel
 } from '../../api';
 import TableActionGroup from '../../components/Connection/TableView/TableActionGroup';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableProfilingChecksUI,
-  updateTableProfilingChecksUI,
-  setUpdatedChecksUi
+  getTableProfilingChecksModel,
+  updateTableProfilingChecksModel,
+  setUpdatedChecksModel
 } from '../../redux/actions/table.actions';
 import {
   getFirstLevelState,
@@ -42,7 +42,7 @@ const TableAdvancedProfiling = () => {
 
   useEffect(() => {
     dispatch(
-      getTableProfilingChecksUI(
+      getTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -64,7 +64,7 @@ const TableAdvancedProfiling = () => {
       return;
     }
     await dispatch(
-      updateTableProfilingChecksUI(
+      updateTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -74,7 +74,7 @@ const TableAdvancedProfiling = () => {
       )
     );
     await dispatch(
-      getTableProfilingChecksUI(
+      getTableProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -85,8 +85,8 @@ const TableAdvancedProfiling = () => {
     );
   };
 
-  const handleChange = (value: UICheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
+  const handleChange = (value: CheckContainerModel) => {
+    dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
   };
 
   const getCheckOverview = () => {

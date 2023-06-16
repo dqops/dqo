@@ -16,7 +16,7 @@
 package ai.dqo.execution.sensors.progress;
 
 import ai.dqo.execution.checks.progress.CheckExecutionProgressEvent;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderInput;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderInput;
 
 /**
  * Progress event raised before an SQL template is expanded (rendered).

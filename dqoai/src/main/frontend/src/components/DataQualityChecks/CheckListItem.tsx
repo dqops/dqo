@@ -4,8 +4,8 @@ import {
   CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
-  UICheckModel,
-  UIFieldModel
+  CheckModel,
+  FieldModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import CheckSettings from './CheckSettings';
@@ -27,12 +27,12 @@ export interface ITab {
   label: string;
   value: string;
   type?: string;
-  field?: UIFieldModel;
+  field?: FieldModel;
 }
 
 interface ICheckListItemProps {
-  check: UICheckModel;
-  onChange: (check: UICheckModel) => void;
+  check: CheckModel;
+  onChange: (check: CheckModel) => void;
   category?: string;
   checkResult?: CheckResultsOverviewDataModel;
   getCheckOverview: () => void;
@@ -61,7 +61,7 @@ const CheckListItem = ({
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
@@ -137,7 +137,7 @@ const CheckListItem = ({
         ? { timeWindowFilter }
         : {})
     });
-    // setJobId(res.data?.jobId?.jobId);
+    setJobId((res.data as any)?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;
@@ -189,6 +189,21 @@ const CheckListItem = ({
       setExpanded(false);
     }
     setShowDetails(!showDetails);
+  };
+  const getLocalDateInUserTimeZone = (date: Date): string => {
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: userTimeZone
+    };
+
+    return date.toLocaleString('en-US', options);
   };
 
   return (
@@ -352,9 +367,13 @@ const CheckListItem = ({
                         <div>
                           Executed at:{' '}
                           {checkResult?.executedAtTimestamps
-                            ? moment(
-                                checkResult.executedAtTimestamps[index]
-                              ).format('YYYY-MM-DD HH:mm:ss') + ' UTC'
+                            ? getLocalDateInUserTimeZone(
+                                new Date(
+                                  moment(
+                                    checkResult.executedAtTimestamps[index]
+                                  ).format('YYYY-MM-DD HH:mm:ss')
+                                )
+                              )
                             : ''}
                         </div>
                         <div>
@@ -391,7 +410,7 @@ const CheckListItem = ({
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
                 parameters={check.sensor_parameters || []}
-                onChange={(parameters: UIFieldModel[]) =>
+                onChange={(parameters: FieldModel[]) =>
                   handleChange({ sensor_parameters: parameters })
                 }
                 disabled={!check?.configured || check.disabled}
@@ -466,7 +485,19 @@ const CheckListItem = ({
       {showDetails && (
         <tr>
           <td colSpan={6}>
-            <CheckDetails check={check} onClose={closeCheckDetails} job={job} />
+            <CheckDetails
+              checkTypes={checkTypes}
+              connection={connection}
+              schema={schema}
+              table={table}
+              column={column}
+              runCheckType={check.run_checks_job_template?.checkType}
+              checkName={check.check_name}
+              timeScale={check.run_checks_job_template?.timeScale}
+              check={check}
+              onClose={closeCheckDetails}
+              job={job}
+            />
           </td>
         </tr>
       )}

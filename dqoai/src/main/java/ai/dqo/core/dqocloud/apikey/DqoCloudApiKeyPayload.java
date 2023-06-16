@@ -32,7 +32,7 @@ public class DqoCloudApiKeyPayload {
     /**
      * API Key format version.
      */
-    public static final long CURRENT_API_KEY_VERSION = 7;
+    public static final long CURRENT_API_KEY_VERSION = 8;
 
     @JsonProperty("sub")
     private String subject;
@@ -63,6 +63,10 @@ public class DqoCloudApiKeyPayload {
     @JsonProperty("dm")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String domain;
+
+    @JsonProperty("reg")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String region;
 
 
     /**
@@ -223,6 +227,23 @@ public class DqoCloudApiKeyPayload {
     public void setDomain(String domain) {
         this.domain = domain;
     }
+
+    /**
+     * Returns the region where the tenant's data is stored. It is a name of a GCP region.
+     * @return GCP region where the tenant's data is stored.
+     */
+    public String getRegion() {
+        return region;
+    }
+
+    /**
+     * Sets the name of a GCP region where the tenant's data is stored.
+     * @param region The region where the tenant's data is stored.
+     */
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
 
     /**
      * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.

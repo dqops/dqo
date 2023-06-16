@@ -20,7 +20,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.check.impl.CheckCliService;
-import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
+import ai.dqo.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.output.OutputFormatService;
@@ -347,7 +347,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             this.fatalLevelOptions = new HashMap<>();
         }
 
-        UIAllChecksCliPatchParameters patchParameters = new UIAllChecksCliPatchParameters() {{
+        AllChecksModelCliPatchParameters patchParameters = new AllChecksModelCliPatchParameters() {{
             setCheckSearchFilters(filters);
             setSensorOptions(sensorParams);
             setOverrideConflicts(override);

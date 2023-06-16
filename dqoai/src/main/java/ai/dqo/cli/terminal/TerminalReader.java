@@ -97,9 +97,10 @@ public interface TerminalReader {
     /**
      * Tries to read one character from the terminal.
      * @param timeoutMillis Read timeout.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
      * @return Character that was read.
      */
-    Character tryReadChar(long timeoutMillis);
+    Character tryReadChar(long timeoutMillis, boolean peekOnly);
 
     /**
      * Starts a background job that will wait for any input on the console.

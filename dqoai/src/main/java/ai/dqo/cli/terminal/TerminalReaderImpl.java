@@ -62,10 +62,11 @@ public class TerminalReaderImpl extends TerminalReaderAbstract {
      * Tries to read one character from the terminal.
      *
      * @param timeoutMillis Read timeout.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
      * @return Character that was read.
      */
     @Override
-    public Character tryReadChar(long timeoutMillis) {
+    public Character tryReadChar(long timeoutMillis, boolean peekOnly) {
         try {
             Terminal terminal = this.lineReader.getTerminal();
 
@@ -73,6 +74,11 @@ public class TerminalReaderImpl extends TerminalReaderAbstract {
             if (readResult <= 0) {
                 return null;
             }
+
+            if (peekOnly || Thread.currentThread().isInterrupted()) {
+                return null;
+            }
+
             return (char)terminal.reader().read();
         }
         catch (IOException ioe) {
