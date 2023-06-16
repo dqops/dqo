@@ -193,7 +193,7 @@ const TableHeader = ({
                 <>
                   <Button
                     color="primary"
-                    label="Set up recurring checkpoints"
+                    label="Set up recurring checks"
                     textSize="sm"
                     className="font-medium px-4"
                     variant="outlined"
@@ -201,7 +201,7 @@ const TableHeader = ({
                   />
                   <Button
                     color="primary"
-                    label="Set up date partition checks"
+                    label="Set up partition checks"
                     textSize="sm"
                     className="font-medium px-4"
                     variant="outlined"
