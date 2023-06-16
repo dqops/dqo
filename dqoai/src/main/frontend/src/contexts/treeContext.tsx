@@ -7,7 +7,8 @@ import {
   ConnectionBasicModel,
   SchemaModel,
   TableBasicModel,
-  CheckBasicModel
+  CheckBasicModel,
+  RunChecksQueueJobParameters
 } from '../api';
 import {
   ColumnApiClient,
@@ -880,6 +881,10 @@ function TreeProvider(props: any) {
     }));
 
     return newItems;
+  };
+
+  const runPartitionedChecks = async (obj: RunChecksQueueJobParameters) => {
+    await JobApiClient.runChecks(false, undefined, obj);
   };
 
   const runChecks = async (node: CustomTreeNode) => {
@@ -1797,7 +1802,8 @@ function TreeProvider(props: any) {
         setSelectedTreeNode,
         loadingNodes,
         addSchema,
-        refreshDatabaseNode
+        refreshDatabaseNode,
+        runPartitionedChecks
       }}
       {...props}
     />

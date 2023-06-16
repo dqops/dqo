@@ -17,7 +17,6 @@ import {
   TimeWindowFilterParameters,
   RunChecksQueueJobParameters
 } from '../../api';
-import { JobApiClient } from '../../services/apiClient';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -35,8 +34,13 @@ const ContextMenu = ({
   openAddSchemaDialog
 }: ContextMenuProps) => {
   const { checkTypes }: { checkTypes: any } = useParams();
-  const { refreshNode, runChecks, collectStatisticsOnTable, deleteStoredData } =
-    useTree();
+  const {
+    refreshNode,
+    runChecks,
+    collectStatisticsOnTable,
+    deleteStoredData,
+    runPartitionedChecks
+  } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
@@ -82,20 +86,13 @@ const ContextMenu = ({
     e.stopPropagation();
   };
 
-  const runPartitionedChecks = async (obj: RunChecksQueueJobParameters) => {
-    const res = await JobApiClient.runChecks(true, 0, obj);
-    console.log(res.data);
-  };
-
   const setSetectedRun = (selected: TimeWindowFilterParameters) => {
     const obj: RunChecksQueueJobParameters = {
-      timeWindowFilter: selected
+      timeWindowFilter: selected,
+      checkSearchFilters: node.run_checks_job_template
     };
-    // console.log(obj);
     return obj;
   };
-
-  // console.log(RUN_CHECK_TIME_WINDOW_FILTERS);
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -121,13 +118,10 @@ const ContextMenu = ({
           {checkTypes === 'partitioned' &&
             (node.level === TREE_LEVEL.COLUMN ||
               node.level === TREE_LEVEL.TABLE) && (
-              <div
-                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded flex items-center"
-                // onClick={handleRunChecks}
-              >
-                Run checks part
+              <div className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded flex items-center gap-x-14">
+                Run checks
                 <SvgIcon
-                  name="info"
+                  name="options"
                   className="w-5 h-5"
                   onClick={() => setIsClicked(!isClicked)}
                 />
@@ -143,7 +137,7 @@ const ContextMenu = ({
                     onClick={() =>
                       value
                         ? runPartitionedChecks(setSetectedRun(value))
-                        : setIsClicked(true)
+                        : handleRunChecks()
                     }
                   >
                     {key}
