@@ -18,6 +18,7 @@ import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
 import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
+import Checkbox, { CheckboxProps } from '../../components/Checkbox';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -49,7 +50,7 @@ const TableColumns = ({
   const [columnToDelete, setColumnToDelete] = useState<ColumnStatisticsModel>();
   const [dataArray1, setDataArray1] = useState<MyData[]>();
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
+  const [isClicked, setIsClicked] = useState<boolean>(false)
   const dispatch = useDispatch();
   const {
     connection,
@@ -662,6 +663,7 @@ const TableColumns = ({
           {column.nameOfCol}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
+        <Checkbox checked={isClicked} onChange={() =>setIsClicked(!isClicked) }/>
           <div key={index} className="truncate">
             {datatype_detected(column.detectedDatatypeVar)}
           </div>
