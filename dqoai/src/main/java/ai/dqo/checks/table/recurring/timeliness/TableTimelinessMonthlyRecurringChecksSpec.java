@@ -16,8 +16,8 @@
 package ai.dqo.checks.table.recurring.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -39,43 +39,62 @@ import java.util.Objects;
 public class TableTimelinessMonthlyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMonthlyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("monthly_days_since_most_recent_event", o -> o.monthlyDaysSinceMostRecentEvent);
+           put("monthly_data_freshness", o -> o.monthlyDataFreshness);
            put("monthly_data_ingestion_delay", o -> o.monthlyDataIngestionDelay);
-           put("monthly_days_since_most_recent_ingestion", o -> o.monthlyDaysSinceMostRecentIngestion);
+           put("monthly_data_staleness", o -> o.monthlyDataStaleness);
         }
     };
 
     @JsonPropertyDescription("Monthly recurring calculating the number of days since the most recent event timestamp (freshness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceMostRecentEventCheckSpec monthlyDaysSinceMostRecentEvent;
+    private TableDataFreshnessCheckSpec monthlyDataFreshness;
+
+    @JsonPropertyDescription("Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDataStalenessCheckSpec monthlyDataStaleness;
 
     @JsonPropertyDescription("Monthly recurring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataIngestionDelayCheckSpec monthlyDataIngestionDelay;
 
-    @JsonPropertyDescription("Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceMostRecentIngestionCheckSpec monthlyDaysSinceMostRecentIngestion;
-
     /**
      * Returns the number of days since the most recent event check configuration.
      * @return The number of days since the most recent event check configuration.
      */
-    public TableDaysSinceMostRecentEventCheckSpec getMonthlyDaysSinceMostRecentEvent() {
-        return monthlyDaysSinceMostRecentEvent;
+    public TableDataFreshnessCheckSpec getMonthlyDataFreshness() {
+        return monthlyDataFreshness;
     }
 
     /**
      * Sets the number of days since the most recent event.
-     * @param monthlyDaysSinceMostRecentEvent New days since the most recent event check.
+     * @param monthlyDataFreshness New days since the most recent event check.
      */
-    public void setMonthlyDaysSinceMostRecentEvent(TableDaysSinceMostRecentEventCheckSpec monthlyDaysSinceMostRecentEvent) {
-		this.setDirtyIf(!Objects.equals(this.monthlyDaysSinceMostRecentEvent, monthlyDaysSinceMostRecentEvent));
-        this.monthlyDaysSinceMostRecentEvent = monthlyDaysSinceMostRecentEvent;
-		this.propagateHierarchyIdToField(monthlyDaysSinceMostRecentEvent, "monthly_days_since_most_recent_event");
+    public void setMonthlyDataFreshness(TableDataFreshnessCheckSpec monthlyDataFreshness) {
+		this.setDirtyIf(!Objects.equals(this.monthlyDataFreshness, monthlyDataFreshness));
+        this.monthlyDataFreshness = monthlyDataFreshness;
+		this.propagateHierarchyIdToField(monthlyDataFreshness, "monthly_data_freshness");
+    }
+
+    /**
+     * Returns a number of days since the last data ingestion check configuration.
+     * @return A number of days since the last data ingestion check configuration..
+     */
+    public TableDataStalenessCheckSpec getMonthlyDataStaleness() {
+        return monthlyDataStaleness;
+    }
+
+    /**
+     * Sets a number of days since the last data ingestion check configuration.
+     * @param monthlyDataStaleness A number of days since the last data ingestion check configuration.
+     */
+
+    public void setMonthlyDataStaleness(TableDataStalenessCheckSpec monthlyDataStaleness) {
+        this.setDirtyIf(!Objects.equals(this.monthlyDataStaleness, monthlyDataStaleness));
+        this.monthlyDataStaleness = monthlyDataStaleness;
+        this.propagateHierarchyIdToField(monthlyDataStaleness, "monthly_data_staleness");
     }
 
     /**
@@ -94,24 +113,6 @@ public class TableTimelinessMonthlyRecurringChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyDataIngestionDelay, monthlyDataIngestionDelay));
         this.monthlyDataIngestionDelay = monthlyDataIngestionDelay;
         this.propagateHierarchyIdToField(monthlyDataIngestionDelay, "monthly_data_ingestion_delay");
-    }
-
-    /**
-     * Returns a number of days since the last data ingestion check configuration.
-     * @return A number of days since the last data ingestion check configuration..
-     */
-    public TableDaysSinceMostRecentIngestionCheckSpec getMonthlyDaysSinceMostRecentIngestion() {
-        return monthlyDaysSinceMostRecentIngestion;
-    }
-
-    /**
-     * Sets a number of days since the last data ingestion check configuration.
-     * @param monthlyDaysSinceMostRecentIngestion A number of days since the last data ingestion check configuration.
-     */
-    public void setMonthlyDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec monthlyDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.monthlyDaysSinceMostRecentIngestion, monthlyDaysSinceMostRecentIngestion));
-        this.monthlyDaysSinceMostRecentIngestion = monthlyDaysSinceMostRecentIngestion;
-        this.propagateHierarchyIdToField(monthlyDaysSinceMostRecentIngestion, "monthly_days_since_most_recent_ingestion");
     }
 
         /**

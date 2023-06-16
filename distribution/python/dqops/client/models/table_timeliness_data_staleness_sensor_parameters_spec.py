@@ -5,12 +5,12 @@ import attr
 from ..types import UNSET, Unset
 
 T = TypeVar(
-    "T", bound="TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec"
+    "T", bound="TableTimelinessDataStalenessSensorParametersSpec"
 )
 
 
 @attr.s(auto_attribs=True)
-class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec:
+class TableTimelinessDataStalenessSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
@@ -36,14 +36,14 @@ class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec:
         d = src_dict.copy()
         filter_ = d.pop("filter", UNSET)
 
-        table_timeliness_days_since_most_recent_ingestion_sensor_parameters_spec = cls(
+        table_timeliness_data_staleness_sensor_parameters_spec = cls(
             filter_=filter_,
         )
 
-        table_timeliness_days_since_most_recent_ingestion_sensor_parameters_spec.additional_properties = (
+        table_timeliness_data_staleness_sensor_parameters_spec.additional_properties = (
             d
         )
-        return table_timeliness_days_since_most_recent_ingestion_sensor_parameters_spec
+        return table_timeliness_data_staleness_sensor_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

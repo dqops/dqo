@@ -1,46 +1,48 @@
-**days since most recent ingestion** checks  
+**data freshness** checks  
 
 **Description**  
-Table level check that calculates the maximum number of days between event timestamp and ingestion timestamp.
+Table level check that calculates the time difference between the most recent row in the table and the current time.
+ The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration.
+ This check is also known as &quot;Data Freshness&quot;.
 
 ___
 
-## **days since most recent ingestion**  
+## **data freshness**  
   
 **Check description**  
-Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
+Calculates the number of days since the most recent event timestamp (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|days_since_most_recent_ingestion|profiling| |[days_since_most_recent_ingestion](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|data_freshness|profiling| |[data_freshness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=data_freshness
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=days_since_most_recent_ingestion
+dqo> check run -ch=data_freshness
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=data_freshness
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=data_freshness
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=data_freshness
 ```
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
     timeliness:
-      days_since_most_recent_ingestion:
+      data_freshness:
         warning:
           max_days: 1.0
         error:
@@ -62,7 +64,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     timeliness:
-      days_since_most_recent_ingestion:
+      data_freshness:
         warning:
           max_days: 1.0
         error:
@@ -84,30 +86,30 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATE_DIFF(
             CURRENT_DATE(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             DAY
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATETIME_DIFF(
             CURRENT_DATETIME(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
@@ -115,7 +117,7 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -130,7 +132,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -146,36 +148,36 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATEDIFF(
             DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE()
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
         {%- else -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -189,8 +191,8 @@ spec:
     SELECT
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX(analyzed_table.`col_event_timestamp`)
         ) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         LOCALTIMESTAMP AS time_period_utc
@@ -204,26 +206,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -236,7 +238,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -250,26 +252,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -282,7 +284,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -296,38 +298,37 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(
-            DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            ),
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -342,8 +343,8 @@ spec:
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-            ),
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
@@ -358,32 +359,32 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             ) / 24.0 / 3600.0
         {%- else -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -396,7 +397,7 @@ spec:
     ```sql
     SELECT
         DATEDIFF(SECOND,
-                MAX(analyzed_table.[col_inserted_at]),
+                MAX(analyzed_table.[col_event_timestamp]),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0 AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
@@ -427,7 +428,7 @@ spec:
             column: state
       profiling_checks:
         timeliness:
-          days_since_most_recent_ingestion:
+          data_freshness:
             warning:
               max_days: 1.0
             error:
@@ -454,30 +455,30 @@ spec:
         ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATE_DIFF(
                 CURRENT_DATE(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 DAY
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATETIME_DIFF(
                 CURRENT_DATETIME(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
@@ -485,7 +486,7 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -499,7 +500,7 @@ spec:
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -517,36 +518,36 @@ spec:
         ```sql+jinja
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(
                 DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE()
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
             {%- else -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -559,8 +560,8 @@ spec:
         SELECT
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX(analyzed_table.`col_event_timestamp`)
             ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -576,26 +577,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -607,7 +608,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -623,26 +624,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -654,7 +655,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -670,38 +671,37 @@ spec:
         ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(
-                DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-                ),
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -715,8 +715,8 @@ spec:
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-                ),
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -733,32 +733,32 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(DAY,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 ) / 24.0 / 3600.0
             {%- else -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -770,7 +770,7 @@ spec:
         ```sql
         SELECT
             DATEDIFF(SECOND,
-                    MAX(analyzed_table.[col_inserted_at]),
+                    MAX(analyzed_table.[col_event_timestamp]),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -793,43 +793,43 @@ spec:
 
 ___
 
-## **daily days since most recent ingestion**  
+## **daily data freshness**  
   
 **Check description**  
-Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
+Daily  calculating the number of days since the most recent event timestamp (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_days_since_most_recent_ingestion|recurring|daily|[days_since_most_recent_ingestion](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|daily_data_freshness|recurring|daily|[data_freshness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=daily_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=daily_data_freshness
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=daily_days_since_most_recent_ingestion
+dqo> check run -ch=daily_data_freshness
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=daily_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=daily_data_freshness
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=daily_data_freshness
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_data_freshness
 ```
 **Check structure (Yaml)**
 ```yaml
   recurring_checks:
     daily:
       timeliness:
-        daily_days_since_most_recent_ingestion:
+        daily_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -852,7 +852,7 @@ spec:
   recurring_checks:
     daily:
       timeliness:
-        daily_days_since_most_recent_ingestion:
+        daily_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -874,30 +874,30 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATE_DIFF(
             CURRENT_DATE(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             DAY
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATETIME_DIFF(
             CURRENT_DATETIME(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
@@ -905,7 +905,7 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -920,7 +920,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -936,36 +936,36 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATEDIFF(
             DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE()
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
         {%- else -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -979,8 +979,8 @@ spec:
     SELECT
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX(analyzed_table.`col_event_timestamp`)
         ) / 24.0 / 3600.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -994,26 +994,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1026,7 +1026,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1040,26 +1040,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1072,7 +1072,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1086,38 +1086,37 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(
-            DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            ),
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1132,8 +1131,8 @@ spec:
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-            ),
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
@@ -1148,32 +1147,32 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             ) / 24.0 / 3600.0
         {%- else -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1186,7 +1185,7 @@ spec:
     ```sql
     SELECT
         DATEDIFF(SECOND,
-                MAX(analyzed_table.[col_inserted_at]),
+                MAX(analyzed_table.[col_event_timestamp]),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0 AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
@@ -1218,7 +1217,7 @@ spec:
       recurring_checks:
         daily:
           timeliness:
-            daily_days_since_most_recent_ingestion:
+            daily_data_freshness:
               warning:
                 max_days: 1.0
               error:
@@ -1245,30 +1244,30 @@ spec:
         ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATE_DIFF(
                 CURRENT_DATE(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 DAY
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATETIME_DIFF(
                 CURRENT_DATETIME(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
@@ -1276,7 +1275,7 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1290,7 +1289,7 @@ spec:
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1308,36 +1307,36 @@ spec:
         ```sql+jinja
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(
                 DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE()
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
             {%- else -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1350,8 +1349,8 @@ spec:
         SELECT
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX(analyzed_table.`col_event_timestamp`)
             ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -1367,26 +1366,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1398,7 +1397,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -1414,26 +1413,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1445,7 +1444,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -1461,38 +1460,37 @@ spec:
         ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(
-                DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-                ),
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1506,8 +1504,8 @@ spec:
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-                ),
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1524,32 +1522,32 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(DAY,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 ) / 24.0 / 3600.0
             {%- else -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1561,7 +1559,7 @@ spec:
         ```sql
         SELECT
             DATEDIFF(SECOND,
-                    MAX(analyzed_table.[col_inserted_at]),
+                    MAX(analyzed_table.[col_event_timestamp]),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -1584,43 +1582,43 @@ spec:
 
 ___
 
-## **monthly days since most recent ingestion**  
+## **monthly data freshness**  
   
 **Check description**  
-Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
+Monthly recurring calculating the number of days since the most recent event timestamp (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_days_since_most_recent_ingestion|recurring|monthly|[days_since_most_recent_ingestion](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|monthly_data_freshness|recurring|monthly|[data_freshness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=monthly_data_freshness
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -ch=monthly_data_freshness
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=monthly_data_freshness
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=monthly_data_freshness
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_data_freshness
 ```
 **Check structure (Yaml)**
 ```yaml
   recurring_checks:
     monthly:
       timeliness:
-        monthly_days_since_most_recent_ingestion:
+        monthly_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -1643,7 +1641,7 @@ spec:
   recurring_checks:
     monthly:
       timeliness:
-        monthly_days_since_most_recent_ingestion:
+        monthly_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -1665,30 +1663,30 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATE_DIFF(
             CURRENT_DATE(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             DAY
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATETIME_DIFF(
             CURRENT_DATETIME(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
@@ -1696,7 +1694,7 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1711,7 +1709,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1727,36 +1725,36 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATEDIFF(
             DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE()
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
         {%- else -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1770,8 +1768,8 @@ spec:
     SELECT
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX(analyzed_table.`col_event_timestamp`)
         ) / 24.0 / 3600.0 AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -1785,26 +1783,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1817,7 +1815,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1831,26 +1829,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1863,7 +1861,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1877,38 +1875,37 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(
-            DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            ),
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1923,8 +1920,8 @@ spec:
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-            ),
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
@@ -1939,32 +1936,32 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             ) / 24.0 / 3600.0
         {%- else -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1977,7 +1974,7 @@ spec:
     ```sql
     SELECT
         DATEDIFF(SECOND,
-                MAX(analyzed_table.[col_inserted_at]),
+                MAX(analyzed_table.[col_event_timestamp]),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0 AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
@@ -2009,7 +2006,7 @@ spec:
       recurring_checks:
         monthly:
           timeliness:
-            monthly_days_since_most_recent_ingestion:
+            monthly_data_freshness:
               warning:
                 max_days: 1.0
               error:
@@ -2036,30 +2033,30 @@ spec:
         ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATE_DIFF(
                 CURRENT_DATE(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 DAY
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATETIME_DIFF(
                 CURRENT_DATETIME(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
@@ -2067,7 +2064,7 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2081,7 +2078,7 @@ spec:
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2099,36 +2096,36 @@ spec:
         ```sql+jinja
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(
                 DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE()
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
             {%- else -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2141,8 +2138,8 @@ spec:
         SELECT
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX(analyzed_table.`col_event_timestamp`)
             ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -2158,26 +2155,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2189,7 +2186,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -2205,26 +2202,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2236,7 +2233,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -2252,38 +2249,37 @@ spec:
         ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(
-                DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-                ),
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2297,8 +2293,8 @@ spec:
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-                ),
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -2315,32 +2311,32 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(DAY,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 ) / 24.0 / 3600.0
             {%- else -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2352,7 +2348,7 @@ spec:
         ```sql
         SELECT
             DATEDIFF(SECOND,
-                    MAX(analyzed_table.[col_inserted_at]),
+                    MAX(analyzed_table.[col_event_timestamp]),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -2375,43 +2371,43 @@ spec:
 
 ___
 
-## **daily partition days since most recent ingestion**  
+## **daily partition data freshness**  
   
 **Check description**  
-Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
+Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_days_since_most_recent_ingestion|partitioned|daily|[days_since_most_recent_ingestion](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|daily_partition_data_freshness|partitioned|daily|[data_freshness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=daily_partition_data_freshness
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -ch=daily_partition_data_freshness
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=daily_partition_data_freshness
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_data_freshness
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_data_freshness
 ```
 **Check structure (Yaml)**
 ```yaml
   partitioned_checks:
     daily:
       timeliness:
-        daily_partition_days_since_most_recent_ingestion:
+        daily_partition_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -2434,7 +2430,7 @@ spec:
   partitioned_checks:
     daily:
       timeliness:
-        daily_partition_days_since_most_recent_ingestion:
+        daily_partition_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -2456,30 +2452,30 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATE_DIFF(
             CURRENT_DATE(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             DAY
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATETIME_DIFF(
             CURRENT_DATETIME(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
@@ -2487,7 +2483,7 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2502,7 +2498,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2518,36 +2514,36 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATEDIFF(
             DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE()
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
         {%- else -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2561,8 +2557,8 @@ spec:
     SELECT
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX(analyzed_table.`col_event_timestamp`)
         ) / 24.0 / 3600.0 AS actual_value,
         DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -2576,26 +2572,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2608,7 +2604,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
         CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2622,26 +2618,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2654,7 +2650,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
         CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2668,38 +2664,37 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(
-            DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            ),
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2714,8 +2709,8 @@ spec:
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-            ),
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
@@ -2730,32 +2725,32 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             ) / 24.0 / 3600.0
         {%- else -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2768,7 +2763,7 @@ spec:
     ```sql
     SELECT
         DATEDIFF(SECOND,
-                MAX(analyzed_table.[col_inserted_at]),
+                MAX(analyzed_table.[col_event_timestamp]),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0 AS actual_value,
         CAST([] AS date) AS time_period,
@@ -2804,7 +2799,7 @@ spec:
       partitioned_checks:
         daily:
           timeliness:
-            daily_partition_days_since_most_recent_ingestion:
+            daily_partition_data_freshness:
               warning:
                 max_days: 1.0
               error:
@@ -2831,30 +2826,30 @@ spec:
         ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATE_DIFF(
                 CURRENT_DATE(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 DAY
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATETIME_DIFF(
                 CURRENT_DATETIME(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
@@ -2862,7 +2857,7 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2876,7 +2871,7 @@ spec:
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2894,36 +2889,36 @@ spec:
         ```sql+jinja
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(
                 DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE()
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
             {%- else -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2936,8 +2931,8 @@ spec:
         SELECT
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX(analyzed_table.`col_event_timestamp`)
             ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -2953,26 +2948,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2984,7 +2979,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -3000,26 +2995,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3031,7 +3026,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -3047,38 +3042,37 @@ spec:
         ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(
-                DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-                ),
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3092,8 +3086,8 @@ spec:
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-                ),
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -3110,32 +3104,32 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(DAY,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 ) / 24.0 / 3600.0
             {%- else -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3147,7 +3141,7 @@ spec:
         ```sql
         SELECT
             DATEDIFF(SECOND,
-                    MAX(analyzed_table.[col_inserted_at]),
+                    MAX(analyzed_table.[col_event_timestamp]),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -3168,43 +3162,43 @@ spec:
 
 ___
 
-## **monthly partition days since most recent ingestion**  
+## **monthly partition data freshness**  
   
 **Check description**  
-Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)  
+Monthly partitioned check calculating the number of days since the most recent event (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_days_since_most_recent_ingestion|partitioned|monthly|[days_since_most_recent_ingestion](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|monthly_partition_data_freshness|partitioned|monthly|[data_freshness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=monthly_partition_data_freshness
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -ch=monthly_partition_data_freshness
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=monthly_partition_data_freshness
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_data_freshness
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_data_freshness
 ```
 **Check structure (Yaml)**
 ```yaml
   partitioned_checks:
     monthly:
       timeliness:
-        monthly_partition_days_since_most_recent_ingestion:
+        monthly_partition_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -3227,7 +3221,7 @@ spec:
   partitioned_checks:
     monthly:
       timeliness:
-        monthly_partition_days_since_most_recent_ingestion:
+        monthly_partition_data_freshness:
           warning:
             max_days: 1.0
           error:
@@ -3249,30 +3243,30 @@ spec:
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATE_DIFF(
             CURRENT_DATE(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             DAY
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATETIME_DIFF(
             CURRENT_DATETIME(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
@@ -3280,7 +3274,7 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3295,7 +3289,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -3311,36 +3305,36 @@ spec:
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         DATEDIFF(
             DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE()
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP()
         ) / 24.0 / 3600.0
         {%- else -%}
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3354,8 +3348,8 @@ spec:
     SELECT
         TIMESTAMPDIFF(
             SECOND,
-            MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-            CURRENT_TIMESTAMP()
+            CURRENT_TIMESTAMP(),
+            MAX(analyzed_table.`col_event_timestamp`)
         ) / 24.0 / 3600.0 AS actual_value,
         DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -3369,26 +3363,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3401,7 +3395,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3415,26 +3409,26 @@ spec:
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
         )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3447,7 +3441,7 @@ spec:
     ```sql
     SELECT
         EXTRACT(EPOCH FROM (
-            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3461,38 +3455,37 @@ spec:
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-        DATEDIFF(
-            DAY,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_DATE
         )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
         TIMESTAMPDIFF(
             MILLISECOND,
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            ),
+                TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3507,8 +3500,8 @@ spec:
         TIMESTAMPDIFF(
             MILLISECOND,
             MAX(
-                TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-            ),
+                TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+            )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -3523,32 +3516,32 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_current_ingestion_diff() -%}
-        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
-        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             )
-        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 GETDATE()
             ) / 24.0 / 3600.0
         {%- else -%}
             DATEDIFF(SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_current_ingestion_diff() }} AS actual_value
+        {{ render_current_event_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3561,7 +3554,7 @@ spec:
     ```sql
     SELECT
         DATEDIFF(SECOND,
-                MAX(analyzed_table.[col_inserted_at]),
+                MAX(analyzed_table.[col_event_timestamp]),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0 AS actual_value,
         DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
@@ -3597,7 +3590,7 @@ spec:
       partitioned_checks:
         monthly:
           timeliness:
-            monthly_partition_days_since_most_recent_ingestion:
+            monthly_partition_data_freshness:
               warning:
                 max_days: 1.0
               error:
@@ -3624,30 +3617,30 @@ spec:
         ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATE_DIFF(
                 CURRENT_DATE(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 DAY
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATETIME_DIFF(
                 CURRENT_DATETIME(),
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0
@@ -3655,7 +3648,7 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3669,7 +3662,7 @@ spec:
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
                 MAX(
-                    SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
                 ),
                 MILLISECOND
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -3687,36 +3680,36 @@ spec:
         ```sql+jinja
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             DATEDIFF(
                 DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE()
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP()
             ) / 24.0 / 3600.0
             {%- else -%}
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3729,8 +3722,8 @@ spec:
         SELECT
             TIMESTAMPDIFF(
                 SECOND,
-                MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
-                CURRENT_TIMESTAMP()
+                CURRENT_TIMESTAMP(),
+                MAX(analyzed_table.`col_event_timestamp`)
             ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -3746,26 +3739,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3777,7 +3770,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -3793,26 +3786,26 @@ spec:
         ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
             )) / 24.0 / 3600.0
             {%- else -%}
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
             )) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3824,7 +3817,7 @@ spec:
         ```sql
         SELECT
             EXTRACT(EPOCH FROM (
-                CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+                CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -3840,38 +3833,37 @@ spec:
         ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
-            DATEDIFF(
-                DAY,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DATEDIFF(DAY,
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_DATE
             )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
-                MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- else -%}
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
-                ),
+                    TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3885,8 +3877,8 @@ spec:
             TIMESTAMPDIFF(
                 MILLISECOND,
                 MAX(
-                    TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
-                ),
+                    TRY_TO_TIMESTAMP(analyzed_table."col_event_timestamp")
+                )
                 CURRENT_TIMESTAMP
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -3903,32 +3895,32 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        {% macro render_current_ingestion_diff() -%}
-            {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        {% macro render_current_event_diff() -%}
+            {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
-            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(DAY,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 )
-            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     GETDATE()
                 ) / 24.0 / 3600.0
             {%- else -%}
                 DATEDIFF(SECOND,
-                    MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
-            {{ render_current_ingestion_diff() }} AS actual_value
+            {{ render_current_event_diff() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3940,7 +3932,7 @@ spec:
         ```sql
         SELECT
             DATEDIFF(SECOND,
-                    MAX(analyzed_table.[col_inserted_at]),
+                    MAX(analyzed_table.[col_event_timestamp]),
                     SYSDATETIMEOFFSET()
                 ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.[country] AS stream_level_1,

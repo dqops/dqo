@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.table.timeliness;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,26 +30,26 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentEventSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDataFreshnessSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQueryTests extends BaseTest {
-    private TableTimelinessDaysSinceMostRecentEventSensorParametersSpec sut;
+public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests extends BaseTest {
+    private TableTimelinessDataFreshnessSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableDaysSinceMostRecentEventCheckSpec checkSpec;
+    private TableDataFreshnessCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sut = new TableTimelinessDaysSinceMostRecentEventSensorParametersSpec();
+		this.sut = new TableTimelinessDataFreshnessSensorParametersSpec();
         this.sut.setFilter("{alias}.correct = 0");
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_timeliness_sensors, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableDaysSinceMostRecentEventCheckSpec();
+        this.checkSpec = new TableDataFreshnessCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

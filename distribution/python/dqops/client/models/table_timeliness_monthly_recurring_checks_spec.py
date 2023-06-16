@@ -8,11 +8,11 @@ if TYPE_CHECKING:
     from ..models.table_data_ingestion_delay_check_spec import (
         TableDataIngestionDelayCheckSpec,
     )
-    from ..models.table_days_since_most_recent_event_check_spec import (
-        TableDaysSinceMostRecentEventCheckSpec,
+    from ..models.table_data_freshness_check_spec import (
+        TableDataFreshnessCheckSpec,
     )
-    from ..models.table_days_since_most_recent_ingestion_check_spec import (
-        TableDaysSinceMostRecentIngestionCheckSpec,
+    from ..models.table_data_staleness_check_spec import (
+        TableDataStalenessCheckSpec,
     )
 
 
@@ -23,52 +23,52 @@ T = TypeVar("T", bound="TableTimelinessMonthlyRecurringChecksSpec")
 class TableTimelinessMonthlyRecurringChecksSpec:
     """
     Attributes:
-        monthly_days_since_most_recent_event (Union[Unset, TableDaysSinceMostRecentEventCheckSpec]):
+        monthly_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
         monthly_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
-        monthly_days_since_most_recent_ingestion (Union[Unset, TableDaysSinceMostRecentIngestionCheckSpec]):
+        monthly_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
     """
 
-    monthly_days_since_most_recent_event: Union[
-        Unset, "TableDaysSinceMostRecentEventCheckSpec"
+    monthly_data_freshness: Union[
+        Unset, "TableDataFreshnessCheckSpec"
     ] = UNSET
     monthly_data_ingestion_delay: Union[
         Unset, "TableDataIngestionDelayCheckSpec"
     ] = UNSET
-    monthly_days_since_most_recent_ingestion: Union[
-        Unset, "TableDaysSinceMostRecentIngestionCheckSpec"
+    monthly_data_staleness: Union[
+        Unset, "TableDataStalenessCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        monthly_days_since_most_recent_event: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_days_since_most_recent_event, Unset):
-            monthly_days_since_most_recent_event = (
-                self.monthly_days_since_most_recent_event.to_dict()
+        monthly_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_data_freshness, Unset):
+            monthly_data_freshness = (
+                self.monthly_data_freshness.to_dict()
             )
 
         monthly_data_ingestion_delay: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_data_ingestion_delay, Unset):
             monthly_data_ingestion_delay = self.monthly_data_ingestion_delay.to_dict()
 
-        monthly_days_since_most_recent_ingestion: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_days_since_most_recent_ingestion, Unset):
-            monthly_days_since_most_recent_ingestion = (
-                self.monthly_days_since_most_recent_ingestion.to_dict()
+        monthly_data_staleness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_data_staleness, Unset):
+            monthly_data_staleness = (
+                self.monthly_data_staleness.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if monthly_days_since_most_recent_event is not UNSET:
+        if monthly_data_freshness is not UNSET:
             field_dict[
-                "monthly_days_since_most_recent_event"
-            ] = monthly_days_since_most_recent_event
+                "monthly_data_freshness"
+            ] = monthly_data_freshness
         if monthly_data_ingestion_delay is not UNSET:
             field_dict["monthly_data_ingestion_delay"] = monthly_data_ingestion_delay
-        if monthly_days_since_most_recent_ingestion is not UNSET:
+        if monthly_data_staleness is not UNSET:
             field_dict[
-                "monthly_days_since_most_recent_ingestion"
-            ] = monthly_days_since_most_recent_ingestion
+                "monthly_data_staleness"
+            ] = monthly_data_staleness
 
         return field_dict
 
@@ -77,26 +77,26 @@ class TableTimelinessMonthlyRecurringChecksSpec:
         from ..models.table_data_ingestion_delay_check_spec import (
             TableDataIngestionDelayCheckSpec,
         )
-        from ..models.table_days_since_most_recent_event_check_spec import (
-            TableDaysSinceMostRecentEventCheckSpec,
+        from ..models.table_data_freshness_check_spec import (
+            TableDataFreshnessCheckSpec,
         )
-        from ..models.table_days_since_most_recent_ingestion_check_spec import (
-            TableDaysSinceMostRecentIngestionCheckSpec,
+        from ..models.table_data_staleness_check_spec import (
+            TableDataStalenessCheckSpec,
         )
 
         d = src_dict.copy()
-        _monthly_days_since_most_recent_event = d.pop(
-            "monthly_days_since_most_recent_event", UNSET
+        _monthly_data_freshness = d.pop(
+            "monthly_data_freshness", UNSET
         )
-        monthly_days_since_most_recent_event: Union[
-            Unset, TableDaysSinceMostRecentEventCheckSpec
+        monthly_data_freshness: Union[
+            Unset, TableDataFreshnessCheckSpec
         ]
-        if isinstance(_monthly_days_since_most_recent_event, Unset):
-            monthly_days_since_most_recent_event = UNSET
+        if isinstance(_monthly_data_freshness, Unset):
+            monthly_data_freshness = UNSET
         else:
-            monthly_days_since_most_recent_event = (
-                TableDaysSinceMostRecentEventCheckSpec.from_dict(
-                    _monthly_days_since_most_recent_event
+            monthly_data_freshness = (
+                TableDataFreshnessCheckSpec.from_dict(
+                    _monthly_data_freshness
                 )
             )
 
@@ -109,25 +109,25 @@ class TableTimelinessMonthlyRecurringChecksSpec:
                 _monthly_data_ingestion_delay
             )
 
-        _monthly_days_since_most_recent_ingestion = d.pop(
-            "monthly_days_since_most_recent_ingestion", UNSET
+        _monthly_data_staleness = d.pop(
+            "monthly_data_staleness", UNSET
         )
-        monthly_days_since_most_recent_ingestion: Union[
-            Unset, TableDaysSinceMostRecentIngestionCheckSpec
+        monthly_data_staleness: Union[
+            Unset, TableDataStalenessCheckSpec
         ]
-        if isinstance(_monthly_days_since_most_recent_ingestion, Unset):
-            monthly_days_since_most_recent_ingestion = UNSET
+        if isinstance(_monthly_data_staleness, Unset):
+            monthly_data_staleness = UNSET
         else:
-            monthly_days_since_most_recent_ingestion = (
-                TableDaysSinceMostRecentIngestionCheckSpec.from_dict(
-                    _monthly_days_since_most_recent_ingestion
+            monthly_data_staleness = (
+                TableDataStalenessCheckSpec.from_dict(
+                    _monthly_data_staleness
                 )
             )
 
         table_timeliness_monthly_recurring_checks_spec = cls(
-            monthly_days_since_most_recent_event=monthly_days_since_most_recent_event,
+            monthly_data_freshness=monthly_data_freshness,
             monthly_data_ingestion_delay=monthly_data_ingestion_delay,
-            monthly_days_since_most_recent_ingestion=monthly_days_since_most_recent_ingestion,
+            monthly_data_staleness=monthly_data_staleness,
         )
 
         table_timeliness_monthly_recurring_checks_spec.additional_properties = d

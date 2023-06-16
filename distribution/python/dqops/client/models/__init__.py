@@ -1452,11 +1452,11 @@ from .table_daily_recurring_categories_spec_custom import (
     TableDailyRecurringCategoriesSpecCustom,
 )
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
-from .table_days_since_most_recent_event_check_spec import (
-    TableDaysSinceMostRecentEventCheckSpec,
+from .table_data_freshness_check_spec import (
+    TableDataFreshnessCheckSpec,
 )
-from .table_days_since_most_recent_ingestion_check_spec import (
-    TableDaysSinceMostRecentIngestionCheckSpec,
+from .table_data_staleness_check_spec import (
+    TableDataStalenessCheckSpec,
 )
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_incident_grouping_spec_grouping_level import (
@@ -1548,11 +1548,11 @@ from .table_timeliness_daily_recurring_checks_spec import (
 from .table_timeliness_data_ingestion_delay_sensor_parameters_spec import (
     TableTimelinessDataIngestionDelaySensorParametersSpec,
 )
-from .table_timeliness_days_since_most_recent_event_sensor_parameters_spec import (
-    TableTimelinessDaysSinceMostRecentEventSensorParametersSpec,
+from .table_timeliness_data_freshness_sensor_parameters_spec import (
+    TableTimelinessDataFreshnessSensorParametersSpec,
 )
-from .table_timeliness_days_since_most_recent_ingestion_sensor_parameters_spec import (
-    TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec,
+from .table_timeliness_data_staleness_sensor_parameters_spec import (
+    TableTimelinessDataStalenessSensorParametersSpec,
 )
 from .table_timeliness_monthly_partitioned_checks_spec import (
     TableTimelinessMonthlyPartitionedChecksSpec,
@@ -2290,8 +2290,8 @@ __all__ = (
     "TableDailyRecurringCategoriesSpec",
     "TableDailyRecurringCategoriesSpecCustom",
     "TableDataIngestionDelayCheckSpec",
-    "TableDaysSinceMostRecentEventCheckSpec",
-    "TableDaysSinceMostRecentIngestionCheckSpec",
+    "TableDataFreshnessCheckSpec",
+    "TableDataStalenessCheckSpec",
     "TableIncidentGroupingSpec",
     "TableIncidentGroupingSpecGroupingLevel",
     "TableIncidentGroupingSpecMinimumSeverity",
@@ -2336,8 +2336,8 @@ __all__ = (
     "TableTimelinessDailyPartitionedChecksSpec",
     "TableTimelinessDailyRecurringChecksSpec",
     "TableTimelinessDataIngestionDelaySensorParametersSpec",
-    "TableTimelinessDaysSinceMostRecentEventSensorParametersSpec",
-    "TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec",
+    "TableTimelinessDataFreshnessSensorParametersSpec",
+    "TableTimelinessDataStalenessSensorParametersSpec",
     "TableTimelinessMonthlyPartitionedChecksSpec",
     "TableTimelinessMonthlyRecurringChecksSpec",
     "TableTimelinessPartitionReloadLagSensorParametersSpec",

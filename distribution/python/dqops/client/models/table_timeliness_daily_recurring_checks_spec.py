@@ -8,11 +8,11 @@ if TYPE_CHECKING:
     from ..models.table_data_ingestion_delay_check_spec import (
         TableDataIngestionDelayCheckSpec,
     )
-    from ..models.table_days_since_most_recent_event_check_spec import (
-        TableDaysSinceMostRecentEventCheckSpec,
+    from ..models.table_data_freshness_check_spec import (
+        TableDataFreshnessCheckSpec,
     )
-    from ..models.table_days_since_most_recent_ingestion_check_spec import (
-        TableDaysSinceMostRecentIngestionCheckSpec,
+    from ..models.table_data_staleness_check_spec import (
+        TableDataStalenessCheckSpec,
     )
 
 
@@ -23,50 +23,50 @@ T = TypeVar("T", bound="TableTimelinessDailyRecurringChecksSpec")
 class TableTimelinessDailyRecurringChecksSpec:
     """
     Attributes:
-        daily_days_since_most_recent_event (Union[Unset, TableDaysSinceMostRecentEventCheckSpec]):
+        daily_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
         daily_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
-        daily_days_since_most_recent_ingestion (Union[Unset, TableDaysSinceMostRecentIngestionCheckSpec]):
+        daily_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
     """
 
-    daily_days_since_most_recent_event: Union[
-        Unset, "TableDaysSinceMostRecentEventCheckSpec"
+    daily_data_freshness: Union[
+        Unset, "TableDataFreshnessCheckSpec"
     ] = UNSET
     daily_data_ingestion_delay: Union[Unset, "TableDataIngestionDelayCheckSpec"] = UNSET
-    daily_days_since_most_recent_ingestion: Union[
-        Unset, "TableDaysSinceMostRecentIngestionCheckSpec"
+    daily_data_staleness: Union[
+        Unset, "TableDataStalenessCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        daily_days_since_most_recent_event: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_days_since_most_recent_event, Unset):
-            daily_days_since_most_recent_event = (
-                self.daily_days_since_most_recent_event.to_dict()
+        daily_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_data_freshness, Unset):
+            daily_data_freshness = (
+                self.daily_data_freshness.to_dict()
             )
 
         daily_data_ingestion_delay: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_data_ingestion_delay, Unset):
             daily_data_ingestion_delay = self.daily_data_ingestion_delay.to_dict()
 
-        daily_days_since_most_recent_ingestion: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_days_since_most_recent_ingestion, Unset):
-            daily_days_since_most_recent_ingestion = (
-                self.daily_days_since_most_recent_ingestion.to_dict()
+        daily_data_staleness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_data_staleness, Unset):
+            daily_data_staleness = (
+                self.daily_data_staleness.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if daily_days_since_most_recent_event is not UNSET:
+        if daily_data_freshness is not UNSET:
             field_dict[
-                "daily_days_since_most_recent_event"
-            ] = daily_days_since_most_recent_event
+                "daily_data_freshness"
+            ] = daily_data_freshness
         if daily_data_ingestion_delay is not UNSET:
             field_dict["daily_data_ingestion_delay"] = daily_data_ingestion_delay
-        if daily_days_since_most_recent_ingestion is not UNSET:
+        if daily_data_staleness is not UNSET:
             field_dict[
-                "daily_days_since_most_recent_ingestion"
-            ] = daily_days_since_most_recent_ingestion
+                "daily_data_staleness"
+            ] = daily_data_staleness
 
         return field_dict
 
@@ -75,26 +75,26 @@ class TableTimelinessDailyRecurringChecksSpec:
         from ..models.table_data_ingestion_delay_check_spec import (
             TableDataIngestionDelayCheckSpec,
         )
-        from ..models.table_days_since_most_recent_event_check_spec import (
-            TableDaysSinceMostRecentEventCheckSpec,
+        from ..models.table_data_freshness_check_spec import (
+            TableDataFreshnessCheckSpec,
         )
-        from ..models.table_days_since_most_recent_ingestion_check_spec import (
-            TableDaysSinceMostRecentIngestionCheckSpec,
+        from ..models.table_data_staleness_check_spec import (
+            TableDataStalenessCheckSpec,
         )
 
         d = src_dict.copy()
-        _daily_days_since_most_recent_event = d.pop(
-            "daily_days_since_most_recent_event", UNSET
+        _daily_data_freshness = d.pop(
+            "daily_data_freshness", UNSET
         )
-        daily_days_since_most_recent_event: Union[
-            Unset, TableDaysSinceMostRecentEventCheckSpec
+        daily_data_freshness: Union[
+            Unset, TableDataFreshnessCheckSpec
         ]
-        if isinstance(_daily_days_since_most_recent_event, Unset):
-            daily_days_since_most_recent_event = UNSET
+        if isinstance(_daily_data_freshness, Unset):
+            daily_data_freshness = UNSET
         else:
-            daily_days_since_most_recent_event = (
-                TableDaysSinceMostRecentEventCheckSpec.from_dict(
-                    _daily_days_since_most_recent_event
+            daily_data_freshness = (
+                TableDataFreshnessCheckSpec.from_dict(
+                    _daily_data_freshness
                 )
             )
 
@@ -107,25 +107,25 @@ class TableTimelinessDailyRecurringChecksSpec:
                 _daily_data_ingestion_delay
             )
 
-        _daily_days_since_most_recent_ingestion = d.pop(
-            "daily_days_since_most_recent_ingestion", UNSET
+        _daily_data_staleness = d.pop(
+            "daily_data_staleness", UNSET
         )
-        daily_days_since_most_recent_ingestion: Union[
-            Unset, TableDaysSinceMostRecentIngestionCheckSpec
+        daily_data_staleness: Union[
+            Unset, TableDataStalenessCheckSpec
         ]
-        if isinstance(_daily_days_since_most_recent_ingestion, Unset):
-            daily_days_since_most_recent_ingestion = UNSET
+        if isinstance(_daily_data_staleness, Unset):
+            daily_data_staleness = UNSET
         else:
-            daily_days_since_most_recent_ingestion = (
-                TableDaysSinceMostRecentIngestionCheckSpec.from_dict(
-                    _daily_days_since_most_recent_ingestion
+            daily_data_staleness = (
+                TableDataStalenessCheckSpec.from_dict(
+                    _daily_data_staleness
                 )
             )
 
         table_timeliness_daily_recurring_checks_spec = cls(
-            daily_days_since_most_recent_event=daily_days_since_most_recent_event,
+            daily_data_freshness=daily_data_freshness,
             daily_data_ingestion_delay=daily_data_ingestion_delay,
-            daily_days_since_most_recent_ingestion=daily_days_since_most_recent_ingestion,
+            daily_data_staleness=daily_data_staleness,
         )
 
         table_timeliness_daily_recurring_checks_spec.additional_properties = d

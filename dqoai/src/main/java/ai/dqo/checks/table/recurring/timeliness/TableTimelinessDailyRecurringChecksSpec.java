@@ -16,8 +16,8 @@
 package ai.dqo.checks.table.recurring.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -39,43 +39,61 @@ import java.util.Objects;
 public class TableTimelinessDailyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("daily_days_since_most_recent_event", o -> o.dailyDaysSinceMostRecentEvent);
+           put("daily_data_freshness", o -> o.dailyDataFreshness);
            put("daily_data_ingestion_delay", o -> o.dailyDataIngestionDelay);
-           put("daily_days_since_most_recent_ingestion", o -> o.dailyDaysSinceMostRecentIngestion);
+           put("daily_data_staleness", o -> o.dailyDataStaleness);
         }
     };
 
     @JsonPropertyDescription("Daily  calculating the number of days since the most recent event timestamp (freshness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceMostRecentEventCheckSpec dailyDaysSinceMostRecentEvent;
+    private TableDataFreshnessCheckSpec dailyDataFreshness;
+
+    @JsonPropertyDescription("Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDataStalenessCheckSpec dailyDataStaleness;
 
     @JsonPropertyDescription("Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataIngestionDelayCheckSpec dailyDataIngestionDelay;
 
-    @JsonPropertyDescription("Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceMostRecentIngestionCheckSpec dailyDaysSinceMostRecentIngestion;
-
     /**
      * Returns the number of days since the most recent event check configuration.
      * @return A number of days since the most recent event check configuration.
      */
-    public TableDaysSinceMostRecentEventCheckSpec getDailyDaysSinceMostRecentEvent() {
-        return dailyDaysSinceMostRecentEvent;
+    public TableDataFreshnessCheckSpec getDailyDataFreshness() {
+        return dailyDataFreshness;
     }
 
     /**
      * Sets the number of days since the most recent event.
-     * @param dailyDaysSinceMostRecentEvent New days since the most recent event check.
+     * @param dailyDataFreshness New days since the most recent event check.
      */
-    public void setDailyDaysSinceMostRecentEvent(TableDaysSinceMostRecentEventCheckSpec dailyDaysSinceMostRecentEvent) {
-		this.setDirtyIf(!Objects.equals(this.dailyDaysSinceMostRecentEvent, dailyDaysSinceMostRecentEvent));
-        this.dailyDaysSinceMostRecentEvent = dailyDaysSinceMostRecentEvent;
-		this.propagateHierarchyIdToField(dailyDaysSinceMostRecentEvent, "daily_days_since_most_recent_event");
+    public void setDailyDataFreshness(TableDataFreshnessCheckSpec dailyDataFreshness) {
+		this.setDirtyIf(!Objects.equals(this.dailyDataFreshness, dailyDataFreshness));
+        this.dailyDataFreshness = dailyDataFreshness;
+		this.propagateHierarchyIdToField(dailyDataFreshness, "daily_data_freshness");
+    }
+
+    /**
+     * Returns a number of days since the last data ingestion check configuration.
+     * @return A number of days since the last data ingestion check configuration..
+     */
+    public TableDataStalenessCheckSpec getDailyDataStaleness() {
+        return dailyDataStaleness;
+    }
+
+    /**
+     * Sets a number of days since the last data ingestion check configuration.
+     * @param dailyDataStaleness A number of days since the last data ingestion check configuration.
+     */
+    public void setDailyDataStaleness(TableDataStalenessCheckSpec dailyDataStaleness) {
+        this.setDirtyIf(!Objects.equals(this.dailyDataStaleness, dailyDataStaleness));
+        this.dailyDataStaleness = dailyDataStaleness;
+        this.propagateHierarchyIdToField(dailyDataStaleness, "daily_data_staleness");
     }
 
     /**
@@ -96,23 +114,6 @@ public class TableTimelinessDailyRecurringChecksSpec extends AbstractCheckCatego
         this.propagateHierarchyIdToField(dailyDataIngestionDelay, "daily_data_ingestion_delay");
     }
 
-    /**
-     * Returns a number of days since the last data ingestion check configuration.
-     * @return A number of days since the last data ingestion check configuration..
-     */
-    public TableDaysSinceMostRecentIngestionCheckSpec getDailyDaysSinceMostRecentIngestion() {
-        return dailyDaysSinceMostRecentIngestion;
-    }
-
-    /**
-     * Sets a number of days since the last data ingestion check configuration.
-     * @param dailyDaysSinceMostRecentIngestion A number of days since the last data ingestion check configuration.
-     */
-    public void setDailyDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec dailyDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.dailyDaysSinceMostRecentIngestion, dailyDaysSinceMostRecentIngestion));
-        this.dailyDaysSinceMostRecentIngestion = dailyDaysSinceMostRecentIngestion;
-        this.propagateHierarchyIdToField(dailyDaysSinceMostRecentIngestion, "daily_days_since_most_recent_ingestion");
-    }
 
     /**
      * Returns the child map on the spec class with all fields.
