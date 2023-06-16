@@ -83,7 +83,7 @@ const ContextMenu = ({
   };
 
   const runPartitionedChecks = async (obj: RunChecksQueueJobParameters) => {
-    const res = await JobApiClient.runChecks(false, undefined, obj);
+    const res = await JobApiClient.runChecks(true, 0, obj);
     console.log(res.data);
   };
 
