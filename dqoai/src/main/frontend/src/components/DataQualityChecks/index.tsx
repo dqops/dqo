@@ -392,6 +392,8 @@ const DataQualityChecks = ({
             color="primary"
             variant={checksUI.partition_by_column ? 'outlined' : 'contained'}
             onClick={goToTableTimestamps}
+            className="px-1 py-1"
+            textSize="sm"
           />
           {checksUI.partition_by_column && (
             <div className="flex gap-2 text-sm items-center">
