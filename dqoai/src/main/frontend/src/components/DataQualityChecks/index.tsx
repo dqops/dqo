@@ -303,7 +303,7 @@ const DataQualityChecks = ({
       className={clsx(className, 'p-4 overflow-auto')}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
-      <div className="flex items-center justify-between text-sm mb-3 gap-6">
+      <div className="flex items-center text-sm mb-3 gap-6">
         <div className="flex items-center space-x-1 gap-x-4">
           <div className="flex items-center space-x-1">
             <span>Scheduling status:</span>
@@ -347,7 +347,6 @@ const DataQualityChecks = ({
           )}
         </div>
         <div className="flex items-center justify-between">
-          <span className="mr-3">Configure at:</span>
           <a className="underline cursor-pointer" onClick={goToScheduleTab}>
             {checksUI?.effective_schedule?.schedule_group}
           </a>
@@ -356,7 +355,7 @@ const DataQualityChecks = ({
             CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
             <div className="flex items-center gap-x-4">
               <Button
-                label="Configure on connection"
+                label="Configure a schedule for the connection"
                 color="primary"
                 variant="outlined"
                 onClick={goToConnectionSchedule}
@@ -365,7 +364,7 @@ const DataQualityChecks = ({
               />
 
               <Button
-                label="Configure on table"
+                label="Configure a schedule for the table"
                 color="primary"
                 variant="outlined"
                 onClick={goToTableSchedule}
