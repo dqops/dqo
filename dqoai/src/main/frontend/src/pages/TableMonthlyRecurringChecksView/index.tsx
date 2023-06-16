@@ -83,7 +83,7 @@ const TableMonthlyChecksView = () => {
       <TableNavigation defaultTab="monthly" />
       <div>
         <DataQualityChecks
-          className="max-h-checks-1"
+          className="max-h-checks-2"
           checksUI={updatedChecksUI}
           onChange={onChangeUI}
           onUpdate={onUpdate}

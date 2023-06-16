@@ -84,7 +84,7 @@ const TableMonthlyPartitionedChecksView = () => {
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}
-          className="max-h-checks-1"
+          className="max-h-checks-2"
           checksUI={updatedChecksUI}
           onChange={onChangeUI}
           checkResultsOverview={checkResultsOverview}
