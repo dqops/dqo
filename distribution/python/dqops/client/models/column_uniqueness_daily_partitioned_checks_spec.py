@@ -5,12 +5,14 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_check_spec import (
+        ColumnDistinctPercentCheckSpec,
+    )
     from ..models.column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
-    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-    from ..models.column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 
 
 T = TypeVar("T", bound="ColumnUniquenessDailyPartitionedChecksSpec")
@@ -27,7 +29,9 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
     """
 
     daily_partition_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
-    daily_partition_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
+    daily_partition_distinct_percent: Union[
+        Unset, "ColumnDistinctPercentCheckSpec"
+    ] = UNSET
     daily_partition_duplicate_count: Union[
         Unset, "ColumnDuplicateCountCheckSpec"
     ] = UNSET
@@ -39,7 +43,9 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
     def to_dict(self) -> Dict[str, Any]:
         daily_partition_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_distinct_count, Unset):
-            daily_partition_distinct_count = self.daily_partition_distinct_count.to_dict()
+            daily_partition_distinct_count = (
+                self.daily_partition_distinct_count.to_dict()
+            )
 
         daily_partition_distinct_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_distinct_percent, Unset):
@@ -63,7 +69,9 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if daily_partition_distinct_count is not UNSET:
-            field_dict["daily_partition_distinct_count"] = daily_partition_distinct_count
+            field_dict[
+                "daily_partition_distinct_count"
+            ] = daily_partition_distinct_count
         if daily_partition_distinct_percent is not UNSET:
             field_dict[
                 "daily_partition_distinct_percent"
@@ -81,15 +89,17 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_distinct_count_check_spec import (
+            ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_check_spec import (
+            ColumnDistinctPercentCheckSpec,
+        )
         from ..models.column_duplicate_count_check_spec import (
             ColumnDuplicateCountCheckSpec,
         )
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
-        )
-        from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-        from ..models.column_distinct_percent_check_spec import (
-            ColumnDistinctPercentCheckSpec,
         )
 
         d = src_dict.copy()
@@ -102,7 +112,9 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
                 _daily_partition_distinct_count
             )
 
-        _daily_partition_distinct_percent = d.pop("daily_partition_distinct_percent", UNSET)
+        _daily_partition_distinct_percent = d.pop(
+            "daily_partition_distinct_percent", UNSET
+        )
         daily_partition_distinct_percent: Union[Unset, ColumnDistinctPercentCheckSpec]
         if isinstance(_daily_partition_distinct_percent, Unset):
             daily_partition_distinct_percent = UNSET

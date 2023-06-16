@@ -1,11 +1,11 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.all_checks_model import AllChecksModel
+from ...models.check_configuration_model import CheckConfigurationModel
 from ...models.get_schema_recurring_checks_model_check_target import (
     GetSchemaRecurringChecksModelCheckTarget,
 )
@@ -28,6 +28,7 @@ def _get_kwargs(
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
+    check_configured: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/recurring/{timeScale}/model".format(
         client.base_url,
@@ -58,6 +59,8 @@ def _get_kwargs(
 
     params["checkEnabled"] = check_enabled
 
+    params["checkConfigured"] = check_configured
+
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
@@ -73,9 +76,16 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[AllChecksModel]:
+) -> Optional[List["CheckConfigurationModel"]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = AllChecksModel.from_dict(response.json())
+        response_200 = []
+        _response_200 = response.json()
+        for response_200_item_data in _response_200:
+            response_200_item = CheckConfigurationModel.from_dict(
+                response_200_item_data
+            )
+
+            response_200.append(response_200_item)
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -86,7 +96,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[AllChecksModel]:
+) -> Response[List["CheckConfigurationModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -108,7 +118,8 @@ def sync_detailed(
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
-) -> Response[AllChecksModel]:
+    check_configured: Union[Unset, None, bool] = UNSET,
+) -> Response[List["CheckConfigurationModel"]]:
     """getSchemaRecurringChecksModel
 
      Return a UI friendly model of configurations for data quality recurring checks on a schema
@@ -124,13 +135,14 @@ def sync_detailed(
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
+        check_configured (Union[Unset, None, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[AllChecksModel]
+        Response[List['CheckConfigurationModel']]
     """
 
     kwargs = _get_kwargs(
@@ -145,6 +157,7 @@ def sync_detailed(
         check_category=check_category,
         check_name=check_name,
         check_enabled=check_enabled,
+        check_configured=check_configured,
     )
 
     response = httpx.request(
@@ -168,7 +181,8 @@ def sync(
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
-) -> Optional[AllChecksModel]:
+    check_configured: Union[Unset, None, bool] = UNSET,
+) -> Optional[List["CheckConfigurationModel"]]:
     """getSchemaRecurringChecksModel
 
      Return a UI friendly model of configurations for data quality recurring checks on a schema
@@ -184,13 +198,14 @@ def sync(
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
+        check_configured (Union[Unset, None, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        AllChecksModel
+        List['CheckConfigurationModel']
     """
 
     return sync_detailed(
@@ -205,6 +220,7 @@ def sync(
         check_category=check_category,
         check_name=check_name,
         check_enabled=check_enabled,
+        check_configured=check_configured,
     ).parsed
 
 
@@ -221,7 +237,8 @@ async def asyncio_detailed(
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
-) -> Response[AllChecksModel]:
+    check_configured: Union[Unset, None, bool] = UNSET,
+) -> Response[List["CheckConfigurationModel"]]:
     """getSchemaRecurringChecksModel
 
      Return a UI friendly model of configurations for data quality recurring checks on a schema
@@ -237,13 +254,14 @@ async def asyncio_detailed(
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
+        check_configured (Union[Unset, None, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[AllChecksModel]
+        Response[List['CheckConfigurationModel']]
     """
 
     kwargs = _get_kwargs(
@@ -258,6 +276,7 @@ async def asyncio_detailed(
         check_category=check_category,
         check_name=check_name,
         check_enabled=check_enabled,
+        check_configured=check_configured,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
@@ -279,7 +298,8 @@ async def asyncio(
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
-) -> Optional[AllChecksModel]:
+    check_configured: Union[Unset, None, bool] = UNSET,
+) -> Optional[List["CheckConfigurationModel"]]:
     """getSchemaRecurringChecksModel
 
      Return a UI friendly model of configurations for data quality recurring checks on a schema
@@ -295,13 +315,14 @@ async def asyncio(
         check_category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
+        check_configured (Union[Unset, None, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        AllChecksModel
+        List['CheckConfigurationModel']
     """
 
     return (
@@ -317,5 +338,6 @@ async def asyncio(
             check_category=check_category,
             check_name=check_name,
             check_enabled=check_enabled,
+            check_configured=check_configured,
         )
     ).parsed

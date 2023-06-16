@@ -57,9 +57,7 @@ class TableDataFreshnessCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "TableTimelinessDataFreshnessSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "TableTimelinessDataFreshnessSensorParametersSpec"] = UNSET
     warning: Union[Unset, "MaxDaysRule1ParametersSpec"] = UNSET
     error: Union[Unset, "MaxDaysRule2ParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxDaysRule7ParametersSpec"] = UNSET
@@ -169,16 +167,12 @@ class TableDataFreshnessCheckSpec:
         data_stream = d.pop("data_stream", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[
-            Unset, TableTimelinessDataFreshnessSensorParametersSpec
-        ]
+        parameters: Union[Unset, TableTimelinessDataFreshnessSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = (
-                TableTimelinessDataFreshnessSensorParametersSpec.from_dict(
-                    _parameters
-                )
+            parameters = TableTimelinessDataFreshnessSensorParametersSpec.from_dict(
+                _parameters
             )
 
         _warning = d.pop("warning", UNSET)

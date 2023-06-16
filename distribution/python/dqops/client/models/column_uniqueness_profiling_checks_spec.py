@@ -5,12 +5,14 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_check_spec import (
+        ColumnDistinctPercentCheckSpec,
+    )
     from ..models.column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
-    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-    from ..models.column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 
 
 T = TypeVar("T", bound="ColumnUniquenessProfilingChecksSpec")
@@ -65,15 +67,17 @@ class ColumnUniquenessProfilingChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_distinct_count_check_spec import (
+            ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_check_spec import (
+            ColumnDistinctPercentCheckSpec,
+        )
         from ..models.column_duplicate_count_check_spec import (
             ColumnDuplicateCountCheckSpec,
         )
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
-        )
-        from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-        from ..models.column_distinct_percent_check_spec import (
-            ColumnDistinctPercentCheckSpec,
         )
 
         d = src_dict.copy()
@@ -89,7 +93,9 @@ class ColumnUniquenessProfilingChecksSpec:
         if isinstance(_distinct_percent, Unset):
             distinct_percent = UNSET
         else:
-            distinct_percent = ColumnDistinctPercentCheckSpec.from_dict(_distinct_percent)
+            distinct_percent = ColumnDistinctPercentCheckSpec.from_dict(
+                _distinct_percent
+            )
 
         _duplicate_count = d.pop("duplicate_count", UNSET)
         duplicate_count: Union[Unset, ColumnDuplicateCountCheckSpec]

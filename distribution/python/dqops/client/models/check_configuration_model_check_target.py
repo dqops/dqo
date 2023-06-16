@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class AllTableChecksModelCheckTarget(str, Enum):
+class CheckConfigurationModelCheckTarget(str, Enum):
     COLUMN = "column"
     TABLE = "table"
 

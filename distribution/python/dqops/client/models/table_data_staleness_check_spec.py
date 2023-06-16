@@ -57,9 +57,7 @@ class TableDataStalenessCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "TableTimelinessDataStalenessSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "TableTimelinessDataStalenessSensorParametersSpec"] = UNSET
     warning: Union[Unset, "MaxDaysRule1ParametersSpec"] = UNSET
     error: Union[Unset, "MaxDaysRule2ParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxDaysRule7ParametersSpec"] = UNSET
@@ -169,9 +167,7 @@ class TableDataStalenessCheckSpec:
         data_stream = d.pop("data_stream", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[
-            Unset, TableTimelinessDataStalenessSensorParametersSpec
-        ]
+        parameters: Union[Unset, TableTimelinessDataStalenessSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:

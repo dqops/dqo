@@ -5,12 +5,14 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_check_spec import (
+        ColumnDistinctPercentCheckSpec,
+    )
     from ..models.column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
-    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-    from ..models.column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 
 
 T = TypeVar("T", bound="ColumnUniquenessMonthlyPartitionedChecksSpec")
@@ -26,7 +28,9 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
         monthly_partition_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
     """
 
-    monthly_partition_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
+    monthly_partition_distinct_count: Union[
+        Unset, "ColumnDistinctCountCheckSpec"
+    ] = UNSET
     monthly_partition_distinct_percent: Union[
         Unset, "ColumnDistinctPercentCheckSpec"
     ] = UNSET
@@ -87,19 +91,23 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_distinct_count_check_spec import (
+            ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_check_spec import (
+            ColumnDistinctPercentCheckSpec,
+        )
         from ..models.column_duplicate_count_check_spec import (
             ColumnDuplicateCountCheckSpec,
         )
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
         )
-        from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-        from ..models.column_distinct_percent_check_spec import (
-            ColumnDistinctPercentCheckSpec,
-        )
 
         d = src_dict.copy()
-        _monthly_partition_distinct_count = d.pop("monthly_partition_distinct_count", UNSET)
+        _monthly_partition_distinct_count = d.pop(
+            "monthly_partition_distinct_count", UNSET
+        )
         monthly_partition_distinct_count: Union[Unset, ColumnDistinctCountCheckSpec]
         if isinstance(_monthly_partition_distinct_count, Unset):
             monthly_partition_distinct_count = UNSET
@@ -115,8 +123,10 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
         if isinstance(_monthly_partition_distinct_percent, Unset):
             monthly_partition_distinct_percent = UNSET
         else:
-            monthly_partition_distinct_percent = ColumnDistinctPercentCheckSpec.from_dict(
-                _monthly_partition_distinct_percent
+            monthly_partition_distinct_percent = (
+                ColumnDistinctPercentCheckSpec.from_dict(
+                    _monthly_partition_distinct_percent
+                )
             )
 
         _monthly_partition_duplicate_count = d.pop(

@@ -4,9 +4,7 @@ import attr
 
 from ..types import UNSET, Unset
 
-T = TypeVar(
-    "T", bound="TableTimelinessDataStalenessSensorParametersSpec"
-)
+T = TypeVar("T", bound="TableTimelinessDataStalenessSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
@@ -40,9 +38,7 @@ class TableTimelinessDataStalenessSensorParametersSpec:
             filter_=filter_,
         )
 
-        table_timeliness_data_staleness_sensor_parameters_spec.additional_properties = (
-            d
-        )
+        table_timeliness_data_staleness_sensor_parameters_spec.additional_properties = d
         return table_timeliness_data_staleness_sensor_parameters_spec
 
     @property

@@ -38,9 +38,7 @@ class TableTimelinessDataFreshnessSensorParametersSpec:
             filter_=filter_,
         )
 
-        table_timeliness_data_freshness_sensor_parameters_spec.additional_properties = (
-            d
-        )
+        table_timeliness_data_freshness_sensor_parameters_spec.additional_properties = d
         return table_timeliness_data_freshness_sensor_parameters_spec
 
     @property

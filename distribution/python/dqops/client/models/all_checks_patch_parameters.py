@@ -5,18 +5,18 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.all_checks_patch_parameters_selected_tables_to_columns import (
+        AllChecksPatchParametersSelectedTablesToColumns,
+    )
     from ..models.check_model import CheckModel
     from ..models.check_search_filters import CheckSearchFilters
-    from ..models.ui_all_checks_patch_parameters_selected_tables_to_columns import (
-        UIAllChecksPatchParametersSelectedTablesToColumns,
-    )
 
 
-T = TypeVar("T", bound="UIAllChecksPatchParameters")
+T = TypeVar("T", bound="AllChecksPatchParameters")
 
 
 @attr.s(auto_attribs=True)
-class UIAllChecksPatchParameters:
+class AllChecksPatchParameters:
     """Parameter object for creating pruned patch trees of all checks that fit the filters.
 
     Attributes:
@@ -24,7 +24,7 @@ class UIAllChecksPatchParameters:
             checks on which tables and columns should be executed.
         check_model_patch (Union[Unset, CheckModel]): Model that returns the form definition and the form data to edit a
             single data quality check.
-        selected_tables_to_columns (Union[Unset, UIAllChecksPatchParametersSelectedTablesToColumns]): List of concrete
+        selected_tables_to_columns (Union[Unset, AllChecksPatchParametersSelectedTablesToColumns]): List of concrete
             table and column names which will be the target. Column mappings are ignored for table level checks. This filter
             is applied at the end.
         override_conflicts (Union[Unset, bool]): Override existing configurations if they're present. If false, apply
@@ -34,7 +34,7 @@ class UIAllChecksPatchParameters:
     check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
     check_model_patch: Union[Unset, "CheckModel"] = UNSET
     selected_tables_to_columns: Union[
-        Unset, "UIAllChecksPatchParametersSelectedTablesToColumns"
+        Unset, "AllChecksPatchParametersSelectedTablesToColumns"
     ] = UNSET
     override_conflicts: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
@@ -70,11 +70,11 @@ class UIAllChecksPatchParameters:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.all_checks_patch_parameters_selected_tables_to_columns import (
+            AllChecksPatchParametersSelectedTablesToColumns,
+        )
         from ..models.check_model import CheckModel
         from ..models.check_search_filters import CheckSearchFilters
-        from ..models.ui_all_checks_patch_parameters_selected_tables_to_columns import (
-            UIAllChecksPatchParametersSelectedTablesToColumns,
-        )
 
         d = src_dict.copy()
         _check_search_filters = d.pop("check_search_filters", UNSET)
@@ -93,28 +93,28 @@ class UIAllChecksPatchParameters:
 
         _selected_tables_to_columns = d.pop("selected_tables_to_columns", UNSET)
         selected_tables_to_columns: Union[
-            Unset, UIAllChecksPatchParametersSelectedTablesToColumns
+            Unset, AllChecksPatchParametersSelectedTablesToColumns
         ]
         if isinstance(_selected_tables_to_columns, Unset):
             selected_tables_to_columns = UNSET
         else:
             selected_tables_to_columns = (
-                UIAllChecksPatchParametersSelectedTablesToColumns.from_dict(
+                AllChecksPatchParametersSelectedTablesToColumns.from_dict(
                     _selected_tables_to_columns
                 )
             )
 
         override_conflicts = d.pop("override_conflicts", UNSET)
 
-        ui_all_checks_patch_parameters = cls(
+        all_checks_patch_parameters = cls(
             check_search_filters=check_search_filters,
             check_model_patch=check_model_patch,
             selected_tables_to_columns=selected_tables_to_columns,
             override_conflicts=override_conflicts,
         )
 
-        ui_all_checks_patch_parameters.additional_properties = d
-        return ui_all_checks_patch_parameters
+        all_checks_patch_parameters.additional_properties = d
+        return all_checks_patch_parameters
 
     @property
     def additional_keys(self) -> List[str]:
