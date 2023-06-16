@@ -37,6 +37,7 @@ interface MyData {
   scale?: number | undefined;
   importedDatatype?: string | undefined;
   columnHash: number;
+  isColumnSelected: boolean; 
 }
 
 const TableColumns = ({
@@ -345,7 +346,8 @@ const TableColumns = ({
         length: renderValue(lengthValue),
         scale: renderValue(scaleValue),
         importedDatatype: renderValue(typeValue),
-        columnHash: Number(hashValue)
+        columnHash: Number(hashValue),
+        isColumnSelected: false
       };
 
       dataArray.push(newData);
@@ -653,6 +655,13 @@ const TableColumns = ({
     }
   };
 
+  const selectColumn = (column: MyData) =>{
+  column.isColumnSelected= true; 
+  console.log(column.isColumnSelected)
+  }
+
+
+
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
@@ -660,10 +669,10 @@ const TableColumns = ({
           className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
           onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
         >
-          {column.nameOfCol}
+          {column.nameOfCol}{column.isColumnSelected}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
-        <Checkbox checked={isClicked} onChange={() =>setIsClicked(!isClicked) }/>
+        <Checkbox checked={!column.isColumnSelected} onChange={() =>selectColumn(column) }/>
           <div key={index} className="truncate">
             {datatype_detected(column.detectedDatatypeVar)}
           </div>
