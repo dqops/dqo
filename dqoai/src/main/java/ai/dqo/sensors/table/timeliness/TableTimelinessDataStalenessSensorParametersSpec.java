@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Table sensor that runs a query calculating maximum days since the most recent event.
+ * Table sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDaysSinceMostRecentEventSensorParametersSpec> FIELDS =
+public class TableTimelinessDataStalenessSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDataStalenessSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
@@ -53,6 +53,6 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpec extends
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/timeliness/days_since_most_recent_event";
+        return "table/timeliness/data_staleness";
     }
 }

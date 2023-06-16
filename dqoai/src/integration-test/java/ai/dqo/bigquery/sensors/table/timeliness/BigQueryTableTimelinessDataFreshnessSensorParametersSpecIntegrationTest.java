@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sqlserver.sensors.table.timeliness;
+package ai.dqo.bigquery.sensors.table.timeliness;
 
+import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,8 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec;
-import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDataFreshnessSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,25 +40,25 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class SqlServerTableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
-    private TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec sut;
+public class BigQueryTableTimelinessDataFreshnessSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private TableTimelinessDataFreshnessSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableDaysSinceMostRecentIngestionCheckSpec checkSpec;
+    private TableDataFreshnessCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.sqlserver);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec();
-        this.checkSpec = new TableDaysSinceMostRecentIngestionCheckSpec();
+        this.sut = new TableTimelinessDataFreshnessSensorParametersSpec();
+        this.checkSpec = new TableDataFreshnessCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -78,7 +78,7 @@ public class SqlServerTableTimelinessDaysSinceMostRecentIngestionSensorParameter
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -98,7 +98,7 @@ public class SqlServerTableTimelinessDaysSinceMostRecentIngestionSensorParameter
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -116,10 +116,29 @@ public class SqlServerTableTimelinessDaysSinceMostRecentIngestionSensorParameter
         Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
     }
 
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        LocalDateTime ldt = LocalDateTime.now();
+        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").get(0),ldt);
+        double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
+        double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+    }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");

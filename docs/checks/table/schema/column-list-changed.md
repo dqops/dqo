@@ -92,6 +92,15 @@ spec:
       
     ```sql
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -184,6 +193,14 @@ spec:
         ```sql+jinja
         ```
     === "Rendered SQL for MySQL"
+        ```sql
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Oracle"
         ```sql
         ```
     **PostgreSQL**  
@@ -313,6 +330,15 @@ spec:
       
     ```sql
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -406,6 +432,14 @@ spec:
         ```sql+jinja
         ```
     === "Rendered SQL for MySQL"
+        ```sql
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Oracle"
         ```sql
         ```
     **PostgreSQL**  
@@ -535,6 +569,15 @@ spec:
       
     ```sql
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -628,6 +671,14 @@ spec:
         ```sql+jinja
         ```
     === "Rendered SQL for MySQL"
+        ```sql
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Oracle"
         ```sql
         ```
     **PostgreSQL**  

@@ -10,16 +10,16 @@ if TYPE_CHECKING:
     from ..models.max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
     from ..models.max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
-    from ..models.table_timeliness_days_since_most_recent_ingestion_sensor_parameters_spec import (
-        TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec,
+    from ..models.table_timeliness_data_staleness_sensor_parameters_spec import (
+        TableTimelinessDataStalenessSensorParametersSpec,
     )
 
 
-T = TypeVar("T", bound="TableDaysSinceMostRecentIngestionCheckSpec")
+T = TypeVar("T", bound="TableDataStalenessCheckSpec")
 
 
 @attr.s(auto_attribs=True)
-class TableDaysSinceMostRecentIngestionCheckSpec:
+class TableDataStalenessCheckSpec:
     """
     Attributes:
         schedule_override (Union[Unset, RecurringScheduleSpec]):
@@ -43,7 +43,7 @@ class TableDaysSinceMostRecentIngestionCheckSpec:
             stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
-        parameters (Union[Unset, TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec]):
+        parameters (Union[Unset, TableTimelinessDataStalenessSensorParametersSpec]):
         warning (Union[Unset, MaxDaysRule1ParametersSpec]):
         error (Union[Unset, MaxDaysRule2ParametersSpec]):
         fatal (Union[Unset, MaxDaysRule7ParametersSpec]):
@@ -58,7 +58,7 @@ class TableDaysSinceMostRecentIngestionCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[
-        Unset, "TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec"
+        Unset, "TableTimelinessDataStalenessSensorParametersSpec"
     ] = UNSET
     warning: Union[Unset, "MaxDaysRule1ParametersSpec"] = UNSET
     error: Union[Unset, "MaxDaysRule2ParametersSpec"] = UNSET
@@ -137,8 +137,8 @@ class TableDaysSinceMostRecentIngestionCheckSpec:
         from ..models.max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
         from ..models.max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
-        from ..models.table_timeliness_days_since_most_recent_ingestion_sensor_parameters_spec import (
-            TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec,
+        from ..models.table_timeliness_data_staleness_sensor_parameters_spec import (
+            TableTimelinessDataStalenessSensorParametersSpec,
         )
 
         d = src_dict.copy()
@@ -170,12 +170,12 @@ class TableDaysSinceMostRecentIngestionCheckSpec:
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[
-            Unset, TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec
+            Unset, TableTimelinessDataStalenessSensorParametersSpec
         ]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec.from_dict(
+            parameters = TableTimelinessDataStalenessSensorParametersSpec.from_dict(
                 _parameters
             )
 
@@ -200,7 +200,7 @@ class TableDaysSinceMostRecentIngestionCheckSpec:
         else:
             fatal = MaxDaysRule7ParametersSpec.from_dict(_fatal)
 
-        table_days_since_most_recent_ingestion_check_spec = cls(
+        table_data_staleness_check_spec = cls(
             schedule_override=schedule_override,
             comments=comments,
             disabled=disabled,
@@ -215,8 +215,8 @@ class TableDaysSinceMostRecentIngestionCheckSpec:
             fatal=fatal,
         )
 
-        table_days_since_most_recent_ingestion_check_spec.additional_properties = d
-        return table_days_since_most_recent_ingestion_check_spec
+        table_data_staleness_check_spec.additional_properties = d
+        return table_data_staleness_check_spec
 
     @property
     def additional_keys(self) -> List[str]:

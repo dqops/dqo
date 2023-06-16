@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.mysql.sensors.table.timeliness;
+package ai.dqo.sqlserver.sensors.table.timeliness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -24,12 +24,12 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.mysql.BaseMysqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentEventSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDataFreshnessSensorParametersSpec;
+import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,19 +40,19 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class MysqlTableTimelinessDaysSinceMostRecentEventSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private TableTimelinessDaysSinceMostRecentEventSensorParametersSpec sut;
+public class SqlServerTableTimelinessDataFreshnessSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private TableTimelinessDataFreshnessSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableDaysSinceMostRecentEventCheckSpec checkSpec;
+    private TableDataFreshnessCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.mysql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableTimelinessDaysSinceMostRecentEventSensorParametersSpec();
-        this.checkSpec = new TableDaysSinceMostRecentEventCheckSpec();
+        this.sut = new TableTimelinessDataFreshnessSensorParametersSpec();
+        this.checkSpec = new TableDataFreshnessCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -116,25 +116,6 @@ public class MysqlTableTimelinessDaysSinceMostRecentEventSensorParametersSpecInt
         Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
     }
 
-    @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
-
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").get(0),ldt);
-        double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
-        double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
-    }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {

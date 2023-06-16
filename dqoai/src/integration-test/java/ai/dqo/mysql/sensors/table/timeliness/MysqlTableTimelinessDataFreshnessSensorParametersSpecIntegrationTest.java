@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.snowflake.sensors.table.timeliness;
+package ai.dqo.mysql.sensors.table.timeliness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -24,12 +24,12 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.mysql.BaseMysqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentEventSensorParametersSpec;
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDataFreshnessSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,19 +40,19 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class SnowflakeTableTimelinessDaysSinceMostRecentEventSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private TableTimelinessDaysSinceMostRecentEventSensorParametersSpec sut;
+public class MysqlTableTimelinessDataFreshnessSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private TableTimelinessDataFreshnessSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableDaysSinceMostRecentEventCheckSpec checkSpec;
+    private TableDataFreshnessCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableTimelinessDaysSinceMostRecentEventSensorParametersSpec();
-        this.checkSpec = new TableDaysSinceMostRecentEventCheckSpec();
+        this.sut = new TableTimelinessDataFreshnessSensorParametersSpec();
+        this.checkSpec = new TableDataFreshnessCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -16,7 +16,7 @@
 package ai.dqo.sqlserver.sensors.table.timeliness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,7 +28,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentEventSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDataStalenessSensorParametersSpec;
 import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,10 +40,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class SqlServerTableTimelinessDaysSinceMostRecentEventSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
-    private TableTimelinessDaysSinceMostRecentEventSensorParametersSpec sut;
+public class SqlServerTableTimelinessDataStalenessSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private TableTimelinessDataStalenessSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableDaysSinceMostRecentEventCheckSpec checkSpec;
+    private TableDataStalenessCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -51,14 +51,14 @@ public class SqlServerTableTimelinessDaysSinceMostRecentEventSensorParametersSpe
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableTimelinessDaysSinceMostRecentEventSensorParametersSpec();
-        this.checkSpec = new TableDaysSinceMostRecentEventCheckSpec();
+        this.sut = new TableTimelinessDataStalenessSensorParametersSpec();
+        this.checkSpec = new TableDataStalenessCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -78,7 +78,7 @@ public class SqlServerTableTimelinessDaysSinceMostRecentEventSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -98,7 +98,7 @@ public class SqlServerTableTimelinessDaysSinceMostRecentEventSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -119,7 +119,7 @@ public class SqlServerTableTimelinessDaysSinceMostRecentEventSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");

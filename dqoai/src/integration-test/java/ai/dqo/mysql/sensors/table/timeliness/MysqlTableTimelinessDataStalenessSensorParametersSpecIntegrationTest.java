@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.table.timeliness;
+package ai.dqo.mysql.sensors.table.timeliness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -24,12 +24,12 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
+import ai.dqo.mysql.BaseMysqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDataStalenessSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,19 +40,19 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class PostgresqlTableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec sut;
+public class MysqlTableTimelinessDataStalenessSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private TableTimelinessDataStalenessSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableDaysSinceMostRecentIngestionCheckSpec checkSpec;
+    private TableDataStalenessCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec();
-        this.checkSpec = new TableDaysSinceMostRecentIngestionCheckSpec();
+        this.sut = new TableTimelinessDataStalenessSensorParametersSpec();
+        this.checkSpec = new TableDataStalenessCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -113,7 +113,7 @@ public class PostgresqlTableTimelinessDaysSinceMostRecentIngestionSensorParamete
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0) >= min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
     }
 
     @Test

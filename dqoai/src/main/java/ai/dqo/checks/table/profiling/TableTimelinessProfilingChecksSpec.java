@@ -17,8 +17,8 @@ package ai.dqo.checks.table.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,37 +38,55 @@ import java.util.Objects;
 public class TableTimelinessProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("days_since_most_recent_event", o -> o.daysSinceMostRecentEvent);
+            put("data_freshness", o -> o.dataFreshness);
+            put("data_staleness", o -> o.dataStaleness);
             put("data_ingestion_delay", o -> o.dataIngestionDelay);
-            put("days_since_most_recent_ingestion", o -> o.daysSinceMostRecentIngestion);
         }
     };
 
     @JsonPropertyDescription("Calculates the number of days since the most recent event timestamp (freshness)")
-    private TableDaysSinceMostRecentEventCheckSpec daysSinceMostRecentEvent;
+    private TableDataFreshnessCheckSpec dataFreshness;
+
+    @JsonPropertyDescription("Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
+    private TableDataStalenessCheckSpec dataStaleness;
 
     @JsonPropertyDescription("Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     private TableDataIngestionDelayCheckSpec dataIngestionDelay;
-
-    @JsonPropertyDescription("Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    private TableDaysSinceMostRecentIngestionCheckSpec daysSinceMostRecentIngestion;
 
     /**
      * Returns the number of days since the most recent event check configuration.
      * @return A number of days since the most recent event check configuration.
      */
-    public TableDaysSinceMostRecentEventCheckSpec getDaysSinceMostRecentEvent() {
-        return daysSinceMostRecentEvent;
+    public TableDataFreshnessCheckSpec getDataFreshness() {
+        return dataFreshness;
     }
 
     /**
      * Sets the number of days since the most recent event check configuration.
-     * @param daysSinceMostRecentEvent Maximum days since the most recent event check configuration.
+     * @param dataFreshness Maximum days since the most recent event check configuration.
      */
-    public void setDaysSinceMostRecentEvent(TableDaysSinceMostRecentEventCheckSpec daysSinceMostRecentEvent) {
-        this.setDirtyIf(!Objects.equals(this.daysSinceMostRecentEvent, daysSinceMostRecentEvent));
-        this.daysSinceMostRecentEvent = daysSinceMostRecentEvent;
-        propagateHierarchyIdToField(daysSinceMostRecentEvent, "days_since_most_recent_event");
+    public void setDataFreshness(TableDataFreshnessCheckSpec dataFreshness) {
+        this.setDirtyIf(!Objects.equals(this.dataFreshness, dataFreshness));
+        this.dataFreshness = dataFreshness;
+        propagateHierarchyIdToField(dataFreshness, "data_freshness");
+    }
+
+    /**
+     * Returns a number of days since the last data ingestion check configuration.
+     * @return A number of days since the last data ingestion check configuration.
+     */
+    public TableDataStalenessCheckSpec getDataStaleness() {
+        return dataStaleness;
+    }
+
+    /**
+     * Sets a number of days since the last data ingestion check configuration.
+     * @param dataStaleness  A number of days since the last load check configuration.
+     */
+    public void setDataStaleness(TableDataStalenessCheckSpec dataStaleness) {
+        this.setDirtyIf(!Objects.equals(this.dataStaleness, dataStaleness));
+        this.dataStaleness = dataStaleness;
+        propagateHierarchyIdToField(dataStaleness, "data_staleness");
     }
 
     /**
@@ -89,23 +107,6 @@ public class TableTimelinessProfilingChecksSpec extends AbstractCheckCategorySpe
         propagateHierarchyIdToField(dataIngestionDelay, "data_ingestion_delay");
     }
 
-    /**
-     * Returns a number of days since the last data ingestion check configuration.
-     * @return A number of days since the last data ingestion check configuration.
-     */
-    public TableDaysSinceMostRecentIngestionCheckSpec getDaysSinceMostRecentIngestion() {
-        return daysSinceMostRecentIngestion;
-    }
-
-    /**
-     * Sets a number of days since the last data ingestion check configuration.
-     * @param daysSinceMostRecentIngestion  A number of days since the last load check configuration.
-     */
-    public void setDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec daysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.daysSinceMostRecentIngestion, daysSinceMostRecentIngestion));
-        this.daysSinceMostRecentIngestion = daysSinceMostRecentIngestion;
-        propagateHierarchyIdToField(daysSinceMostRecentIngestion, "days_since_most_recent_ingestion");
-    }
 
     /**
      * Returns the child map on the spec class with all fields.
