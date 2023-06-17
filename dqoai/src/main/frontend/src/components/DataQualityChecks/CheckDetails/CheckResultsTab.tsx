@@ -174,10 +174,16 @@ const CheckResultsTab = ({
   ];
 
   const monthOptions = useMemo(() => {
-    return Array(24).fill('').map((item, index) => ({
-      label: moment().subtract(index, 'months').format('MMMM YYYY'),
-      value: moment().subtract(index, 'months').format('MMMM YYYY')
-    }))
+    return [
+      {
+        label: 'Last 3 months',
+        value: 'Last 3 months'
+      },
+      ...Array(24).fill('').map((item, index) => ({
+        label: moment().subtract(index, 'months').format('MMMM YYYY'),
+        value: moment().subtract(index, 'months').format('MMMM YYYY')
+      }))
+    ]
   }, []);
 
   useEffect(() => {

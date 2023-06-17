@@ -97,14 +97,25 @@ const CheckDetails = ({
 
   const { sidebarWidth } = useTree();
 
+  const calculateDateRange = (month: string) => {
+    if (!month) return { startDate: '', endDate: '' };
+
+    if (month === 'Last 3 months') {
+      return {
+        startDate: moment().add(-2, 'month').startOf('month').format('YYYY-MM-DD'),
+        endDate: moment().endOf('month').format('YYYY-MM-DD')
+      }
+    }
+
+    return {
+      startDate: moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD'),
+      endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+    }
+  }
+
   const fetchCheckErrors = useCallback(
     (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
+      const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(getCheckErrors(checkTypes, firstLevelActiveTab, {
         connection,
@@ -124,12 +135,7 @@ const CheckDetails = ({
 
   const fetchCheckReadouts = useCallback(
     (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
+      const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(getCheckReadouts(
         checkTypes,
@@ -153,12 +159,7 @@ const CheckDetails = ({
 
   const fetchCheckResults = useCallback(
     (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
+      const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(getCheckResults(
         checkTypes,
