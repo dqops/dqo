@@ -21,6 +21,7 @@ import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -57,6 +58,8 @@ public class SensorExecutionRunParameters {
     private ProviderDialectSettings dialectSettings;
     @JsonIgnore
     private Instant startedAt = Instant.now();
+    @JsonIgnore
+    private CheckSearchFilters checkSearchFilter;
 
     /**
      * Creates a sensor run parameters object with all objects required to run a sensor.
@@ -72,6 +75,7 @@ public class SensorExecutionRunParameters {
      * @param dataStreams Effective data streams configuration.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
+     * @param checkSearchFilter Check search filter to find this particular check.
      */
     public SensorExecutionRunParameters(
 			ConnectionSpec connection,
@@ -85,7 +89,8 @@ public class SensorExecutionRunParameters {
             TimeWindowFilterParameters timeWindowFilter,
             DataStreamMappingSpec dataStreams,
 			AbstractSensorParametersSpec sensorParameters,
-			ProviderDialectSettings dialectSettings) {
+			ProviderDialectSettings dialectSettings,
+            CheckSearchFilters checkSearchFilter) {
         this.connection = connection;
         this.table = table;
         this.column = column;
@@ -98,6 +103,7 @@ public class SensorExecutionRunParameters {
         this.dataStreams = dataStreams;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
+        this.checkSearchFilter = checkSearchFilter;
     }
 
     /**
@@ -307,5 +313,21 @@ public class SensorExecutionRunParameters {
      */
     public void setStartedAt(Instant startedAt) {
         this.startedAt = startedAt;
+    }
+
+    /**
+     * Returns a check search filter that will find this check again (to rerun it, or report it).
+     * @return Check search filter to find this check.
+     */
+    public CheckSearchFilters getCheckSearchFilter() {
+        return checkSearchFilter;
+    }
+
+    /**
+     * Sets a check search filter that will find this check.
+     * @param checkSearchFilter Check search filter.
+     */
+    public void setCheckSearchFilter(CheckSearchFilters checkSearchFilter) {
+        this.checkSearchFilter = checkSearchFilter;
     }
 }

@@ -83,7 +83,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 new TimeWindowFilterParameters(),
                 null, // data stream mapping
                 checkSpec.getParameters(),
-                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));
+                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
+                null);
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
     }
 

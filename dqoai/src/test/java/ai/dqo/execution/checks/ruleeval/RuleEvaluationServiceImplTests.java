@@ -98,7 +98,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
                 checkSpec.getParameters(),
-                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));
+                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
+                null);
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
         SensorReadoutsSnapshotFactory dummySensorReadoutStorageService = SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService();

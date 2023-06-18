@@ -185,34 +185,19 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         Table allErrorsTable = errorsSnapshot.getTableDataChanges().getNewOrChangedRows();
         jobCancellationToken.throwIfCancelled();
 
-        int checksCount = 0;
-        int sensorResultsCount = 0;
-        int passedRules = 0;
-        int warningIssuesCount = 0;
-        int errorIssuesCount = 0;
-        int fatalIssuesCount = 0;
-        int erroredSensors = 0;
-        int erroredRules = 0;
+        TableChecksExecutionStatistics executionStatistics = new TableChecksExecutionStatistics();
 
         for (AbstractCheckSpec<?, ?, ?, ?> checkSpec : checks) {
             if (jobCancellationToken.isCancelled()) {
                 break;
             }
 
-            checksCount++;
+            executionStatistics.incrementExecutedChecksCount(1);
 
             try {
                 SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
                 TimePeriodGradient timeGradient = effectiveTimeSeries.getTimeGradient();
-
-                CheckSearchFilters exactCheckSearchFilters = checkSearchFilters.clone();
-                exactCheckSearchFilters.setConnectionName(connectionName);
-                exactCheckSearchFilters.setSchemaTableName(physicalTableName.toTableSearchFilter());
-                exactCheckSearchFilters.setColumnName(sensorRunParameters.getColumn() == null ? null : sensorRunParameters.getColumn().getColumnName());
-                exactCheckSearchFilters.setCheckCategory(checkSpec.getCategoryName());
-                exactCheckSearchFilters.setCheckName(checkSpec.getCheckName());
-                exactCheckSearchFilters.setSensorName(sensorRunParameters.getEffectiveSensorRuleNames().getSensorName());
 
                 if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
                         Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {
@@ -221,13 +206,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                             " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. " +
                             "Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
 
-                    erroredSensors++;
+                    executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, missingTimestampException);
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
                             sensorExecutionResultWithError, timeGradient, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultWithError, missingTimestampException));
-                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, exactCheckSearchFilters));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, sensorRunParameters.getCheckSearchFilter()));
                     continue;
                 }
 
@@ -236,13 +221,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
 
                 if (!sensorPrepareResult.isSuccess()) {
-                    erroredSensors++;
+                    executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
                             sensorExecutionResultFailedPrepare, timeGradient, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
-                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorPrepareResult.getPrepareException(), exactCheckSearchFilters));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorPrepareResult.getPrepareException(), sensorRunParameters.getCheckSearchFilter()));
                     continue;
                 }
 
@@ -252,12 +237,12 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
 
                 if (!sensorResult.isSuccess()) {
-                    erroredSensors++;
+                    executionStatistics.incrementSensorExecutionErrorsCount(1);
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
                             sensorResult, timeGradient, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorResult, sensorResult.getException()));
-                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorResult.getException(), exactCheckSearchFilters));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorResult.getException(), sensorRunParameters.getCheckSearchFilter()));
                     continue;
                 }
 
@@ -265,7 +250,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 if (sensorResult.getResultTable().rowCount() == 0) {
                     continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
                 }
-                sensorResultsCount += sensorResult.getResultTable().rowCount();
+                executionStatistics.incrementSensorReadoutsCount(sensorResult.getResultTable().rowCount());
 
                 SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorReadoutsNormalizationService.normalizeResults(
                         sensorResult, timeGradient, sensorRunParameters);
@@ -303,20 +288,16 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
                         allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
-
-                        passedRules += ruleEvaluationResult.getSeverityColumn().isLessThanOrEqualTo(1).size();  // passed checks are severity 0 (passed) and 1 (warnings)
-                        warningIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(1).size();
-                        errorIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
-                        fatalIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
+                        executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
                     }
                     catch (Throwable ex) {
                         log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
-                        erroredRules++;
+                        executionStatistics.incrementRuleExecutionErrorsCount(1);
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
                                 sensorResult, timeGradient, sensorRunParameters, ex);
                         allErrorsTable.append(normalizedRuleErrorResults.getTable());
                         progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorResult, ex, ruleDefinitionName));
-                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, exactCheckSearchFilters));
+                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));
                     }
                 }
             }
@@ -345,14 +326,12 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             errorsSnapshot.save();
         }
 
-        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinishedEvent(connectionWrapper, tableSpec, checks,
-                checksCount, sensorResultsCount, passedRules, warningIssuesCount, errorIssuesCount, fatalIssuesCount,
-                erroredSensors, erroredRules));
+        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinishedEvent(
+                connectionWrapper, tableSpec, checks, executionStatistics));
 
-        checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, checksCount, sensorResultsCount,
-                passedRules, warningIssuesCount, errorIssuesCount, fatalIssuesCount, erroredSensors + erroredRules);
+        checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
 
-        if (this.incidentImportQueueService != null && (warningIssuesCount > 0 || errorIssuesCount > 0 || fatalIssuesCount > 0)) {
+        if (this.incidentImportQueueService != null && executionStatistics.hasAnyFailedRules()) {
             TableIncidentImportBatch tableIncidentImportBatch = new TableIncidentImportBatch(
                     checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(),
                     connectionWrapper.getSpec(),

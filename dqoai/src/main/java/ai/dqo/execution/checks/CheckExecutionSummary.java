@@ -152,26 +152,20 @@ public class CheckExecutionSummary {
      * Adds a table check summary row.
      * @param connection Connection wrapper.
      * @param tableSpec Table specification.
-     * @param checksExecuted Number of checks that were executed.
-     * @param sensorResults Number of sensor results returned from sensors.
-     * @param validResults Number of valid results that passed the rules.
-     * @param warningsCount Count of warning severity alerts.
-     * @param errorsCount Count of errors (normal, medium) severity alerts.
-     * @param fatalErrorsCount Count of fatal (high) severity alerts.
-     * @param executionErrorsCount Count of check execution errors (checks that failed to execute correctly).
+     * @param executionStatistics Check execution statistics.
      */
-    public void reportTableStats(ConnectionWrapper connection, TableSpec tableSpec, int checksExecuted, int sensorResults, int validResults,
-								 int warningsCount, int errorsCount, int fatalErrorsCount, int executionErrorsCount) {
+    public void reportTableStats(ConnectionWrapper connection, TableSpec tableSpec, TableChecksExecutionStatistics executionStatistics) {
         Row row = this.summaryTable.appendRow();
 		this.connectionColumn.set(row.getRowNumber(), connection.getName());
 		this.tableColumn.set(row.getRowNumber(), tableSpec.getPhysicalTableName().toString());
-		this.checksExecutedColumn.set(row.getRowNumber(), checksExecuted);
-		this.sensorResultsColumn.set(row.getRowNumber(), sensorResults);
-		this.validResultsColumn.set(row.getRowNumber(), validResults);
-		this.warningsCountColumn.set(row.getRowNumber(), warningsCount);
-		this.errorsCountColumn.set(row.getRowNumber(), errorsCount);
-		this.fatalErrorsCountColumn.set(row.getRowNumber(), fatalErrorsCount);
-        this.executionErrorsCountColumn.set(row.getRowNumber(), executionErrorsCount);
+		this.checksExecutedColumn.set(row.getRowNumber(), executionStatistics.getExecutedChecksCount());
+		this.sensorResultsColumn.set(row.getRowNumber(), executionStatistics.getSensorReadoutsCount());
+		this.validResultsColumn.set(row.getRowNumber(), executionStatistics.getPassedRulesCount());
+		this.warningsCountColumn.set(row.getRowNumber(), executionStatistics.getWarningIssuesCount());
+		this.errorsCountColumn.set(row.getRowNumber(), executionStatistics.getFatalIssuesCount());
+		this.fatalErrorsCountColumn.set(row.getRowNumber(), executionStatistics.getFatalIssuesCount());
+        this.executionErrorsCountColumn.set(row.getRowNumber(), executionStatistics.getSensorExecutionErrorsCount() +
+                executionStatistics.getRuleExecutionErrorsCount());
     }
 
     /**

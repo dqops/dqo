@@ -27,6 +27,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PartitionIncrementalTimeWindowSpec;
@@ -107,9 +108,17 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             }
         }
 
+        CheckSearchFilters exactCheckSearchFilters = new CheckSearchFilters();
+        exactCheckSearchFilters.setConnectionName(connection.getConnectionName());
+        exactCheckSearchFilters.setSchemaTableName(table.getPhysicalTableName().toTableSearchFilter());
+        exactCheckSearchFilters.setColumnName(column == null ? null : column.getColumnName());
+        exactCheckSearchFilters.setCheckCategory(check.getCategoryName());
+        exactCheckSearchFilters.setCheckName(check.getCheckName());
+        exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());
+
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
-                dataStreams, sensorParameters, dialectSettings);
+                dataStreams, sensorParameters, dialectSettings, exactCheckSearchFilters);
     }
 
     /**
@@ -147,7 +156,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
-                dataStreams, sensorParameters, dialectSettings);
+                dataStreams, sensorParameters, dialectSettings, null);
     }
 
     /**
