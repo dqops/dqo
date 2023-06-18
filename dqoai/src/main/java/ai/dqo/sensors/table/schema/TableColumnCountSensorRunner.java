@@ -23,6 +23,7 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorPrepareResult;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
@@ -68,13 +69,16 @@ public class TableColumnCountSensorRunner extends AbstractSensorRunner {
      * Prepares a sensor for execution. SQL templated sensors will render the SQL template, filled with the table and column names.
      *
      * @param executionContext    Check execution context with access to the dqo home and user home, if any metadata is needed.
-     * @param sensorPrepareResult Sensor prepare result with additional sensor run parameters. The prepareSensor method should fill additional values in this object that will be used when the sensor is executed.
+     * @param sensorRunParameters Sensor run parameters.
+     * @param sensorDefinition    Sensor definition that was found in the dqo home or the user home.
      * @param progressListener    Progress listener that receives events when the sensor is executed.
      */
     @Override
-    public void prepareSensor(ExecutionContext executionContext,
-                              SensorPrepareResult sensorPrepareResult,
-                              SensorExecutionProgressListener progressListener) {
+    public SensorPrepareResult prepareSensor(ExecutionContext executionContext,
+                                             SensorExecutionRunParameters sensorRunParameters,
+                                             SensorDefinitionFindResult sensorDefinition,
+                                             SensorExecutionProgressListener progressListener) {
+        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, this);
     }
 
     /**

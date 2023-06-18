@@ -17,12 +17,15 @@ package ai.dqo.execution.sensors;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sensors.runners.SensorRunnerFactory;
+import ai.dqo.execution.sqltemplates.grouping.FragmentedSqlQuery;
+import ai.dqo.execution.sqltemplates.grouping.SqlQueryFragmentsParser;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +39,21 @@ import org.springframework.stereotype.Component;
 public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
     private final SensorDefinitionFindService sensorDefinitionFindService;
     private final SensorRunnerFactory sensorRunnerFactory;
+    private SqlQueryFragmentsParser sqlQueryFragmentsParser;
 
     /**
      * Creates a sensor runner.
      * @param sensorDefinitionFindService Sensor definition finder that finds the correct sensor definition.
+     * @param sensorRunnerFactory Sensor runner factory. Creates instances of requested sensor runners.
+     * @param sqlQueryFragmentsParser SQL query fragment parser, used to find similar sql query fragments for matching sensor queries that could be combined.
      */
     @Autowired
-    public DataQualitySensorRunnerImpl(SensorDefinitionFindService sensorDefinitionFindService, SensorRunnerFactory sensorRunnerFactory) {
+    public DataQualitySensorRunnerImpl(SensorDefinitionFindService sensorDefinitionFindService,
+                                       SensorRunnerFactory sensorRunnerFactory,
+                                       SqlQueryFragmentsParser sqlQueryFragmentsParser) {
         this.sensorDefinitionFindService = sensorDefinitionFindService;
         this.sensorRunnerFactory = sensorRunnerFactory;
+        this.sqlQueryFragmentsParser = sqlQueryFragmentsParser;
     }
 
     /**
@@ -67,17 +76,37 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
         AbstractSensorRunner sensorRunner = this.sensorRunnerFactory.getSensorRunner(providerSensorSpec.getType(),
                 providerSensorSpec.getJavaClassName());
 
-        SensorPrepareResult sensorPrepareResult = new SensorPrepareResult(sensorRunParameters, sensorDefinition, sensorRunner);
-
         try {
-            sensorRunner.prepareSensor(executionContext, sensorPrepareResult, progressListener);
+            SensorPrepareResult sensorPrepareResult = sensorRunner.prepareSensor(executionContext, sensorRunParameters, sensorDefinition, progressListener);
+            String renderedSensorSql = sensorPrepareResult.getRenderedSensorSql();
+            if (renderedSensorSql != null) {
+                if (renderedSensorSql.contains(sensorRunParameters.getActualValueAlias())) {
+                    sensorPrepareResult.setActualValueAlias(sensorRunParameters.getActualValueAlias());
+                }
+                else if (!SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME.equals(sensorRunParameters.getActualValueAlias()) &&
+                    renderedSensorSql.contains(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME)) {
+                    sensorPrepareResult.setActualValueAlias(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+                }
+
+                if (renderedSensorSql.contains(sensorRunParameters.getExpectedValueAlias())) {
+                    sensorPrepareResult.setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
+                }
+                else if (!SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME.equals(sensorRunParameters.getExpectedValueAlias()) &&
+                        renderedSensorSql.contains(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {
+                    sensorPrepareResult.setExpectedValueAlias(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+                }
+
+                FragmentedSqlQuery fragmentedSqlQuery = this.sqlQueryFragmentsParser.parseQueryToComponents(renderedSensorSql,
+                        sensorPrepareResult.getActualValueAlias(), sensorPrepareResult.getExpectedValueAlias());
+                sensorPrepareResult.setFragmentedSqlQuery(fragmentedSqlQuery);
+            }
+
+            return sensorPrepareResult;
         }
         catch (Throwable ex) {
             log.error("Sensor failed to render, sensor name: " + sensorName, ex);
-            sensorPrepareResult.setPrepareException(ex);
+            return SensorPrepareResult.createForPrepareException(sensorRunParameters, sensorDefinition, ex);
         }
-
-        return sensorPrepareResult;
     }
 
     /**

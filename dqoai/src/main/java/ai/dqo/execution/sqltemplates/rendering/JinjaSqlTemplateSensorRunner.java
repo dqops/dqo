@@ -19,22 +19,29 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.SourceConnection;
 import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorPrepareResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
 import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import ai.dqo.utils.tables.TableColumnUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.Column;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Sensor runner that transforms an SQL template and executes a generated SQL on a connection.
@@ -49,6 +56,7 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     public static final String CLASS_NAME = JinjaSqlTemplateSensorRunner.class.getName();
     private final JinjaTemplateRenderService jinjaTemplateRenderService;
     private final ConnectionProviderRegistry connectionProviderRegistry;
+    private final JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor;
 
     /**
      * Creates a sql template runner.
@@ -59,38 +67,40 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     @Autowired
     public JinjaSqlTemplateSensorRunner(JinjaTemplateRenderService jinjaTemplateRenderService,
 										ConnectionProviderRegistry connectionProviderRegistry,
-                                        DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                        DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                        JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor) {
         super(defaultTimeZoneProvider);
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
         this.connectionProviderRegistry = connectionProviderRegistry;
+        this.jinjaSqlTemplateSensorExecutor = jinjaSqlTemplateSensorExecutor;
     }
 
     /**
      * Prepares a sensor for execution. SQL templated sensors will render the SQL template, filled with the table and column names.
      *
      * @param executionContext    Check execution context with access to the dqo home and user home, if any metadata is needed.
-     * @param sensorPrepareResult Sensor prepare result with additional sensor run parameters. The prepareSensor method should fill additional values in this object that will be used when the sensor is executed.
+     * @param sensorRunParameters Sensor run parameters.
+     * @param sensorDefinition    Sensor definition that was found in the dqo home or the user home.
      * @param progressListener    Progress listener that receives events when the sensor is executed.
      */
     @Override
-    public void prepareSensor(ExecutionContext executionContext,
-                              SensorPrepareResult sensorPrepareResult,
-                              SensorExecutionProgressListener progressListener) {
+    public SensorPrepareResult prepareSensor(ExecutionContext executionContext,
+                                             SensorExecutionRunParameters sensorRunParameters,
+                                             SensorDefinitionFindResult sensorDefinition,
+                                             SensorExecutionProgressListener progressListener) {
         String renderedSql = null;
         try {
-            SensorDefinitionFindResult sensorDefinition = sensorPrepareResult.getSensorDefinition();
-            SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
-
             JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
                     sensorRunParameters, sensorDefinition);
             renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinition,
                     templateRenderParameters, progressListener);
 
-            sensorPrepareResult.setRenderedSensorSql(renderedSql);
+            return new SensorPrepareResult(sensorRunParameters, sensorDefinition,
+                    this.jinjaSqlTemplateSensorExecutor, this, renderedSql);
         }
         catch (Throwable exception) {
             log.debug("Sensor failed to render an sql template :" + renderedSql, exception);
-            sensorPrepareResult.setPrepareException(exception);
+            return SensorPrepareResult.createForPrepareException(sensorRunParameters, sensorDefinition, exception);
         }
     }
 
@@ -135,5 +145,55 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
             log.debug("Sensor failed to execute a query :" + renderedSensorSql, exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
+    }
+
+    /**
+     * Transforms the sensor result that was captured by the sensor executor. This method performs de-grouping of grouped sensors that were executed as multiple SQL queries merged into one big query.
+     *
+     * @param executionContext             Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param groupedSensorExecutionResult Sensor execution result with the data retrieved from the data source. It will be adapted to a sensor result for one sensor.
+     * @param sensorPrepareResult          Original sensor prepare results for this sensor. Contains also the sensor run parameters.
+     * @param progressListener             Progress listener that receives events when the sensor is executed.
+     * @param jobCancellationToken         Job cancellation token, may cancel a running query.
+     * @return Sensor result for one sensor.
+     */
+    @Override
+    public SensorExecutionResult adaptSensorResults(ExecutionContext executionContext,
+                                                    GroupedSensorExecutionResult groupedSensorExecutionResult,
+                                                    SensorPrepareResult sensorPrepareResult,
+                                                    SensorExecutionProgressListener progressListener,
+                                                    JobCancellationToken jobCancellationToken) {
+        Table multiSensorTableResult = groupedSensorExecutionResult.getTableResult();
+        Table sensorResultRows = Table.create(multiSensorTableResult.name());
+        Column<?> actualValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getActualValueAlias());
+        if (actualValueColumn != null) {
+            sensorResultRows.addColumns(Objects.equals(actualValueColumn.name(),
+                    SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) ? actualValueColumn : actualValueColumn.copy());
+        }
+
+        Column<?> expectedValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getExpectedValueAlias());
+        if (expectedValueColumn != null) {
+            sensorResultRows.addColumns(Objects.equals(expectedValueColumn.name(),
+                    SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME) ? expectedValueColumn : expectedValueColumn.copy());
+        }
+
+        Column<?> timePeriodColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        if (timePeriodColumn != null) {
+            sensorResultRows.addColumns(timePeriodColumn);
+        }
+        Column<?> timePeriodUtcColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
+        if (timePeriodUtcColumn != null) {
+            sensorResultRows.addColumns(timePeriodUtcColumn);
+        }
+
+        List<Column<?>> allSourceColumns = multiSensorTableResult.columns();
+        Column<?>[] dataStreamLevelColumns = allSourceColumns.stream()
+                .filter(c -> c.name() != null && c.name().startsWith(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX))
+                .toArray(Column<?>[]::new);
+        if (dataStreamLevelColumns.length > 0) {
+            sensorResultRows.addColumns(dataStreamLevelColumns);
+        }
+
+        return new SensorExecutionResult(sensorPrepareResult.getSensorRunParameters(), sensorResultRows);
     }
 }

@@ -18,6 +18,7 @@ package ai.dqo.execution.sensors;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
@@ -61,6 +62,8 @@ public class SensorExecutionRunParameters {
     private Instant startedAt = Instant.now();
     @JsonIgnore
     private CheckSearchFilters checkSearchFilter;
+    private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
+    private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
 
     /**
      * Creates a sensor run parameters object with all objects required to run a sensor.
@@ -330,6 +333,38 @@ public class SensorExecutionRunParameters {
      */
     public void setCheckSearchFilter(CheckSearchFilters checkSearchFilter) {
         this.checkSearchFilter = checkSearchFilter;
+    }
+
+    /**
+     * Returns the column alias that should be used for the actual_value output column.
+     * @return The alias for the actual_value primary sensor readout column.
+     */
+    public String getActualValueAlias() {
+        return actualValueAlias;
+    }
+
+    /**
+     * Sets the the column alias that should be used for the actual_value output column.
+     * @param actualValueAlias The alias for the actual_value primary sensor readout column.
+     */
+    public void setActualValueAlias(String actualValueAlias) {
+        this.actualValueAlias = actualValueAlias;
+    }
+
+    /**
+     * Returns the column alias that should be used for the expected_value output column.
+     * @return The alias for the expected_value secondary sensor readout column.
+     */
+    public String getExpectedValueAlias() {
+        return expectedValueAlias;
+    }
+
+    /**
+     * Sets the column alias that should be used for the expected_value output column.
+     * @param expectedValueAlias The alias for the expected_value secondary sensor readout column.
+     */
+    public void setExpectedValueAlias(String expectedValueAlias) {
+        this.expectedValueAlias = expectedValueAlias;
     }
 
     /**

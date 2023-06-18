@@ -16,6 +16,7 @@
 package ai.dqo.execution.sqltemplates.rendering;
 
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
@@ -52,6 +53,8 @@ public class JinjaTemplateRenderParameters {
     private SensorDefinitionSpec sensorDefinition;
     private ProviderSensorDefinitionSpec providerSensorDefinition;
     private ProviderDialectSettings dialectSettings;
+    private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
+    private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
 
     /**
      * Creates a default, empty jinja template render parameters object.
@@ -72,6 +75,8 @@ public class JinjaTemplateRenderParameters {
      * @param sensorDefinition Sensor definition spec.
      * @param providerSensorDefinition Provider sensor definition spec.
      * @param dialectSettings Dialect settings with configuration of the dialect.
+     * @param actualValueAlias The column alias that should be used for the actual value output column name.
+     * @param expectedValueAlias The column alias that should be used for the expected value output column name.
      */
     public JinjaTemplateRenderParameters(ConnectionSpec connection,
 										 TableSpec table,
@@ -83,7 +88,9 @@ public class JinjaTemplateRenderParameters {
                                          DataStreamMappingSpec effectiveDataStreams,
 										 SensorDefinitionSpec sensorDefinition,
 										 ProviderSensorDefinitionSpec providerSensorDefinition,
-										 ProviderDialectSettings dialectSettings) {
+										 ProviderDialectSettings dialectSettings,
+                                         String actualValueAlias,
+                                         String expectedValueAlias) {
         this.connection = connection;
         this.table = table;
         this.targetTable = table.getPhysicalTableName();
@@ -96,6 +103,8 @@ public class JinjaTemplateRenderParameters {
         this.sensorDefinition = sensorDefinition;
         this.providerSensorDefinition = providerSensorDefinition;
         this.dialectSettings = dialectSettings;
+        this.actualValueAlias = actualValueAlias;
+        this.expectedValueAlias = expectedValueAlias;
     }
 
     /**
@@ -121,6 +130,8 @@ public class JinjaTemplateRenderParameters {
 			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
 			setDialectSettings(sensorRunParameters.getDialectSettings());
             setEffectiveTimeWindowFilter(sensorRunParameters.getTimeWindowFilter());
+            setActualValueAlias(sensorRunParameters.getActualValueAlias());
+            setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
         }};
 
         return result;
@@ -316,5 +327,37 @@ public class JinjaTemplateRenderParameters {
      */
     public void setDialectSettings(ProviderDialectSettings dialectSettings) {
         this.dialectSettings = dialectSettings;
+    }
+
+    /**
+     * Returns the column alias that should be used for the actual_value output column.
+     * @return The alias for the actual_value primary sensor readout column.
+     */
+    public String getActualValueAlias() {
+        return actualValueAlias;
+    }
+
+    /**
+     * Sets the the column alias that should be used for the actual_value output column.
+     * @param actualValueAlias The alias for the actual_value primary sensor readout column.
+     */
+    public void setActualValueAlias(String actualValueAlias) {
+        this.actualValueAlias = actualValueAlias;
+    }
+
+    /**
+     * Returns the column alias that should be used for the expected_value output column.
+     * @return The alias for the expected_value secondary sensor readout column.
+     */
+    public String getExpectedValueAlias() {
+        return expectedValueAlias;
+    }
+
+    /**
+     * Sets the column alias that should be used for the expected_value output column.
+     * @param expectedValueAlias The alias for the expected_value secondary sensor readout column.
+     */
+    public void setExpectedValueAlias(String expectedValueAlias) {
+        this.expectedValueAlias = expectedValueAlias;
     }
 }
