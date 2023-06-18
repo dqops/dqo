@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -329,5 +330,18 @@ public class SensorExecutionRunParameters {
      */
     public void setCheckSearchFilter(CheckSearchFilters checkSearchFilter) {
         this.checkSearchFilter = checkSearchFilter;
+    }
+
+    /**
+     * Returns the time series gradient that is used for time partitioning the analyzed table.
+     * @return Time period gradient.
+     */
+    @JsonIgnore
+    public TimePeriodGradient getTimePeriodGradient() {
+        if (this.timeSeries == null) {
+            return null;
+        }
+
+        return this.timeSeries.getTimeGradient();
     }
 }

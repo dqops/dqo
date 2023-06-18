@@ -162,7 +162,7 @@ public class CheckExecutionSummary {
 		this.sensorResultsColumn.set(row.getRowNumber(), executionStatistics.getSensorReadoutsCount());
 		this.validResultsColumn.set(row.getRowNumber(), executionStatistics.getPassedRulesCount());
 		this.warningsCountColumn.set(row.getRowNumber(), executionStatistics.getWarningIssuesCount());
-		this.errorsCountColumn.set(row.getRowNumber(), executionStatistics.getFatalIssuesCount());
+		this.errorsCountColumn.set(row.getRowNumber(), executionStatistics.getErrorIssuesCount());
 		this.fatalErrorsCountColumn.set(row.getRowNumber(), executionStatistics.getFatalIssuesCount());
         this.executionErrorsCountColumn.set(row.getRowNumber(), executionStatistics.getSensorExecutionErrorsCount() +
                 executionStatistics.getRuleExecutionErrorsCount());

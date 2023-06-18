@@ -196,8 +196,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
             try {
                 SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
-                TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
-                TimePeriodGradient timeGradient = effectiveTimeSeries.getTimeGradient();
 
                 if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
                         Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {
@@ -209,7 +207,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, missingTimestampException);
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultWithError, timeGradient, sensorRunParameters);
+                            sensorExecutionResultWithError, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultWithError, missingTimestampException));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, sensorRunParameters.getCheckSearchFilter()));
@@ -224,7 +222,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultFailedPrepare, timeGradient, sensorRunParameters);
+                            sensorExecutionResultFailedPrepare, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorPrepareResult.getPrepareException(), sensorRunParameters.getCheckSearchFilter()));
@@ -239,7 +237,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 if (!sensorResult.isSuccess()) {
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorResult, timeGradient, sensorRunParameters);
+                            sensorResult, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorResult, sensorResult.getException()));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorResult.getException(), sensorRunParameters.getCheckSearchFilter()));
@@ -253,7 +251,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 executionStatistics.incrementSensorReadoutsCount(sensorResult.getResultTable().rowCount());
 
                 SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorReadoutsNormalizationService.normalizeResults(
-                        sensorResult, timeGradient, sensorRunParameters);
+                        sensorResult, sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
                         tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
                 allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable());
@@ -294,7 +292,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
                         executionStatistics.incrementRuleExecutionErrorsCount(1);
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
-                                sensorResult, timeGradient, sensorRunParameters, ex);
+                                sensorResult, sensorRunParameters, ex);
                         allErrorsTable.append(normalizedRuleErrorResults.getTable());
                         progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorResult, ex, ruleDefinitionName));
                         checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));

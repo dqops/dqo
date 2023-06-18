@@ -85,7 +85,7 @@ public class TableTimelinessDataStalenessSensorParametersSpecBigQueryTests exten
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/timeliness/days_since_most_recent_ingestion", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("table/timeliness/data_staleness", this.sut.getSensorDefinitionName());
     }
 
     @Test
