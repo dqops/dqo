@@ -1,8 +1,11 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { ColumnApiClient, DataSourcesApi, DataStreamsApi, JobApiClient } from '../../services/apiClient';
+import { ColumnApiClient,DataStreamsApi, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
+  DataStreamLevelSpec,
+  DataStreamMappingSpec,
+  DataStreamTrimmedModel,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -19,6 +22,7 @@ import Loader from '../../components/Loader';
 import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
 import Checkbox from '../../components/Checkbox';
+import Button from '../../components/Button';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -664,7 +668,6 @@ const TableColumns = ({
     }
   };
 
-console.log(objectStates)
 
 const countTrueValues = (obj: Record<string, boolean>): number => {
   let count = 0;
@@ -675,18 +678,76 @@ const countTrueValues = (obj: Record<string, boolean>): number => {
   }
   return count;
 }
-
-const trueValuesCount = countTrueValues(objectStates);
-console.log(trueValuesCount); 
-
-
-const postDataStream = async() =>{
-  const res = DataStreamsApi.createDataStream(connection, schema, table)
-
+const selectStrings = (obj: Record<string, boolean>) => {
+  return Object.keys(obj).filter(key => obj[key] === true);
 }
 
+const listOfStr = selectStrings(objectStates)
 
+const trueValuesCount = countTrueValues(objectStates);
 
+const postDataStream = async() =>{
+  await DataStreamsApi.createDataStream(connectionName, schemaName, tableName, {data_stream_name: setDataStream(), spec: setSpec2()})
+}
+const spec: DataStreamMappingSpec = {
+  level_1: {
+    column: undefined
+  },
+  level_2: {
+    column: undefined
+  },
+  level_3: {
+    column: undefined
+  },
+  level_4: {
+    column: undefined
+  },
+  level_5: {
+    column: undefined
+  },
+  level_6: {
+    column: undefined 
+  },
+  level_7: {
+    column: undefined
+  },
+  level_8: {
+    column: undefined
+  },
+  level_9: {
+    column: undefined
+  }
+}
+const setSpec2 = () =>{
+ 
+  for(let i =1; i<= trueValuesCount; i++){ 
+    const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
+    const level = spec[levelKey];
+
+    if (level) {
+      level.column = listOfStr.at(i - 1);
+      level.source = "column_value";
+    }
+  }
+  return spec
+}
+
+const setDataStream = () =>{
+  
+  let dataStream = ''
+
+  for(let i =1; i<= trueValuesCount; i++){ 
+    const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
+    const level = spec[levelKey];
+
+    if (level && i!== trueValuesCount) {
+      dataStream+=(listOfStr.at(i - 1) + ',');
+    }else{
+      dataStream+=(listOfStr.at(i - 1));
+    }
+  }
+  return dataStream
+}
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
@@ -695,7 +756,7 @@ const postDataStream = async() =>{
           className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
           onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
         >
-          {column.nameOfCol}{column.isColumnSelected}
+          {column.nameOfCol}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
         <Checkbox checked={objectStates[column.nameOfCol ? column.nameOfCol : ""] ? true : false} onChange={() =>handleButtonClick(column.nameOfCol ? column.nameOfCol : "") }/>
@@ -815,6 +876,14 @@ const postDataStream = async() =>{
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
         <thead>
+          {trueValuesCount !== 0 && trueValuesCount<= 9 && <Button label='create Data Stream' color='primary' onClick={() => {postDataStream()}}/>}
+          {trueValuesCount !== 0 && trueValuesCount> 9 && 
+          <div className='flex text-red-500 items-center gap-x-4'>
+
+          <Button label='create Data Stream' color='secondary' className='text-black' /> 
+          (You can choose max 9 columns)
+          </div>
+          }
           <tr>
             {labels.map((x, index) => (
               <th
