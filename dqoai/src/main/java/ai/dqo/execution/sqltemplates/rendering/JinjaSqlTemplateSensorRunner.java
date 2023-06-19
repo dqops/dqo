@@ -158,11 +158,11 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
      * @return Sensor result for one sensor.
      */
     @Override
-    public SensorExecutionResult adaptSensorResults(ExecutionContext executionContext,
-                                                    GroupedSensorExecutionResult groupedSensorExecutionResult,
-                                                    SensorPrepareResult sensorPrepareResult,
-                                                    SensorExecutionProgressListener progressListener,
-                                                    JobCancellationToken jobCancellationToken) {
+    public SensorExecutionResult extractSensorResults(ExecutionContext executionContext,
+                                                      GroupedSensorExecutionResult groupedSensorExecutionResult,
+                                                      SensorPrepareResult sensorPrepareResult,
+                                                      SensorExecutionProgressListener progressListener,
+                                                      JobCancellationToken jobCancellationToken) {
         Table multiSensorTableResult = groupedSensorExecutionResult.getTableResult();
         Table sensorResultRows = Table.create(multiSensorTableResult.name());
         Column<?> actualValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getActualValueAlias());

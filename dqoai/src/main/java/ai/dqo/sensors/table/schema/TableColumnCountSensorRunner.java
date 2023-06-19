@@ -24,12 +24,17 @@ import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorPrepareResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
+import ai.dqo.execution.sensors.grouping.TableMetadataSensorExecutor;
 import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -37,8 +42,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Sensor runner that introspects the metadata on a table and counts the number of columns.
@@ -52,17 +59,21 @@ public class TableColumnCountSensorRunner extends AbstractSensorRunner {
      */
     public static final String CLASS_NAME = TableColumnCountSensorRunner.class.getName();
     private ConnectionProviderRegistry connectionProviderRegistry;
+    private TableMetadataSensorExecutor tableMetadataSensorExecutor;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
      * @param defaultTimeZoneProvider The default time zone provider.
+     * @param tableMetadataSensorExecutor Table metadata shared executor.
      */
     @Autowired
     public TableColumnCountSensorRunner(ConnectionProviderRegistry connectionProviderRegistry,
-                                        DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                        DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                        TableMetadataSensorExecutor tableMetadataSensorExecutor) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
+        this.tableMetadataSensorExecutor = tableMetadataSensorExecutor;
     }
 
     /**
@@ -78,7 +89,46 @@ public class TableColumnCountSensorRunner extends AbstractSensorRunner {
                                              SensorExecutionRunParameters sensorRunParameters,
                                              SensorDefinitionFindResult sensorDefinition,
                                              SensorExecutionProgressListener progressListener) {
-        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, this);
+        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, this.tableMetadataSensorExecutor, this);
+    }
+
+    /**
+     * Transforms the sensor result that was captured by the sensor executor. This method performs de-grouping of grouped sensors that were executed as multiple SQL queries merged into one big query.
+     *
+     * @param executionContext             Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param groupedSensorExecutionResult Sensor execution result with the data retrieved from the data source. It will be adapted to a sensor result for one sensor.
+     * @param sensorPrepareResult          Original sensor prepare results for this sensor. Contains also the sensor run parameters.
+     * @param progressListener             Progress listener that receives events when the sensor is executed.
+     * @param jobCancellationToken         Job cancellation token, may cancel a running query.
+     * @return Sensor result for one sensor.
+     */
+    @Override
+    public SensorExecutionResult extractSensorResults(ExecutionContext executionContext,
+                                                      GroupedSensorExecutionResult groupedSensorExecutionResult,
+                                                      SensorPrepareResult sensorPrepareResult,
+                                                      SensorExecutionProgressListener progressListener,
+                                                      JobCancellationToken jobCancellationToken) {
+        SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
+        PhysicalTableName physicalTableName = sensorRunParameters.getTable().getPhysicalTableName();
+
+        try {
+            TableSpec introspectedTableSpec = groupedSensorExecutionResult.getCapturedMetadataResult();
+
+            if (introspectedTableSpec == null) {
+                // table not found
+                Table table = createResultTableWithResult((Double) null);
+                return new SensorExecutionResult(sensorRunParameters, table);
+            }
+
+            int columnCount = introspectedTableSpec.getColumns().size();
+
+            Table table = createResultTableWithResult(columnCount);
+            return new SensorExecutionResult(sensorRunParameters, table);
+        }
+        catch (Throwable exception) {
+            log.debug("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
+            return new SensorExecutionResult(sensorRunParameters, exception);
+        }
     }
 
     /**

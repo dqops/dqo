@@ -83,11 +83,11 @@ public abstract class AbstractSensorRunner {
      * @param jobCancellationToken  Job cancellation token, may cancel a running query.
      * @return Sensor result for one sensor.
      */
-    public abstract SensorExecutionResult adaptSensorResults(ExecutionContext executionContext,
-                                                             GroupedSensorExecutionResult groupedSensorExecutionResult,
-                                                             SensorPrepareResult sensorPrepareResult,
-                                                             SensorExecutionProgressListener progressListener,
-                                                             JobCancellationToken jobCancellationToken);
+    public abstract SensorExecutionResult extractSensorResults(ExecutionContext executionContext,
+                                                               GroupedSensorExecutionResult groupedSensorExecutionResult,
+                                                               SensorPrepareResult sensorPrepareResult,
+                                                               SensorExecutionProgressListener progressListener,
+                                                               JobCancellationToken jobCancellationToken);
 
     /**
      * Creates a local date time of NOW, using the default configured time zone.

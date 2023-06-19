@@ -104,11 +104,11 @@ public class TableColumnTypesHashSensorRunner extends AbstractSensorRunner {
      * @return Sensor result for one sensor.
      */
     @Override
-    public SensorExecutionResult adaptSensorResults(ExecutionContext executionContext,
-                                                    GroupedSensorExecutionResult groupedSensorExecutionResult,
-                                                    SensorPrepareResult sensorPrepareResult,
-                                                    SensorExecutionProgressListener progressListener,
-                                                    JobCancellationToken jobCancellationToken) {
+    public SensorExecutionResult extractSensorResults(ExecutionContext executionContext,
+                                                      GroupedSensorExecutionResult groupedSensorExecutionResult,
+                                                      SensorPrepareResult sensorPrepareResult,
+                                                      SensorExecutionProgressListener progressListener,
+                                                      JobCancellationToken jobCancellationToken) {
         SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
         PhysicalTableName physicalTableName = sensorRunParameters.getTable().getPhysicalTableName();
 
