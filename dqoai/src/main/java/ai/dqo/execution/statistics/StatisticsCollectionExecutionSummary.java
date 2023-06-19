@@ -129,27 +129,19 @@ public class StatisticsCollectionExecutionSummary {
      * Adds a table statistics collection summary row.
      * @param connection Connection wrapper.
      * @param tableSpec Table specification.
-     * @param collectorsExecuted Number of statistics collectors that were executed.
-     * @param profiledColumns Number of profiled columns (successfully or with a failure).
-     * @param profiledColumnsSuccessfully Number of columns that were profiled successfully - at least one collector finished correctly.
-     * @param collectorsFailed Count of collectors that failed to retrieve valid information.
-     * @param collectorsResults Count of collectors results, may be higher than the number of collectors executed.
+     * @param executionStatistics Collector execution statistics with the counts of collectors executed, statistics results collected count, etc..
      */
     public void reportTableStats(ConnectionWrapper connection,
                                  TableSpec tableSpec,
-                                 int collectorsExecuted,
-                                 int profiledColumns,
-                                 int profiledColumnsSuccessfully,
-								 int collectorsFailed,
-                                 int collectorsResults) {
+                                 CollectorExecutionStatistics executionStatistics) {
         Row row = this.summaryTable.appendRow();
 		this.connectionColumn.set(row.getRowNumber(), connection.getName());
 		this.tableColumn.set(row.getRowNumber(), tableSpec.getPhysicalTableName().toString());
-		this.collectorsExecutedColumn.set(row.getRowNumber(), collectorsExecuted);
-		this.collectorsColumnsColumn.set(row.getRowNumber(), profiledColumns);
-		this.collectorsColumnsSuccessfullyColumn.set(row.getRowNumber(), profiledColumnsSuccessfully);
-		this.collectorsFailedColumn.set(row.getRowNumber(), collectorsFailed);
-        this.collectorsResultsColumn.set(row.getRowNumber(), collectorsResults);
+		this.collectorsExecutedColumn.set(row.getRowNumber(), executionStatistics.getCollectorsExecutedCount());
+		this.collectorsColumnsColumn.set(row.getRowNumber(), executionStatistics.getProfiledColumnsCount());
+		this.collectorsColumnsSuccessfullyColumn.set(row.getRowNumber(), executionStatistics.getProfiledColumnSuccessfullyCount());
+		this.collectorsFailedColumn.set(row.getRowNumber(), executionStatistics.getCollectorsFailedCount());
+        this.collectorsResultsColumn.set(row.getRowNumber(), executionStatistics.getCollectorsResultsCount());
     }
 
     /**
