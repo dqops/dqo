@@ -24,7 +24,7 @@ business unit, vendor, supplier, or subsidiary.
 - **Operational dashboards**. Operational dashboards helps data engineers and data owners to identify areas (tables or 
 data pipelines) in a data warehouse or data lake with the highest number of data quality issues that should be addressed. 
 
-- **Detailed dashboards**. This type of data quality dashboard show detailed information at the table level. 
+- **Data Quality Issue Details dashboards**. This type of data quality dashboard show detailed information about the issues at the table level. 
 In DQO there are two groups of dashboards in this category: Issue details and Details per category. Issue details group 
 focuses on issues grouped by [quality dimensions](../data-quality-dimensions/data-quality-dimensions.md), 
 [check types](../checks/#types-of-checks), [check categories](../checks/#categories-of-checks) or tables. Details per 
@@ -32,7 +32,12 @@ category groups issues by volume, timeliness and completeness. The detailed dash
 to better understand data dynamics during the investigation phase when the data quality issue is being diagnosed and 
 later to confirm whether it has been resolved.
 
-- **Technical dashboards**. Technical dashboards groups dashboards with summaries of tests, scoreboard or KPIs per table, 
-check or data streams.
+- **Data Source States dashboards**. This group of dashboards contains a summaries on most incomplete columns, table 
+    freshness, table ingestion delay, the biggest tables measured by recurring checks anf table row count for time partitions.
 
+- **Data Quality Platform dashboards**. This group of dashboards contains the summaries of daily tests per check, data stream and table. 
+
+
+## What's next
+- [Learn how to review results of data quality monitoring on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
 
