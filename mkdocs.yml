@@ -118,9 +118,9 @@ nav:
         - sql condition failed count on table: 'checks/table/sql/sql-condition-failed-count-on-table.md'
         - sql aggregate expr table: 'checks/table/sql/sql-aggregate-expr-table.md'
       - timeliness:
-        - days since most recent event: 'checks/table/timeliness/days-since-most-recent-event.md'
+        - data freshness: 'checks/table/timeliness/data-freshness.md'
+        - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
-        - days since most recent ingestion: 'checks/table/timeliness/days-since-most-recent-ingestion.md'
         - daily partition reload lag: 'checks/table/timeliness/daily-partition-reload-lag.md'
       - volume:
         - row count: 'checks/table/volume/row-count.md'
@@ -324,11 +324,11 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
-      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
       - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
+      - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
+      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings

@@ -5,12 +5,14 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_check_spec import (
+        ColumnDistinctPercentCheckSpec,
+    )
     from ..models.column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
-    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-    from ..models.column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 
 
 T = TypeVar("T", bound="ColumnUniquenessMonthlyRecurringChecksSpec")
@@ -65,15 +67,17 @@ class ColumnUniquenessMonthlyRecurringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_distinct_count_check_spec import (
+            ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_check_spec import (
+            ColumnDistinctPercentCheckSpec,
+        )
         from ..models.column_duplicate_count_check_spec import (
             ColumnDuplicateCountCheckSpec,
         )
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
-        )
-        from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-        from ..models.column_distinct_percent_check_spec import (
-            ColumnDistinctPercentCheckSpec,
         )
 
         d = src_dict.copy()

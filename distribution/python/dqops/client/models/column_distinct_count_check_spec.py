@@ -61,7 +61,9 @@ class ColumnDistinctCountCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
-    parameters: Union[Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"] = UNSET
+    parameters: Union[
+        Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
+    ] = UNSET
     warning: Union[Unset, "MinCountRuleWarningParametersSpec"] = UNSET
     error: Union[Unset, "MinCountRule0ParametersSpec"] = UNSET
     fatal: Union[Unset, "MinCountRuleFatalParametersSpec"] = UNSET

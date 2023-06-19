@@ -97,7 +97,8 @@ module.exports = withMT({
         'container': 'calc(100vh - 64px)',
         'table': 'calc(100vh - 265px)',
         'checks': 'calc(100vh - 325px)',
-        'checks-1': 'calc(100vh - 211px)'
+        'checks-1': 'calc(100vh - 211px)',
+        'checks-2': 'calc(100vh - 270px)'
       },
       backgroundOpacity: {
         4: '0.04',

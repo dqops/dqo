@@ -67,7 +67,9 @@ const TableColumns = ({
   const history = useHistory();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const labels = [
     'Column name',
@@ -738,35 +740,40 @@ const TableColumns = ({
           </div>
         </td>
 
-        <td className="border-b border-gray-100 text-right px-4 py-2 flex flex-nowrap justify-end items-end">
-          <IconButton
-            size="sm"
-            className={
-              filteredColumns?.find((x) => x === column.nameOfCol)
-                ? 'group bg-gray-400 ml-1.5'
-                : 'group bg-teal-500 ml-1.5'
-            }
-            onClick={() => collectStatistics(column.columnHash)}
-          >
-            <SvgIcon name="boxplot" className="w-4 white" />
-            <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
-              Collect statistics
+        <td className="border-b border-gray-100 text-right px-4 py-2">
+          <div className="flex" style={{ justifyContent: 'flex-end' }}>
+            <div>
+              <IconButton
+                size="sm"
+                className={
+                  filteredColumns?.find((x) => x === column.nameOfCol)
+                    ? 'group bg-gray-400 ml-1.5'
+                    : 'group bg-teal-500 ml-1.5'
+                }
+                onClick={() => collectStatistics(column.columnHash)}
+              >
+                <SvgIcon name="boxplot" className="w-4 white" />
+                <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
+                  Collect statistics
+                </div>
+              </IconButton>
             </div>
-          </IconButton>
+            <div>
+              <IconButton
+                size="sm"
+                className="group bg-teal-500 ml-3"
+                onClick={() => {
+                  rewriteData(column.columnHash);
+                }}
+              >
+                <SvgIcon name="delete" className="w-4" />
 
-          <IconButton
-            size="sm"
-            className="group bg-teal-500 ml-3"
-            onClick={() => {
-              rewriteData(column.columnHash);
-            }}
-          >
-            <SvgIcon name="delete" className="w-4" />
-
-            <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
-              Delete column
-            </span>
-          </IconButton>
+                <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
+                  Delete column
+                </span>
+              </IconButton>
+            </div>
+          </div>
         </td>
       </tr>
     );

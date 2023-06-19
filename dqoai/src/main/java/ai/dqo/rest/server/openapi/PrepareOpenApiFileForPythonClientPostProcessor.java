@@ -21,10 +21,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -48,21 +44,9 @@ public class PrepareOpenApiFileForPythonClientPostProcessor {
         Path pathToSourceSwaggerFile = Path.of(args[0]);
         Path pathToTargetSwaggerFile = Path.of(args[1]);
 
-        HttpRequest converterRequest = HttpRequest.newBuilder()
-                .uri(new URI("https://converter.swagger.io/api/convert"))
-                .header("content-type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofFile(pathToSourceSwaggerFile))
-                .build();
-
-        HttpClient httpClient = HttpClient.newBuilder()
-                .followRedirects(HttpClient.Redirect.ALWAYS)
-                .build();
-
         try {
-            HttpResponse<String> convertResponse = httpClient.send(converterRequest, HttpResponse.BodyHandlers.ofString());
-            String convertedSwaggerContent = convertResponse.body();
-
             OpenAPIParser openAPIParser = new OpenAPIParser();
+            String convertedSwaggerContent = Files.readString(pathToSourceSwaggerFile);
             SwaggerParseResult swaggerParseResult = openAPIParser.readContents(convertedSwaggerContent, null, null);
             if (swaggerParseResult == null || swaggerParseResult.getOpenAPI() == null) {
                 String message = "File " + pathToSourceSwaggerFile.toString() + " is invalid and was not parsed.";

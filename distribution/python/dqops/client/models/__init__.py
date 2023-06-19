@@ -1,10 +1,9 @@
 """ Contains all the data models used in inputs/outputs """
 
-from .all_checks_model import AllChecksModel
-from .all_column_checks_model import AllColumnChecksModel
-from .all_column_checks_model_check_target import AllColumnChecksModelCheckTarget
-from .all_table_checks_model import AllTableChecksModel
-from .all_table_checks_model_check_target import AllTableChecksModelCheckTarget
+from .all_checks_patch_parameters import AllChecksPatchParameters
+from .all_checks_patch_parameters_selected_tables_to_columns import (
+    AllChecksPatchParametersSelectedTablesToColumns,
+)
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
 from .big_query_parameters_spec import BigQueryParametersSpec
@@ -25,6 +24,12 @@ from .change_percentile_moving_within_60_days_rule_parameters_spec import (
     ChangePercentileMovingWithin60DaysRuleParametersSpec,
 )
 from .check_basic_model import CheckBasicModel
+from .check_configuration_model import CheckConfigurationModel
+from .check_configuration_model_check_target import CheckConfigurationModelCheckTarget
+from .check_configuration_model_check_time_scale import (
+    CheckConfigurationModelCheckTimeScale,
+)
+from .check_configuration_model_check_type import CheckConfigurationModelCheckType
 from .check_container_basic_model import CheckContainerBasicModel
 from .check_container_model import CheckContainerModel
 from .check_container_model_effective_schedule_enabled_status import (
@@ -238,8 +243,6 @@ from .column_change_sum_since_30_days_check_spec import (
 from .column_change_sum_since_yesterday_check_spec import (
     ColumnChangeSumSinceYesterdayCheckSpec,
 )
-from .column_checks_model import ColumnChecksModel
-from .column_checks_model_check_containers import ColumnChecksModelCheckContainers
 from .column_column_exists_sensor_parameters_spec import (
     ColumnColumnExistsSensorParametersSpec,
 )
@@ -307,6 +310,8 @@ from .column_datetime_value_in_range_date_percent_check_spec import (
 from .column_datetime_value_in_range_date_percent_sensor_parameters_spec import (
     ColumnDatetimeValueInRangeDatePercentSensorParametersSpec,
 )
+from .column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+from .column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 from .column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
 from .column_duplicate_percent_check_spec import ColumnDuplicatePercentCheckSpec
 from .column_expected_numbers_in_use_count_check_spec import (
@@ -920,13 +925,23 @@ from .column_strings_string_whitespace_percent_sensor_parameters_spec import (
 from .column_sum_in_range_check_spec import ColumnSumInRangeCheckSpec
 from .column_true_percent_check_spec import ColumnTruePercentCheckSpec
 from .column_type_snapshot_spec import ColumnTypeSnapshotSpec
-from .column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
-from .column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 from .column_uniqueness_daily_partitioned_checks_spec import (
     ColumnUniquenessDailyPartitionedChecksSpec,
 )
 from .column_uniqueness_daily_recurring_checks_spec import (
     ColumnUniquenessDailyRecurringChecksSpec,
+)
+from .column_uniqueness_distinct_count_sensor_parameters_spec import (
+    ColumnUniquenessDistinctCountSensorParametersSpec,
+)
+from .column_uniqueness_distinct_count_statistics_collector_spec import (
+    ColumnUniquenessDistinctCountStatisticsCollectorSpec,
+)
+from .column_uniqueness_distinct_percent_sensor_parameters_spec import (
+    ColumnUniquenessDistinctPercentSensorParametersSpec,
+)
+from .column_uniqueness_distinct_percent_statistics_collector_spec import (
+    ColumnUniquenessDistinctPercentStatisticsCollectorSpec,
 )
 from .column_uniqueness_duplicate_count_sensor_parameters_spec import (
     ColumnUniquenessDuplicateCountSensorParametersSpec,
@@ -949,18 +964,6 @@ from .column_uniqueness_monthly_recurring_checks_spec import (
 from .column_uniqueness_profiling_checks_spec import ColumnUniquenessProfilingChecksSpec
 from .column_uniqueness_statistics_collectors_spec import (
     ColumnUniquenessStatisticsCollectorsSpec,
-)
-from .column_uniqueness_distinct_count_sensor_parameters_spec import (
-    ColumnUniquenessDistinctCountSensorParametersSpec,
-)
-from .column_uniqueness_distinct_count_statistics_collector_spec import (
-    ColumnUniquenessDistinctCountStatisticsCollectorSpec,
-)
-from .column_uniqueness_distinct_percent_sensor_parameters_spec import (
-    ColumnUniquenessDistinctPercentSensorParametersSpec,
-)
-from .column_uniqueness_distinct_percent_statistics_collector_spec import (
-    ColumnUniquenessDistinctPercentStatisticsCollectorSpec,
 )
 from .column_valid_latitude_percent_check_spec import (
     ColumnValidLatitudePercentCheckSpec,
@@ -1326,7 +1329,6 @@ from .run_checks_queue_job_result_highest_severity import (
 )
 from .schema_model import SchemaModel
 from .schema_remote_model import SchemaRemoteModel
-from .schema_table_checks_model import SchemaTableChecksModel
 from .sensor_basic_folder_model import SensorBasicFolderModel
 from .sensor_basic_folder_model_folders import SensorBasicFolderModelFolders
 from .sensor_basic_model import SensorBasicModel
@@ -1425,9 +1427,6 @@ from .table_change_row_count_since_30_days_check_spec import (
 from .table_change_row_count_since_yesterday_check_spec import (
     TableChangeRowCountSinceYesterdayCheckSpec,
 )
-from .table_checks_model import TableChecksModel
-from .table_checks_model_check_containers import TableChecksModelCheckContainers
-from .table_column_checks_model import TableColumnChecksModel
 from .table_column_count_sensor_parameters_spec import (
     TableColumnCountSensorParametersSpec,
 )
@@ -1451,13 +1450,9 @@ from .table_daily_recurring_categories_spec import TableDailyRecurringCategories
 from .table_daily_recurring_categories_spec_custom import (
     TableDailyRecurringCategoriesSpecCustom,
 )
+from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
-from .table_days_since_most_recent_event_check_spec import (
-    TableDaysSinceMostRecentEventCheckSpec,
-)
-from .table_days_since_most_recent_ingestion_check_spec import (
-    TableDaysSinceMostRecentIngestionCheckSpec,
-)
+from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_incident_grouping_spec_grouping_level import (
     TableIncidentGroupingSpecGroupingLevel,
@@ -1545,14 +1540,14 @@ from .table_timeliness_daily_partitioned_checks_spec import (
 from .table_timeliness_daily_recurring_checks_spec import (
     TableTimelinessDailyRecurringChecksSpec,
 )
+from .table_timeliness_data_freshness_sensor_parameters_spec import (
+    TableTimelinessDataFreshnessSensorParametersSpec,
+)
 from .table_timeliness_data_ingestion_delay_sensor_parameters_spec import (
     TableTimelinessDataIngestionDelaySensorParametersSpec,
 )
-from .table_timeliness_days_since_most_recent_event_sensor_parameters_spec import (
-    TableTimelinessDaysSinceMostRecentEventSensorParametersSpec,
-)
-from .table_timeliness_days_since_most_recent_ingestion_sensor_parameters_spec import (
-    TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec,
+from .table_timeliness_data_staleness_sensor_parameters_spec import (
+    TableTimelinessDataStalenessSensorParametersSpec,
 )
 from .table_timeliness_monthly_partitioned_checks_spec import (
     TableTimelinessMonthlyPartitionedChecksSpec,
@@ -1587,10 +1582,6 @@ from .table_volume_statistics_collectors_spec import TableVolumeStatisticsCollec
 from .temporal_unit import TemporalUnit
 from .time_window_filter_parameters import TimeWindowFilterParameters
 from .timestamp_columns_spec import TimestampColumnsSpec
-from .ui_all_checks_patch_parameters import UIAllChecksPatchParameters
-from .ui_all_checks_patch_parameters_selected_tables_to_columns import (
-    UIAllChecksPatchParametersSelectedTablesToColumns,
-)
 from .update_column_partitioned_checks_model_time_scale import (
     UpdateColumnPartitionedChecksModelTimeScale,
 )
@@ -1620,11 +1611,8 @@ from .within_change_30_days_rule_parameters_spec import (
 from .within_change_rule_parameters_spec import WithinChangeRuleParametersSpec
 
 __all__ = (
-    "AllChecksModel",
-    "AllColumnChecksModel",
-    "AllColumnChecksModelCheckTarget",
-    "AllTableChecksModel",
-    "AllTableChecksModelCheckTarget",
+    "AllChecksPatchParameters",
+    "AllChecksPatchParametersSelectedTablesToColumns",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
     "BigQueryParametersSpec",
@@ -1635,6 +1623,10 @@ __all__ = (
     "ChangePercentileMovingWithin60DaysRuleParametersSpec",
     "ChangePercentileMovingWithin7DaysRuleParametersSpec",
     "CheckBasicModel",
+    "CheckConfigurationModel",
+    "CheckConfigurationModelCheckTarget",
+    "CheckConfigurationModelCheckTimeScale",
+    "CheckConfigurationModelCheckType",
     "CheckContainerBasicModel",
     "CheckContainerModel",
     "CheckContainerModelEffectiveScheduleEnabledStatus",
@@ -1732,8 +1724,6 @@ __all__ = (
     "ColumnChangeSumSince30DaysCheckSpec",
     "ColumnChangeSumSince7DaysCheckSpec",
     "ColumnChangeSumSinceYesterdayCheckSpec",
-    "ColumnChecksModel",
-    "ColumnChecksModelCheckContainers",
     "ColumnColumnExistsSensorParametersSpec",
     "ColumnColumnTypeHashSensorParametersSpec",
     "ColumnConsistencyDailyPartitionedChecksSpec",
@@ -1757,6 +1747,8 @@ __all__ = (
     "ColumnDatetimeValueInRangeDatePercentCheckSpec",
     "ColumnDatetimeValueInRangeDatePercentSensorParametersSpec",
     "ColumnDateValuesInFuturePercentCheckSpec",
+    "ColumnDistinctCountCheckSpec",
+    "ColumnDistinctPercentCheckSpec",
     "ColumnDuplicateCountCheckSpec",
     "ColumnDuplicatePercentCheckSpec",
     "ColumnExpectedNumbersInUseCountCheckSpec",
@@ -1994,9 +1986,12 @@ __all__ = (
     "ColumnSumInRangeCheckSpec",
     "ColumnTruePercentCheckSpec",
     "ColumnTypeSnapshotSpec",
-    "ColumnDistinctCountCheckSpec",
     "ColumnUniquenessDailyPartitionedChecksSpec",
     "ColumnUniquenessDailyRecurringChecksSpec",
+    "ColumnUniquenessDistinctCountSensorParametersSpec",
+    "ColumnUniquenessDistinctCountStatisticsCollectorSpec",
+    "ColumnUniquenessDistinctPercentSensorParametersSpec",
+    "ColumnUniquenessDistinctPercentStatisticsCollectorSpec",
     "ColumnUniquenessDuplicateCountSensorParametersSpec",
     "ColumnUniquenessDuplicateCountStatisticsCollectorSpec",
     "ColumnUniquenessDuplicatePercentSensorParametersSpec",
@@ -2005,11 +2000,6 @@ __all__ = (
     "ColumnUniquenessMonthlyRecurringChecksSpec",
     "ColumnUniquenessProfilingChecksSpec",
     "ColumnUniquenessStatisticsCollectorsSpec",
-    "ColumnUniquenessDistinctCountSensorParametersSpec",
-    "ColumnUniquenessDistinctCountStatisticsCollectorSpec",
-    "ColumnUniquenessDistinctPercentSensorParametersSpec",
-    "ColumnUniquenessDistinctPercentStatisticsCollectorSpec",
-    "ColumnDistinctPercentCheckSpec",
     "ColumnValidLatitudePercentCheckSpec",
     "ColumnValidLongitudePercentCheckSpec",
     "ColumnValueAboveMaxValueCountCheckSpec",
@@ -2226,7 +2216,6 @@ __all__ = (
     "RunChecksQueueJobResultHighestSeverity",
     "SchemaModel",
     "SchemaRemoteModel",
-    "SchemaTableChecksModel",
     "SensorBasicFolderModel",
     "SensorBasicFolderModelFolders",
     "SensorBasicModel",
@@ -2277,9 +2266,6 @@ __all__ = (
     "TableChangeRowCountSince30DaysCheckSpec",
     "TableChangeRowCountSince7DaysCheckSpec",
     "TableChangeRowCountSinceYesterdayCheckSpec",
-    "TableChecksModel",
-    "TableChecksModelCheckContainers",
-    "TableColumnChecksModel",
     "TableColumnCountSensorParametersSpec",
     "TableColumnListOrderedHashSensorParametersSpec",
     "TableColumnListUnorderedHashSensorParametersSpec",
@@ -2289,9 +2275,9 @@ __all__ = (
     "TableDailyPartitionedCheckCategoriesSpecCustom",
     "TableDailyRecurringCategoriesSpec",
     "TableDailyRecurringCategoriesSpecCustom",
+    "TableDataFreshnessCheckSpec",
     "TableDataIngestionDelayCheckSpec",
-    "TableDaysSinceMostRecentEventCheckSpec",
-    "TableDaysSinceMostRecentIngestionCheckSpec",
+    "TableDataStalenessCheckSpec",
     "TableIncidentGroupingSpec",
     "TableIncidentGroupingSpecGroupingLevel",
     "TableIncidentGroupingSpecMinimumSeverity",
@@ -2335,9 +2321,9 @@ __all__ = (
     "TableStatisticsModel",
     "TableTimelinessDailyPartitionedChecksSpec",
     "TableTimelinessDailyRecurringChecksSpec",
+    "TableTimelinessDataFreshnessSensorParametersSpec",
     "TableTimelinessDataIngestionDelaySensorParametersSpec",
-    "TableTimelinessDaysSinceMostRecentEventSensorParametersSpec",
-    "TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec",
+    "TableTimelinessDataStalenessSensorParametersSpec",
     "TableTimelinessMonthlyPartitionedChecksSpec",
     "TableTimelinessMonthlyRecurringChecksSpec",
     "TableTimelinessPartitionReloadLagSensorParametersSpec",
@@ -2353,8 +2339,6 @@ __all__ = (
     "TemporalUnit",
     "TimestampColumnsSpec",
     "TimeWindowFilterParameters",
-    "UIAllChecksPatchParameters",
-    "UIAllChecksPatchParametersSelectedTablesToColumns",
     "UpdateColumnPartitionedChecksModelTimeScale",
     "UpdateColumnRecurringChecksModelTimeScale",
     "UpdateConnectionSchedulingGroupSchedulingGroup",

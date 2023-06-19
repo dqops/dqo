@@ -1,7 +1,11 @@
 **data ingestion delay** checks  
 
 **Description**  
-Table level check that calculates the maximal number of days between event timestamp and ingestion timestamp. .
+Table level check that calculates time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse / data lake.
+ The most recent row is identified by finding the most recent (maximum) value of the timestamp column that should contain the last modification timestamp from the source.
+ The timestamp when the row was loaded is identified by the most recent (maximum) value a timestamp column that was filled by the data pipeline, for example: &quot;loaded_at&quot;, &quot;updated_at&quot;, etc.
+ This check requires that the data pipeline is filling an extra column with the timestamp when the data loading job has been executed.
+ The names of both columns used for comparison should be specified in the &quot;timestamp_columns&quot; configuration entry on the table.
 
 ___
 

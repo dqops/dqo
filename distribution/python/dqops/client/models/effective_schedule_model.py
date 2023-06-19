@@ -33,6 +33,7 @@ class EffectiveScheduleModel:
             time_of_execution (Union[Unset, datetime.datetime]): Field value for the time at which the scheduled checks will
                 be executed.
             time_until_execution (Union[Unset, Duration]):
+            disabled (Union[Unset, bool]): Field value stating if the schedule has been explicitly disabled.
     """
 
     schedule_group: Union[Unset, EffectiveScheduleModelScheduleGroup] = UNSET
@@ -40,6 +41,7 @@ class EffectiveScheduleModel:
     cron_expression: Union[Unset, str] = UNSET
     time_of_execution: Union[Unset, datetime.datetime] = UNSET
     time_until_execution: Union[Unset, "Duration"] = UNSET
+    disabled: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -60,6 +62,8 @@ class EffectiveScheduleModel:
         if not isinstance(self.time_until_execution, Unset):
             time_until_execution = self.time_until_execution.to_dict()
 
+        disabled = self.disabled
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -73,6 +77,8 @@ class EffectiveScheduleModel:
             field_dict["time_of_execution"] = time_of_execution
         if time_until_execution is not UNSET:
             field_dict["time_until_execution"] = time_until_execution
+        if disabled is not UNSET:
+            field_dict["disabled"] = disabled
 
         return field_dict
 
@@ -111,12 +117,15 @@ class EffectiveScheduleModel:
         else:
             time_until_execution = Duration.from_dict(_time_until_execution)
 
+        disabled = d.pop("disabled", UNSET)
+
         effective_schedule_model = cls(
             schedule_group=schedule_group,
             schedule_level=schedule_level,
             cron_expression=cron_expression,
             time_of_execution=time_of_execution,
             time_until_execution=time_until_execution,
+            disabled=disabled,
         )
 
         effective_schedule_model.additional_properties = d

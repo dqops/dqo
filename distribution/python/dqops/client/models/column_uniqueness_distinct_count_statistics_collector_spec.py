@@ -23,7 +23,9 @@ class ColumnUniquenessDistinctCountStatisticsCollectorSpec:
     """
 
     disabled: Union[Unset, bool] = UNSET
-    parameters: Union[Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"] = UNSET
+    parameters: Union[
+        Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

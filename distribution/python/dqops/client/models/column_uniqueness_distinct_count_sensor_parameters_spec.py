@@ -38,7 +38,9 @@ class ColumnUniquenessDistinctCountSensorParametersSpec:
             filter_=filter_,
         )
 
-        column_uniqueness_distinct_count_sensor_parameters_spec.additional_properties = d
+        column_uniqueness_distinct_count_sensor_parameters_spec.additional_properties = (
+            d
+        )
         return column_uniqueness_distinct_count_sensor_parameters_spec
 
     @property

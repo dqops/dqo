@@ -57,14 +57,19 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         loading: true
       };
-    case JOB_ACTION.GET_JOBS_SUCCESS:
+    case JOB_ACTION.GET_JOBS_SUCCESS: {
+      const job_dictionary_state: Record<string, DqoJobHistoryEntryModel> = {};
+      action.data.jobs.forEach((item: DqoJobHistoryEntryModel) => {
+        job_dictionary_state[item.jobId?.jobId || ''] = item;
+      })
       return {
         ...state,
         loading: false,
-        jobs: action.data,
+        job_dictionary_state,
         lastSequenceNumber: action.data.lastSequenceNumber,
         error: null
       };
+    }
     case JOB_ACTION.GET_JOBS_ERROR:
       return {
         ...state,
@@ -82,12 +87,11 @@ const schemaReducer = (state = initialState, action: any) => {
       };
     case JOB_ACTION.GET_JOBS_CHANGES_SUCCESS: {
       const jobChanges: DqoJobChangeModel[] = action.data.jobChanges || [];
-      const job_dictionary_state = state.job_dictionary_state;
+      const job_dictionary_state = Object.assign({}, state.job_dictionary_state);
 
-      jobChanges.map((jobChange) => {
+      jobChanges.forEach((jobChange) => {
         if (!jobChange.jobId?.jobId) return;
         if (job_dictionary_state[jobChange.jobId?.jobId]) {
-          console.log('jobChange', jobChange);
           if (jobChange.status) {
             job_dictionary_state[jobChange.jobId?.jobId].status = jobChange.status;
           }
