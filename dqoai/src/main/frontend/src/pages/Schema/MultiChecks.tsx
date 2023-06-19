@@ -12,6 +12,7 @@ import { AxiosResponse } from "axios";
 import DisplaySensorParameters from "./DisplaySensorParameters";
 import FieldValue from "./FieldValue";
 import { isEqual } from "lodash";
+import { UpdateCheckModel } from "./UpdateCheckModel";
 
 const tabs = [
   {
@@ -37,6 +38,8 @@ export const MultiChecks = () => {
   const [checks, setChecks] = useState<CheckConfigurationModel[]>();
   const [activeTab, setActiveTab] = useState<'daily' | 'monthly'>('daily');
   const [selectedData, setSelectedData] = useState<CheckConfigurationModel[]>([]);
+  const [open, setOpen] = useState(false);
+  const [selectedCheck, setSelectedCheck] = useState<CheckConfigurationModel>();
 
   useEffect(() => {
     const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
@@ -109,13 +112,52 @@ export const MultiChecks = () => {
 
 
   const bulkEnableChecks = () => {
-    // ConnectionApiClient.bulkEnableConnectionChecks(connection, schema, {
-    //
-    // })
+    ConnectionApiClient.bulkEnableConnectionChecks(connection, checkName ?? '', {
+      check_search_filters: {
+        connectionName: connection,
+        schemaTableName: schema,
+        checkTarget,
+        columnDataType,
+        checkName,
+        checkCategory,
+      },
+      selected_tables_to_columns: {
+        ...checkTarget === 'table' ? {
+          table: Array.from(new Set(selectedData.map((item) => item.table_name ?? '')))
+        } : {
+          column: Array.from(new Set(selectedData.map((item) => item.column_name ?? '')))
+        }
+      },
+      override_conflicts: true
+    });
   };
 
   const bulkDisableChecks = () => {
+    ConnectionApiClient.bulkDisableConnectionChecks(connection, checkName ?? '', {
+      check_search_filters: {
+        connectionName: connection,
+        schemaTableName: schema,
+        checkTarget,
+        columnDataType,
+        checkName,
+        checkCategory,
+      },
+      selected_tables_to_columns: {
+        ...checkTarget === 'table' ? {
+          table: Array.from(new Set(selectedData.map((item) => item.table_name ?? '')))
+        } : {
+          column: Array.from(new Set(selectedData.map((item) => item.column_name ?? '')))
+        }
+      },
+    });
+  }
 
+  const onChangeSelectedData = (check: CheckConfigurationModel) => {
+    setSelectedData(selectedData.map((item) => check.check_name === item.check_name ? check : item));
+  };
+
+  const openDialog = () => {
+    setOpen(true);
   }
 
   const selectAll = () => {
@@ -130,6 +172,8 @@ export const MultiChecks = () => {
     if (selectedData.find(item => isEqual(item, check))) {
       setSelectedData(selectedData.filter((item) => !isEqual(item, check)));
     } else {
+      setSelectedCheck(check);
+      setOpen(true);
       setSelectedData([...selectedData, check]);
     }
   }
@@ -325,6 +369,13 @@ export const MultiChecks = () => {
           </div>
         </div>
       </div>
+
+      <UpdateCheckModel
+        open={open}
+        onClose={() => setOpen(false)}
+        check={selectedCheck}
+        onSubmit={onChangeSelectedData}
+      />
     </div>
   );
 };
