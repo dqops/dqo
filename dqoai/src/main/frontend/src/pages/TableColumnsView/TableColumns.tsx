@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
+import { ColumnApiClient, DataSourcesApi, DataStreamsApi, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
@@ -18,7 +18,7 @@ import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
 import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
-import Checkbox, { CheckboxProps } from '../../components/Checkbox';
+import Checkbox from '../../components/Checkbox';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -51,7 +51,14 @@ const TableColumns = ({
   const [columnToDelete, setColumnToDelete] = useState<ColumnStatisticsModel>();
   const [dataArray1, setDataArray1] = useState<MyData[]>();
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [isClicked, setIsClicked] = useState<boolean>(false)
+  const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>({});
+
+  const handleButtonClick = (name: string) => {
+    setObjectStates(prevStates => ({
+      ...prevStates,
+      [name]: !prevStates[name]
+    }));
+  };
   const dispatch = useDispatch();
   const {
     connection,
@@ -657,10 +664,27 @@ const TableColumns = ({
     }
   };
 
-  const selectColumn = (column: MyData) =>{
-  column.isColumnSelected= true; 
-  console.log(column.isColumnSelected)
+console.log(objectStates)
+
+const countTrueValues = (obj: Record<string, boolean>): number => {
+  let count = 0;
+  for (const key in obj) {
+    if (obj[key] === true) {
+      count++;
+    }
   }
+  return count;
+}
+
+const trueValuesCount = countTrueValues(objectStates);
+console.log(trueValuesCount); 
+
+
+const postDataStream = async() =>{
+  const res = DataStreamsApi.createDataStream(connection, schema, table)
+
+}
+
 
 
 
@@ -674,7 +698,7 @@ const TableColumns = ({
           {column.nameOfCol}{column.isColumnSelected}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
-        <Checkbox checked={!column.isColumnSelected} onChange={() =>selectColumn(column) }/>
+        <Checkbox checked={objectStates[column.nameOfCol ? column.nameOfCol : ""] ? true : false} onChange={() =>handleButtonClick(column.nameOfCol ? column.nameOfCol : "") }/>
           <div key={index} className="truncate">
             {datatype_detected(column.detectedDatatypeVar)}
           </div>
