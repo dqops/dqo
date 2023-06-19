@@ -321,6 +321,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                     TableChecksExecutionStatistics executionStatistics,
                                                     JobCancellationToken jobCancellationToken) {
         List<SensorPrepareResult> sensorPrepareResults = new ArrayList<>();
+        int sensorResultId = 0;
 
         for (AbstractCheckSpec<?, ?, ?, ?> checkSpec : checks) {
             if (jobCancellationToken.isCancelled()) {
@@ -331,6 +332,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
             try {
                 SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
+                sensorResultId++;
+                sensorRunParameters.setActualValueAlias("dqo_actual_value_" + sensorResultId);
+                sensorRunParameters.setExpectedValueAlias("dqo_expected_value_" + sensorResultId);
 
                 if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
                         Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {

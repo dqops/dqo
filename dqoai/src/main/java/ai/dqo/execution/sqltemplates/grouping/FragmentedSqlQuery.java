@@ -26,6 +26,8 @@ import java.util.List;
 public class FragmentedSqlQuery {
     private final String originalSql;
     private final ArrayList<SqlQueryFragment> components = new ArrayList<>();
+    private String actualValueAlias;
+    private String expectedValueAlias;
 
     /**
      * Creates an SQL component list.
@@ -69,6 +71,38 @@ public class FragmentedSqlQuery {
      */
     public List<SqlQueryFragment> getComponents() {
         return components;
+    }
+
+    /**
+     * Returns the name of the actual_value alias (output column name) that is used in the query.
+     * @return Detected output column name used to extract the actual value (the sensor readout).
+     */
+    public String getActualValueAlias() {
+        return actualValueAlias;
+    }
+
+    /**
+     * Sets the column name that contains the output sensor readout.
+     * @param actualValueAlias The output column alias that contains the sensor readout value.
+     */
+    public void setActualValueAlias(String actualValueAlias) {
+        this.actualValueAlias = actualValueAlias;
+    }
+
+    /**
+     * Returns the name of the expected_value alias (secondary output column name) that is used in the query.
+     * @return Detected output column name used to extract the expected value (the secondary sensor readout).
+     */
+    public String getExpectedValueAlias() {
+        return expectedValueAlias;
+    }
+
+    /**
+     * Sets the column name that contains the output sensor expected value.
+     * @param expectedValueAlias The output column alias that contains the sensor expected value readout value.
+     */
+    public void setExpectedValueAlias(String expectedValueAlias) {
+        this.expectedValueAlias = expectedValueAlias;
     }
 
     /**

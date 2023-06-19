@@ -16,6 +16,7 @@
 
 package ai.dqo.execution.sensors.grouping;
 
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorPrepareResult;
 import ai.dqo.execution.sqltemplates.grouping.FragmentedSqlQuery;
 import ai.dqo.execution.sqltemplates.grouping.SqlQueryFragment;
@@ -25,6 +26,7 @@ import org.apache.parquet.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A group of similar sensors that are grouped together. Their SQLs will be merged together in order to execute ony one query that can analyze multiple metrics from a table,
@@ -83,12 +85,16 @@ public class PreparedSensorsGroup {
             throw new DqoRuntimeException("No prepared SQLs were added");
         }
 
+        SensorPrepareResult firstPreparedStatement = this.preparedSensors.get(0);
+        FragmentedSqlQuery firstQuerySqlFragments = firstPreparedStatement.getFragmentedSqlQuery();
+
         if (this.preparedSensors.size() == 1) {
-            this.mergedSql = this.preparedSensors.get(0).getRenderedSensorSql();
+            this.mergedSql = firstPreparedStatement.getRenderedSensorSql();
+            firstPreparedStatement.setActualValueAlias(firstQuerySqlFragments.getActualValueAlias());
+            firstPreparedStatement.setExpectedValueAlias(firstQuerySqlFragments.getExpectedValueAlias());
             return;
         }
 
-        SensorPrepareResult firstPreparedStatement = this.preparedSensors.get(0);
         if (firstPreparedStatement.getRenderedSensorSql() == null) {
             this.mergedSql = null; // these sensors are not SQL sensors
             return;
@@ -96,7 +102,6 @@ public class PreparedSensorsGroup {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        FragmentedSqlQuery firstQuerySqlFragments = firstPreparedStatement.getFragmentedSqlQuery();
         int sqlFragmentsCount = firstQuerySqlFragments.getComponents().size();
         for (int fragmentIndex = 0; fragmentIndex < sqlFragmentsCount; fragmentIndex++) {
             SqlQueryFragment firstQueryFragment = firstQuerySqlFragments.getComponents().get(fragmentIndex);
@@ -105,10 +110,26 @@ public class PreparedSensorsGroup {
             } else {
                 for (int sensorIndex = 0; sensorIndex < this.preparedSensors.size(); sensorIndex++) {
                     SensorPrepareResult sensorPrepareResult = this.preparedSensors.get(sensorIndex);
-                    SqlQueryFragment sensorSqlFragment = sensorPrepareResult.getFragmentedSqlQuery().getComponents().get(fragmentIndex);
-                    stringBuilder.append(sensorSqlFragment.getText());
+                    FragmentedSqlQuery fragmentedSqlQuery = sensorPrepareResult.getFragmentedSqlQuery();
+                    SqlQueryFragment sensorSqlFragment = fragmentedSqlQuery.getComponents().get(fragmentIndex);
+                    String sqlFragmentText = sensorSqlFragment.getText();
+                    if (fragmentedSqlQuery.getActualValueAlias() != null &&
+                            Objects.equals(fragmentedSqlQuery.getActualValueAlias(), SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) &&
+                            !Objects.equals(fragmentedSqlQuery.getActualValueAlias(), sensorPrepareResult.getSensorRunParameters().getActualValueAlias())) {
+                        // need to fix the column name
+                        sqlFragmentText = sqlFragmentText.replace(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, sensorPrepareResult.getSensorRunParameters().getActualValueAlias());
+                    }
 
-                    if (!sensorSqlFragment.getText().trim().endsWith(",")) {
+                    if (fragmentedSqlQuery.getExpectedValueAlias() != null &&
+                            Objects.equals(fragmentedSqlQuery.getExpectedValueAlias(), SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME) &&
+                            !Objects.equals(fragmentedSqlQuery.getExpectedValueAlias(), sensorPrepareResult.getSensorRunParameters().getExpectedValueAlias())) {
+                        // need to fix the column name
+                        sqlFragmentText = sqlFragmentText.replace(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, sensorPrepareResult.getSensorRunParameters().getExpectedValueAlias());
+                    }
+
+                    stringBuilder.append(sqlFragmentText);
+
+                    if (!sqlFragmentText.trim().endsWith(",")) {
                         stringBuilder.append(',');
                     }
 
@@ -157,10 +178,6 @@ public class PreparedSensorsGroup {
     public String getMergedSql() {
         if (this.mergedSql != null) {
             return this.mergedSql;
-        }
-
-        if (this.preparedSensors.size() == 1) {
-            return this.preparedSensors.get(0).getRenderedSensorSql(); // fallback for single sensor groups
         }
 
         this.mergeQueries();
