@@ -16,7 +16,6 @@
 package ai.dqo.execution.sensors.grouping;
 
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
-import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.sources.TableSpec;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -31,7 +30,7 @@ import java.time.temporal.ChronoUnit;
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class GroupedSensorExecutionResult {
-    private SensorExecutionRunParameters parameters;
+    private PreparedSensorsGroup sensorGroup;
     private Table tableResult;
     private TableSpec capturedMetadataResult;
     private Object otherResult;
@@ -49,54 +48,58 @@ public class GroupedSensorExecutionResult {
 
     /**
      * Creates a sensor execution result object with the sensor parameters and a tabular result returned as a query from the sensor.
-     * @param parameters Sensor execution parameters.
+     * @param sensorGroup Sensor group.
+     * @param executionStartedAt Timestamp when the sensor was executed on the data source.
      * @param tableResult Sensor SELECT result table.
      */
-    public GroupedSensorExecutionResult(SensorExecutionRunParameters parameters, Table tableResult) {
-        this.parameters = parameters;
+    public GroupedSensorExecutionResult(PreparedSensorsGroup sensorGroup, Instant executionStartedAt, Table tableResult) {
+        this.sensorGroup = sensorGroup;
         this.tableResult = tableResult;
 		this.finishedAt = Instant.now();
-		this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
+		this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(executionStartedAt, this.finishedAt);
         this.success = true;
     }
 
     /**
      * Creates a sensor execution result object with the sensor parameters and captured metadata of a table, for schema validation sensors (column count, column order).
-     * @param parameters             Sensor execution parameters.
+     * @param sensorGroup             Sensor execution parameters.
+     * @param executionStartedAt Timestamp when the sensor was executed on the data source.
      * @param capturedMetadataResult The metadata of a table that was just introspected.
      */
-    public GroupedSensorExecutionResult(SensorExecutionRunParameters parameters, TableSpec capturedMetadataResult) {
-        this.parameters = parameters;
+    public GroupedSensorExecutionResult(PreparedSensorsGroup sensorGroup, Instant executionStartedAt, TableSpec capturedMetadataResult) {
+        this.sensorGroup = sensorGroup;
         this.capturedMetadataResult = capturedMetadataResult;
         this.finishedAt = Instant.now();
-        this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
+        this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(executionStartedAt, this.finishedAt);
         this.success = true;
     }
 
     /**
      * Creates a sensor execution result object with the sensor parameters and an unspecified result object of any time (the sensor runner will know how to parse it).
-     * @param parameters  Sensor execution parameters.
+     * @param sensorGroup  Sensor group.
+     * @param executionStartedAt Timestamp when the sensor was executed on the data source.
      * @param otherResult The sensor execution result of any type, let the sensor runner parse it further.
      */
-    public GroupedSensorExecutionResult(SensorExecutionRunParameters parameters, Object otherResult) {
-        this.parameters = parameters;
+    public GroupedSensorExecutionResult(PreparedSensorsGroup sensorGroup, Instant executionStartedAt, Object otherResult) {
+        this.sensorGroup = sensorGroup;
         this.otherResult = otherResult;
         this.finishedAt = Instant.now();
-        this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
+        this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(executionStartedAt, this.finishedAt);
         this.success = true;
     }
 
     /**
      * Creates a sensor execution result object with the sensor parameters when the sensor failed. The isSensorFailed result will be false
      * and the exception will be preserved.
-     * @param parameters Sensor execution parameters.
+     * @param sensorGroup Sensor group.
+     * @param executionStartedAt Timestamp when the sensor was executed on the data source.
      * @param exception The exception throw by the sensor.
      */
-    public GroupedSensorExecutionResult(SensorExecutionRunParameters parameters, Throwable exception) {
-        this.parameters = parameters;
+    public GroupedSensorExecutionResult(PreparedSensorsGroup sensorGroup, Instant executionStartedAt, Throwable exception) {
+        this.sensorGroup = sensorGroup;
         this.exception = exception;
         this.finishedAt = Instant.now();
-        this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
+        this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(executionStartedAt, this.finishedAt);
         this.success = false;
         this.tableResult = Table.create("error");
         this.tableResult.addColumns(DoubleColumn.create(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
@@ -104,19 +107,19 @@ public class GroupedSensorExecutionResult {
     }
 
     /**
-     * Sensor run parameters (connection, table, column, sensor parameters).
-     * @return Sensor execution run parameters.
+     * Sensor group that was executed.
+     * @return Sensor group.
      */
-    public SensorExecutionRunParameters getSensorRunParameters() {
-        return parameters;
+    public PreparedSensorsGroup getSensorGroup() {
+        return sensorGroup;
     }
 
     /**
-     * Stores the sensor run parameters used to execute the sensor.
-     * @param parameters Sensor run parameters.
+     * Stores the sensor group that was executed.
+     * @param sensorGroup Sensor group.
      */
-    public void setParameters(SensorExecutionRunParameters parameters) {
-        this.parameters = parameters;
+    public void setSensorGroup(PreparedSensorsGroup sensorGroup) {
+        this.sensorGroup = sensorGroup;
     }
 
     /**

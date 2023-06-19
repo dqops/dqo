@@ -17,6 +17,11 @@
 package ai.dqo.execution.sensors.grouping;
 
 import ai.dqo.execution.sensors.SensorPrepareResult;
+import ai.dqo.execution.sqltemplates.grouping.FragmentedSqlQuery;
+import ai.dqo.execution.sqltemplates.grouping.SqlQueryFragment;
+import ai.dqo.execution.sqltemplates.grouping.SqlQueryFragmentType;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+import org.apache.parquet.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +31,7 @@ import java.util.List;
  * or even from multiple columns.
  */
 public class PreparedSensorsGroup {
-    private List<SensorPrepareResult> preparedSensors = new ArrayList<>();
+    private final List<SensorPrepareResult> preparedSensors = new ArrayList<>();
     private String mergedSql;
 
     /**
@@ -46,13 +51,119 @@ public class PreparedSensorsGroup {
     }
 
     /**
+     * Retrieves the first sensor's prepared result. This sensor is used as a template for other operations.
+     * @return The prepare results of the first sensor that was added to the group.
+     */
+    public SensorPrepareResult getFirstSensorPrepareResult() {
+        return this.preparedSensors.get(0);
+    }
+
+    /**
+     * Returns the count of prepared sensors that are aggregated into this similar sensor group.
+     * @return Count of similar sensors that are aggregated.
+     */
+    public int size() {
+        return this.preparedSensors.size();
+    }
+
+    /**
+     * Returns true if this check could be split further.
+     * @return True when this check could be split further.
+     */
+    public boolean isSplittable() {
+        return this.preparedSensors.size() > 1 && !Strings.isNullOrEmpty(this.getFirstSensorPrepareResult().getRenderedSensorSql());
+    }
+
+    /**
+     * Merges queries into a single SQL that calculates all queries at once.
+     * The merged query could be returned by {@link PreparedSensorsGroup#getMergedSql()}.
+     */
+    public void mergeQueries() {
+        if (this.preparedSensors.size() == 0) {
+            throw new DqoRuntimeException("No prepared SQLs were added");
+        }
+
+        if (this.preparedSensors.size() == 1) {
+            this.mergedSql = this.preparedSensors.get(0).getRenderedSensorSql();
+            return;
+        }
+
+        SensorPrepareResult firstPreparedStatement = this.preparedSensors.get(0);
+        if (firstPreparedStatement.getRenderedSensorSql() == null) {
+            this.mergedSql = null; // these sensors are not SQL sensors
+            return;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        FragmentedSqlQuery firstQuerySqlFragments = firstPreparedStatement.getFragmentedSqlQuery();
+        int sqlFragmentsCount = firstQuerySqlFragments.getComponents().size();
+        for (int fragmentIndex = 0; fragmentIndex < sqlFragmentsCount; fragmentIndex++) {
+            SqlQueryFragment firstQueryFragment = firstQuerySqlFragments.getComponents().get(fragmentIndex);
+            if (firstQueryFragment.getFragmentType() == SqlQueryFragmentType.STATIC_FRAGMENT) {
+                stringBuilder.append(firstQueryFragment.getText());
+            } else {
+                for (int sensorIndex = 0; sensorIndex < this.preparedSensors.size(); sensorIndex++) {
+                    SensorPrepareResult sensorPrepareResult = this.preparedSensors.get(sensorIndex);
+                    SqlQueryFragment sensorSqlFragment = sensorPrepareResult.getFragmentedSqlQuery().getComponents().get(fragmentIndex);
+                    stringBuilder.append(sensorSqlFragment.getText());
+
+                    if (!sensorSqlFragment.getText().trim().endsWith(",")) {
+                        stringBuilder.append(',');
+                    }
+
+                    if (sensorIndex < this.preparedSensors.size() - 1) {
+                        stringBuilder.append('\n');
+                    }
+                }
+            }
+
+            if (fragmentIndex < sqlFragmentsCount - 1) {
+                stringBuilder.append('\n');
+            }
+        }
+
+
+        if (stringBuilder.length() > 0) {
+            this.mergedSql = stringBuilder.toString();
+        }
+    }
+
+    /**
+     * Splits the list into two separate lists of equal (or almost equal) size.
+     * This method should be called to generate SQLs that aggregate less sensors, in case that one of the sensor cannot be executed due to some issues in the sensor's query or a missing column.
+     * @return Two groups with sensors extracted from this group.
+     * @throws DqoRuntimeException When this group has less than 2 sensors and cannot be divided further.
+     */
+    public PreparedSensorsGroup[] split() {
+        if (this.preparedSensors.size() == 1) {
+            throw new DqoRuntimeException("Cannot split the group that has only one sensor");
+        }
+
+        int firstGroupSize = this.preparedSensors.size() / 2;
+        PreparedSensorsGroup firstGroup = new PreparedSensorsGroup();
+        firstGroup.preparedSensors.addAll(this.preparedSensors.subList(0, firstGroupSize));
+
+        PreparedSensorsGroup secondGroup = new PreparedSensorsGroup();
+        secondGroup.preparedSensors.addAll(this.preparedSensors.subList(firstGroupSize, this.preparedSensors.size()));
+
+        return new PreparedSensorsGroup[] { firstGroup, secondGroup };
+    }
+
+    /**
      * Returns a merged SQL query that is combined from multiple sensors.
      * @return Merged sql.
      */
     public String getMergedSql() {
-        if (this.mergedSql == null && this.preparedSensors.size() == 1) {
+        if (this.mergedSql != null) {
+            return this.mergedSql;
+        }
+
+        if (this.preparedSensors.size() == 1) {
             return this.preparedSensors.get(0).getRenderedSensorSql(); // fallback for single sensor groups
         }
+
+        this.mergeQueries();
         return this.mergedSql;
     }
 }

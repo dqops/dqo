@@ -36,6 +36,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
 
+import java.time.Instant;
+
 /**
  * Sensor executor that executes SQL queries on a data source that supports SQL.
  */
@@ -76,6 +78,7 @@ public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecuto
         SensorPrepareResult firstSensorPrepareResult = preparedSensorsGroup.getPreparedSensors().get(0);
         SensorExecutionRunParameters sensorRunParameters = firstSensorPrepareResult.getSensorRunParameters();
         String renderedSensorSql = preparedSensorsGroup.getMergedSql();
+        Instant startedAt = Instant.now();
 
         try {
             if (!dummySensorExecution) {
@@ -88,16 +91,16 @@ public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecuto
                 try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
                     jobCancellationToken.throwIfCancelled();
                     Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken);
-                    return new GroupedSensorExecutionResult(sensorRunParameters, sensorResultRows);
+                    return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, sensorResultRows);
                 }
             }
 
             Table dummyResultTable = createResultTableWithResult(preparedSensorsGroup);
-            return new GroupedSensorExecutionResult(sensorRunParameters, dummyResultTable);
+            return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, dummyResultTable);
         }
         catch (Throwable exception) {
             log.debug("Sensor failed to execute a query :" + renderedSensorSql, exception);
-            return new GroupedSensorExecutionResult(sensorRunParameters, exception);
+            return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, exception);
         }
     }
 }

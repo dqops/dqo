@@ -43,6 +43,9 @@ import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.*;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
+import ai.dqo.execution.sensors.grouping.GroupedSensorsCollection;
+import ai.dqo.execution.sensors.grouping.PreparedSensorsGroup;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
 import ai.dqo.execution.sensors.progress.PreparingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
@@ -190,7 +193,10 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(checks, executionContext, userHome, userTimeWindowFilters, progressListener,
                 allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
 
-        List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(allPreparedSensors, executionContext, progressListener, allErrorsTable,
+        GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection();
+        groupedSensorsCollection.addAllPreparedSensors(allPreparedSensors);
+
+        List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(groupedSensorsCollection, executionContext, progressListener, allErrorsTable,
                 checkExecutionSummary, executionStatistics, dummySensorExecution, jobCancellationToken);
 
         for (SensorExecutionResult sensorExecutionResult : sensorExecutionResults) {
@@ -377,7 +383,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
     /**
      * Executes prepared sensors.
-     * @param preparedSensors Collection of sensors that are prepared for execution.
+     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that could be merged together.
      * @param executionContext Execution context - to access sensor definitions.
      * @param progressListener Progress listener - to report progress.
      * @param allErrorsTable Target table where errors are added when parsing fails.
@@ -387,7 +393,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
      * @return List of sensor execution results.
      */
-    public List<SensorExecutionResult> executeSensors(Collection<SensorPrepareResult> preparedSensors,
+    public List<SensorExecutionResult> executeSensors(GroupedSensorsCollection groupedSensorsCollection,
                                                       ExecutionContext executionContext,
                                                       CheckExecutionProgressListener progressListener,
                                                       Table allErrorsTable,
@@ -396,38 +402,52 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                       boolean dummySensorExecution,
                                                       JobCancellationToken jobCancellationToken) {
         List<SensorExecutionResult> sensorExecuteResults = new ArrayList<>();
+        Collection<PreparedSensorsGroup> preparedSensorGroups = groupedSensorsCollection.getPreparedSensorGroups();
 
-        for (SensorPrepareResult sensorPrepareResult : preparedSensors) {
+        for (PreparedSensorsGroup preparedSensorsGroup : preparedSensorGroups) {
             if (jobCancellationToken.isCancelled()) {
                 break;
             }
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
-                TableSpec tableSpec = sensorRunParameters.getTable();
+                SensorPrepareResult firstSensorPrepareResult = preparedSensorsGroup.getFirstSensorPrepareResult();
+                SensorExecutionRunParameters firstSensorRunParameters = firstSensorPrepareResult.getSensorRunParameters();
+                TableSpec tableSpec = firstSensorRunParameters.getTable();
 
-                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorPrepareResult));
-                SensorExecutionResult sensorExecuteResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
+                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, firstSensorPrepareResult));
+                List<GroupedSensorExecutionResult> groupedSensorExecutionResults = this.dataQualitySensorRunner.executeGroupedSensors(executionContext,
+                        preparedSensorsGroup, progressListener, dummySensorExecution, jobCancellationToken);
 
-                if (!sensorExecuteResult.isSuccess()) {
-                    executionStatistics.incrementSensorExecutionErrorsCount(1);
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecuteResult, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
-                    progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
-                            sensorExecuteResult, sensorExecuteResult.getException()));
-                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(
-                            sensorExecuteResult.getException(), sensorRunParameters.getCheckSearchFilter()));
-                    continue;
+                for (GroupedSensorExecutionResult groupedSensorExecutionResult : groupedSensorExecutionResults) {
+                    PreparedSensorsGroup sensorGroup = groupedSensorExecutionResult.getSensorGroup();
+                    List<SensorPrepareResult> preparedSensorsInGroup = sensorGroup.getPreparedSensors();
+
+                    for (SensorPrepareResult sensorPrepareResult : preparedSensorsInGroup) {
+                        SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
+                        SensorExecutionResult sensorExecuteResult = sensorPrepareResult.getSensorRunner().extractSensorResults(
+                                executionContext, groupedSensorExecutionResult,
+                                sensorPrepareResult, progressListener, jobCancellationToken);
+
+                        if (!sensorExecuteResult.isSuccess()) {
+                            executionStatistics.incrementSensorExecutionErrorsCount(1);
+                            ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                                    sensorExecuteResult, sensorRunParameters);
+                            allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                            progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
+                                    sensorExecuteResult, sensorExecuteResult.getException()));
+                            checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(
+                                    sensorExecuteResult.getException(), sensorRunParameters.getCheckSearchFilter()));
+                            continue;
+                        }
+
+                        progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorExecuteResult));
+                        if (sensorExecuteResult.getResultTable().rowCount() == 0) {
+                            continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
+                        }
+                        executionStatistics.incrementSensorReadoutsCount(sensorExecuteResult.getResultTable().rowCount());
+                        sensorExecuteResults.add(sensorExecuteResult);
+                    }
                 }
-
-                progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorExecuteResult));
-                if (sensorExecuteResult.getResultTable().rowCount() == 0) {
-                    continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
-                }
-                executionStatistics.incrementSensorReadoutsCount(sensorExecuteResult.getResultTable().rowCount());
-                sensorExecuteResults.add(sensorExecuteResult);
             }
             catch (DqoQueueJobCancelledException cex) {
                 // ignore the error, just stop running checks

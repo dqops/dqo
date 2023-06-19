@@ -17,7 +17,7 @@
 package ai.dqo.execution.sqltemplates.grouping;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Rendered SQL query that was divided into components that are static SQLs (the beginning and the ending of an SQL query) that are the same between similar queries
@@ -67,7 +67,7 @@ public class FragmentedSqlQuery {
      * Returns a collection of SQL components.
      * @return Collection of sql components.
      */
-    public Collection<SqlQueryFragment> getComponents() {
+    public List<SqlQueryFragment> getComponents() {
         return components;
     }
 

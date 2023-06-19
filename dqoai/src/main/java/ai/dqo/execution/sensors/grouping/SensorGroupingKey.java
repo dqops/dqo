@@ -16,7 +16,6 @@
 
 package ai.dqo.execution.sensors.grouping;
 
-import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sqltemplates.grouping.FragmentedSqlQuery;
 
 import java.util.Objects;
@@ -26,16 +25,16 @@ import java.util.Objects;
  */
 public class SensorGroupingKey {
     private FragmentedSqlQuery fragmentedSqlQuery;
-    private AbstractSensorRunner sensorRunner;
+    private AbstractGroupedSensorExecutor sensorExecutor;
 
     /**
      * Creates a sensor grouping key.
      * @param fragmentedSqlQuery Parsed sql query that is divided into SQL fragments, static fragments could be compared as a part of this key.
-     * @param sensorRunner Sensor runner instance that will be used to execute this sensor.
+     * @param sensorExecutor Sensor executor instance that will be used to execute this sensor.
      */
-    public SensorGroupingKey(FragmentedSqlQuery fragmentedSqlQuery, AbstractSensorRunner sensorRunner) {
+    public SensorGroupingKey(FragmentedSqlQuery fragmentedSqlQuery, AbstractGroupedSensorExecutor sensorExecutor) {
         this.fragmentedSqlQuery = fragmentedSqlQuery;
-        this.sensorRunner = sensorRunner;
+        this.sensorExecutor = sensorExecutor;
     }
 
     /**
@@ -47,11 +46,11 @@ public class SensorGroupingKey {
     }
 
     /**
-     * Returns the sensor runner instance that will run this sensor.
-     * @return Sensor runner instance.
+     * Returns the sensor executor instance that will run this sensor.
+     * @return Sensor executor instance.
      */
-    public AbstractSensorRunner getSensorRunner() {
-        return sensorRunner;
+    public AbstractGroupedSensorExecutor getSensorExecutor() {
+        return sensorExecutor;
     }
 
     @Override
@@ -63,13 +62,13 @@ public class SensorGroupingKey {
 
         if (!Objects.equals(fragmentedSqlQuery, that.fragmentedSqlQuery))
             return false;
-        return Objects.equals(sensorRunner, that.sensorRunner);
+        return Objects.equals(sensorExecutor, that.sensorExecutor);
     }
 
     @Override
     public int hashCode() {
         int result = fragmentedSqlQuery != null ? fragmentedSqlQuery.hashCode() : 0;
-        result = 31 * result + (sensorRunner != null ? sensorRunner.hashCode() : 0);
+        result = 31 * result + (sensorExecutor != null ? sensorExecutor.hashCode() : 0);
         return result;
     }
 }

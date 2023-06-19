@@ -31,6 +31,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
                                                              JobCancellationToken jobCancellationToken) {
         SensorPrepareResult firstSensorPrepareResult = preparedSensorsGroup.getPreparedSensors().get(0);
         SensorExecutionRunParameters sensorRunParameters = firstSensorPrepareResult.getSensorRunParameters();
+        Instant startedAt = Instant.now();
 
         PhysicalTableName physicalTableName = sensorRunParameters.getTable().getPhysicalTableName();
         try {
@@ -91,11 +93,11 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
 
                     if (retrievedTableSpecList.size() == 0) {
                         // table not found
-                        return new GroupedSensorExecutionResult(sensorRunParameters, (TableSpec)null);
+                        return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, (TableSpec)null);
                     }
 
                     TableSpec introspectedTableSpec = retrievedTableSpecList.get(0);
-                    return new GroupedSensorExecutionResult(sensorRunParameters, introspectedTableSpec);
+                    return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, introspectedTableSpec);
                 }
             }
 
@@ -104,12 +106,12 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
             fakeTableSpec.getColumns().put("col1", new ColumnSpec() {{
                 setTypeSnapshot(new ColumnTypeSnapshotSpec("INT"));
             }});
-            return new GroupedSensorExecutionResult(sensorRunParameters, fakeTableSpec);
+            return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, fakeTableSpec);
         }
         catch (Throwable exception) {
             log.debug("Metadata sensor failed to read the metadata of the table:" +
                     physicalTableName.toTableSearchFilter(), exception);
-            return new GroupedSensorExecutionResult(sensorRunParameters, exception);
+            return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, exception);
         }
     }
 }
