@@ -3,9 +3,7 @@ import { ColumnApiClient,DataStreamsApi, JobApiClient } from '../../services/api
 import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
-  DataStreamLevelSpec,
   DataStreamMappingSpec,
-  DataStreamTrimmedModel,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -28,6 +26,11 @@ interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
+}
+interface LocationState {
+  bool: boolean;
+  data_stream_name: string;
+  spec: DataStreamMappingSpec;
 }
 
 interface MyData {
@@ -141,6 +144,48 @@ const TableColumns = ({
     );
     history.push(url);
   };
+  
+  const postDataStream = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      'sources',
+      connectionName,
+      schemaName,
+      tableName,
+      'data-streams'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      'sources',
+      connection,
+      schema,
+      table
+    );
+  
+    const data: LocationState = {
+      bool: true,
+      data_stream_name: setDataStream(),
+      spec: setSpec2()
+    };
+  
+    return new Promise<void>((resolve, reject) => {
+      DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data)
+        .then(() => {
+          dispatch(
+            addFirstLevelTab(CheckTypes.SOURCES, {
+              url,
+              value,
+              state: data,
+              label: table
+            })
+          );
+          history.push(url, data);
+         
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
+  
 
   const removeColumn = async () => {
     if (selectedColumn?.column_name) {
@@ -686,9 +731,6 @@ const listOfStr = selectStrings(objectStates)
 
 const trueValuesCount = countTrueValues(objectStates);
 
-const postDataStream = async() =>{
-  await DataStreamsApi.createDataStream(connectionName, schemaName, tableName, {data_stream_name: setDataStream(), spec: setSpec2()})
-}
 const spec: DataStreamMappingSpec = {
   level_1: {
     column: undefined
@@ -718,6 +760,7 @@ const spec: DataStreamMappingSpec = {
     column: undefined
   }
 }
+
 const setSpec2 = () =>{
  
   for(let i =1; i<= trueValuesCount; i++){ 
@@ -752,6 +795,8 @@ const setDataStream = () =>{
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
+        
+        <Checkbox checked={objectStates[column.nameOfCol ? column.nameOfCol : ""] ? true : false} onChange={() =>handleButtonClick(column.nameOfCol ? column.nameOfCol : "") } className='absolute top-2 border-b border-gray-100'/>
         <td
           className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
           onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
@@ -759,7 +804,6 @@ const setDataStream = () =>{
           {column.nameOfCol}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
-        <Checkbox checked={objectStates[column.nameOfCol ? column.nameOfCol : ""] ? true : false} onChange={() =>handleButtonClick(column.nameOfCol ? column.nameOfCol : "") }/>
           <div key={index} className="truncate">
             {datatype_detected(column.detectedDatatypeVar)}
           </div>
@@ -873,18 +917,19 @@ const setDataStream = () =>{
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 py-6 relative">
+            {trueValuesCount !== 0 && trueValuesCount<= 9 && <Button label='Create Data Stream' color='primary' onClick={() => {postDataStream()}} className='absolute top-0 right-4 px-2'/>}
+            {trueValuesCount !== 0 && trueValuesCount> 9 && 
+            <div className='flex text-red-500 items-center gap-x-4 absolute top-0 right-4 px-2'>
+
+            (You can choose max 9 columns)
+            <Button label='Create Data Stream' color='secondary' className='text-black ' /> 
+            </div>
+            }
       <table className="mb-6 mt-4 w-full">
         <thead>
-          {trueValuesCount !== 0 && trueValuesCount<= 9 && <Button label='create Data Stream' color='primary' onClick={() => {postDataStream()}}/>}
-          {trueValuesCount !== 0 && trueValuesCount> 9 && 
-          <div className='flex text-red-500 items-center gap-x-4'>
-
-          <Button label='create Data Stream' color='secondary' className='text-black' /> 
-          (You can choose max 9 columns)
-          </div>
-          }
           <tr>
+            <th className="border-b border-gray-100 " style={{width: "6px"}}></th>
             {labels.map((x, index) => (
               <th
                 className="border-b border-gray-100 text-left px-4 py-2 cursor-pointer"
