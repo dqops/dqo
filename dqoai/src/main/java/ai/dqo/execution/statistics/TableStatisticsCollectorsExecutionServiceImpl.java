@@ -27,10 +27,19 @@ import ai.dqo.data.statistics.normalization.StatisticsResultsNormalizedResult;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.checks.CheckExecutionFailedException;
+import ai.dqo.execution.checks.progress.SavingSensorResultsEvent;
 import ai.dqo.execution.sensors.*;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
+import ai.dqo.execution.sensors.grouping.GroupedSensorsCollection;
+import ai.dqo.execution.sensors.grouping.PreparedSensorsGroup;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
 import ai.dqo.execution.sensors.progress.PreparingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
+import ai.dqo.execution.sensors.progress.SensorFailedEvent;
+import ai.dqo.execution.statistics.progress.ExecuteStatisticsCollectorsOnTableFinishedEvent;
+import ai.dqo.execution.statistics.progress.ExecuteStatisticsCollectorsOnTableStartEvent;
+import ai.dqo.execution.statistics.progress.SavingStatisticsResultsEvent;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
@@ -120,7 +129,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         jobCancellationToken.throwIfCancelled();
 
         TableSpec tableSpec = targetTable.getSpec();
-//        progressListener.onExecuteProfilerOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
+        progressListener.onExecuteStatisticsCollectorsOnTableStart(new ExecuteStatisticsCollectorsOnTableStartEvent(connectionWrapper, tableSpec, collectors));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
         StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
@@ -128,49 +137,43 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
 
         Map<String, Integer> successfulCollectorsPerColumn = new HashMap<>();
 
-        for (AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec : collectors) {
+        List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(collectors, executionContext, userHome, progressListener,
+                executionStatistics, statisticsDataScope, jobCancellationToken);
+
+        GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection();
+        groupedSensorsCollection.addAllPreparedSensors(allPreparedSensors);
+
+        List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(groupedSensorsCollection, executionContext, progressListener,
+                executionStatistics, dummySensorExecution, jobCancellationToken);
+
+        for (SensorExecutionResult sensorExecutionResult : sensorExecutionResults) {
             jobCancellationToken.throwIfCancelled();
-            executionStatistics.incrementCollectorsExecutedCount(1);
+            AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec = sensorExecutionResult.getSensorRunParameters().getProfiler();
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, statisticsCollectorSpec, statisticsDataScope);
-                if (!collectorSupportsTarget(statisticsCollectorSpec, sensorRunParameters)) {
-                    continue; // the collector does not support that target
-                }
-
-                progressListener.onPreparingSensor(new PreparingSensorEvent(tableSpec, sensorRunParameters));
-                SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
-
-                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorPrepareResult));
-                SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
-                progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
-
-                if (!sensorResult.isSuccess()) {
-                    executionStatistics.incrementCollectorsFailedCount(1);
-                }
+                SensorExecutionRunParameters sensorRunParameters = sensorExecutionResult.getSensorRunParameters();
 
                 if (sensorRunParameters.getColumn() != null) {
                     String columnName = sensorRunParameters.getColumn().getColumnName();
                     if (successfulCollectorsPerColumn.containsKey(columnName)) {
-                        if (sensorResult.isSuccess()) {
+                        if (sensorExecutionResult.isSuccess()) {
                             successfulCollectorsPerColumn.put(columnName, successfulCollectorsPerColumn.get(columnName) + 1);
                         }
                     }
                     else {
-                        successfulCollectorsPerColumn.put(columnName, sensorResult.isSuccess() ? 1 : 0);
+                        successfulCollectorsPerColumn.put(columnName, sensorExecutionResult.isSuccess() ? 1 : 0);
                     }
                 }
 
-                if (statisticsDataScope == StatisticsDataScope.data_stream && sensorResult.isSuccess() && sensorResult.getResultTable().rowCount() == 0) {
-                    continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
+                if (statisticsDataScope == StatisticsDataScope.data_stream && sensorExecutionResult.isSuccess() &&
+                        sensorExecutionResult.getResultTable().rowCount() == 0) {
+                    continue; // no results captured, moving to the next sensor
                 }
-                executionStatistics.incrementCollectorsResultsCount(sensorResult.getResultTable() != null ? sensorResult.getResultTable().rowCount() : 0);
+                executionStatistics.incrementCollectorsResultsCount(sensorExecutionResult.getResultTable() != null ?
+                        sensorExecutionResult.getResultTable().rowCount() : 0);
 
                 StatisticsResultsNormalizedResult normalizedStatisticsResults = this.statisticsResultsNormalizationService.normalizeResults(
-                        sensorResult, collectionSessionStartAt, sensorRunParameters);
-//                progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
-//                        tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
+                        sensorExecutionResult, collectionSessionStartAt, sensorRunParameters);
                 allNormalizedStatisticsTable.append(normalizedStatisticsResults.getTable());
             }
             catch (DqoQueueJobCancelledException cex) {
@@ -182,13 +185,10 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
             }
         }
 
-//        progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, profilerResultsSnapshot));
+        progressListener.onSavingStatisticsResults(new SavingStatisticsResultsEvent(tableSpec, statisticsSnapshot));
         if (statisticsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
             statisticsSnapshot.save();
         }
-
-//        progressListener.onTableProfilerProcessingFinished(new TableProfilerProcessingFinished(connectionWrapper, tableSpec, profilers,
-//                profilersExecuted, profiledColumns, profiledColumnsSuccessfully, profilersFailed, profilerResults));
 
         int profiledColumns = successfulCollectorsPerColumn.size();
         long profiledColumnsSuccessfully = successfulCollectorsPerColumn.values().stream()
@@ -198,9 +198,146 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         executionStatistics.incrementProfiledColumnsCount(profiledColumns);
         executionStatistics.incrementProfiledColumnSuccessfullyCount((int)profiledColumnsSuccessfully);
 
+        progressListener.onTableStatisticsCollectionFinished(new ExecuteStatisticsCollectorsOnTableFinishedEvent(
+                connectionWrapper, tableSpec, collectors, executionStatistics));
+
         statisticsCollectionExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
 
         return statisticsCollectionExecutionSummary;
+    }
+
+    /**
+     * Prepares all sensors for execution.
+     * @param collectors Collection of statistics collectors that will be prepared.
+     * @param executionContext Execution context - to access sensor definitions.
+     * @param userHome User home.
+     * @param progressListener Progress listener - to report progress.
+     * @param executionStatistics Execution statistics - counts of checks and errors.
+     * @param statisticsDataScope Statistics scope (whole table or data streams).
+     * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
+     * @return List of prepared sensors.
+     */
+    public List<SensorPrepareResult> prepareSensors(Collection<AbstractStatisticsCollectorSpec<?>> collectors,
+                                                    ExecutionContext executionContext,
+                                                    UserHome userHome,
+                                                    StatisticsCollectorExecutionProgressListener progressListener,
+                                                    CollectorExecutionStatistics executionStatistics,
+                                                    StatisticsDataScope statisticsDataScope,
+                                                    JobCancellationToken jobCancellationToken) {
+        List<SensorPrepareResult> sensorPrepareResults = new ArrayList<>();
+        int sensorResultId = 0;
+
+        for (AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec : collectors) {
+            if (jobCancellationToken.isCancelled()) {
+                break;
+            }
+
+            try {
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, statisticsCollectorSpec, statisticsDataScope);
+                if (!collectorSupportsTarget(statisticsCollectorSpec, sensorRunParameters)) {
+                    continue; // the collector does not support that target
+                }
+                executionStatistics.incrementCollectorsExecutedCount(1);
+
+
+                sensorResultId++;
+                sensorRunParameters.setActualValueAlias("dqo_actual_value_" + sensorResultId);
+                sensorRunParameters.setExpectedValueAlias("dqo_expected_value_" + sensorResultId);
+
+                jobCancellationToken.throwIfCancelled();
+                progressListener.onPreparingSensor(new PreparingSensorEvent(sensorRunParameters.getTable(), sensorRunParameters));
+                SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
+
+                if (!sensorPrepareResult.isSuccess()) {
+                    executionStatistics.incrementCollectorsFailedCount(1);
+                    SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
+                    progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters,
+                            sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
+                    continue;
+                }
+
+                sensorPrepareResults.add(sensorPrepareResult);
+            }
+            catch (DqoQueueJobCancelledException cex) {
+                // ignore the error, just stop running checks
+                break;
+            }
+            catch (Throwable ex) {
+                log.error("Statistics collector failed to run checks: " + ex.getMessage(), ex);
+                throw new CheckExecutionFailedException("Statistics collector on table failed to execute", ex);
+            }
+        }
+
+        return sensorPrepareResults;
+    }
+
+    /**
+     * Executes prepared sensors.
+     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that could be merged together.
+     * @param executionContext Execution context - to access sensor definitions.
+     * @param progressListener Progress listener - to report progress.
+     * @param executionStatistics Execution statistics - counts of executed statistics collectors and errors.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
+     * @return List of sensor execution results.
+     */
+    public List<SensorExecutionResult> executeSensors(GroupedSensorsCollection groupedSensorsCollection,
+                                                      ExecutionContext executionContext,
+                                                      StatisticsCollectorExecutionProgressListener progressListener,
+                                                      CollectorExecutionStatistics executionStatistics,
+                                                      boolean dummySensorExecution,
+                                                      JobCancellationToken jobCancellationToken) {
+        List<SensorExecutionResult> sensorExecuteResults = new ArrayList<>();
+        Collection<PreparedSensorsGroup> preparedSensorGroups = groupedSensorsCollection.getPreparedSensorGroups();
+
+        for (PreparedSensorsGroup preparedSensorsGroup : preparedSensorGroups) {
+            if (jobCancellationToken.isCancelled()) {
+                break;
+            }
+
+            try {
+                SensorPrepareResult firstSensorPrepareResult = preparedSensorsGroup.getFirstSensorPrepareResult();
+                SensorExecutionRunParameters firstSensorRunParameters = firstSensorPrepareResult.getSensorRunParameters();
+                TableSpec tableSpec = firstSensorRunParameters.getTable();
+
+                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, firstSensorPrepareResult));
+                List<GroupedSensorExecutionResult> groupedSensorExecutionResults = this.dataQualitySensorRunner.executeGroupedSensors(executionContext,
+                        preparedSensorsGroup, progressListener, dummySensorExecution, jobCancellationToken);
+
+                for (GroupedSensorExecutionResult groupedSensorExecutionResult : groupedSensorExecutionResults) {
+                    PreparedSensorsGroup sensorGroup = groupedSensorExecutionResult.getSensorGroup();
+                    List<SensorPrepareResult> preparedSensorsInGroup = sensorGroup.getPreparedSensors();
+
+                    for (SensorPrepareResult sensorPrepareResult : preparedSensorsInGroup) {
+                        SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
+                        SensorExecutionResult sensorExecuteResult = sensorPrepareResult.getSensorRunner().extractSensorResults(
+                                executionContext, groupedSensorExecutionResult,
+                                sensorPrepareResult, progressListener, jobCancellationToken);
+
+                        if (!sensorExecuteResult.isSuccess()) {
+                            executionStatistics.incrementCollectorsFailedCount(1);
+                            progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
+                                    sensorExecuteResult, sensorExecuteResult.getException()));
+                            continue;
+                        }
+
+                        progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorExecuteResult));
+                        executionStatistics.incrementCollectorsResultsCount(sensorExecuteResult.getResultTable().rowCount());
+                        sensorExecuteResults.add(sensorExecuteResult);
+                    }
+                }
+            }
+            catch (DqoQueueJobCancelledException cex) {
+                // ignore the error, just stop running checks
+                break;
+            }
+            catch (Throwable ex) {
+                log.error("Check runner failed to run checks: " + ex.getMessage(), ex);
+                throw new CheckExecutionFailedException("Checks on table failed to execute", ex);
+            }
+        }
+
+        return sensorExecuteResults;
     }
 
     /**
@@ -243,9 +380,9 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
      * @param statisticsDataScope Statistics collector data scope to analyze - the whole table or each data stream separately.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome,
-                                                                   AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
-                                                                   StatisticsDataScope statisticsDataScope) {
+    public SensorExecutionRunParameters createSensorRunParameters(UserHome userHome,
+                                                                  AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
+                                                                  StatisticsDataScope statisticsDataScope) {
         HierarchyId checkHierarchyId = statisticsCollectorSpec.getHierarchyId();
         ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
         TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
