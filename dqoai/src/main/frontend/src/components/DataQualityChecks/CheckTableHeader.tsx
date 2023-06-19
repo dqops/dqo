@@ -187,7 +187,7 @@ const TableHeader = ({
     <thead>
       <tr>
         {checkTypes === CheckTypes.PROFILING ? (
-          <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+          <td colSpan={2} className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
             <div className="flex gap-2 items-center">
               {!mode && (
                 <>
