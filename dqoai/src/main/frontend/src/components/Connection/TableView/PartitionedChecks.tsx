@@ -20,11 +20,11 @@ import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selec
 
 const initTabs = [
   {
-    label: 'Days',
+    label: 'Daily',
     value: 'daily'
   },
   {
-    label: 'Months',
+    label: 'Monthly',
     value: 'monthly'
   }
 ];

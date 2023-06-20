@@ -225,7 +225,7 @@ spec:
         ds0.p_check_type: recurring
         ds0.p_quality_dimension: all
         ds0.p_check_category: all
-- folder_name: Data Quality Platform
+- folder_name: DQ Statistics
   folders:
     - folder_name: Checks No Longer In Use
       dashboards:
