@@ -187,7 +187,7 @@ const TableHeader = ({
     <thead>
       <tr>
         {checkTypes === CheckTypes.PROFILING ? (
-          <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+          <td colSpan={2} className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
             <div className="flex gap-2 items-center">
               {!mode && (
                 <>
@@ -214,14 +214,14 @@ const TableHeader = ({
                   <div className="text-sm">Copy selected checks to:</div>
                   <Button
                     color="primary"
-                    label="Daily recurring checkpoints"
+                    label="Daily recurring checks"
                     textSize="sm"
                     className="font-medium px-4"
                     onClick={() => copyRecurringCheck('daily')}
                   />
                   <Button
                     color="primary"
-                    label="Monthly recurring checkpoints"
+                    label="Monthly recurring checks"
                     textSize="sm"
                     className="font-medium px-4"
                     onClick={() => copyRecurringCheck('monthly')}
