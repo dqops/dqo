@@ -61,49 +61,46 @@ spec:
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
         ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
         ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
-  - folder_name: Current status
-    folders:
-      - folder_name: Current status by Dimension
-        dashboards:
-          - dashboard_name: Current table status by Dimension
-            url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C
-            width: 1400
-            height: 1400
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-              ds0.p_quality_dimension: all
-              ds0.p_check_category: all
-          - dashboard_name: Current column status by Dimension
-            ur: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
-            width: 1400
-            height: 1760
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-              ds0.p_quality_dimension: all
-              ds0.p_check_category: all
-      - folder_name: Current status by Category
-        dashboards:
-          - dashboard_name: Current table status by Category
-            url: https://lookerstudio.google.com/embed/reporting/4ff08521-65d9-448d-9d78-fd3fe415a557/page/c5B8C
-            width: 1400
-            height: 1400
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-              ds0.p_quality_dimension: all
-              ds0.p_check_category: all
-          - dashboard_name: Current column status by Category
-            url: https://lookerstudio.google.com/embed/reporting/20c67e41-5830-4242-aac4-fe4131d2bb92/page/c5B8C
-            width: 1400
-            height: 1760
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-              ds0.p_quality_dimension: all
-              ds0.p_check_category: all
-
+  - folder_name: Current status by Dimension
+    dashboards:
+      - dashboard_name: Current table status by Dimension
+        url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C
+        width: 1400
+        height: 1400
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
+      - dashboard_name: Current column status by Dimension
+        ur: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
+        width: 1400
+        height: 1760
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
+  - folder_name: Current status by Category
+    dashboards:
+      - dashboard_name: Current table status by Category
+        url: https://lookerstudio.google.com/embed/reporting/4ff08521-65d9-448d-9d78-fd3fe415a557/page/c5B8C
+        width: 1400
+        height: 1400
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
+      - dashboard_name: Current column status by Category
+        url: https://lookerstudio.google.com/embed/reporting/20c67e41-5830-4242-aac4-fe4131d2bb92/page/c5B8C
+        width: 1400
+        height: 1760
+        parameters:
+          ds0.token: '%DQO_CLOUD_TOKEN%'
+          ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
+          ds0.p_quality_dimension: all
+          ds0.p_check_category: all
 - folder_name: Operational
   folders:
   - folder_name: Scoreboards
