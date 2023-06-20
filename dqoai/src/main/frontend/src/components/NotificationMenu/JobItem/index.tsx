@@ -121,7 +121,7 @@ const JobItem = ({
         >
           <div className="flex justify-between items-center text-sm w-full text-gray-700">
             <div className="flex space-x-1 items-center">
-              <div>{job.jobType}</div>
+              <div>{job.jobType || (job as any).updatedModel?.jobType}</div>
               {renderStatus()}
             </div>
             <div className="flex items-center gap-x-2">
