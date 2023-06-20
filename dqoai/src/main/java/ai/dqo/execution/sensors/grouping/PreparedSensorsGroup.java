@@ -117,14 +117,16 @@ public class PreparedSensorsGroup {
                             Objects.equals(fragmentedSqlQuery.getActualValueAlias(), SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) &&
                             !Objects.equals(fragmentedSqlQuery.getActualValueAlias(), sensorPrepareResult.getSensorRunParameters().getActualValueAlias())) {
                         // need to fix the column name
-                        sqlFragmentText = sqlFragmentText.replace(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, sensorPrepareResult.getSensorRunParameters().getActualValueAlias());
+                        sqlFragmentText = sqlFragmentText.replace(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME,
+                                sensorPrepareResult.getSensorRunParameters().getActualValueAlias());
                     }
 
                     if (fragmentedSqlQuery.getExpectedValueAlias() != null &&
                             Objects.equals(fragmentedSqlQuery.getExpectedValueAlias(), SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME) &&
                             !Objects.equals(fragmentedSqlQuery.getExpectedValueAlias(), sensorPrepareResult.getSensorRunParameters().getExpectedValueAlias())) {
                         // need to fix the column name
-                        sqlFragmentText = sqlFragmentText.replace(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, sensorPrepareResult.getSensorRunParameters().getExpectedValueAlias());
+                        sqlFragmentText = sqlFragmentText.replace(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME,
+                                sensorPrepareResult.getSensorRunParameters().getExpectedValueAlias());
                     }
 
                     stringBuilder.append(sqlFragmentText);
@@ -132,15 +134,7 @@ public class PreparedSensorsGroup {
                     if (!sqlFragmentText.trim().endsWith(",")) {
                         stringBuilder.append(',');
                     }
-
-                    if (sensorIndex < this.preparedSensors.size() - 1) {
-                        stringBuilder.append('\n');
-                    }
                 }
-            }
-
-            if (fragmentIndex < sqlFragmentsCount - 1) {
-                stringBuilder.append('\n');
             }
         }
 

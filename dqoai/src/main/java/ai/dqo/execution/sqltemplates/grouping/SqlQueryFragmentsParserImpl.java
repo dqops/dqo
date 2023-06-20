@@ -53,29 +53,27 @@ public class SqlQueryFragmentsParserImpl implements SqlQueryFragmentsParser {
 
         int actualValueUsagesCount = StringUtils.countMatches(sql, actualValueColumnName);
         if (actualValueUsagesCount != 1) {
-            return FragmentedSqlQuery.createNotGroupableQuery(sql);
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
         }
 
         int expectedValueUsagesCount = StringUtils.countMatches(sql, expectedValueColumnName);
         if (expectedValueUsagesCount > 1) {
-            return FragmentedSqlQuery.createNotGroupableQuery(sql);
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
         }
 
         List<String> listOfLines = sql.lines().collect(Collectors.toList());
         int indexIfSelect = findIndexOfLineEqualsText(listOfLines, 0, "SELECT");
         if (indexIfSelect < 0) {
-            return FragmentedSqlQuery.createNotGroupableQuery(sql);
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
         }
 
         int indexOfActualValueAlias = findIndexOfLineHavingText(listOfLines, indexIfSelect + 1, actualValueColumnName);
         int indexOfExpectedValueAlias = findIndexOfLineHavingText(listOfLines, indexIfSelect + 1, expectedValueColumnName);
         if (indexOfExpectedValueAlias > 0 && indexOfExpectedValueAlias < indexOfActualValueAlias) {
-            return FragmentedSqlQuery.createNotGroupableQuery(sql);
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
         }
 
-        FragmentedSqlQuery componentList = new FragmentedSqlQuery(sql);
-        componentList.setActualValueAlias(actualValueColumnName);
-        componentList.setExpectedValueAlias(expectedValueColumnName);
+        FragmentedSqlQuery componentList = new FragmentedSqlQuery(sql, actualValueColumnName, expectedValueColumnName);
 
         componentList.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT,
                 combineLines(listOfLines, 0, indexIfSelect + 1, true)));

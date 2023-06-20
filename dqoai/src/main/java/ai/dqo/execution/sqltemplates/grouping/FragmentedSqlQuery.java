@@ -16,6 +16,8 @@
 
 package ai.dqo.execution.sqltemplates.grouping;
 
+import org.apache.parquet.Strings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,19 +34,25 @@ public class FragmentedSqlQuery {
     /**
      * Creates an SQL component list.
      * @param originalSql The original SQL that will be divided into components.
+     * @param actualValueAlias The alias of the actual value.
+     * @param expectedValueAlias The alias of the expected value.
      */
-    public FragmentedSqlQuery(String originalSql) {
+    public FragmentedSqlQuery(String originalSql, String actualValueAlias, String expectedValueAlias) {
         this.originalSql = originalSql;
+        this.actualValueAlias = actualValueAlias;
+        this.expectedValueAlias = expectedValueAlias;
     }
 
     /**
      * Creates a single fragment query that does not support grouping and substitution.
      * It is a single static sql fragment where the actual_value component was not detected.
      * @param sql SQL query.
+     * @param actualValueAlias The alias of the actual value.
+     * @param expectedValueAlias The alias of the expected value.
      * @return SQL query fragment as a single static SQL.
      */
-    public static FragmentedSqlQuery createNotGroupableQuery(String sql) {
-        FragmentedSqlQuery fragmentedSqlQuery = new FragmentedSqlQuery(sql);
+    public static FragmentedSqlQuery createNotGroupableQuery(String sql, String actualValueAlias, String expectedValueAlias) {
+        FragmentedSqlQuery fragmentedSqlQuery = new FragmentedSqlQuery(sql, actualValueAlias, expectedValueAlias);
         fragmentedSqlQuery.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT, sql));
         return fragmentedSqlQuery;
     }
@@ -86,6 +94,9 @@ public class FragmentedSqlQuery {
      * @param actualValueAlias The output column alias that contains the sensor readout value.
      */
     public void setActualValueAlias(String actualValueAlias) {
+        if (Strings.isNullOrEmpty(actualValueAlias)) {
+            throw new NullPointerException("Actual value alias cannot be null or empty.");
+        }
         this.actualValueAlias = actualValueAlias;
     }
 
@@ -102,6 +113,9 @@ public class FragmentedSqlQuery {
      * @param expectedValueAlias The output column alias that contains the sensor expected value readout value.
      */
     public void setExpectedValueAlias(String expectedValueAlias) {
+        if (Strings.isNullOrEmpty(expectedValueAlias)) {
+            throw new NullPointerException("Expected value alias cannot be null or empty.");
+        }
         this.expectedValueAlias = expectedValueAlias;
     }
 

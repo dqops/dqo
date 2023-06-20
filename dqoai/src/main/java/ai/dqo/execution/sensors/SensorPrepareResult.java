@@ -23,6 +23,7 @@ import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sqltemplates.grouping.FragmentedSqlQuery;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import org.apache.parquet.Strings;
 
 /**
  * Result object that stores all objects required to execute a data quality sensor before it can be executed on the data source connection.
@@ -36,6 +37,7 @@ public class SensorPrepareResult {
     private SensorDefinitionFindResult sensorDefinition;
     private AbstractGroupedSensorExecutor sensorExecutor;
     private AbstractSensorRunner sensorRunner;
+    private boolean disableMergingQueries;
     private String renderedSensorSql;
     private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
@@ -51,15 +53,18 @@ public class SensorPrepareResult {
      * @param sensorDefinition Sensor definition with the sensor configuration and the SQL template (for templated sensors).
      * @param sensorExecutor Sensor executor that will execute the sensor, also supporting grouping of sensors whose SQLs could be merged together.
      * @param sensorRunner  Sensor runner instance that will parse the sensor result from the sensor executor to adapt it to a tabular format.
+     * @param disableMergingQueries Disables merging this query with other similar queries.
      */
     public SensorPrepareResult(SensorExecutionRunParameters sensorRunParameters,
                                SensorDefinitionFindResult sensorDefinition,
                                AbstractGroupedSensorExecutor sensorExecutor,
-                               AbstractSensorRunner sensorRunner) {
+                               AbstractSensorRunner sensorRunner,
+                               boolean disableMergingQueries) {
         this.sensorRunParameters = sensorRunParameters;
         this.sensorDefinition = sensorDefinition;
         this.sensorExecutor = sensorExecutor;
         this.sensorRunner = sensorRunner;
+        this.disableMergingQueries = disableMergingQueries;
     }
 
     /**
@@ -69,13 +74,15 @@ public class SensorPrepareResult {
      * @param sensorRunner  Sensor runner instance that will run the sensor.
      * @param sensorExecutor Sensor executor that will execute the sensor, also supporting grouping of sensors whose SQLs could be merged together.
      * @param renderedSensorSql Rendered sensor SQL.
+     * @param disableMergingQueries Disables merging this query with other similar queries.
      */
     public SensorPrepareResult(SensorExecutionRunParameters sensorRunParameters,
                                SensorDefinitionFindResult sensorDefinition,
                                AbstractGroupedSensorExecutor sensorExecutor,
                                AbstractSensorRunner sensorRunner,
-                               String renderedSensorSql) {
-        this(sensorRunParameters, sensorDefinition, sensorExecutor, sensorRunner);
+                               String renderedSensorSql,
+                               boolean disableMergingQueries) {
+        this(sensorRunParameters, sensorDefinition, sensorExecutor, sensorRunner, disableMergingQueries);
         this.renderedSensorSql = renderedSensorSql;
     }
 
@@ -89,7 +96,7 @@ public class SensorPrepareResult {
     public static SensorPrepareResult createForPrepareException(SensorExecutionRunParameters sensorRunParameters,
                                                                 SensorDefinitionFindResult sensorDefinition,
                                                                 Throwable prepareException) {
-        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, null, null) {{
+        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, null, null, true) {{
             setSuccess(false);
             setPrepareException(prepareException);
         }};
@@ -195,6 +202,22 @@ public class SensorPrepareResult {
     }
 
     /**
+     * Returns true when this query should not be merged with other similar queries and must be executed as a standalone query.
+     * @return True when merging is disabled.
+     */
+    public boolean isDisableMergingQueries() {
+        return disableMergingQueries;
+    }
+
+    /**
+     * Sets a flag that disables merging queries.
+     * @param disableMergingQueries True when this query should not be merged with other queries.
+     */
+    public void setDisableMergingQueries(boolean disableMergingQueries) {
+        this.disableMergingQueries = disableMergingQueries;
+    }
+
+    /**
      * Returns a rendered SQL template that should be executed on the monitored data source.
      * @return Rendered SQL.
      */
@@ -224,6 +247,9 @@ public class SensorPrepareResult {
      * @param actualValueAlias The column name (alias) from the results that contains the actual_value.
      */
     public void setActualValueAlias(String actualValueAlias) {
+        if (Strings.isNullOrEmpty(actualValueAlias)) {
+            throw new NullPointerException("Actual value alias cannot be null or empty.");
+        }
         this.actualValueAlias = actualValueAlias;
     }
 
@@ -241,6 +267,9 @@ public class SensorPrepareResult {
      * @param expectedValueAlias The column name (alias) from the results that contains the expected_value.
      */
     public void setExpectedValueAlias(String expectedValueAlias) {
+        if (Strings.isNullOrEmpty(expectedValueAlias)) {
+            throw new NullPointerException("Expected value alias cannot be null or empty.");
+        }
         this.expectedValueAlias = expectedValueAlias;
     }
 

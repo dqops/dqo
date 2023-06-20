@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
  * analyze multiple statistics or operate on different columns.
  */
 public class GroupedSensorsCollection {
+    private int standaloneQueryNextId = 0;
     private final LinkedHashMap<SensorGroupingKey, PreparedSensorsGroup> sensorGroups = new LinkedHashMap<>();
 
     /**
@@ -42,7 +43,10 @@ public class GroupedSensorsCollection {
      * @param sensorPrepareResult Prepared sensor result to be added to a matching group.
      */
     public void addPreparedSensor(SensorPrepareResult sensorPrepareResult) {
-        SensorGroupingKey sensorGroupingKey = new SensorGroupingKey(sensorPrepareResult.getFragmentedSqlQuery(), sensorPrepareResult.getSensorExecutor());
+        Integer queryGroupingId = sensorPrepareResult.isDisableMergingQueries() ? standaloneQueryNextId++ : null;
+        SensorGroupingKey sensorGroupingKey = new SensorGroupingKey(
+                sensorPrepareResult.getFragmentedSqlQuery(), sensorPrepareResult.getSensorExecutor(), queryGroupingId);
+
         PreparedSensorsGroup preparedSensorsGroup = this.sensorGroups.get(sensorGroupingKey);
         if (preparedSensorsGroup == null) {
             preparedSensorsGroup = new PreparedSensorsGroup();

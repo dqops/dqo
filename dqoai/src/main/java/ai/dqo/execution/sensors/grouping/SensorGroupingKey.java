@@ -26,15 +26,20 @@ import java.util.Objects;
 public class SensorGroupingKey {
     private FragmentedSqlQuery fragmentedSqlQuery;
     private AbstractGroupedSensorExecutor sensorExecutor;
+    private Integer queryGroupingId;
 
     /**
      * Creates a sensor grouping key.
      * @param fragmentedSqlQuery Parsed sql query that is divided into SQL fragments, static fragments could be compared as a part of this key.
      * @param sensorExecutor Sensor executor instance that will be used to execute this sensor.
+     * @param queryGroupingId Optional object used to group queries.
      */
-    public SensorGroupingKey(FragmentedSqlQuery fragmentedSqlQuery, AbstractGroupedSensorExecutor sensorExecutor) {
+    public SensorGroupingKey(FragmentedSqlQuery fragmentedSqlQuery,
+                             AbstractGroupedSensorExecutor sensorExecutor,
+                             Integer queryGroupingId) {
         this.fragmentedSqlQuery = fragmentedSqlQuery;
         this.sensorExecutor = sensorExecutor;
+        this.queryGroupingId = queryGroupingId;
     }
 
     /**
@@ -53,6 +58,15 @@ public class SensorGroupingKey {
         return sensorExecutor;
     }
 
+    /**
+     * Returns the query grouping id. It is an optional value used for assigning queries to different merge groups.
+     * When the grouping id is unique, the query will not be grouped with other queries.
+     * @return Query grouping id.
+     */
+    public Integer getQueryGroupingId() {
+        return queryGroupingId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,13 +76,16 @@ public class SensorGroupingKey {
 
         if (!Objects.equals(fragmentedSqlQuery, that.fragmentedSqlQuery))
             return false;
-        return Objects.equals(sensorExecutor, that.sensorExecutor);
+        if (!Objects.equals(sensorExecutor, that.sensorExecutor))
+            return false;
+        return Objects.equals(queryGroupingId, that.queryGroupingId);
     }
 
     @Override
     public int hashCode() {
         int result = fragmentedSqlQuery != null ? fragmentedSqlQuery.hashCode() : 0;
         result = 31 * result + (sensorExecutor != null ? sensorExecutor.hashCode() : 0);
+        result = 31 * result + (queryGroupingId != null ? queryGroupingId.hashCode() : 0);
         return result;
     }
 }

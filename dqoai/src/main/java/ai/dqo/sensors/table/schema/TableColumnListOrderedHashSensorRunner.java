@@ -90,7 +90,7 @@ public class TableColumnListOrderedHashSensorRunner extends AbstractSensorRunner
                                              SensorExecutionRunParameters sensorRunParameters,
                                              SensorDefinitionFindResult sensorDefinition,
                                              SensorExecutionProgressListener progressListener) {
-        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, this.tableMetadataSensorExecutor, this);
+        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, this.tableMetadataSensorExecutor, this, false);
     }
 
     /**

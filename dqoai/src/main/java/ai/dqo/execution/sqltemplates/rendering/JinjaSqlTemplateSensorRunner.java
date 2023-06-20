@@ -29,6 +29,7 @@ import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
 import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.tables.TableColumnUtility;
@@ -95,8 +96,10 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
             renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinition,
                     templateRenderParameters, progressListener);
 
+            ProviderSensorDefinitionSpec providerSensorDefinitionSpec = sensorDefinition.getProviderSensorDefinitionSpec();
+
             return new SensorPrepareResult(sensorRunParameters, sensorDefinition,
-                    this.jinjaSqlTemplateSensorExecutor, this, renderedSql);
+                    this.jinjaSqlTemplateSensorExecutor, this, renderedSql, providerSensorDefinitionSpec.isDisableMergingQueries());
         }
         catch (Throwable exception) {
             log.debug("Sensor failed to render an sql template :" + renderedSql, exception);
