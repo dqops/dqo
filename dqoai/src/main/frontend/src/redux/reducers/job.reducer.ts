@@ -17,6 +17,7 @@
 import { JOB_ACTION } from '../types';
 import {
   CloudSynchronizationFoldersStatusModel,
+  DataStreamMappingSpec,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
   DqoJobQueueInitialSnapshotModel
@@ -39,6 +40,7 @@ export interface IJobsState {
   bool?: boolean;
   dataStreamName: string;
   dataStreamButton: number;
+  spec: DataStreamMappingSpec;
 }
 
 const initialState: IJobsState = {
@@ -53,7 +55,8 @@ const initialState: IJobsState = {
   job_dictionary_state: {},
   bool: false,
   dataStreamName: '',
-  dataStreamButton: 0
+  dataStreamButton: 0,
+  spec: {}
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -164,7 +167,8 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         bool: action.bool,
-        dataStreamName: action.dataStreamName
+        dataStreamName: action.dataStreamName,
+        spec: action.spec
       };
     }
     case JOB_ACTION.SHOW_DATASTREAM_BUTTON: {

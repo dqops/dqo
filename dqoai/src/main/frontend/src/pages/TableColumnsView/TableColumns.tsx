@@ -81,14 +81,23 @@ const TableColumns = ({
   const history = useHistory();
   const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
-  const { dataStreamButton } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+
   const setData = () => {
-    actionDispatch(setCreatedDataStream(true, setDataStream(), setSpec2()));
+    const dataToDispatch = {
+      createdDataStream: true,
+      dataStreamName: fixString(),
+      spec2: setSpec2()
+    };
+
+    actionDispatch(
+      setCreatedDataStream(
+        dataToDispatch.createdDataStream,
+        dataToDispatch.dataStreamName,
+        dataToDispatch.spec2
+      )
+    );
   };
 
-  console.log(dataStreamButton);
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -466,18 +475,7 @@ const TableColumns = ({
   };
 
   const setDataStream = () => {
-    let dataStream = '';
-    for (let i = 1; i <= trueValuesCount; i++) {
-      const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
-      const level = spec[levelKey];
-
-      if (level && i !== trueValuesCount) {
-        dataStream += listOfStr.at(i - 1) + ',';
-      } else {
-        dataStream += listOfStr.at(i - 1);
-      }
-    }
-    return dataStream;
+    return listOfStr.join(',');
   };
 
   const doNothing = (): void => {};
@@ -531,7 +529,16 @@ const TableColumns = ({
     history.push(url);
   };
 
-  const showDataStreamButtonFunc = () => {
+  const fixString = () => {
+    const columnValues = Object.values(spec)
+      .map((level) => level.column)
+      .filter((column) => column !== undefined);
+
+    const joinedValues = columnValues.join(',');
+    return joinedValues;
+  };
+
+  const setButton = () => {
     if (trueValuesCount === 0) {
       actionDispatch(showDataStreamButton(0));
     } else if (trueValuesCount <= 9) {
@@ -539,6 +546,12 @@ const TableColumns = ({
     } else if (trueValuesCount > 9) {
       actionDispatch(showDataStreamButton(2));
     }
+  };
+
+  const showDataStreamButtonFunc = async () => {
+    await fixString();
+    await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
+    await setButton();
   };
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
@@ -553,8 +566,8 @@ const TableColumns = ({
                   : false
               }
               onChange={() => {
-                handleButtonClick(column.nameOfCol ? column.nameOfCol : ''),
-                  showDataStreamButtonFunc();
+                showDataStreamButtonFunc(),
+                  handleButtonClick(column.nameOfCol ? column.nameOfCol : '');
               }}
               className="py-4"
             />
@@ -682,12 +695,14 @@ const TableColumns = ({
   return (
     <div className="p-4 py-6 relative">
       {trueValuesCount !== 0 && trueValuesCount <= 9 && (
-        <Button
-          label="Create Data Stream"
-          color="primary"
-          onClick={postDataStream}
-          className="absolute top-0 right-4 px-2"
-        />
+        <div>
+          <Button
+            label="Create Data Stream"
+            color="primary"
+            onClick={postDataStream}
+            className="absolute top-0 right-4 px-2"
+          />
+        </div>
       )}
       {trueValuesCount !== 0 && trueValuesCount > 9 && (
         <div className="flex text-red-500 items-center gap-x-4 absolute top-0 right-4 px-2">
