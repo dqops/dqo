@@ -73,7 +73,7 @@ spec:
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
       - dashboard_name: Current column status by Dimension
-        ur: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
+        url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
         width: 1400
         height: 1760
         parameters:

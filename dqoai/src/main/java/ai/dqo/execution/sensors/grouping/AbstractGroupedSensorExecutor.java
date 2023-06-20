@@ -164,6 +164,6 @@ public abstract class AbstractGroupedSensorExecutor {
      * @return Dummy result table.
      */
     public Table createResultTableWithResult(PreparedSensorsGroup preparedSensorsGroup) {
-        return createResultTableWithResult(1.0, preparedSensorsGroup);
+        return createResultTableWithResult(10.0, preparedSensorsGroup);
     }
 }
