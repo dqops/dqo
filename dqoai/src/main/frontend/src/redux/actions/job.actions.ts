@@ -109,3 +109,7 @@ export const toggleSettings = (areSettingsOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_SETTINGS,
   areSettingsOpen
 });
+export const showDataStreamButton = (dataStreamButton: number) => ({
+  type: JOB_ACTION.SHOW_DATASTREAM_BUTTON,
+  dataStreamButton
+});

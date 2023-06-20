@@ -19,7 +19,7 @@ const TableColumnsView = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, dataStreamButton } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
@@ -74,7 +74,7 @@ const TableColumnsView = () => {
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
-
+        {/* {dataStreamButton == 1} */}
         <Button
           className="flex items-center gap-x-2 justify-center"
           label={

@@ -26,6 +26,7 @@ import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
 import Checkbox from '../../components/Checkbox';
 import Button from '../../components/Button';
+import { showDataStreamButton } from '../../redux/actions/job.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { datatype_detected } from '../../shared/constants';
 import { cutString } from './TableColumnsFunctions';
@@ -80,10 +81,14 @@ const TableColumns = ({
   const history = useHistory();
   const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
+  const { dataStreamButton } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const setData = () => {
     actionDispatch(setCreatedDataStream(true, setDataStream(), setSpec2()));
   };
 
+  console.log(dataStreamButton);
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -101,10 +106,6 @@ const TableColumns = ({
       console.error(err);
     }
   };
-
-  useEffect(() => {
-    fetchColumns().then();
-  }, [connectionName, schemaName, tableName]);
 
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
     setIsOpen(true);
@@ -530,6 +531,16 @@ const TableColumns = ({
     history.push(url);
   };
 
+  const showDataStreamButtonFunc = () => {
+    if (trueValuesCount === 0) {
+      actionDispatch(showDataStreamButton(0));
+    } else if (trueValuesCount <= 9) {
+      actionDispatch(showDataStreamButton(1));
+    } else if (trueValuesCount > 9) {
+      actionDispatch(showDataStreamButton(2));
+    }
+  };
+
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
@@ -541,9 +552,10 @@ const TableColumns = ({
                   ? true
                   : false
               }
-              onChange={() =>
-                handleButtonClick(column.nameOfCol ? column.nameOfCol : '')
-              }
+              onChange={() => {
+                handleButtonClick(column.nameOfCol ? column.nameOfCol : ''),
+                  showDataStreamButtonFunc();
+              }}
               className="py-4"
             />
           </div>
