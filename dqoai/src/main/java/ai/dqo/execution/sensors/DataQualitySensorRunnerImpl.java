@@ -17,34 +17,49 @@ package ai.dqo.execution.sensors;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
+import ai.dqo.execution.sensors.grouping.AbstractGroupedSensorExecutor;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
+import ai.dqo.execution.sensors.grouping.PreparedSensorsGroup;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sensors.runners.SensorRunnerFactory;
+import ai.dqo.execution.sqltemplates.grouping.FragmentedSqlQuery;
+import ai.dqo.execution.sqltemplates.grouping.SqlQueryFragmentsParser;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Data quality sensor run service. Executes a sensor, reads the sensor values and returns it for further processing (rule evaluation).
+ * Data quality sensor preparation and running service. Prepares a sensor for execution and calls the runner.
  */
 @Component
 @Slf4j
 public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
     private final SensorDefinitionFindService sensorDefinitionFindService;
     private final SensorRunnerFactory sensorRunnerFactory;
+    private final SqlQueryFragmentsParser sqlQueryFragmentsParser;
 
     /**
      * Creates a sensor runner.
      * @param sensorDefinitionFindService Sensor definition finder that finds the correct sensor definition.
+     * @param sensorRunnerFactory Sensor runner factory. Creates instances of requested sensor runners.
+     * @param sqlQueryFragmentsParser SQL query fragment parser, used to find similar sql query fragments for matching sensor queries that could be combined.
      */
     @Autowired
-    public DataQualitySensorRunnerImpl(SensorDefinitionFindService sensorDefinitionFindService, SensorRunnerFactory sensorRunnerFactory) {
+    public DataQualitySensorRunnerImpl(SensorDefinitionFindService sensorDefinitionFindService,
+                                       SensorRunnerFactory sensorRunnerFactory,
+                                       SqlQueryFragmentsParser sqlQueryFragmentsParser) {
         this.sensorDefinitionFindService = sensorDefinitionFindService;
         this.sensorRunnerFactory = sensorRunnerFactory;
+        this.sqlQueryFragmentsParser = sqlQueryFragmentsParser;
     }
 
     /**
@@ -67,17 +82,37 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
         AbstractSensorRunner sensorRunner = this.sensorRunnerFactory.getSensorRunner(providerSensorSpec.getType(),
                 providerSensorSpec.getJavaClassName());
 
-        SensorPrepareResult sensorPrepareResult = new SensorPrepareResult(sensorRunParameters, sensorDefinition, sensorRunner);
-
         try {
-            sensorRunner.prepareSensor(executionContext, sensorPrepareResult, progressListener);
+            SensorPrepareResult sensorPrepareResult = sensorRunner.prepareSensor(executionContext, sensorRunParameters, sensorDefinition, progressListener);
+            String renderedSensorSql = sensorPrepareResult.getRenderedSensorSql();
+            if (renderedSensorSql != null) {
+                if (renderedSensorSql.contains(sensorRunParameters.getActualValueAlias())) {
+                    sensorPrepareResult.setActualValueAlias(sensorRunParameters.getActualValueAlias());
+                }
+                else if (!SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME.equals(sensorRunParameters.getActualValueAlias()) &&
+                    renderedSensorSql.contains(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME)) {
+                    sensorPrepareResult.setActualValueAlias(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+                }
+
+                if (renderedSensorSql.contains(sensorRunParameters.getExpectedValueAlias())) {
+                    sensorPrepareResult.setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
+                }
+                else if (!SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME.equals(sensorRunParameters.getExpectedValueAlias()) &&
+                        renderedSensorSql.contains(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {
+                    sensorPrepareResult.setExpectedValueAlias(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+                }
+
+                FragmentedSqlQuery fragmentedSqlQuery = this.sqlQueryFragmentsParser.parseQueryToComponents(renderedSensorSql,
+                        sensorPrepareResult.getActualValueAlias(), sensorPrepareResult.getExpectedValueAlias());
+                sensorPrepareResult.setFragmentedSqlQuery(fragmentedSqlQuery);
+            }
+
+            return sensorPrepareResult;
         }
         catch (Throwable ex) {
             log.error("Sensor failed to render, sensor name: " + sensorName, ex);
-            sensorPrepareResult.setPrepareException(ex);
+            return SensorPrepareResult.createForPrepareException(sensorRunParameters, sensorDefinition, ex);
         }
-
-        return sensorPrepareResult;
     }
 
     /**
@@ -100,5 +135,43 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
         SensorExecutionResult result = sensorRunner.executeSensor(executionContext, sensorPrepareResult,
                 progressListener, dummySensorExecution, jobCancellationToken);
         return result;
+    }
+
+    /**
+     * Executes a sensor and returns the sensor result as a table returned from the query.
+     *
+     * @param executionContext     Check execution context that provides access to the user home and dqo home.
+     * @param preparedSensorsGroup Object with a list of merged prepared sensors that will be executed by a single call to the data source.
+     * @param progressListener     Progress lister that receives information about the progress of a sensor execution.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to cancel a running sensor query.
+     * @return Collection of sensor group execution result with the query result from an executor. May contain results of multiple sensors that were merged.
+     * The result is a collection because when a sensor fails, then the query could be split and executed again.
+     */
+    @Override
+    public List<GroupedSensorExecutionResult> executeGroupedSensors(ExecutionContext executionContext,
+                                                                    PreparedSensorsGroup preparedSensorsGroup,
+                                                                    SensorExecutionProgressListener progressListener,
+                                                                    boolean dummySensorExecution,
+                                                                    JobCancellationToken jobCancellationToken) {
+        AbstractGroupedSensorExecutor sensorExecutor = preparedSensorsGroup.getFirstSensorPrepareResult().getSensorExecutor();
+        GroupedSensorExecutionResult result = sensorExecutor.executeGroupedSensor(executionContext, preparedSensorsGroup,
+                progressListener, dummySensorExecution, jobCancellationToken);
+
+        if (result.isSuccess() || !preparedSensorsGroup.isSplittable()) {
+            return List.of(result);
+        }
+
+        ArrayList<GroupedSensorExecutionResult> resultsFromSplits = new ArrayList<>();
+        PreparedSensorsGroup[] sensorGroups = preparedSensorsGroup.split();
+        for (PreparedSensorsGroup smallerGroup : sensorGroups) {
+            jobCancellationToken.throwIfCancelled();
+
+            List<GroupedSensorExecutionResult> smallerSensorGroupResults = this.executeGroupedSensors(executionContext,
+                    smallerGroup, progressListener, dummySensorExecution, jobCancellationToken);
+            resultsFromSplits.addAll(smallerSensorGroupResults);
+        }
+
+        return resultsFromSplits;
     }
 }

@@ -22,6 +22,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
 import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
@@ -70,7 +71,9 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),
                 new ProviderSensorDefinitionSpec(),
-                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery)
+                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
+                SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME,
+                SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME
         );
     }
 

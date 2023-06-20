@@ -85,7 +85,7 @@ public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests exten
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/timeliness/days_since_most_recent_event", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("table/timeliness/data_freshness", this.sut.getSensorDefinitionName());
     }
 
     @Test

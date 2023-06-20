@@ -24,6 +24,8 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.CustomSensorParametersSpec;
+import ai.dqo.sensors.column.sampling.ColumnSamplingColumnSamplesSensorParametersSpec;
+import ai.dqo.sensors.table.availability.TableAvailabilitySensorParametersSpec;
 import ai.dqo.sensors.table.availability.TableAvailabilitySensorRunner;
 import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
 import ai.dqo.utils.reflection.TargetClassSearchUtility;
@@ -105,6 +107,9 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                 providerSensorDefinitionSpec.setSupportsPartitionedChecks(
                         sqlTemplate.contains("lib.render_time_dimension_projection") &&
                                 abstractSensorParametersSpec.getSupportsPartitionedChecks());
+                providerSensorDefinitionSpec.setDisableMergingQueries(
+                        sensorDefinitionName.contains(new ColumnSamplingColumnSamplesSensorParametersSpec().getSensorDefinitionName()) ||
+                        sensorDefinitionName.contains(new TableAvailabilitySensorParametersSpec().getSensorDefinitionName()));
             }
 
             if (abstractSensorParametersSpec.getAlwaysSupportedOnAllProviders()) {

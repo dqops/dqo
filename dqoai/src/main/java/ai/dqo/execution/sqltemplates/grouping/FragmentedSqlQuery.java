@@ -16,8 +16,10 @@
 
 package ai.dqo.execution.sqltemplates.grouping;
 
+import org.apache.parquet.Strings;
+
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Rendered SQL query that was divided into components that are static SQLs (the beginning and the ending of an SQL query) that are the same between similar queries
@@ -26,23 +28,31 @@ import java.util.Collection;
 public class FragmentedSqlQuery {
     private final String originalSql;
     private final ArrayList<SqlQueryFragment> components = new ArrayList<>();
+    private String actualValueAlias;
+    private String expectedValueAlias;
 
     /**
      * Creates an SQL component list.
      * @param originalSql The original SQL that will be divided into components.
+     * @param actualValueAlias The alias of the actual value.
+     * @param expectedValueAlias The alias of the expected value.
      */
-    public FragmentedSqlQuery(String originalSql) {
+    public FragmentedSqlQuery(String originalSql, String actualValueAlias, String expectedValueAlias) {
         this.originalSql = originalSql;
+        this.actualValueAlias = actualValueAlias;
+        this.expectedValueAlias = expectedValueAlias;
     }
 
     /**
      * Creates a single fragment query that does not support grouping and substitution.
      * It is a single static sql fragment where the actual_value component was not detected.
      * @param sql SQL query.
+     * @param actualValueAlias The alias of the actual value.
+     * @param expectedValueAlias The alias of the expected value.
      * @return SQL query fragment as a single static SQL.
      */
-    public static FragmentedSqlQuery createNotGroupableQuery(String sql) {
-        FragmentedSqlQuery fragmentedSqlQuery = new FragmentedSqlQuery(sql);
+    public static FragmentedSqlQuery createNotGroupableQuery(String sql, String actualValueAlias, String expectedValueAlias) {
+        FragmentedSqlQuery fragmentedSqlQuery = new FragmentedSqlQuery(sql, actualValueAlias, expectedValueAlias);
         fragmentedSqlQuery.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT, sql));
         return fragmentedSqlQuery;
     }
@@ -67,8 +77,46 @@ public class FragmentedSqlQuery {
      * Returns a collection of SQL components.
      * @return Collection of sql components.
      */
-    public Collection<SqlQueryFragment> getComponents() {
+    public List<SqlQueryFragment> getComponents() {
         return components;
+    }
+
+    /**
+     * Returns the name of the actual_value alias (output column name) that is used in the query.
+     * @return Detected output column name used to extract the actual value (the sensor readout).
+     */
+    public String getActualValueAlias() {
+        return actualValueAlias;
+    }
+
+    /**
+     * Sets the column name that contains the output sensor readout.
+     * @param actualValueAlias The output column alias that contains the sensor readout value.
+     */
+    public void setActualValueAlias(String actualValueAlias) {
+        if (Strings.isNullOrEmpty(actualValueAlias)) {
+            throw new NullPointerException("Actual value alias cannot be null or empty.");
+        }
+        this.actualValueAlias = actualValueAlias;
+    }
+
+    /**
+     * Returns the name of the expected_value alias (secondary output column name) that is used in the query.
+     * @return Detected output column name used to extract the expected value (the secondary sensor readout).
+     */
+    public String getExpectedValueAlias() {
+        return expectedValueAlias;
+    }
+
+    /**
+     * Sets the column name that contains the output sensor expected value.
+     * @param expectedValueAlias The output column alias that contains the sensor expected value readout value.
+     */
+    public void setExpectedValueAlias(String expectedValueAlias) {
+        if (Strings.isNullOrEmpty(expectedValueAlias)) {
+            throw new NullPointerException("Expected value alias cannot be null or empty.");
+        }
+        this.expectedValueAlias = expectedValueAlias;
     }
 
     /**

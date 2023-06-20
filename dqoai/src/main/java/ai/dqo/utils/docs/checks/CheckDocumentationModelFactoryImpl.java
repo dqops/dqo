@@ -46,6 +46,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.HomeType;
 import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
@@ -518,7 +519,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         null,
                         tableSpec.getDataStreams().getFirstDataStreamMapping(),
                         checkSpec.getParameters(),
-                        providerDialectSettings
+                        providerDialectSettings,
+                        new CheckSearchFilters()
                 );
 
                 JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(

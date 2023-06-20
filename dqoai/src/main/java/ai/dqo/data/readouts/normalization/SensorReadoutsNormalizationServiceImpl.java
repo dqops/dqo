@@ -55,15 +55,15 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Analyzes a given dataset, fixes wrong column types, calculates a data stream hash, sorts the data,
      * prepares the data for using in a sensor. Returns a new table with fixed column types.
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data.
-     * @param timePeriodGradient Time series gradient.
      * @param sensorRunParameters Sensor run parameters.
      * @return Metadata object that describes the sensor result table. Contains also a normalized results table.
      */
     public SensorReadoutsNormalizedResult normalizeResults(SensorExecutionResult sensorExecutionResult,
-                                                           TimePeriodGradient timePeriodGradient,
                                                            SensorExecutionRunParameters sensorRunParameters) {
         Table resultsTable = sensorExecutionResult.getResultTable();
         int resultsRowCount = resultsTable.rowCount();
+        TimePeriodGradient timePeriodGradient = sensorRunParameters.getTimePeriodGradient();
+
         ZoneId defaultTimeZone = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
         Column<?> actualValueColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);

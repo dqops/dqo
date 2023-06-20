@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.execution.checks.TableChecksExecutionStatistics;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.TableSpec;
 
@@ -28,14 +29,7 @@ public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEv
     private final ConnectionWrapper connectionWrapper;
     private final TableSpec tableSpec;
     private final Collection<AbstractCheckSpec<?,?,?,?>> checks;
-    private final int checksCount;
-    private final int sensorResultsCount;
-    private final int passedRules;
-    private final int warningsCount;
-    private final int errorsCount;
-    private final int fatalCount;
-    private final int sensorsFailedCount;
-    private final int rulesFailedCount;
+    private final TableChecksExecutionStatistics executionStatistics;
 
     /**
      * Creates a progress event.
@@ -45,20 +39,11 @@ public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEv
      * @param checks    Collection of checks that were executed.
      */
     public TableChecksProcessingFinishedEvent(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckSpec<?,?,?,?>> checks,
-                                              int checksCount, int sensorResultsCount, int passedRules,
-                                              int warningsCount, int errorsCount, int fatalCount,
-                                              int sensorsFailedCount, int rulesFailedCount) {
+                                              TableChecksExecutionStatistics executionStatistics) {
         this.connectionWrapper = connectionWrapper;
         this.tableSpec = tableSpec;
         this.checks = checks;
-        this.checksCount = checksCount;
-        this.sensorResultsCount = sensorResultsCount;
-        this.passedRules = passedRules;
-        this.warningsCount = warningsCount;
-        this.errorsCount = errorsCount;
-        this.fatalCount = fatalCount;
-        this.sensorsFailedCount = sensorsFailedCount;
-        this.rulesFailedCount = rulesFailedCount;
+        this.executionStatistics = executionStatistics;
     }
 
     /**
@@ -88,19 +73,27 @@ public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEv
     }
 
     /**
+     * Returns the check execution statistics with counts of checks, failures, results, etc.
+     * @return Check execution statistics.
+     */
+    public TableChecksExecutionStatistics getExecutionStatistics() {
+        return executionStatistics;
+    }
+
+    /**
      * Count of checks that were executed.
      * @return Count of checks.
      */
-    public int getChecksCount() {
-        return checksCount;
+    public int getExecutedChecksCount() {
+        return this.executionStatistics.getExecutedChecksCount();
     }
 
     /**
      * Count of sensor results that were generated (captured) by sensors.
      * @return Count of sensor results.
      */
-    public int getSensorResultsCount() {
-        return sensorResultsCount;
+    public int getSensorReadoutsCount() {
+        return this.executionStatistics.getSensorReadoutsCount();
     }
 
     /**
@@ -108,7 +101,7 @@ public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEv
      * @return Count of passed checks.
      */
     public int getPassedRules() {
-        return passedRules;
+        return this.executionStatistics.getPassedRulesCount();
     }
 
     /**
@@ -116,7 +109,7 @@ public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEv
      * @return Warnings count.
      */
     public int getWarningsCount() {
-        return warningsCount;
+        return this.executionStatistics.getWarningIssuesCount();
     }
 
     /**
@@ -124,7 +117,7 @@ public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEv
      * @return Error severity alerts count.
      */
     public int getErrorsCount() {
-        return errorsCount;
+        return this.executionStatistics.getErrorIssuesCount();
     }
 
     /**
@@ -132,22 +125,22 @@ public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEv
      * @return High severity alerts (fatal) count.
      */
     public int getFatalCount() {
-        return fatalCount;
+        return this.executionStatistics.getFatalIssuesCount();
     }
 
     /**
      * Returns the number of sensors that failed to execute.
      * @return Number of sensors that failed to execute.
      */
-    public int getSensorsFailedCount() {
-        return sensorsFailedCount;
+    public int getSensorExecutionErrorsCount() {
+        return this.executionStatistics.getSensorExecutionErrorsCount();
     }
 
     /**
      * Returns the number of rules that failed to evaluate (but the sensors managed to execute).
      * @return Number of rules that failed to evaluate.
      */
-    public int getRulesFailedCount() {
-        return rulesFailedCount;
+    public int getRuleExecutionErrorsCount() {
+        return this.executionStatistics.getRuleExecutionErrorsCount();
     }
 }

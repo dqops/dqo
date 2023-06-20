@@ -15,13 +15,12 @@
  */
 package ai.dqo.execution.statistics.progress;
 
-import ai.dqo.execution.checks.progress.CheckExecutionProgressEvent;
 import ai.dqo.execution.statistics.StatisticsCollectionExecutionSummary;
 
 /**
  * Progress event raised after all statistics collectors were executed. Returns the summary.
  */
-public class StatisticsCollectorExecutionFinishedEvent extends CheckExecutionProgressEvent {
+public class StatisticsCollectorExecutionFinishedEvent extends StatisticsCollectorsExecutionProgressEvent {
     private final StatisticsCollectionExecutionSummary collectorsExecutionSummary;
 
     /**

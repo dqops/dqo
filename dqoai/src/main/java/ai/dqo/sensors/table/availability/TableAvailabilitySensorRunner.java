@@ -20,6 +20,8 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorPrepareResult;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
@@ -60,14 +62,53 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
      * Prepares a sensor for execution. SQL templated sensors will render the SQL template, filled with the table and column names.
      *
      * @param executionContext    Check execution context with access to the dqo home and user home, if any metadata is needed.
-     * @param sensorPrepareResult Sensor prepare result with additional sensor run parameters. The prepareSensor method should fill additional values in this object that will be used when the sensor is executed.
+     * @param sensorRunParameters Sensor run parameters.
+     * @param sensorDefinition    Sensor definition that was found in the dqo home or the user home.
      * @param progressListener    Progress listener that receives events when the sensor is executed.
      */
     @Override
-    public void prepareSensor(ExecutionContext executionContext,
-                              SensorPrepareResult sensorPrepareResult,
-                              SensorExecutionProgressListener progressListener) {
-        this.jinjaSqlTemplateSensorRunner.prepareSensor(executionContext, sensorPrepareResult, progressListener);
+    public SensorPrepareResult prepareSensor(ExecutionContext executionContext,
+                                             SensorExecutionRunParameters sensorRunParameters,
+                                             SensorDefinitionFindResult sensorDefinition,
+                                             SensorExecutionProgressListener progressListener) {
+        return this.jinjaSqlTemplateSensorRunner.prepareSensor(executionContext, sensorRunParameters, sensorDefinition, progressListener);
+    }
+
+    /**
+     * Transforms the sensor result that was captured by the sensor executor. This method performs de-grouping of grouped sensors that were executed as multiple SQL queries merged into one big query.
+     *
+     * @param executionContext             Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param groupedSensorExecutionResult Sensor execution result with the data retrieved from the data source. It will be adapted to a sensor result for one sensor.
+     * @param sensorPrepareResult          Original sensor prepare results for this sensor. Contains also the sensor run parameters.
+     * @param progressListener             Progress listener that receives events when the sensor is executed.
+     * @param jobCancellationToken         Job cancellation token, may cancel a running query.
+     * @return Sensor result for one sensor.
+     */
+    @Override
+    public SensorExecutionResult extractSensorResults(ExecutionContext executionContext,
+                                                      GroupedSensorExecutionResult groupedSensorExecutionResult,
+                                                      SensorPrepareResult sensorPrepareResult,
+                                                      SensorExecutionProgressListener progressListener,
+                                                      JobCancellationToken jobCancellationToken) {
+        SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
+        SensorExecutionResult sensorExecutionResult = this.jinjaSqlTemplateSensorRunner.extractSensorResults(executionContext,
+                groupedSensorExecutionResult, sensorPrepareResult, progressListener, jobCancellationToken);
+
+        if (sensorExecutionResult.isSuccess()) {
+            try {
+                if (sensorExecutionResult.getResultTable().column(0).get(0) == null) {
+                    Table resultTableWithResult = createResultTableWithResult(1.0);
+                    return new SensorExecutionResult(sensorRunParameters, resultTableWithResult);
+                }
+            } catch (Exception exception) {
+                Table resultTable = createResultTableWithResult(0.0);
+                return new SensorExecutionResult(sensorRunParameters, resultTable);
+            }
+            return sensorExecutionResult;
+        }
+
+        Table resultTable = createResultTableWithResult(0.0);
+        return new SensorExecutionResult(sensorRunParameters, resultTable);
     }
 
     /**
@@ -93,17 +134,17 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
         if (sensorExecutionResult.isSuccess()) {
             try {
                 if (sensorExecutionResult.getResultTable().column(0).get(0) == null) {
-                    Table resultTableWithResult = createResultTableWithResult(1L);
+                    Table resultTableWithResult = createResultTableWithResult(1.0);
                     return new SensorExecutionResult(sensorRunParameters, resultTableWithResult);
                 }
             } catch (Exception exception) {
-                Table resultTable = createResultTableWithResult(0L);
+                Table resultTable = createResultTableWithResult(0.0);
                 return new SensorExecutionResult(sensorRunParameters, resultTable);
             }
             return sensorExecutionResult;
         }
 
-        Table resultTable = createResultTableWithResult(0L);
+        Table resultTable = createResultTableWithResult(0.0);
         return new SensorExecutionResult(sensorRunParameters, resultTable);
     }
 }

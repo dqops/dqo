@@ -346,12 +346,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 return null; // skip this check
             }
 
-            if (providerSensorDefinitionSpec.isSupportsPartitionedChecks() != null &&
-                    !providerSensorDefinitionSpec.isSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
+            if (providerSensorDefinitionSpec.getSupportsPartitionedChecks() != null &&
+                    !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
                 return null; // skip this check
             }
 
-            checkModel.setSupportsDataStreams(providerSensorDefinitionSpec.isSupportsGroupingByDataStream() == null || providerSensorDefinitionSpec.isSupportsGroupingByDataStream());
+            checkModel.setSupportsDataStreams(providerSensorDefinitionSpec.getSupportsGroupingByDataStream() == null || providerSensorDefinitionSpec.getSupportsGroupingByDataStream());
 
             SensorDefinitionSpec sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
             if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
@@ -455,8 +455,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 return null; // skip this check
             }
 
-            if (providerSensorDefinitionSpec.isSupportsPartitionedChecks() != null &&
-                    !providerSensorDefinitionSpec.isSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
+            if (providerSensorDefinitionSpec.getSupportsPartitionedChecks() != null &&
+                    !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
                 return null; // skip this check
             }
         }
