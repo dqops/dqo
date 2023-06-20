@@ -13,7 +13,8 @@ import ConfirmDialog from './ConfirmDialog';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
-import { addFirstLevelTab, setCreatedDataStream } from '../../redux/actions/source.actions';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { setCreatedDataStream } from '../../redux/actions/rule.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
@@ -21,6 +22,7 @@ import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
 import Checkbox from '../../components/Checkbox';
 import Button from '../../components/Button';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -79,7 +81,13 @@ const TableColumns = ({
     checkTypes: CheckTypes;
   } = useParams();
   const history = useHistory();
+  const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
+
+  const setData = () =>{
+    actionDispatch(setCreatedDataStream(true, setDataStream(), setSpec2()))
+  }
+
 
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -754,6 +762,8 @@ const setDataStream = () =>{
 const doNothing= (): void =>{
 }
 
+setCreatedDataStream(true, setDataStream(), setSpec2())
+console.log(setCreatedDataStream(true, setDataStream(), setSpec2()))
 const postDataStream = async () => {
   const url = ROUTES.TABLE_LEVEL_PAGE(
     'sources',
@@ -784,7 +794,8 @@ const postDataStream = async () => {
     doNothing()
   }
 }
-dispatch(
+    setData();
+    dispatch(
   addFirstLevelTab(CheckTypes.SOURCES, {
         url,
         value,
@@ -792,7 +803,6 @@ dispatch(
         label: table
       })
       );
-      setCreatedDataStream(true, setDataStream(), setSpec2())
       history.push(url, data);     
     };
     

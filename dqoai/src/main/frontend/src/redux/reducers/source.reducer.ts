@@ -17,6 +17,7 @@
 import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from "../../shared/routes";
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { DataStreamMappingSpec } from '../../api';
 
 export interface INestTab {
   url: string;
@@ -58,6 +59,7 @@ const initialState: ISourceState = {
   partitioned: {
     tabs: []
   },
+  
 };
 
 export type BasicAction = {
@@ -71,6 +73,14 @@ export type Action = BasicAction & {
   schedulingGroup?: CheckRunRecurringScheduleGroup;
   error?: any;
 };
+
+export type DataStreamAction = {
+  bool: boolean;
+  data_stream_name: string;
+  spec: DataStreamMappingSpec;
+}
+
+
 
 const setActiveTabState = (state: ISourceState, action: Action, data: Record<string, unknown>) => {
   const newState = state ? structuredClone(state) : state;
@@ -1233,13 +1243,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
       })
     }
-    case SOURCE_ACTION.SET_CREATED_DATA_STREAM: {
-    return {
-        ...state, 
-        
-    }
-
-    }
+    
     default:
       return state;
   }

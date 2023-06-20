@@ -17,6 +17,7 @@
 import { JOB_ACTION } from '../types';
 import {
   CloudSynchronizationFoldersStatusModel,
+  DataStreamMappingSpec,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
   DqoJobQueueInitialSnapshotModel
@@ -36,6 +37,9 @@ export interface IJobsState {
   isProfileOpen: boolean;
   areSettingsOpen: boolean;
   job_dictionary_state: Record<string, DqoJobHistoryEntryModel>
+  bool?:boolean,
+  dataStreamName: string,
+  spec: DataStreamMappingSpec
 }
 
 const initialState: IJobsState = {
@@ -47,7 +51,10 @@ const initialState: IJobsState = {
   amounthOfElements: 0,
   isProfileOpen: false,
   areSettingsOpen: false,
-  job_dictionary_state: {}
+  job_dictionary_state: {},
+  bool: false,
+  dataStreamName: "",
+  spec: {}
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -146,7 +153,15 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         areSettingsOpen: action.areSettingsOpen
       };
-
+      case JOB_ACTION.SET_CREATED_DATA_STREAM: {
+        return {
+            ...state, 
+        bool: action.bool,
+        dataStreamName: action.dataStreamName,
+        spec: action.spec    
+        }
+    
+        }
     default:
       return state;
   }

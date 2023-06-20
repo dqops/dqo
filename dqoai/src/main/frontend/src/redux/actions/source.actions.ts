@@ -657,9 +657,4 @@ export const updateTableIncidentGrouping = (checkType: CheckTypes, activeTab: st
   }
 };
 
-export const setCreatedDataStream = (bool:boolean, dataStreamName: string, spec: DataStreamMappingSpec) =>({
-  type: SOURCE_ACTION.SET_CREATED_DATA_STREAM,
-  bool,
-  dataStreamName, 
-  spec
-});
+

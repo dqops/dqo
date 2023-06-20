@@ -17,9 +17,9 @@
 import { Dispatch } from 'redux';
 
 import { RulesApi } from '../../services/apiClient';
-import { RULE_ACTION } from '../types';
+import { JOB_ACTION, RULE_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { RuleBasicFolderModel } from "../../api";
+import { DataStreamMappingSpec, RuleBasicFolderModel } from "../../api";
 
 export const getRuleFolderTreeRequest = () => ({
   type: RULE_ACTION.GET_RULE_FOLDER_TREE
@@ -54,4 +54,10 @@ export const toggleRuleFolderTree = (key: string) => ({
 export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
   type: RULE_ACTION.UPDATE_RULE_FOLDER_TREE,
   data
+});
+export const setCreatedDataStream = (bool:boolean, dataStreamName: string, spec: DataStreamMappingSpec) =>({
+  type: JOB_ACTION.SET_CREATED_DATA_STREAM,
+  bool,
+  dataStreamName, 
+  spec
 });

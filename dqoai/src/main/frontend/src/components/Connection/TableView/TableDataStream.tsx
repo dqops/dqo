@@ -1,41 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { DataStreamBasicModel, DataStreamMappingSpec } from '../../../api';
+import { DataStreamBasicModel } from '../../../api';
 import DataStreamListView from "./DataStreamListView";
 import DataStreamEditView from "./DataStreamEditView";
 import { DataStreamsApi } from "../../../services/apiClient";
-import { useParams, useLocation} from "react-router-dom";
+import { useParams} from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
-interface MyLocationState {
-  bool: boolean;
-  data_stream_name: string;
-  spec: DataStreamMappingSpec;
-}
 const TableDataStream = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [myState, setState] = useState<MyLocationState | undefined>();
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
   const [selectedDataStream, setSelectedDataStream] = useState<DataStreamBasicModel>();
 
-  const location = useLocation();
+  const {bool, dataStreamName, spec} = useSelector((state: IRootState) => state.job || {})
 
-  const state = location.state as MyLocationState | undefined;
-  console.log(state)
+  console.log(dataStreamName)
 
-  const dSName = state?.data_stream_name
-
+  const checkingFunc = () =>{
+    dataStreams.map((x) => x.data_stream_name===dataStreamName ? setIsEditing(true) : "")
+  }
+console.log(isEditing)
   useEffect(() => {
-    getDataStreams();
-    setState(location.state as MyLocationState | undefined)
-  }, [connectionName, schemaName, tableName, myState]);
+    getDataStreams()
+    checkingFunc()
+    
+  }, [connectionName, schemaName, tableName]);
   
   const getDataStreams = () => {
     DataStreamsApi.getDataStreams(connectionName, schemaName, tableName).then((res) => {
       setDataStreams(res.data);
     });
   };
-
-  console.log(myState)
 
   const onEdit = (stream: DataStreamBasicModel) => {
     setSelectedDataStream(stream);
@@ -51,25 +47,16 @@ const TableDataStream = () => {
     connection_name: connectionName,
     schema_name: schemaName,
     table_name: tableName, 
-    data_stream_name: dSName
+    data_stream_name: dataStreamName
   }
 
   return (
     <div className="my-1">
     
-      {location.state  ? <DataStreamEditView
-            onBack={() => setIsEditing(false)}
-            selectedDataStream={myObj}
-            connection={connectionName}
-            schema={schemaName}
-            table={tableName}
-            getDataStreams={getDataStreams}
-          /> 
-        :
-        isEditing ? (
+        {isEditing ? (
           <DataStreamEditView
             onBack={() => setIsEditing(false)}
-            selectedDataStream={selectedDataStream}
+            selectedDataStream={myObj || selectedDataStream}
             connection={connectionName}
             schema={schemaName}
             table={tableName}
@@ -83,7 +70,7 @@ const TableDataStream = () => {
             onEdit={onEdit}
           />
         )
-      }
+        }
     </div>
   );
 };
