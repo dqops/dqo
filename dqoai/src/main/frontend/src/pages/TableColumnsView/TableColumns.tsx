@@ -1,5 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { ColumnApiClient,DataStreamsApi, JobApiClient } from '../../services/apiClient';
+import {
+  ColumnApiClient,
+  DataStreamsApi,
+  JobApiClient
+} from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
@@ -23,6 +27,7 @@ import { IRootState } from '../../redux/reducers';
 import Checkbox from '../../components/Checkbox';
 import Button from '../../components/Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { datatype_detected } from '../../shared/constants';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -46,7 +51,7 @@ interface MyData {
   scale?: number | undefined;
   importedDatatype?: string | undefined;
   columnHash: number;
-  isColumnSelected: boolean; 
+  isColumnSelected: boolean;
 }
 
 const TableColumns = ({
@@ -60,10 +65,12 @@ const TableColumns = ({
   const [columnToDelete, setColumnToDelete] = useState<ColumnStatisticsModel>();
   const [dataArray1, setDataArray1] = useState<MyData[]>();
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>({});
+  const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const handleButtonClick = (name: string) => {
-    setObjectStates(prevStates => ({
+    setObjectStates((prevStates) => ({
       ...prevStates,
       [name]: !prevStates[name]
     }));
@@ -84,15 +91,13 @@ const TableColumns = ({
   const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
-  const setData = () =>{
-    actionDispatch(setCreatedDataStream(true, setDataStream(), setSpec2()))
-  }
-
+  const setData = () => {
+    actionDispatch(setCreatedDataStream(true, setDataStream(), setSpec2()));
+  };
 
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
 
   const labels = [
     'Column name',
@@ -153,8 +158,6 @@ const TableColumns = ({
     );
     history.push(url);
   };
-  
-
 
   const removeColumn = async () => {
     if (selectedColumn?.column_name) {
@@ -199,30 +202,6 @@ const TableColumns = ({
       return text.slice(0, 22) + '...';
     } else {
       return text;
-    }
-  };
-
-  const datatype_detected = (numberForFile: any) => {
-    if (Number(numberForFile) === 1) {
-      return 'INTEGER';
-    }
-    if (Number(numberForFile) === 2) {
-      return 'FLOAT';
-    }
-    if (Number(numberForFile) === 3) {
-      return 'DATETIME';
-    }
-    if (Number(numberForFile) === 4) {
-      return 'TIMESTAMP';
-    }
-    if (Number(numberForFile) === 5) {
-      return 'BOOLEAN';
-    }
-    if (Number(numberForFile) === 6) {
-      return 'STRING';
-    }
-    if (Number(numberForFile) === 7) {
-      return 'Mixed data type';
     }
   };
 
@@ -489,151 +468,19 @@ const TableColumns = ({
     setDataArray1(sortedResult);
   };
 
-  const sortDataByLength = () => {
+  const sortData = <T extends { [key: string]: any }>(key: keyof T) => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsPercentA = String(a.length);
-      const nullsPercentB = String(b.length);
+      const valueA = String(a[key as keyof typeof a]);
+      const valueB = String(b[key as keyof typeof b]);
 
-      if (nullsPercentA && nullsPercentB) {
+      if (valueA && valueB) {
         return sortDirection === 'asc'
-          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
-          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
-      } else if (nullsPercentA) {
+          ? parseFloat(valueA) - parseFloat(valueB)
+          : parseFloat(valueB) - parseFloat(valueA);
+      } else if (valueA) {
         return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsPercentB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByScale = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsPercentA = String(a.scale);
-      const nullsPercentB = String(b.scale);
-
-      if (nullsPercentA && nullsPercentB) {
-        return sortDirection === 'asc'
-          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
-          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
-      } else if (nullsPercentA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsPercentB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByNullPercent = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsPercentA = String(a.null_percent);
-      const nullsPercentB = String(b.null_percent);
-
-      if (nullsPercentA && nullsPercentB) {
-        return sortDirection === 'asc'
-          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
-          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
-      } else if (nullsPercentA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsPercentB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByNullCount = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.null_count);
-      const nullsCountB = String(b.null_count);
-
-      if (nullsCountA && nullsCountB) {
-        return sortDirection === 'asc'
-          ? Number(nullsCountA) - Number(nullsCountB)
-          : Number(nullsCountB) - Number(nullsCountA);
-      } else if (nullsCountA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsCountB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByUniqueValue = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const uniqueValueA = a.unique_value;
-      const uniqueValueB = b.unique_value;
-
-      if (uniqueValueA && uniqueValueB) {
-        return sortDirection === 'asc'
-          ? uniqueValueA - uniqueValueB
-          : uniqueValueB - uniqueValueA;
-      } else if (uniqueValueA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (uniqueValueB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByDetectedtype = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.detectedDatatypeVar);
-      const nullsCountB = String(b.detectedDatatypeVar);
-
-      if (nullsCountA && nullsCountB) {
-        return sortDirection === 'asc'
-          ? Number(nullsCountA) - Number(nullsCountB)
-          : Number(nullsCountB) - Number(nullsCountA);
-      } else if (nullsCountA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsCountB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByImportedtype = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.importedDatatype);
-      const nullsCountB = String(b.importedDatatype);
-
-      if (nullsCountA && nullsCountB) {
-        return sortDirection === 'asc'
-          ? nullsCountA.localeCompare(nullsCountB)
-          : nullsCountB.localeCompare(nullsCountA);
-      } else if (nullsCountA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsCountB) {
+      } else if (valueB) {
         return sortDirection === 'asc' ? 1 : -1;
       } else {
         return 0;
@@ -645,23 +492,23 @@ const TableColumns = ({
 
   const handleSorting = (param: string) => {
     switch (param) {
-      case 'Name':
+      case 'Column name':
         sortAlphabetictly();
         break;
       case 'Detected data type':
-        sortDataByDetectedtype();
+        sortData<MyData>('detectedDatatypeVar');
         break;
-      case 'Imported type':
-        sortDataByImportedtype();
+      case 'Imported data type':
+        sortData<MyData>('importedDatatype');
         break;
       case 'Length':
-        sortDataByLength();
+        sortData<MyData>('length');
         break;
       case 'Scale':
-        sortDataByScale();
+        sortData<MyData>('scale');
         break;
       case 'Null count':
-        sortDataByNullCount();
+        sortData<MyData>('null_count');
         break;
       case 'Minimal value':
         sortDataByMinimalValue();
@@ -682,139 +529,151 @@ const TableColumns = ({
     }
   };
 
-
-const countTrueValues = (obj: Record<string, boolean>): number => {
-  let count = 0;
-  for (const key in obj) {
-    if (obj[key] === true) {
-      count++;
+  const countTrueValues = (obj: Record<string, boolean>): number => {
+    let count = 0;
+    for (const key in obj) {
+      if (obj[key] === true) {
+        count++;
+      }
     }
-  }
-  return count;
-}
-const selectStrings = (obj: Record<string, boolean>) => {
-  return Object.keys(obj).filter(key => obj[key] === true);
-}
-
-const listOfStr = selectStrings(objectStates)
-
-const trueValuesCount = countTrueValues(objectStates);
-
-const spec: DataStreamMappingSpec = {
-  level_1: {
-    column: undefined
-  },
-  level_2: {
-    column: undefined
-  },
-  level_3: {
-    column: undefined
-  },
-  level_4: {
-    column: undefined
-  },
-  level_5: {
-    column: undefined
-  },
-  level_6: {
-    column: undefined 
-  },
-  level_7: {
-    column: undefined
-  },
-  level_8: {
-    column: undefined
-  },
-  level_9: {
-    column: undefined
-  }
-}
-
-const setSpec2 = () =>{
- 
-  for(let i =1; i<= trueValuesCount; i++){ 
-    const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
-    const level = spec[levelKey];
-
-    if (level) {
-      level.column = listOfStr.at(i - 1);
-      level.source = "column_value";
+    return count;
+  };
+  const selectStrings = (obj: Record<string, boolean>) => {
+    return Object.keys(obj).filter((key) => obj[key] === true);
+  };
+  const listOfStr = selectStrings(objectStates);
+  const trueValuesCount = countTrueValues(objectStates);
+  const spec: DataStreamMappingSpec = {
+    level_1: {
+      column: undefined
+    },
+    level_2: {
+      column: undefined
+    },
+    level_3: {
+      column: undefined
+    },
+    level_4: {
+      column: undefined
+    },
+    level_5: {
+      column: undefined
+    },
+    level_6: {
+      column: undefined
+    },
+    level_7: {
+      column: undefined
+    },
+    level_8: {
+      column: undefined
+    },
+    level_9: {
+      column: undefined
     }
-  }
-  return spec
-}
+  };
 
-const setDataStream = () =>{
-  let dataStream = ''
-  for(let i =1; i<= trueValuesCount; i++){ 
-    const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
-    const level = spec[levelKey];
+  const setSpec2 = () => {
+    for (let i = 1; i <= trueValuesCount; i++) {
+      const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
+      const level = spec[levelKey];
 
-    if (level && i!== trueValuesCount) {
-      dataStream+=(listOfStr.at(i - 1) + ',');
-    }else{
-      dataStream+=(listOfStr.at(i - 1));
+      if (level) {
+        level.column = listOfStr.at(i - 1);
+        level.source = 'column_value';
+      }
     }
-  }
-  return dataStream
-}
+    return spec;
+  };
 
-const doNothing= (): void =>{
-}
+  const setDataStream = () => {
+    let dataStream = '';
+    for (let i = 1; i <= trueValuesCount; i++) {
+      const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
+      const level = spec[levelKey];
 
-setCreatedDataStream(true, setDataStream(), setSpec2())
-console.log(setCreatedDataStream(true, setDataStream(), setSpec2()))
-const postDataStream = async () => {
-  const url = ROUTES.TABLE_LEVEL_PAGE(
-    'sources',
-    connectionName,
-    schemaName,
-    tableName,
-    'data-streams'
-  );
-  const value = ROUTES.TABLE_LEVEL_VALUE(
-    'sources',
-    connection,
-    schema,
-    table
+      if (level && i !== trueValuesCount) {
+        dataStream += listOfStr.at(i - 1) + ',';
+      } else {
+        dataStream += listOfStr.at(i - 1);
+      }
+    }
+    return dataStream;
+  };
+
+  const doNothing = (): void => {};
+
+  setCreatedDataStream(true, setDataStream(), setSpec2());
+  console.log(setCreatedDataStream(true, setDataStream(), setSpec2()));
+  const postDataStream = async () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      'sources',
+      connectionName,
+      schemaName,
+      tableName,
+      'data-streams'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      'sources',
+      connection,
+      schema,
+      table
     );
     const data: LocationState = {
       bool: true,
       data_stream_name: setDataStream(),
       spec: setSpec2()
     };
-    
+
     try {
-      const response = await DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data);
+      const response = await DataStreamsApi.createDataStream(
+        connectionName,
+        schemaName,
+        tableName,
+        data
+      );
       if (response.status === 409) {
-    doNothing()
-  }
-} catch (error: any) {
-  if (error.response && error.response.status) {
-    doNothing()
-  }
-}
+        doNothing();
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status) {
+        doNothing();
+      }
+    }
     setData();
     dispatch(
-  addFirstLevelTab(CheckTypes.SOURCES, {
+      addFirstLevelTab(CheckTypes.SOURCES, {
         url,
         value,
         state: data,
         label: table
       })
-      );
-      history.push(url, data);     
-    };
-    
-    const mapFunc = (column: MyData, index: number): ReactNode => {
-      return (
-        <tr key={index}>
-        
-        <Checkbox checked={objectStates[column.nameOfCol ? column.nameOfCol : ""] ? true : false} onChange={() =>handleButtonClick(column.nameOfCol ? column.nameOfCol : "") } className='absolute top-2 border-b border-gray-100'/>
+    );
+    history.push(url);
+  };
+
+  const mapFunc = (column: MyData, index: number): ReactNode => {
+    return (
+      <tr key={index}>
+        <td className="border-b border-gray-100 text-right px-4 py-2">
+          <div>
+            <Checkbox
+              checked={
+                objectStates[column.nameOfCol ? column.nameOfCol : '']
+                  ? true
+                  : false
+              }
+              onChange={() =>
+                handleButtonClick(column.nameOfCol ? column.nameOfCol : '')
+              }
+              className="py-4"
+            />
+          </div>
+        </td>
         <td
           className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
           onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
-          >
+        >
           {column.nameOfCol}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
@@ -932,18 +791,31 @@ const postDataStream = async () => {
 
   return (
     <div className="p-4 py-6 relative">
-            {trueValuesCount !== 0 && trueValuesCount<= 9 && <Button label='Create Data Stream' color='primary' onClick={postDataStream} className='absolute top-0 right-4 px-2'/>}
-            {trueValuesCount !== 0 && trueValuesCount> 9 && 
-            <div className='flex text-red-500 items-center gap-x-4 absolute top-0 right-4 px-2'>
-
-            (You can choose max 9 columns)
-            <Button label='Create Data Stream' color='secondary' className='text-black ' /> 
-            </div>
-            }
+      {trueValuesCount !== 0 && trueValuesCount <= 9 && (
+        <Button
+          label="Create Data Stream"
+          color="primary"
+          onClick={postDataStream}
+          className="absolute top-0 right-4 px-2"
+        />
+      )}
+      {trueValuesCount !== 0 && trueValuesCount > 9 && (
+        <div className="flex text-red-500 items-center gap-x-4 absolute top-0 right-4 px-2">
+          (You can choose max 9 columns)
+          <Button
+            label="Create Data Stream"
+            color="secondary"
+            className="text-black "
+          />
+        </div>
+      )}
       <table className="mb-6 mt-4 w-full">
         <thead>
           <tr>
-            <th className="border-b border-gray-100 " style={{width: "6px"}}></th>
+            <th
+              className="border-b border-gray-100 "
+              style={{ width: '6px' }}
+            ></th>
             {labels.map((x, index) => (
               <th
                 className="border-b border-gray-100 text-left px-4 py-2 cursor-pointer"
@@ -973,7 +845,7 @@ const postDataStream = async () => {
             <th className="border-b border-gray-100 text-right px-10 py-2 ">
               <div
                 className="flex justify-center cursor-pointer"
-                onClick={() => sortDataByNullPercent()}
+                onClick={() => sortData<MyData>('null_percent')}
               >
                 <div>Null percent</div>
                 <div>
@@ -985,7 +857,7 @@ const postDataStream = async () => {
             <th className="border-b border-gray-100 text-right px-4 py-2">
               <div
                 className="flex justify-end cursor-pointer"
-                onClick={() => sortDataByUniqueValue()}
+                onClick={() => sortData<MyData>('unique_value')}
               >
                 <div>Unique Count</div>
                 <div>
