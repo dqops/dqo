@@ -379,7 +379,7 @@ const DataQualityChecks = ({
         <div className="flex items-center mb-3 gap-6">
           <div className="text-sm text-red-500">
             <span className="mr-3 text-black">
-              The results are partitioned (grouped) by a timestamp column:
+              The results are date partitioned (grouped) by a column:
             </span>
             {checksUI.partition_by_column ? (
               <span className="text-black">{checksUI.partition_by_column}</span>
@@ -388,7 +388,7 @@ const DataQualityChecks = ({
             )}
           </div>
           <Button
-            label="Configure the partition by column"
+            label="Configure the date partitioning column"
             color="primary"
             variant={checksUI.partition_by_column ? 'outlined' : 'contained'}
             onClick={goToTableTimestamps}

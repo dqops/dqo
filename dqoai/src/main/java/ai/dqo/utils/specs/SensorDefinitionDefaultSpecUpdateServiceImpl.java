@@ -111,12 +111,11 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                 ProviderType[] allProviderTypes = ProviderType.values();
                 for (ProviderType providerType : allProviderTypes) {
                     ProviderSensorDefinitionWrapper providerSensorWrapper = providerSensors.getByObjectName(providerType, true);
-                    if (providerSensorWrapper != null) {
-                        continue; // the sensor is already configured
+                    if (providerSensorWrapper == null) {
+                        providerSensorWrapper = providerSensors.createAndAddNew(providerType);
+                        providerSensorWrapper.setSpec(new ProviderSensorDefinitionSpec());
                     }
 
-                    providerSensorWrapper = providerSensors.createAndAddNew(providerType);
-                    providerSensorWrapper.setSpec(new ProviderSensorDefinitionSpec());
                     ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorWrapper.getSpec();
                     boolean isSqlTemplateRunner = abstractSensorParametersSpec.getSensorRunnerClass() == JinjaSqlTemplateSensorRunner.class ||
                             abstractSensorParametersSpec.getSensorRunnerClass() == TableAvailabilitySensorRunner.class;

@@ -2,6 +2,7 @@
 apiVersion: dqo/v1
 kind: check
 spec:
-  sensor_name: table/timeliness/days_since_most_recent_event
+  sensor_name: table/timeliness/data_freshness
   rule_name: comparison/max_days
-  help_text: Calculates the number of days since the most recent event timestamp (freshness)
+  help_text: Daily  calculating the number of days since the most recent event timestamp
+    (freshness)

@@ -90,7 +90,7 @@ const TimestampsView = () => {
 
       <div className="mb-10">
         <ColumnSelect
-          label="DATE or DATETIME column name for partition checks"
+          label="Date or datetime column name for partition checks"
           value={tablePartitioning?.timestamp_columns?.partition_by_column}
           onChange={(column) =>
             handleChangeTimestamps({
