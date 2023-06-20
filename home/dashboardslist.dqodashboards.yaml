@@ -4,7 +4,7 @@ kind: dashboards
 spec:
 - folder_name: Governance (KPIs)
   dashboards:
-  - dashboard_name: KPIs for Quality Dimension
+  - dashboard_name: KPIs per Quality Dimension
     url: https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
     width: 1400
     height: 1300
@@ -222,7 +222,7 @@ spec:
   folders:
   - folder_name: Volume
     dashboards:
-    - dashboard_name: Table Row Count for Time Partitions
+    - dashboard_name: Daily Partitions Row Count
       url: https://lookerstudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C
       width: 1400
       height: 1600
@@ -256,7 +256,7 @@ spec:
         ds0.token: '%DQO_CLOUD_TOKEN%'
   - folder_name: Data Completeness
     dashboards:
-    - dashboard_name: Most Incomplete Columns - count
+    - dashboard_name: Most Incomplete Columns - Count
       url: https://lookerstudio.google.com/embed/reporting/1d7ca470-04d4-479d-b702-c610cfda6601/page/c5B8C
       width: 1400
       height: 1300
@@ -278,13 +278,13 @@ spec:
   folders:
     - folder_name: Checks No Longer In Use
       dashboards:
-        - dashboard_name: Checks No Longer In Use - tabular
+        - dashboard_name: Checks No Longer In Use - Tabular
           url: https://lookerstudio.google.com/embed/reporting/f639b221-d6db-461a-b6ab-e67ab9d5e2a9/page/c5B8C
           width: 1400
           height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-        - dashboard_name: Checks No Longer In Use - charts
+        - dashboard_name: Checks No Longer In Use - Charts
           url: https://lookerstudio.google.com/embed/reporting/b0d9c982-827b-448b-8da6-68e97793d10e/page/c5B8C
           width: 1400
           height: 1100
@@ -327,4 +327,3 @@ spec:
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
       ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
       ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
-
