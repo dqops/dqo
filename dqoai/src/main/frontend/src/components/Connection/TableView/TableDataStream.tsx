@@ -6,6 +6,8 @@ import { DataStreamsApi } from "../../../services/apiClient";
 import { useParams} from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 
 const TableDataStream = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
@@ -13,26 +15,32 @@ const TableDataStream = () => {
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
   const [selectedDataStream, setSelectedDataStream] = useState<DataStreamBasicModel>();
 
-  const {bool, dataStreamName, spec} = useSelector((state: IRootState) => state.job || {})
+  const {dataStreamName, bool} = useSelector((state: IRootState) => state.job || {})
 
-  console.log(dataStreamName)
-
-  const checkingFunc = () =>{
-    dataStreams.map((x) => x.data_stream_name===dataStreamName ? setIsEditing(true) : "")
+  const actionDispatch = useActionDispatch();
+  const setBackData = () =>{
+    actionDispatch(setCreatedDataStream(false, "", {}))
   }
-console.log(isEditing)
   useEffect(() => {
     getDataStreams()
-    checkingFunc()
-    
+      .catch((error) => {
+        console.error(error);
+      });
   }, [connectionName, schemaName, tableName]);
   
   const getDataStreams = () => {
-    DataStreamsApi.getDataStreams(connectionName, schemaName, tableName).then((res) => {
-      setDataStreams(res.data);
+    return new Promise<void>((resolve, reject) => {
+      DataStreamsApi.getDataStreams(connectionName, schemaName, tableName)
+        .then((res) => {
+          setDataStreams(res.data);
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
   };
-
+  
   const onEdit = (stream: DataStreamBasicModel) => {
     setSelectedDataStream(stream);
     setIsEditing(true);
@@ -52,10 +60,10 @@ console.log(isEditing)
 
   return (
     <div className="my-1">
-    
-        {isEditing ? (
+      
+        {isEditing || bool ? (
           <DataStreamEditView
-            onBack={() => setIsEditing(false)}
+            onBack={() => {setIsEditing(false), setBackData()}}
             selectedDataStream={myObj || selectedDataStream}
             connection={connectionName}
             schema={schemaName}
