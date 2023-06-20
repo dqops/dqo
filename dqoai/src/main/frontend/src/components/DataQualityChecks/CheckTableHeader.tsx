@@ -214,14 +214,14 @@ const TableHeader = ({
                   <div className="text-sm">Copy selected checks to:</div>
                   <Button
                     color="primary"
-                    label="Daily recurring checkpoints"
+                    label="Daily recurring checks"
                     textSize="sm"
                     className="font-medium px-4"
                     onClick={() => copyRecurringCheck('daily')}
                   />
                   <Button
                     color="primary"
-                    label="Monthly recurring checkpoints"
+                    label="Monthly recurring checks"
                     textSize="sm"
                     className="font-medium px-4"
                     onClick={() => copyRecurringCheck('monthly')}
