@@ -415,6 +415,7 @@ const DataQualityChecks = ({
           setMode={setMode}
           copyUI={copyUI}
           setCopyUI={setCopyUI}
+          onUpdate={onUpdate}
         />
         <tbody>
           {checksUI?.categories.map((category, index) => (

@@ -8,3 +8,4 @@ export const getDaysString = (value: string | number) => {
   return `${daysDiff} days ago`;
 }
 
+export const wait = (time: number) => new Promise((resolve) => setTimeout(resolve,  time));
