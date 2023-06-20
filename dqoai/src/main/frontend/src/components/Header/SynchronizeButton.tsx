@@ -5,15 +5,20 @@ import { IRootState } from "../../redux/reducers";
 import SvgIcon from "../SvgIcon";
 import { JobApiClient } from "../../services/apiClient";
 import clsx from "clsx";
+import { DqoJobHistoryEntryModelStatusEnum } from "../../api";
 
 export const SynchronizeButton = () => {
-  const { folderSynchronizationStatus } = useSelector((state: IRootState) => state.job || {});
+  const { folderSynchronizationStatus, job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const [loading, setLoading] = useState(false);
+  const [jobId, setJobId] = useState<number>();
+
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
 
   const syncAllFolders = async () => {
     try {
       setLoading(true);
-      await JobApiClient.synchronizeFolders({
+      const res = await JobApiClient.synchronizeFolders({
         sources: true,
         sensors: true,
         rules: true,
@@ -24,13 +29,19 @@ export const SynchronizeButton = () => {
         dataErrors: true,
         dataIncidents: true
       });
+      if (res.data) {
+        setJobId(res.data.jobId);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const isGreenBorder = !folderSynchronizationStatus || Object.values(folderSynchronizationStatus).every((status) => status === "unchanged");
-  const disabled = folderSynchronizationStatus && Object.values(folderSynchronizationStatus).some((status) => status === "synchronizing");
+  const disabled = job && (
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed
+  );
 
   return (
     <Button
