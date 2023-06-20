@@ -56,7 +56,7 @@ spec:
         column: country
 ```
 
-# Configuring data stream 
+## Configuring data stream 
 
 In DQO you can set up data stream globally for all tables in the connection or individually for each table.
 You can set up data streams in the **Data Sources** section by clicking at the connection or individual table in the tree and 

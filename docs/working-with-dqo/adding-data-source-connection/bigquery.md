@@ -48,7 +48,7 @@ To add BigQuery data source connection to DQO you need the following:
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-   ![AImporting tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
+   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
 
 ## Adding BigQuery connection using DQO Shell
 
