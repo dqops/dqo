@@ -145,47 +145,7 @@ const TableColumns = ({
     history.push(url);
   };
   
-  const postDataStream = () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      'sources',
-      connectionName,
-      schemaName,
-      tableName,
-      'data-streams'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      'sources',
-      connection,
-      schema,
-      table
-    );
-  
-    const data: LocationState = {
-      bool: true,
-      data_stream_name: setDataStream(),
-      spec: setSpec2()
-    };
-  
-    return new Promise<void>((resolve, reject) => {
-      DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data)
-        .then(() => {
-          dispatch(
-            addFirstLevelTab(CheckTypes.SOURCES, {
-              url,
-              value,
-              state: data,
-              label: table
-            })
-          );
-          history.push(url, data);
-         
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  };
-  
+
 
   const removeColumn = async () => {
     if (selectedColumn?.column_name) {
@@ -776,9 +736,7 @@ const setSpec2 = () =>{
 }
 
 const setDataStream = () =>{
-  
   let dataStream = ''
-
   for(let i =1; i<= trueValuesCount; i++){ 
     const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
     const level = spec[levelKey];
@@ -791,6 +749,63 @@ const setDataStream = () =>{
   }
   return dataStream
 }
+
+const postDataStream = () => {
+  const url = ROUTES.TABLE_LEVEL_PAGE(
+    'sources',
+    connectionName,
+    schemaName,
+    tableName,
+    'data-streams'
+  );
+  const value = ROUTES.TABLE_LEVEL_VALUE(
+    'sources',
+    connection,
+    schema,
+    table
+  );
+
+  const data: LocationState = {
+    bool: true,
+    data_stream_name: setDataStream(),
+    spec: setSpec2()
+  };
+console.log(data)
+console.log(setSpec2())
+console.log(setDataStream())
+ 
+return new Promise<void>((resolve, reject) => {
+
+  DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data)
+
+  .then(() => {
+
+    dispatch(
+
+      addFirstLevelTab(CheckTypes.SOURCES, {
+
+        url,
+
+        value,
+            state: data,
+            label: table
+          })
+
+          );
+
+
+          history.push(url, data);     
+
+
+        })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+
+
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
@@ -918,7 +933,7 @@ const setDataStream = () =>{
 
   return (
     <div className="p-4 py-6 relative">
-            {trueValuesCount !== 0 && trueValuesCount<= 9 && <Button label='Create Data Stream' color='primary' onClick={() => {postDataStream()}} className='absolute top-0 right-4 px-2'/>}
+            {trueValuesCount !== 0 && trueValuesCount<= 9 && <Button label='Create Data Stream' color='primary' onClick={postDataStream} className='absolute top-0 right-4 px-2'/>}
             {trueValuesCount !== 0 && trueValuesCount> 9 && 
             <div className='flex text-red-500 items-center gap-x-4 absolute top-0 right-4 px-2'>
 

@@ -13,6 +13,7 @@ interface MyLocationState {
 const TableDataStream = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
+  
 
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
   const [selectedDataStream, setSelectedDataStream] = useState<DataStreamBasicModel>();
@@ -27,7 +28,6 @@ const TableDataStream = () => {
   const state = location.state as MyLocationState | undefined;
   console.log(state)
 
-  
   const dSName = state?.data_stream_name
   const getDataStreams = () => {
     DataStreamsApi.getDataStreams(connectionName, schemaName, tableName).then((res) => {
