@@ -3,7 +3,7 @@ import { DataStreamBasicModel, DataStreamMappingSpec } from '../../../api';
 import DataStreamListView from "./DataStreamListView";
 import DataStreamEditView from "./DataStreamEditView";
 import { DataStreamsApi } from "../../../services/apiClient";
-import { useParams, useHistory, useLocation} from "react-router-dom";
+import { useParams, useLocation} from "react-router-dom";
 
 interface MyLocationState {
   bool: boolean;
@@ -13,27 +13,31 @@ interface MyLocationState {
 const TableDataStream = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
+  const [myState, setState] = useState<MyLocationState | undefined>();
   
 
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
   const [selectedDataStream, setSelectedDataStream] = useState<DataStreamBasicModel>();
 
-
-  useEffect(() => {
-    getDataStreams();
-  }, [connectionName, schemaName, tableName]);
-  
   const location = useLocation();
 
   const state = location.state as MyLocationState | undefined;
   console.log(state)
 
   const dSName = state?.data_stream_name
+
+  useEffect(() => {
+    getDataStreams();
+    setState(location.state as MyLocationState | undefined)
+  }, [connectionName, schemaName, tableName, myState]);
+  
   const getDataStreams = () => {
     DataStreamsApi.getDataStreams(connectionName, schemaName, tableName).then((res) => {
       setDataStreams(res.data);
     });
   };
+
+  console.log(myState)
 
   const onEdit = (stream: DataStreamBasicModel) => {
     setSelectedDataStream(stream);

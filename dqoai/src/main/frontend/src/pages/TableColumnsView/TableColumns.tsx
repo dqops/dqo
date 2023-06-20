@@ -750,7 +750,10 @@ const setDataStream = () =>{
   return dataStream
 }
 
-const postDataStream = () => {
+const doNothing= (): void =>{
+}
+
+const postDataStream = async () => {
   const url = ROUTES.TABLE_LEVEL_PAGE(
     'sources',
     connectionName,
@@ -770,42 +773,26 @@ const postDataStream = () => {
     data_stream_name: setDataStream(),
     spec: setSpec2()
   };
-console.log(data)
-console.log(setSpec2())
-console.log(setDataStream())
- 
-return new Promise<void>((resolve, reject) => {
-
-  DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data)
-
-  .then(() => {
-
-    dispatch(
-
+  try {
+    const response = await DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data);
+    if (response.status === 409) {
+    doNothing()
+    }
+  } catch (error: any) {
+    if (error.response && error.response.status) {
+      doNothing()
+    }
+  }
+  dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
-
         url,
-
         value,
             state: data,
             label: table
           })
-
           );
-
-
           history.push(url, data);     
-
-
-        })
-      .catch(error => {
-        reject(error);
-      });
-  });
 };
-
-
-
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
