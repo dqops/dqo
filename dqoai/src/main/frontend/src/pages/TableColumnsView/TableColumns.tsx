@@ -28,30 +28,20 @@ import Checkbox from '../../components/Checkbox';
 import Button from '../../components/Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { datatype_detected } from '../../shared/constants';
+import { cutString } from './TableColumnsFunctions';
+import {
+  renderValue,
+  MyData,
+  LocationState,
+  labels,
+  calculate_color,
+  spec
+} from './TableColumnsFunctions';
 
 interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
-}
-interface LocationState {
-  bool: boolean;
-  data_stream_name: string;
-  spec: DataStreamMappingSpec;
-}
-
-interface MyData {
-  null_percent: number | undefined;
-  unique_value: number | undefined;
-  null_count?: number | undefined;
-  nameOfCol?: string | undefined;
-  minimalValue?: string | undefined;
-  detectedDatatypeVar: number | undefined;
-  length?: number | undefined;
-  scale?: number | undefined;
-  importedDatatype?: string | undefined;
-  columnHash: number;
-  isColumnSelected: boolean;
 }
 
 const TableColumns = ({
@@ -90,7 +80,6 @@ const TableColumns = ({
   const history = useHistory();
   const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
-
   const setData = () => {
     actionDispatch(setCreatedDataStream(true, setDataStream(), setSpec2()));
   };
@@ -98,16 +87,6 @@ const TableColumns = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
-  const labels = [
-    'Column name',
-    'Detected data type',
-    'Imported data type',
-    'Length',
-    'Scale',
-    'Minimal value',
-    'Null count'
-  ];
 
   const fetchColumns = async () => {
     try {
@@ -187,24 +166,6 @@ const TableColumns = ({
     fetchColumns();
   }, [connectionName, schemaName, tableName]);
 
-  const renderValue = (value: any) => {
-    if (typeof value === 'boolean') {
-      return value ? 'Yes' : 'No';
-    }
-    if (typeof value === 'object') {
-      return value.toString();
-    }
-    return value;
-  };
-
-  const cutString = (text: string) => {
-    if (text.length > 22 && isNaN(Number(text))) {
-      return text.slice(0, 22) + '...';
-    } else {
-      return text;
-    }
-  };
-
   const max_unique_value = () => {
     const arr: number[] = [];
     statistics?.column_statistics?.map((x) => {
@@ -239,26 +200,6 @@ const TableColumns = ({
       x.parameters?.collectStatisticsParameters
         ?.statisticsCollectorSearchFilters?.columnName
   );
-
-  const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
-    if (uniqueCount === 0) {
-      return 'rgba(255, 255, 255, 1)';
-    }
-
-    if (uniqueCount === maxUniqueCount) {
-      return 'rgba(2, 154, 128, 0.1)';
-    }
-
-    if (uniqueCount === 1) {
-      return 'rgba(2, 154, 128, 0.8)';
-    }
-
-    const logarithm = Math.log2(uniqueCount);
-    const alpha = (1 - (logarithm / Math.log2(maxUniqueCount)) * 0.9) / 1.3;
-    const color = `rgba(2, 154, 128, ${alpha})`;
-
-    return color;
-  };
 
   const nullPercentData = statistics?.column_statistics?.map((x) =>
     x.statistics
@@ -304,55 +245,21 @@ const TableColumns = ({
   const hashData = statistics?.column_statistics?.map((x) => x.column_hash);
 
   const dataArray: MyData[] = [];
-
-  if (
-    nullPercentData &&
-    uniqueCountData &&
-    nullCountData &&
-    detectedDatatypeVar &&
-    columnNameData &&
-    minimalValueData &&
-    lengthData &&
-    scaleData &&
-    typeData &&
-    hashData
-  ) {
-    const maxLength = Math.max(
-      nullPercentData.length,
-      uniqueCountData.length,
-      nullCountData.length,
-      detectedDatatypeVar.length,
-      columnNameData.length,
-      minimalValueData.length,
-      lengthData.length,
-      scaleData.length,
-      typeData.length,
-      hashData.length
-    );
+  if (columnNameData && hashData) {
+    const maxLength = Math.max(columnNameData.length, hashData.length);
 
     for (let i = 0; i < maxLength; i++) {
-      const nullPercent = nullPercentData[i];
-      const uniqueValue = uniqueCountData[i];
-      const nullCount = nullCountData[i];
-      const detectedDatatype = detectedDatatypeVar[i];
-      const columnname = columnNameData[i];
-      const minimalValue = minimalValueData[i];
-      const lengthValue = lengthData[i];
-      const scaleValue = scaleData[i];
-      const typeValue = typeData[i];
-      const hashValue = hashData[i];
-
       const newData: MyData = {
-        null_percent: Number(renderValue(nullPercent)),
-        unique_value: Number(renderValue(uniqueValue)),
-        null_count: Number(renderValue(nullCount)),
-        detectedDatatypeVar: Number(detectedDatatype),
-        nameOfCol: columnname,
-        minimalValue: renderValue(minimalValue),
-        length: renderValue(lengthValue),
-        scale: renderValue(scaleValue),
-        importedDatatype: renderValue(typeValue),
-        columnHash: Number(hashValue),
+        null_percent: Number(renderValue(nullPercentData?.[i])),
+        unique_value: Number(renderValue(uniqueCountData?.[i])),
+        null_count: Number(renderValue(nullCountData?.[i])),
+        detectedDatatypeVar: Number(detectedDatatypeVar?.[i]),
+        nameOfCol: columnNameData?.[i],
+        minimalValue: renderValue(minimalValueData?.[i]),
+        length: renderValue(lengthData?.[i]),
+        scale: renderValue(scaleData?.[i]),
+        importedDatatype: renderValue(typeData?.[i]),
+        columnHash: Number(hashData?.[i]),
         isColumnSelected: false
       };
 
@@ -543,35 +450,6 @@ const TableColumns = ({
   };
   const listOfStr = selectStrings(objectStates);
   const trueValuesCount = countTrueValues(objectStates);
-  const spec: DataStreamMappingSpec = {
-    level_1: {
-      column: undefined
-    },
-    level_2: {
-      column: undefined
-    },
-    level_3: {
-      column: undefined
-    },
-    level_4: {
-      column: undefined
-    },
-    level_5: {
-      column: undefined
-    },
-    level_6: {
-      column: undefined
-    },
-    level_7: {
-      column: undefined
-    },
-    level_8: {
-      column: undefined
-    },
-    level_9: {
-      column: undefined
-    }
-  };
 
   const setSpec2 = () => {
     for (let i = 1; i <= trueValuesCount; i++) {
@@ -604,7 +482,7 @@ const TableColumns = ({
   const doNothing = (): void => {};
 
   setCreatedDataStream(true, setDataStream(), setSpec2());
-  console.log(setCreatedDataStream(true, setDataStream(), setSpec2()));
+
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       'sources',
