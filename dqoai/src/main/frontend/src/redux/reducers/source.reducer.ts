@@ -25,6 +25,7 @@ export interface INestTab {
   label: string;
 }
 
+
 export interface ISourceState {
   [CheckTypes.SOURCES]: {
     tabs: INestTab[];
@@ -1231,6 +1232,13 @@ const connectionReducer = (state = initialState, action: Action) => {
       return setActiveTabState(state, action, {
         isUpdating: false,
       })
+    }
+    case SOURCE_ACTION.SET_CREATED_DATA_STREAM: {
+    return {
+        ...state, 
+        
+    }
+
     }
     default:
       return state;

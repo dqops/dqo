@@ -14,8 +14,6 @@ const TableDataStream = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [myState, setState] = useState<MyLocationState | undefined>();
-  
-
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
   const [selectedDataStream, setSelectedDataStream] = useState<DataStreamBasicModel>();
 

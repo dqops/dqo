@@ -27,11 +27,13 @@ import {
   SensorReadoutsDetailedDataModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
-  TableIncidentGroupingSpec
+  TableIncidentGroupingSpec,
+  DataStreamMappingSpec
 } from "../../api";
 import { Dispatch } from "redux";
 import { AxiosResponse } from "axios";
 import { CheckResultApi, ConnectionApiClient, ErrorsApi, SensorReadoutsApi, TableApiClient } from "../../services/apiClient";
+import { type } from 'os';
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -654,3 +656,10 @@ export const updateTableIncidentGrouping = (checkType: CheckTypes, activeTab: st
     dispatch(updateTableIncidentGroupingFailed(checkType, activeTab, err));
   }
 };
+
+export const setCreatedDataStream = (bool:boolean, dataStreamName: string, spec: DataStreamMappingSpec) =>({
+  type: SOURCE_ACTION.SET_CREATED_DATA_STREAM,
+  bool,
+  dataStreamName, 
+  spec
+});

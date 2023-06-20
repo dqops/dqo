@@ -13,7 +13,7 @@ import ConfirmDialog from './ConfirmDialog';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { addFirstLevelTab, setCreatedDataStream } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
@@ -84,6 +84,7 @@ const TableColumns = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
+
 
   const labels = [
     'Column name',
@@ -766,43 +767,44 @@ const postDataStream = async () => {
     connection,
     schema,
     table
-  );
-
-  const data: LocationState = {
-    bool: true,
-    data_stream_name: setDataStream(),
-    spec: setSpec2()
-  };
-  try {
-    const response = await DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data);
-    if (response.status === 409) {
+    );
+    const data: LocationState = {
+      bool: true,
+      data_stream_name: setDataStream(),
+      spec: setSpec2()
+    };
+    
+    try {
+      const response = await DataStreamsApi.createDataStream(connectionName, schemaName, tableName, data);
+      if (response.status === 409) {
     doNothing()
-    }
-  } catch (error: any) {
-    if (error.response && error.response.status) {
-      doNothing()
-    }
   }
-  dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
+} catch (error: any) {
+  if (error.response && error.response.status) {
+    doNothing()
+  }
+}
+dispatch(
+  addFirstLevelTab(CheckTypes.SOURCES, {
         url,
         value,
-            state: data,
-            label: table
-          })
-          );
-          history.push(url, data);     
-};
-
-  const mapFunc = (column: MyData, index: number): ReactNode => {
-    return (
-      <tr key={index}>
+        state: data,
+        label: table
+      })
+      );
+      setCreatedDataStream(true, setDataStream(), setSpec2())
+      history.push(url, data);     
+    };
+    
+    const mapFunc = (column: MyData, index: number): ReactNode => {
+      return (
+        <tr key={index}>
         
         <Checkbox checked={objectStates[column.nameOfCol ? column.nameOfCol : ""] ? true : false} onChange={() =>handleButtonClick(column.nameOfCol ? column.nameOfCol : "") } className='absolute top-2 border-b border-gray-100'/>
         <td
           className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
           onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
-        >
+          >
           {column.nameOfCol}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
