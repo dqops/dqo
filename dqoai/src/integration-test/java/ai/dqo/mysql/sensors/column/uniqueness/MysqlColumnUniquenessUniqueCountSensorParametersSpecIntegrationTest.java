@@ -16,7 +16,7 @@
 package ai.dqo.mysql.sensors.column.uniqueness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,9 +38,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class MysqlColumnUniquenessUniqueCountSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnUniquenessUniqueCountSensorParametersSpec sut;
+    private ColumnUniquenessDistinctCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnUniqueCountCheckSpec checkSpec;
+    private ColumnDistinctCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -48,8 +48,8 @@ public class MysqlColumnUniquenessUniqueCountSensorParametersSpecIntegrationTest
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnUniquenessUniqueCountSensorParametersSpec();
-		this.checkSpec = new ColumnUniqueCountCheckSpec();
+		this.sut = new ColumnUniquenessDistinctCountSensorParametersSpec();
+		this.checkSpec = new ColumnDistinctCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

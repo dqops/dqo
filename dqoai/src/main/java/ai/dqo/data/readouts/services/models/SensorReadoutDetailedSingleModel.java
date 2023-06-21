@@ -48,8 +48,8 @@ public class SensorReadoutDetailedSingleModel {
 
     @JsonPropertyDescription("Column name.")
     String columnName;
-    @JsonPropertyDescription("Data stream.")
-    String dataStream;
+    @JsonPropertyDescription("Data group.")
+    String dataGroup;
 
     @JsonPropertyDescription("Duration (ms).")
     Integer durationMs;

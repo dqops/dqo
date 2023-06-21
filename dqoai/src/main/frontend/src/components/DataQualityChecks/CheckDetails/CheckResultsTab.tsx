@@ -16,10 +16,10 @@ import { getFirstLevelActiveTab } from "../../../redux/selectors";
 
 interface CheckResultsTabProps {
   results: CheckResultsDetailedDataModel[];
-  dataStreamName?: string;
+  dataGroup?: string;
   month?: string;
   onChangeMonth: (month: string) => void;
-  onChangeDataStream: (name: string) => void;
+  onChangeDataGroup: (name: string) => void;
   runCheckType: string;
   timeScale?: 'daily' | 'monthly';
   checkName: string;
@@ -27,10 +27,10 @@ interface CheckResultsTabProps {
 
 const CheckResultsTab = ({
   results,
-  dataStreamName,
+  dataGroup,
   month,
   onChangeMonth,
-  onChangeDataStream,
+  onChangeDataGroup,
   runCheckType,
   timeScale,
   checkName
@@ -167,8 +167,8 @@ const CheckResultsTab = ({
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
     {
-      label: 'Data Stream',
-      value: 'dataStream',
+      label: 'Data Group',
+      value: 'dataGroup',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
   ];
@@ -199,7 +199,7 @@ const CheckResultsTab = ({
           schema,
           table,
           column,
-          dataStreamName,
+          dataGroup,
           runCheckType,
           checkName,
           timeScale,
@@ -223,7 +223,7 @@ const CheckResultsTab = ({
           schema,
           table,
           column,
-          dataStreamName,
+          dataGroup,
           runCheckType,
           checkName,
           timeScale,
@@ -241,11 +241,11 @@ const CheckResultsTab = ({
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Data stream</div>
+          <div className="text-sm">Data group</div>
           <Select
-            value={dataStreamName}
-            options={(results[0]?.dataStreamNames || []).map((item) => ({ label: item, value: item })) || []}
-            onChange={onChangeDataStream}
+            value={dataGroup}
+            options={(results[0]?.dataGroups || []).map((item) => ({ label: item, value: item })) || []}
+            onChange={onChangeDataGroup}
           />
         </div>
         <div className="flex space-x-4 items-center">

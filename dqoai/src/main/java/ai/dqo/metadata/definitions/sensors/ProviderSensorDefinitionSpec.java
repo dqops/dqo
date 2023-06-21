@@ -49,8 +49,8 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     private String javaClassName = JinjaSqlTemplateSensorRunner.CLASS_NAME;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyDescription("The sensor supports grouping by the data stream, using the GROUP BY clause in SQL. Sensors that support a GROUP BY condition can capture separate data quality scores for each data stream. The default value is true, because most of the data quality sensor support grouping.")
-    private Boolean supportsGroupingByDataStream;
+    @JsonPropertyDescription("The sensor supports grouping, using the GROUP BY clause in SQL. Sensors that support a GROUP BY condition can capture separate data quality scores for each data group. The default value is true, because most of the data quality sensor support grouping.")
+    private Boolean supportsGrouping;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonPropertyDescription("The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column could be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks.")
@@ -119,17 +119,17 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
      * Returns true if the sensor supports grouping by the data stream.
      * @return True when the sensor supports grouping by the data stream.
      */
-    public Boolean getSupportsGroupingByDataStream() {
-        return supportsGroupingByDataStream;
+    public Boolean getSupportsGrouping() {
+        return supportsGrouping;
     }
 
     /**
      * Sets the flag if the sensor supports grouping by the data stream.
-     * @param supportsGroupingByDataStream True when the sensor supports grouping, false otherwise.
+     * @param supportsGrouping True when the sensor supports grouping, false otherwise.
      */
-    public void setSupportsGroupingByDataStream(Boolean supportsGroupingByDataStream) {
-        this.setDirtyIf(!Objects.equals(this.supportsGroupingByDataStream, supportsGroupingByDataStream));
-        this.supportsGroupingByDataStream = supportsGroupingByDataStream;
+    public void setSupportsGrouping(Boolean supportsGrouping) {
+        this.setDirtyIf(!Objects.equals(this.supportsGrouping, supportsGrouping));
+        this.supportsGrouping = supportsGrouping;
     }
 
     /**

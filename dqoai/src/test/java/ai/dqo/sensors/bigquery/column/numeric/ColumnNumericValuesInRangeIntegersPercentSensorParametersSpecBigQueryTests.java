@@ -27,6 +27,9 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
 import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -229,8 +232,8 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecBigQue
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -263,8 +266,8 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecBigQue
         this.sut.setMaxValue(30L);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -299,8 +302,8 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecBigQue
         this.sut.setMaxValue(30L);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -343,8 +346,8 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecBigQue
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
@@ -383,8 +386,8 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecBigQue
         this.sut.setMaxValue(30L);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
@@ -423,8 +426,8 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecBigQue
         this.sut.setMaxValue(30L);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));

@@ -49,8 +49,9 @@ public class TableIncidentGroupingSpec extends AbstractSpec implements Cloneable
     @JsonPropertyDescription("Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported severity levels are 'error' and 'fatal'.")
     private MinimumGroupingSeverityLevel minimumSeverity;
 
-    @JsonPropertyDescription("Create separate data quality incidents for each data stream, creating different incidents for different data streams. By default, data streams are ignored for grouping data quality issues into data quality incidents.")
-    private Boolean divideByDataStream;
+    @JsonPropertyDescription("Create separate data quality incidents for each data group, creating different incidents for different groups of rows. " +
+            "By default, data groups are ignored for grouping data quality issues into data quality incidents.")
+    private Boolean divideByDataGroup;
 
     @JsonPropertyDescription("Disables data quality incident creation for failed data quality checks on the table.")
     private Boolean disabled;
@@ -93,17 +94,17 @@ public class TableIncidentGroupingSpec extends AbstractSpec implements Cloneable
      * Returns a flat if the data stream is also included in the data quality issue grouping.
      * @return True when incidents are created for data streams.
      */
-    public Boolean getDivideByDataStream() {
-        return divideByDataStream;
+    public Boolean getDivideByDataGroup() {
+        return divideByDataGroup;
     }
 
     /**
      * Sets a flag that enables creating separate data quality incidents for each data stream.
-     * @param divideByDataStream True when each data stream has a different incident.
+     * @param divideByDataGroup True when each data stream has a different incident.
      */
-    public void setDivideByDataStream(Boolean divideByDataStream) {
-        this.setDirtyIf(!Objects.equals(this.divideByDataStream, divideByDataStream));
-        this.divideByDataStream = divideByDataStream;
+    public void setDivideByDataGroup(Boolean divideByDataGroup) {
+        this.setDirtyIf(!Objects.equals(this.divideByDataGroup, divideByDataGroup));
+        this.divideByDataGroup = divideByDataGroup;
     }
     /**
      * Returns true if incident creation is disabled. When false (the default value), then data quality incidents are created.

@@ -27,6 +27,9 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
 import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -302,8 +305,8 @@ public class TableTimelinessDataStalenessSensorParametersSpecBigQueryTests exten
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -334,8 +337,8 @@ public class TableTimelinessDataStalenessSensorParametersSpecBigQueryTests exten
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                     DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -368,8 +371,8 @@ public class TableTimelinessDataStalenessSensorParametersSpecBigQueryTests exten
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "earlier_datetime");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);

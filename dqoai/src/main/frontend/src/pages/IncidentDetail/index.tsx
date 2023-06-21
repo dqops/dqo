@@ -334,8 +334,8 @@ export const IncidentDetail = () => {
               <div className="flex-1 font-bold">{incidentDetail?.checkName}</div>
             </div>
             <div className="flex gap-3 items-center">
-              <div className="flex-1">Data stream:</div>
-              <div className="flex-1 font-bold">{incidentDetail?.dataStreamName}</div>
+              <div className="flex-1">Data group:</div>
+              <div className="flex-1 font-bold">{incidentDetail?.dataGroup}</div>
             </div>
           </SectionWrapper>
         </div>

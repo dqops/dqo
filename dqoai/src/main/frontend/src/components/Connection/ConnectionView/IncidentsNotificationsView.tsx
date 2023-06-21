@@ -88,11 +88,11 @@ export const IncidentsNotificationsView = () => {
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
-          <p>Create separate incidents for each data stream:</p>
+          <p>Create separate incidents for each data group:</p>
           <div className="w-6 h-6">
             <Checkbox
-              checked={incidentGrouping?.divide_by_data_stream}
-              onChange={(value) => onChange({ divide_by_data_stream: value })}
+              checked={incidentGrouping?.divide_by_data_groups}
+              onChange={(value) => onChange({ divide_by_data_groups: value })}
             />
           </div>
         </div>

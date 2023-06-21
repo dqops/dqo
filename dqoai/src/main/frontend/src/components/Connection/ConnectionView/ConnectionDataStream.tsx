@@ -1,78 +1,78 @@
 import React, { useEffect } from 'react';
-import DataStreamsMappingView from '../DataStreamsMappingView';
+import DataGroupingConfigurationView from '../DataGroupingConfigurationView';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionBasic,
-  getConnectionDefaultDataStreamsMapping,
-  setIsUpdatedDataStreamsMapping,
-  setUpdatedDataStreamsMapping,
-  updateConnectionDefaultDataStreamsMapping
+  getConnectionDefaultGroupingConfiguration,
+  setIsUpdatedDataGroupingConfiguration,
+  setUpdatedDataGroupingConfiguration,
+  updateConnectionDefaultGroupingConfiguration
 } from '../../../redux/actions/connection.actions';
-import { DataStreamMappingSpec } from '../../../api';
+import { DataGroupingConfigurationSpec } from '../../../api';
 import { useSelector } from 'react-redux';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useParams } from "react-router-dom";
 import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
-const ConnectionDataStream = () => {
+const ConnectionDefaultGroupingConfiguration = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
-  const { isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
+  const { isUpdating, updatedDataGroupingConfiguration, isUpdatedDataGroupingConfiguration } =
     useSelector(getFirstLevelState(checkTypes));
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     dispatch(getConnectionBasic(checkTypes, firstLevelActiveTab, connection));
-    dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
+    dispatch(getConnectionDefaultGroupingConfiguration(checkTypes, firstLevelActiveTab, connection));
   }, [connection, checkTypes, firstLevelActiveTab]);
 
   useEffect(() => {
-    if (!updatedDataStreamsMapping) {
-      dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
+    if (!updatedDataGroupingConfiguration) {
+      dispatch(getConnectionDefaultGroupingConfiguration(checkTypes, firstLevelActiveTab, connection));
     }
   }, [connection, checkTypes, firstLevelActiveTab]);
 
   const onUpdate = async () => {
-    if (!updatedDataStreamsMapping) {
+    if (!updatedDataGroupingConfiguration) {
       return;
     }
     await dispatch(
-      updateConnectionDefaultDataStreamsMapping(
+      updateConnectionDefaultGroupingConfiguration(
         checkTypes,
         firstLevelActiveTab,
         connection,
-        updatedDataStreamsMapping
+        updatedDataGroupingConfiguration
       )
     );
-    await dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection, false));
-    dispatch(setIsUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab,false));
+    await dispatch(getConnectionDefaultGroupingConfiguration(checkTypes, firstLevelActiveTab, connection, false));
+    dispatch(setIsUpdatedDataGroupingConfiguration(checkTypes, firstLevelActiveTab,false));
   };
 
-  const handleChange = (value: DataStreamMappingSpec) => {
-    dispatch(setUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab, value));
-    dispatch(setIsUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab,true));
+  const handleChange = (value: DataGroupingConfigurationSpec) => {
+    dispatch(setUpdatedDataGroupingConfiguration(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedDataGroupingConfiguration(checkTypes, firstLevelActiveTab,true));
   };
 
   return (
     <div className="px-4">
       <div className="pt-6 px-4">
         <p className="text-gray-700 italic text-base">
-          The following data stream configuration will be copied to the data stream configuration of tables that will be imported in the future.
+          The following data grouping configuration will be copied to the data grouping configuration of tables that will be imported in the future.
           This configuration does not affect tables that have already been imported.      </p>
       </div>
       <ConnectionActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdatedDataStreamsMapping}
+        isUpdated={isUpdatedDataGroupingConfiguration}
         isUpdating={isUpdating}
       />
-      <DataStreamsMappingView
-        dataStreamsMapping={updatedDataStreamsMapping}
+      <DataGroupingConfigurationView
+        dataGroupingConfiguration={updatedDataGroupingConfiguration}
         onChange={handleChange}
       />
     </div>
   );
 };
 
-export default ConnectionDataStream;
+export default ConnectionDefaultGroupingConfiguration;

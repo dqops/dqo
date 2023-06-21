@@ -27,6 +27,9 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
 import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -292,8 +295,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling("date4");
         runParameters.setTimeSeries(null);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -332,8 +335,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring("date4", CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -374,8 +377,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned("date4", CheckTimeScale.daily, "date1");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -424,8 +427,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date1");
         }});
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
 
@@ -468,8 +471,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring("date4", CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
 
@@ -512,8 +515,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned("date4", CheckTimeScale.daily, "date1");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
 

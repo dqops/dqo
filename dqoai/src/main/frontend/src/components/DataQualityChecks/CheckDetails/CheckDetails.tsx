@@ -114,7 +114,7 @@ const CheckDetails = ({
   }
 
   const fetchCheckErrors = useCallback(
-    (month: string, dataStreamName?: string) => {
+    (month: string, dataGroup?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(getCheckErrors(checkTypes, firstLevelActiveTab, {
@@ -122,7 +122,7 @@ const CheckDetails = ({
         schema,
         table,
         column,
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate,
         runCheckType,
@@ -134,7 +134,7 @@ const CheckDetails = ({
   );
 
   const fetchCheckReadouts = useCallback(
-    (month: string, dataStreamName?: string) => {
+    (month: string, dataGroup?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(getCheckReadouts(
@@ -145,7 +145,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-          dataStreamName,
+          dataGroup,
           startDate,
           endDate,
           runCheckType,
@@ -158,7 +158,7 @@ const CheckDetails = ({
   );
 
   const fetchCheckResults = useCallback(
-    (month: string, dataStreamName?: string) => {
+    (month: string, dataGroup?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(getCheckResults(
@@ -169,7 +169,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-          dataStreamName,
+          dataGroup,
           startDate,
           endDate,
           runCheckType,
@@ -183,19 +183,19 @@ const CheckDetails = ({
 
   useEffect(() => {
     if (!sensorErrors?.length) {
-      fetchCheckErrors(filters.month, filters.dataStreamName);
+      fetchCheckErrors(filters.month, filters.dataGroup);
     }
   }, []);
 
   useEffect(() => {
     if (!sensorReadouts?.length) {
-      fetchCheckReadouts(filters.month, filters.dataStreamName);
+      fetchCheckReadouts(filters.month, filters.dataGroup);
     }
   }, []);
 
   useEffect(() => {
     if (!checkResults?.length) {
-      fetchCheckResults(filters.month, filters.dataStreamName);
+      fetchCheckResults(filters.month, filters.dataGroup);
     }
   }, []);
 
@@ -204,7 +204,7 @@ const CheckDetails = ({
       (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
         job?.status === DqoJobHistoryEntryModelStatusEnum.failed)
     ) {
-      refetch(filters.month, filters.dataStreamName);
+      refetch(filters.month, filters.dataGroup);
     }
   }, [job?.status]);
 
@@ -212,12 +212,12 @@ const CheckDetails = ({
     setDeleteDataDialogOpened(true);
   };
 
-  const onChangeDataStream = (value: string) => {
+  const onChangeDataGroup = (value: string) => {
     dispatch(
       setCheckFilters(checkTypes, firstLevelActiveTab,
       checkName ?? '', {
         ...filters,
-        dataStreamName: value
+        onChangeDataGroup: value
       })
     );
     refetch(filters.month, value);
@@ -230,7 +230,7 @@ const CheckDetails = ({
         month: value
       })
     );
-    refetch(value, filters.dataStreamName);
+    refetch(value, filters.dataGroup);
   };
 
   const refetch = (month: string, name?: string) => {
@@ -270,28 +270,28 @@ const CheckDetails = ({
             checkName={checkName || ''}
             timeScale={timeScale}
             results={checkResults || []}
-            dataStreamName={filters.dataStreamName}
+            dataGroup={filters.dataGroup}
             month={filters.month}
             onChangeMonth={onChangeMonth}
-            onChangeDataStream={onChangeDataStream}
+            onChangeDataGroup={onChangeDataGroup}
           />
         )}
         {activeTab === 'sensor_readouts' && (
           <SensorReadoutsTab
             sensorReadouts={sensorReadouts || []}
-            dataStreamName={filters.dataStreamName}
+            dataGroup={filters.dataGroup}
             month={filters.month}
             onChangeMonth={onChangeMonth}
-            onChangeDataStream={onChangeDataStream}
+            onChangeDataGroup={onChangeDataGroup}
           />
         )}
         {activeTab === 'execution_errors' && (
           <CheckErrorsTab
             errors={sensorErrors || []}
-            dataStreamName={filters.dataStreamName}
+            dataGroup={filters.dataGroup}
             month={filters.month}
             onChangeMonth={onChangeMonth}
-            onChangeDataStream={onChangeDataStream}
+            onChangeDataGroup={onChangeDataGroup}
           />
         )}
 

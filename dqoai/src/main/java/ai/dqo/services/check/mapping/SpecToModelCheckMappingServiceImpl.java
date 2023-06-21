@@ -351,7 +351,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 return null; // skip this check
             }
 
-            checkModel.setSupportsDataStreams(providerSensorDefinitionSpec.getSupportsGroupingByDataStream() == null || providerSensorDefinitionSpec.getSupportsGroupingByDataStream());
+            checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
 
             SensorDefinitionSpec sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
             if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
@@ -381,7 +381,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         }
 
         DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate);
-        dataCleanJobTemplate.setDataStreamName(checkSpec.getDataStream());
+        dataCleanJobTemplate.setDataGroupTag(checkSpec.getDataGrouping());
         checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
 
         RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
@@ -403,7 +403,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
         checkModel.setQualityDimension(checkSpec.getEffectiveDataQualityDimension());
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
-        checkModel.setDataStream(checkSpec.getDataStream());
+        checkModel.setDataGroupingConfiguration(checkSpec.getDataGrouping());
         checkModel.setCheckSpec(checkSpec);
         checkModel.setCheckTarget(CheckTargetModel.fromCheckTarget(checkTarget));
 

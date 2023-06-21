@@ -162,8 +162,8 @@ public class IncidentNotificationMessage {
         message.setFirstSeen(incidentRow.getInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME));
         message.setLastSeen(incidentRow.getInstant(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
         message.setIncidentUntil(incidentRow.getInstant(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME));
-        if (!incidentRow.isMissing(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME)) {
-            message.setDataStreamName(incidentRow.getString(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME));
+        if (!incidentRow.isMissing(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME)) {
+            message.setDataStreamName(incidentRow.getString(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
         }
         if (!incidentRow.isMissing(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME)) {
             message.setQualityDimension(incidentRow.getString(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));

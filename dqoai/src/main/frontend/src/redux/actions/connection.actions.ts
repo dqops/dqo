@@ -22,7 +22,7 @@ import { AxiosResponse } from 'axios';
 import {
   CommentSpec,
   ConnectionBasicModel,
-  DataStreamMappingSpec,
+  DataGroupingConfigurationSpec,
   RecurringScheduleSpec
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
@@ -300,77 +300,77 @@ export const updateConnectionLabels =
     }
   };
 
-export const getConnectionDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING,
+export const getConnectionDefaultGroupingConfigurationRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_GROUPING_CONFIGURATION,
   checkType,
   activeTab
 });
 
-export const getConnectionDefaultDataStreamsMappingSuccess = (
+export const getConnectionDefaultGroupingConfigurationSuccess = (
   checkType: CheckTypes,
   activeTab: string,
-  data: DataStreamMappingSpec
+  data: DataGroupingConfigurationSpec
 ) => ({
-  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_SUCCESS,
   data,
   checkType,
   activeTab
 });
 
-export const getConnectionDefaultDataStreamsMappingFailed = (
+export const getConnectionDefaultGroupingConfigurationFailed = (
   error: unknown
 ) => ({
-  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_ERROR,
   error
 });
 
-export const getConnectionDefaultDataStreamsMapping =
+export const getConnectionDefaultGroupingConfiguration =
   (checkType: CheckTypes, activeTab: string, connectionName: string, loading = true) => async (dispatch: Dispatch) => {
     if (loading) {
-      dispatch(getConnectionDefaultDataStreamsMappingRequest(checkType, activeTab));
+      dispatch(getConnectionDefaultGroupingConfigurationRequest(checkType, activeTab));
     }
     try {
       const res =
-        await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(
+        await ConnectionApiClient.getConnectionDefaultGroupingConfiguration(
           connectionName
         );
-      dispatch(getConnectionDefaultDataStreamsMappingSuccess(checkType, activeTab, res.data));
+      dispatch(getConnectionDefaultGroupingConfigurationSuccess(checkType, activeTab, res.data));
     } catch (err) {
-      dispatch(getConnectionDefaultDataStreamsMappingFailed(err));
+      dispatch(getConnectionDefaultGroupingConfigurationFailed(err));
     }
   };
 
-export const updateConnectionDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING,
+export const updateConnectionDefaultGroupingConfigurationRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_MAPPING,
   checkType,
   activeTab
 });
 
-export const updateConnectionDefaultDataStreamsMappingSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+export const updateConnectionDefaultGroupingConfigurationSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_SUCCESS,
   checkType,
   activeTab
 });
 
-export const updateConnectionDefaultDataStreamsMappingFailed = (
+export const updateConnectionDefaultGroupingConfigurationFailed = (
   error: unknown
 ) => ({
-  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_ERROR,
   error
 });
 
-export const updateConnectionDefaultDataStreamsMapping =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, data: DataStreamMappingSpec) =>
+export const updateConnectionDefaultGroupingConfiguration =
+  (checkType: CheckTypes, activeTab: string, connectionName: string, data: DataGroupingConfigurationSpec) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateConnectionDefaultDataStreamsMappingRequest(checkType, activeTab));
+    dispatch(updateConnectionDefaultGroupingConfigurationRequest(checkType, activeTab));
     try {
-      await ConnectionApiClient.updateConnectionDefaultDataStreamsMapping(
+      await ConnectionApiClient.updateConnectionDefaultGroupingConfiguration(
         connectionName,
         data
       );
-      dispatch(updateConnectionDefaultDataStreamsMappingSuccess(checkType, activeTab));
+      dispatch(updateConnectionDefaultGroupingConfigurationSuccess(checkType, activeTab));
     } catch (err) {
-      dispatch(updateConnectionDefaultDataStreamsMappingFailed(err));
+      dispatch(updateConnectionDefaultGroupingConfigurationFailed(err));
     }
   };
 
@@ -440,19 +440,19 @@ export const setIsUpdatedLabels = (checkType: CheckTypes, activeTab: string, isU
   activeTab
 });
 
-export const setUpdatedDataStreamsMapping = (
+export const setUpdatedDataGroupingConfiguration = (
   checkType: CheckTypes,
   activeTab: string,
-  dataStreamsMapping?: DataStreamMappingSpec
+  dataGroupingConfiguration?: DataGroupingConfigurationSpec
 ) => ({
-  type: SOURCE_ACTION.SET_UPDATED_DATA_STREAMS,
-  data: dataStreamsMapping,
+  type: SOURCE_ACTION.SET_UPDATED_DEFAULT_GROUPING_CONFIGURATION,
+  data: dataGroupingConfiguration,
   checkType,
   activeTab
 });
 
-export const setIsUpdatedDataStreamsMapping = (checkType: CheckTypes, activeTab: string, isUpdated: boolean) => ({
-  type: SOURCE_ACTION.SET_IS_UPDATED_DATA_STREAMS,
+export const setIsUpdatedDataGroupingConfiguration = (checkType: CheckTypes, activeTab: string, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_DEFAULT_GROUPING_CONFIGURATION,
   data: isUpdated,
   checkType,
   activeTab

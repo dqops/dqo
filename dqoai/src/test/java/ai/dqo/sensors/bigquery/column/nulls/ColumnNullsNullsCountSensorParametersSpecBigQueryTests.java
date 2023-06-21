@@ -27,6 +27,9 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
 import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -215,8 +218,8 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
     void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -246,8 +249,8 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
     @Test
     void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                     DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -279,8 +282,8 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -320,8 +323,8 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date1");
         }});
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
 
@@ -355,8 +358,8 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
     @Test
     void renderSensor_whenRecurringDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
 
@@ -390,8 +393,8 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
 

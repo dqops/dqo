@@ -23,7 +23,6 @@ import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.data.storage.TableDataSnapshot;
 import ai.dqo.data.storage.TablePartitioningPattern;
 import ai.dqo.metadata.sources.PhysicalTableName;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.table.TableSlice;
@@ -98,12 +97,12 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
 
         if (allLoadedData != null) {
             TableSliceGroup tableSlices = allLoadedData.splitOn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME,
-                    SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
+                    SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
             
             for (TableSlice tableSlice : tableSlices) {
                 Table timeSeriesTable = tableSlice.asTable();
                 LongColumn checkHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-                LongColumn dataStreamHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
+                LongColumn dataStreamHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
                 long checkHashId = checkHashColumn.get(0); // the first row has the value
                 long dataStreamHash = dataStreamHashColumn.get(0);
 

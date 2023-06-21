@@ -31,7 +31,7 @@ export const CONNECTION_LEVEL_TABS: {
       value: 'schemas'
     },
     {
-      label: 'Default data stream template',
+      label: 'Default data grouping template',
       value: 'data-streams'
     }
   ],
@@ -88,7 +88,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'labels'
     },
     {
-      label: 'Data Streams',
+      label: 'Data Groupings',
       value: 'data-streams'
     },
     {

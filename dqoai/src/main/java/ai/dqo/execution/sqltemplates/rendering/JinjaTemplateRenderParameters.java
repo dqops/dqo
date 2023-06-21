@@ -22,8 +22,8 @@ import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -49,7 +49,7 @@ public class JinjaTemplateRenderParameters {
     private AbstractSensorParametersSpec parameters;
     private TimeSeriesConfigurationSpec effectiveTimeSeries;
     private TimeWindowFilterParameters effectiveTimeWindowFilter;
-    private DataStreamMappingSpec effectiveDataStreams;
+    private DataGroupingConfigurationSpec effectiveGroupings;
     private SensorDefinitionSpec sensorDefinition;
     private ProviderSensorDefinitionSpec providerSensorDefinition;
     private ProviderDialectSettings dialectSettings;
@@ -71,7 +71,7 @@ public class JinjaTemplateRenderParameters {
      * @param parameters Sensor parameters spec.
      * @param effectiveTimeSeries Effective time series configuration.
      * @param effectiveTimeWindowFilter Effective time window filter for partitioned checks or checks with a time window (start and end dates).
-     * @param effectiveDataStreams Effective data streams configuration.
+     * @param effectiveGroupings Effective data groupings configuration.
      * @param sensorDefinition Sensor definition spec.
      * @param providerSensorDefinition Provider sensor definition spec.
      * @param dialectSettings Dialect settings with configuration of the dialect.
@@ -85,7 +85,7 @@ public class JinjaTemplateRenderParameters {
 										 AbstractSensorParametersSpec parameters,
                                          TimeSeriesConfigurationSpec effectiveTimeSeries,
                                          TimeWindowFilterParameters effectiveTimeWindowFilter,
-                                         DataStreamMappingSpec effectiveDataStreams,
+                                         DataGroupingConfigurationSpec effectiveGroupings,
 										 SensorDefinitionSpec sensorDefinition,
 										 ProviderSensorDefinitionSpec providerSensorDefinition,
 										 ProviderDialectSettings dialectSettings,
@@ -99,7 +99,7 @@ public class JinjaTemplateRenderParameters {
         this.parameters = parameters;
         this.effectiveTimeSeries = effectiveTimeSeries;
         this.effectiveTimeWindowFilter = effectiveTimeWindowFilter;
-        this.effectiveDataStreams = effectiveDataStreams;
+        this.effectiveGroupings = effectiveGroupings;
         this.sensorDefinition = sensorDefinition;
         this.providerSensorDefinition = providerSensorDefinition;
         this.dialectSettings = dialectSettings;
@@ -125,7 +125,7 @@ public class JinjaTemplateRenderParameters {
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
             setEffectiveTimeSeries(sensorRunParameters.getTimeSeries());
-            setEffectiveDataStreams(sensorRunParameters.getDataStreams() != null ? sensorRunParameters.getDataStreams().truncateToColumns() : null);
+            setEffectiveGroupings(sensorRunParameters.getGroupings() != null ? sensorRunParameters.getGroupings().truncateToColumns() : null);
 			setSensorDefinition(sensorDefinitions.getSensorDefinitionSpec().trim());
 			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
 			setDialectSettings(sensorRunParameters.getDialectSettings());
@@ -266,19 +266,19 @@ public class JinjaTemplateRenderParameters {
     }
 
     /**
-     * Returns the effective data streams configuration.
-     * @return Effective data streams configuration.
+     * Returns the effective data grouping configuration.
+     * @return Effective data grouping configuration.
      */
-    public DataStreamMappingSpec getEffectiveDataStreams() {
-        return effectiveDataStreams;
+    public DataGroupingConfigurationSpec getEffectiveGroupings() {
+        return effectiveGroupings;
     }
 
     /**
-     * Sets the effective data streams configuration.
-     * @param effectiveDataStreams Effective data streams configuration.
+     * Sets the effective data grouping configuration.
+     * @param effectiveGroupings Effective data grouping configuration.
      */
-    public void setEffectiveDataStreams(DataStreamMappingSpec effectiveDataStreams) {
-        this.effectiveDataStreams = effectiveDataStreams;
+    public void setEffectiveGroupings(DataGroupingConfigurationSpec effectiveGroupings) {
+        this.effectiveGroupings = effectiveGroupings;
     }
 
     /**

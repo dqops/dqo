@@ -22,9 +22,9 @@ import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-import ai.dqo.metadata.groupings.DataStreamLevelSource;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSource;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.mysql.BaseMysqlIntegrationTest;
@@ -106,12 +106,12 @@ public class MysqlColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
 
-        DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
-        dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
-            setSource(DataStreamLevelSource.column_value);
+        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getGroupings().getFirstDataGroupingConfiguration();
+        dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
+            setSource(DataGroupingDimensionSource.column_value);
             setColumn("dim1");
         }});
-        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+        this.sampleTableMetadata.getTableSpec().getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfiguration);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);

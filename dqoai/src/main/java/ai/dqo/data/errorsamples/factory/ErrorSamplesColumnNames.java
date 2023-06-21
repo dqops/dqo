@@ -27,19 +27,19 @@ public class ErrorSamplesColumnNames {
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
 
     /**
-     * The data stream hash, it is a hash of the data stream level names.
+     * The data grouping hash, it is a hash of the data grouping level values.
      */
-    public static final String DATA_STREAM_HASH_COLUMN_NAME = CommonColumnNames.DATA_STREAM_HASH_COLUMN_NAME;
+    public static final String DATA_GROUP_HASH_COLUMN_NAME = CommonColumnNames.DATA_GROUP_HASH_COLUMN_NAME;
 
     /**
-     * The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
+     * The data grouping name, it is a concatenated name of the data grouping dimension values, created from [grouping_level_1] / [grouping_level_2] / ...
      */
-    public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
+    public static final String DATA_GROUP_NAME_COLUMN_NAME = CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME;
 
     /**
-     * The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check.
+     * The data grouping configuration name, it is a name of the named data grouping configuration that was used to run the data quality check.
      */
-    public static final String DATA_STREAM_MAPPING_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME;
+    public static final String DATA_GROUPING_CONFIGURATION_COLUMN_NAME = CommonColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME;
 
     /**
      * A hash calculated from the connection name (the data source name).

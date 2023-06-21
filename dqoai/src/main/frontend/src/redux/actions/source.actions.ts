@@ -200,7 +200,7 @@ export const getCheckResults = (
     schema,
     table,
     column,
-    dataStreamName,
+    dataGroup,
     checkName,
     runCheckType,
     startDate,
@@ -211,7 +211,7 @@ export const getCheckResults = (
     schema: string;
     table: string;
     column?: string;
-    dataStreamName?: string;
+    dataGroup?: string;
     startDate: string;
     endDate: string;
     timeScale?: 'daily' | 'monthly';
@@ -256,7 +256,7 @@ export const getCheckResults = (
         schema,
         table,
         column,
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -267,7 +267,7 @@ export const getCheckResults = (
         table,
         column,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -278,7 +278,7 @@ export const getCheckResults = (
         table,
         column,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -289,7 +289,7 @@ export const getCheckResults = (
         connection,
         schema,
         table,
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -299,7 +299,7 @@ export const getCheckResults = (
         schema,
         table,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -309,7 +309,7 @@ export const getCheckResults = (
         schema,
         table,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -348,7 +348,7 @@ export const getCheckReadouts = (
     schema,
     table,
     column,
-    dataStreamName,
+    dataGroup,
     startDate,
     endDate,
     checkName,
@@ -359,7 +359,7 @@ export const getCheckReadouts = (
     schema: string;
     table: string;
     column?: string;
-    dataStreamName?: string;
+    dataGroup?: string;
     check?: CheckModel;
     startDate: string;
     endDate: string;
@@ -395,7 +395,7 @@ export const getCheckReadouts = (
         schema,
         table,
         column,
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -406,7 +406,7 @@ export const getCheckReadouts = (
         table,
         column,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -417,7 +417,7 @@ export const getCheckReadouts = (
         table,
         column,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -428,7 +428,7 @@ export const getCheckReadouts = (
         connection,
         schema,
         table,
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -438,7 +438,7 @@ export const getCheckReadouts = (
         schema,
         table,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -448,7 +448,7 @@ export const getCheckReadouts = (
         schema,
         table,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -487,7 +487,7 @@ export const getCheckErrors = (
     schema,
     table,
     column,
-    dataStreamName,
+    dataGroup,
     startDate,
     endDate,
     checkName,
@@ -498,7 +498,7 @@ export const getCheckErrors = (
     schema: string;
     table: string;
     column?: string;
-    dataStreamName?: string;
+    dataGroup?: string;
     startDate: string;
     endDate: string;
     timeScale?: 'daily' | 'monthly';
@@ -533,7 +533,7 @@ export const getCheckErrors = (
         schema,
         table,
         column,
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -544,7 +544,7 @@ export const getCheckErrors = (
         table,
         column,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -555,7 +555,7 @@ export const getCheckErrors = (
         table,
         column,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -566,7 +566,7 @@ export const getCheckErrors = (
         connection,
         schema,
         table,
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -576,7 +576,7 @@ export const getCheckErrors = (
         schema,
         table,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);
@@ -586,7 +586,7 @@ export const getCheckErrors = (
         schema,
         table,
         timeScale || 'daily',
-        dataStreamName,
+        dataGroup,
         startDate,
         endDate
       ).then(successCallback).catch(errCallback);

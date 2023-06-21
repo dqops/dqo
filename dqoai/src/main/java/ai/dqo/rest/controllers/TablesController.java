@@ -34,7 +34,7 @@ import ai.dqo.data.statistics.services.StatisticsDataService;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.incidents.TableIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -284,21 +284,21 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the default (first) data streams configuration for a table given a connection name and a table names.
+     * Retrieves the default (first) data grouping configuration for a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Default data streams configuration for the requested table.
+     * @return Default data grouping configuration for the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping", produces = "application/json")
-    @ApiOperation(value = "getTableDefaultDataStreamsMapping", notes = "Return the default (first) data streams mapping for a table", response = DataStreamMappingSpec.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", produces = "application/json")
+    @ApiOperation(value = "getTableDefaultGroupingConfiguration", notes = "Return the default (first) data grouping configuration for a table", response = DataGroupingConfigurationSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Default data streams mapping for a table returned", response = DataStreamMappingSpec.class),
+            @ApiResponse(code = 200, message = "Default data grouping configuration for a table returned", response = DataGroupingConfigurationSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DataStreamMappingSpec>> getTableDefaultDataStreamsMapping(
+    public ResponseEntity<Mono<DataGroupingConfigurationSpec>> getTableDefaultGroupingConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -318,9 +318,9 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        DataStreamMappingSpec dataStreamsSpec = tableSpec.getDataStreams().getFirstDataStreamMapping();
+        DataGroupingConfigurationSpec dataGroupingConfiguration = tableSpec.getGroupings().getFirstDataGroupingConfiguration();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.justOrEmpty(dataGroupingConfiguration), HttpStatus.OK); // 200
     }
 
     /**
@@ -1275,7 +1275,7 @@ public class TablesController {
 
         StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
                 this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
-                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME, true);
+                        CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME, true);
 
         TableStatisticsModel resultModel = new TableStatisticsModel();
         resultModel.setConnectionName(connectionName);
@@ -1828,29 +1828,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the default (first) data streams mapping of an existing table.
+     * Updates the default (first) data grouping configuration of an existing table.
      * @param connectionName         Connection name.
      * @param schemaName             Schema name.
      * @param tableName              Table name.
-     * @param dataStreamsMappingSpec New default data streams mapping or null (an empty optional).
+     * @param dataGroupingConfigurationSpec New default data grouping configuration or null (an empty optional).
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateTableDefaultDataStreamsMapping", notes = "Updates the default data streams mapping at a table level.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableDefaultGroupingConfiguration", notes = "Updates the default data grouping configuration at a table level.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's default data streams mapping successfully updated"),
+            @ApiResponse(code = 204, message = "Table's default data grouping configuration successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDefaultDataStreamsMapping(
+    public ResponseEntity<Mono<?>> updateTableDefaultGroupingConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Default data streams mapping to store or an empty object to clear the data streams mapping on a table level")
-            @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
+            @ApiParam("Default data grouping configuration to store or an empty object to clear the data grouping configuration on a table level")
+            @RequestBody Optional<DataGroupingConfigurationSpec> dataGroupingConfigurationSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -1874,10 +1874,10 @@ public class TablesController {
 
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
-        if (dataStreamsMappingSpec.isPresent()) {
-            tableSpec.getDataStreams().setFirstDataStreamMapping(dataStreamsMappingSpec.get());
+        if (dataGroupingConfigurationSpec.isPresent()) {
+            tableSpec.getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfigurationSpec.get());
         } else {
-            tableSpec.getDataStreams().setFirstDataStreamMapping(null); // will remove the first mapping
+            tableSpec.getGroupings().setFirstDataGroupingConfiguration(null); // will remove the first mapping
         }
         userHomeContext.flush();
 

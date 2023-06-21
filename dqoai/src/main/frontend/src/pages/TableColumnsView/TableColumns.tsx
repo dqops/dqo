@@ -145,7 +145,7 @@ const TableColumns = ({
     statistics?.column_statistics &&
       statistics?.column_statistics.map(async (x, index) =>
         x.column_hash === hashValue
-          ? await JobApiClient.collectStatisticsOnDataStreams(
+          ? await JobApiClient.collectStatisticsOnDataGroups(
               statistics?.column_statistics?.at(index)
                 ?.collect_column_statistics_job_template
             )

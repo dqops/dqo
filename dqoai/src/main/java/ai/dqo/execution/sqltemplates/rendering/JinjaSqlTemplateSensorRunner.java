@@ -191,7 +191,7 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
 
         List<Column<?>> allSourceColumns = multiSensorTableResult.columns();
         Column<?>[] dataStreamLevelColumns = allSourceColumns.stream()
-                .filter(c -> c.name() != null && c.name().startsWith(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX))
+                .filter(c -> c.name() != null && c.name().startsWith(SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX))
                 .toArray(Column<?>[]::new);
         if (dataStreamLevelColumns.length > 0) {
             sensorResultRows.addColumns(dataStreamLevelColumns);
