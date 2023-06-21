@@ -161,7 +161,6 @@ const TableColumns = ({
 
   useEffect(() => {
     fetchColumns();
-    setNumberOfSelected(trueValuesCount);
   }, [connectionName, schemaName, tableName]);
 
   const max_unique_value = () => {
@@ -441,6 +440,7 @@ const TableColumns = ({
         count++;
       }
     }
+    setNumberOfSelected(count);
 
     return count;
   };
@@ -467,8 +467,6 @@ const TableColumns = ({
     return listOfStr.join(',');
   };
 
-  setCreatedDataStream(true, setDataStream(), setSpec2());
-
   const fixString = () => {
     const columnValues = Object.values(spec)
       .map((level) => level.column)
@@ -477,16 +475,17 @@ const TableColumns = ({
     const joinedValues = columnValues.join(',');
     updateData(joinedValues);
     setLevelsData(setSpec2());
+    countTrueValues(objectStates);
 
     return joinedValues;
   };
-  setNumberOfSelected(trueValuesCount);
 
   const showDataStreamButtonFunc = async () => {
     await fixString();
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
+  setCreatedDataStream(true, setDataStream(), setSpec2());
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
