@@ -24,6 +24,7 @@ import {
 } from '../../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelActiveTab, getFirstLevelState } from '../../../redux/selectors';
+import { IRootState } from "../../../redux/reducers";
 
 const tabs = [
   {
@@ -51,7 +52,6 @@ interface CheckDetailsProps {
   timeScale?: 'daily' | 'monthly';
   checkName?: string;
   onClose: () => void;
-  job?: DqoJobHistoryEntryModel;
   data_clean_job_template?: DeleteStoredDataQueueJobParameters;
   defaultFilters?: any;
 }
@@ -67,7 +67,6 @@ const CheckDetails = ({
   checkName,
   timeScale,
   onClose,
-  job,
   defaultFilters
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
@@ -76,9 +75,12 @@ const CheckDetails = ({
     checkResults: resultsData,
     sensorReadouts: readoutsData,
     sensorErrors: errorsData,
-    checkFilters: filtersData
+    checkFilters: filtersData,
+    currentJobId,
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const currentJob = currentJobId ? job_dictionary_state[currentJobId] : undefined;
 
   const checkResults = resultsData
     ? resultsData[checkName ?? ''] || []
@@ -199,14 +201,14 @@ const CheckDetails = ({
     }
   }, []);
 
-  useEffect(() => {
+  useEffect(() =>{
     if (
-      (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-        job?.status === DqoJobHistoryEntryModelStatusEnum.failed)
+      (currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+        currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed)
     ) {
       refetch(filters.month, filters.dataStreamName);
     }
-  }, [job?.status]);
+  }, [currentJob?.status]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);

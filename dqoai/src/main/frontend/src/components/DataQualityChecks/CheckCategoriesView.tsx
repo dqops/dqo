@@ -15,6 +15,9 @@ import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import CheckMenu from './CheckMenu';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../shared/routes';
+import { setCurrentJobId } from "../../redux/actions/source.actions";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
@@ -43,9 +46,10 @@ const CheckCategoriesView = ({
   );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const [jobId, setJobId] = useState<number>();
-
-  const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { currentJobId } = useSelector(getFirstLevelState(checkTypes));
+  const job = currentJobId ? job_dictionary_state[currentJobId] : undefined;
 
   const onRunChecks = async () => {
     await onUpdate();
@@ -55,8 +59,7 @@ const CheckCategoriesView = ({
         ? { timeWindowFilter }
         : {})
     });
-
-    setJobId((res.data as any)?.jobId?.jobId);
+    dispatch(setCurrentJobId(checkTypes, firstLevelActiveTab, (res.data as any)?.jobId?.jobId));
 
     if (getCheckOverview) {
       getCheckOverview();

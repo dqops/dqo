@@ -18,7 +18,7 @@
 /// limitations under the License.
 ///
 
-import { SOURCE_ACTION } from '../types';
+import { JOB_ACTION, SOURCE_ACTION } from '../types';
 import { CheckTypes } from "../../shared/routes";
 import {
   CheckResultsDetailedDataModel,
@@ -654,3 +654,10 @@ export const updateTableIncidentGrouping = (checkType: CheckTypes, activeTab: st
     dispatch(updateTableIncidentGroupingFailed(checkType, activeTab, err));
   }
 };
+
+export const setCurrentJobId = (checkType: CheckTypes, activeTab: string, jobId: number) => ({
+  type: SOURCE_ACTION.SET_CURRENT_JOB_ID,
+  checkType,
+  activeTab,
+  data: jobId
+});
