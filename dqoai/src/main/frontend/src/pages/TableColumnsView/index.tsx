@@ -38,7 +38,6 @@ const TableColumnsView = () => {
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataStreamMappingSpec>({});
   const [selected, setSelected] = useState<number>(0);
-  const [stringCount, setStringCount] = useState(0);
 
   const fetchColumns = async () => {
     try {
@@ -142,14 +141,10 @@ const TableColumnsView = () => {
   };
 
   const implementDataStreamName = () => {
-    let count = 0;
     const columnValues = Object.values(levels)
       .map((level) => level.column)
       .filter((column) => column !== undefined);
     const joinedValues = columnValues.join(',');
-    count = columnValues.length;
-
-    setStringCount(count);
 
     return joinedValues;
   };

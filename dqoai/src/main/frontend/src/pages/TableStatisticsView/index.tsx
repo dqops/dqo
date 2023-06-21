@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react';
 import TableColumns from '../TableColumnsView/TableColumns';
 import { DataStreamMappingSpec, TableStatisticsModel } from '../../api';
 import { AxiosResponse } from 'axios';
-import { TableApiClient, DataStreamsApi } from '../../services/apiClient';
+import { TableApiClient } from '../../services/apiClient';
 import Loader from '../../components/Loader';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes } from '../../shared/routes';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { formatNumber } from '../../shared/constants';
 import { setCreatedDataStream } from '../../redux/actions/rule.actions';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { LocationState } from '../TableColumnsView/TableColumnsFunctions';
 
 export default function TableStatisticsView({
   connectionName,
@@ -35,10 +33,7 @@ export default function TableStatisticsView({
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataStreamMappingSpec>({});
   const [selected, setSelected] = useState<number>(0);
-  const [stringCount, setStringCount] = useState(0);
 
-  const dispatch = useDispatch();
-  const history = useHistory();
   const {
     connection,
     schema,
@@ -102,67 +97,6 @@ export default function TableStatisticsView({
     );
   }
 
-  const doNothing = (): void => {};
-
-  const postDataStream = async () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      'sources',
-      connectionName,
-      schemaName,
-      tableName,
-      'data-streams'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      'sources',
-      connectionName,
-      schemaName,
-      tableName
-    );
-    const data: LocationState = {
-      bool: true,
-      data_stream_name: nameOfDataStream,
-      spec: levels
-    };
-
-    try {
-      const response = await DataStreamsApi.createDataStream(
-        connectionName,
-        schemaName,
-        tableName,
-        { data_stream_name: nameOfDataStream, spec: levels }
-      );
-      if (response.status === 409) {
-        doNothing();
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status) {
-        doNothing();
-      }
-    }
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value,
-        state: data,
-        label: tableName
-      })
-    );
-    history.push(url);
-    setCreatedDataStream(false, '', {});
-  };
-
-  const implementDataStreamName = () => {
-    let count = 0;
-    const columnValues = Object.values(levels)
-      .map((level) => level.column)
-      .filter((column) => column !== undefined);
-    const joinedValues = columnValues.join(',');
-    count = columnValues.length;
-
-    setStringCount(count);
-
-    return joinedValues;
-  };
   console.log(selected);
   updateData2(nameOfDataStream);
   setLevelsData2(levels);
