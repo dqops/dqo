@@ -16,19 +16,18 @@
 
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import storage from 'redux-persist/lib/storage'
-import {
-  persistReducer,
-} from 'redux-persist'
+import { throttle } from "lodash";
 
-const persistConfig = {
-  key: 'root',
-  storage: storage,
-}
+
 import rootReducer from './reducers';
+import { loadState, saveState } from "./localStorage";
 
 const middleware = compose(applyMiddleware(thunk));
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-const store = createStore(persistedReducer, middleware)
+const persistedState = loadState();
+const store = createStore(rootReducer, persistedState, middleware);
+
+store.subscribe(throttle(() => {
+  saveState(store.getState());
+}, 1000));
 export default store;

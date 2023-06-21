@@ -16,6 +16,7 @@
 package ai.dqo.utils.specs;
 
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.definitions.sensors.*;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
@@ -23,7 +24,10 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.CustomSensorParametersSpec;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.sensors.column.sampling.ColumnSamplingColumnSamplesSensorParametersSpec;
+import ai.dqo.sensors.table.availability.TableAvailabilitySensorParametersSpec;
+import ai.dqo.sensors.table.availability.TableAvailabilitySensorRunner;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
 import ai.dqo.utils.reflection.TargetClassSearchUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,13 +47,13 @@ import java.util.stream.Collectors;
 @Component
 public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefinitionDefaultSpecUpdateService {
     private DqoHomeContext dqoHomeContext;
-    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
 
     @Autowired
     public SensorDefinitionDefaultSpecUpdateServiceImpl(DqoHomeContext dqoHomeContext,
-                                                        SpecToUiCheckMappingService specToUiCheckMappingService) {
+                                                        SpecToModelCheckMappingService specToModelCheckMappingService) {
         this.dqoHomeContext = dqoHomeContext;
-        this.specToUiCheckMappingService = specToUiCheckMappingService;
+        this.specToModelCheckMappingService = specToModelCheckMappingService;
     }
 
     /**
@@ -103,19 +107,24 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                 providerSensorDefinitionSpec.setSupportsPartitionedChecks(
                         sqlTemplate.contains("lib.render_time_dimension_projection") &&
                                 abstractSensorParametersSpec.getSupportsPartitionedChecks());
+                providerSensorDefinitionSpec.setDisableMergingQueries(
+                        sensorDefinitionName.contains(new ColumnSamplingColumnSamplesSensorParametersSpec().getSensorDefinitionName()) ||
+                        sensorDefinitionName.contains(new TableAvailabilitySensorParametersSpec().getSensorDefinitionName()));
             }
 
             if (abstractSensorParametersSpec.getAlwaysSupportedOnAllProviders()) {
                 ProviderType[] allProviderTypes = ProviderType.values();
                 for (ProviderType providerType : allProviderTypes) {
                     ProviderSensorDefinitionWrapper providerSensorWrapper = providerSensors.getByObjectName(providerType, true);
-                    if (providerSensorWrapper != null) {
-                        continue; // the sensor is already configured
+                    if (providerSensorWrapper == null) {
+                        providerSensorWrapper = providerSensors.createAndAddNew(providerType);
+                        providerSensorWrapper.setSpec(new ProviderSensorDefinitionSpec());
                     }
 
-                    providerSensorWrapper = providerSensors.createAndAddNew(providerType);
-                    providerSensorWrapper.setSpec(new ProviderSensorDefinitionSpec());
                     ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorWrapper.getSpec();
+                    boolean isSqlTemplateRunner = abstractSensorParametersSpec.getSensorRunnerClass() == JinjaSqlTemplateSensorRunner.class ||
+                            abstractSensorParametersSpec.getSensorRunnerClass() == TableAvailabilitySensorRunner.class;
+                    providerSensorDefinitionSpec.setType(isSqlTemplateRunner ? ProviderSensorRunnerType.sql_template : ProviderSensorRunnerType.java_class);
                     providerSensorDefinitionSpec.setJavaClassName(abstractSensorParametersSpec.getSensorRunnerClass().getName());
                     providerSensorDefinitionSpec.setSupportsGroupingByDataStream(abstractSensorParametersSpec.getSupportsDataStreams());
                     providerSensorDefinitionSpec.setSupportsPartitionedChecks(abstractSensorParametersSpec.getSupportsPartitionedChecks());
@@ -124,7 +133,7 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
 
             SensorDefinitionSpec sensorDefinitionSpec = sensorDefinitionWrapper.getSpec();
 
-            List<ParameterDefinitionSpec> fieldDefinitionList = this.specToUiCheckMappingService.createFieldsForSensorParameters(abstractSensorParametersSpec)
+            List<ParameterDefinitionSpec> fieldDefinitionList = this.specToModelCheckMappingService.createFieldsForSensorParameters(abstractSensorParametersSpec)
                     .stream()
                     .map(uiFieldModel -> uiFieldModel.getDefinition())
                     .collect(Collectors.toList());

@@ -49,7 +49,7 @@ const Header = () => {
   const { tabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
-  const selectedTab = tabs?.find((item) => item.url === activeTab);
+  const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
 
   const onClick = (newCheckTypes: CheckTypes) => () => {
@@ -99,6 +99,14 @@ const Header = () => {
         schema,
         table
       );
+    } else if (match.path === ROUTES.PATTERNS.TABLE_INCIDENTS_NOTIFICATION) {
+      url = ROUTES.TABLE_INCIDENTS_NOTIFICATION(newCheckTypes, connection, schema, table);
+      value = ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(
+        newCheckTypes,
+        connection,
+        schema,
+        table
+      );
     } else if (match.path === ROUTES.PATTERNS.COLUMN) {
       let newTab = COLUMN_LEVEL_TABS[newCheckTypes].find(
         (item: PageTab) => item.value === tab
@@ -136,7 +144,9 @@ const Header = () => {
       );
     }
 
-    history.push(url);
+    if (url !== location.pathname) {
+      history.push(url);
+    }
   };
 
   return (

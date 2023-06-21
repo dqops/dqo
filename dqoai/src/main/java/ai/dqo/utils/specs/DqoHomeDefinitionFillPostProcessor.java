@@ -19,7 +19,7 @@ package ai.dqo.utils.specs;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
 import ai.dqo.utils.docs.HandlebarsDocumentationUtilities;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -65,7 +65,7 @@ public class DqoHomeDefinitionFillPostProcessor {
      * @param dqoHomeContext DQO home instance with access to the rule references.
      */
     public static void updateSpecificationsForRules(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         RuleDefinitionDefaultSpecUpdateService ruleDefinitionDefaultSpecUpdateService =
                 new RuleDefinitionDefaultSpecUpdateServiceImpl(dqoHomeContext, specToUiCheckMappingService);
@@ -80,7 +80,7 @@ public class DqoHomeDefinitionFillPostProcessor {
      * @param dqoHomeContext DQO home instance with access to the sensor references.
      */
     public static void updateSpecificationsForSensors(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         SensorDefinitionDefaultSpecUpdateService sensorDefinitionDefaultSpecUpdateService =
                 new SensorDefinitionDefaultSpecUpdateServiceImpl(dqoHomeContext, specToUiCheckMappingService);
@@ -93,7 +93,7 @@ public class DqoHomeDefinitionFillPostProcessor {
      * @param dqoHomeContext DQO home instance with access to the check references.
      */
     public static void updateSpecificationsForChecks(DqoHomeContext dqoHomeContext) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         CheckDefinitionDefaultSpecUpdateService sensorDefinitionDefaultSpecUpdateService =
                 new CheckDefinitionDefaultSpecUpdateServiceImpl(new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService));

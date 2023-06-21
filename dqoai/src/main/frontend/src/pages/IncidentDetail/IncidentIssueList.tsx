@@ -1,17 +1,18 @@
-import { CheckResultDetailedSingleModel, UICheckModel } from "../../api";
-import React, { useEffect, useState } from "react";
+import { CheckResultDetailedSingleModel, IncidentModel } from "../../api";
+import React, { useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
-import { ChecksApi } from "../../services/apiClient";
 import { SortableColumn } from "../IncidentConnection/SortableColumn";
 import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
 import moment from "moment";
+import { CheckTypes } from "../../shared/routes";
 
 type IncidentIssueRowProps = {
   issue: CheckResultDetailedSingleModel;
+  incidentDetail?: IncidentModel;
 }
 
-export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
+export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProps) => {
   const [open, setOpen] = useState(false);
 
   const getIssueSeverityLevel = (value?: number) => {
@@ -44,13 +45,6 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
     return '';
   };
 
-  useEffect(() => {
-    if (!issue?.checkName) return;
-
-    ChecksApi.getCheck(issue?.checkName).then((res) => {
-      console.log('res', res);
-    });
-  }, []);
   const closeCheckDetails = () => {
     setOpen(false);
   };
@@ -73,7 +67,9 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.checkName}
+          <a className="text-blue-700 underline" href={`/${issue.checkType}/connection/${incidentDetail?.connection || ""}/schema/${incidentDetail?.schema || ""}/table/${incidentDetail?.table}/columns/${issue.columnName}/detail`}>
+            {issue.checkName}
+          </a>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
           {moment(issue.executedAt).format("YYYY-MM-DD HH:mm:ss.SSS")}
@@ -131,7 +127,14 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
         <tr>
           <td colSpan={12}>
             <CheckDetails
+              checkTypes={(incidentDetail?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+              connection={incidentDetail?.connection ?? ''}
+              schema={incidentDetail?.schema ?? ''}
+              table={incidentDetail?.table ?? ''}
+              checkName={issue.checkName}
+              runCheckType={issue.checkType}
               onClose={closeCheckDetails}
+              defaultFilters={moment(issue.timePeriod).format("MMMM YYYY")}
             />
           </td>
         </tr>
@@ -144,9 +147,10 @@ type IncidentIssueListProps = {
   issues: CheckResultDetailedSingleModel[];
   filters?: IncidentIssueFilter;
   onChangeFilter: (obj: Partial<IncidentIssueFilter>) => void;
+  incidentDetail?: IncidentModel;
 };
 
-export const IncidentIssueList = ({ issues, filters, onChangeFilter }: IncidentIssueListProps) => {
+export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDetail }: IncidentIssueListProps) => {
   const handleSortChange = (orderBy: string, direction?: 'asc' | 'desc') => {
     onChangeFilter({
       order: orderBy as any,
@@ -276,7 +280,7 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter }: IncidentI
         </thead>
         <tbody>
         {issues.map((issue) => (
-          <IncidentIssueRow key={issue.id} issue={issue} />
+          <IncidentIssueRow key={issue.id} issue={issue} incidentDetail={incidentDetail} />
         ))}
         </tbody>
       </table>

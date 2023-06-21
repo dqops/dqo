@@ -84,6 +84,6 @@ public class ColumnRangeMedianValueStatisticsCollectorSpec extends AbstractStati
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return DataTypeCategory.COMPARABLE;
+        return DataTypeCategory.NUMERIC;
     }
 }

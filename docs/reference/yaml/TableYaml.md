@@ -3749,8 +3749,8 @@ Stores the column data type captured at the time of the table metadata import.
 |column_type|Column data type using the monitored database type names.|string| | | |
 |nullable|Column is nullable.|boolean| | | |
 |length|Maximum length of text and binary columns.|integer| | | |
-|scale|Scale of a numeric (decimal) data type.|integer| | | |
 |precision|Precision of a numeric (decimal) data type.|integer| | | |
+|scale|Scale of a numeric (decimal) data type.|integer| | | |
 
 
 
@@ -9025,8 +9025,8 @@ Container of built-in preconfigured data quality checks on a column level that a
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[unique_count](#columnuniquecountcheckspec)|Verifies that the number of unique values in a column does not fall below the minimum accepted count.|[ColumnUniqueCountCheckSpec](#columnuniquecountcheckspec)| | | |
-|[unique_percent](#columnuniquepercentcheckspec)|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent.|[ColumnUniquePercentCheckSpec](#columnuniquepercentcheckspec)| | | |
+|[distinct_count](#columndistinctcountcheckspec)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count.|[ColumnDistinctCountCheckSpec](#columndistinctcountcheckspec)| | | |
+|[distinct_percent](#columndistinctpercentcheckspec)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.|[ColumnDistinctPercentCheckSpec](#columndistinctpercentcheckspec)| | | |
 |[duplicate_count](#columnduplicatecountcheckspec)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.|[ColumnDuplicateCountCheckSpec](#columnduplicatecountcheckspec)| | | |
 |[duplicate_percent](#columnduplicatepercentcheckspec)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.|[ColumnDuplicatePercentCheckSpec](#columnduplicatepercentcheckspec)| | | |
 
@@ -9040,7 +9040,7 @@ Container of built-in preconfigured data quality checks on a column level that a
 
 ___  
 
-## ColumnUniqueCountCheckSpec  
+## ColumnDistinctCountCheckSpec  
 Column level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.  
   
 
@@ -9055,7 +9055,7 @@ Column level check that ensures that the number of unique values in a column doe
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnuniquenessuniquecountsensorparametersspec)|Data quality check parameters|[ColumnUniquenessUniqueCountSensorParametersSpec](#columnuniquenessuniquecountsensorparametersspec)| | | |
+|[parameters](#columnuniquenessdistinctcountsensorparametersspec)|Data quality check parameters|[ColumnUniquenessDistinctCountSensorParametersSpec](#columnuniquenessdistinctcountsensorparametersspec)| | | |
 |[warning](#mincountrulewarningparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinCountRuleWarningParametersSpec](#mincountrulewarningparametersspec)| | | |
 |[error](#mincountrule0parametersspec)|Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).|[MinCountRule0ParametersSpec](#mincountrule0parametersspec)| | | |
 |[fatal](#mincountrulefatalparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinCountRuleFatalParametersSpec](#mincountrulefatalparametersspec)| | | |
@@ -9078,7 +9078,7 @@ Column level check that ensures that the number of unique values in a column doe
 
 ___  
 
-## ColumnUniquenessUniqueCountSensorParametersSpec  
+## ColumnUniquenessDistinctCountSensorParametersSpec  
 Column level sensor that calculates the number of unique non-null values.  
   
 
@@ -9105,7 +9105,7 @@ Column level sensor that calculates the number of unique non-null values.
 
 ___  
 
-## ColumnUniquePercentCheckSpec  
+## ColumnDistinctPercentCheckSpec  
 Column level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.  
   
 
@@ -9120,7 +9120,7 @@ Column level check that ensures that the percentage of unique values in a column
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnuniquenessuniquepercentsensorparametersspec)|Data quality check parameters|[ColumnUniquenessUniquePercentSensorParametersSpec](#columnuniquenessuniquepercentsensorparametersspec)| | | |
+|[parameters](#columnuniquenessdistinctpercentsensorparametersspec)|Data quality check parameters|[ColumnUniquenessDistinctPercentSensorParametersSpec](#columnuniquenessdistinctpercentsensorparametersspec)| | | |
 |[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
 |[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with unique value in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
@@ -9143,7 +9143,7 @@ Column level check that ensures that the percentage of unique values in a column
 
 ___  
 
-## ColumnUniquenessUniquePercentSensorParametersSpec  
+## ColumnUniquenessDistinctPercentSensorParametersSpec  
 Column level sensor that calculates the percentage of unique values in a column.  
   
 
@@ -12460,8 +12460,8 @@ Container of uniqueness data quality recurring checks on a column level that are
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_unique_count](#columnuniquecountcheckspec)|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnUniqueCountCheckSpec](#columnuniquecountcheckspec)| | | |
-|[daily_unique_percent](#columnuniquepercentcheckspec)|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnUniquePercentCheckSpec](#columnuniquepercentcheckspec)| | | |
+|[daily_distinct_count](#columndistinctcountcheckspec)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnDistinctCountCheckSpec](#columndistinctcountcheckspec)| | | |
+|[daily_distinct_percent](#columndistinctpercentcheckspec)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnDistinctPercentCheckSpec](#columndistinctpercentcheckspec)| | | |
 |[daily_duplicate_count](#columnduplicatecountcheckspec)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnDuplicateCountCheckSpec](#columnduplicatecountcheckspec)| | | |
 |[daily_duplicate_percent](#columnduplicatepercentcheckspec)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnDuplicatePercentCheckSpec](#columnduplicatepercentcheckspec)| | | |
 
@@ -12961,8 +12961,8 @@ Container of uniqueness data quality recurring checks on a column level that are
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_unique_count](#columnuniquecountcheckspec)|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnUniqueCountCheckSpec](#columnuniquecountcheckspec)| | | |
-|[monthly_unique_percent](#columnuniquepercentcheckspec)|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnUniquePercentCheckSpec](#columnuniquepercentcheckspec)| | | |
+|[monthly_distinct_count](#columndistinctcountcheckspec)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDistinctCountCheckSpec](#columndistinctcountcheckspec)| | | |
+|[monthly_distinct_percent](#columndistinctpercentcheckspec)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDistinctPercentCheckSpec](#columndistinctpercentcheckspec)| | | |
 |[monthly_duplicate_count](#columnduplicatecountcheckspec)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDuplicateCountCheckSpec](#columnduplicatecountcheckspec)| | | |
 |[monthly_duplicate_percent](#columnduplicatepercentcheckspec)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDuplicatePercentCheckSpec](#columnduplicatepercentcheckspec)| | | |
 
@@ -13471,8 +13471,8 @@ Container of uniqueness data quality partitioned checks on a column level that a
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_unique_count](#columnuniquecountcheckspec)|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnUniqueCountCheckSpec](#columnuniquecountcheckspec)| | | |
-|[daily_partition_unique_percent](#columnuniquepercentcheckspec)|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnUniquePercentCheckSpec](#columnuniquepercentcheckspec)| | | |
+|[daily_partition_distinct_count](#columndistinctcountcheckspec)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDistinctCountCheckSpec](#columndistinctcountcheckspec)| | | |
+|[daily_partition_distinct_percent](#columndistinctpercentcheckspec)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDistinctPercentCheckSpec](#columndistinctpercentcheckspec)| | | |
 |[daily_partition_duplicate_count](#columnduplicatecountcheckspec)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDuplicateCountCheckSpec](#columnduplicatecountcheckspec)| | | |
 |[daily_partition_duplicate_percent](#columnduplicatepercentcheckspec)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnDuplicatePercentCheckSpec](#columnduplicatepercentcheckspec)| | | |
 
@@ -14280,8 +14280,8 @@ Container of uniqueness data quality partitioned checks on a column level that a
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_partition_unique_count](#columnuniquecountcheckspec)|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnUniqueCountCheckSpec](#columnuniquecountcheckspec)| | | |
-|[monthly_partition_unique_percent](#columnuniquepercentcheckspec)|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnUniquePercentCheckSpec](#columnuniquepercentcheckspec)| | | |
+|[monthly_partition_distinct_count](#columndistinctcountcheckspec)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnDistinctCountCheckSpec](#columndistinctcountcheckspec)| | | |
+|[monthly_partition_distinct_percent](#columndistinctpercentcheckspec)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnDistinctPercentCheckSpec](#columndistinctpercentcheckspec)| | | |
 |[monthly_partition_duplicate_count](#columnduplicatecountcheckspec)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnDuplicateCountCheckSpec](#columnduplicatecountcheckspec)| | | |
 |[monthly_partition_duplicate_percent](#columnduplicatepercentcheckspec)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnDuplicatePercentCheckSpec](#columnduplicatepercentcheckspec)| | | |
 
@@ -14546,6 +14546,7 @@ ___
 |[strings](#columnstringsstatisticscollectorsspec)|Configuration of string (text) profilers on a column level.|[ColumnStringsStatisticsCollectorsSpec](#columnstringsstatisticscollectorsspec)| | | |
 |[uniqueness](#columnuniquenessstatisticscollectorsspec)|Configuration of profilers that analyse uniqueness of values (distinct count).|[ColumnUniquenessStatisticsCollectorsSpec](#columnuniquenessstatisticscollectorsspec)| | | |
 |[range](#columnrangestatisticscollectorsspec)|Configuration of profilers that analyse the range of values (min, max).|[ColumnRangeStatisticsCollectorsSpec](#columnrangestatisticscollectorsspec)| | | |
+|[sampling](#columnsamplingstatisticscollectorsspec)|Configuration of profilers that collect the column samples.|[ColumnSamplingStatisticsCollectorsSpec](#columnsamplingstatisticscollectorsspec)| | | |
 
 
 
@@ -14856,8 +14857,8 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[unique_count](#columnuniquenessuniquecountstatisticscollectorspec)|Configuration of the profiler that counts unique (distinct) column values.|[ColumnUniquenessUniqueCountStatisticsCollectorSpec](#columnuniquenessuniquecountstatisticscollectorspec)| | | |
-|[unique_percent](#columnuniquenessuniquepercentstatisticscollectorspec)|Configuration of the profiler that measure the percentage of unique (distinct) column values.|[ColumnUniquenessUniquePercentStatisticsCollectorSpec](#columnuniquenessuniquepercentstatisticscollectorspec)| | | |
+|[distinct_count](#columnuniquenessdistinctcountstatisticscollectorspec)|Configuration of the profiler that counts distinct column values.|[ColumnUniquenessDistinctCountStatisticsCollectorSpec](#columnuniquenessdistinctcountstatisticscollectorspec)| | | |
+|[distinct_percent](#columnuniquenessdistinctpercentstatisticscollectorspec)|Configuration of the profiler that measure the percentage of distinct column values.|[ColumnUniquenessDistinctPercentStatisticsCollectorSpec](#columnuniquenessdistinctpercentstatisticscollectorspec)| | | |
 |[duplicate_count](#columnuniquenessduplicatecountstatisticscollectorspec)|Configuration of the profiler that counts duplicate column values.|[ColumnUniquenessDuplicateCountStatisticsCollectorSpec](#columnuniquenessduplicatecountstatisticscollectorspec)| | | |
 |[duplicate_percent](#columnuniquenessduplicatepercentstatisticscollectorspec)|Configuration of the profiler that measure the percentage of duplicate column values.|[ColumnUniquenessDuplicatePercentStatisticsCollectorSpec](#columnuniquenessduplicatepercentstatisticscollectorspec)| | | |
 
@@ -14871,7 +14872,7 @@ ___
 
 ___  
 
-## ColumnUniquenessUniqueCountStatisticsCollectorSpec  
+## ColumnUniquenessDistinctCountStatisticsCollectorSpec  
   
   
 
@@ -14886,7 +14887,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnuniquenessuniquecountsensorparametersspec)|Profiler parameters|[ColumnUniquenessUniqueCountSensorParametersSpec](#columnuniquenessuniquecountsensorparametersspec)| | | |
+|[parameters](#columnuniquenessdistinctcountsensorparametersspec)|Profiler parameters|[ColumnUniquenessDistinctCountSensorParametersSpec](#columnuniquenessdistinctcountsensorparametersspec)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
@@ -14899,7 +14900,7 @@ ___
 
 ___  
 
-## ColumnUniquenessUniquePercentStatisticsCollectorSpec  
+## ColumnUniquenessDistinctPercentStatisticsCollectorSpec  
   
   
 
@@ -14914,7 +14915,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnuniquenessuniquepercentsensorparametersspec)|Profiler parameters|[ColumnUniquenessUniquePercentSensorParametersSpec](#columnuniquenessuniquepercentsensorparametersspec)| | | |
+|[parameters](#columnuniquenessdistinctpercentsensorparametersspec)|Profiler parameters|[ColumnUniquenessDistinctPercentSensorParametersSpec](#columnuniquenessdistinctpercentsensorparametersspec)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
@@ -15170,6 +15171,89 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Profiler parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSamplingStatisticsCollectorsSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[column_samples](#columnsamplingcolumnsamplesstatisticscollectorspec)|Configuration of the profiler that finds the maximum string length.|[ColumnSamplingColumnSamplesStatisticsCollectorSpec](#columnsamplingcolumnsamplesstatisticscollectorspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSamplingColumnSamplesStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnsamplingcolumnsamplessensorparametersspec)|Profiler parameters|[ColumnSamplingColumnSamplesSensorParametersSpec](#columnsamplingcolumnsamplessensorparametersspec)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSamplingColumnSamplesSensorParametersSpec  
+Column level sensor that retrieves a column value samples. Column value sampling is used in profiling and in capturing error samples for failed data quality checks.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|limit|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|integer| | |10<br/>|
+|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
 
 
 

@@ -1,7 +1,11 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
-import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
+import {
+  ColumnStatisticsModel,
+  DqoJobHistoryEntryModelStatusEnum,
+  TableColumnsStatisticsModel
+} from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
@@ -12,6 +16,8 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
+import { formatNumber, dateToString } from '../../shared/constants';
+import { IRootState } from '../../redux/reducers';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -29,6 +35,7 @@ interface MyData {
   length?: number | undefined;
   scale?: number | undefined;
   importedDatatype?: string | undefined;
+  columnHash: number;
 }
 
 const TableColumns = ({
@@ -58,13 +65,17 @@ const TableColumns = ({
   const history = useHistory();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+
   const labels = [
-    'Name',
-    'Detected Datatype',
-    'Imported Type',
+    'Column name',
+    'Detected data type',
+    'Imported data type',
     'Length',
     'Scale',
-    'Minimal Value',
+    'Minimal value',
     'Null count'
   ];
 
@@ -130,11 +141,16 @@ const TableColumns = ({
     }
   };
 
-  const collectStatistics = async (index: number) => {
-    await JobApiClient.collectStatisticsOnDataStreams(
-      statistics?.column_statistics?.at(index)
-        ?.collect_column_statistics_job_template
-    );
+  const collectStatistics = async (hashValue?: number) => {
+    statistics?.column_statistics &&
+      statistics?.column_statistics.map(async (x, index) =>
+        x.column_hash === hashValue
+          ? await JobApiClient.collectStatisticsOnDataStreams(
+              statistics?.column_statistics?.at(index)
+                ?.collect_column_statistics_job_template
+            )
+          : ''
+      );
   };
 
   useEffect(() => {
@@ -202,6 +218,21 @@ const TableColumns = ({
 
     return max;
   };
+  const filteredJobs = Object.values(job_dictionary_state)?.filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schemaName + '.' + tableName &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  );
+  const filteredColumns = filteredJobs?.map(
+    (x) =>
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.columnName
+  );
 
   const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
     if (uniqueCount === 0) {
@@ -223,43 +254,6 @@ const TableColumns = ({
     return color;
   };
 
-  const formatNumber = (k: number) => {
-    if (k > 1000 && k < 1000000) {
-      if (k > Math.pow(10, 3) && k < Math.pow(10, 4)) {
-        return (k / Math.pow(10, 3)).toFixed(3) + 'k';
-      } else if (k > Math.pow(10, 4) && k < Math.pow(10, 5)) {
-        return (k / Math.pow(10, 3)).toFixed(2) + 'k';
-      } else {
-        return (k / Math.pow(10, 3)).toFixed(1) + 'k';
-      }
-    } else if (k > Math.pow(10, 6) && k < Math.pow(10, 9)) {
-      if (k > Math.pow(10, 6) && k < Math.pow(10, 7)) {
-        return (k / Math.pow(10, 6)).toFixed(3) + 'M';
-      } else if (k > Math.pow(10, 7) && k < Math.pow(10, 8)) {
-        return (k / Math.pow(10, 6)).toFixed(2) + 'M';
-      } else {
-        return (k / Math.pow(10, 6)).toFixed(1) + 'M';
-      }
-    } else if (k > Math.pow(10, 9) && k < Math.pow(10, 12)) {
-      if (k > Math.pow(10, 9) && k < Math.pow(10, 10)) {
-        return (k / Math.pow(10, 9)).toFixed(3) + 'G';
-      } else if (k > Math.pow(10, 10) && k < Math.pow(10, 11)) {
-        return (k / Math.pow(10, 9)).toFixed(2) + 'G';
-      } else {
-        return (k / Math.pow(10, 9)).toFixed(1) + 'G';
-      }
-    } else if (k > Math.pow(10, 12) && k < Math.pow(10, 15)) {
-      if (k > Math.pow(10, 12) && k < Math.pow(10, 13)) {
-        return (k / Math.pow(10, 12)).toFixed(3) + 'T';
-      } else if (k > Math.pow(10, 13) && k < Math.pow(10, 14)) {
-        return (k / Math.pow(10, 12)).toFixed(2) + 'T';
-      } else {
-        return (k / Math.pow(10, 12)).toFixed(1) + 'T';
-      }
-    } else {
-      return k;
-    }
-  };
   const nullPercentData = statistics?.column_statistics?.map((x) =>
     x.statistics
       ?.filter((item) => item.collector === 'nulls_percent')
@@ -301,6 +295,8 @@ const TableColumns = ({
     (x) => x.type_snapshot?.column_type
   );
 
+  const hashData = statistics?.column_statistics?.map((x) => x.column_hash);
+
   const dataArray: MyData[] = [];
 
   if (
@@ -312,7 +308,8 @@ const TableColumns = ({
     minimalValueData &&
     lengthData &&
     scaleData &&
-    typeData
+    typeData &&
+    hashData
   ) {
     const maxLength = Math.max(
       nullPercentData.length,
@@ -323,7 +320,8 @@ const TableColumns = ({
       minimalValueData.length,
       lengthData.length,
       scaleData.length,
-      typeData.length
+      typeData.length,
+      hashData.length
     );
 
     for (let i = 0; i < maxLength; i++) {
@@ -336,6 +334,7 @@ const TableColumns = ({
       const lengthValue = lengthData[i];
       const scaleValue = scaleData[i];
       const typeValue = typeData[i];
+      const hashValue = hashData[i];
 
       const newData: MyData = {
         null_percent: Number(renderValue(nullPercent)),
@@ -346,7 +345,8 @@ const TableColumns = ({
         minimalValue: renderValue(minimalValue),
         length: renderValue(lengthValue),
         scale: renderValue(scaleValue),
-        importedDatatype: renderValue(typeValue)
+        importedDatatype: renderValue(typeValue),
+        columnHash: Number(hashValue)
       };
 
       dataArray.push(newData);
@@ -459,7 +459,6 @@ const TableColumns = ({
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     const sortedResult = [...BoolArray, ...StringArray, ...NumberArray];
     setDataArray1(sortedResult);
-    console.log(sortedResult);
   };
 
   const sortDataByLength = () => {
@@ -597,8 +596,8 @@ const TableColumns = ({
   const sortDataByImportedtype = () => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.detectedDatatypeVar);
-      const nullsCountB = String(b.detectedDatatypeVar);
+      const nullsCountA = String(a.importedDatatype);
+      const nullsCountB = String(b.importedDatatype);
 
       if (nullsCountA && nullsCountB) {
         return sortDirection === 'asc'
@@ -621,10 +620,10 @@ const TableColumns = ({
       case 'Name':
         sortAlphabetictly();
         break;
-      case 'Detected Datatype':
+      case 'Detected data type':
         sortDataByDetectedtype();
         break;
-      case 'Imported Type':
+      case 'Imported type':
         sortDataByImportedtype();
         break;
       case 'Length':
@@ -636,15 +635,15 @@ const TableColumns = ({
       case 'Null count':
         sortDataByNullCount();
         break;
-      case 'Minimal Value':
+      case 'Minimal value':
         sortDataByMinimalValue();
         break;
     }
   };
 
-  const rewriteData = (columnName: string) => {
+  const rewriteData = (hashValue: number) => {
     const columnToDelete = statistics?.column_statistics?.find(
-      (x) => x.column_name === columnName
+      (x) => x.column_hash === hashValue
     );
 
     if (columnToDelete) {
@@ -654,8 +653,6 @@ const TableColumns = ({
         .catch((error) => console.error(error));
     }
   };
-
-  // console.log(loading);
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
@@ -682,7 +679,9 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {cutString(String(column.minimalValue))}
+            {dateToString(String(column.minimalValue))
+              ? dateToString(String(column.minimalValue))
+              : cutString(String(column.minimalValue))}
           </div>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
@@ -692,7 +691,10 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-right px-4 py-2">
           <div className="flex justify-center items-center">
-            <div>{Number(column.null_percent).toFixed(2)}%</div>
+            <div className="flex justify-center items-center">
+              <div>{Number(column.null_percent).toFixed(2)}</div>
+              <div>{isNaN(Number(column.null_percent)) ? '' : '%'}</div>
+            </div>
             <div
               className=" h-3 border border-gray-100 flex ml-5"
               style={{ width: '66.66px' }}
@@ -727,31 +729,40 @@ const TableColumns = ({
           </div>
         </td>
 
-        <td className="border-b border-gray-100 text-right px-4 py-2 flex flex-nowrap justify-end items-end">
-          <IconButton
-            size="sm"
-            className="group bg-teal-500 ml-1.5"
-            onClick={() => collectStatistics(index)}
-          >
-            <SvgIcon name="boxplot" className="w-4 white" />
-            <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
-              Collect statistic
+        <td className="border-b border-gray-100 text-right px-4 py-2">
+          <div className="flex" style={{ justifyContent: 'flex-end' }}>
+            <div>
+              <IconButton
+                size="sm"
+                className={
+                  filteredColumns?.find((x) => x === column.nameOfCol)
+                    ? 'group bg-gray-400 ml-1.5'
+                    : 'group bg-teal-500 ml-1.5'
+                }
+                onClick={() => collectStatistics(column.columnHash)}
+              >
+                <SvgIcon name="boxplot" className="w-4 white" />
+                <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
+                  Collect statistics
+                </div>
+              </IconButton>
             </div>
-          </IconButton>
+            <div>
+              <IconButton
+                size="sm"
+                className="group bg-teal-500 ml-3"
+                onClick={() => {
+                  rewriteData(column.columnHash);
+                }}
+              >
+                <SvgIcon name="delete" className="w-4" />
 
-          <IconButton
-            size="sm"
-            className="group bg-teal-500 ml-3"
-            onClick={() => {
-              rewriteData(column.nameOfCol ? column.nameOfCol : '');
-            }}
-          >
-            <SvgIcon name="delete" className="w-4" />
-
-            <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
-              Click to delete
-            </span>
-          </IconButton>
+                <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
+                  Delete column
+                </span>
+              </IconButton>
+            </div>
+          </div>
         </td>
       </tr>
     );

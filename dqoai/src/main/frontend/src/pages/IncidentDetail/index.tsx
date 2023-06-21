@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import IncidentsLayout from "../../components/IncidentsLayout";
 import SvgIcon from "../../components/SvgIcon";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Input from "../../components/Input";
 import { useSelector } from "react-redux";
 import { getFirstLevelIncidentsState } from "../../redux/selectors";
@@ -26,6 +26,8 @@ import IncidentNavigation from "./IncidentNavigation";
 import Button from "../../components/Button";
 import { HistogramChart } from "./HistogramChart";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
+import { addFirstLevelTab as addSourceFirstLevelTab } from "../../redux/actions/source.actions";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 
 const statusOptions = [
   {
@@ -80,6 +82,7 @@ export const IncidentDetail = () => {
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const { issues, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const history = useHistory();
 
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
@@ -92,7 +95,7 @@ export const IncidentDetail = () => {
       month,
       incidentId
     }));
-  }, []);
+  }, [connection, year, month, incidentId]);
 
   const onChangeIncidentStatus = async (status: IncidentModelStatusEnum) => {
     if (!incidentDetail) return;
@@ -138,6 +141,37 @@ export const IncidentDetail = () => {
     })
   }, [debouncedSearchTerm]);
 
+  const getWarnings = (minimumSeverity?: number) => {
+    if (!minimumSeverity) return 'No warnings';
+    if (minimumSeverity > 1) return `${minimumSeverity} Warnings`;
+
+    return 'Warning';
+  };
+
+  const getSeverity = (highestSeverity?: number) => {
+    if (!highestSeverity || highestSeverity / 3 < 1) return 'No fatals';
+    if (Math.floor(highestSeverity / 3) > 1) return `${highestSeverity} Fatals`;
+
+    return 'Fatal';
+  }
+
+  const goToConfigure = () => {
+    const schema = incidentDetail?.schema || '';
+    const table = incidentDetail?.table || '';
+    dispatch(addSourceFirstLevelTab(CheckTypes.SOURCES, {
+      url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+        CheckTypes.SOURCES,
+        connection,
+        schema,
+        table
+      ),
+      value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(CheckTypes.SOURCES, connection, schema, table),
+      state: {},
+      label: 'Incident Configuration'
+    }));
+    history.push(ROUTES.TABLE_INCIDENTS_NOTIFICATION(CheckTypes.SOURCES, connection, schema, table));
+  };
+
   return (
     <IncidentsLayout>
       <div className="relative">
@@ -147,7 +181,11 @@ export const IncidentDetail = () => {
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">Data quality incident {`${year}/${month}/${incidentId}`}</div>
           </div>
-          <Button label="Configure table notification" color="primary"></Button>
+          <Button
+            label="Configure table notification"
+            color="primary"
+            onClick={goToConfigure}
+          ></Button>
         </div>
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
@@ -224,16 +262,16 @@ export const IncidentDetail = () => {
           </SectionWrapper>
           <SectionWrapper title="Severity statistics">
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Lowest detected issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.minSeverity} Warning</div>
+              <div className="flex-[2]">Minimum issue severity:</div>
+              <div className="flex-[1] text-right font-bold">{getWarnings(incidentDetail?.minimumSeverity)}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Highest detected issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.highestSeverity} Error</div>
+              <div className="flex-[1] text-right font-bold">{getSeverity(incidentDetail?.highestSeverity)}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Total data quality incidents:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount} Fatal</div>
+              <div className="flex-[2]">Total data quality issues:</div>
+              <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount}</div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex-[2]">Issue url:</div>
@@ -306,6 +344,7 @@ export const IncidentDetail = () => {
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
             <IncidentIssueList
+              incidentDetail={incidentDetail}
               filters={filters}
               issues={issues || []}
               onChangeFilter={onChangeFilter}

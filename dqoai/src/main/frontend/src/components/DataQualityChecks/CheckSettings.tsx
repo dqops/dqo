@@ -7,16 +7,16 @@ import Tabs from '../Tabs';
 import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
-import { DataStreamLevelSpec, UICheckModel } from '../../api';
+import { DataStreamLevelSpec, CheckModel } from '../../api';
 import CheckSettingsTab from './CheckSettingsTab';
 
 interface ICheckSettingsProps {
-  check?: UICheckModel;
+  check?: CheckModel;
   activeTab: string;
   setActiveTab: (value: string) => void;
   tabs: ITab[];
   onClose: () => void;
-  onChange: (check: UICheckModel) => void;
+  onChange: (check: CheckModel) => void;
 }
 
 const CheckSettings = ({

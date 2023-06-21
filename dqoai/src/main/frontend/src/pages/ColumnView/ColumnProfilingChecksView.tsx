@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, ColumnStatisticsModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, ColumnStatisticsModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getColumnChecksUi,
-  setUpdatedChecksUi,
-  updateColumnCheckUI
+  getColumnProfilingChecksModel,
+  setUpdatedChecksModel,
+  updateColumnProfilingChecksModel
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient, JobApiClient } from "../../services/apiClient";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
@@ -18,7 +18,7 @@ import ColumnStatisticsView from "./ColumnStatisticsView";
 
 const tabs = [
   {
-    label: 'Statistics',
+    label: 'Basic data statistics',
     value: 'statistics'
   },
   {
@@ -67,7 +67,7 @@ const ColumnProfilingChecksView = ({
 
   useEffect(() => {
     dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
 
@@ -76,7 +76,7 @@ const ColumnProfilingChecksView = ({
       return;
     }
     await dispatch(
-      updateColumnCheckUI(
+      updateColumnProfilingChecksModel(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -87,12 +87,12 @@ const ColumnProfilingChecksView = ({
       )
     );
     await dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
+      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
   };
 
-  const handleChange = (value: UICheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
+  const handleChange = (value: CheckContainerModel) => {
+    dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
   };
 
   const onCollectStatistics = async () => {

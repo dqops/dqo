@@ -1,5 +1,11 @@
 # Installation
 
+DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
+
+If you want to [install DQO directly from Git go to this section](../../working-with-dqo/installation/install-dqo-from-git.md).
+
+You can also [run DQO as Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+
 ## Prerequisites
 
 To use DQO you need:
@@ -38,10 +44,6 @@ To use DQO you need:
     ```
 
 ## Install DQO with pip manager
-
-DQO is available on [PyPi repository](https://pypi.org/project/dqops/). 
-
-If you want to install DQO directly from Git go to [this section](../../working-with-dqo/installation/install-dqo-from-git.md).
 
 1. Create an empty catalogue where you want to install DQO.
 2. Open a terminal, navigate to the created directory, and create a [virtual environment](https://docs.python.org/3/library/venv.html) by running:

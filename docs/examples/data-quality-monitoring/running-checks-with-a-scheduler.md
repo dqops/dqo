@@ -26,12 +26,12 @@ We will set six data quality recurring checks on `bigquery-public-data.thelook_e
     - error: 5
     - fatal: 10
 
-2. [daily_unique_percent](../../checks/column/uniqueness/unique-percent.md) check on `id` column with minimum percent thresholds levels
+2. [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md) check on `id` column with minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
 
-3. [daily_unique_percent](../../checks/column/uniqueness/unique-percent.md) check on `email` column with minimum percent thresholds levels
+3. [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md) check on `email` column with minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
@@ -41,7 +41,7 @@ We will set six data quality recurring checks on `bigquery-public-data.thelook_e
     - error: 98.0%
     - fatal: 95.0%
 
-5.  [daily_string_in_set_percent](../../checks/column/strings/string-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
+5.  [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
@@ -113,7 +113,7 @@ spec:
 In the YAML table configuration file below, the highlighted section indicate that the table-level `daily_table_availability` 
 check is set with schedule_override section. This means that this check will be run every 30 min (*/30 * * * *). 
 
-The `id` column also includes an updated schedule on a daily_unique_percent check. This check will run 15 min past every hour.
+The `id` column also includes an updated schedule on a daily_distinct_percent check. This check will run 15 min past every hour.
 The remaining checks will be run every day at 8:00 AM (0 8 * * *) as indicated in the YAML connection configuration mentioned earlier.
 It is important to keep in mind that the daily_values_in_range_numeric_percent check will not be run since the "disabled:"
 parameter has been set to "true" in the "schedule_override" section.
@@ -146,7 +146,7 @@ spec:
       recurring_checks:
         daily:
           uniqueness:
-            daily_unique_percent:
+            daily_distinct_percent:
               schedule_override:
                 cron_expression: 15 * * * *
               warning:
@@ -170,7 +170,7 @@ spec:
       recurring_checks:
         daily:
           uniqueness:
-            daily_unique_percent:
+            daily_distinct_percent:
               warning:
                 min_percent: 99.0
               error:
@@ -211,7 +211,7 @@ spec:
       recurring_checks:
         daily:
           strings:
-            daily_string_in_set_percent:
+            daily_string_value_in_set_percent:
               parameters:
                 values:
                 - F

@@ -43,7 +43,7 @@ public class CheckResultsTableFactoryImplTests extends BaseTest {
     void createEmptyRuleResultsTable_whenCalled_thenCreatesTableWithRuleRelatedColumns() {
         Table table = this.sut.createEmptyCheckResultsTable("tab");
         Assertions.assertNotNull(table);
-        Assertions.assertEquals(49, table.columnCount());
+        Assertions.assertEquals(57, table.columnCount());
     }
 
     // This is a special test, it produces an empty rule results parquet file in the target/parquet-samples/rule-results-empty.parquet file

@@ -1,0 +1,347 @@
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+
+import attr
+
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.column_accuracy_monthly_partitioned_checks_spec import (
+        ColumnAccuracyMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_anomaly_monthly_partitioned_checks_spec import (
+        ColumnAnomalyMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_bool_monthly_partitioned_checks_spec import (
+        ColumnBoolMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_consistency_monthly_partitioned_checks_spec import (
+        ColumnConsistencyMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_datetime_monthly_partitioned_checks_spec import (
+        ColumnDatetimeMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_integrity_monthly_partitioned_checks_spec import (
+        ColumnIntegrityMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_monthly_partitioned_check_categories_spec_custom import (
+        ColumnMonthlyPartitionedCheckCategoriesSpecCustom,
+    )
+    from ..models.column_nulls_monthly_partitioned_checks_spec import (
+        ColumnNullsMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_numeric_monthly_partitioned_checks_spec import (
+        ColumnNumericMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_pii_monthly_partitioned_checks_spec import (
+        ColumnPiiMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_sql_monthly_partitioned_checks_spec import (
+        ColumnSqlMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_strings_monthly_partitioned_checks_spec import (
+        ColumnStringsMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_uniqueness_monthly_partitioned_checks_spec import (
+        ColumnUniquenessMonthlyPartitionedChecksSpec,
+    )
+
+
+T = TypeVar("T", bound="ColumnMonthlyPartitionedCheckCategoriesSpec")
+
+
+@attr.s(auto_attribs=True)
+class ColumnMonthlyPartitionedCheckCategoriesSpec:
+    """
+    Attributes:
+        custom (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
+            are check names.
+        nulls (Union[Unset, ColumnNullsMonthlyPartitionedChecksSpec]):
+        numeric (Union[Unset, ColumnNumericMonthlyPartitionedChecksSpec]):
+        strings (Union[Unset, ColumnStringsMonthlyPartitionedChecksSpec]):
+        uniqueness (Union[Unset, ColumnUniquenessMonthlyPartitionedChecksSpec]):
+        datetime_ (Union[Unset, ColumnDatetimeMonthlyPartitionedChecksSpec]):
+        pii (Union[Unset, ColumnPiiMonthlyPartitionedChecksSpec]):
+        sql (Union[Unset, ColumnSqlMonthlyPartitionedChecksSpec]):
+        bool_ (Union[Unset, ColumnBoolMonthlyPartitionedChecksSpec]):
+        integrity (Union[Unset, ColumnIntegrityMonthlyPartitionedChecksSpec]):
+        accuracy (Union[Unset, ColumnAccuracyMonthlyPartitionedChecksSpec]):
+        consistency (Union[Unset, ColumnConsistencyMonthlyPartitionedChecksSpec]):
+        anomaly (Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]):
+    """
+
+    custom: Union[Unset, "ColumnMonthlyPartitionedCheckCategoriesSpecCustom"] = UNSET
+    nulls: Union[Unset, "ColumnNullsMonthlyPartitionedChecksSpec"] = UNSET
+    numeric: Union[Unset, "ColumnNumericMonthlyPartitionedChecksSpec"] = UNSET
+    strings: Union[Unset, "ColumnStringsMonthlyPartitionedChecksSpec"] = UNSET
+    uniqueness: Union[Unset, "ColumnUniquenessMonthlyPartitionedChecksSpec"] = UNSET
+    datetime_: Union[Unset, "ColumnDatetimeMonthlyPartitionedChecksSpec"] = UNSET
+    pii: Union[Unset, "ColumnPiiMonthlyPartitionedChecksSpec"] = UNSET
+    sql: Union[Unset, "ColumnSqlMonthlyPartitionedChecksSpec"] = UNSET
+    bool_: Union[Unset, "ColumnBoolMonthlyPartitionedChecksSpec"] = UNSET
+    integrity: Union[Unset, "ColumnIntegrityMonthlyPartitionedChecksSpec"] = UNSET
+    accuracy: Union[Unset, "ColumnAccuracyMonthlyPartitionedChecksSpec"] = UNSET
+    consistency: Union[Unset, "ColumnConsistencyMonthlyPartitionedChecksSpec"] = UNSET
+    anomaly: Union[Unset, "ColumnAnomalyMonthlyPartitionedChecksSpec"] = UNSET
+    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        custom: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom, Unset):
+            custom = self.custom.to_dict()
+
+        nulls: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.nulls, Unset):
+            nulls = self.nulls.to_dict()
+
+        numeric: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.numeric, Unset):
+            numeric = self.numeric.to_dict()
+
+        strings: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.strings, Unset):
+            strings = self.strings.to_dict()
+
+        uniqueness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.uniqueness, Unset):
+            uniqueness = self.uniqueness.to_dict()
+
+        datetime_: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.datetime_, Unset):
+            datetime_ = self.datetime_.to_dict()
+
+        pii: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.pii, Unset):
+            pii = self.pii.to_dict()
+
+        sql: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.sql, Unset):
+            sql = self.sql.to_dict()
+
+        bool_: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.bool_, Unset):
+            bool_ = self.bool_.to_dict()
+
+        integrity: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.integrity, Unset):
+            integrity = self.integrity.to_dict()
+
+        accuracy: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.accuracy, Unset):
+            accuracy = self.accuracy.to_dict()
+
+        consistency: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.consistency, Unset):
+            consistency = self.consistency.to_dict()
+
+        anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.anomaly, Unset):
+            anomaly = self.anomaly.to_dict()
+
+        field_dict: Dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if custom is not UNSET:
+            field_dict["custom"] = custom
+        if nulls is not UNSET:
+            field_dict["nulls"] = nulls
+        if numeric is not UNSET:
+            field_dict["numeric"] = numeric
+        if strings is not UNSET:
+            field_dict["strings"] = strings
+        if uniqueness is not UNSET:
+            field_dict["uniqueness"] = uniqueness
+        if datetime_ is not UNSET:
+            field_dict["datetime"] = datetime_
+        if pii is not UNSET:
+            field_dict["pii"] = pii
+        if sql is not UNSET:
+            field_dict["sql"] = sql
+        if bool_ is not UNSET:
+            field_dict["bool"] = bool_
+        if integrity is not UNSET:
+            field_dict["integrity"] = integrity
+        if accuracy is not UNSET:
+            field_dict["accuracy"] = accuracy
+        if consistency is not UNSET:
+            field_dict["consistency"] = consistency
+        if anomaly is not UNSET:
+            field_dict["anomaly"] = anomaly
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_accuracy_monthly_partitioned_checks_spec import (
+            ColumnAccuracyMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_anomaly_monthly_partitioned_checks_spec import (
+            ColumnAnomalyMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_bool_monthly_partitioned_checks_spec import (
+            ColumnBoolMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_consistency_monthly_partitioned_checks_spec import (
+            ColumnConsistencyMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_datetime_monthly_partitioned_checks_spec import (
+            ColumnDatetimeMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_integrity_monthly_partitioned_checks_spec import (
+            ColumnIntegrityMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_monthly_partitioned_check_categories_spec_custom import (
+            ColumnMonthlyPartitionedCheckCategoriesSpecCustom,
+        )
+        from ..models.column_nulls_monthly_partitioned_checks_spec import (
+            ColumnNullsMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_numeric_monthly_partitioned_checks_spec import (
+            ColumnNumericMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_pii_monthly_partitioned_checks_spec import (
+            ColumnPiiMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_sql_monthly_partitioned_checks_spec import (
+            ColumnSqlMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_strings_monthly_partitioned_checks_spec import (
+            ColumnStringsMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_uniqueness_monthly_partitioned_checks_spec import (
+            ColumnUniquenessMonthlyPartitionedChecksSpec,
+        )
+
+        d = src_dict.copy()
+        _custom = d.pop("custom", UNSET)
+        custom: Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecCustom]
+        if isinstance(_custom, Unset):
+            custom = UNSET
+        else:
+            custom = ColumnMonthlyPartitionedCheckCategoriesSpecCustom.from_dict(
+                _custom
+            )
+
+        _nulls = d.pop("nulls", UNSET)
+        nulls: Union[Unset, ColumnNullsMonthlyPartitionedChecksSpec]
+        if isinstance(_nulls, Unset):
+            nulls = UNSET
+        else:
+            nulls = ColumnNullsMonthlyPartitionedChecksSpec.from_dict(_nulls)
+
+        _numeric = d.pop("numeric", UNSET)
+        numeric: Union[Unset, ColumnNumericMonthlyPartitionedChecksSpec]
+        if isinstance(_numeric, Unset):
+            numeric = UNSET
+        else:
+            numeric = ColumnNumericMonthlyPartitionedChecksSpec.from_dict(_numeric)
+
+        _strings = d.pop("strings", UNSET)
+        strings: Union[Unset, ColumnStringsMonthlyPartitionedChecksSpec]
+        if isinstance(_strings, Unset):
+            strings = UNSET
+        else:
+            strings = ColumnStringsMonthlyPartitionedChecksSpec.from_dict(_strings)
+
+        _uniqueness = d.pop("uniqueness", UNSET)
+        uniqueness: Union[Unset, ColumnUniquenessMonthlyPartitionedChecksSpec]
+        if isinstance(_uniqueness, Unset):
+            uniqueness = UNSET
+        else:
+            uniqueness = ColumnUniquenessMonthlyPartitionedChecksSpec.from_dict(
+                _uniqueness
+            )
+
+        _datetime_ = d.pop("datetime", UNSET)
+        datetime_: Union[Unset, ColumnDatetimeMonthlyPartitionedChecksSpec]
+        if isinstance(_datetime_, Unset):
+            datetime_ = UNSET
+        else:
+            datetime_ = ColumnDatetimeMonthlyPartitionedChecksSpec.from_dict(_datetime_)
+
+        _pii = d.pop("pii", UNSET)
+        pii: Union[Unset, ColumnPiiMonthlyPartitionedChecksSpec]
+        if isinstance(_pii, Unset):
+            pii = UNSET
+        else:
+            pii = ColumnPiiMonthlyPartitionedChecksSpec.from_dict(_pii)
+
+        _sql = d.pop("sql", UNSET)
+        sql: Union[Unset, ColumnSqlMonthlyPartitionedChecksSpec]
+        if isinstance(_sql, Unset):
+            sql = UNSET
+        else:
+            sql = ColumnSqlMonthlyPartitionedChecksSpec.from_dict(_sql)
+
+        _bool_ = d.pop("bool", UNSET)
+        bool_: Union[Unset, ColumnBoolMonthlyPartitionedChecksSpec]
+        if isinstance(_bool_, Unset):
+            bool_ = UNSET
+        else:
+            bool_ = ColumnBoolMonthlyPartitionedChecksSpec.from_dict(_bool_)
+
+        _integrity = d.pop("integrity", UNSET)
+        integrity: Union[Unset, ColumnIntegrityMonthlyPartitionedChecksSpec]
+        if isinstance(_integrity, Unset):
+            integrity = UNSET
+        else:
+            integrity = ColumnIntegrityMonthlyPartitionedChecksSpec.from_dict(
+                _integrity
+            )
+
+        _accuracy = d.pop("accuracy", UNSET)
+        accuracy: Union[Unset, ColumnAccuracyMonthlyPartitionedChecksSpec]
+        if isinstance(_accuracy, Unset):
+            accuracy = UNSET
+        else:
+            accuracy = ColumnAccuracyMonthlyPartitionedChecksSpec.from_dict(_accuracy)
+
+        _consistency = d.pop("consistency", UNSET)
+        consistency: Union[Unset, ColumnConsistencyMonthlyPartitionedChecksSpec]
+        if isinstance(_consistency, Unset):
+            consistency = UNSET
+        else:
+            consistency = ColumnConsistencyMonthlyPartitionedChecksSpec.from_dict(
+                _consistency
+            )
+
+        _anomaly = d.pop("anomaly", UNSET)
+        anomaly: Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]
+        if isinstance(_anomaly, Unset):
+            anomaly = UNSET
+        else:
+            anomaly = ColumnAnomalyMonthlyPartitionedChecksSpec.from_dict(_anomaly)
+
+        column_monthly_partitioned_check_categories_spec = cls(
+            custom=custom,
+            nulls=nulls,
+            numeric=numeric,
+            strings=strings,
+            uniqueness=uniqueness,
+            datetime_=datetime_,
+            pii=pii,
+            sql=sql,
+            bool_=bool_,
+            integrity=integrity,
+            accuracy=accuracy,
+            consistency=consistency,
+            anomaly=anomaly,
+        )
+
+        column_monthly_partitioned_check_categories_spec.additional_properties = d
+        return column_monthly_partitioned_check_categories_spec
+
+    @property
+    def additional_keys(self) -> List[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

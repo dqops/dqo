@@ -18,18 +18,15 @@ package ai.dqo.rest.controllers;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.metadata.definitions.checks.CheckDefinitionList;
 import ai.dqo.metadata.definitions.checks.CheckDefinitionWrapper;
-import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
-import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.CheckBasicFolderModel;
-import ai.dqo.rest.models.metadata.CheckBasicModel;
-import ai.dqo.rest.models.metadata.CheckModel;
-import ai.dqo.rest.models.metadata.RuleBasicFolderModel;
+import ai.dqo.rest.models.metadata.CheckSpecFolderBasicModel;
+import ai.dqo.rest.models.metadata.CheckSpecBasicModel;
+import ai.dqo.rest.models.metadata.CheckSpecModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -72,15 +69,15 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Model of the check with specific check name.
      */
-    @GetMapping("/checks/{fullCheckName}")
-    @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckModel.class)
+    @GetMapping(value = "/checks/{fullCheckName}", produces = "application/json")
+    @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckSpecModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckModel.class),
+            @ApiResponse(code = 200, message = "OK", response = CheckSpecModel.class),
             @ApiResponse(code = 404, message = "Check name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckModel>> getCheck(
+    public ResponseEntity<Mono<CheckSpecModel>> getCheck(
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
         if (Strings.isNullOrEmpty(fullCheckName)) {
@@ -103,18 +100,18 @@ public class CheckController {
 
         boolean isCustom = userCheckDefinitionWrapper != null;
         boolean isBuiltIn = builtinCheckDefinitionWrapper != null;
-        CheckModel checkModel = new CheckModel(effectiveCheckDefinition, isCustom, isBuiltIn);
+        CheckSpecModel checkSpecModel = new CheckSpecModel(effectiveCheckDefinition, isCustom, isBuiltIn);
 
-        return new ResponseEntity<>(Mono.just(checkModel), HttpStatus.OK);
+        return new ResponseEntity<>(Mono.just(checkSpecModel), HttpStatus.OK);
     }
 
     /**
      * Creates (adds) a new custom check given the check information (a sensor and a rule pair).
-     * @param checkModel Check model to save.
+     * @param checkSpecModel Check model to save.
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PostMapping("/checks/{fullCheckName}")
+    @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -126,8 +123,8 @@ public class CheckController {
     })
     public ResponseEntity<Mono<?>> createCheck(
             @ApiParam("Full check name") @PathVariable String fullCheckName,
-            @ApiParam("Check model") @RequestBody CheckModel checkModel) {
-        if (checkModel == null || Strings.isNullOrEmpty(fullCheckName)) {
+            @ApiParam("Check model") @RequestBody CheckSpecModel checkSpecModel) {
+        if (checkSpecModel == null || Strings.isNullOrEmpty(fullCheckName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -141,8 +138,8 @@ public class CheckController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(checkModel.getRuleName());
-        checkDefinitionWrapper.setSpec(checkModel.toCheckDefinitionSpec());
+        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(checkSpecModel.getRuleName());
+        checkDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
@@ -150,11 +147,11 @@ public class CheckController {
 
     /**
      * Updates an existing check, creating possibly a custom check.
-     * @param checkModel Check definition model.
+     * @param checkSpecModel Check definition model.
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PutMapping("/checks/{fullCheckName}")
+    @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -165,10 +162,10 @@ public class CheckController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateCheck(
-            @ApiParam("List of check definitions") @RequestBody CheckModel checkModel,
+            @ApiParam("List of check definitions") @RequestBody CheckSpecModel checkSpecModel,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
-        if (Strings.isNullOrEmpty(fullCheckName) || checkModel == null) {
+        if (Strings.isNullOrEmpty(fullCheckName) || checkSpecModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -189,7 +186,7 @@ public class CheckController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        if (checkModel.equalsBuiltInCheck(builtinCheckDefinitionWrapper)) {
+        if (checkSpecModel.equalsBuiltInCheck(builtinCheckDefinitionWrapper)) {
             if (existingUserCheckDefinitionWrapper != null) {
                 existingUserCheckDefinitionWrapper.markForDeletion(); // remove customization
             }
@@ -201,10 +198,10 @@ public class CheckController {
 
         if (existingUserCheckDefinitionWrapper == null) {
             CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
-            checkDefinitionWrapper.setSpec(checkModel.toCheckDefinitionSpec());
+            checkDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
         }
         else {
-            existingUserCheckDefinitionWrapper.setSpec(checkModel.toCheckDefinitionSpec());
+            existingUserCheckDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
         }
 
         userHomeContext.flush();
@@ -217,7 +214,7 @@ public class CheckController {
      * @param fullCheckName  Full check name.
      * @return Empty response.
      */
-    @DeleteMapping("/checks/{fullCheckName}")
+    @DeleteMapping(value = "/checks/{fullCheckName}", produces = "application/json")
     @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -252,18 +249,18 @@ public class CheckController {
      * Returns all combined check folder model.
      * @return check basic tree model.
      */
-    @GetMapping("/definitions/checks")
+    @GetMapping(value = "/definitions/checks", produces = "application/json")
     @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.",
-            response = CheckBasicFolderModel.class)
+            response = CheckSpecFolderBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckBasicFolderModel.class),
+            @ApiResponse(code = 200, message = "OK", response = CheckSpecFolderBasicModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Mono<CheckBasicFolderModel>> getCheckFolderTree() {
-        CheckBasicFolderModel checkBasicFolderModel = createCheckTreeModel();
+    public ResponseEntity<Mono<CheckSpecFolderBasicModel>> getCheckFolderTree() {
+        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel();
 
-        return new ResponseEntity<>(Mono.just(checkBasicFolderModel), HttpStatus.OK);
+        return new ResponseEntity<>(Mono.just(checkSpecFolderBasicModel), HttpStatus.OK);
     }
 
     /**
@@ -271,8 +268,8 @@ public class CheckController {
      * @return Check tree.
      */
     @NotNull
-    private CheckBasicFolderModel createCheckTreeModel() {
-        CheckBasicFolderModel checkBasicFolderModel = new CheckBasicFolderModel();
+    private CheckSpecFolderBasicModel createCheckTreeModel() {
+        CheckSpecFolderBasicModel checkSpecFolderBasicModel = new CheckSpecFolderBasicModel();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -288,31 +285,31 @@ public class CheckController {
 
         for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
             String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
-            checkBasicFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome));
+            checkSpecFolderBasicModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome));
         }
 
         for (CheckDefinitionWrapper checkDefinitionWrapperDqoHome : checkDefinitionWrapperListDqoHome) {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
-            checkBasicFolderModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true);
+            checkSpecFolderBasicModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true);
         }
-        return checkBasicFolderModel;
+        return checkSpecFolderBasicModel;
     }
 
     /**
      * Returns a flat list of all checks
      * @return List of all checks
      */
-    @GetMapping("/checks")
+    @GetMapping(value = "/checks", produces = "application/json")
     @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
-            response = CheckBasicModel[].class)
+            response = CheckSpecBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = CheckSpecBasicModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Flux<CheckBasicModel>> getAllChecks() {
-        CheckBasicFolderModel checkBasicFolderModel = createCheckTreeModel();
-        List<CheckBasicModel> allChecks = checkBasicFolderModel.getAllChecks();
+    public ResponseEntity<Flux<CheckSpecBasicModel>> getAllChecks() {
+        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel();
+        List<CheckSpecBasicModel> allChecks = checkSpecFolderBasicModel.getAllChecks();
 
         return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
     }

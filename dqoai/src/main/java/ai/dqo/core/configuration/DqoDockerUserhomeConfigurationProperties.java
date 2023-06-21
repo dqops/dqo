@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "dqo.docker.userhome")
 @EqualsAndHashCode(callSuper = false)
-public class DqoDockerUserhomeConfigurationProperties {
+public class DqoDockerUserhomeConfigurationProperties implements Cloneable {
 
     private boolean allowUnmounted = false;
 
@@ -44,5 +44,19 @@ public class DqoDockerUserhomeConfigurationProperties {
      */
     public void setAllowUnmounted(boolean allowUnmounted) {
         this.allowUnmounted = allowUnmounted;
+    }
+
+    /**
+     * Clones the current object.
+     * @return Cloned instance.
+     */
+    @Override
+    public DqoDockerUserhomeConfigurationProperties clone() {
+        try {
+            return (DqoDockerUserhomeConfigurationProperties)super.clone();
+        }
+        catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

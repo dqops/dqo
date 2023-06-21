@@ -18,6 +18,7 @@ package ai.dqo.cli;
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.connectors.jdbc.JdbcTypeColumnMapping;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -26,6 +27,7 @@ import ai.dqo.core.jobqueue.ParentDqoJobQueue;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionService;
+import ai.dqo.data.storage.TablesawParquetSupportFix;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import ai.dqo.rest.server.LocalUrlAddresses;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
@@ -140,6 +142,9 @@ public class CliInitializerImpl implements CliInitializer {
      */
     @Override
     public void initializeApp(String[] args) {
+        TablesawParquetSupportFix.ensureInitialized();
+        JdbcTypeColumnMapping.ensureInitializedJdbc();
+
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
         this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
         this.defaultTimeZoneProvider.invalidate();

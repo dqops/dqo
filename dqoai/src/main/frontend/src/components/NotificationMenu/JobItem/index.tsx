@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -25,7 +25,7 @@ const JobItem = ({
   job: DqoJobHistoryEntryModel;
   notifnumber?: number;
 }) => {
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const { errors } = useError();
   const dispatch = useActionDispatch();
 
@@ -41,14 +41,15 @@ const JobItem = ({
     dispatch(reduceCounter(true, sizeOfNot));
   };
 
+  useEffect(() => {
+    firstMatchingItem();
+  }, []);
+
   const data = useMemo(() => {
-    const jobsData = jobs?.jobs
-      ? jobs?.jobs
-          .sort((a, b) => {
-            return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-          })
-          .map((item) => ({ type: 'job', item }))
-      : [];
+    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
+      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+    })
+    .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
@@ -62,7 +63,7 @@ const JobItem = ({
     });
 
     return newData;
-  }, [jobs, errors]);
+  }, [job_dictionary_state, errors]);
 
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -101,6 +102,15 @@ const JobItem = ({
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
   };
+  const firstMatchingItem = (): boolean => {
+    for (const x of data) {
+      if (x.item.jobId?.parentJobId?.jobId === job.jobId?.jobId) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   return (
     <Accordion open={open}>
@@ -111,7 +121,7 @@ const JobItem = ({
         >
           <div className="flex justify-between items-center text-sm w-full text-gray-700">
             <div className="flex space-x-1 items-center">
-              <div>{job.jobType}</div>
+              <div>{job.jobType || (job as any).updatedModel?.jobType}</div>
               {renderStatus()}
             </div>
             <div className="flex items-center gap-x-2">
@@ -149,14 +159,6 @@ const JobItem = ({
               </td>
             </tr>
 
-            {job?.errorMessage && (
-              <>
-                <tr>
-                  <td className="px-2 capitalize">Error Message</td>
-                  <td className="px-2 max-w-76">{job?.errorMessage}</td>
-                </tr>
-              </>
-            )}
             {job?.parameters?.runChecksParameters?.checkSearchFilters &&
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters
@@ -243,7 +245,16 @@ const JobItem = ({
                 </tr>
               </>
             )}
-            {job.jobId?.parentJobId?.jobId === undefined ? (
+            {job?.errorMessage && (
+              <>
+                <tr className="flex flex-col w-108">
+                  <td className="capitalize">Error Message:</td>
+                  <td className="px-2 ">{job?.errorMessage}</td>
+                </tr>
+              </>
+            )}
+            {job.jobId?.parentJobId?.jobId === undefined &&
+            firstMatchingItem() ? (
               <Accordion open={open2} className="min-w-100">
                 <AccordionHeader
                   onClick={() => {

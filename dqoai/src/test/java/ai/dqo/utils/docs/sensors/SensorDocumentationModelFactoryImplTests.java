@@ -19,8 +19,9 @@ import ai.dqo.BaseTest;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMatchRegexPercentSensorParametersSpec;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,7 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
     void setUp() {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         this.sut = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
     }
@@ -56,9 +57,11 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertEquals("column/strings/string_match_regex_percent", sensorDocumentation.getFullSensorName());
 
         Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
-        Assertions.assertEquals(5,sensorDocumentation.getSqlTemplates().keySet().size());
-        Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream().anyMatch(k->Objects.equals("bigquery", k)));
-        Assertions.assertEquals(5,sensorDocumentation.getSqlTemplates().values().size());
+        Assertions.assertEquals(6,sensorDocumentation.getSqlTemplates().keySet().size());
+        Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream()
+                .map(ProviderTypeModel::getProviderTypeName)
+                .anyMatch(provider -> provider.equals("bigquery")));
+        Assertions.assertEquals(6,sensorDocumentation.getSqlTemplates().values().size());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());

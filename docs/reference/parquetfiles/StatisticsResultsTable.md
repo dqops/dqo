@@ -17,6 +17,8 @@ Constants with the column names of the &quot;statistics&quot; table that contain
  | result_date_time | Column name for a statistics collector result when it is a local date time value. | local_date_time |
  | result_instant | Column name for a statistics collector result when it is an absolute (UTC timezone) instant. | instant |
  | result_time | Column name for a statistics collector result when it is time value. | local_time |
+ | sample_index | The index of the sample for statistics collector that collect data samples. | integer |
+ | sample_count | The count of the samples for statistics collector that collect data samples. | long |
  | scope | Column name for string column that says if the result is for a whole table (&quot;table&quot;) or for each data stream separately (&quot;data_stream&quot;) | text |
  | stream_level_1 | Column name for the data stream. | text |
  | stream_level_2 | Column name for the data stream. | text |
@@ -29,6 +31,7 @@ Constants with the column names of the &quot;statistics&quot; table that contain
  | stream_level_9 | Column name for the data stream. | text |
  | data_stream_hash | Column name for a data stream hash, it is a hash of the data stream level names. | long |
  | data_stream_name | Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
+ | data_stream_mapping_name | The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check. | text |
  | connection_hash | Column name for a connection hash. | long |
  | connection_name | Column name for a connection name. | text |
  | provider | Column name for a provider name. | text |
@@ -47,3 +50,7 @@ Constants with the column names of the &quot;statistics&quot; table that contain
  | executed_at | Column name for a statistics collector executed at timestamp. | instant |
  | duration_ms | Column name for a sensor duration in milliseconds. | integer |
  | error_message | Column name for an optional error message when the status is &#x27;error&#x27;. | text |
+ | created_at | The timestamp when the row was created at. | instant |
+ | updated_at | The timestamp when the row was updated at. | instant |
+ | created_by | The login of the user that created the row. | text |
+ | updated_by | The login of the user that updated the row. | text |

@@ -123,12 +123,13 @@ export const IncidentConnection = () => {
   const columns = [
     {
       label: 'Resolution status',
-      className: 'text-left py-2 px-4',
+      className: 'text-left py-2 px-4 text-sm',
       value: 'status',
       render: (value: string, row: IncidentModel) => {
         return (
           <div className="flex items-center">
             <Select
+              className="!text-sm"
               value={value}
               options={statusOptions}
               onChange={(status) => onChangeIncidentStatus(row, status)}
@@ -140,7 +141,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
-          className="justify-end"
+          className="justify-end text-sm"
           label="Failed checks count"
           order="failedChecksCount"
           direction={filters.sortBy === 'failedChecksCount' ? filters.sortDirection : undefined}
@@ -159,6 +160,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
+          className="text-sm"
           label="Table"
           order="table"
           direction={filters.sortBy === 'table' ? filters.sortDirection : undefined}
@@ -172,6 +174,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
+          className="text-sm"
           label="Checks"
           order="checkName"
           direction={filters.sortBy === 'checkName' ? filters.sortDirection : undefined}
@@ -195,6 +198,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
+          className="text-sm"
           label="First seen"
           order="firstSeen"
           direction={filters.sortBy === 'firstSeen' ? filters.sortDirection : undefined}
@@ -214,6 +218,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
+          className="text-sm"
           label="Last seen"
           order="lastSeen"
           direction={filters.sortBy === 'lastSeen' ? filters.sortDirection : undefined}
@@ -232,7 +237,7 @@ export const IncidentConnection = () => {
     },
     {
       label: 'Issue Link',
-      className: 'text-center issueUrl py-2 px-4',
+      className: 'text-center issueUrl py-2 px-4 text-sm',
       value: 'issueUrl',
       render: (value: string, row: IncidentModel) => {
         return (

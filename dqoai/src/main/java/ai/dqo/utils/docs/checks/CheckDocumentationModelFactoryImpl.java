@@ -24,6 +24,8 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.mysql.MysqlConnectionProvider;
 import ai.dqo.connectors.mysql.MysqlParametersSpec;
+import ai.dqo.connectors.oracle.OracleConnectionProvider;
+import ai.dqo.connectors.oracle.OracleParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
@@ -35,8 +37,8 @@ import ai.dqo.connectors.sqlserver.SqlServerParametersSpec;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderParameters;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderService;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderService;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.groupings.DataStreamLevelSpec;
@@ -44,19 +46,20 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.HomeType;
-import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
 import ai.dqo.metadata.userhome.UserHomeImpl;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.UICheckModel;
-import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
+import ai.dqo.services.check.mapping.ModelToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.models.CheckContainerModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
+import ai.dqo.services.check.mapping.models.QualityCategoryModel;
 import ai.dqo.services.check.matching.SimilarCheckMatchingService;
 import ai.dqo.services.check.matching.SimilarCheckModel;
 import ai.dqo.services.check.matching.SimilarChecksContainer;
 import ai.dqo.services.check.matching.SimilarChecksGroup;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import ai.dqo.utils.docs.rules.RuleDocumentationModelFactory;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModel;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactory;
@@ -83,6 +86,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
         put("availability", "Checks whether the table is accessible and available for use.");
         put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
+        put("schema", "Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.");
     }};
 
     private static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
@@ -96,6 +100,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         put("bool", "Calculates the percentage of data in a Boolean format.");
         put("integrity", "Checks the referential integrity of a column against a column in another table.");
         put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
+        put("schema", "Detects schema drifts such as a column is missing or the data type has changed.");
     }};
 
     private static final CommentFormatter commentFormatter = new CommentFormatter();
@@ -103,7 +108,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private SimilarCheckMatchingService similarCheckMatchingService;
     private SensorDocumentationModelFactory sensorDocumentationModelFactory;
     private RuleDocumentationModelFactory ruleDocumentationModelFactory;
-    private UiToSpecCheckMappingService uiToSpecCheckMappingService;
+    private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private YamlSerializer yamlSerializer;
     private JinjaTemplateRenderService jinjaTemplateRenderService;
 
@@ -112,7 +117,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
      * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
      * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
-     * @param uiToSpecCheckMappingService UI check model to specification adapter that can generate a sample usage for us.
+     * @param modelToSpecCheckMappingService UI check model to specification adapter that can generate a sample usage for us.
      * @param yamlSerializer Yaml serializer, used to render the table yaml files with a sample usage.
      * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
      */
@@ -120,13 +125,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     public CheckDocumentationModelFactoryImpl(SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
-                                              UiToSpecCheckMappingService uiToSpecCheckMappingService,
+                                              ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
                                               JinjaTemplateRenderService jinjaTemplateRenderService) {
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
-        this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
+        this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.yamlSerializer = yamlSerializer;
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
     }
@@ -278,7 +283,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                                                                 TableSpec tableSpec,
                                                                 SensorDocumentationModel sensorDocumentation) {
         CheckDocumentationModel checkDocumentationModel = new CheckDocumentationModel();
-        UICheckModel checkModel = similarCheckModel.getCheckModel();
+        CheckModel checkModel = similarCheckModel.getCheckModel();
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
         checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
@@ -312,9 +317,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             columnSpec.setColumnCheckRootContainer(checkRootContainer);
         }
 
-        UICheckContainerModel allChecksModel = new UICheckContainerModel();
-        UIQualityCategoryModel uiCategoryModel = new UIQualityCategoryModel(similarCheckModel.getCategory());
-        UICheckModel sampleCheckModel = checkModel.cloneForUpdate();
+        CheckContainerModel allChecksModel = new CheckContainerModel();
+        QualityCategoryModel uiCategoryModel = new QualityCategoryModel(similarCheckModel.getCategory());
+        CheckModel sampleCheckModel = checkModel.cloneForUpdate();
         sampleCheckModel.setConfigured(true);
         if (sampleCheckModel.getRule().getError() != null) {
             sampleCheckModel.getRule().getError().setConfigured(true);
@@ -328,7 +333,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         sampleCheckModel.applySampleValues();
         uiCategoryModel.getChecks().add(sampleCheckModel);
         allChecksModel.getCategories().add(uiCategoryModel);
-        this.uiToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
         if (checkCategoryContainer == null) {
@@ -345,8 +350,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         checkDocumentationModel.setCheckSample(createCheckSample(yamlSample, similarCheckModel, checkDocumentationModel));
 
+        Comparator<CheckProviderRenderedSqlDocumentationModel> checkProviderRenderedSqlDocumentationModelComparator =
+                Comparator.comparing(model -> model.getProviderTypeModel().getProviderTypeDisplayName().toLowerCase());
+
         List<CheckProviderRenderedSqlDocumentationModel> providerSamples = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
-        providerSamples.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        providerSamples.sort(checkProviderRenderedSqlDocumentationModelComparator);
         checkDocumentationModel.setProviderTemplates(providerSamples);
 
         trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
@@ -363,7 +371,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
         List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
-        providerSamplesDataStream.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        providerSamplesDataStream.sort(checkProviderRenderedSqlDocumentationModelComparator);
         checkDocumentationModel.setProviderTemplatesDataStreams(providerSamplesDataStream);
 
 
@@ -460,7 +468,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             ProviderType providerType = providerSensorDefinitionWrapper.getProvider();
 
             CheckProviderRenderedSqlDocumentationModel providerDocModel = new CheckProviderRenderedSqlDocumentationModel();
-            providerDocModel.setProviderType(providerType);
+            providerDocModel.setProviderTypeModel(ProviderTypeModel.fromProviderType(providerType));
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
             if (sqlTemplate != null) {
                 providerDocModel.setJinjaTemplate(sqlTemplate);
@@ -489,6 +497,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 connectionSpec.setMysql(new MysqlParametersSpec() {{
                     setDatabase("your_my_sql_database");
                 }});
+                connectionSpec.setOracle(new OracleParametersSpec() {{
+                    setDatabase("your_oracle_database");
+                }});
                 connectionSpec.setProviderType(providerType);
 
                 TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
@@ -508,7 +519,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         null,
                         tableSpec.getDataStreams().getFirstDataStreamMapping(),
                         checkSpec.getParameters(),
-                        providerDialectSettings
+                        providerDialectSettings,
+                        new CheckSearchFilters()
                 );
 
                 JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
@@ -548,6 +560,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return SqlServerConnectionProvider.DIALECT_SETTINGS;
             case mysql:
                 return MysqlConnectionProvider.DIALECT_SETTINGS;
+            case oracle:
+                return OracleConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

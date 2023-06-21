@@ -130,9 +130,9 @@
 
 {% macro date_trunc_utc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
-        DATE_TRUNC('year', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+        DATE_TRUNC('year', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
     {%- elif part == 'quarter' -%}
-        DATE_TRUNC('quarter', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+        DATE_TRUNC('quarter', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
     {%- elif part == 'month' -%}
         DATE_TRUNC('month', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
     {%- elif part == 'week' -%}
@@ -144,7 +144,7 @@
             (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
         {%- endif -%}
     {%- elif part == 'hour' -%}
-        DATE_TRUNC('hour', (CAST({{value}} AS DATETIME)|| ' 00:00:00'):: TIMESTAMP
+        DATE_TRUNC('hour', CAST({{value}} AS DATETIME):: TIMESTAMP)
     {%- elif part == 'millisecond' -%}
         CAST({{value}} AS timestamp)
     {%- else -%}

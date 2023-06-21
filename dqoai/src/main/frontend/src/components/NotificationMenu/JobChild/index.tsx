@@ -56,14 +56,11 @@ const JobChild = ({
 
   return (
     <Accordion open={open}>
-      {(job.jobId?.parentJobId?.jobId === parentId &&
-        succeededCounter &&
-        succeededCounter < 30) ||
-      job.status !== 'succeeded' ? (
+      {job.jobId?.parentJobId?.jobId === parentId ? (
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
             <div className="flex flex-wrap space-x-1 items-center">
-              <div>{job.jobType}</div>
+              <div className="px-2">{job.jobType}</div>
 
               {renderStatus()}
             </div>
@@ -102,12 +99,6 @@ const JobChild = ({
               </td>
             </tr>
 
-            {job?.errorMessage && (
-              <tr>
-                <td className="px-2 capitalize">Error Message</td>
-                <td className="px-2 max-w-76">{job?.errorMessage}</td>
-              </tr>
-            )}
             {job?.parameters?.runChecksParameters?.checkSearchFilters &&
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters
@@ -197,6 +188,12 @@ const JobChild = ({
                   </td>
                 </tr>
               </>
+            )}
+            {job?.errorMessage && (
+              <tr>
+                <td className="px-2 capitalize">Error Message</td>
+                <td className="px-2 max-w-76">{job?.errorMessage}</td>
+              </tr>
             )}
           </tbody>
         </table>

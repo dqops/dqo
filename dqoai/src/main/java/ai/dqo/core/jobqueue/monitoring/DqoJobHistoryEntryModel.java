@@ -18,6 +18,7 @@ package ai.dqo.core.jobqueue.monitoring;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
 import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,6 +36,9 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
     private DqoJobStatus status;
     private String errorMessage;
     private Instant statusChangedAt;
+    @JsonIgnore
+    private DqoJobQueueEntry jobQueueEntry;
+
 
     public DqoJobHistoryEntryModel() {
     }
@@ -44,15 +48,18 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
      * @param jobId Job id.
      * @param jobType Job type.
      * @param parameters Job parameters.
+     * @param jobQueueEntry Job queue entry.
      */
     public DqoJobHistoryEntryModel(DqoQueueJobId jobId,
                                    DqoJobType jobType,
-                                   DqoJobEntryParametersModel parameters) {
+                                   DqoJobEntryParametersModel parameters,
+                                   DqoJobQueueEntry jobQueueEntry) {
         this.jobId = jobId;
         this.jobType = jobType;
         this.parameters = parameters;
         this.status = DqoJobStatus.queued;
         this.statusChangedAt = Instant.now();
+        this.jobQueueEntry = jobQueueEntry;
     }
 
     /**
@@ -65,6 +72,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
         this.parameters = jobQueueEntry.getJob().createParametersModel();
         this.status = DqoJobStatus.queued;
         this.statusChangedAt = jobQueueEntry.getJobId().getCreatedAt();
+        this.jobQueueEntry = jobQueueEntry;
     }
 
     /**
@@ -148,6 +156,22 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
      */
     public void setStatusChangedAt(Instant statusChangedAt) {
         this.statusChangedAt = statusChangedAt;
+    }
+
+    /**
+     * Returns the DQO queue job entry, that could be used to wait for the job.
+     * @return Job queue entry.
+     */
+    public DqoJobQueueEntry getJobQueueEntry() {
+        return jobQueueEntry;
+    }
+
+    /**
+     * Sets a reference to the job queue entry.
+     * @param jobQueueEntry Job queue entry.
+     */
+    public void setJobQueueEntry(DqoJobQueueEntry jobQueueEntry) {
+        this.jobQueueEntry = jobQueueEntry;
     }
 
     @Override

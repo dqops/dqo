@@ -11,7 +11,13 @@ import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 import { AxiosResponse } from 'axios';
-import { TableColumnsStatisticsModel } from '../../../api';
+import {
+  DqoJobHistoryEntryModelStatusEnum,
+  TableColumnsStatisticsModel
+} from '../../../api';
+import SvgIcon from '../../SvgIcon';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -44,11 +50,12 @@ const TableActionGroup = ({
     table: string;
   } = useParams();
   const [isOpen, setIsOpen] = useState(false);
+
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const fetchColumns = async () => {
     try {
@@ -61,7 +68,7 @@ const TableActionGroup = ({
   };
 
   useEffect(() => {
-    fetchColumns().then();
+    fetchColumns();
   }, [connection, schema, table]);
   const fullPath = `${connection}.${schema}.${table}`;
 
@@ -86,6 +93,17 @@ const TableActionGroup = ({
     }
   };
 
+  const filteredJobs = Object.values(job_dictionary_state).filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schema + '.' + table &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  );
+
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
@@ -108,8 +126,39 @@ const TableActionGroup = ({
       )}
       {collectStatistic && (
         <Button
-          label="Collect Statistic"
-          color="primary"
+          className="flex items-center gap-x-2 justify-center"
+          label={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schema + '.' + table
+            )
+              ? 'Collecting...'
+              : 'Collect Statistic'
+          }
+          color={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schema + '.' + table
+            )
+              ? 'secondary'
+              : 'primary'
+          }
+          leftIcon={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schema + '.' + table
+            ) ? (
+              <SvgIcon name="sync" className="w-4 h-4" />
+            ) : (
+              ''
+            )
+          }
           onClick={collectStatistics}
           loading={loadingJob}
         />

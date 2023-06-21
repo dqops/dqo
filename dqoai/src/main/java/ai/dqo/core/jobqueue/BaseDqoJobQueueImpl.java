@@ -22,8 +22,10 @@ import ai.dqo.core.jobqueue.exceptions.DqoInvalidQueueConfigurationException;
 import ai.dqo.core.jobqueue.exceptions.DqoJobQueuePushFailedException;
 import ai.dqo.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -51,6 +53,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     private LinkedBlockingQueue<DqoJobQueueEntry> jobsBlockingQueue;
     private ConcurrentHashMap<DqoQueueJobId, DqoJobQueueEntry> jobEntriesByJobId;
     private Set<DqoJobQueueEntry> runningJobs;
+    private List<DqoJobQueueEntry> jobsQueuedBeforeStart = new ArrayList<>();
     private boolean started;
     private ExecutorService executorService;
     private List<Future<?>> runnerThreadsFutures;
@@ -104,7 +107,23 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             this.runnerThreadsFutures.add(jobProcessingThreadFuture);
         }
 
-        this.started = true;
+        List<DqoJobQueueEntry> preStartQueuedJobs;
+
+        synchronized (this) {
+            this.started = true;
+
+            if (this.jobsQueuedBeforeStart.size() > 0) {
+                preStartQueuedJobs = new ArrayList<>(this.jobsQueuedBeforeStart);
+                Lists.reverse(preStartQueuedJobs);
+                this.jobsQueuedBeforeStart = new ArrayList<>();
+            } else {
+                preStartQueuedJobs = new ArrayList<>();
+            }
+        }
+
+        for (DqoJobQueueEntry jobQueueEntry : preStartQueuedJobs) {
+            this.pushJobCore(jobQueueEntry.getJob(), jobQueueEntry.getJobId().getParentJobId());
+        }
     }
 
     /**
@@ -208,7 +227,10 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             return;
         }
 
-        for (int i = 0; i < this.startedThreadsCount.get(); i++) {
+        this.started = false;
+
+        int startedThreadsCount = this.startedThreadsCount.get();
+        for (int i = 0; i < startedThreadsCount; i++) {
             try {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
                 this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
@@ -217,8 +239,13 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             }
         }
 
-        for (int i = 0; i < this.runnerThreadsFutures.size(); i++) {
-            Future<?> threadFinishFuture = this.runnerThreadsFutures.get(i);
+        List<Future<?>> threadFinishFutures = null;
+        synchronized (this.runnerThreadsFuturesLock) {
+            threadFinishFutures = new ArrayList<>(this.runnerThreadsFutures);
+        }
+
+        for (int i = 0; i < threadFinishFutures.size(); i++) {
+            Future<?> threadFinishFuture = threadFinishFutures.get(i);
             try {
                 threadFinishFuture.get(MAX_WAIT_FOR_THREAD_STOP_MS, TimeUnit.MILLISECONDS);
             }
@@ -236,7 +263,6 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         this.jobsBlockingQueue = null;
         this.runningJobs = null;
         this.jobEntriesByJobId = null;
-        this.started = false;
     }
 
     /**
@@ -274,7 +300,16 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      */
     protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId) {
         if (!this.started) {
-            throw new IllegalStateException("Cannot publish a job because the job queue is not started yet.");
+            if (job.getJobId() == null) {
+                DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+                newJobId.setParentJobId(parentJobId);
+                job.setJobId(newJobId);
+            }
+            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            synchronized (this) {
+                this.jobsQueuedBeforeStart.add(jobQueueEntry);
+            }
+            return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
         }
 
         boolean newThreadStarted = this.startNewThreadWhenRequired();
@@ -283,16 +318,18 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         }
 
         try {
-            DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
-            newJobId.setParentJobId(parentJobId);
-            job.setJobId(newJobId);
-            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, newJobId);
-            this.jobEntriesByJobId.put(newJobId, jobQueueEntry);
+            if (job.getJobId() == null) {
+                DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+                newJobId.setParentJobId(parentJobId);
+                job.setJobId(newJobId);
+            }
+            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            this.jobEntriesByJobId.put(job.getJobId(), jobQueueEntry);
 
             this.queueMonitoringService.publishJobAddedEvent(jobQueueEntry);
             this.jobsBlockingQueue.put(jobQueueEntry);
 
-            return new PushJobResult<>(job.getFinishedFuture(), newJobId);
+            return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
         } catch (InterruptedException e) {
             throw new DqoJobQueuePushFailedException("Cannot push a job to the queue", e);
         }
@@ -308,6 +345,14 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             this.queueMonitoringService.publishJobCancellationRequestedEvent(dqoJobQueueEntry);
             dqoJobQueueEntry.getJob().getCancellationToken().cancel();
         } else {
+            if (!this.started) {
+                synchronized (this) {
+                    Optional<DqoJobQueueEntry> preStartQueuedJob = this.jobsQueuedBeforeStart.stream().filter(je -> je.getJobId().equals(jobId)).findFirst();
+                    if (preStartQueuedJob.isPresent()) {
+                        this.jobsQueuedBeforeStart.remove(preStartQueuedJob.get());
+                    }
+                }
+            }
             return;
         }
 

@@ -4,7 +4,6 @@ import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useTree } from '../../contexts/treeContext';
 import { useSelector } from 'react-redux';
 import TableDetails from '../../components/Connection/TableView/TableDetails';
 import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
@@ -15,8 +14,11 @@ import TableCommentView from '../../components/Connection/TableView/TableComment
 import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TableDataStream from '../../components/Connection/TableView/TableDataStream';
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
-import { getFirstLevelState } from '../../redux/selectors';
+import { getFirstLevelActiveTab, getFirstLevelState } from '../../redux/selectors';
 import TableNavigation from '../../components/TableNavigation';
+import TableIncidentsNotificationsView from "../../components/Connection/TableView/TableIncidentsNotificationsView";
+import { setActiveFirstLevelUrl } from "../../redux/actions/source.actions";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
 
 const initTabs = [
   {
@@ -42,17 +44,10 @@ const initTabs = [
   {
     label: 'Date and time columns',
     value: 'timestamps'
-  }
-];
-
-const tabs = [
-  {
-    label: 'Statistics',
-    value: 'statistics'
   },
   {
-    label: 'Advanced Profiling',
-    value: 'advanced'
+    label: 'Incident Configuration',
+    value: 'incident_configuration'
   }
 ];
 
@@ -70,7 +65,6 @@ const TablePage = () => {
     tab: string;
     checkTypes: CheckTypes;
   } = useParams();
-  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
   const {
@@ -85,6 +79,9 @@ const TablePage = () => {
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector(getFirstLevelState(checkTypes));
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const dispatch = useActionDispatch();
+
   const isRecurringOnly = useMemo(
     () => checkTypes === CheckTypes.RECURRING,
     [checkTypes]
@@ -103,13 +100,18 @@ const TablePage = () => {
   );
 
   const onChangeTab = (tab: string) => {
+
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab)
+      )
+    );
+
     history.push(
       ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab)
     );
-    setTabMap({
-      ...tabMap,
-      [pageTab]: tab
-    });
   };
 
   useEffect(() => {
@@ -252,6 +254,7 @@ const TablePage = () => {
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
             <div>{activeTab === 'data-streams' && <TableDataStream />}</div>
             <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
+            <div>{activeTab === 'incident_configuration' && <TableIncidentsNotificationsView />}</div>
           </>
         )}
       </div>

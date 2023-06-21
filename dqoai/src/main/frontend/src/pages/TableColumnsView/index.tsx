@@ -5,8 +5,13 @@ import { useParams } from 'react-router-dom';
 import ConnectionLayout from '../../components/ConnectionLayout';
 import Button from '../../components/Button';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
-import { TableColumnsStatisticsModel } from '../../api';
+import {
+  DqoJobHistoryEntryModelStatusEnum,
+  TableColumnsStatisticsModel
+} from '../../api';
 import { AxiosResponse } from 'axios';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 const TableColumnsView = () => {
   const {
@@ -14,8 +19,11 @@ const TableColumnsView = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -31,12 +39,13 @@ const TableColumnsView = () => {
   };
 
   useEffect(() => {
-    fetchColumns().then();
+    fetchColumns();
   }, [connectionName, schemaName, tableName]);
 
   const collectStatistics = async () => {
     try {
       setLoadingJob(true);
+
       await JobApiClient.collectStatisticsOnTable(
         statistics?.collect_column_statistics_job_template
       );
@@ -44,6 +53,17 @@ const TableColumnsView = () => {
       setLoadingJob(false);
     }
   };
+
+  const filteredJobs = Object.values(job_dictionary_state)?.filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schemaName + '.' + tableName &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  );
 
   return (
     <ConnectionLayout>
@@ -53,9 +73,42 @@ const TableColumnsView = () => {
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
         <Button
-          label="Collect Statistic"
-          color="primary"
-          onClick={collectStatistics}
+          className="flex items-center gap-x-2 justify-center"
+          label={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schemaName + '.' + tableName
+            )
+              ? 'Collecting...'
+              : 'Collect Statistic'
+          }
+          color={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schemaName + '.' + tableName
+            )
+              ? 'secondary'
+              : 'primary'
+          }
+          leftIcon={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schemaName + '.' + tableName
+            ) ? (
+              <SvgIcon name="sync" className="w-4 h-4" />
+            ) : (
+              ''
+            )
+          }
+          onClick={() => {
+            collectStatistics();
+          }}
           loading={loadingJob}
         />
       </div>

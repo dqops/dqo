@@ -16,6 +16,8 @@
 package ai.dqo.execution.checks.scheduled;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.*;
 import ai.dqo.metadata.sources.TableWrapper;
@@ -64,8 +66,10 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
             scheduledChecksSearchFilters.setEnabled(true);
             scheduledChecksSearchFilters.setSchedule(schedule);
             scheduledChecksSearchFilters.setScheduleGroup(scheduleRoot.getScheduleGroup());
+            HierarchyNode scheduleRootNode = scheduleRoot.getScheduleRootNode();
+
             Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(
-                    scheduleRoot.getScheduleRootNode(), scheduledChecksSearchFilters);
+                    scheduleRootNode, scheduledChecksSearchFilters);
 
             for (AbstractCheckSpec<?,?,?,?> targetCheck : scheduledChecks) {
                 TableWrapper targetTableWrapper = userHome.findTableFor(targetCheck.getHierarchyId());

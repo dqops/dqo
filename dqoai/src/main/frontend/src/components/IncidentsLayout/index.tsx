@@ -10,6 +10,7 @@ import {
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
+import { TabOption } from "../PageTabs/tab";
 
 interface LayoutProps {
   children?: any;
@@ -22,9 +23,9 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleChange = (value: string) => {
-    dispatch(setActiveFirstLevelTab(value));
-    history.push(value);
+  const handleChange = (tab: TabOption) => {
+    dispatch(setActiveFirstLevelTab(tab.value));
+    history.push(tab?.url ?? '');
   };
 
   const closeTab = (value: string) => {
@@ -35,6 +36,7 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
     return (
       pageTabs?.map((item) => ({
         value: item.url,
+        url: item.url,
         label: item.label
       })) || []
     );

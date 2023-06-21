@@ -54,15 +54,6 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String timestampColumn;
 
-//    @JsonPropertyDescription("The time window for the earliest captured data. When the 'mode' is timestamp_column, a WHERE condition is added to the query to retrieve only the given number of time periods. When the time_gradient is daily, the WHERE clause would be equivalent to: WHERE {timestamp_column} >= now() - time_window_periods * '1 day'. As a result, only the last time_window_periods days (or any other periods of selected time gradients) will be analyzed. This parameter has no meaning when the mode is current_time.")
-//    private Integer timeWindowPeriods;
-//
-//    @JsonPropertyDescription("Similar to the time_window_periods, but used when the --incremental parameter is used to capture sensor values. Usually when the database is monitored frequently, it could be 2-3 time periods.")
-//    private Integer incrementalTimeWindowPeriods;
-//
-//    @JsonPropertyDescription("Number of most recent time gradient periods that should be excluded. This parameter is used when the mode is timestamp_column and we cannot analyze the data for the current time period (that contains 'now', which is today for a daily time gradient) because not all data have been received and the data quality score like the row count may still change. Set the value of this parameter to '1' to exclude today's result for a daily gradient. Use '2' to wait one full day until the data is analyzed.")
-//    private Integer excludedRecentPeriods;
-
     /**
      * Creates a default time series configuration (current time, no date/time rounding).
      * @return Default time series configuration.
@@ -124,57 +115,6 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec {
 		setDirtyIf(!Objects.equals(this.timestampColumn, timestampColumn));
         this.timestampColumn = timestampColumn;
     }
-
-//    /**
-//     * Returns the default limit of time window periods that are analyzed.
-//     * @return Time window periods to analyze.
-//     */
-//    public Integer getTimeWindowPeriods() {
-//        return timeWindowPeriods;
-//    }
-//
-//    /**
-//     * Sets the default time window periods to analyze.
-//     * @param timeWindowPeriods Time window periods to analyze.
-//     */
-//    public void setTimeWindowPeriods(Integer timeWindowPeriods) {
-//		setDirtyIf(!Objects.equals(this.timeWindowPeriods, timeWindowPeriods));
-//        this.timeWindowPeriods = timeWindowPeriods;
-//    }
-//
-//    /**
-//     * Sets the number of time window periods to analyze in the --incremental mode.
-//     * @return Time window periods.
-//     */
-//    public Integer getIncrementalTimeWindowPeriods() {
-//        return incrementalTimeWindowPeriods;
-//    }
-//
-//    /**
-//     * Sets the number of time periods to analyze in --incremental mode.
-//     * @param incrementalTimeWindowPeriods Incremental time window periods to analyze.
-//     */
-//    public void setIncrementalTimeWindowPeriods(Integer incrementalTimeWindowPeriods) {
-//		setDirtyIf(!Objects.equals(this.incrementalTimeWindowPeriods, incrementalTimeWindowPeriods));
-//        this.incrementalTimeWindowPeriods = incrementalTimeWindowPeriods;
-//    }
-//
-//    /**
-//     * Sets the number of recent (before the time of 'now') time periods to exclude, a WHERE timestamp_column < now - time_gradient * excluded_current_periods is used in the query.
-//     * @return Number of excluded recent periods.
-//     */
-//    public Integer getExcludedRecentPeriods() {
-//        return excludedRecentPeriods;
-//    }
-//
-//    /**
-//     * Sets the number of recent (newest) time periods to exclude.
-//     * @param excludedRecentPeriods Number of excluded recent time periods.
-//     */
-//    public void setExcludedRecentPeriods(Integer excludedRecentPeriods) {
-//		setDirtyIf(!Objects.equals(this.excludedRecentPeriods, excludedRecentPeriods));
-//        this.excludedRecentPeriods = excludedRecentPeriods;
-//    }
 
     /**
      * Returns the child map on the spec class with all fields.

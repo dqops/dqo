@@ -1,14 +1,14 @@
 import React from 'react';
 import SvgIcon from '../SvgIcon';
 import FieldControl from './FieldControl';
-import { UIFieldModel, UIRuleParametersModel } from '../../api';
+import { FieldModel, RuleParametersModel } from '../../api';
 import clsx from 'clsx';
 import { IconButton } from '@material-tailwind/react';
 import Button from "../Button";
 
 interface CheckRuleItemProps {
-  parameters?: UIRuleParametersModel;
-  onChange: (parameters: UIRuleParametersModel) => void;
+  parameters?: RuleParametersModel;
+  onChange: (parameters: RuleParametersModel) => void;
   type: 'error' | 'warning' | 'fatal';
   disabled?: boolean;
   onUpdate: () => void;
@@ -33,7 +33,7 @@ const CheckRuleItem = ({
   disabled,
   onUpdate
 }: CheckRuleItemProps) => {
-  const handleRuleParameterChange = (field: UIFieldModel, idx: number) => {
+  const handleRuleParameterChange = (field: FieldModel, idx: number) => {
     const newParameters = parameters?.rule_parameters?.map((item, index) =>
       index === idx ? field : item
     );
@@ -82,7 +82,7 @@ const CheckRuleItem = ({
             <div key={index}>
               <FieldControl
                 field={item}
-                onChange={(field: UIFieldModel) =>
+                onChange={(field: FieldModel) =>
                   handleRuleParameterChange(field, index)
                 }
                 disabled={disabled}

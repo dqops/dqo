@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CheckResultsOverviewDataModel, CheckResultsOverviewDataModelStatusesEnum,
+  CheckResultsOverviewDataModel,
+  CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
-  UICheckModel,
-  UIFieldModel
+  TimeWindowFilterParameters,
+  CheckModel,
+  FieldModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import CheckSettings from './CheckSettings';
@@ -14,40 +16,54 @@ import CheckRuleItem from './CheckRuleItem';
 import { JobApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { isEqual } from 'lodash';
 import { Tooltip } from '@material-tailwind/react';
-import moment from "moment";
-import CheckDetails from "./CheckDetails/CheckDetails";
-
-interface ICheckListItemProps {
-  check: UICheckModel;
-  onChange: (check: UICheckModel) => void;
-  category?: string;
-  checkResult?: CheckResultsOverviewDataModel;
-  getCheckOverview: () => void;
-  onUpdate: () => void;
-}
+import moment from 'moment';
+import CheckDetails from './CheckDetails/CheckDetails';
+import { CheckTypes } from '../../shared/routes';
+import { useParams } from 'react-router-dom';
+import Checkbox from '../Checkbox';
 
 export interface ITab {
   label: string;
   value: string;
   type?: string;
-  field?: UIFieldModel;
+  field?: FieldModel;
 }
 
-const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdate }: ICheckListItemProps) => {
+interface ICheckListItemProps {
+  check: CheckModel;
+  onChange: (check: CheckModel) => void;
+  category?: string;
+  checkResult?: CheckResultsOverviewDataModel;
+  getCheckOverview: () => void;
+  onUpdate: () => void;
+  timeWindowFilter?: TimeWindowFilterParameters | null;
+  mode?: string;
+  changeCopyUI: (checked: boolean) => void;
+  checkedCopyUI?: boolean;
+}
+
+const CheckListItem = ({
+  mode,
+  check,
+  onChange,
+  checkResult,
+  getCheckOverview,
+  onUpdate,
+  timeWindowFilter,
+  changeCopyUI,
+  checkedCopyUI
+}: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { jobs } = useSelector((state: IRootState) => state.job);
-  const [showDetails, setShowDetails] = useState(false);
-
-  const job = jobs?.jobs?.find((item) =>
-    isEqual(
-      item.parameters?.runChecksParameters?.checkSearchFilters,
-      check.run_checks_job_template
-    )
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
   );
+  const [showDetails, setShowDetails] = useState(false);
+  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const openCheckSettings = () => {
     if (showDetails) {
@@ -115,9 +131,13 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
       return;
     }
     await onUpdate();
-    JobApiClient.runChecks({
-      checkSearchFilters: check?.run_checks_job_template
+    const res = await JobApiClient.runChecks(false, undefined, {
+      checkSearchFilters: check?.run_checks_job_template,
+      ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
+        ? { timeWindowFilter }
+        : {})
     });
+    setJobId((res.data as any)?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;
@@ -140,17 +160,22 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   };
 
   useEffect(() => {
-    if (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded || job?.status === DqoJobHistoryEntryModelStatusEnum.failed) {
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
       getCheckOverview();
     }
   }, [job?.status]);
 
-  const getStatusLabel = (status: CheckResultsOverviewDataModelStatusesEnum) => {
+  const getStatusLabel = (
+    status: CheckResultsOverviewDataModelStatusesEnum
+  ) => {
     if (status === 'valid') {
       return 'Valid';
     }
     if (status === CheckResultsOverviewDataModelStatusesEnum.execution_error) {
-      return 'Execution Error'
+      return 'Execution Error';
     }
     return status;
   };
@@ -165,6 +190,21 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
     }
     setShowDetails(!showDetails);
   };
+  const getLocalDateInUserTimeZone = (date: Date): string => {
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: userTimeZone
+    };
+
+    return date.toLocaleString('en-US', options);
+  };
 
   return (
     <>
@@ -177,15 +217,20 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
       >
         <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
           <div className="flex space-x-1 items-center">
-            {/*<div className="w-5">*/}
-            {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
-            {/*</div>*/}
-            <div>
-              <Switch
-                checked={!!check?.configured}
-                onChange={onChangeConfigured}
-              />
-            </div>
+            {mode ? (
+              <div className="w-5 h-5 block flex items-center">
+                {check?.configured && (
+                  <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
+                )}
+              </div>
+            ) : (
+              <div>
+                <Switch
+                  checked={!!check?.configured}
+                  onChange={onChangeConfigured}
+                />
+              </div>
+            )}
             <Tooltip
               content={!check?.disabled ? 'Enabled' : 'Disabled'}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -217,7 +262,11 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               </div>
             </Tooltip>
             <Tooltip
-              content={check?.schedule_override?.disabled ? 'Schedule disabled' : 'Schedule enabled'}
+              content={
+                check?.schedule_override?.disabled
+                  ? 'Schedule disabled'
+                  : 'Schedule enabled'
+              }
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
               <div>
@@ -227,9 +276,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                   }
                   className={clsx(
                     'w-5 h-5 cursor-pointer',
-                    check?.schedule_override
-                      ? 'text-gray-700'
-                      : 'font-bold',
+                    check?.schedule_override ? 'text-gray-700' : 'font-bold',
                     check?.schedule_override?.disabled ? 'line-through' : ''
                   )}
                   strokeWidth={check?.schedule_override ? 4 : 2}
@@ -239,18 +286,18 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-                <Tooltip
-                  content="Run Check"
-                  className="max-w-80 py-4 px-4 bg-gray-800"
-                >
-                  <div>
-                    <SvgIcon
-                      name="play"
-                      className="text-primary h-5 cursor-pointer"
-                      onClick={onRunCheck}
-                    />
-                  </div>
-                </Tooltip>
+              <Tooltip
+                content="Run Check"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div>
+                  <SvgIcon
+                    name="play"
+                    className="text-primary h-5 cursor-pointer"
+                    onClick={onRunCheck}
+                  />
+                </div>
+              </Tooltip>
             )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <Tooltip
@@ -302,7 +349,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                 />
               </div>
             </Tooltip>
-    
+
             {checkResult && (
               <div className="flex space-x-1">
                 {checkResult?.statuses?.map((status, index) => (
@@ -311,22 +358,50 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                     content={
                       <div className="text-gray-900">
                         <div>Sensor value: {checkResult?.results?.[index]}</div>
-                        <div>Most severe status: <span className="capitalize">{getStatusLabel(status)}</span></div>
-                        <div>Executed at: {checkResult?.executedAtTimestamps ? moment(checkResult.executedAtTimestamps[index]).format('YYYY-MM-DD HH:mm:ss') + ' UTC' : ''}</div>
-                        <div>Time period: {checkResult?.timePeriodDisplayTexts ? checkResult.timePeriodDisplayTexts[index] : ''}</div>                        
-                        <div>Data stream: {checkResult?.dataStreams ? checkResult.dataStreams[index] : ''}</div>
+                        <div>
+                          Most severe status:{' '}
+                          <span className="capitalize">
+                            {getStatusLabel(status)}
+                          </span>
+                        </div>
+                        <div>
+                          Executed at:{' '}
+                          {checkResult?.executedAtTimestamps
+                            ? getLocalDateInUserTimeZone(
+                                new Date(
+                                  moment(
+                                    checkResult.executedAtTimestamps[index]
+                                  ).format('YYYY-MM-DD HH:mm:ss')
+                                )
+                              )
+                            : ''}
+                        </div>
+                        <div>
+                          Time period:{' '}
+                          {checkResult?.timePeriodDisplayTexts
+                            ? checkResult.timePeriodDisplayTexts[index]
+                            : ''}
+                        </div>
+                        <div>
+                          Data stream:{' '}
+                          {checkResult?.dataStreams
+                            ? checkResult.dataStreams[index]
+                            : ''}
+                        </div>
                       </div>
                     }
                     className="max-w-80 py-4 px-4 bg-white shadow-2xl"
                   >
-                    <div className={clsx("w-3 h-3", getColor(status))} />
+                    <div className={clsx('w-3 h-3', getColor(status))} />
                   </Tooltip>
                 ))}
               </div>
             )}
             <div className="text-sm relative">
               <p>{check.check_name}</p>
-              <p className="absolute left-0 top-full text-xxs">{check.quality_dimension}</p>
+              <p className="absolute left-0 top-full text-xxs">
+                {check.quality_dimension}
+              </p>
             </div>
           </div>
         </td>
@@ -335,7 +410,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
                 parameters={check.sensor_parameters || []}
-                onChange={(parameters: UIFieldModel[]) =>
+                onChange={(parameters: FieldModel[]) =>
                   handleChange({ sensor_parameters: parameters })
                 }
                 disabled={!check?.configured || check.disabled}
@@ -411,6 +486,14 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
         <tr>
           <td colSpan={6}>
             <CheckDetails
+              checkTypes={checkTypes}
+              connection={connection}
+              schema={schema}
+              table={table}
+              column={column}
+              runCheckType={check.run_checks_job_template?.checkType}
+              checkName={check.check_name}
+              timeScale={check.run_checks_job_template?.timeScale}
               check={check}
               onClose={closeCheckDetails}
               job={job}

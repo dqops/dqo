@@ -64,7 +64,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
 5. Synchronize locally stored results with your DQO Cloud account to be able to view the results on the dashboards. 
 
-    To synchronize all the data just run `cloud sync all` command in DQO Shell.
+    To synchronize all the data click on the **Synchronize** button in the upper right corner or just run `cloud sync all` command in DQO Shell.
 
     You can read more about `cloud` command in [Command-line specification section](../../command-line-interface/cloud.md).
 

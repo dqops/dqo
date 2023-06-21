@@ -27,7 +27,12 @@ server:
      enabled: true
      mime-types: application/json,application/xml,text/html,image/jpeg,image/x-png,image/svg+xm
 
-
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+  packagesToScan: ai.dqo.rest
 logging:
   level:
     root: WARN
@@ -114,6 +119,9 @@ dqo:
     keep-finished-jobs-history-seconds: 3600
     keep-jobs-changes-history-seconds: 1200
     get-job-changes-since-wait-seconds: 20
+    wait-timeouts:
+      run-checks: 120
+      default-wait-timeout: 120
   scheduler:
     #start: true
     synchronization-mode: silent

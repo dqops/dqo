@@ -19,6 +19,7 @@ import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.mysql.MysqlParametersSpec;
+import ai.dqo.connectors.oracle.OracleParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
@@ -62,13 +63,14 @@ public class ConnectionSpec extends AbstractSpec {
             put("redshift", o -> o.redshift);
             put("sqlserver", o -> o.sqlserver);
             put("mysql", o -> o.mysql);
+            put("oracle", o -> o.oracle);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("incident_grouping", o -> o.incidentGrouping);
         }
     };
 
-    @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
+    @JsonPropertyDescription("Database provider type (required).")
     private ProviderType providerType;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
@@ -80,7 +82,7 @@ public class ConnectionSpec extends AbstractSpec {
     private SnowflakeParametersSpec snowflake;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
+    @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).")
     private PostgresqlParametersSpec postgresql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
@@ -92,8 +94,12 @@ public class ConnectionSpec extends AbstractSpec {
     private SqlServerParametersSpec sqlserver;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
+    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).")
     private MysqlParametersSpec mysql;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).")
+    private OracleParametersSpec oracle;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelRunsLimit;
@@ -263,6 +269,24 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.mysql, mysql));
         this.mysql = mysql;
         propagateHierarchyIdToField(mysql, "mysql");
+    }
+
+    /**
+     * Returns the connection parameters for Oracle.
+     * @return Oracle connection parameters.
+     */
+    public OracleParametersSpec getOracle() {
+        return oracle;
+    }
+
+    /**
+     * Sets the Oracle connection parameters.
+     * @param oracle New Oracle connection parameters.
+     */
+    public void setOracle(OracleParametersSpec oracle) {
+        setDirtyIf(!Objects.equals(this.oracle, oracle));
+        this.oracle = oracle;
+        propagateHierarchyIdToField(oracle, "oracle");
     }
 
     /**

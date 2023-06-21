@@ -16,9 +16,11 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.metadata.basespecs.ElementWrapper;
-import ai.dqo.metadata.definitions.sensors.*;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionList;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -37,7 +39,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -71,7 +75,7 @@ public class SensorsController {
      * @param fullSensorName Full sensor name.
      * @return Model of the sensor with specific sensor name.
      */
-    @GetMapping("/sensors/{fullSensorName}")
+    @GetMapping(value = "/sensors/{fullSensorName}", produces = "application/json")
     @ApiOperation(value = "getSensor", notes = "Returns a sensor model", response = SensorModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -144,7 +148,7 @@ public class SensorsController {
      * @param fullSensorName Full sensor name
      * @param sensorModel sensor model
      */
-    @PostMapping("/sensors/{fullSensorName}")
+    @PostMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -192,7 +196,7 @@ public class SensorsController {
      * or removes sensor if custom definition is same as Dqo Home sensor
      * @param sensorModel sensor model
      */
-    @PutMapping("/sensors/{fullSensorName}")
+    @PutMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateSensor", notes = "Updates an existing sensor, making a custom sensor definition if it is not present. \n" +
             "Removes sensor if custom definition is same as Dqo Home sensor")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -293,11 +297,11 @@ public class SensorsController {
      * @param fullSensorName  Full sensor name.
      * @return Empty response.
      */
-    @DeleteMapping("/sensors/{fullSensorName}")
+    @DeleteMapping(value = "/sensors/{fullSensorName}", produces = "application/json")
     @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Custom sensor definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 204, message = "Custom sensor definition successfully deleted"),
             @ApiResponse(code = 404, message = "Custom sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -328,7 +332,7 @@ public class SensorsController {
      * Returns all combined sensor folder model.
      * @return sensor basic folder model.
      */
-    @GetMapping("/definitions/sensors")
+    @GetMapping(value = "/definitions/sensors", produces = "application/json")
     @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
             response = SensorBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -397,7 +401,7 @@ public class SensorsController {
      * Returns a flat list of all sensors.
      * @return List of all sensors.
      */
-    @GetMapping("/sensors")
+    @GetMapping(value = "/sensors", produces = "application/json")
     @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
             response = SensorBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

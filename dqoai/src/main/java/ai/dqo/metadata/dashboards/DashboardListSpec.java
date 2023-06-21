@@ -18,6 +18,7 @@ package ai.dqo.metadata.dashboards;
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -86,5 +87,12 @@ public class DashboardListSpec extends AbstractDirtyTrackingSpecList<DashboardSp
         }
 
         return null;
+    }
+
+    /**
+     * Sorts the list of folders per folder name. Sorts also nested dashboards and folders inside nested dashboards.
+     */
+    public void sort() {
+        this.sort(Comparator.comparing(DashboardSpec::getDashboardName));
     }
 }

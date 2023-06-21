@@ -15,8 +15,8 @@
  */
 package ai.dqo.execution.checks.jobs;
 
-import ai.dqo.execution.checks.CheckExecutionSummary;
-import ai.dqo.rules.RuleSeverityLevel;
+import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.jobqueue.monitoring.DqoJobStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
@@ -24,88 +24,55 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.
+ * Object returned from the operation that queues a "run checks" job. The result contains the job id that was started
+ * and optionally can also contain the result of running the checks if the operation was started with wait=true parameter to wait for the "run checks" job to finish.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RunChecksQueueJobResult", description = "Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.")
+@ApiModel(value = "RunChecksQueueJobResult", description = "Object returned from the operation that queues a \"run checks\" job. The result contains the job id that was started and optionally can also contain the result of running the checks if the operation was started with wait=true parameter to wait for the \"run checks\" job to finish.")
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class RunChecksQueueJobResult {
     /**
-     * The highest check severity for the data quality checks executed in this batch.
+     * Job id that identifies a job that was started on the DQO job queue.
      */
-    @JsonPropertyDescription("The highest check severity for the data quality checks executed in this batch.")
-    private RuleSeverityLevel highestSeverity;
+    @JsonPropertyDescription("Job id that identifies a job that was started on the DQO job queue.")
+    private DqoQueueJobId jobId;
 
     /**
-     * The total count of all executed checks.
+     * Optional result object that is returned only when the wait parameter was true and the "run checks" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected.
+     * The calling code (the data pipeline) can decide if further processing should be continued.
      */
-    @JsonPropertyDescription("The total count of all executed checks.")
-    private int executedChecks;
+    @JsonPropertyDescription("Optional result object that is returned only when the wait parameter was true and the \"run checks\" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private RunChecksJobResult result;
 
     /**
-     * The total count of all checks that finished successfully (with no data quality issues).
+     * Job status.
      */
-    @JsonPropertyDescription("The total count of all checks that finished successfully (with no data quality issues).")
-    private int validResults;
+    @JsonPropertyDescription("Job status")
+    private DqoJobStatus status;
 
-    /**
-     * The total count of all invalid data quality checks that finished raising a warning.
-     */
-    @JsonPropertyDescription("The total count of all invalid data quality checks that finished raising a warning.")
-    private int warnings;
 
-    /**
-     * The total count of all invalid data quality checks that finished raising an error.
-     */
-    @JsonPropertyDescription("The total count of all invalid data quality checks that finished raising an error.")
-    private int errors;
-
-    /**
-     * The total count of all invalid data quality checks that finished raising a fatal error.
-     */
-    @JsonPropertyDescription("The total count of all invalid data quality checks that finished raising a fatal error.")
-    private int fatals;
-
-    /**
-     * The total number of checks that failed to execute due to some execution errors.
-     */
-    @JsonPropertyDescription("The total number of checks that failed to execute due to some execution errors.")
-    private int executionErrors;
-
-    /**
-     * The default parameterless constructor.
-     */
     public RunChecksQueueJobResult() {
     }
 
     /**
-     * Creates a check run job result from the execution summary.
-     * @param checkExecutionSummary Check execution summary.
-     * @return The job result object.
+     * Creates a new model given all parameters.
+     * @param jobId Job id.
+     * @param result Job result.
+     * @param status Job status.
      */
-    public static RunChecksQueueJobResult fromCheckExecutionSummary(CheckExecutionSummary checkExecutionSummary) {
-        RunChecksQueueJobResult runChecksQueueJobResult = new RunChecksQueueJobResult() {{
-            setExecutedChecks(checkExecutionSummary.getTotalChecksExecutedCount());
-            setValidResults(checkExecutionSummary.getValidResultsCount());
-            setWarnings(checkExecutionSummary.getWarningSeverityIssuesCount());
-            setErrors(checkExecutionSummary.getErrorSeverityIssuesCount());
-            setFatals(checkExecutionSummary.getFatalSeverityIssuesCount());
-            setExecutionErrors(checkExecutionSummary.getTotalExecutionErrorsCount());
-        }};
+    public RunChecksQueueJobResult(DqoQueueJobId jobId, RunChecksJobResult result, DqoJobStatus status) {
+        this.jobId = jobId;
+        this.result = result;
+        this.status = status;
+    }
 
-        if (runChecksQueueJobResult.getFatals() > 0) {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.fatal);
-        }
-        else if (runChecksQueueJobResult.getErrors() > 0) {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.error);
-        }
-        else if (runChecksQueueJobResult.getWarnings() > 0) {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.warning);
-        } else {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.valid);
-        }
-
-        return runChecksQueueJobResult;
+    /**
+     * Creates a new model given all parameters.
+     * @param jobId Job id.
+     */
+    public RunChecksQueueJobResult(DqoQueueJobId jobId) {
+        this.jobId = jobId;
     }
 }

@@ -12,6 +12,11 @@ import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from '../../shared/routes';
 import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
+import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
+import {
+  TimeWindowFilterParameters,
+  RunChecksQueueJobParameters
+} from '../../api';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -29,12 +34,17 @@ const ContextMenu = ({
   openAddSchemaDialog
 }: ContextMenuProps) => {
   const { checkTypes }: { checkTypes: any } = useParams();
-  const { refreshNode, runChecks, collectStatisticsOnTable, deleteStoredData } =
-    useTree();
+  const {
+    refreshNode,
+    runChecks,
+    collectStatisticsOnTable,
+    deleteStoredData,
+    runPartitionedChecks
+  } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
-
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const handleRefresh = () => {
     refreshNode(node);
     setOpen(false);
@@ -76,6 +86,14 @@ const ContextMenu = ({
     e.stopPropagation();
   };
 
+  const setSetectedRun = (selected: TimeWindowFilterParameters) => {
+    const obj: RunChecksQueueJobParameters = {
+      timeWindowFilter: selected,
+      checkSearchFilters: node.run_checks_job_template
+    };
+    return obj;
+  };
+
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
       <PopoverHandler onClick={openPopover}>
@@ -83,14 +101,49 @@ const ContextMenu = ({
           <SvgIcon name="options" className="w-5 h-5 text-gray-500" />
         </div>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2" onClick={(e) => e.stopPropagation()}>
+      <PopoverContent
+        className="z-50 min-w-50 max-w-50 border-gray-500 p-2"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div onClick={(e) => e.stopPropagation()}>
-          {node.level !== TREE_LEVEL.COLUMNS && (
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={handleRunChecks}
-            >
-              Run checks
+          {node.level !== TREE_LEVEL.COLUMNS &&
+            checkTypes !== 'partitioned' && (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={handleRunChecks}
+              >
+                Run checks
+              </div>
+            )}
+          {checkTypes === 'partitioned' &&
+            (node.level === TREE_LEVEL.COLUMN ||
+              node.level === TREE_LEVEL.TABLE) && (
+              <div className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded flex items-center gap-x-14">
+                Run checks
+                <SvgIcon
+                  name="options"
+                  className="w-5 h-5"
+                  onClick={() => setIsClicked(!isClicked)}
+                />
+              </div>
+            )}
+          {isClicked && (
+            <div className="w-80 h-81 bg-white absolute left-50 top-0 rounded border">
+              {Object.entries(RUN_CHECK_TIME_WINDOW_FILTERS).map(
+                ([key, value]) => (
+                  <div
+                    className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                    key={key}
+                    onClick={() =>
+                      value
+                        ? runPartitionedChecks(setSetectedRun(value))
+                        : handleRunChecks()
+                    }
+                  >
+                    {key}
+                  </div>
+                )
+              )}
             </div>
           )}
           {[
@@ -190,8 +243,7 @@ const ContextMenu = ({
           )}
           {(node.level === TREE_LEVEL.DATABASE ||
             node.level === TREE_LEVEL.SCHEMA ||
-            node.level === TREE_LEVEL.TABLE ||
-            node.level === TREE_LEVEL.COLUMN) && (
+            node.level === TREE_LEVEL.TABLE) && (
             <>
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
@@ -207,6 +259,33 @@ const ContextMenu = ({
                   deleteStoredData(node, params);
                   setOpen(false);
                 }}
+              />
+            </>
+          )}
+          {node.level === TREE_LEVEL.COLUMN && (
+            <>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => setDeleteDataDialogOpened(true)}
+              >
+                Delete data
+              </div>
+              <DeleteOnlyDataDialog
+                open={deleteDataDialogOpened}
+                onClose={() => setDeleteDataDialogOpened(false)}
+                onDelete={(params) => {
+                  setDeleteDataDialogOpened(false);
+
+                  deleteStoredData(
+                    node,
+                    params,
+                    node.collect_statistics_job_template?.columnName && [
+                      node.collect_statistics_job_template?.columnName
+                    ]
+                  );
+                  setOpen(false);
+                }}
+                nameOfCol={node.collect_statistics_job_template?.columnName}
               />
             </>
           )}

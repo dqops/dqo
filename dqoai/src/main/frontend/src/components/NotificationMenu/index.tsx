@@ -19,7 +19,7 @@ import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
 
 const NotificationMenu = () => {
-  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
+  const { job_dictionary_state, isOpen } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
   const { errors } = useError();
@@ -40,13 +40,10 @@ const NotificationMenu = () => {
   }, []);
 
   const data = useMemo(() => {
-    const jobsData = jobs?.jobs
-      ? jobs?.jobs
-          .sort((a, b) => {
-            return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-          })
-          .map((item) => ({ type: 'job', item }))
-      : [];
+    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
+      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+    })
+    .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
@@ -60,7 +57,7 @@ const NotificationMenu = () => {
     });
 
     return newData;
-  }, [jobs, errors]);
+  }, [job_dictionary_state, errors]);
 
   const [sizeOfNot, setSizeOfNot] = useState<number>(data.length);
 
@@ -117,7 +114,7 @@ const NotificationMenu = () => {
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4">
           <div>Notifications ({data.length})</div>
           <div className="flex items-center gap-x-3 text-sm">
-            <div className="whitespace-no-wrap">Scheduler status </div>
+            <div className="whitespace-no-wrap">Jobs scheduler </div>
             <div>
               <Switch
                 checked={cronBoolean ? cronBoolean : false}
@@ -126,7 +123,7 @@ const NotificationMenu = () => {
             </div>
             {cronBoolean === false && (
               <div className="font-light text-xs text-red-500 text-center">
-                (Warning, scheduled jobs won{"'"}t be executed)
+                (Warning: scheduled jobs will not be executed)
               </div>
             )}
           </div>

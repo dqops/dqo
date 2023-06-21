@@ -2,7 +2,7 @@
 apiVersion: dqo/v1
 kind: provider_sensor
 spec:
-  type: sql_template
+  type: java_class
   java_class_name: ai.dqo.sensors.column.schema.ColumnColumnExistsSensorRunner
   supports_grouping_by_data_stream: false
   supports_partitioned_checks: false

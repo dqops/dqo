@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.nio.file.Path;
+import java.time.Instant;
 
 /**
  * Virtual file tree node in the virtual file system.

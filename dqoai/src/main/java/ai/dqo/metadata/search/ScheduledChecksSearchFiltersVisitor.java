@@ -57,7 +57,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
         RecurringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
-        if (schedulesOverride != null) {
+        if (schedulesOverride != null && !schedulesOverride.isDefault()) {
             RecurringScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(this.filters.getScheduleGroup());
 
             if (scheduleForCheckSchedulingGroup != null &&
@@ -90,7 +90,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
         RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule() != null;
 
-        if (checkSchedule != null) {
+        if (checkSchedule != null && !checkSchedule.isDefault()) {
             if (!Objects.equals(checkSchedule, this.filters.getSchedule())) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;  // do not add to the results, this is the deepest node to traverse
             }

@@ -4,11 +4,11 @@ info:
   description: "DQO Cloud API"
   version: "v1"
   title: "DQO Cloud"
-  termsOfService: "https://dqo.ai/terms-of-service"
+  termsOfService: "https://dqops.com/terms-of-service"
   contact:
     name: "DQO Cloud Support"
-    url: "https://dqo.ai"
-    email: "support@dqo.ai"
+    url: "https://dqops.com/"
+    email: "support@dqops.com"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -62,6 +62,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom check definitions"
       operationId: "issueBucketChecksRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/error_samples:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketErrorSamplesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with error samples"
+      operationId: "issueBucketErrorSamplesRWAccessToken"
       parameters: []
       responses:
         200:
@@ -330,6 +346,7 @@ definitions:
         - "sensor_readouts"
         - "check_results"
         - "errors"
+        - "error_samples"
         - "statistics"
         - "incidents"
         - "sources"
@@ -390,6 +407,8 @@ definitions:
       expiresAt:
         type: "string"
       billingProjectId:
+        type: "string"
+      dataSetName:
         type: "string"
       sensorReadoutsTableName:
         type: "string"

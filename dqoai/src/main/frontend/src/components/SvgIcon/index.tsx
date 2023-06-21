@@ -7,6 +7,7 @@ import { ReactComponent as BellSvg } from './svg/bell.svg';
 import { ReactComponent as BigQueryBigSvg } from './svg/bigquery-big.svg';
 import { ReactComponent as BigQuerySvg } from './svg/bigquery.svg';
 import { ReactComponent as ChartBarSvg } from './svg/chart-bar.svg';
+import { ReactComponent as ChartLineSvg } from './svg/chart-line.svg';
 import { ReactComponent as CheckSvg } from './svg/check.svg';
 import { ReactComponent as CheckCircleSvg } from './svg/check-circle.svg';
 import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
@@ -84,10 +85,12 @@ import { ReactComponent as YugabyteDbSvg } from './svg/yugabyte-db.svg';
 import { ReactComponent as UserProfileSvg } from './svg/user-profile.svg';
 import { ReactComponent as BoxPlotSvg } from './svg/box-plot.svg';
 import { ReactComponent as CancelJobsSvg } from './svg/cancel-job.svg';
+import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
   'chart-bar': ChartBarSvg,
+  'chart-line': ChartLineSvg,
   clock: ClockSvg,
   cog: CogSvg,
   download: DownloadSvg,
@@ -175,7 +178,8 @@ const iconsMap: any = {
   yugabytedb: YugabyteDbSvg,
   userprofile: UserProfileSvg,
   boxplot: BoxPlotSvg,
-  canceljobs: CancelJobsSvg
+  canceljobs: CancelJobsSvg,
+  oracle: OracleSvg,
 };
 
 interface SvgIconProps {

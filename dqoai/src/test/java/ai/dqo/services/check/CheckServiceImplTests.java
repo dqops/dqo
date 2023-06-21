@@ -51,7 +51,8 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.*;
 import ai.dqo.services.check.mapping.*;
 import ai.dqo.services.check.mapping.models.*;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.matching.SimilarCheckCacheImpl;
+import ai.dqo.services.check.models.AllChecksPatchParameters;
 import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
@@ -74,9 +75,9 @@ public class CheckServiceImplTests extends BaseTest {
 
     private ExecutionContextFactory executionContextFactory;
     private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
-    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ReflectionService reflectionService;
-    private UIAllChecksModelFactory uiAllChecksModelFactory;
+    private AllChecksModelFactory allChecksModelFactory;
 
     @BeforeEach
     public void setUp() {
@@ -91,18 +92,19 @@ public class CheckServiceImplTests extends BaseTest {
         JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
-        this.specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService);
-        this.uiAllChecksModelFactory = new UIAllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        this.specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService,
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
+        this.allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToModelCheckMappingService);
 
-        UiToSpecCheckMappingService uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
-        UIAllChecksPatchApplier uiAllChecksPatchApplier = new UIAllChecksPatchApplierImpl(uiToSpecCheckMappingService);
+        ModelToSpecCheckMappingService modelToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
+        AllChecksPatchApplier allChecksPatchApplier = new AllChecksPatchApplierImpl(modelToSpecCheckMappingService);
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         ParentDqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultParentJobQueue();
 
         this.sut = new CheckServiceImpl(
-                uiAllChecksModelFactory,
-                uiAllChecksPatchApplier,
+                allChecksModelFactory,
+                allChecksPatchApplier,
                 dqoQueueJobFactory,
                 dqoJobQueue,
                 userHomeContextFactory);
@@ -191,7 +193,7 @@ public class CheckServiceImplTests extends BaseTest {
         return executionContext;
     }
 
-    private List<UIFieldModel> getParametersModels(HierarchyNode obj) {
+    private List<FieldModel> getParametersModels(HierarchyNode obj) {
         ClassInfo classInfo =  this.reflectionService.getClassInfoForClass(obj.getClass());
         if (classInfo == null) {
             return null;
@@ -205,7 +207,7 @@ public class CheckServiceImplTests extends BaseTest {
         return fieldInfos.stream()
                 .filter(fieldInfo -> !fieldInfo.getClassFieldName().equals("filter"))
                 .map(fieldInfo -> {
-                    UIFieldModel fieldModel = new UIFieldModel();
+                    FieldModel fieldModel = new FieldModel();
 
                     ParameterDefinitionSpec parameterDefinitionSpec = new ParameterDefinitionSpec();
                     parameterDefinitionSpec.setDataType(fieldInfo.getDataType());
@@ -226,35 +228,35 @@ public class CheckServiceImplTests extends BaseTest {
                 }).collect(Collectors.toList());
     }
 
-    private UICheckModel patchCheckModelTemplate(AbstractCheckSpec checkSpec, UICheckModel checkModel) {
+    private CheckModel patchCheckModelTemplate(AbstractCheckSpec checkSpec, CheckModel checkModel) {
         checkModel.setCheckSpec(null);
         checkModel.setSensorParametersSpec(null);
         checkModel.setConfigured(true);
         checkModel.setFilter(checkSpec.getParameters().getFilter());
         checkModel.setDisabled(checkSpec.isDisabled());
 
-        List<UIFieldModel> sensorParametersModels = getParametersModels(checkSpec.getParameters());
+        List<FieldModel> sensorParametersModels = getParametersModels(checkSpec.getParameters());
         checkModel.setSensorParameters(sensorParametersModels);
         
-        UIRuleThresholdsModel ruleThresholdsModel = new UIRuleThresholdsModel();
+        RuleThresholdsModel ruleThresholdsModel = new RuleThresholdsModel();
         
         if (checkSpec.getWarning() != null) {
-            UIRuleParametersModel warningModel = new UIRuleParametersModel();
-            List<UIFieldModel> warning = getParametersModels(checkSpec.getWarning());
+            RuleParametersModel warningModel = new RuleParametersModel();
+            List<FieldModel> warning = getParametersModels(checkSpec.getWarning());
             warningModel.setRuleParameters(warning);
             warningModel.setConfigured(true);
             ruleThresholdsModel.setWarning(warningModel);
         }
         if (checkSpec.getError() != null) {
-            UIRuleParametersModel errorModel = new UIRuleParametersModel();
-            List<UIFieldModel> error = getParametersModels(checkSpec.getError());
+            RuleParametersModel errorModel = new RuleParametersModel();
+            List<FieldModel> error = getParametersModels(checkSpec.getError());
             errorModel.setRuleParameters(error);
             errorModel.setConfigured(true);
             ruleThresholdsModel.setWarning(errorModel);
         }
         if (checkSpec.getFatal() != null) {
-            UIRuleParametersModel fatalModel = new UIRuleParametersModel();
-            List<UIFieldModel> fatal = getParametersModels(checkSpec.getFatal());
+            RuleParametersModel fatalModel = new RuleParametersModel();
+            List<FieldModel> fatal = getParametersModels(checkSpec.getFatal());
             fatalModel.setRuleParameters(fatal);
             fatalModel.setConfigured(true);
             ruleThresholdsModel.setFatal(fatalModel);
@@ -376,18 +378,18 @@ public class CheckServiceImplTests extends BaseTest {
     void updateAllChecksPatch_whenConnectionAndCheckGiven_enablesRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
 
-        UIAllChecksPatchParameters uiAllChecksPatchParameters = new UIAllChecksPatchParameters();
+        AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
             setCheckName("nulls_count");
         }};
-        uiAllChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
+        allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
-        List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
-        UICheckModel uiCheckModel = uiAllChecksModel.stream()
-                .map(UIAllChecksModel::getColumnChecksModel)
-                .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getUiTableColumnChecksModels().stream())
-                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getUiColumnChecksModels().stream())
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        CheckModel checkModel = allChecksModel.stream()
+                .map(AllChecksModel::getColumnChecksModel)
+                .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
+                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getColumnChecksModels().stream())
                 .flatMap(uiColumnChecksModel -> uiColumnChecksModel.getCheckContainers().entrySet().stream())
                 .filter(containerTypeToCheckContainer -> containerTypeToCheckContainer.getKey().getCheckType() == CheckType.PROFILING)
                 .map(Map.Entry::getValue)
@@ -399,10 +401,10 @@ public class CheckServiceImplTests extends BaseTest {
         ColumnNullsCountCheckSpec checkSpec = new ColumnNullsCountCheckSpec();
         checkSpec.setFatal(maxCountRule);
 
-        UICheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, uiCheckModel);
-        uiAllChecksPatchParameters.setUiCheckModelPatch(checkModelTemplate);
+        CheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, checkModel);
+        allChecksPatchParameters.setCheckModelPatch(checkModelTemplate);
 
-        this.sut.updateAllChecksPatch(uiAllChecksPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksPatchParameters);
 
         UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
@@ -420,18 +422,18 @@ public class CheckServiceImplTests extends BaseTest {
     void updateAllChecksPatch_whenSpecificColumnsGiven_enablesOnlyRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
 
-        UIAllChecksPatchParameters uiAllChecksPatchParameters = new UIAllChecksPatchParameters();
+        AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
             setCheckName("nulls_count");
         }};
-        uiAllChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
+        allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
-        List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
-        UICheckModel uiCheckModel = uiAllChecksModel.stream()
-                .map(UIAllChecksModel::getColumnChecksModel)
-                .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getUiTableColumnChecksModels().stream())
-                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getUiColumnChecksModels().stream())
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        CheckModel checkModel = allChecksModel.stream()
+                .map(AllChecksModel::getColumnChecksModel)
+                .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
+                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getColumnChecksModels().stream())
                 .flatMap(uiColumnChecksModel -> uiColumnChecksModel.getCheckContainers().entrySet().stream())
                 .filter(containerTypeToCheckContainer -> containerTypeToCheckContainer.getKey().getCheckType() == CheckType.PROFILING)
                 .map(Map.Entry::getValue)
@@ -443,8 +445,8 @@ public class CheckServiceImplTests extends BaseTest {
         ColumnNullsCountCheckSpec checkSpec = new ColumnNullsCountCheckSpec();
         checkSpec.setFatal(maxCountRule);
 
-        UICheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, uiCheckModel);
-        uiAllChecksPatchParameters.setUiCheckModelPatch(checkModelTemplate);
+        CheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, checkModel);
+        allChecksPatchParameters.setCheckModelPatch(checkModelTemplate);
 
         Map<String, List<String>> selectedTablesToColumns = new HashMap<>();
         List<String> selectedColumns1 = new ArrayList<>();
@@ -454,9 +456,9 @@ public class CheckServiceImplTests extends BaseTest {
         selectedColumns2.add("col3");
         selectedTablesToColumns.put("tab1", selectedColumns1);
         selectedTablesToColumns.put("tab2", selectedColumns2);
-        uiAllChecksPatchParameters.setSelectedTablesToColumns(selectedTablesToColumns);
+        allChecksPatchParameters.setSelectedTablesToColumns(selectedTablesToColumns);
 
-        this.sut.updateAllChecksPatch(uiAllChecksPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksPatchParameters);
 
         UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);

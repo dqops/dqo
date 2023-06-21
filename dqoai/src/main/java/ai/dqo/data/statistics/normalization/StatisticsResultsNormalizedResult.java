@@ -38,9 +38,21 @@ public class StatisticsResultsNormalizedResult {
     private final DateTimeColumn resultDateTimeColumn;
     private final InstantColumn resultInstantColumn;
     private final TimeColumn resultTimeColumn;
+    private final IntColumn sampleIndex;
+    private final LongColumn sampleCount;
     private final TextColumn scopeColumn;
+    private final TextColumn dataStreamLevel1Column;
+    private final TextColumn dataStreamLevel2Column;
+    private final TextColumn dataStreamLevel3Column;
+    private final TextColumn dataStreamLevel4Column;
+    private final TextColumn dataStreamLevel5Column;
+    private final TextColumn dataStreamLevel6Column;
+    private final TextColumn dataStreamLevel7Column;
+    private final TextColumn dataStreamLevel8Column;
+    private final TextColumn dataStreamLevel9Column;
     private final LongColumn dataStreamHashColumn;
     private final TextColumn dataStreamNameColumn;
+    private final TextColumn dataStreamMappingNameColumn;
     private final LongColumn connectionHashColumn;
     private final TextColumn connectionNameColumn;
     private final TextColumn providerColumn;
@@ -59,6 +71,10 @@ public class StatisticsResultsNormalizedResult {
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
     private final TextColumn errorMessageColumn;
+    private final InstantColumn createdAtColumn;
+    private final InstantColumn updatedAtColumn;
+    private final TextColumn createdByColumn;
+    private final TextColumn updatedByColumn;
 
     /**
      * Creates a statistics result dataset, extracting key columns.
@@ -79,9 +95,21 @@ public class StatisticsResultsNormalizedResult {
         this.resultDateTimeColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.RESULT_DATE_TIME_COLUMN_NAME);
         this.resultInstantColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.RESULT_INSTANT_COLUMN_NAME);
         this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, StatisticsColumnNames.RESULT_TIME_COLUMN_NAME);
+        this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
+        this.sampleCount = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
         this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCOPE_COLUMN_NAME);
+        this.dataStreamLevel1Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1");
+        this.dataStreamLevel2Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2");
+        this.dataStreamLevel3Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "3");
+        this.dataStreamLevel4Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "4");
+        this.dataStreamLevel5Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "5");
+        this.dataStreamLevel6Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "6");
+        this.dataStreamLevel7Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "7");
+        this.dataStreamLevel8Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "8");
+        this.dataStreamLevel9Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9");
         this.dataStreamHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
         this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        this.dataStreamMappingNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME);
         this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME);
         this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME);
         this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.PROVIDER_COLUMN_NAME);
@@ -100,6 +128,10 @@ public class StatisticsResultsNormalizedResult {
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.DURATION_MS_COLUMN_NAME);
         this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
+        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.CREATED_AT_COLUMN_NAME);
+        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.UPDATED_AT_COLUMN_NAME);
+        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CREATED_BY_COLUMN_NAME);
+        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.UPDATED_BY_COLUMN_NAME);
     }
 
 
@@ -209,11 +241,99 @@ public class StatisticsResultsNormalizedResult {
     }
 
     /**
+     * Returns the sample index column that stores an index of a value from a column value sampling collector.
+     * @return Sample index column.
+     */
+    public IntColumn getSampleIndex() {
+        return sampleIndex;
+    }
+
+    /**
+     * Returns the sample count column that stores the number of rows that contain the given sample value, obtained by a column value sampling collector.
+     * @return Sample count column.
+     */
+    public LongColumn getSampleCount() {
+        return sampleCount;
+    }
+
+    /**
      * Returns the column that contains a statistics scope. Values are from the {@link StatisticsDataScope} ("table" or "data_streams").
      * @return Statistics scope column (contains "table" or "data_streams").
      */
     public TextColumn getScopeColumn() {
         return scopeColumn;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 1.
+     * @return Data stream value for the stream_level_1.
+     */
+    public TextColumn getDataStreamLevel1Column() {
+        return dataStreamLevel1Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 2.
+     * @return Data stream value for the stream_level_2.
+     */
+    public TextColumn getDataStreamLevel2Column() {
+        return dataStreamLevel2Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 3.
+     * @return Data stream value for the stream_level_3.
+     */
+    public TextColumn getDataStreamLevel3Column() {
+        return dataStreamLevel3Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 4.
+     * @return Data stream value for the stream_level_4.
+     */
+    public TextColumn getDataStreamLevel4Column() {
+        return dataStreamLevel4Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 5.
+     * @return Data stream value for the stream_level_5.
+     */
+    public TextColumn getDataStreamLevel5Column() {
+        return dataStreamLevel5Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 6.
+     * @return Data stream value for the stream_level_6.
+     */
+    public TextColumn getDataStreamLevel6Column() {
+        return dataStreamLevel6Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 7.
+     * @return Data stream value for the stream_level_7.
+     */
+    public TextColumn getDataStreamLevel7Column() {
+        return dataStreamLevel7Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 8.
+     * @return Data stream value for the stream_level_8.
+     */
+    public TextColumn getDataStreamLevel8Column() {
+        return dataStreamLevel8Column;
+    }
+
+    /**
+     * Returns the column that contains the value of the data stream at the level 9.
+     * @return Data stream value for the stream_level_9.
+     */
+    public TextColumn getDataStreamLevel9Column() {
+        return dataStreamLevel9Column;
     }
 
     /**
@@ -230,6 +350,14 @@ public class StatisticsResultsNormalizedResult {
      */
     public TextColumn getDataStreamNameColumn() {
         return dataStreamNameColumn;
+    }
+
+    /**
+     * Returns the data stream mapping name column. It contains the name of the selected data stream mapping that was used.
+     * @return Data stream mapping name column.
+     */
+    public TextColumn getDataStreamMappingNameColumn() {
+        return dataStreamMappingNameColumn;
     }
 
     /**
@@ -375,5 +503,37 @@ public class StatisticsResultsNormalizedResult {
      */
     public TextColumn getErrorMessageColumn() {
         return errorMessageColumn;
+    }
+
+    /**
+     * Returns the created at column.
+     * @return Created at column.
+     */
+    public InstantColumn getCreatedAtColumn() {
+        return createdAtColumn;
+    }
+
+    /**
+     * Returns the updated at column.
+     * @return Updated at column.
+     */
+    public InstantColumn getUpdatedAtColumn() {
+        return updatedAtColumn;
+    }
+
+    /**
+     * Returns the created by column.
+     * @return Created by column.
+     */
+    public TextColumn getCreatedByColumn() {
+        return createdByColumn;
+    }
+
+    /**
+     * Returns the updated by column.
+     * @return Updated by column.
+     */
+    public TextColumn getUpdatedByColumn() {
+        return updatedByColumn;
     }
 }

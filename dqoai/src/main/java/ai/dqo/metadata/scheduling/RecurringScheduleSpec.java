@@ -140,6 +140,6 @@ public class RecurringScheduleSpec extends AbstractSpec {
             return false;
         }
 
-        return super.isDefault();
+        return true;
     }
 }

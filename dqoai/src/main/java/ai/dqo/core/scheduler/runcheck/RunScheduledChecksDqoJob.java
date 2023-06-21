@@ -18,11 +18,10 @@ package ai.dqo.core.scheduler.runcheck;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoJobType;
-import ai.dqo.core.jobqueue.DqoQueueJob;
+import ai.dqo.core.jobqueue.ParentDqoQueueJob;
 import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.scheduler.JobSchedulerService;
-import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.checks.CheckExecutionService;
@@ -41,7 +40,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunScheduledChecksDqoJob extends DqoQueueJob<CheckExecutionSummary> {
+public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSummary> {
     private JobSchedulerService jobSchedulerService;
     private CheckExecutionService checkExecutionService;
     private ExecutionContextFactory executionContextFactory;

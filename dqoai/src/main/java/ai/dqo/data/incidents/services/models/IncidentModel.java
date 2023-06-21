@@ -148,7 +148,7 @@ public class IncidentModel {
      * The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.
      */
     @JsonPropertyDescription("The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.")
-    private int minSeverity;
+    private int minimumSeverity;
 
     /**
      * The total number of failed data quality checks that were seen when the incident was raised for the first time.
@@ -210,8 +210,8 @@ public class IncidentModel {
             model.setIssueUrl(incidentRow.getString(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
         }
         model.setHighestSeverity(incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME));
-        if (!incidentRow.isMissing(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME)) {
-            model.setMinSeverity(incidentRow.getInt(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME));
+        if (!incidentRow.isMissing(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME)) {
+            model.setMinimumSeverity(incidentRow.getInt(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME));
         }
         model.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         model.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));

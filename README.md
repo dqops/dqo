@@ -3,6 +3,8 @@
 DQO is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
 DQO comes with around 100 predefined data quality checks which helps you monitor the quality of your data.
 
+![DQO screens](https://dqops.com/docs/images/dqo-screens.gif)
+
 ## Key features
 - Intuitive graphical interface and access via CLI
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server and MySQL
@@ -12,6 +14,7 @@ DQO comes with around 100 predefined data quality checks which helps you monitor
 - Data segmentation by up to 9 different data streams
 - Build-in scheduling
 - Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
+- Incident analysis
 
 ## Installation
 
@@ -70,7 +73,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 ## Documentation
 
-For full documentation with guides and use cases, visit https://dqo.ai/docs
+For full documentation with guides and use cases, visit https://dqops.com/docs
 
 ## Contact and issues
 
@@ -78,4 +81,4 @@ If you find any issues with the tool, just post it here:
 
 https://github.com/dqops/dqo/issues
 
-or contact us via https://dqo.ai/
+or contact us via https://dqops.com/

@@ -28,7 +28,7 @@ import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksS
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
+import ai.dqo.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.ExecutionContextFactory;
@@ -50,6 +50,7 @@ import ai.dqo.rules.comparison.*;
 import ai.dqo.services.check.CheckService;
 import ai.dqo.services.check.CheckServiceImpl;
 import ai.dqo.services.check.mapping.*;
+import ai.dqo.services.check.matching.SimilarCheckCacheImpl;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import ai.dqo.utils.reflection.ReflectionService;
@@ -84,25 +85,26 @@ public class CheckCliServiceImplTests extends BaseTest {
         JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
-        SpecToUiCheckMappingService specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService);
-        UIAllChecksModelFactory uiAllChecksModelFactory = new UIAllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService,
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
+        AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToModelCheckMappingService);
 
-        UiToSpecCheckMappingService uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
-        UIAllChecksPatchApplier uiAllChecksPatchApplier = new UIAllChecksPatchApplierImpl(uiToSpecCheckMappingService);
+        ModelToSpecCheckMappingService modelToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
+        AllChecksPatchApplier allChecksPatchApplier = new AllChecksPatchApplierImpl(modelToSpecCheckMappingService);
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         ParentDqoJobQueue parentDqoJobQueue = DqoJobQueueObjectMother.getDefaultParentJobQueue();
 
         CheckService checkService = new CheckServiceImpl(
-                uiAllChecksModelFactory,
-                uiAllChecksPatchApplier,
+                allChecksModelFactory,
+                allChecksPatchApplier,
                 dqoQueueJobFactory,
                 parentDqoJobQueue,
                 userHomeContextFactory);
 
         this.sut = new CheckCliServiceImpl(
                 checkService,
-                uiAllChecksModelFactory);
+                allChecksModelFactory);
     }
 
     private ColumnSpec createColumn(String type, boolean nullable) {
@@ -185,16 +187,16 @@ public class CheckCliServiceImplTests extends BaseTest {
     void updateAllChecksPatch_whenConnectionAndCheckGiven_enablesRequestedChecks() {
         UserHome userHome = createHierarchyTree();
 
-        UIAllChecksCliPatchParameters uiAllChecksCliPatchParameters = new UIAllChecksCliPatchParameters();
+        AllChecksModelCliPatchParameters allChecksModelCliPatchParameters = new AllChecksModelCliPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
             setCheckName("nulls_count");
         }};
-        uiAllChecksCliPatchParameters.setCheckSearchFilters(checkSearchFilters);
-        uiAllChecksCliPatchParameters.setFatalLevelOptions(getRuleOptionMap("max_count", 50));
-        uiAllChecksCliPatchParameters.setDisableFatalLevel(false);
+        allChecksModelCliPatchParameters.setCheckSearchFilters(checkSearchFilters);
+        allChecksModelCliPatchParameters.setFatalLevelOptions(getRuleOptionMap("max_count", 50));
+        allChecksModelCliPatchParameters.setDisableFatalLevel(false);
 
-        this.sut.updateAllChecksPatch(uiAllChecksCliPatchParameters);
+        this.sut.updateAllChecksPatch(allChecksModelCliPatchParameters);
 
         userHome = userHomeContextFactory.openLocalUserHome().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);

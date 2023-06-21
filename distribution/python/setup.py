@@ -109,18 +109,27 @@ try:
         long_description=long_description,
         long_description_content_type="text/markdown",
         author='DQO Developers',
-        author_email='support@dqo.ai',
+        author_email='support@dqops.com',
         url='https://github.com/dqops/dqo/tree/master/distribution/python',
         packages=['dqops'],
-#        include_package_data=True,
+        include_package_data=True,
         package_dir={
             'dqops': 'dqops'
         },
-        # package_data={
-        #     'dqops': home_dirs
-        # },
+        package_data={
+            'dqops': ['py.typed']
+        },
         license='http://www.apache.org/licenses/LICENSE-2.0',
-        install_requires=['install-jdk==1.0.4'],
+        install_requires=['install-jdk>=1.0.4',
+                          'httpx>=0.15.4,<0.25.0',
+                          'attrs>=21.3.0',
+                          'python-dateutil==^2.8.2',
+                          'numpy>=1.24.3',
+                          'MarkupSafe>=2.1.1',
+                          'Jinja2>=3.0.3',
+                          'six>=1.16.0',
+                          'pandas>=2.0.1',
+                          'scipy>=1.10.1'],
         python_requires='>=3.8',
         classifiers=[
 #            'Development Status :: 5 - Production/Stable',
@@ -130,6 +139,7 @@ try:
             'Programming Language :: Python :: 3.9',
             'Programming Language :: Python :: 3.10',
             'Programming Language :: Python :: 3.11',
+            'Programming Language :: Python :: 3.12',
             'Environment :: Console',
 #            'Framework :: Apache Airflow :: Provider',
             'Intended Audience :: Developers',

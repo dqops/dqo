@@ -183,6 +183,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "GCP project name with a GCP secret manager enabled to pull the secrets.", defaultValue = "true")
     private Boolean dqoSecretsGcpProjectId;
 
+    @CommandLine.Option(names = {"--dqo.cli.terminal.width"},
+            description = "Width of the terminal when no terminal window is available, e.g. in one-shot running mode.", defaultValue = "100")
+    private Integer dqoCliTerminalWidth;
+
     @CommandLine.Option(names = {"--dqo.core.print-stack-trace"},
             description = "Prints a full stack trace for errors on the console.", defaultValue = "true")
     private Boolean dqoCorePrintStackTrace;
@@ -199,9 +203,17 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
     private Integer dqoCloudParallelFileDownloads;
 
-    @CommandLine.Option(names = {"--dqo.queue.threads"},
-            description = "Sets the number of threads that the job queue creates for processing jobs (running data quality checks, importing metadata, etc.). ", defaultValue = "10")
-    private Long dqoQueueThreads;
+    @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
+            description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). The maximum number of threads is also limited by the DQO license.")
+    private Long dqoQueueMaxConcurrentJobs;
+
+    @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.run-checks"},
+            description = "Sets the default timeout (in seconds) for the \"run checks\" rest api operation called from the DQO client when the \"wait\" parameter is true and the timeout is not provided by the client.", defaultValue = "120")
+    private Long dqoQueueWaitTimeoutsRunChecks;
+
+    @CommandLine.Option(names = {"--dqo.queue.wait-timeouts.default-wait-timeout"},
+            description = "Sets the default wait timeout (in seconds) for waiting for a job when the \"waitTimeout\" parameter is not given to the call to the \"waitForJob\" operation from the DQO client..", defaultValue = "120")
+    private Long dqoQueueWaitTimeoutsDefaultWaitTimeout;
 
     @CommandLine.Option(names = {"--dqo.scheduler.start"},
             description = "Starts the job scheduler on startup (true) or disables the job scheduler (false).")

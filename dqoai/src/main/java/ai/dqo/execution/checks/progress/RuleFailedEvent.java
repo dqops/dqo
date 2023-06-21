@@ -26,7 +26,7 @@ public class RuleFailedEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
     private final SensorExecutionRunParameters sensorRunParameters;
     private final SensorExecutionResult sensorResult;
-    private Exception ruleExecutionException;
+    private Throwable ruleExecutionException;
     private String ruleDefinitionName;
 
     /**
@@ -41,7 +41,7 @@ public class RuleFailedEvent extends CheckExecutionProgressEvent {
     public RuleFailedEvent(TableSpec tableSpec,
                            SensorExecutionRunParameters sensorRunParameters,
                            SensorExecutionResult sensorResult,
-                           Exception ruleExecutionException,
+                           Throwable ruleExecutionException,
                            String ruleDefinitionName) {
         this.tableSpec = tableSpec;
         this.sensorRunParameters = sensorRunParameters;
@@ -81,7 +81,7 @@ public class RuleFailedEvent extends CheckExecutionProgressEvent {
      * Returns the exception that was thrown by the rule.
      * @return Exception thrown by the rule.
      */
-    public Exception getRuleExecutionException() {
+    public Throwable getRuleExecutionException() {
         return ruleExecutionException;
     }
 

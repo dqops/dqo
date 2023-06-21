@@ -1,4 +1,4 @@
-# Review results on the dashboards
+# Review results on dashboards
 
 In the [previous step](../run-data-quality-checks/run-data-quality-checks.md) we run two data quality check: table-level
 [row_count](../../checks/table/volume/row-count.md) and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md)
@@ -15,25 +15,25 @@ Government dashboards are useful for senior management to review aggregated key 
 **Issue Details** are useful for data engineers and data owners to better understand data dynamics during the investigation phase when the data quality issue is being diagnosed and
 later to confirm whether it has been resolved.
 
-You can read more about the data quality dashboards in [Concept section](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
+You can read more about the data quality dashboards in the [Concept section](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
 
 ## Prerequisite
 
 To be able to display results on data quality dashboards you need to synchronize locally stored results with your DQO Cloud account.  
-To synchronize all the data just run `cloud sync all` command in DQO Shell.
+To synchronize all the data just click on the **Synchronize** button in the upper right corner of the navigation tab or run `cloud sync all` command in DQO Shell.
 
-You can read more about `cloud` command in [Command-line specification section](../../command-line-interface/cloud.md).
+You can read more about `cloud` command in the [Command-line specification section](../../command-line-interface/cloud.md).
 
 ## Total data quality KPIs dashboard
 
-To review the summary KPIs of all run checks you can use the **Total data quality KPIs** dashboard.
-You can find it in the Governance group.
+To review the summary KPIs of all run checks you can use the **KPIs** dashboard.
+You can find it in the Governance (KPIs) group.
 
 1. Go to the **Data Quality Dashboards** section using the navigation bar at the top of the screen
 
     ![Navigating to Data Quality Dashboards section](https://dqops.com/docs/images/getting-started/data-quality-dashboards-section.jpg)
     
-2. From the tree view on the left, select the **Total DQ KPIs** dashboard in the Governance group. 
+2. From the tree view on the left, select the **KPIs** dashboard folder and **KPIs** dashboard.
 
     ![Total DQ KPIs dashboard](https://dqops.com/docs/images/getting-started/total-dq-kpis-dashboard.jpg)
 
@@ -43,16 +43,16 @@ You can find it in the Governance group.
     The calculated percentage of passed data quality checks (KPI) in our example is 50%. You can see that there is on passed data quality
     check and one failed.  
 
-## Total issue details dashboard
+## Issues details dashboard
 
-To review the details which tables were affected by the issues you can use the **Total issue details** dashboard. 
-You can find it in the Issue Details group.
+To review the details which tables were affected by the issues you can use the **Issues details** dashboard.
+You can find it in the **Data Quality Issue Details** group.
 
-1. From the tree view on the left of the Data Quality Dashboard section, select the **Total issue details** dashboard in the Issue Details group. 
+1. From the tree view on the left of the Data Quality Dashboard section, select the **Issue** dashboard in the Data Quality Issue Details group. 
 
     ![Total issue details dashboard](https://dqops.com/docs/images/getting-started/total-issue-details-dashboard.jpg)
 
-    On the **Total issue details** dashboard, you can see the results broken down by categories of checks, as well as the 
+    On the **Issue** dashboard, you can see the results broken down by categories of checks, as well as the 
     list of tables affected by the issues. In our example, there is only one table with one data quality issue. 
     You can filter the results by clicking on the check category or the table.  
 

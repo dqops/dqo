@@ -16,6 +16,8 @@
 package ai.dqo.cli.terminal;
 
 import java.io.Console;
+import java.io.IOException;
+import java.io.PushbackInputStream;
 import java.time.Duration;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
@@ -25,11 +27,8 @@ import java.util.concurrent.TimeoutException;
 
 public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
 
-    private Scanner scanner;
-
     public TerminalReaderSystemImpl(TerminalWriter writer) {
         super(writer);
-        this.scanner = new Scanner(System.in);
     }
 
     /**
@@ -41,7 +40,12 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
     @Override
     protected String readLine(String promptText) {
         this.getWriter().write(promptText);
-        return this.scanner.nextLine();
+        try {
+            Scanner s = new Scanner(System.in);
+            return s.nextLine();
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     /**
@@ -64,67 +68,39 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
 
     /**
      * Tries to read one character from the terminal.
-     * Always returns null.
      *
      * @param timeoutMillis Read timeout.
-     * @return Returns null, as system terminal cannot read characters in this manner.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
+     * @return Character that was read.
      */
     @Override
-    public Character tryReadChar(long timeoutMillis) {
-        return null;
-    }
-
-    /**
-     * Starts a background job that will wait the whole duration and always return false.
-     *
-     * @param waitDuration Wait duration.
-     * @return Mono that always returns false (no input on console).
-     */
-    @Override
-    public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration) {
-        CompletableFuture<Boolean> waitForSomeTime = CompletableFuture.supplyAsync(() -> {
+    public Character tryReadChar(long timeoutMillis, boolean peekOnly) {
+        CompletableFuture<Character> waitForInput = CompletableFuture.supplyAsync(() -> {
             try {
-                Thread.sleep(waitDuration.toMillis());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                PushbackInputStream pushbackInputStream = (PushbackInputStream) System.in;
+                int readResult = pushbackInputStream.read();
+                if (readResult == -1) {
+                    return null;
+                }
+
+                if (peekOnly || Thread.currentThread().isInterrupted()) {
+                    pushbackInputStream.unread(readResult);
+                }
+                return (char)readResult;
+            } catch (IOException e) {
+                return null;
             }
-            return false;
         });
-        return waitForSomeTime;
-    }
 
-    /**
-     * Hangs on waiting for the user to confirm that the application should exit.
-     * Does nothing.
-     *
-     * @param startMessage Ignored
-     */
-    @Override
-    public void waitForExit(String startMessage) {
-        // Do nothing
-    }
-
-    /**
-     * Hangs on waiting for the user to confirm that the application should exit.
-     * Waits for up to <code>waitDuration</code>.
-     * Always false.
-     *
-     * @param startMessage Ignored.
-     * @param waitDuration Ignored.
-     * @return False - the timeout elapsed, as no input could be possibly detected on console.
-     */
-    @Override
-    public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
-
-        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
         try {
-            Boolean wasExitedByUser = booleanCompletableFuture.get(waitDuration.toMillis(), TimeUnit.MILLISECONDS);
-            return wasExitedByUser;
-        }
-        catch (InterruptedException | ExecutionException | TimeoutException e) {
-            return false;
+            Character inputCharacter = waitForInput.get(timeoutMillis, TimeUnit.MILLISECONDS);
+            return inputCharacter;
+        } catch (TimeoutException e) {
+            waitForInput.cancel(true);
+            return null;
+        } catch (InterruptedException | ExecutionException e) {
+            waitForInput.cancel(true);
+            throw new RuntimeException(e);
         }
     }
 }

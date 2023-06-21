@@ -45,6 +45,7 @@ import ai.dqo.execution.CheckExecutionContextObjectMother;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.CheckExecutionServiceImpl;
 import ai.dqo.execution.checks.CheckExecutionSummary;
+import ai.dqo.execution.checks.TableCheckExecutionServiceImpl;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import ai.dqo.execution.checks.scheduled.ScheduledTargetChecksFindService;
@@ -141,22 +142,26 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         DqoQueueJobFactoryImpl dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
 
-        this.sut = new CheckExecutionServiceImpl(
+        TableCheckExecutionServiceImpl tableCheckExecutionService = new TableCheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
                 SensorExecutionRunParametersObjectMother.getFactory(),
                 DataQualitySensorRunnerObjectMother.getDefault(),
                 ConnectionProviderRegistryObjectMother.getInstance(),
-                dqoQueueJobFactory,
-                DqoJobQueueObjectMother.getDefaultJobQueue(),
                 sensorReadoutsNormalizationService,
                 ruleEvaluationService,
                 SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService(),
                 RuleResultsSnapshotFactoryObjectMother.createDummyRuleResultsStorageService(),
                 errorsNormalizationService,
                 ErrorsSnapshotFactoryObjectMother.createDummyErrorsStorageService(),
-                scheduledTargetChecksFindService,
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 null);
+
+        this.sut = new CheckExecutionServiceImpl(
+                hierarchyNodeTreeSearcher,
+                dqoQueueJobFactory,
+                DqoJobQueueObjectMother.getDefaultJobQueue(),
+                scheduledTargetChecksFindService,
+                tableCheckExecutionService);
     }
 
     @Test

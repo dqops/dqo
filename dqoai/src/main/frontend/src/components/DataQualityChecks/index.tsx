@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CheckResultsOverviewDataModel,
-  UICheckContainerModel,
-  UICheckContainerModelEffectiveScheduleEnabledStatusEnum,
-  UICheckModel,
-  UIEffectiveScheduleModelScheduleLevelEnum
+  CheckContainerModel,
+  CheckContainerModelEffectiveScheduleEnabledStatusEnum,
+  CheckModel,
+  EffectiveScheduleModelScheduleLevelEnum
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
@@ -17,10 +17,12 @@ import moment from 'moment/moment';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import Button from '../Button';
+import Select from '../Select';
+import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 
 interface IDataQualityChecksProps {
-  checksUI?: UICheckContainerModel;
-  onChange: (ui: UICheckContainerModel) => void;
+  checksUI?: CheckContainerModel;
+  onChange: (ui: CheckContainerModel) => void;
   className?: string;
   checkResultsOverview: CheckResultsOverviewDataModel[];
   getCheckOverview: () => void;
@@ -43,21 +45,28 @@ const DataQualityChecks = ({
     schema,
     table,
     column,
-    timeScale
+    timePartitioned,
+    tab
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
     column: string;
-    timeScale: 'daily' | 'monthly';
+    timePartitioned: 'daily' | 'monthly';
+    tab: 'daily' | 'monthly';
   } = useParams();
   const history = useHistory();
   const dispatch = useActionDispatch();
+  const [timeWindow, setTimeWindow] = useState(
+    'Default incremental time window'
+  );
+  const [mode, setMode] = useState<string>();
+  const [copyUI, setCopyUI] = useState<CheckContainerModel>();
 
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
-    check: UICheckModel,
+    check: CheckModel,
     idx: number,
     jdx: number
   ) => {
@@ -82,12 +91,12 @@ const DataQualityChecks = ({
 
   useEffect(() => {
     getCheckOverview();
-  }, [checkTypes, connection, schema, table, column, timeScale]);
+  }, [checkTypes, connection, schema, table, column, timePartitioned]);
 
   const goToSchedule = () => {
     if (
       checksUI?.effective_schedule?.schedule_level ===
-      UIEffectiveScheduleModelScheduleLevelEnum.connection
+      EffectiveScheduleModelScheduleLevelEnum.connection
     ) {
       dispatch(
         addFirstLevelTab(CheckTypes.SOURCES, {
@@ -108,7 +117,7 @@ const DataQualityChecks = ({
     }
     if (
       checksUI?.effective_schedule?.schedule_level ===
-      UIEffectiveScheduleModelScheduleLevelEnum.table_override
+      EffectiveScheduleModelScheduleLevelEnum.table_override
     ) {
       dispatch(
         addFirstLevelTab(CheckTypes.SOURCES, {
@@ -143,11 +152,25 @@ const DataQualityChecks = ({
   };
 
   const goToConnectionSchedule = () => {
+    let activeTab = checksUI?.effective_schedule?.schedule_group;
+    if (!activeTab) {
+      if (checkTypes === CheckTypes.PROFILING) {
+        activeTab = checkTypes;
+      } else if (checkTypes !== CheckTypes.SOURCES) {
+        let timeScale = tab || timePartitioned;
+
+        if (!timeScale) {
+          timeScale = checksUI?.run_checks_job_template?.timeScale || 'daily';
+        }
+        activeTab = `${checkTypes}_${timeScale}`;
+      }
+    }
+
     const url = `${ROUTES.CONNECTION_DETAIL(
       CheckTypes.SOURCES,
       connection,
       'schedule'
-    )}?activeTab=${checksUI?.effective_schedule?.schedule_group}`;
+    )}?activeTab=${activeTab}`;
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
         url,
@@ -195,13 +218,13 @@ const DataQualityChecks = ({
   const goToScheduleTab = () => {
     if (
       checksUI?.effective_schedule?.schedule_level ===
-      UIEffectiveScheduleModelScheduleLevelEnum.connection
+      EffectiveScheduleModelScheduleLevelEnum.connection
     ) {
       goToConnectionSchedule();
     }
     if (
       checksUI?.effective_schedule?.schedule_level ===
-      UIEffectiveScheduleModelScheduleLevelEnum.table_override
+      EffectiveScheduleModelScheduleLevelEnum.table_override
     ) {
       goToTableSchedule();
     }
@@ -231,6 +254,31 @@ const DataQualityChecks = ({
     history.push(url);
   };
 
+  const changeCopyUI = (
+    category: string,
+    checkName: string,
+    checked: boolean
+  ) => {
+    setCopyUI({
+      ...copyUI,
+      categories: copyUI?.categories?.map((item) =>
+        item.category === category
+          ? {
+              ...item,
+              checks: item.checks?.map((check) =>
+                check.check_name === checkName
+                  ? {
+                      ...check,
+                      configured: checked
+                    }
+                  : check
+              )
+            }
+          : item
+      )
+    });
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center min-h-80">
@@ -243,12 +291,19 @@ const DataQualityChecks = ({
     return <div className="p-4">No Checks</div>;
   }
 
+  const timeWindowOptions = Object.keys(RUN_CHECK_TIME_WINDOW_FILTERS).map(
+    (item) => ({
+      label: item,
+      value: item
+    })
+  );
+
   return (
     <div
       className={clsx(className, 'p-4 overflow-auto')}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
-      <div className="flex items-center justify-between text-sm mb-3 gap-6">
+      <div className="flex items-center text-sm mb-3 gap-6">
         <div className="flex items-center space-x-1 gap-x-4">
           <div className="flex items-center space-x-1">
             <span>Scheduling status:</span>
@@ -261,8 +316,8 @@ const DataQualityChecks = ({
             </span>
           </div>
           {checksUI.effective_schedule_enabled_status !==
-          UICheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured ? (
-            <div className="flex items-center">
+          CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured ? (
+            <div className="flex items-center gap-x-4">
               <div className="flex items-center space-x-1">
                 <span>Scheduling configured at:</span>
                 <a className="underline cursor-pointer" onClick={goToSchedule}>
@@ -285,23 +340,22 @@ const DataQualityChecks = ({
               <span>Next execution at:</span>
               <span>
                 {moment(checksUI?.effective_schedule?.time_of_execution).format(
-                  'MMM, DD YYYY'
+                  'MMM, DD YYYY HH:mm'
                 )}
               </span>
             </div>
           )}
         </div>
         <div className="flex items-center justify-between">
-          <span className="mr-3">Configure at:</span>
           <a className="underline cursor-pointer" onClick={goToScheduleTab}>
             {checksUI?.effective_schedule?.schedule_group}
           </a>
 
           {checksUI?.effective_schedule_enabled_status ===
-            UICheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
+            CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
             <div className="flex items-center gap-x-4">
               <Button
-                label="Configure on connection"
+                label="Configure a schedule for the connection"
                 color="primary"
                 variant="outlined"
                 onClick={goToConnectionSchedule}
@@ -310,7 +364,7 @@ const DataQualityChecks = ({
               />
 
               <Button
-                label="Configure on table"
+                label="Configure a schedule for the table"
                 color="primary"
                 variant="outlined"
                 onClick={goToTableSchedule}
@@ -323,33 +377,63 @@ const DataQualityChecks = ({
       </div>
       {checkTypes === CheckTypes.PARTITIONED && (
         <div className="flex items-center mb-3 gap-6">
-          <div className="text-sm">
-            <span className="mr-3">
-              The results are partitioned (grouped) by a timestamp column:
+          <div className="text-sm text-red-500">
+            <span className="mr-3 text-black">
+              The results are date partitioned (grouped) by a column:
             </span>
-            {checksUI.partition_by_column || 'Not configured'}
+            {checksUI.partition_by_column ? (
+              <span className="text-black">{checksUI.partition_by_column}</span>
+            ) : (
+              'Warning: Partition checks will not be run, please configure the date or datetime column'
+            )}
           </div>
-          <span
-            className="text-primary underline text-sm cursor-pointer"
+          <Button
+            label="Configure the date partitioning column"
+            color="primary"
+            variant={checksUI.partition_by_column ? 'outlined' : 'contained'}
             onClick={goToTableTimestamps}
-          >
-            Configure the partition by column
-          </span>
+            className="px-1 py-1"
+            textSize="sm"
+          />
+          {checksUI.partition_by_column && (
+            <div className="flex gap-2 text-sm items-center">
+              <span>Time window:</span>
+              <Select
+                options={timeWindowOptions}
+                value={timeWindow}
+                onChange={setTimeWindow}
+              />
+            </div>
+          )}
         </div>
       )}
       <table className="w-full">
-        <TableHeader checksUI={checksUI} />
+        <TableHeader
+          checksUI={checksUI}
+          timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
+          mode={mode}
+          setMode={setMode}
+          copyUI={copyUI}
+          setCopyUI={setCopyUI}
+          onUpdate={onUpdate}
+        />
         <tbody>
           {checksUI?.categories.map((category, index) => (
             <CheckCategoriesView
               key={index}
               category={category}
               checkResultsOverview={checkResultsOverview}
+              timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
               handleChangeDataDataStreams={(check, jIndex) =>
                 handleChangeDataDataStreams(check, index, jIndex)
               }
               onUpdate={onUpdate}
               getCheckOverview={getCheckOverview}
+              mode={mode}
+              changeCopyUI={changeCopyUI}
+              copyCategory={copyUI?.categories?.find(
+                (item) => item.category === category.category
+              )}
             />
           ))}
         </tbody>

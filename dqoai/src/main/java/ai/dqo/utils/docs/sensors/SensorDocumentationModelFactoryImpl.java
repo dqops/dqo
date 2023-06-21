@@ -22,8 +22,9 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.models.UIFieldModel;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
+import ai.dqo.services.check.mapping.models.FieldModel;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
@@ -38,17 +39,17 @@ import java.util.*;
 public class SensorDocumentationModelFactoryImpl implements SensorDocumentationModelFactory {
     private static final CommentFormatter commentFormatter = new CommentFormatter();
     private DqoHomeContext dqoHomeContext;
-    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
 
     /**
      * Creates a sensor documentation model factory.
      * @param dqoHomeContext DQO User home context.
-     * @param specToUiCheckMappingService Specification to UI model factory, used to get documentation of the sensor parameters.
+     * @param specToModelCheckMappingService Specification to the model factory, used to get documentation of the sensor parameters.
      */
     public SensorDocumentationModelFactoryImpl(DqoHomeContext dqoHomeContext,
-                                               SpecToUiCheckMappingService specToUiCheckMappingService) {
+                                               SpecToModelCheckMappingService specToModelCheckMappingService) {
         this.dqoHomeContext = dqoHomeContext;
-        this.specToUiCheckMappingService = specToUiCheckMappingService;
+        this.specToModelCheckMappingService = specToModelCheckMappingService;
     }
 
     /**
@@ -86,7 +87,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
 
         documentationModel.setDefinition(sensorDefinitionWrapper);
 
-        List<UIFieldModel> fieldsForSensorParameters = this.specToUiCheckMappingService.createFieldsForSensorParameters(sensorParametersSpec);
+        List<FieldModel> fieldsForSensorParameters = this.specToModelCheckMappingService.createFieldsForSensorParameters(sensorParametersSpec);
         ParameterDefinitionsListSpec fieldDefinitionsList = new ParameterDefinitionsListSpec();
         fieldsForSensorParameters.forEach(uiFieldModel -> fieldDefinitionsList.add(uiFieldModel.getDefinition()));
         sensorDefinitionWrapper.getSpec().setFields(fieldDefinitionsList);  // replacing to use the most recent definition from the code
@@ -99,8 +100,8 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
      * @param sensorDefinition Sensor definition wrapper.
      * @return Sql templates.
      */
-    private Map<String, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
-        Map<String, List<String>> sqlTemplates = new HashMap<>();
+    private Map<ProviderTypeModel, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
+        Map<ProviderTypeModel, List<String>> sqlTemplates = new HashMap<>();
         for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
             ProviderType provider = providerSensor.getProvider();
             String sqlTemplate = providerSensor.getSqlTemplate();
@@ -110,11 +111,11 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
             if (sqlTemplate == null) {
                 throw new RuntimeException("Sensor " + sensorDefinition.getName() + " for provider " + provider.toString() + " has no SQL template");
             }
-            sqlTemplates.put(provider.toString(), List.of(sqlTemplate.split("\\r?\\n|\\r")));
+            sqlTemplates.put(ProviderTypeModel.fromProviderType(provider), List.of(sqlTemplate.split("\\r?\\n|\\r")));
         }
 
-        Comparator<String> comparator = String::compareTo;
-        Map<String, List<String>> sortedSqlTemplates = new TreeMap<>(comparator);
+        Comparator<ProviderTypeModel> comparator = Comparator.comparing(providerTypeModel -> providerTypeModel.getProviderTypeDisplayName().toLowerCase());
+        Map<ProviderTypeModel, List<String>> sortedSqlTemplates = new TreeMap<>(comparator);
         sortedSqlTemplates.putAll(sqlTemplates);
 
         return sortedSqlTemplates;

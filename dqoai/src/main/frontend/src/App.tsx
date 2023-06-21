@@ -13,9 +13,17 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LogErrorsApi } from "./services/apiClient";
 
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+
+Chart.register(CategoryScale);
+// import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, TimeScale } from "chart.js";
+import 'chartjs-adapter-moment';
+// ChartJS.register(LinearScale, PointElement, Tooltip, Legend, TimeScale);
+
 const App = () => {
   const dispatch = useActionDispatch();
-  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job);
+  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
     dispatch(getAllJobs());

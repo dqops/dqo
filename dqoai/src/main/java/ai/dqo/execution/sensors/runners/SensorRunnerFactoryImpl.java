@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors.runners;
 
-import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorRunnerType;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class SensorRunnerFactoryImpl implements SensorRunnerFactory {
         switch (sensorType) {
             case sql_template:
                 return this.sqlTemplateSensorRunner;
-            case custom_class:
+            case java_class:
                 return createCustomSensorByJavaClass(sensorRunnerClassName);
             default:
                 throw new IllegalArgumentException("Unsupported provider sensor type: " + sensorType);

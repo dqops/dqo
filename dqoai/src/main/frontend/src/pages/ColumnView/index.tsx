@@ -12,8 +12,10 @@ import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import ConnectionLayout from "../../components/ConnectionLayout";
-import { getFirstLevelState } from "../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import ColumnNavigation from "../../components/ColumnNavigation";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { setActiveFirstLevelUrl } from "../../redux/actions/source.actions";
 
 const initTabs = [
   {
@@ -52,21 +54,19 @@ const ColumnView = () => {
   const showAllSubTabs =(
     () => !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly
   );
-   // will update more in next tasks
-  // useEffect(() => {
-  //   if (tabMap[pageTab]) {
-  //     setActiveTab(tabMap[pageTab]);
-  //   } else {
-  //     setActiveTab('column');
-  //   }
-  // }, [pageTab, tabMap]);
+
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const dispatch = useActionDispatch();
 
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, columnName, tab)
+      )
+    );
     history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, columnName, tab));
-    setTabMap({
-      ...tabMap,
-      [pageTab]: tab
-    });
   };
 
   useEffect(() => {

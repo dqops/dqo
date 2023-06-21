@@ -15,7 +15,7 @@
  */
 package ai.dqo.utils.docs.checks;
 
-import ai.dqo.connectors.ProviderType;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import lombok.Data;
 
 import java.util.List;
@@ -26,9 +26,9 @@ import java.util.List;
 @Data
 public class CheckProviderRenderedSqlDocumentationModel {
     /**
-     * Provider type.
+     * Provider type model.
      */
-    private ProviderType providerType;
+    private ProviderTypeModel providerTypeModel;
 
     /**
      * Jinja2 template content.

@@ -13,15 +13,15 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connection.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.jpg)
 
 2. Select PostgreSQL database type.
 
-    ![Selecting PostgreSQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connection-postgresql.jpg)
+    ![Selecting PostgreSQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-postgresql.jpg)
 
     Add connection settings.
 
-    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/connection-settings-postgresql.jpg)
+    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-postgresql.jpg)
 
     | PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                      |
     |--------------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -36,13 +36,13 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
-    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/connection-settings-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
     For example:
-    ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
+    ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
     
     To remove the property click on the trash icon add the end of the input field.
 

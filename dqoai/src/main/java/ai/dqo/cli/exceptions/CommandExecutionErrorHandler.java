@@ -81,7 +81,7 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
         } else {
             Throwable innerCause = e;
             while (innerCause != null && !(innerCause instanceof DqoErrorUserMessage)) {
-                innerCause = e.getCause();
+                innerCause = innerCause.getCause();
             }
             if (innerCause != null) {
                 System.err.println(((DqoErrorUserMessage) innerCause).getUserFriendlyMessage());

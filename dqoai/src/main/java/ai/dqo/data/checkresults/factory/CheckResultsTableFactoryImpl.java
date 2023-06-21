@@ -48,6 +48,9 @@ public class CheckResultsTableFactoryImpl implements CheckResultsTableFactory {
         table.addColumns(
                 IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME),
                 LongColumn.create(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME),
+                TextColumn.create(CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME),
+                TextColumn.create(CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME),
+                TextColumn.create(CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME),
                 BooleanColumn.create(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME),
                 BooleanColumn.create(CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME),
                 DoubleColumn.create(CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME),

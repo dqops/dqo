@@ -73,7 +73,7 @@ public class DataSourcesController {
      * @param verifyNameUniqueness True when the connection uniqueness must be checked.
      * @return Enum value of connection status and error message.
      */
-    @PostMapping("/datasource/testconnection")
+    @PostMapping(value = "/datasource/testconnection", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "testConnection", notes = "Checks if the given remote connection could be opened and the credentials are valid",
             response = ConnectionTestModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -100,7 +100,7 @@ public class DataSourcesController {
      * @param connectionName Connection name. Required import.
      * @return List of schemas inside a connection.
      */
-    @GetMapping("/datasource/connections/{connectionName}/schemas")
+    @GetMapping(value = "/datasource/connections/{connectionName}/schemas", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceSchemas",
             notes = "Introspects a list of schemas inside a remote data source, identified by an already imported connection.", response = SchemaRemoteModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -133,7 +133,7 @@ public class DataSourcesController {
      * @param schemaName     Schema name.
      * @return List of tables inside a schema.
      */
-    @GetMapping("/datasource/connections/{connectionName}/schemas/{schemaName}/tables")
+    @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceTables", notes = "Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQO.",
             response = TableRemoteBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

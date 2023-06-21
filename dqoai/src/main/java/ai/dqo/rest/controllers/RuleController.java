@@ -15,7 +15,6 @@
  */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
@@ -24,7 +23,9 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.*;
+import ai.dqo.rest.models.metadata.RuleBasicFolderModel;
+import ai.dqo.rest.models.metadata.RuleBasicModel;
+import ai.dqo.rest.models.metadata.RuleModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -67,7 +68,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Model of the rule with specific rule name.
      */
-    @GetMapping("/rules/{fullRuleName}")
+    @GetMapping(value = "/rules/{fullRuleName}", produces = "application/json")
     @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -109,7 +110,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Empty response.
      */
-    @PostMapping("/rules/{fullRuleName}")
+    @PostMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -150,7 +151,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Empty response.
      */
-    @PutMapping("/rules/{fullRuleName}")
+    @PutMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -210,11 +211,11 @@ public class RuleController {
      * @param fullRuleName  Full rule name.
      * @return Empty response.
      */
-    @DeleteMapping("/rules/{fullRuleName}")
+    @DeleteMapping(value = "/rules/{fullRuleName}", produces = "application/json")
     @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Custom rule definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 204, message = "Custom rule definition successfully deleted"),
             @ApiResponse(code = 404, message = "Custom rule not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -245,7 +246,7 @@ public class RuleController {
      * Returns all combined rule folder model.
      * @return rule basic tree model.
      */
-    @GetMapping("/definitions/rules")
+    @GetMapping(value = "/definitions/rules", produces = "application/json")
     @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
             response = RuleBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -295,7 +296,7 @@ public class RuleController {
      * Returns a flat list of all rules.
      * @return List of all rules.
      */
-    @GetMapping("/rules")
+    @GetMapping(value = "/rules", produces = "application/json")
     @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
             response = RuleBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

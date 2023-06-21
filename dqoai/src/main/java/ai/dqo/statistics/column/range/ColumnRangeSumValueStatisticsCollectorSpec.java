@@ -84,6 +84,6 @@ public class ColumnRangeSumValueStatisticsCollectorSpec extends AbstractStatisti
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return DataTypeCategory.COMPARABLE;
+        return DataTypeCategory.NUMERIC;
     }
 }

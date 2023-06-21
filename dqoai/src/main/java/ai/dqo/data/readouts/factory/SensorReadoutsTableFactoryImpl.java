@@ -48,6 +48,7 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
                 TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9"),
                 LongColumn.create(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
+                TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME),
                 LongColumn.create(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME),
@@ -69,7 +70,11 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
                 TextColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME),
                 InstantColumn.create(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME),
-                IntColumn.create(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME)
+                IntColumn.create(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.CREATED_AT_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME),
+                TextColumn.create(SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME),
+                TextColumn.create(SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME)
         );
 
         return table;

@@ -20,7 +20,7 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.metadata.userhome.UserHomeObjectMother;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +39,7 @@ public class SimilarCheckMatchingServiceImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new SimilarCheckMatchingServiceImpl(SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+        this.sut = new SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl()));
         this.userHome = UserHomeObjectMother.createBareUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");

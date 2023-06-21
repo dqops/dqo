@@ -37,22 +37,22 @@ import java.util.Objects;
 public class ColumnUniquenessStatisticsCollectorsSpec extends AbstractStatisticsCollectorCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
-            put("unique_count", o -> o.uniqueCount);
-            put("unique_percent", o -> o.uniquePercent);
+            put("distinct_count", o -> o.distinctCount);
+            put("distinct_percent", o -> o.distinctPercent);
             put("duplicate_count", o -> o.duplicateCount);
             put("duplicate_percent", o -> o.duplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Configuration of the profiler that counts unique (distinct) column values.")
+    @JsonPropertyDescription("Configuration of the profiler that counts distinct column values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniqueCountStatisticsCollectorSpec uniqueCount = new ColumnUniquenessUniqueCountStatisticsCollectorSpec();
+    private ColumnUniquenessDistinctCountStatisticsCollectorSpec distinctCount = new ColumnUniquenessDistinctCountStatisticsCollectorSpec();
 
-    @JsonPropertyDescription("Configuration of the profiler that measure the percentage of unique (distinct) column values.")
+    @JsonPropertyDescription("Configuration of the profiler that measure the percentage of distinct column values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniquePercentStatisticsCollectorSpec uniquePercent = new ColumnUniquenessUniquePercentStatisticsCollectorSpec();
+    private ColumnUniquenessDistinctPercentStatisticsCollectorSpec distinctPercent = new ColumnUniquenessDistinctPercentStatisticsCollectorSpec();
 
     @JsonPropertyDescription("Configuration of the profiler that counts duplicate column values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -65,39 +65,39 @@ public class ColumnUniquenessStatisticsCollectorsSpec extends AbstractStatistics
     private ColumnUniquenessDuplicatePercentStatisticsCollectorSpec duplicatePercent = new ColumnUniquenessDuplicatePercentStatisticsCollectorSpec();
 
     /**
-     * Returns the profiler configuration that counts unique (distinct) values.
+     * Returns the profiler configuration that counts distinct values.
      * @return Profiler for the distinct count.
      */
-    public ColumnUniquenessUniqueCountStatisticsCollectorSpec getUniqueCount() {
-        return uniqueCount;
+    public ColumnUniquenessDistinctCountStatisticsCollectorSpec getDistinctCount() {
+        return distinctCount;
     }
 
     /**
-     * Sets a reference to a unique values count profiler.
-     * @param uniqueCount Unique (distinct) values count profiler.
+     * Sets a reference to a distinct values count profiler.
+     * @param distinctCount Unique (distinct) values count profiler.
      */
-    public void setUniqueCount(ColumnUniquenessUniqueCountStatisticsCollectorSpec uniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.uniqueCount, uniqueCount));
-        this.uniqueCount = uniqueCount;
-        this.propagateHierarchyIdToField(uniqueCount, "unique_count");
+    public void setDistinctCount(ColumnUniquenessDistinctCountStatisticsCollectorSpec distinctCount) {
+        this.setDirtyIf(!Objects.equals(this.distinctCount, distinctCount));
+        this.distinctCount = distinctCount;
+        this.propagateHierarchyIdToField(distinctCount, "distinct_count");
     }
 
     /**
-     * Returns the profiler configuration that measure the percentage of unique (distinct) values.
-     * @return Profiler for the unique (distinct) percent.
+     * Returns the profiler configuration that measure the percentage of distinct values.
+     * @return Profiler for the distinct percent.
      */
-    public ColumnUniquenessUniquePercentStatisticsCollectorSpec getUniquePercent() {
-        return uniquePercent;
+    public ColumnUniquenessDistinctPercentStatisticsCollectorSpec getDistinctPercent() {
+        return distinctPercent;
     }
 
     /**
-     * Sets a reference to a unique values percent profiler.
-     * @param uniquePercent Unique (distinct) percent profiler.
+     * Sets a reference to a distinct values percent profiler.
+     * @param distinctPercent Distinct percent profiler.
      */
-    public void setUniquePercent(ColumnUniquenessUniquePercentStatisticsCollectorSpec uniquePercent) {
-        this.setDirtyIf(!Objects.equals(this.uniquePercent, uniquePercent));
-        this.uniquePercent = uniquePercent;
-        this.propagateHierarchyIdToField(uniquePercent, "unique_percent");
+    public void setDistinctPercent(ColumnUniquenessDistinctPercentStatisticsCollectorSpec distinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.distinctPercent, distinctPercent));
+        this.distinctPercent = distinctPercent;
+        this.propagateHierarchyIdToField(distinctPercent, "distinct_percent");
     }
 
     /**

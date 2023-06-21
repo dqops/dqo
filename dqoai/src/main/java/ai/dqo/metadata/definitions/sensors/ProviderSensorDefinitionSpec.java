@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.definitions.sensors;
 
-import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -59,6 +59,10 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Additional provider specific sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> parameters;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonPropertyDescription("Disables merging this sensor's SQL with other sensors. When this parameter is 'true', the sensor's SQL will be executed as an independent query.")
+    private boolean disableMergingQueries;
 
     /**
      * Returns a key/value map of additional rule parameters.
@@ -115,7 +119,7 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
      * Returns true if the sensor supports grouping by the data stream.
      * @return True when the sensor supports grouping by the data stream.
      */
-    public Boolean isSupportsGroupingByDataStream() {
+    public Boolean getSupportsGroupingByDataStream() {
         return supportsGroupingByDataStream;
     }
 
@@ -132,7 +136,7 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
      * Checks if the sensor supports grouping by the date column identified by the 'partition_by_column' parameter, that means the sensor can analyze daily and monthly partitioned data.
      * @return True when the sensor supports partitioned checks.
      */
-    public Boolean isSupportsPartitionedChecks() {
+    public Boolean getSupportsPartitionedChecks() {
         return supportsPartitionedChecks;
     }
 
@@ -143,6 +147,23 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     public void setSupportsPartitionedChecks(Boolean supportsPartitionedChecks) {
         this.setDirtyIf(!Objects.equals(this.supportsPartitionedChecks, supportsPartitionedChecks));
         this.supportsPartitionedChecks = supportsPartitionedChecks;
+    }
+
+    /**
+     * Returns true if this sensor should not be merged with other queries.
+     * @return True when this query should not be merged with other queries.
+     */
+    public boolean isDisableMergingQueries() {
+        return disableMergingQueries;
+    }
+
+    /**
+     * Sets a flag to disable merging queries with other similar queries.
+     * @param disableMergingQueries Disable merging queries flag.
+     */
+    public void setDisableMergingQueries(boolean disableMergingQueries) {
+        this.setDirtyIf(this.disableMergingQueries != disableMergingQueries);
+        this.disableMergingQueries = disableMergingQueries;
     }
 
     /**

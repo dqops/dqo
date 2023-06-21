@@ -115,6 +115,10 @@ const Tree = () => {
         setActiveTab(`${tableNode?.id || ""}.columns`);
       }
 
+      if (match.path === ROUTES.PATTERNS.TABLE_INCIDENTS_NOTIFICATION) {
+        setActiveTab(`${tableNode?.id || ""}.incidents`);
+      }
+
       if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
         setActiveTab(`${tableNode?.id || ""}.dailyCheck`);
       }
@@ -258,7 +262,7 @@ const Tree = () => {
   };
 
   const renderIcon = (node: CustomTreeNode) => {
-    if (node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)) {
+    if (node.level === TREE_LEVEL.TABLE_INCIDENTS || node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)) {
       return <div className="w-0 shrink-0" />;
     }
     if (loadingNodes[node.id]) {

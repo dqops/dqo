@@ -1,21 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Tabs from '../../Tabs';
-import { useParams } from 'react-router-dom';
 import {
-  CheckResultsDetailedDataModel,
-  CheckSearchFiltersCheckTypeEnum,
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum,
-  ErrorsDetailedDataModel,
-  SensorReadoutsDetailedDataModel,
-  UICheckModel
+  CheckModel, DeleteStoredDataQueueJobParameters
 } from '../../../api';
-import {
-  CheckResultApi,
-  ErrorsApi,
-  JobApiClient,
-  SensorReadoutsApi
-} from '../../../services/apiClient';
+import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
 import IconButton from '../../IconButton';
 import SvgIcon from '../../SvgIcon';
@@ -27,13 +17,13 @@ import moment from 'moment/moment';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { CheckTypes } from '../../../shared/routes';
 import {
+  getCheckErrors,
+  getCheckReadouts,
+  getCheckResults,
   setCheckFilters,
-  setCheckResults,
-  setSensorErrors,
-  setSensorReadouts
 } from '../../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
-import { getFirstLevelState } from '../../../redux/selectors';
+import { getFirstLevelActiveTab, getFirstLevelState } from '../../../redux/selectors';
 
 const tabs = [
   {
@@ -51,26 +41,36 @@ const tabs = [
 ];
 
 interface CheckDetailsProps {
-  check?: UICheckModel;
+  checkTypes: CheckTypes;
+  connection: string;
+  schema: string;
+  table: string;
+  column?: string;
+  check?: CheckModel;
+  runCheckType?: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName?: string;
   onClose: () => void;
   job?: DqoJobHistoryEntryModel;
+  data_clean_job_template?: DeleteStoredDataQueueJobParameters;
+  defaultFilters?: any;
 }
 
-const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
+const CheckDetails = ({
+  checkTypes,
+  connection,
+  schema,
+  table,
+  column,
+  data_clean_job_template,
+  runCheckType,
+  checkName,
+  timeScale,
+  onClose,
+  job,
+  defaultFilters
+}: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
-  const {
-    checkTypes,
-    connection,
-    schema,
-    table,
-    column
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-    column: string;
-  } = useParams();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const {
     checkResults: resultsData,
@@ -78,491 +78,135 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
     sensorErrors: errorsData,
     checkFilters: filtersData
   } = useSelector(getFirstLevelState(checkTypes));
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const checkResults = resultsData
-    ? resultsData[check?.check_name ?? ''] || []
+    ? resultsData[checkName ?? ''] || []
     : [];
   const sensorReadouts = readoutsData
-    ? readoutsData[check?.check_name ?? ''] || []
+    ? readoutsData[checkName ?? ''] || []
     : [];
   const sensorErrors = errorsData
-    ? errorsData[check?.check_name ?? ''] || []
+    ? errorsData[checkName ?? ''] || []
     : [];
-  const filters = filtersData ? filtersData[check?.check_name ?? ''] || {} : {};
+  const filters = filtersData && filtersData[checkName ?? ''] ? filtersData[checkName ?? ''] : (defaultFilters || {
+    month: moment().format('MMMM YYYY')
+  });
 
   const dispatch = useActionDispatch();
 
   const { sidebarWidth } = useTree();
 
-  const getCheckResult = (
-    data: CheckResultsDetailedDataModel[]
-  ): CheckResultsDetailedDataModel[] => {
-    return data.filter((item) => item.checkName === check?.check_name);
-  };
+  const calculateDateRange = (month: string) => {
+    if (!month) return { startDate: '', endDate: '' };
 
-  const getSensorReadout = (
-    data: SensorReadoutsDetailedDataModel[]
-  ): SensorReadoutsDetailedDataModel[] => {
-    return data.filter(
-      (item) =>
-        item.singleSensorReadouts &&
-        item.singleSensorReadouts[0]?.checkName === check?.check_name
-    );
-  };
+    if (month === 'Last 3 months') {
+      return {
+        startDate: moment().add(-2, 'month').startOf('month').format('YYYY-MM-DD'),
+        endDate: moment().endOf('month').format('YYYY-MM-DD')
+      }
+    }
 
-  const getErrorItem = (
-    data: ErrorsDetailedDataModel[]
-  ): ErrorsDetailedDataModel[] => {
-    return data.filter((item) => item.checkName === check?.check_name);
-  };
+    return {
+      startDate: moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD'),
+      endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+    }
+  }
+
+  const fetchCheckErrors = useCallback(
+    (month: string, dataStreamName?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
+
+      dispatch(getCheckErrors(checkTypes, firstLevelActiveTab, {
+        connection,
+        schema,
+        table,
+        column,
+        dataStreamName,
+        startDate,
+        endDate,
+        runCheckType,
+        timeScale,
+        checkName: checkName ?? ''
+      }));
+    },
+    [checkName, timeScale, runCheckType, connection, schema, table, column]
+  );
+
+  const fetchCheckReadouts = useCallback(
+    (month: string, dataStreamName?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
+
+      dispatch(getCheckReadouts(
+        checkTypes,
+        firstLevelActiveTab,
+        {
+          connection,
+          schema,
+          table,
+          column,
+          dataStreamName,
+          startDate,
+          endDate,
+          runCheckType,
+          timeScale,
+          checkName: checkName ?? ''
+        }
+      ));
+    },
+    [runCheckType, checkName, timeScale, connection, schema, table, column]
+  );
+
+  const fetchCheckResults = useCallback(
+    (month: string, dataStreamName?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
+
+      dispatch(getCheckResults(
+        checkTypes,
+        firstLevelActiveTab,
+        {
+          connection,
+          schema,
+          table,
+          column,
+          dataStreamName,
+          startDate,
+          endDate,
+          runCheckType,
+          checkName: checkName ?? '',
+          timeScale,
+        }
+      ));
+    },
+    [runCheckType, checkName, timeScale, connection, schema, table, column]
+  );
 
   useEffect(() => {
-    if (!sensorErrors.length) {
+    if (!sensorErrors?.length) {
       fetchCheckErrors(filters.month, filters.dataStreamName);
     }
   }, []);
 
   useEffect(() => {
-    if (!sensorReadouts.length) {
+    if (!sensorReadouts?.length) {
       fetchCheckReadouts(filters.month, filters.dataStreamName);
     }
   }, []);
 
   useEffect(() => {
-    if (!checkResults.length) {
+    if (!checkResults?.length) {
       fetchCheckResults(filters.month, filters.dataStreamName);
     }
   }, []);
 
-  const fetchCheckErrors = useCallback(
-    (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
-
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.profiling
-      ) {
-        if (column) {
-          ErrorsApi.getColumnProfilingErrors(
-            connection,
-            schema,
-            table,
-            column,
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorErrors(
-                checkTypes,
-                check?.check_name ?? '',
-                getErrorItem(res.data)
-              )
-            );
-          });
-        } else {
-          ErrorsApi.getTableProfilingErrors(
-            connection,
-            schema,
-            table,
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorErrors(
-                checkTypes,
-                check?.check_name ?? '',
-                getErrorItem(res.data)
-              )
-            );
-          });
-        }
-      }
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.recurring
-      ) {
-        if (column) {
-          ErrorsApi.getColumnRecurringErrors(
-            connection,
-            schema,
-            table,
-            column,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorErrors(
-                checkTypes,
-                check?.check_name ?? '',
-                getErrorItem(res.data)
-              )
-            );
-          });
-        } else {
-          ErrorsApi.getTableRecurringErrors(
-            connection,
-            schema,
-            table,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorErrors(
-                checkTypes,
-                check?.check_name ?? '',
-                getErrorItem(res.data)
-              )
-            );
-          });
-        }
-      }
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.partitioned
-      ) {
-        if (column) {
-          ErrorsApi.getColumnPartitionedErrors(
-            connection,
-            schema,
-            table,
-            column,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorErrors(
-                checkTypes,
-                check?.check_name ?? '',
-                getErrorItem(res.data)
-              )
-            );
-          });
-        } else {
-          ErrorsApi.getTablePartitionedErrors(
-            connection,
-            schema,
-            table,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorErrors(
-                checkTypes,
-                check?.check_name ?? '',
-                getErrorItem(res.data)
-              )
-            );
-          });
-        }
-      }
-    },
-    [check, connection, schema, table, column]
-  );
-
-  const fetchCheckReadouts = useCallback(
-    (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
-
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.profiling
-      ) {
-        if (column) {
-          SensorReadoutsApi.getColumnProfilingSensorReadouts(
-            connection,
-            schema,
-            table,
-            column,
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorReadouts(
-                checkTypes,
-                check?.check_name ?? '',
-                getSensorReadout(res.data)
-              )
-            );
-          });
-        } else {
-          SensorReadoutsApi.getTableProfilingSensorReadouts(
-            connection,
-            schema,
-            table,
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorReadouts(
-                checkTypes,
-                check?.check_name ?? '',
-                getSensorReadout(res.data)
-              )
-            );
-          });
-        }
-      }
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.recurring
-      ) {
-        if (column) {
-          SensorReadoutsApi.getColumnRecurringSensorReadouts(
-            connection,
-            schema,
-            table,
-            column,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorReadouts(
-                checkTypes,
-                check?.check_name ?? '',
-                getSensorReadout(res.data)
-              )
-            );
-          });
-        } else {
-          SensorReadoutsApi.getTableRecurringSensorReadouts(
-            connection,
-            schema,
-            table,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorReadouts(
-                checkTypes,
-                check?.check_name ?? '',
-                getSensorReadout(res.data)
-              )
-            );
-          });
-        }
-      }
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.partitioned
-      ) {
-        if (column) {
-          SensorReadoutsApi.getColumnPartitionedSensorReadouts(
-            connection,
-            schema,
-            table,
-            column,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorReadouts(
-                checkTypes,
-                check?.check_name ?? '',
-                getSensorReadout(res.data)
-              )
-            );
-          });
-        } else {
-          SensorReadoutsApi.getTablePartitionedSensorReadouts(
-            connection,
-            schema,
-            table,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setSensorReadouts(
-                checkTypes,
-                check?.check_name ?? '',
-                getSensorReadout(res.data)
-              )
-            );
-          });
-        }
-      }
-    },
-    [check, connection, schema, table, column]
-  );
-
-  const fetchCheckResults = useCallback(
-    (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
-
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.profiling
-      ) {
-        if (column) {
-          CheckResultApi.getColumnProfilingChecksResults(
-            connection,
-            schema,
-            table,
-            column,
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setCheckResults(
-                checkTypes,
-                check?.check_name ?? '',
-                getCheckResult(res.data)
-              )
-            );
-          });
-        } else {
-          CheckResultApi.getTableProfilingChecksResults(
-            connection,
-            schema,
-            table,
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setCheckResults(
-                checkTypes,
-                check?.check_name ?? '',
-                getCheckResult(res.data)
-              )
-            );
-          });
-        }
-      }
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.recurring
-      ) {
-        if (column) {
-          CheckResultApi.getColumnRecurringChecksResults(
-            connection,
-            schema,
-            table,
-            column,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setCheckResults(
-                checkTypes,
-                check?.check_name ?? '',
-                getCheckResult(res.data)
-              )
-            );
-          });
-        } else {
-          CheckResultApi.getTableRecurringChecksResults(
-            connection,
-            schema,
-            table,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setCheckResults(
-                checkTypes,
-                check?.check_name ?? '',
-                getCheckResult(res.data)
-              )
-            );
-          });
-        }
-      }
-      if (
-        check?.run_checks_job_template?.checkType ===
-        CheckSearchFiltersCheckTypeEnum.partitioned
-      ) {
-        if (column) {
-          CheckResultApi.getColumnPartitionedChecksResults(
-            connection,
-            schema,
-            table,
-            column,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setCheckResults(
-                checkTypes,
-                check?.check_name ?? '',
-                getCheckResult(res.data)
-              )
-            );
-          });
-        } else {
-          CheckResultApi.getTablePartitionedChecksResults(
-            connection,
-            schema,
-            table,
-            check?.run_checks_job_template?.timeScale || 'daily',
-            dataStreamName,
-            startDate,
-            endDate
-          ).then((res) => {
-            dispatch(
-              setCheckResults(
-                checkTypes,
-                check?.check_name ?? '',
-                getCheckResult(res.data)
-              )
-            );
-          });
-        }
-      }
-    },
-    [check, connection, schema, table, column]
-  );
-
   useEffect(() => {
     if (
-      job &&
-      (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-        job.status === DqoJobHistoryEntryModelStatusEnum.failed)
+      (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+        job?.status === DqoJobHistoryEntryModelStatusEnum.failed)
     ) {
       refetch(filters.month, filters.dataStreamName);
     }
-  }, [job]);
+  }, [job?.status]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);
@@ -570,7 +214,8 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   const onChangeDataStream = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, check?.check_name ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab,
+      checkName ?? '', {
         ...filters,
         dataStreamName: value
       })
@@ -580,7 +225,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   const onChangeMonth = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, check?.check_name ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
         ...filters,
         month: value
       })
@@ -591,10 +236,8 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const refetch = (month: string, name?: string) => {
     fetchCheckErrors(month, name);
     fetchCheckResults(month, name);
-    fetchCheckResults(month, name);
+    fetchCheckReadouts(month, name);
   };
-
-  console.log(checkResults.length);
 
   return (
     <div
@@ -623,6 +266,9 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         {activeTab === 'check_results' && (
           <CheckResultsTab
+            runCheckType={runCheckType || ''}
+            checkName={checkName || ''}
+            timeScale={timeScale}
             results={checkResults || []}
             dataStreamName={filters.dataStreamName}
             month={filters.month}
@@ -655,7 +301,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
-              ...check?.data_clean_job_template,
+              ...data_clean_job_template || {},
               ...params
             });
           }}

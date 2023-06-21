@@ -62,10 +62,11 @@ public class TerminalReaderImpl extends TerminalReaderAbstract {
      * Tries to read one character from the terminal.
      *
      * @param timeoutMillis Read timeout.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
      * @return Character that was read.
      */
     @Override
-    public Character tryReadChar(long timeoutMillis) {
+    public Character tryReadChar(long timeoutMillis, boolean peekOnly) {
         try {
             Terminal terminal = this.lineReader.getTerminal();
 
@@ -73,78 +74,15 @@ public class TerminalReaderImpl extends TerminalReaderAbstract {
             if (readResult <= 0) {
                 return null;
             }
+
+            if (peekOnly || Thread.currentThread().isInterrupted()) {
+                return null;
+            }
+
             return (char)terminal.reader().read();
         }
         catch (IOException ioe) {
             return null;
-        }
-    }
-
-    /**
-     * Starts a background job that will wait for any input on the console.
-     * @param waitDuration Wait duration.
-     * @return Mono that returns true when any input appeared on the console (the user clicked any key). False or cancelled when no input appeared.
-     */
-    @Override
-    public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration) {
-        CompletableFuture<Boolean> waitForAnyInputFuture = CompletableFuture.supplyAsync(() -> {
-            try {
-                Terminal terminal = this.lineReader.getTerminal();
-
-                long waitDurationMillis = waitDuration.toMillis();
-                int readResult = terminal.reader().peek(waitDurationMillis);
-                if (readResult <= 0) {
-                    return false;
-                }
-                return true;
-            } catch (IOException ioe) {
-                return false;
-            }
-        });
-
-        return waitForAnyInputFuture;
-    }
-
-    /**
-     * Hangs on waiting for the user to confirm that the application should exit.
-     *
-     * @param startMessage Message to show before waiting for the user to confirm the exit.
-     */
-    @Override
-    public void waitForExit(String startMessage) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
-
-        while (true) {
-            Character character = this.tryReadChar(1000);
-            if (character != null) {
-                if (this.promptBoolean("Exit the application", false)) {
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
-     * Hangs on waiting for the user to confirm that the application should exit.
-     * Waits for up to <code>waitDuration</code>.
-     *
-     * @param startMessage Message to show before waiting for the user to confirm the exit.
-     * @param waitDuration Wait duration. The method will return false when the timeout elapsed.
-     * @return True - the user intentionally clicked any button to exit the application, false - the timeout elapsed.
-     */
-    @Override
-    public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
-
-        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
-        try {
-            Boolean wasExitedByUser = booleanCompletableFuture.get(waitDuration.toMillis(), TimeUnit.MILLISECONDS);
-            return wasExitedByUser;
-        }
-        catch (InterruptedException | ExecutionException | TimeoutException e) {
-            return false;
         }
     }
 }

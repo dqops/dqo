@@ -15,18 +15,16 @@
  */
 package ai.dqo.utils.tables;
 
+import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import org.jetbrains.annotations.NotNull;
-import tech.tablesaw.api.LongColumn;
-import tech.tablesaw.api.StringColumn;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -45,12 +43,40 @@ public class TableMergeUtility {
     public static Table mergeNewResults(Table currentResults, Table newResults, String... joinColumns) {
         assert joinColumns.length > 0;
 
+        if (!tableSchemasEqual(currentResults, newResults)) {
+            currentResults = recreateCurrentTableWithDifferentColumns(currentResults, newResults.columns());
+        }
+
         if (joinColumns.length == 1 && tableSchemasEqual(currentResults, newResults)) {
             return mergeResultsSimple(currentResults, newResults, joinColumns[0]);
         }
         else {
             return mergeNewResultsOnMultipleColumns(currentResults, newResults, joinColumns);
         }
+    }
+
+    /**
+     * Creates a new version of the current results, but having all expected columns.
+     * @param sourceTable The source table to recreate.
+     * @param expectedColumns A list of expected columns, we use the column names and column types, we do not copy values from them.
+     * @return A new instance of a table that has all expected columns from the current results.
+     */
+    protected static Table recreateCurrentTableWithDifferentColumns(Table sourceTable, List<Column<?>> expectedColumns) {
+        Map<String, ? extends Column<?>> currentColumnsByColumnName = sourceTable.columns().stream()
+                .collect(Collectors.toMap(c -> c.name(), c -> c));
+
+        List<Column<?>> newColumns = new ArrayList<>();
+        for (Column<?> expectedColumn : expectedColumns) {
+            String columnName = expectedColumn.name();
+            Column<?> columnFromSourceTable = currentColumnsByColumnName.get(columnName);
+            if (columnFromSourceTable != null) {
+                newColumns.add(columnFromSourceTable);
+            } else {
+                newColumns.add(expectedColumn.emptyCopy(sourceTable.rowCount()));
+            }
+        }
+
+        return Table.create(sourceTable.name(), newColumns);
     }
 
     /**
@@ -64,16 +90,23 @@ public class TableMergeUtility {
      */
     protected static Table mergeResultsSimple(Table currentResults, Table newResults, String idColumName) {
         Column<?> newResultIdColumn = newResults.column(idColumName);
+        Instant now = Instant.now();
+        InstantColumn newResultsCreatedAtColumn = newResults.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
+        InstantColumn newResultsUpdatedAtColumn = newResults.instantColumn(CommonColumnNames.UPDATED_AT_COLUMN_NAME);
         Table resultTable = null;
 
         Column<?> currentIdColumn = currentResults.column(idColumName);
         if (currentIdColumn instanceof TextColumn) {
             TextColumn currentIdColumnString = (TextColumn) currentIdColumn;
-            List<String> idsInNewResultsStrings = ((TextColumn)newResultIdColumn).asList();
+            Set<String> idsInCurrentResults = currentIdColumnString.asSet();
+            TextColumn newResultIdTextColumn = (TextColumn) newResultIdColumn;
+            List<String> idsInNewResultsStrings = newResultIdTextColumn.asList();
             Selection notInSelection = currentIdColumnString.isNotIn(idsInNewResultsStrings);
 
             if (notInSelection.size() < currentIdColumnString.size()) {
                 resultTable = currentResults.where(notInSelection);
+                Selection newResultsThatAreUpdates = newResultIdTextColumn.isIn(idsInCurrentResults);
+                newResultsUpdatedAtColumn.set(newResultsThatAreUpdates, now);
             }
             else {
                 resultTable = currentResults.copy();
@@ -81,22 +114,15 @@ public class TableMergeUtility {
         }
         else if (currentIdColumn instanceof LongColumn) {
             LongColumn currentIdColumnLong = (LongColumn) currentIdColumn;
-            long[] idsInNewResultsLong = ((LongColumn)newResultIdColumn).asLongArray();
+            LongColumn newResultsIdColumnLong = (LongColumn) newResultIdColumn;
+            Set<Number> idsInCurrentResultsLong = (Set<Number>)(Set<?>)newResultsIdColumnLong.asSet();
+            long[] idsInNewResultsLong = newResultsIdColumnLong.asLongArray();
             Selection notInSelection = currentIdColumnLong.isNotIn(idsInNewResultsLong);
 
             if (notInSelection.size() < currentIdColumnLong.size()) {
                 resultTable = currentResults.where(notInSelection);
-            }
-            else {
-                resultTable = currentResults.copy();
-            }
-        } else if (currentIdColumn instanceof StringColumn) {
-            StringColumn currentIdColumnString = (StringColumn) currentIdColumn;
-            List<String> idsInNewResultsStrings = ((StringColumn)newResultIdColumn).asList();
-            Selection notInSelection = currentIdColumnString.isNotIn(idsInNewResultsStrings);
-
-            if (notInSelection.size() < currentIdColumnString.size()) {
-                resultTable = currentResults.where(notInSelection);
+                Selection newResultsThatAreUpdates = newResultsIdColumnLong.isIn(idsInCurrentResultsLong);
+                newResultsUpdatedAtColumn.set(newResultsThatAreUpdates, now);
             }
             else {
                 resultTable = currentResults.copy();
@@ -105,6 +131,8 @@ public class TableMergeUtility {
             throw new DqoRuntimeException("Unsupported column type " + newResultIdColumn.type());
         }
 
+        Selection whenNotUpdated = newResultsUpdatedAtColumn.isMissing();
+        newResultsCreatedAtColumn.set(whenNotUpdated, now);
         resultTable.append(newResults);
 
         return resultTable;
