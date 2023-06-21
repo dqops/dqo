@@ -19,6 +19,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
@@ -113,6 +114,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getDataStreams() != null) {
             dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataStreams().getDataStreamMappingName());
+        } else {
+            dataStreamMappingNameColumn.setMissingTo(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
         }
         normalizedResults.addColumns(dataStreamMappingNameColumn);
 
