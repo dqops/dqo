@@ -25,6 +25,7 @@ interface TableHeaderProps {
   setMode: (mode?: string) => void;
   copyUI?: CheckContainerModel;
   setCopyUI: (ui: CheckContainerModel) => void;
+  onUpdate: () => void;
 }
 
 const TableHeader = ({
@@ -33,7 +34,8 @@ const TableHeader = ({
   mode,
   setMode,
   copyUI,
-  setCopyUI
+  setCopyUI,
+  onUpdate,
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -56,6 +58,7 @@ const TableHeader = ({
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const onRunChecks = async () => {
+    await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: checksUI?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null

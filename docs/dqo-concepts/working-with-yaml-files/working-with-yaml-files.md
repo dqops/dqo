@@ -8,7 +8,7 @@ versioned along with any other pipeline code or machine learning code.
 
 Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
 
-``` yaml hl_lines="14-22"
+``` yaml hl_lines="15-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table

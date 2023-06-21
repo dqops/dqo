@@ -159,9 +159,7 @@ const TableActionGroup = ({
               ''
             )
           }
-          onClick={() => {
-            collectStatistics();
-          }}
+          onClick={collectStatistics}
           loading={loadingJob}
         />
       )}

@@ -65,7 +65,7 @@ To configure the date or datetime colum:
 
 2. Select the table of interest from the tree view.
 
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "DATE or DATETIME 
+3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime 
     column name for partition checks" input field.
 
     ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.jpg)
@@ -210,7 +210,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 ### Configuring date or datetime column for partition checks and event and ingestion timestamps for timeliness checks
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
-To run partition checks you need to configure DATE or DATETIME colum which will be used as the time partitioning key for the table.
+To run partition checks you need to configure Date or datetime colum which will be used as the time partitioning key for the table.
 
 To run timeliness checks you need to configure event and/or ingestion timestamp columns.
 

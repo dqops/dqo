@@ -53,24 +53,42 @@ public class SqlQueryFragmentsParserImpl implements SqlQueryFragmentsParser {
 
         int actualValueUsagesCount = StringUtils.countMatches(sql, actualValueColumnName);
         if (actualValueUsagesCount != 1) {
-            return FragmentedSqlQuery.createNotGroupableQuery(sql);
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
+        }
+
+        int expectedValueUsagesCount = StringUtils.countMatches(sql, expectedValueColumnName);
+        if (expectedValueUsagesCount > 1) {
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
         }
 
         List<String> listOfLines = sql.lines().collect(Collectors.toList());
         int indexIfSelect = findIndexOfLineEqualsText(listOfLines, 0, "SELECT");
         if (indexIfSelect < 0) {
-            return FragmentedSqlQuery.createNotGroupableQuery(sql);
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
         }
 
         int indexOfActualValueAlias = findIndexOfLineHavingText(listOfLines, indexIfSelect + 1, actualValueColumnName);
+        int indexOfExpectedValueAlias = findIndexOfLineHavingText(listOfLines, indexIfSelect + 1, expectedValueColumnName);
+        if (indexOfExpectedValueAlias > 0 && indexOfExpectedValueAlias < indexOfActualValueAlias) {
+            return FragmentedSqlQuery.createNotGroupableQuery(sql, actualValueColumnName, expectedValueColumnName);
+        }
 
-        FragmentedSqlQuery componentList = new FragmentedSqlQuery(sql);
+        FragmentedSqlQuery componentList = new FragmentedSqlQuery(sql, actualValueColumnName, expectedValueColumnName);
+
         componentList.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT,
                 combineLines(listOfLines, 0, indexIfSelect + 1, true)));
         componentList.add(new SqlQueryFragment(SqlQueryFragmentType.ACTUAL_VALUE,
                 combineLines(listOfLines, indexIfSelect + 1, indexOfActualValueAlias + 1, true)));
-        componentList.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT,
-                combineLines(listOfLines, indexOfActualValueAlias + 1, listOfLines.size(), false)));
+        if (indexOfExpectedValueAlias > 0) {
+            componentList.add(new SqlQueryFragment(SqlQueryFragmentType.EXPECTED_VALUE,
+                    combineLines(listOfLines, indexOfActualValueAlias + 1, indexOfExpectedValueAlias + 1, true)));
+            componentList.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT,
+                    combineLines(listOfLines, indexOfExpectedValueAlias + 1, listOfLines.size(), false)));
+        }
+        else {
+            componentList.add(new SqlQueryFragment(SqlQueryFragmentType.STATIC_FRAGMENT,
+                    combineLines(listOfLines, indexOfActualValueAlias + 1, listOfLines.size(), false)));
+        }
 
         return componentList;
     }

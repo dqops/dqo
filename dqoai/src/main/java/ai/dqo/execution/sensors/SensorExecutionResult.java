@@ -77,7 +77,7 @@ public class SensorExecutionResult {
      * Sensor run parameters (connection, table, column, sensor parameters).
      * @return Sensor execution run parameters.
      */
-    public SensorExecutionRunParameters getParameters() {
+    public SensorExecutionRunParameters getSensorRunParameters() {
         return parameters;
     }
 

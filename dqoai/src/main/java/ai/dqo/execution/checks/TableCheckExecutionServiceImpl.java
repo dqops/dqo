@@ -43,6 +43,9 @@ import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.*;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
+import ai.dqo.execution.sensors.grouping.GroupedSensorsCollection;
+import ai.dqo.execution.sensors.grouping.PreparedSensorsGroup;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
 import ai.dqo.execution.sensors.progress.PreparingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
@@ -70,6 +73,7 @@ import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -163,7 +167,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
-            // checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0, 0);
             return checkExecutionSummary; // no checks for this table
         }
         jobCancellationToken.throwIfCancelled();
@@ -185,92 +188,29 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         Table allErrorsTable = errorsSnapshot.getTableDataChanges().getNewOrChangedRows();
         jobCancellationToken.throwIfCancelled();
 
-        int checksCount = 0;
-        int sensorResultsCount = 0;
-        int passedRules = 0;
-        int warningIssuesCount = 0;
-        int errorIssuesCount = 0;
-        int fatalIssuesCount = 0;
-        int erroredSensors = 0;
-        int erroredRules = 0;
+        TableChecksExecutionStatistics executionStatistics = new TableChecksExecutionStatistics();
 
-        for (AbstractCheckSpec<?, ?, ?, ?> checkSpec : checks) {
+        List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(checks, executionContext, userHome, userTimeWindowFilters, progressListener,
+                allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
+
+        GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection();
+        groupedSensorsCollection.addAllPreparedSensors(allPreparedSensors);
+
+        List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(groupedSensorsCollection, executionContext, progressListener, allErrorsTable,
+                checkExecutionSummary, executionStatistics, dummySensorExecution, jobCancellationToken);
+
+        for (SensorExecutionResult sensorExecutionResult : sensorExecutionResults) {
             if (jobCancellationToken.isCancelled()) {
                 break;
             }
 
-            checksCount++;
-
             try {
-                SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
-                TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
-                TimePeriodGradient timeGradient = effectiveTimeSeries.getTimeGradient();
-
-                CheckSearchFilters exactCheckSearchFilters = checkSearchFilters.clone();
-                exactCheckSearchFilters.setConnectionName(connectionName);
-                exactCheckSearchFilters.setSchemaTableName(physicalTableName.toTableSearchFilter());
-                exactCheckSearchFilters.setColumnName(sensorRunParameters.getColumn() == null ? null : sensorRunParameters.getColumn().getColumnName());
-                exactCheckSearchFilters.setCheckCategory(checkSpec.getCategoryName());
-                exactCheckSearchFilters.setCheckName(checkSpec.getCheckName());
-                exactCheckSearchFilters.setSensorName(sensorRunParameters.getEffectiveSensorRuleNames().getSensorName());
-
-                if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
-                        Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {
-                    // timestamp column not configured, date/time partitioned data quality checks cannot be evaluated
-                    CheckExecutionFailedException missingTimestampException = new CheckExecutionFailedException("Data quality check " + checkSpec.getHierarchyId().toString() +
-                            " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. " +
-                            "Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
-
-                    erroredSensors++;
-                    SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, missingTimestampException);
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultWithError, timeGradient, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
-                    progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultWithError, missingTimestampException));
-                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, exactCheckSearchFilters));
-                    continue;
-                }
-
-                jobCancellationToken.throwIfCancelled();
-                progressListener.onPreparingSensor(new PreparingSensorEvent(tableSpec, sensorRunParameters));
-                SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
-
-                if (!sensorPrepareResult.isSuccess()) {
-                    erroredSensors++;
-                    SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultFailedPrepare, timeGradient, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
-                    progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
-                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorPrepareResult.getPrepareException(), exactCheckSearchFilters));
-                    continue;
-                }
-
-                jobCancellationToken.throwIfCancelled();
-                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorPrepareResult));
-                SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
-
-                if (!sensorResult.isSuccess()) {
-                    erroredSensors++;
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorResult, timeGradient, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
-                    progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorResult, sensorResult.getException()));
-                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorResult.getException(), exactCheckSearchFilters));
-                    continue;
-                }
-
-                progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
-                if (sensorResult.getResultTable().rowCount() == 0) {
-                    continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
-                }
-                sensorResultsCount += sensorResult.getResultTable().rowCount();
+                SensorExecutionRunParameters sensorRunParameters = sensorExecutionResult.getSensorRunParameters();
 
                 SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorReadoutsNormalizationService.normalizeResults(
-                        sensorResult, timeGradient, sensorRunParameters);
+                        sensorExecutionResult, sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
-                        tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
+                        tableSpec, sensorRunParameters, sensorExecutionResult, normalizedSensorResults));
                 allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable());
 
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
@@ -299,24 +239,21 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                     try {
                         RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
-                                executionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
+                                executionContext, sensorExecutionResult.getSensorRunParameters().getCheck(), sensorRunParameters,
+                                normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
                         progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
                         allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
-
-                        passedRules += ruleEvaluationResult.getSeverityColumn().isLessThanOrEqualTo(1).size();  // passed checks are severity 0 (passed) and 1 (warnings)
-                        warningIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(1).size();
-                        errorIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
-                        fatalIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
+                        executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
                     }
                     catch (Throwable ex) {
                         log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
-                        erroredRules++;
+                        executionStatistics.incrementRuleExecutionErrorsCount(1);
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
-                                sensorResult, timeGradient, sensorRunParameters, ex);
+                                sensorExecutionResult, sensorRunParameters, ex);
                         allErrorsTable.append(normalizedRuleErrorResults.getTable());
-                        progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorResult, ex, ruleDefinitionName));
-                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, exactCheckSearchFilters));
+                        progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResult, ex, ruleDefinitionName));
+                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));
                     }
                 }
             }
@@ -345,14 +282,12 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             errorsSnapshot.save();
         }
 
-        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinishedEvent(connectionWrapper, tableSpec, checks,
-                checksCount, sensorResultsCount, passedRules, warningIssuesCount, errorIssuesCount, fatalIssuesCount,
-                erroredSensors, erroredRules));
+        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinishedEvent(
+                connectionWrapper, tableSpec, checks, executionStatistics));
 
-        checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, checksCount, sensorResultsCount,
-                passedRules, warningIssuesCount, errorIssuesCount, fatalIssuesCount, erroredSensors + erroredRules);
+        checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
 
-        if (this.incidentImportQueueService != null && (warningIssuesCount > 0 || errorIssuesCount > 0 || fatalIssuesCount > 0)) {
+        if (this.incidentImportQueueService != null && executionStatistics.hasAnyFailedRules()) {
             TableIncidentImportBatch tableIncidentImportBatch = new TableIncidentImportBatch(
                     checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(),
                     connectionWrapper.getSpec(),
@@ -364,15 +299,183 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     }
 
     /**
+     * Prepares all sensors for execution.
+     * @param checks Collection of checks that will be prepared.
+     * @param executionContext Execution context - to access sensor definitions.
+     * @param userHome User home.
+     * @param userTimeWindowFilters Optional user provided time window filters.
+     * @param progressListener Progress listener - to report progress.
+     * @param allErrorsTable Target table where errors are added when parsing fails.
+     * @param checkExecutionSummary Check execution summary where results are added.
+     * @param executionStatistics Execution statistics - counts of checks and errors.
+     * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
+     * @return List of prepared sensors.
+     */
+    public List<SensorPrepareResult> prepareSensors(Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
+                                                    ExecutionContext executionContext,
+                                                    UserHome userHome,
+                                                    TimeWindowFilterParameters userTimeWindowFilters,
+                                                    CheckExecutionProgressListener progressListener,
+                                                    Table allErrorsTable,
+                                                    CheckExecutionSummary checkExecutionSummary,
+                                                    TableChecksExecutionStatistics executionStatistics,
+                                                    JobCancellationToken jobCancellationToken) {
+        List<SensorPrepareResult> sensorPrepareResults = new ArrayList<>();
+        int sensorResultId = 0;
+
+        for (AbstractCheckSpec<?, ?, ?, ?> checkSpec : checks) {
+            if (jobCancellationToken.isCancelled()) {
+                break;
+            }
+
+            executionStatistics.incrementExecutedChecksCount(1);
+
+            try {
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
+                sensorResultId++;
+                sensorRunParameters.setActualValueAlias("dqo_actual_value_" + sensorResultId);
+                sensorRunParameters.setExpectedValueAlias("dqo_expected_value_" + sensorResultId);
+
+                if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
+                        Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {
+                    // timestamp column not configured, date/time partitioned data quality checks cannot be evaluated
+                    CheckExecutionFailedException missingTimestampException = new CheckExecutionFailedException("Data quality check " + checkSpec.getHierarchyId().toString() +
+                            " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. " +
+                            "Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
+
+                    executionStatistics.incrementSensorExecutionErrorsCount(1);
+                    SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, missingTimestampException);
+                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                            sensorExecutionResultWithError, sensorRunParameters);
+                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                    progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters, sensorExecutionResultWithError, missingTimestampException));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, sensorRunParameters.getCheckSearchFilter()));
+                    continue;
+                }
+
+                jobCancellationToken.throwIfCancelled();
+                progressListener.onPreparingSensor(new PreparingSensorEvent(sensorRunParameters.getTable(), sensorRunParameters));
+                SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
+
+                if (!sensorPrepareResult.isSuccess()) {
+                    executionStatistics.incrementSensorExecutionErrorsCount(1);
+                    SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
+                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                            sensorExecutionResultFailedPrepare, sensorRunParameters);
+                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                    progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters,
+                            sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(
+                            sensorPrepareResult.getPrepareException(), sensorRunParameters.getCheckSearchFilter()));
+                    continue;
+                }
+
+                sensorPrepareResults.add(sensorPrepareResult);
+            }
+            catch (DqoQueueJobCancelledException cex) {
+                // ignore the error, just stop running checks
+                break;
+            }
+            catch (Throwable ex) {
+                log.error("Check runner failed to run checks: " + ex.getMessage(), ex);
+                throw new CheckExecutionFailedException("Checks on table failed to execute", ex);
+            }
+        }
+
+        return sensorPrepareResults;
+    }
+
+    /**
+     * Executes prepared sensors.
+     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that could be merged together.
+     * @param executionContext Execution context - to access sensor definitions.
+     * @param progressListener Progress listener - to report progress.
+     * @param allErrorsTable Target table where errors are added when parsing fails.
+     * @param checkExecutionSummary Check execution summary where results are added.
+     * @param executionStatistics Execution statistics - counts of checks and errors.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
+     * @return List of sensor execution results.
+     */
+    public List<SensorExecutionResult> executeSensors(GroupedSensorsCollection groupedSensorsCollection,
+                                                      ExecutionContext executionContext,
+                                                      CheckExecutionProgressListener progressListener,
+                                                      Table allErrorsTable,
+                                                      CheckExecutionSummary checkExecutionSummary,
+                                                      TableChecksExecutionStatistics executionStatistics,
+                                                      boolean dummySensorExecution,
+                                                      JobCancellationToken jobCancellationToken) {
+        List<SensorExecutionResult> sensorExecuteResults = new ArrayList<>();
+        Collection<PreparedSensorsGroup> preparedSensorGroups = groupedSensorsCollection.getPreparedSensorGroups();
+
+        for (PreparedSensorsGroup preparedSensorsGroup : preparedSensorGroups) {
+            if (jobCancellationToken.isCancelled()) {
+                break;
+            }
+
+            try {
+                SensorPrepareResult firstSensorPrepareResult = preparedSensorsGroup.getFirstSensorPrepareResult();
+                SensorExecutionRunParameters firstSensorRunParameters = firstSensorPrepareResult.getSensorRunParameters();
+                TableSpec tableSpec = firstSensorRunParameters.getTable();
+
+                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, firstSensorPrepareResult));
+                List<GroupedSensorExecutionResult> groupedSensorExecutionResults = this.dataQualitySensorRunner.executeGroupedSensors(executionContext,
+                        preparedSensorsGroup, progressListener, dummySensorExecution, jobCancellationToken);
+
+                for (GroupedSensorExecutionResult groupedSensorExecutionResult : groupedSensorExecutionResults) {
+                    PreparedSensorsGroup sensorGroup = groupedSensorExecutionResult.getSensorGroup();
+                    List<SensorPrepareResult> preparedSensorsInGroup = sensorGroup.getPreparedSensors();
+
+                    for (SensorPrepareResult sensorPrepareResult : preparedSensorsInGroup) {
+                        SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
+                        SensorExecutionResult sensorExecuteResult = sensorPrepareResult.getSensorRunner().extractSensorResults(
+                                executionContext, groupedSensorExecutionResult,
+                                sensorPrepareResult, progressListener, jobCancellationToken);
+
+                        if (!sensorExecuteResult.isSuccess()) {
+                            executionStatistics.incrementSensorExecutionErrorsCount(1);
+                            ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                                    sensorExecuteResult, sensorRunParameters);
+                            allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                            progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
+                                    sensorExecuteResult, sensorExecuteResult.getException()));
+                            checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(
+                                    sensorExecuteResult.getException(), sensorRunParameters.getCheckSearchFilter()));
+                            continue;
+                        }
+
+                        progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorExecuteResult));
+                        if (sensorExecuteResult.getResultTable().rowCount() == 0) {
+                            continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
+                        }
+                        executionStatistics.incrementSensorReadoutsCount(sensorExecuteResult.getResultTable().rowCount());
+                        sensorExecuteResults.add(sensorExecuteResult);
+                    }
+                }
+            }
+            catch (DqoQueueJobCancelledException cex) {
+                // ignore the error, just stop running checks
+                break;
+            }
+            catch (Throwable ex) {
+                log.error("Check runner failed to run checks: " + ex.getMessage(), ex);
+                throw new CheckExecutionFailedException("Checks on table failed to execute", ex);
+            }
+        }
+
+        return sensorExecuteResults;
+    }
+
+    /**
      * Creates a sensor run parameters from the check specification. Retrieves the connection, table, column and sensor parameters.
      * @param userHome User home with the metadata.
      * @param checkSpec Check specification.
      * @param userTimeWindowFilters Optional user time window filters, to run the checks for a given time period.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome,
-                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
-                                                                   TimeWindowFilterParameters userTimeWindowFilters) {
+    public SensorExecutionRunParameters createSensorRunParameters(UserHome userHome,
+                                                                  AbstractCheckSpec<?,?,?,?> checkSpec,
+                                                                  TimeWindowFilterParameters userTimeWindowFilters) {
         HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
         ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
         TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);

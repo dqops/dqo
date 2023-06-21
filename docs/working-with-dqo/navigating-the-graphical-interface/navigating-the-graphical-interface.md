@@ -30,7 +30,7 @@ The navigation bar allows you to select the specific sections that you want to f
 - The **Definitions** section lets you customize built-in data quality sensors and rules.  
 
 
-The right part of the navigation bar provides access to the main settings and some other functions.
+The right side of the navigation bar provides access to the main settings and some other functions.
 
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/rigth-part-of-the-navigation-bar.png)
 

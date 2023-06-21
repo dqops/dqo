@@ -79,8 +79,9 @@ public class HistoricDataPointTimeSeriesCollector {
         }
 
         LocalDateTime startTimePeriod = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(readoutTimestamp, timePeriodsCount, this.gradient);
+        LocalDateTime endTimePeriod = LocalDateTimeTruncateUtility.truncateTimePeriod(readoutTimestamp, this.gradient);
         Selection readoutsSinceStartTime = this.timePeriodIndex.atLeast(startTimePeriod);  // inclusive
-        Selection readoutBeforeReadoutTimestamp = this.timePeriodIndex.lessThan(readoutTimestamp); // exclusive
+        Selection readoutBeforeReadoutTimestamp = this.timePeriodIndex.lessThan(endTimePeriod); // exclusive
         Selection readoutsInRange = readoutsSinceStartTime.and(readoutBeforeReadoutTimestamp);
         int[] rowIndexes = readoutsInRange.toArray();
         Arrays.sort(rowIndexes); // just in case...

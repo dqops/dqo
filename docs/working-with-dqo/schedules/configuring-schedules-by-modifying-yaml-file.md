@@ -133,7 +133,7 @@ the YAML files will look like the ones provided below:
             nullable: true
     ```
 === "Schedule on column level nulls_count check"
-    ```yaml hl_lines="22-23"
+    ```yaml hl_lines="16-17"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -158,8 +158,3 @@ the YAML files will look like the ones provided below:
             column_type: STRING
             nullable: true 
     ```
-
-## Starting schedule
-
-
-

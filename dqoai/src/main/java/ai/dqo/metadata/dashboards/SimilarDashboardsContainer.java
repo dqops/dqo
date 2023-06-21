@@ -16,6 +16,8 @@
 package ai.dqo.metadata.dashboards;
 
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+import org.apache.parquet.Strings;
 
 import java.util.*;
 
@@ -40,6 +42,9 @@ public class SimilarDashboardsContainer {
     public static SimilarDashboardsContainer fromDashboardSpec(DashboardSpec dashboardSpec, HierarchyNode rootNode) {
         SimilarDashboardsContainer similarDashboardsContainer = new SimilarDashboardsContainer();
         similarDashboardsContainer.firstDashboardName = dashboardSpec.getDashboardName();
+        if (Strings.isNullOrEmpty(dashboardSpec.getUrl())) {
+            throw new DqoRuntimeException("Dashboard " + dashboardSpec.getDashboardName() + ", hierarchy id: " + dashboardSpec.getHierarchyId().toString() + " has no url");
+        }
         similarDashboardsContainer.url = dashboardSpec.getUrl().replace("https://datastudio.google.com/", "https://lookerstudio.google.com/");
         similarDashboardsContainer.width = dashboardSpec.getWidth();
         similarDashboardsContainer.height = dashboardSpec.getHeight();

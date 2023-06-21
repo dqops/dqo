@@ -18,7 +18,7 @@ To add BigQuery data source connection to DQO you need the following:
 
 1. Go to the Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/getting-started/adding-test-connection-test-connection.jpg)
+    ![Adding connection](https://dqops.com/docs/images/getting-started/adding-test-connection.jpg)
    
 2. Select BiqQuery database type.
 

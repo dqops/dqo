@@ -23,10 +23,14 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorPrepareResult;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
+import ai.dqo.execution.sensors.grouping.TableMetadataSensorExecutor;
 import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import com.google.common.hash.HashCode;
@@ -40,6 +44,7 @@ import tech.tablesaw.api.Table;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,30 +60,80 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
      */
     public static final String CLASS_NAME = TableColumnListUnorderedHashSensorRunner.class.getName();
     private ConnectionProviderRegistry connectionProviderRegistry;
+    private TableMetadataSensorExecutor tableMetadataSensorExecutor;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
      * @param defaultTimeZoneProvider The default time zone provider.
+     * @param tableMetadataSensorExecutor Table metadata shared executor.
      */
     @Autowired
     public TableColumnListUnorderedHashSensorRunner(ConnectionProviderRegistry connectionProviderRegistry,
-                                                    DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                                    DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                                    TableMetadataSensorExecutor tableMetadataSensorExecutor) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
+        this.tableMetadataSensorExecutor = tableMetadataSensorExecutor;
     }
 
     /**
      * Prepares a sensor for execution. SQL templated sensors will render the SQL template, filled with the table and column names.
      *
      * @param executionContext    Check execution context with access to the dqo home and user home, if any metadata is needed.
-     * @param sensorPrepareResult Sensor prepare result with additional sensor run parameters. The prepareSensor method should fill additional values in this object that will be used when the sensor is executed.
+     * @param sensorRunParameters Sensor run parameters.
+     * @param sensorDefinition    Sensor definition that was found in the dqo home or the user home.
      * @param progressListener    Progress listener that receives events when the sensor is executed.
      */
     @Override
-    public void prepareSensor(ExecutionContext executionContext,
-                              SensorPrepareResult sensorPrepareResult,
-                              SensorExecutionProgressListener progressListener) {
+    public SensorPrepareResult prepareSensor(ExecutionContext executionContext,
+                                             SensorExecutionRunParameters sensorRunParameters,
+                                             SensorDefinitionFindResult sensorDefinition,
+                                             SensorExecutionProgressListener progressListener) {
+        return new SensorPrepareResult(sensorRunParameters, sensorDefinition, this.tableMetadataSensorExecutor, this, false);
+    }
+
+    /**
+     * Transforms the sensor result that was captured by the sensor executor. This method performs de-grouping of grouped sensors that were executed as multiple SQL queries merged into one big query.
+     *
+     * @param executionContext             Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param groupedSensorExecutionResult Sensor execution result with the data retrieved from the data source. It will be adapted to a sensor result for one sensor.
+     * @param sensorPrepareResult          Original sensor prepare results for this sensor. Contains also the sensor run parameters.
+     * @param progressListener             Progress listener that receives events when the sensor is executed.
+     * @param jobCancellationToken         Job cancellation token, may cancel a running query.
+     * @return Sensor result for one sensor.
+     */
+    @Override
+    public SensorExecutionResult extractSensorResults(ExecutionContext executionContext,
+                                                      GroupedSensorExecutionResult groupedSensorExecutionResult,
+                                                      SensorPrepareResult sensorPrepareResult,
+                                                      SensorExecutionProgressListener progressListener,
+                                                      JobCancellationToken jobCancellationToken) {
+        SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
+        PhysicalTableName physicalTableName = sensorRunParameters.getTable().getPhysicalTableName();
+
+        try {
+            TableSpec introspectedTableSpec = groupedSensorExecutionResult.getCapturedMetadataResult();
+
+            if (introspectedTableSpec == null) {
+                // table not found
+                Table table = createResultTableWithResult((Double) null);
+                return new SensorExecutionResult(sensorRunParameters, table);
+            }
+
+            List<HashCode> elementHashes = introspectedTableSpec.getColumns().keySet().stream()
+                    .map(columnName -> Hashing.farmHashFingerprint64().hashString(columnName, StandardCharsets.UTF_8))
+                    .collect(Collectors.toList());
+            long fullHash = Math.abs(Hashing.combineUnordered(elementHashes).asLong());
+            long hashFitInDoubleExponent = fullHash & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
+
+            Table table = createResultTableWithResult(hashFitInDoubleExponent);
+            return new SensorExecutionResult(sensorRunParameters, table);
+        }
+        catch (Throwable exception) {
+            log.debug("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
+            return new SensorExecutionResult(sensorRunParameters, exception);
+        }
     }
 
     /**

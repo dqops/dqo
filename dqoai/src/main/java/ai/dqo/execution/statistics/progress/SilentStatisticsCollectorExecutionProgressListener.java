@@ -137,6 +137,36 @@ public class SilentStatisticsCollectorExecutionProgressListener implements Stati
     }
 
     /**
+     * Called when collecting statistics on a table is started, but before any sensors are executed.
+     *
+     * @param event Statistics collector on table event with the table and a list of collectors to execute.
+     */
+    @Override
+    public void onExecuteStatisticsCollectorsOnTableStart(ExecuteStatisticsCollectorsOnTableStartEvent event) {
+
+    }
+
+    /**
+     * Called before the statistics results are saved to parquet files.
+     *
+     * @param event Log event with the results to be saved for a table.
+     */
+    @Override
+    public void onSavingStatisticsResults(SavingStatisticsResultsEvent event) {
+
+    }
+
+    /**
+     * Called after basic profiling statistics were collected on a table.
+     *
+     * @param event Log event with the summary of the statistics collectors that were processed.
+     */
+    @Override
+    public void onTableStatisticsCollectionFinished(ExecuteStatisticsCollectorsOnTableFinishedEvent event) {
+
+    }
+
+    /**
      * Called after all data collectors were executed.
      *
      * @param event Data statistics collectors execution summary for one batch of checks.

@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
@@ -41,6 +42,7 @@ import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
@@ -98,7 +100,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
                 checkSpec.getParameters(),
-                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));
+                ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
+                null);
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
         SensorReadoutsSnapshotFactory dummySensorReadoutStorageService = SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService();
@@ -108,8 +111,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndWarningSeverityRuleOnlyAndPassed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
-        SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
+                SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(11L));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -133,8 +138,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndWarningSeverityRuleOnlyAndNotPassed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 10.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
         this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(11L));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -158,8 +165,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndAlertSeverityRuleOnlyAndPassed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -183,8 +192,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndAlertSeverityRuleOnlyAndNotPassed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 10.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -208,8 +219,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndFatalSeverityRuleOnlyAndPassed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -233,8 +246,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndFatalSeverityRuleOnlyAndNotPassed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 10.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -258,8 +273,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndAllWarningAlertFatalLevelsConfiguredAndPassed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 15.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(12));
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
@@ -285,8 +302,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndAllWarningAlertFatalLevelsConfiguredAndFatalFailed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 9.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(12));
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
@@ -312,8 +331,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndAllWarningAlertFatalLevelsConfiguredAndAlertFailed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(13));
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(12));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
@@ -339,8 +360,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenOneRowAndMinValueRuleAndAllWarningAlertFatalLevelsConfiguredAndWarningFailed_thenReturnsResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(13));
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleFatalParametersSpec(10));
@@ -366,8 +389,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenTwoRowsAndOneRule_thenReturnsTwoResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0, 12.0));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(14));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
@@ -403,8 +428,10 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     void evaluateRules_whenTwoRowsForDifferentTimeSeriesAndOneRule_thenReturnsTwoResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0, 10.0));
 		this.table.addColumns(TextColumn.create("stream_level_1", "one", "two"));
+        this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                CheckTimeScale.daily, "date"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
-				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
+				this.sensorExecutionResult, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(12));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
