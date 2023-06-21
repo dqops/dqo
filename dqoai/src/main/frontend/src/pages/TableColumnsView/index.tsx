@@ -109,8 +109,8 @@ const TableColumnsView = () => {
     );
     const data: LocationState = {
       bool: true,
-      data_stream_name: dataStreamName,
-      spec: spec
+      data_stream_name: nameOfDataStream,
+      spec: levels
     };
 
     try {
@@ -118,7 +118,7 @@ const TableColumnsView = () => {
         connectionName,
         schemaName,
         tableName,
-        { data_stream_name: dataStreamName, spec: spec }
+        { data_stream_name: nameOfDataStream, spec: levels }
       );
       if (response.status === 409) {
         doNothing();
@@ -140,10 +140,6 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
-  console.log(nameOfDataStream);
-  console.log(levels);
-  console.log(selected);
-
   const implementDataStreamName = () => {
     let count = 0;
     const columnValues = Object.values(levels)
@@ -157,7 +153,7 @@ const TableColumnsView = () => {
     return joinedValues;
   };
 
-  // console.log(selected);
+  console.log(selected);
 
   return (
     <ConnectionLayout>
@@ -167,14 +163,14 @@ const TableColumnsView = () => {
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
         <div className="flex items-center gap-x-2 justify-center">
-          {dataStreamButton !== 0 && dataStreamButton <= 9 && (
+          {selected !== 0 && selected <= 9 && (
             <Button
               label="Create Data Stream"
               color="primary"
               onClick={postDataStream}
             />
           )}
-          {dataStreamButton > 9 && (
+          {selected > 9 && (
             <div className="flex items-center gap-x-2 justify-center text-red-500">
               (You can choose max 9 columns)
               <Button

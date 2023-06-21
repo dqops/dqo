@@ -67,7 +67,7 @@ const TableColumns = ({
   const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>(
     {}
   );
-
+  const [count, setCount] = useState<number>(0);
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
       ...prevStates,
@@ -547,26 +547,18 @@ const TableColumns = ({
     const joinedValues = columnValues.join(',');
     updateData(joinedValues);
     setLevelsData(setSpec2());
-    setNumberOfSelected(trueValuesCount);
+
     return joinedValues;
   };
+
   console.log(trueValuesCount);
-  // const setButton = async () => {
-  //   countTrueValues(objectStates),
-  //     await actionDispatch(showDataStreamButton(trueValuesCount));
-  // };
+
+  setNumberOfSelected(trueValuesCount);
 
   const showDataStreamButtonFunc = async () => {
     await fixString();
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
-    // await setButton();
   };
-
-  useEffect(() => {
-    setNumberOfSelected(trueValuesCount);
-  }, [connectionName, schemaName, tableName, trueValuesCount]);
-
-  // console.log(setSpec2());
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
