@@ -39,6 +39,7 @@ interface ITableColumnsProps {
   updateData: (arg: string) => void;
   setLevelsData: (arg: DataStreamMappingSpec) => void;
   setNumberOfSelected: (arg: number) => void;
+  setParamToResetFunc: (arg: boolean) => void;
 }
 
 const TableColumns = ({
@@ -47,7 +48,8 @@ const TableColumns = ({
   tableName,
   updateData,
   setLevelsData,
-  setNumberOfSelected
+  setNumberOfSelected,
+  setParamToResetFunc
 }: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
