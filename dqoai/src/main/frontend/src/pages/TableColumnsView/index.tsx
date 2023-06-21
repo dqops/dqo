@@ -28,8 +28,9 @@ const TableColumnsView = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
-  const { job_dictionary_state, dataStreamButton, dataStreamName, spec } =
-    useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const dispatch = useDispatch();
   const history = useHistory();
   const [loadingJob, setLoadingJob] = useState(false);
@@ -153,8 +154,6 @@ const TableColumnsView = () => {
     return joinedValues;
   };
 
-  console.log(selected);
-
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -226,7 +225,6 @@ const TableColumnsView = () => {
           connectionName={connectionName}
           schemaName={schemaName}
           tableName={tableName}
-          someData={nameOfDataStream}
           updateData={updateData}
           setLevelsData={setLevelsData}
           setNumberOfSelected={setNumberOfSelected}

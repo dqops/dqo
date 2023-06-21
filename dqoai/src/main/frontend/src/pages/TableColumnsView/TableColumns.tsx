@@ -25,15 +25,12 @@ import Loader from '../../components/Loader';
 import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
 import Checkbox from '../../components/Checkbox';
-import Button from '../../components/Button';
-import { showDataStreamButton } from '../../redux/actions/job.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { datatype_detected } from '../../shared/constants';
 import { cutString } from './TableColumnsFunctions';
 import {
   renderValue,
   MyData,
-  LocationState,
   labels,
   calculate_color,
   spec
@@ -43,7 +40,6 @@ interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
-  someData?: string;
   updateData: (arg: string) => void;
   setLevelsData: (arg: DataStreamMappingSpec) => void;
   setNumberOfSelected: (arg: number) => void;
@@ -53,7 +49,6 @@ const TableColumns = ({
   connectionName,
   schemaName,
   tableName,
-  someData,
   updateData,
   setLevelsData,
   setNumberOfSelected
@@ -67,7 +62,7 @@ const TableColumns = ({
   const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const [count, setCount] = useState<number>(0);
+
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
       ...prevStates,
@@ -90,23 +85,7 @@ const TableColumns = ({
   const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
-  const setData = () => {
-    const dataToDispatch = {
-      createdDataStream: true,
-      dataStreamName: fixString(),
-      spec2: setSpec2()
-    };
-
-    actionDispatch(
-      setCreatedDataStream(
-        dataToDispatch.createdDataStream,
-        dataToDispatch.dataStreamName,
-        dataToDispatch.spec2
-      )
-    );
-  };
-
-  const { job_dictionary_state, dataStreamButton } = useSelector(
+  const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
@@ -488,56 +467,7 @@ const TableColumns = ({
     return listOfStr.join(',');
   };
 
-  const doNothing = (): void => {};
-
   setCreatedDataStream(true, setDataStream(), setSpec2());
-
-  const postDataStream = async () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      'sources',
-      connectionName,
-      schemaName,
-      tableName,
-      'data-streams'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      'sources',
-      connection,
-      schema,
-      table
-    );
-    const data: LocationState = {
-      bool: true,
-      data_stream_name: setDataStream(),
-      spec: setSpec2()
-    };
-
-    try {
-      const response = await DataStreamsApi.createDataStream(
-        connectionName,
-        schemaName,
-        tableName,
-        data
-      );
-      if (response.status === 409) {
-        doNothing();
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status) {
-        doNothing();
-      }
-    }
-    setData();
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value,
-        state: data,
-        label: table
-      })
-    );
-    history.push(url);
-  };
 
   const fixString = () => {
     const columnValues = Object.values(spec)
@@ -550,9 +480,6 @@ const TableColumns = ({
 
     return joinedValues;
   };
-
-  console.log(trueValuesCount);
-
   setNumberOfSelected(trueValuesCount);
 
   const showDataStreamButtonFunc = async () => {
@@ -700,26 +627,6 @@ const TableColumns = ({
 
   return (
     <div className="p-4 py-6 relative">
-      {trueValuesCount !== 0 && trueValuesCount <= 9 && (
-        <div>
-          <Button
-            label="Create Data Stream"
-            color="primary"
-            onClick={postDataStream}
-            className="absolute top-0 right-4 px-2"
-          />
-        </div>
-      )}
-      {trueValuesCount !== 0 && trueValuesCount > 9 && (
-        <div className="flex text-red-500 items-center gap-x-4 absolute top-0 right-4 px-2">
-          (You can choose max 9 columns)
-          <Button
-            label="Create Data Stream"
-            color="secondary"
-            className="text-black "
-          />
-        </div>
-      )}
       <table className="mb-6 mt-4 w-full">
         <thead>
           <tr>
