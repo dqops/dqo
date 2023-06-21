@@ -40,15 +40,6 @@ spec:
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
       ds0.p_quality_dimension: all
       ds0.p_check_category: all
-  - dashboard_name: KPI day by day
-    url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
-    width: 1400
-    height: 1700
-    parameters:
-      ds0.token: '%DQO_CLOUD_TOKEN%'
-      ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: all
-      ds0.p_check_category: all
   folders:
   - folder_name: KPIs
     dashboards:
