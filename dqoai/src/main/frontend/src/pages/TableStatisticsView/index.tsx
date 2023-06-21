@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TableColumns from '../TableColumnsView/TableColumns';
-import { TableStatisticsModel } from '../../api';
+import { DataStreamMappingSpec, TableStatisticsModel } from '../../api';
 import { AxiosResponse } from 'axios';
 import { TableApiClient } from '../../services/apiClient';
 import Loader from '../../components/Loader';
@@ -9,6 +9,7 @@ import { getFirstLevelState } from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import { formatNumber } from '../../shared/constants';
 
 export default function TableStatisticsView({
   connectionName,
@@ -56,43 +57,10 @@ export default function TableStatisticsView({
       </div>
     );
   }
-  const formatNumber = (k: number) => {
-    if (k > 1000 && k < 1000000) {
-      if (k > Math.pow(10, 3) && k < Math.pow(10, 4)) {
-        return (k / Math.pow(10, 3)).toFixed(3) + 'k';
-      } else if (k > Math.pow(10, 4) && k < Math.pow(10, 5)) {
-        return (k / Math.pow(10, 3)).toFixed(2) + 'k';
-      } else {
-        return (k / Math.pow(10, 3)).toFixed(1) + 'k';
-      }
-    } else if (k > Math.pow(10, 6) && k < Math.pow(10, 9)) {
-      if (k > Math.pow(10, 6) && k < Math.pow(10, 7)) {
-        return (k / Math.pow(10, 6)).toFixed(3) + 'M';
-      } else if (k > Math.pow(10, 7) && k < Math.pow(10, 8)) {
-        return (k / Math.pow(10, 6)).toFixed(2) + 'M';
-      } else {
-        return (k / Math.pow(10, 6)).toFixed(1) + 'M';
-      }
-    } else if (k > Math.pow(10, 9) && k < Math.pow(10, 12)) {
-      if (k > Math.pow(10, 9) && k < Math.pow(10, 10)) {
-        return (k / Math.pow(10, 9)).toFixed(3) + 'G';
-      } else if (k > Math.pow(10, 10) && k < Math.pow(10, 11)) {
-        return (k / Math.pow(10, 9)).toFixed(2) + 'G';
-      } else {
-        return (k / Math.pow(10, 9)).toFixed(1) + 'G';
-      }
-    } else if (k > Math.pow(10, 12) && k < Math.pow(10, 15)) {
-      if (k > Math.pow(10, 12) && k < Math.pow(10, 13)) {
-        return (k / Math.pow(10, 12)).toFixed(3) + 'T';
-      } else if (k > Math.pow(10, 13) && k < Math.pow(10, 14)) {
-        return (k / Math.pow(10, 12)).toFixed(2) + 'T';
-      } else {
-        return (k / Math.pow(10, 12)).toFixed(1) + 'T';
-      }
-    } else {
-      return k;
-    }
-  };
+  const setLevelsData = (levelsToSet: DataStreamMappingSpec): void => {};
+
+  const doNot = (a: string): void => {};
+  const setNumberOfSelected = (param: number): void => {};
 
   return (
     <div>
@@ -135,6 +103,9 @@ export default function TableStatisticsView({
         connectionName={connectionName}
         schemaName={schemaName}
         tableName={tableName}
+        updateData={doNot}
+        setLevelsData={setLevelsData}
+        setNumberOfSelected={setNumberOfSelected}
       />
     </div>
   );

@@ -43,12 +43,20 @@ interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
+  someData?: string;
+  updateData: (arg: string) => void;
+  setLevelsData: (arg: DataStreamMappingSpec) => void;
+  setNumberOfSelected: (arg: number) => void;
 }
 
 const TableColumns = ({
   connectionName,
   schemaName,
-  tableName
+  tableName,
+  someData,
+  updateData,
+  setLevelsData,
+  setNumberOfSelected
 }: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
@@ -98,7 +106,7 @@ const TableColumns = ({
     );
   };
 
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, dataStreamButton } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
@@ -174,6 +182,7 @@ const TableColumns = ({
 
   useEffect(() => {
     fetchColumns();
+    setNumberOfSelected(trueValuesCount);
   }, [connectionName, schemaName, tableName]);
 
   const max_unique_value = () => {
@@ -453,6 +462,7 @@ const TableColumns = ({
         count++;
       }
     }
+
     return count;
   };
   const selectStrings = (obj: Record<string, boolean>) => {
@@ -462,7 +472,7 @@ const TableColumns = ({
   const trueValuesCount = countTrueValues(objectStates);
 
   const setSpec2 = () => {
-    for (let i = 1; i <= trueValuesCount; i++) {
+    for (let i = 1; i <= 9; i++) {
       const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
       const level = spec[levelKey];
 
@@ -535,24 +545,28 @@ const TableColumns = ({
       .filter((column) => column !== undefined);
 
     const joinedValues = columnValues.join(',');
+    updateData(joinedValues);
+    setLevelsData(setSpec2());
+    setNumberOfSelected(trueValuesCount);
     return joinedValues;
   };
-
-  const setButton = () => {
-    if (trueValuesCount === 0) {
-      actionDispatch(showDataStreamButton(0));
-    } else if (trueValuesCount <= 9) {
-      actionDispatch(showDataStreamButton(1));
-    } else if (trueValuesCount > 9) {
-      actionDispatch(showDataStreamButton(2));
-    }
-  };
+  console.log(trueValuesCount);
+  // const setButton = async () => {
+  //   countTrueValues(objectStates),
+  //     await actionDispatch(showDataStreamButton(trueValuesCount));
+  // };
 
   const showDataStreamButtonFunc = async () => {
     await fixString();
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
-    await setButton();
+    // await setButton();
   };
+
+  useEffect(() => {
+    setNumberOfSelected(trueValuesCount);
+  }, [connectionName, schemaName, tableName, trueValuesCount]);
+
+  // console.log(setSpec2());
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
@@ -566,8 +580,8 @@ const TableColumns = ({
                   : false
               }
               onChange={() => {
-                showDataStreamButtonFunc(),
-                  handleButtonClick(column.nameOfCol ? column.nameOfCol : '');
+                showDataStreamButtonFunc();
+                handleButtonClick(column.nameOfCol ? column.nameOfCol : '');
               }}
               className="py-4"
             />
@@ -752,7 +766,9 @@ const TableColumns = ({
                 className="flex justify-center cursor-pointer"
                 onClick={() => sortData<MyData>('null_percent')}
               >
-                <div>Null percent</div>
+                <div onClick={() => updateData('updated data')}>
+                  Null percent
+                </div>
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />
                   <SvgIcon name="chevron-down" className="w-3 h-3" />

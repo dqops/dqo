@@ -10,6 +10,7 @@ import {
   DataStreamsApi
 } from '../../services/apiClient';
 import {
+  DataStreamMappingSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -19,6 +20,7 @@ import { IRootState } from '../../redux/reducers';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { ROUTES, CheckTypes } from '../../shared/routes';
 import { LocationState } from './TableColumnsFunctions';
+import { setCreatedDataStream } from '../../redux/actions/rule.actions';
 
 const TableColumnsView = () => {
   const {
@@ -32,6 +34,10 @@ const TableColumnsView = () => {
   const history = useHistory();
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
+  const [levels, setLevels] = useState<DataStreamMappingSpec>({});
+  const [selected, setSelected] = useState<number>(0);
+  const [stringCount, setStringCount] = useState(0);
 
   const fetchColumns = async () => {
     try {
@@ -47,9 +53,22 @@ const TableColumnsView = () => {
     }
   };
 
+  const updateData = (nameOfDS: string): void => {
+    setNameOfDataStream(nameOfDS);
+  };
+
+  const setLevelsData = (levelsToSet: DataStreamMappingSpec): void => {
+    setLevels(levelsToSet);
+  };
+
+  const setNumberOfSelected = (param: number): void => {
+    setSelected(param);
+  };
+
   useEffect(() => {
     fetchColumns();
-  }, [connectionName, schemaName, tableName]);
+    implementDataStreamName();
+  }, [connectionName, schemaName, tableName, levels]);
 
   const collectStatistics = async () => {
     try {
@@ -62,8 +81,7 @@ const TableColumnsView = () => {
       setLoadingJob(false);
     }
   };
-  console.log(dataStreamName);
-  console.log(spec);
+
   const filteredJobs = Object.values(job_dictionary_state)?.filter(
     (x) =>
       x.jobType === 'collect statistics' &&
@@ -119,7 +137,27 @@ const TableColumnsView = () => {
       })
     );
     history.push(url);
+    setCreatedDataStream(false, '', {});
   };
+
+  console.log(nameOfDataStream);
+  console.log(levels);
+  console.log(selected);
+
+  const implementDataStreamName = () => {
+    let count = 0;
+    const columnValues = Object.values(levels)
+      .map((level) => level.column)
+      .filter((column) => column !== undefined);
+    const joinedValues = columnValues.join(',');
+    count = columnValues.length;
+
+    setStringCount(count);
+
+    return joinedValues;
+  };
+
+  // console.log(selected);
 
   return (
     <ConnectionLayout>
@@ -128,68 +166,74 @@ const TableColumnsView = () => {
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
-        {dataStreamButton == 1 && (
-          <Button
-            label="create data stream"
-            color="primary"
-            onClick={postDataStream}
-          />
-        )}
-        {dataStreamButton == 2 && (
-          <div className="flex text-red-500 items-center gap-x-4 absolute top-0 right-4 px-2">
-            (You can choose max 9 columns)
+        <div className="flex items-center gap-x-2 justify-center">
+          {dataStreamButton !== 0 && dataStreamButton <= 9 && (
             <Button
               label="Create Data Stream"
-              color="secondary"
-              className="text-black "
+              color="primary"
+              onClick={postDataStream}
             />
-          </div>
-        )}
-        <Button
-          className="flex items-center gap-x-2 justify-center"
-          label={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schemaName + '.' + tableName
-            )
-              ? 'Collecting...'
-              : 'Collect Statistic'
-          }
-          color={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schemaName + '.' + tableName
-            )
-              ? 'secondary'
-              : 'primary'
-          }
-          leftIcon={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schemaName + '.' + tableName
-            ) ? (
-              <SvgIcon name="sync" className="w-4 h-4" />
-            ) : (
-              ''
-            )
-          }
-          onClick={() => {
-            collectStatistics();
-          }}
-          loading={loadingJob}
-        />
+          )}
+          {dataStreamButton > 9 && (
+            <div className="flex items-center gap-x-2 justify-center text-red-500">
+              (You can choose max 9 columns)
+              <Button
+                label="Create Data Stream"
+                color="secondary"
+                className="text-black "
+              />
+            </div>
+          )}
+          <Button
+            className="flex items-center gap-x-2 justify-center"
+            label={
+              filteredJobs?.find(
+                (x) =>
+                  x.parameters?.collectStatisticsParameters
+                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                  schemaName + '.' + tableName
+              )
+                ? 'Collecting...'
+                : 'Collect Statistic'
+            }
+            color={
+              filteredJobs?.find(
+                (x) =>
+                  x.parameters?.collectStatisticsParameters
+                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                  schemaName + '.' + tableName
+              )
+                ? 'secondary'
+                : 'primary'
+            }
+            leftIcon={
+              filteredJobs?.find(
+                (x) =>
+                  x.parameters?.collectStatisticsParameters
+                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                  schemaName + '.' + tableName
+              ) ? (
+                <SvgIcon name="sync" className="w-4 h-4" />
+              ) : (
+                ''
+              )
+            }
+            onClick={() => {
+              collectStatistics();
+            }}
+            loading={loadingJob}
+          />
+        </div>
       </div>
       <div>
         <TableColumns
           connectionName={connectionName}
           schemaName={schemaName}
           tableName={tableName}
+          someData={nameOfDataStream}
+          updateData={updateData}
+          setLevelsData={setLevelsData}
+          setNumberOfSelected={setNumberOfSelected}
         />
       </div>
     </ConnectionLayout>
