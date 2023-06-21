@@ -11,6 +11,7 @@ function DashboardProvider(props: any) {
   const [activeTab, setActiveTab] = useState<string>();
   const [openedDashboards, setOpenedDashboards] = useState<AuthenticatedDashboardModel[]>([]);
   const [dashboardStatus, setDashboardStatus] = useState<Record<string, boolean>>({});
+  const [sidebarWidth, setSidebarWidth] = useState(320);
 
   const closeTab = (value: string) => {
     const newTabs = tabs.filter((item) => item.value !== value);
@@ -111,6 +112,8 @@ function DashboardProvider(props: any) {
         dashboardStatus,
         toggleDashboardFolder,
         openDashboardFolder,
+        sidebarWidth,
+        setSidebarWidth
       }}
       {...props}
     />
