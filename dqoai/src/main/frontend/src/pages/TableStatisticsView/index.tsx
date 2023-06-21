@@ -39,6 +39,16 @@ export default function TableStatisticsView({
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const {
+    connection,
+    schema,
+    table
+  }: {
+    connection: string;
+    schema: string;
+    table: string;
+    tab: string;
+  } = useParams();
   const fetchRows = async () => {
     try {
       const res: AxiosResponse<TableStatisticsModel> =
@@ -55,6 +65,13 @@ export default function TableStatisticsView({
   useEffect(() => {
     fetchRows();
   }, [connectionName, schemaName, tableName]);
+
+  useEffect(() => {
+    setNumberOfSelected(0);
+    updateData('');
+    setLevelsData({});
+    setCreatedDataStream(false, '', {});
+  }, [connection, schema, table]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {

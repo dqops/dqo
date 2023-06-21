@@ -1,9 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import {
-  ColumnApiClient,
-  DataStreamsApi,
-  JobApiClient
-} from '../../services/apiClient';
+import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
@@ -448,7 +444,6 @@ const TableColumns = ({
     return Object.keys(obj).filter((key) => obj[key] === true);
   };
   const listOfStr = selectStrings(objectStates);
-  const trueValuesCount = countTrueValues(objectStates);
 
   const setSpec2 = () => {
     for (let i = 1; i <= 9; i++) {
@@ -461,10 +456,6 @@ const TableColumns = ({
       }
     }
     return spec;
-  };
-
-  const setDataStream = () => {
-    return listOfStr.join(',');
   };
 
   const fixString = () => {
