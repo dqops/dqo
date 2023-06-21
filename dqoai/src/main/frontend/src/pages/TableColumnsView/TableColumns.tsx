@@ -485,7 +485,8 @@ const TableColumns = ({
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
-  setCreatedDataStream(true, setDataStream(), setSpec2());
+  // setCreatedDataStream(true, setDataStream(), setSpec2());
+  setCreatedDataStream(true, fixString(), setSpec2());
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>

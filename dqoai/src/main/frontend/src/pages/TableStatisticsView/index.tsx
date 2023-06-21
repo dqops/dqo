@@ -17,11 +17,17 @@ import { LocationState } from '../TableColumnsView/TableColumnsFunctions';
 export default function TableStatisticsView({
   connectionName,
   schemaName,
-  tableName
+  tableName,
+  updateData2,
+  setLevelsData2,
+  setNumberOfSelected2
 }: {
   connectionName: string;
   schemaName: string;
   tableName: string;
+  updateData2: (arg: string) => void;
+  setLevelsData2: (arg: DataStreamMappingSpec) => void;
+  setNumberOfSelected2: (arg: number) => void;
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
@@ -30,6 +36,7 @@ export default function TableStatisticsView({
   const [levels, setLevels] = useState<DataStreamMappingSpec>({});
   const [selected, setSelected] = useState<number>(0);
   const [stringCount, setStringCount] = useState(0);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const fetchRows = async () => {
@@ -79,6 +86,7 @@ export default function TableStatisticsView({
   }
 
   const doNothing = (): void => {};
+
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       'sources',
@@ -139,6 +147,9 @@ export default function TableStatisticsView({
     return joinedValues;
   };
   console.log(selected);
+  updateData2(nameOfDataStream);
+  setLevelsData2(levels);
+  setNumberOfSelected2(selected);
 
   return (
     <div>
