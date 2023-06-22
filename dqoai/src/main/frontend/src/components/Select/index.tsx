@@ -49,7 +49,7 @@ const Select = ({
   menuClassName,
   onAdd,
   addLabel,
-  prefix,
+  prefix
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLButtonElement>(null);
@@ -106,10 +106,12 @@ const Select = ({
           >
             {selectedOption ? (
               <div className="flex items-center gap-2">
-                {selectedOption.icon || ""}
+                {selectedOption.icon || ''}
                 {(prefix ? prefix + ' ' : '') + selectedOption.label}
               </div>
-            ) : placeholder}
+            ) : (
+              placeholder
+            )}
             <SvgIcon
               name="chevron-down"
               className="absolute transform top-1/2 -translate-y-2/4 right-2 w-4"
@@ -119,7 +121,7 @@ const Select = ({
         {!disabled && (
           <MenuList
             className={clsx(
-              'z-50 min-w-40 bg-gray-50 !p-0 max-h-80 overflow-auto',
+              'z-50 min-w-40 bg-gray-50 !p-0 max-h-81 overflow-auto',
               menuClassName
             )}
           >
@@ -132,7 +134,7 @@ const Select = ({
                 style={{ minWidth: menuWidth }}
               >
                 <div className="flex gap-2 items-center">
-                  {option.icon || ""}
+                  {option.icon || ''}
                   {option.label}
                 </div>
               </MenuItem>
