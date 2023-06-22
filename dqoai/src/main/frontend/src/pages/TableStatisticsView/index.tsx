@@ -33,7 +33,6 @@ export default function TableStatisticsView({
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataStreamMappingSpec>({});
   const [selected, setSelected] = useState<number>(0);
-  const [paramToReset, setParamToReset] = useState<boolean>(false);
 
   const {
     connection,
@@ -68,9 +67,6 @@ export default function TableStatisticsView({
     setLevelsData({});
     setCreatedDataStream(false, '', {});
   }, [connection, schema, table]);
-  const setParamToResetFunc = (param: boolean): void => {
-    setParamToReset(param);
-  };
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -150,7 +146,6 @@ export default function TableStatisticsView({
         updateData={updateData}
         setLevelsData={setLevelsData}
         setNumberOfSelected={setNumberOfSelected}
-        setParamToResetFunc={setParamToResetFunc}
       />
     </div>
   );

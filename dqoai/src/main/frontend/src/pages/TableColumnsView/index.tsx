@@ -38,7 +38,6 @@ const TableColumnsView = () => {
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataStreamMappingSpec>({});
   const [selected, setSelected] = useState<number>(0);
-  const [paramToReset, setParamToReset] = useState<boolean>(false);
 
   const fetchColumns = async () => {
     try {
@@ -66,20 +65,8 @@ const TableColumnsView = () => {
     setSelected(param);
   };
 
-  const setParamToResetFunc = (param: boolean): void => {
-    setParamToReset(param);
-  };
-
   useEffect(() => {
     fetchColumns();
-    setSelected(0);
-    setNameOfDataStream('');
-    setLevels({});
-    implementDataStreamName();
-    setLevelsData({});
-    updateData('');
-    setNumberOfSelected(0);
-    console.log('done');
   }, [connectionName, schemaName, tableName]);
 
   const collectStatistics = async () => {
@@ -152,15 +139,6 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
-  const implementDataStreamName = () => {
-    const columnValues = Object.values(levels)
-      .map((level) => level.column)
-      .filter((column) => column !== undefined);
-    const joinedValues = columnValues.join(',');
-
-    return joinedValues;
-  };
-  console.log(nameOfDataStream);
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -235,7 +213,6 @@ const TableColumnsView = () => {
           updateData={updateData}
           setLevelsData={setLevelsData}
           setNumberOfSelected={setNumberOfSelected}
-          setParamToResetFunc={setParamToResetFunc}
         />
       </div>
     </ConnectionLayout>

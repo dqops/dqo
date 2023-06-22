@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useLayoutEffect } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import {
@@ -39,7 +39,6 @@ interface ITableColumnsProps {
   updateData: (arg: string) => void;
   setLevelsData: (arg: DataStreamMappingSpec) => void;
   setNumberOfSelected: (arg: number) => void;
-  setParamToResetFunc: (arg: boolean) => void;
 }
 
 const TableColumns = ({
@@ -48,8 +47,7 @@ const TableColumns = ({
   tableName,
   updateData,
   setLevelsData,
-  setNumberOfSelected,
-  setParamToResetFunc
+  setNumberOfSelected
 }: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
@@ -60,6 +58,7 @@ const TableColumns = ({
   const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
 
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
@@ -159,7 +158,15 @@ const TableColumns = ({
 
   useEffect(() => {
     fetchColumns();
+    setShouldResetCheckboxes(true);
   }, [connectionName, schemaName, tableName]);
+
+  useLayoutEffect(() => {
+    if (shouldResetCheckboxes) {
+      setObjectStates({});
+      setShouldResetCheckboxes(false);
+    }
+  }, [shouldResetCheckboxes]);
 
   const max_unique_value = () => {
     const arr: number[] = [];
@@ -478,7 +485,6 @@ const TableColumns = ({
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
-  // setCreatedDataStream(true, setDataStream(), setSpec2());
   setCreatedDataStream(true, fixString(), setSpec2());
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
