@@ -16,7 +16,7 @@
 package ai.dqo.mysql.sensors.column.uniqueness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniquePercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,9 +38,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class MysqlColumnUniquenessUniquePercentSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnUniquenessUniquePercentSensorParametersSpec sut;
+    private ColumnUniquenessDistinctPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnUniquePercentCheckSpec checkSpec;
+    private ColumnDistinctPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -48,8 +48,8 @@ public class MysqlColumnUniquenessUniquePercentSensorParametersSpecIntegrationTe
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnUniquenessUniquePercentSensorParametersSpec();
-        this.checkSpec = new ColumnUniquePercentCheckSpec();
+        this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
+        this.checkSpec = new ColumnDistinctPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
