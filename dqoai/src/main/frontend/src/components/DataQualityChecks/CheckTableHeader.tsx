@@ -15,7 +15,8 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useHistory, useParams } from 'react-router-dom';
 import Button from '../Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { addFirstLevelTab, setCurrentJobId } from '../../redux/actions/source.actions';
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 interface TableHeaderProps {
   checksUI: CheckContainerModel;
@@ -54,8 +55,9 @@ const TableHeader = ({
   } = useParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
-  const [jobId, setJobId] = useState<number>();
-  const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { currentJobId } = useSelector(getFirstLevelState(checkTypes));
+  const job = currentJobId ? job_dictionary_state[currentJobId] : undefined;
 
   const onRunChecks = async () => {
     await onUpdate();
@@ -65,7 +67,7 @@ const TableHeader = ({
         ? { timeWindowFilter }
         : {})
     });
-    setJobId((res.data as any)?.jobId?.jobId);
+    dispatch(setCurrentJobId(checkTypes, firstLevelActiveTab, (res.data as any)?.jobId?.jobId));
   };
 
   const onChangeMode = (newMode: string) => {

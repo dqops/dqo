@@ -1232,6 +1232,11 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
       })
     }
+    case SOURCE_ACTION.SET_CURRENT_JOB_ID: {
+      return setActiveTabState(state, action, {
+        currentJobId: action.data,
+      })
+    }
     default:
       return state;
   }
