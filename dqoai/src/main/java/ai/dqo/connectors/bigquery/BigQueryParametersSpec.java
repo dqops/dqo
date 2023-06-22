@@ -51,9 +51,11 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     private String billingProjectId;
 
-    @CommandLine.Option(names = {"--bigquery-authentication-mode"}, description = "Bigquery authentication mode.")
+    @CommandLine.Option(names = {"--bigquery-authentication-mode"}, description = "Bigquery authentication mode. The default value uses the current GCP application default credentials. " +
+            "The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, " +
+            "or it is the default GCP credentials obtained on a user's computer by running 'gcloud auth application-default login' from the command line.", defaultValue = "google_application_credentials")
     @JsonPropertyDescription("Authentication mode to the Google Cloud.")
-    private BigQueryAuthenticationMode authenticationMode;
+    private BigQueryAuthenticationMode authenticationMode = BigQueryAuthenticationMode.google_application_credentials;
 
     @CommandLine.Option(names = {"--bigquery-json-key-content"}, description = "Bigquery service account key content as JSON.")
     @JsonPropertyDescription("JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.")

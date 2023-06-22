@@ -28,6 +28,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.remote.ConnectionStatusRemote;
 import ai.dqo.rest.models.remote.ConnectionTestModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
  * Management service for remote connection.
  */
 @Component
+@Slf4j
 public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
     private final ConnectionProviderRegistry connectionProviderRegistry;
@@ -86,6 +88,7 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
             connectionTestModel.setConnectionStatus(ConnectionStatusRemote.SUCCESS);
 
         } catch (Exception e) {
+            log.debug("Failed to test a connection, error: " + e.getMessage(), e);
             connectionTestModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
             connectionTestModel.setErrorMessage(e.getMessage());
         }
