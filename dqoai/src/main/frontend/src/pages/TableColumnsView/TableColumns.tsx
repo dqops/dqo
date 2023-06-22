@@ -3,7 +3,7 @@ import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
-  DataStreamMappingSpec,
+  DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -37,7 +37,7 @@ interface ITableColumnsProps {
   schemaName: string;
   tableName: string;
   updateData: (arg: string) => void;
-  setLevelsData: (arg: DataStreamMappingSpec) => void;
+  setLevelsData: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected: (arg: number) => void;
 }
 
@@ -456,7 +456,7 @@ const TableColumns = ({
 
   const setSpec2 = () => {
     for (let i = 1; i <= 9; i++) {
-      const levelKey = `level_${i}` as keyof DataStreamMappingSpec;
+      const levelKey = `level_${i}` as keyof DataGroupingConfigurationSpec;
       const level = spec[levelKey];
 
       if (level) {

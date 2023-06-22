@@ -17,7 +17,7 @@
 import { JOB_ACTION } from '../types';
 import {
   CloudSynchronizationFoldersStatusModel,
-  DataStreamMappingSpec,
+  DataGroupingConfigurationSpec,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
   DqoJobQueueInitialSnapshotModel
@@ -39,7 +39,7 @@ export interface IJobsState {
   job_dictionary_state: Record<string, DqoJobHistoryEntryModel>;
   bool?: boolean;
   dataStreamName: string;
-  spec: DataStreamMappingSpec;
+  spec: DataGroupingConfigurationSpec;
 }
 
 const initialState: IJobsState = {

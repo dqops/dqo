@@ -19,11 +19,11 @@ import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
 import Tabs from '../../Tabs';
 
 import TableStatisticsView from '../../../pages/TableStatisticsView';
-import { DataStreamMappingSpec } from '../../../api';
+import { DataGroupingConfigurationSpec } from '../../../api';
 import { LocationState } from '../../../pages/TableColumnsView/TableColumnsFunctions';
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
-import { DataStreamsApi } from '../../../services/apiClient';
+import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 
 const tabs = [
   {
@@ -55,7 +55,7 @@ const ProfilingView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [activeTab, setActiveTab] = useState('statistics');
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
-  const [levels, setLevels] = useState<DataStreamMappingSpec>({});
+  const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
   const history = useHistory();
 
@@ -107,7 +107,7 @@ const ProfilingView = () => {
     setNameOfDataStream(nameOfDS);
   };
 
-  const setLevelsData2 = (levelsToSet: DataStreamMappingSpec): void => {
+  const setLevelsData2 = (levelsToSet: DataGroupingConfigurationSpec): void => {
     setLevels(levelsToSet);
   };
 
@@ -136,12 +136,13 @@ const ProfilingView = () => {
     };
 
     try {
-      const response = await DataStreamsApi.createDataStream(
-        connectionName,
-        schemaName,
-        tableName,
-        { data_stream_name: nameOfDataStream, spec: levels }
-      );
+      const response =
+        await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
+          connectionName,
+          schemaName,
+          tableName,
+          { data_grouping_configuration_name: nameOfDataStream, spec: levels }
+        );
       if (response.status === 409) {
         doNothing();
       }

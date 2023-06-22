@@ -14,29 +14,32 @@
 /// limitations under the License.
 ///
 
-import { IRootState } from "../reducers";
-import { CheckTypes } from "../../shared/routes";
+import { IRootState } from '../reducers';
+import { CheckTypes } from '../../shared/routes';
 
-export const getFirstLevelState = (checkType: CheckTypes) => (state: IRootState) => {
-  const { tabs, activeTab = ''} = state.source[checkType || CheckTypes.SOURCES] || {};
+export const getFirstLevelState =
+  (checkType: CheckTypes) => (state: IRootState) => {
+    const { tabs, activeTab = '' } =
+      state.source[checkType || CheckTypes.SOURCES] || {};
 
-  return tabs.find((item) => item.value === activeTab)?.state || {} as any;
-};
+    return tabs.find((item) => item.value === activeTab)?.state || ({} as any);
+  };
 
-export const getFirstLevelActiveTab = (checkType: CheckTypes) => (state: IRootState) => {
-  const { activeTab = ''} = state.source[checkType || CheckTypes.SOURCES];
+export const getFirstLevelActiveTab =
+  (checkType: CheckTypes) => (state: IRootState) => {
+    const { activeTab = '' } = state.source[checkType || CheckTypes.SOURCES];
 
-  return activeTab;
-};
+    return activeTab;
+  };
 
 export const getFirstLevelSensorState = (state: IRootState) => {
-  const { tabs, activeTab = ''} = state.sensor;
+  const { tabs, activeTab = '' } = state.sensor;
 
-  return tabs.find((item) => item.url === activeTab)?.state || {} as any;
+  return tabs.find((item) => item.url === activeTab)?.state || ({} as any);
 };
 
 export const getFirstLevelIncidentsState = (state: IRootState) => {
-  const { tabs, activeTab = ''} = state.incidents;
+  const { tabs, activeTab = '' } = state.incidents;
 
-  return tabs.find((item) => item.url === activeTab)?.state || {} as any;
+  return tabs.find((item) => item.url === activeTab)?.state || ({} as any);
 };

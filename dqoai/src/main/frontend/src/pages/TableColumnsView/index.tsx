@@ -7,10 +7,11 @@ import Button from '../../components/Button';
 import {
   ColumnApiClient,
   JobApiClient,
-  DataStreamsApi
+  DataGroupingConfigurationsApi
 } from '../../services/apiClient';
 import {
-  DataStreamMappingSpec,
+  DataGroupingConfigurationBasicModel,
+  DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -36,7 +37,7 @@ const TableColumnsView = () => {
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
-  const [levels, setLevels] = useState<DataStreamMappingSpec>({});
+  const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
 
   const fetchColumns = async () => {
@@ -57,7 +58,7 @@ const TableColumnsView = () => {
     setNameOfDataStream(nameOfDS);
   };
 
-  const setLevelsData = (levelsToSet: DataStreamMappingSpec): void => {
+  const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
     setLevels(levelsToSet);
   };
 
@@ -113,12 +114,13 @@ const TableColumnsView = () => {
     };
 
     try {
-      const response = await DataStreamsApi.createDataStream(
-        connectionName,
-        schemaName,
-        tableName,
-        { data_stream_name: nameOfDataStream, spec: levels }
-      );
+      const response =
+        await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
+          connectionName,
+          schemaName,
+          tableName,
+          { data_grouping_configuration_name: nameOfDataStream, spec: levels }
+        );
       if (response.status === 409) {
         doNothing();
       }

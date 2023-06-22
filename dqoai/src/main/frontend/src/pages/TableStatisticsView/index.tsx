@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TableColumns from '../TableColumnsView/TableColumns';
-import { DataStreamMappingSpec, TableStatisticsModel } from '../../api';
+import { DataGroupingConfigurationSpec, TableStatisticsModel } from '../../api';
 import { AxiosResponse } from 'axios';
 import { TableApiClient } from '../../services/apiClient';
 import Loader from '../../components/Loader';
@@ -24,14 +24,14 @@ export default function TableStatisticsView({
   schemaName: string;
   tableName: string;
   updateData2: (arg: string) => void;
-  setLevelsData2: (arg: DataStreamMappingSpec) => void;
+  setLevelsData2: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected2: (arg: number) => void;
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
-  const [levels, setLevels] = useState<DataStreamMappingSpec>({});
+  const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
 
   const {
@@ -81,7 +81,7 @@ export default function TableStatisticsView({
     setNameOfDataStream(nameOfDS);
   };
 
-  const setLevelsData = (levelsToSet: DataStreamMappingSpec): void => {
+  const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
     setLevels(levelsToSet);
   };
 

@@ -17,7 +17,7 @@
 import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from '../../shared/routes';
 import { CheckRunRecurringScheduleGroup } from '../../shared/enums/scheduling.enum';
-import { DataStreamMappingSpec } from '../../api';
+import { DataGroupingConfigurationSpec } from '../../api';
 
 export interface INestTab {
   url: string;
@@ -75,7 +75,7 @@ export type Action = BasicAction & {
 export type DataStreamAction = {
   bool: boolean;
   data_stream_name: string;
-  spec: DataStreamMappingSpec;
+  spec: DataGroupingConfigurationSpec;
 };
 
 const setActiveTabState = (

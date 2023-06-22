@@ -1,4 +1,4 @@
-import { DataStreamMappingSpec } from '../../api';
+import { DataGroupingConfigurationSpec } from '../../api';
 
 export const renderValue = (value: any) => {
   if (typeof value === 'boolean') {
@@ -20,7 +20,7 @@ export const cutString = (text: string) => {
 export interface LocationState {
   bool: boolean;
   data_stream_name: string;
-  spec: DataStreamMappingSpec;
+  spec: DataGroupingConfigurationSpec;
 }
 
 export interface MyData {
@@ -68,7 +68,7 @@ export const calculate_color = (
 
   return color;
 };
-export const spec: DataStreamMappingSpec = {
+export const spec: DataGroupingConfigurationSpec = {
   level_1: {
     column: undefined
   },

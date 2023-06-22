@@ -24,7 +24,7 @@ import {
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
   TableIncidentGroupingSpec,
-  DataStreamMappingSpec
+  DataGroupingConfigurationSpec
 } from '../../api';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
