@@ -17,9 +17,9 @@
 import { Dispatch } from 'redux';
 
 import { RulesApi } from '../../services/apiClient';
-import { RULE_ACTION } from '../types';
+import { JOB_ACTION, RULE_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { RuleBasicFolderModel } from "../../api";
+import { DataGroupingConfigurationSpec, RuleBasicFolderModel } from '../../api';
 
 export const getRuleFolderTreeRequest = () => ({
   type: RULE_ACTION.GET_RULE_FOLDER_TREE
@@ -48,10 +48,20 @@ export const getRuleFolderTree = () => async (dispatch: Dispatch) => {
 
 export const toggleRuleFolderTree = (key: string) => ({
   type: RULE_ACTION.TOGGLE_RULE_FOLDER,
-  key,
+  key
 });
 
 export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
   type: RULE_ACTION.UPDATE_RULE_FOLDER_TREE,
   data
+});
+export const setCreatedDataStream = (
+  bool: boolean,
+  dataStreamName: string,
+  spec: DataGroupingConfigurationSpec
+) => ({
+  type: JOB_ACTION.SET_CREATED_DATA_STREAM,
+  bool,
+  dataStreamName,
+  spec
 });

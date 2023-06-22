@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import TableColumns from './TableColumns';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import ConnectionLayout from '../../components/ConnectionLayout';
 import Button from '../../components/Button';
-import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import {
+  ColumnApiClient,
+  JobApiClient,
+  DataGroupingConfigurationsApi
+} from '../../services/apiClient';
+import {
+  DataGroupingConfigurationBasicModel,
+  DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
 import { AxiosResponse } from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { ROUTES, CheckTypes } from '../../shared/routes';
+import { LocationState } from './TableColumnsFunctions';
+import { setCreatedDataStream } from '../../redux/actions/rule.actions';
 
 const TableColumnsView = () => {
   const {
@@ -19,10 +29,16 @@ const TableColumnsView = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
-
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
+  const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
+  const [selected, setSelected] = useState<number>(0);
 
   const fetchColumns = async () => {
     try {
@@ -36,6 +52,18 @@ const TableColumnsView = () => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const updateData = (nameOfDS: string): void => {
+    setNameOfDataStream(nameOfDS);
+  };
+
+  const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
+    setLevels(levelsToSet);
+  };
+
+  const setNumberOfSelected = (param: number): void => {
+    setSelected(param);
   };
 
   useEffect(() => {
@@ -64,6 +92,54 @@ const TableColumnsView = () => {
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
   );
+  const doNothing = (): void => {};
+  const postDataStream = async () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      'sources',
+      connectionName,
+      schemaName,
+      tableName,
+      'data-streams'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      'sources',
+      connectionName,
+      schemaName,
+      tableName
+    );
+    const data: LocationState = {
+      bool: true,
+      data_stream_name: nameOfDataStream,
+      spec: levels
+    };
+
+    try {
+      const response =
+        await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
+          connectionName,
+          schemaName,
+          tableName,
+          { data_grouping_configuration_name: nameOfDataStream, spec: levels }
+        );
+      if (response.status === 409) {
+        doNothing();
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status) {
+        doNothing();
+      }
+    }
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        state: data,
+        label: tableName
+      })
+    );
+    history.push(url);
+    setCreatedDataStream(false, '', {});
+  };
 
   return (
     <ConnectionLayout>
@@ -72,51 +148,73 @@ const TableColumnsView = () => {
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
-        <Button
-          className="flex items-center gap-x-2 justify-center"
-          label={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schemaName + '.' + tableName
-            )
-              ? 'Collecting...'
-              : 'Collect Statistic'
-          }
-          color={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schemaName + '.' + tableName
-            )
-              ? 'secondary'
-              : 'primary'
-          }
-          leftIcon={
-            filteredJobs?.find(
-              (x) =>
-                x.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
-                schemaName + '.' + tableName
-            ) ? (
-              <SvgIcon name="sync" className="w-4 h-4" />
-            ) : (
-              ''
-            )
-          }
-          onClick={() => {
-            collectStatistics();
-          }}
-          loading={loadingJob}
-        />
+        <div className="flex items-center gap-x-2 justify-center">
+          {selected !== 0 && selected <= 9 && (
+            <Button
+              label="Create Data Stream"
+              color="primary"
+              onClick={postDataStream}
+            />
+          )}
+          {selected > 9 && (
+            <div className="flex items-center gap-x-2 justify-center text-red-500">
+              (You can choose max 9 columns)
+              <Button
+                label="Create Data Stream"
+                color="secondary"
+                className="text-black "
+              />
+            </div>
+          )}
+          <Button
+            className="flex items-center gap-x-2 justify-center"
+            label={
+              filteredJobs?.find(
+                (x) =>
+                  x.parameters?.collectStatisticsParameters
+                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                  schemaName + '.' + tableName
+              )
+                ? 'Collecting...'
+                : 'Collect Statistic'
+            }
+            color={
+              filteredJobs?.find(
+                (x) =>
+                  x.parameters?.collectStatisticsParameters
+                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                  schemaName + '.' + tableName
+              )
+                ? 'secondary'
+                : 'primary'
+            }
+            leftIcon={
+              filteredJobs?.find(
+                (x) =>
+                  x.parameters?.collectStatisticsParameters
+                    ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                  schemaName + '.' + tableName
+              ) ? (
+                <SvgIcon name="sync" className="w-4 h-4" />
+              ) : (
+                ''
+              )
+            }
+            onClick={() => {
+              collectStatistics();
+            }}
+            loading={loadingJob}
+          />
+        </div>
       </div>
       <div>
         <TableColumns
           connectionName={connectionName}
           schemaName={schemaName}
           tableName={tableName}
+          updateData={updateData}
+          setLevelsData={setLevelsData}
+          setNumberOfSelected={setNumberOfSelected}
         />
       </div>
     </ConnectionLayout>

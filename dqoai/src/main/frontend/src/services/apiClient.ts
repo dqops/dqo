@@ -35,7 +35,8 @@ import {
   RulesApiFactory,
   IncidentsApiFactory,
   LogShippingApiFactory,
-  EnvironmentApiFactory, ChecksApiFactory
+  EnvironmentApiFactory,
+  ChecksApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -50,11 +51,7 @@ export const SchemaApiClient = SchemasApiFactory(
   axios
 );
 
-export const TableApiClient = TablesApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const TableApiClient = TablesApiFactory(new Configuration(), '', axios);
 
 export const ColumnApiClient = ColumnsApiFactory(
   new Configuration(),
@@ -62,11 +59,7 @@ export const ColumnApiClient = ColumnsApiFactory(
   axios
 );
 
-export const JobApiClient = JobsApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const JobApiClient = JobsApiFactory(new Configuration(), '', axios);
 
 export const DataSourcesApi = DataSourcesApiFactory(
   new Configuration(),
@@ -74,11 +67,8 @@ export const DataSourcesApi = DataSourcesApiFactory(
   axios
 );
 
-export const DataGroupingConfigurationsApi = DataGroupingConfigurationsApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const DataGroupingConfigurationsApi =
+  DataGroupingConfigurationsApiFactory(new Configuration(), '', axios);
 
 export const CheckResultApi = CheckResultsApiFactory(
   new Configuration(),
@@ -98,11 +88,7 @@ export const DashboardsApi = DashboardsApiFactory(
   axios
 );
 
-export const TimezonesApi = TimezonesApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const TimezonesApi = TimezonesApiFactory(new Configuration(), '', axios);
 
 export const SensorReadoutsApi = SensorReadoutsApiFactory(
   new Configuration(),
@@ -110,29 +96,13 @@ export const SensorReadoutsApi = SensorReadoutsApiFactory(
   axios
 );
 
-export const ErrorsApi = ErrorsApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const ErrorsApi = ErrorsApiFactory(new Configuration(), '', axios);
 
-export const SensorsApi = SensorsApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const SensorsApi = SensorsApiFactory(new Configuration(), '', axios);
 
-export const RulesApi = RulesApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const RulesApi = RulesApiFactory(new Configuration(), '', axios);
 
-export const IncidentsApi = IncidentsApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const IncidentsApi = IncidentsApiFactory(new Configuration(), '', axios);
 
 export const EnviromentApiClient = EnvironmentApiFactory(
   new Configuration(),
@@ -143,11 +113,7 @@ export const EnviromentApiClient = EnvironmentApiFactory(
 export const LogErrorsApi = LogShippingApiFactory(
   new Configuration(),
   '',
-  axios,
+  axios
 );
 
-export const ChecksApi = ChecksApiFactory(
-  new Configuration(),
-  '',
-  axios,
-);
+export const ChecksApi = ChecksApiFactory(new Configuration(), '', axios);
