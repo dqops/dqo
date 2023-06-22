@@ -1296,6 +1296,38 @@ const connectionReducer = (state = initialState, action: Action) => {
         currentJobId: action.data
       });
     }
+
+    case SOURCE_ACTION.TOGGLE_CHECK: {
+      const firstState =
+        state[action.checkType].tabs.find(
+          (item) => item.value === action.activeTab
+        )?.state || {};
+
+      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+
+      console.log('firstAte', checksState)
+      return setActiveTabState(state, action, {
+        checksState: {
+          ...checksState,
+          [action.data]: !checksState[action.data]
+        }
+      });
+    }
+    case SOURCE_ACTION.CLOSE_CHECK: {
+      const firstState =
+        state[action.checkType].tabs.find(
+          (item) => item.value === action.activeTab
+        )?.state || {};
+
+      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+
+      return setActiveTabState(state, action, {
+        checksState: {
+          ...checksState,
+          [action.data]: false
+        }
+      });
+    }
     default:
       return state;
   }

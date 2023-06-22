@@ -70,12 +70,38 @@ const CheckListItem = ({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
+  useEffect(() => {
+    const localState = localStorage.getItem(`${checkTypes}_${check.check_name}`);
+
+    if (localState === 'true') {
+      openCheckSettings();
+    }
+
+    const detailsLocalState = localStorage.getItem(`${checkTypes}_${check.check_name}_details`);
+
+    if (detailsLocalState === 'true') {
+      toggleCheckDetails();
+    }
+
+  }, [checkTypes, check.check_name]);
+
+  const toggleExpand = () => {
+    const newValue = !expanded;
+    setExpanded(newValue)
+    localStorage.setItem(`${checkTypes}_${check.check_name}`, newValue.toString());
+  }
+
+  const closeExpand = () => {
+    setExpanded(false)
+    localStorage.setItem(`${checkTypes}_${check.check_name}`, "false");
+  }
+
   const openCheckSettings = () => {
     if (showDetails) {
-      setShowDetails(false);
+      closeCheckDetails();
     }
     if (check?.configured) {
-      setExpanded(!expanded);
+      toggleExpand();
       const initTabs = [
         {
           label: 'Check Settings',
@@ -112,7 +138,7 @@ const CheckListItem = ({
 
   const onChangeConfigured = (configured: boolean) => {
     if (!configured) {
-      setExpanded(false);
+      closeExpand();
     }
     handleChange({
       configured,
@@ -188,13 +214,17 @@ const CheckListItem = ({
 
   const closeCheckDetails = () => {
     setShowDetails(false);
+    localStorage.setItem(`${checkTypes}_${check.check_name}_details`, "false");
   };
 
   const toggleCheckDetails = () => {
     if (expanded && !showDetails) {
-      setExpanded(false);
+      closeExpand();
     }
-    setShowDetails(!showDetails);
+    const newValue = !showDetails;
+
+    localStorage.setItem(`${checkTypes}_${check.check_name}_details`, newValue.toString());
+    setShowDetails(newValue);
   };
   const getLocalDateInUserTimeZone = (date: Date): string => {
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -481,7 +511,7 @@ const CheckListItem = ({
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               tabs={tabs}
-              onClose={() => setExpanded(false)}
+              onClose={closeExpand}
               onChange={onChange}
               check={check}
             />

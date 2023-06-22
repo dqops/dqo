@@ -77,7 +77,6 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                     color="primary"
                     variant="contained"
                     label="Add new data grouping configuration"
-                    className="w-50"
                     onClick={onAddDataGroupingConfiguration}
                   />
                 </div>
