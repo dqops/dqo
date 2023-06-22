@@ -162,9 +162,6 @@ const ProfilingView = () => {
     history.push(url);
     setCreatedDataStream(false, '', {});
   };
-  console.log(selected);
-  console.log(levels);
-  console.log(nameOfDataStream);
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">

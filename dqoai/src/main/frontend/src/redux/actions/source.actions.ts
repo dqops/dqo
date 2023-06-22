@@ -857,3 +857,25 @@ export const setCurrentJobId = (
   activeTab,
   data: jobId
 });
+
+export const toggleCheck = (
+  checkType: CheckTypes,
+  activeTab: string,
+  checkName: string
+) => ({
+  type: SOURCE_ACTION.TOGGLE_CHECK,
+  checkType,
+  activeTab,
+  data: checkName,
+});
+
+export const closeCheck = (
+  checkType: CheckTypes,
+  activeTab: string,
+  checkName: string
+) => ({
+  type: SOURCE_ACTION.CLOSE_CHECK,
+  checkType,
+  activeTab,
+  data: checkName,
+});

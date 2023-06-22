@@ -97,11 +97,6 @@ export default function TableStatisticsView({
     );
   }
 
-  console.log(selected);
-  updateData2(nameOfDataStream);
-  setLevelsData2(levels);
-  setNumberOfSelected2(selected);
-
   return (
     <div>
       <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded mt-8">
