@@ -304,7 +304,7 @@ public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests exten
         
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
@@ -316,11 +316,11 @@ public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests exten
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                analyzed_table.`earlier_string` AS stream_level_1
+                analyzed_table.`earlier_string` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1
-            ORDER BY stream_level_1""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getEventTimestampColumn(),
@@ -336,7 +336,7 @@ public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests exten
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
         
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                     DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
@@ -348,13 +348,13 @@ public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests exten
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                analyzed_table.`earlier_string` AS stream_level_1,
+                analyzed_table.`earlier_string` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getEventTimestampColumn(),
@@ -370,7 +370,7 @@ public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests exten
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
         
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "earlier_datetime");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
@@ -382,15 +382,15 @@ public class TableTimelinessDataFreshnessSensorParametersSpecBigQueryTests exten
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                analyzed_table.`earlier_string` AS stream_level_1,
+                analyzed_table.`earlier_string` AS grouping_level_1,
                 CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
                   AND analyzed_table.`earlier_datetime` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`earlier_datetime` < CAST(CURRENT_DATE() AS DATETIME)
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getEventTimestampColumn(),

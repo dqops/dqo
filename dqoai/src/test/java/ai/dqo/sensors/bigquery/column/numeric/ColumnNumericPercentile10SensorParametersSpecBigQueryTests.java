@@ -252,7 +252,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
@@ -262,7 +262,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc,
-                analyzed_table.`length_string` AS stream_level_1
+                analyzed_table.`length_string` AS grouping_level_1
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -271,12 +271,12 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                     OVER (PARTITION BY
                        \s
                        \s     
-                analyzed_table.`length_string` AS stream_level_1
+                analyzed_table.`length_string` AS grouping_level_1
                     ) AS actual_value
                 FROM `%s`.`%s`.`%s` AS analyzed_table
                 WHERE %s) AS nested_table
-            GROUP BY stream_level_1
-            ORDER BY stream_level_1""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -291,7 +291,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
     void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
@@ -301,7 +301,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc,
-                analyzed_table.`length_string` AS stream_level_1
+                analyzed_table.`length_string` AS grouping_level_1
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -312,14 +312,14 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                        \s
-                analyzed_table.`length_string` AS stream_level_1
+                analyzed_table.`length_string` AS grouping_level_1
                     ) AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
                 WHERE %s) AS nested_table
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -334,7 +334,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
@@ -344,7 +344,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc,                
-                analyzed_table.`length_string` AS stream_level_1
+                analyzed_table.`length_string` AS grouping_level_1
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -355,7 +355,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 analyzed_table.`date`,
                 TIMESTAMP(analyzed_table.`date`)
                        \s
-                analyzed_table.`length_string` AS stream_level_1
+                analyzed_table.`length_string` AS grouping_level_1
                     ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -363,8 +363,8 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 WHERE %s
                       AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                       AND analyzed_table.`date` < CURRENT_DATE()) AS nested_table
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -385,7 +385,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
@@ -397,9 +397,9 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc,                
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3
+                analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                analyzed_table.`mix_of_values` AS grouping_level_2,
+                analyzed_table.`length_string` AS grouping_level_3
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -410,16 +410,16 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 analyzed_table.`date`,
                 TIMESTAMP(analyzed_table.`date`)
                        \s
-                analyzed_table.`strings_with_numbers` AS stream_level_1
-                analyzed_table.`mix_of_values` AS stream_level_2
-                analyzed_table.`length_string` AS stream_level_3
+                analyzed_table.`strings_with_numbers` AS grouping_level_1
+                analyzed_table.`mix_of_values` AS grouping_level_2
+                analyzed_table.`length_string` AS grouping_level_3
                     ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
                 WHERE %s) AS nested_table
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -434,7 +434,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
     void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
@@ -446,9 +446,9 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3
+                analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                analyzed_table.`mix_of_values` AS grouping_level_2,
+                analyzed_table.`length_string` AS grouping_level_3
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -459,16 +459,16 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                        \s
-                analyzed_table.`strings_with_numbers` AS stream_level_1
-                analyzed_table.`mix_of_values` AS stream_level_2
-                analyzed_table.`length_string` AS stream_level_3
+                analyzed_table.`strings_with_numbers` AS grouping_level_1
+                analyzed_table.`mix_of_values` AS grouping_level_2
+                analyzed_table.`length_string` AS grouping_level_3
                     ) AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
                 WHERE %s) AS nested_table
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -483,7 +483,7 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
     void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
@@ -495,9 +495,9 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3
+                analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                analyzed_table.`mix_of_values` AS grouping_level_2,
+                analyzed_table.`length_string` AS grouping_level_3
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -508,9 +508,9 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 analyzed_table.`date`,
                 TIMESTAMP(analyzed_table.`date`)
                        \s
-                analyzed_table.`strings_with_numbers` AS stream_level_1
-                analyzed_table.`mix_of_values` AS stream_level_2
-                analyzed_table.`length_string` AS stream_level_3
+                analyzed_table.`strings_with_numbers` AS grouping_level_1
+                analyzed_table.`mix_of_values` AS grouping_level_2
+                analyzed_table.`length_string` AS grouping_level_3
                     ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -518,8 +518,8 @@ public class ColumnNumericPercentile10SensorParametersSpecBigQueryTests extends 
                 WHERE %s
                       AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                       AND analyzed_table.`date` < CURRENT_DATE()) AS nested_table
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

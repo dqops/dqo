@@ -39,7 +39,7 @@ Column level sensor that calculates the percentage of values that match values i
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -69,7 +69,7 @@ Column level sensor that calculates the percentage of values that match values i
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -99,7 +99,7 @@ Column level sensor that calculates the percentage of values that match values i
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -129,7 +129,7 @@ Column level sensor that calculates the percentage of values that match values i
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -159,7 +159,7 @@ Column level sensor that calculates the percentage of values that match values i
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -210,7 +210,7 @@ Column level sensor that calculates the count of values that does not match valu
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -244,7 +244,7 @@ Column level sensor that calculates the count of values that does not match valu
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -278,7 +278,7 @@ Column level sensor that calculates the count of values that does not match valu
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -308,7 +308,7 @@ Column level sensor that calculates the count of values that does not match valu
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
@@ -338,7 +338,7 @@ Column level sensor that calculates the count of values that does not match valu
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table

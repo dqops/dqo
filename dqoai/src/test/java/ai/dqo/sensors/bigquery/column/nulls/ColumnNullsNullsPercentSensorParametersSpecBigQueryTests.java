@@ -229,7 +229,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
     void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
@@ -245,11 +245,11 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1
+                analyzed_table.`date2` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1
-            ORDER BY stream_level_1""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -263,7 +263,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
     @Test
     void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                     DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
@@ -279,13 +279,13 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
+                analyzed_table.`date2` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -299,7 +299,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
@@ -315,15 +315,15 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
+                analyzed_table.`date2` AS grouping_level_1,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -343,7 +343,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date1");
         }});
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
@@ -360,14 +360,14 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
-                analyzed_table.`date4` AS stream_level_2,
+                analyzed_table.`date2` AS grouping_level_1,
+                analyzed_table.`date4` AS grouping_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -381,7 +381,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
     @Test
     void renderSensor_whenRecurringDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
@@ -398,14 +398,14 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
-                analyzed_table.`date4` AS stream_level_2,
+                analyzed_table.`date2` AS grouping_level_1,
+                analyzed_table.`date4` AS grouping_level_2,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -419,7 +419,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
@@ -436,16 +436,16 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
-                analyzed_table.`date4` AS stream_level_2,
+                analyzed_table.`date2` AS grouping_level_1,
+                analyzed_table.`date4` AS grouping_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
-            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

@@ -183,7 +183,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 1.
-     * @return Data stream value for the stream_level_1.
+     * @return Data stream value for the grouping_level_1.
      */
     public TextColumn getDataGroupingLevel1Column() {
         return dataGroupingLevel1Column;
@@ -191,7 +191,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 2.
-     * @return Data stream value for the stream_level_2.
+     * @return Data stream value for the grouping_level_2.
      */
     public TextColumn getDataGroupingLevel2Column() {
         return dataGroupingLevel2Column;
@@ -199,7 +199,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 3.
-     * @return Data stream value for the stream_level_3.
+     * @return Data stream value for the grouping_level_3.
      */
     public TextColumn getDataGroupingLevel3Column() {
         return dataGroupingLevel3Column;
@@ -207,7 +207,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 4.
-     * @return Data stream value for the stream_level_4.
+     * @return Data stream value for the grouping_level_4.
      */
     public TextColumn getDataGroupingLevel4Column() {
         return dataGroupingLevel4Column;
@@ -215,7 +215,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 5.
-     * @return Data stream value for the stream_level_5.
+     * @return Data stream value for the grouping_level_5.
      */
     public TextColumn getDataGroupingLevel5Column() {
         return dataGroupingLevel5Column;
@@ -223,7 +223,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 6.
-     * @return Data stream value for the stream_level_6.
+     * @return Data stream value for the grouping_level_6.
      */
     public TextColumn getDataGroupingLevel6Column() {
         return dataGroupingLevel6Column;
@@ -231,7 +231,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 7.
-     * @return Data stream value for the stream_level_7.
+     * @return Data stream value for the grouping_level_7.
      */
     public TextColumn getDataGroupingLevel7Column() {
         return dataGroupingLevel7Column;
@@ -239,7 +239,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 8.
-     * @return Data stream value for the stream_level_8.
+     * @return Data stream value for the grouping_level_8.
      */
     public TextColumn getDataGroupingLevel8Column() {
         return dataGroupingLevel8Column;
@@ -247,7 +247,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 9.
-     * @return Data stream value for the stream_level_9.
+     * @return Data stream value for the grouping_level_9.
      */
     public TextColumn getDataGroupingLevel9Column() {
         return dataGroupingLevel9Column;

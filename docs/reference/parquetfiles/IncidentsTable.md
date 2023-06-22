@@ -10,7 +10,7 @@ Constants with the column names used in the &quot;incidents&quot; table.
  | schema_name | Column name for a table schema. | text |
  | table_name | Column name for a table name. | text |
  | table_priority | Column name for a table priority. | integer |
- | data_stream_name | Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
+ | data_group_name | The data group name, it is a concatenated name of the data group dimension values, created from [grouping_level_1] / [grouping_level_2] / ... | text |
  | quality_dimension | Column name for a data quality dimension. | text |
  | check_category | Column name for a check category. | text |
  | check_type | Column name for a check type (adhoc, checkpoint, partitioned). | text |

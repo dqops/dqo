@@ -56,7 +56,7 @@ public class PostgresqlTableSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.date3 is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -71,7 +71,7 @@ public class PostgresqlTableSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.date3 is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -86,7 +86,7 @@ public class PostgresqlTableSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.date3 is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -101,7 +101,7 @@ public class PostgresqlTableSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.date3 is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
@@ -116,7 +116,7 @@ public class PostgresqlTableSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.date3 is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");

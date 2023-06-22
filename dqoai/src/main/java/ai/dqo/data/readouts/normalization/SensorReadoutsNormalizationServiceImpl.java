@@ -94,7 +94,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
 
         // now detect data stream level columns...
         TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
-                resultsTable, sensorRunParameters.getGroupings(), resultsRowCount);
+                resultsTable, sensorRunParameters.getDataGroupings(), resultsRowCount);
 
         for (int streamLevelId = 0; streamLevelId < dataStreamLevelColumns.length; streamLevelId++) {
             if (dataStreamLevelColumns[streamLevelId] != null) {
@@ -112,8 +112,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         normalizedResults.addColumns(dataStreamNameColumn);
 
         TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultsRowCount);
-        if (sensorRunParameters.getGroupings() != null) {
-            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getGroupings().getDataGroupingConfigurationName());
+        if (sensorRunParameters.getDataGroupings() != null) {
+            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataGroupings().getDataGroupingConfigurationName());
         } else {
             dataStreamMappingNameColumn.setMissingTo(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
         }

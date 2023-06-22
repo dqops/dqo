@@ -49,7 +49,7 @@ public class JinjaTemplateRenderParameters {
     private AbstractSensorParametersSpec parameters;
     private TimeSeriesConfigurationSpec effectiveTimeSeries;
     private TimeWindowFilterParameters effectiveTimeWindowFilter;
-    private DataGroupingConfigurationSpec effectiveGroupings;
+    private DataGroupingConfigurationSpec effectiveDataGroupings;
     private SensorDefinitionSpec sensorDefinition;
     private ProviderSensorDefinitionSpec providerSensorDefinition;
     private ProviderDialectSettings dialectSettings;
@@ -71,7 +71,7 @@ public class JinjaTemplateRenderParameters {
      * @param parameters Sensor parameters spec.
      * @param effectiveTimeSeries Effective time series configuration.
      * @param effectiveTimeWindowFilter Effective time window filter for partitioned checks or checks with a time window (start and end dates).
-     * @param effectiveGroupings Effective data groupings configuration.
+     * @param effectiveDataGroupings Effective data groupings configuration.
      * @param sensorDefinition Sensor definition spec.
      * @param providerSensorDefinition Provider sensor definition spec.
      * @param dialectSettings Dialect settings with configuration of the dialect.
@@ -85,7 +85,7 @@ public class JinjaTemplateRenderParameters {
 										 AbstractSensorParametersSpec parameters,
                                          TimeSeriesConfigurationSpec effectiveTimeSeries,
                                          TimeWindowFilterParameters effectiveTimeWindowFilter,
-                                         DataGroupingConfigurationSpec effectiveGroupings,
+                                         DataGroupingConfigurationSpec effectiveDataGroupings,
 										 SensorDefinitionSpec sensorDefinition,
 										 ProviderSensorDefinitionSpec providerSensorDefinition,
 										 ProviderDialectSettings dialectSettings,
@@ -99,7 +99,7 @@ public class JinjaTemplateRenderParameters {
         this.parameters = parameters;
         this.effectiveTimeSeries = effectiveTimeSeries;
         this.effectiveTimeWindowFilter = effectiveTimeWindowFilter;
-        this.effectiveGroupings = effectiveGroupings;
+        this.effectiveDataGroupings = effectiveDataGroupings;
         this.sensorDefinition = sensorDefinition;
         this.providerSensorDefinition = providerSensorDefinition;
         this.dialectSettings = dialectSettings;
@@ -125,7 +125,7 @@ public class JinjaTemplateRenderParameters {
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
             setEffectiveTimeSeries(sensorRunParameters.getTimeSeries());
-            setEffectiveGroupings(sensorRunParameters.getGroupings() != null ? sensorRunParameters.getGroupings().truncateToColumns() : null);
+            setEffectiveDataGroupings(sensorRunParameters.getDataGroupings() != null ? sensorRunParameters.getDataGroupings().truncateToColumns() : null);
 			setSensorDefinition(sensorDefinitions.getSensorDefinitionSpec().trim());
 			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
 			setDialectSettings(sensorRunParameters.getDialectSettings());
@@ -269,16 +269,16 @@ public class JinjaTemplateRenderParameters {
      * Returns the effective data grouping configuration.
      * @return Effective data grouping configuration.
      */
-    public DataGroupingConfigurationSpec getEffectiveGroupings() {
-        return effectiveGroupings;
+    public DataGroupingConfigurationSpec getEffectiveDataGroupings() {
+        return effectiveDataGroupings;
     }
 
     /**
      * Sets the effective data grouping configuration.
-     * @param effectiveGroupings Effective data grouping configuration.
+     * @param effectiveDataGroupings Effective data grouping configuration.
      */
-    public void setEffectiveGroupings(DataGroupingConfigurationSpec effectiveGroupings) {
-        this.effectiveGroupings = effectiveGroupings;
+    public void setEffectiveDataGroupings(DataGroupingConfigurationSpec effectiveDataGroupings) {
+        this.effectiveDataGroupings = effectiveDataGroupings;
     }
 
     /**

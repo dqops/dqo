@@ -340,7 +340,7 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result")));
 
@@ -356,31 +356,31 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                     MAX(2) AS expected_value,
                     top_values.time_period,
                     top_values.time_period_utc,
-                    top_values.stream_level_1
+                    top_values.grouping_level_1
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
                         top_col_values.time_period as time_period,
                         top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1
-                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1
                     FROM
                     (
                         SELECT
                             %1$s AS top_value,
                             COUNT(*) AS total_values,
-                            analyzed_table.`result` AS stream_level_1
+                            analyzed_table.`result` AS grouping_level_1
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                         WHERE id < 5
-                        GROUP BY stream_level_1, top_value
-                        ORDER BY stream_level_1, total_values
+                        GROUP BY grouping_level_1, top_value
+                        ORDER BY grouping_level_1, total_values
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2
-                GROUP BY stream_level_1
-                ORDER BY stream_level_1""";
+                GROUP BY grouping_level_1
+                ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -401,7 +401,7 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result")));
 
@@ -417,33 +417,33 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                     MAX(2) AS expected_value,
                     top_values.time_period,
                     top_values.time_period_utc,
-                    top_values.stream_level_1
+                    top_values.grouping_level_1
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
                         top_col_values.time_period as time_period,
                         top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1
-                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1
                     FROM
                     (
                         SELECT
                             %1$s AS top_value,
                             COUNT(*) AS total_values,
-                            analyzed_table.`result` AS stream_level_1,
+                            analyzed_table.`result` AS grouping_level_1,
                             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                         WHERE id < 5
-                        GROUP BY stream_level_1, time_period, time_period_utc, top_value
-                        ORDER BY stream_level_1, time_period, time_period_utc, total_values
+                        GROUP BY grouping_level_1, time_period, time_period_utc, top_value
+                        ORDER BY grouping_level_1, time_period, time_period_utc, total_values
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2
-                GROUP BY stream_level_1, time_period, time_period_utc
-                ORDER BY stream_level_1, time_period, time_period_utc""";
+                GROUP BY grouping_level_1, time_period, time_period_utc
+                ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -464,7 +464,7 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result")));
 
@@ -480,21 +480,21 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                     MAX(2) AS expected_value,
                     top_values.time_period,
                     top_values.time_period_utc,
-                    top_values.stream_level_1
+                    top_values.grouping_level_1
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
                         top_col_values.time_period as time_period,
                         top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1
-                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1
                     FROM
                     (
                         SELECT
                             %1$s AS top_value,
                             COUNT(*) AS total_values,
-                            analyzed_table.`result` AS stream_level_1,
+                            analyzed_table.`result` AS grouping_level_1,
                             analyzed_table.`date` AS time_period,
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
@@ -502,13 +502,13 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                         WHERE id < 5
                               AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                               AND analyzed_table.`date` < CURRENT_DATE()
-                        GROUP BY stream_level_1, time_period, time_period_utc, top_value
-                        ORDER BY stream_level_1, time_period, time_period_utc, total_values
+                        GROUP BY grouping_level_1, time_period, time_period_utc, top_value
+                        ORDER BY grouping_level_1, time_period, time_period_utc, total_values
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2
-                GROUP BY stream_level_1, time_period, time_period_utc
-                ORDER BY stream_level_1, time_period, time_period_utc""";
+                GROUP BY grouping_level_1, time_period, time_period_utc
+                ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -535,7 +535,7 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),
@@ -554,37 +554,37 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                     MAX(2) AS expected_value,
                     top_values.time_period,
                     top_values.time_period_utc,
-                    top_values.stream_level_1,
-                    top_values.stream_level_2,
-                    top_values.stream_level_3
+                    top_values.grouping_level_1,
+                    top_values.grouping_level_2,
+                    top_values.grouping_level_3
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
                         top_col_values.time_period as time_period,
                         top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
                     FROM
                     (
                         SELECT
                             %1$s AS top_value,
                             COUNT(*) AS total_values,
-                            analyzed_table.`result` AS stream_level_1,
-                            analyzed_table.`result` AS stream_level_2,
-                            analyzed_table.`result` AS stream_level_3,
+                            analyzed_table.`result` AS grouping_level_1,
+                            analyzed_table.`result` AS grouping_level_2,
+                            analyzed_table.`result` AS grouping_level_3,
                             analyzed_table.`date` AS time_period,
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                         WHERE %5$s
-                        GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_value
-                        ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                        GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, top_value
+                        ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, total_values
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2
-                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+                GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+                ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -605,7 +605,7 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),
@@ -623,37 +623,37 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                     MAX(2) AS expected_value,
                     top_values.time_period,
                     top_values.time_period_utc,
-                    top_values.stream_level_1,
-                    top_values.stream_level_2,
-                    top_values.stream_level_3
+                    top_values.grouping_level_1,
+                    top_values.grouping_level_2,
+                    top_values.grouping_level_3
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
                         top_col_values.time_period as time_period,
                         top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
                     FROM
                     (
                         SELECT
                             %1$s AS top_value,
                             COUNT(*) AS total_values,
-                            analyzed_table.`result` AS stream_level_1,
-                            analyzed_table.`result` AS stream_level_2,
-                            analyzed_table.`result` AS stream_level_3,
+                            analyzed_table.`result` AS grouping_level_1,
+                            analyzed_table.`result` AS grouping_level_2,
+                            analyzed_table.`result` AS grouping_level_3,
                             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                         WHERE %5$s
-                        GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_value
-                        ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                        GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, top_value
+                        ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, total_values
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2
-                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+                GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+                ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -674,7 +674,7 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),
@@ -692,25 +692,25 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                     MAX(2) AS expected_value,
                     top_values.time_period,
                     top_values.time_period_utc,
-                    top_values.stream_level_1,
-                    top_values.stream_level_2,
-                    top_values.stream_level_3
+                    top_values.grouping_level_1,
+                    top_values.grouping_level_2,
+                    top_values.grouping_level_3
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
                         top_col_values.time_period as time_period,
                         top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
                     FROM
                     (
                         SELECT
                             %1$s AS top_value,
                             COUNT(*) AS total_values,
-                            analyzed_table.`result` AS stream_level_1,
-                            analyzed_table.`result` AS stream_level_2,
-                            analyzed_table.`result` AS stream_level_3,
+                            analyzed_table.`result` AS grouping_level_1,
+                            analyzed_table.`result` AS grouping_level_2,
+                            analyzed_table.`result` AS grouping_level_3,
                             analyzed_table.`date` AS time_period,
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
@@ -718,13 +718,13 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
                         WHERE %5$s
                               AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                               AND analyzed_table.`date` < CURRENT_DATE()
-                        GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_value
-                        ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                        GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, top_value
+                        ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, total_values
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2
-                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+                GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+                ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

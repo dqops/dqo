@@ -227,7 +227,7 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date")));
 
@@ -240,11 +240,11 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
                         ELSE 0
                     END
                 ) AS actual_value,
-                analyzed_table.`date` AS stream_level_1
+                analyzed_table.`date` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1
-            ORDER BY stream_level_1""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -260,7 +260,7 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
         this.sut.setMaxValue(16);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
 
@@ -273,13 +273,13 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
                         ELSE 0
                     END
                 ) AS actual_value,
-                analyzed_table.`nulls_ok` AS stream_level_1,
+                analyzed_table.`nulls_ok` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -295,7 +295,7 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
         this.sut.setMaxValue(16);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
 
@@ -308,15 +308,15 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
                         ELSE 0
                     END
                 ) AS actual_value,
-                analyzed_table.`nulls_ok` AS stream_level_1,
+                analyzed_table.`nulls_ok` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -338,7 +338,7 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
@@ -353,15 +353,15 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
                         ELSE 0
                     END
                 ) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`nulls_ok` AS stream_level_3,
+                analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                analyzed_table.`mix_of_values` AS grouping_level_2,
+                analyzed_table.`nulls_ok` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -377,7 +377,7 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
         this.sut.setMaxValue(16);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
@@ -392,15 +392,15 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
                         ELSE 0
                     END
                 ) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`nulls_ok` AS stream_level_3,
+                analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                analyzed_table.`mix_of_values` AS grouping_level_2,
+                analyzed_table.`nulls_ok` AS grouping_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -416,7 +416,7 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
         this.sut.setMaxValue(16);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
-        runParameters.setGroupings(
+        runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
@@ -431,17 +431,17 @@ public class ColumnNumericValueAboveMaxValueCountSensorParametersSpecBigQueryTes
                         ELSE 0
                     END
                 ) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`nulls_ok` AS stream_level_3,
+                analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                analyzed_table.`mix_of_values` AS grouping_level_2,
+                analyzed_table.`nulls_ok` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

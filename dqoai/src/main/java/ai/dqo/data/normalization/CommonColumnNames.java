@@ -43,7 +43,7 @@ public final class CommonColumnNames {
     /**
      * The data group name, it is a concatenated name of the data grouping dimensions, created from [grouping_level_1] / [grouping_level_2] / ...
      */
-    public static final String DATA_GROUP_NAME_COLUMN_NAME = "data_group_hash";
+    public static final String DATA_GROUP_NAME_COLUMN_NAME = "data_group_name";
 
     /**
      * The data grouping configuration name, it is a name of the named data grouping mapping configuration that was used to run the data quality check.

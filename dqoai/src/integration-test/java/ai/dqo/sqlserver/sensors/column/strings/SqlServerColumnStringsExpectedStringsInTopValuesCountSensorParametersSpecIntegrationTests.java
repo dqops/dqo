@@ -135,10 +135,10 @@ public class SqlServerColumnStringsExpectedStringsInTopValuesCountSensorParamete
         Assertions.assertEquals(1L, resultTable.column("actual_value").get(2));
         Assertions.assertEquals(0L, resultTable.column("actual_value").get(3));
 
-        Assertions.assertEquals("11", resultTable.column("stream_level_1").get(0).toString());
-        Assertions.assertEquals("22", resultTable.column("stream_level_1").get(1).toString());
-        Assertions.assertEquals("aa", resultTable.column("stream_level_1").get(2).toString());
-        Assertions.assertEquals("bb", resultTable.column("stream_level_1").get(3).toString());
+        Assertions.assertEquals("11", resultTable.column("grouping_level_1").get(0).toString());
+        Assertions.assertEquals("22", resultTable.column("grouping_level_1").get(1).toString());
+        Assertions.assertEquals("aa", resultTable.column("grouping_level_1").get(2).toString());
+        Assertions.assertEquals("bb", resultTable.column("grouping_level_1").get(3).toString());
 
     }
 

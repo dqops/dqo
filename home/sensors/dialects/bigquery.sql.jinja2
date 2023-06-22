@@ -4,7 +4,7 @@
 {% set time_series = effective_time_series | default(none, true) -%}
 {% set time_window_filter = effective_time_window_filter | default(none, true) -%}
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
-{% set data_streams = effective_data_streams | default(none, true) -%}
+{% set data_groupings = effective_data_groupings | default(none, true) -%}
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
 {% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
 
@@ -144,17 +144,17 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
-    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-        {%- for attribute in data_streams -%}
+{% macro render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
+    {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+        {%- for attribute in data_groupings -%}
             {{ ',' }}
-            {%- with data_stream_level = data_streams[attribute] -%}
-                {%- if data_stream_level.source == 'tag' -%}
-                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_stream_level.tag) }}
-                {%- elif data_stream_level.source == 'column_value' -%}
-                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+            {%- with data_grouping_level = data_groupings[attribute] -%}
+                {%- if data_grouping_level.source == 'tag' -%}
+                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_grouping_level.tag) }}
+                {%- elif data_grouping_level.source == 'column_value' -%}
+                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                 {%- endif -%}
-            {%- endwith %} AS stream_{{ attribute }}
+            {%- endwith %} AS grouping_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
 {% endmacro %}
@@ -278,16 +278,16 @@
 {% endmacro %}
 
 {% macro render_grouping_column_names() %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-        {%- for attribute in data_streams -%}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) -%}
+        {%- for attribute in data_groupings -%}
             {%- if not loop.first -%}
                 {{ ', ' }}
             {%- endif -%}
-                stream_{{ attribute }}
+                grouping_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
     {%- if time_series is not none -%}
-        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+        {%- if (data_groupings is not none and (data_groupings | length()) > 0) -%}
             {{ ', ' }}
         {%- endif -%}
             {{ 'time_period' }}, {{ 'time_period_utc' }}
@@ -295,13 +295,13 @@
 {% endmacro %}
 
 {% macro render_group_by(indentation = '') %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or time_series is not none %}
 {{ indentation }}GROUP BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
 
 {% macro render_order_by(indentation = '') %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or time_series is not none %}
 {{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}

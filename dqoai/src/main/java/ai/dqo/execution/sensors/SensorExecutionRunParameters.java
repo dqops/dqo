@@ -55,7 +55,7 @@ public class SensorExecutionRunParameters {
     private EffectiveSensorRuleNames effectiveSensorRuleNames;
     private TimeSeriesConfigurationSpec timeSeries;
     private TimeWindowFilterParameters timeWindowFilter;
-    private DataGroupingConfigurationSpec groupings;
+    private DataGroupingConfigurationSpec dataGroupings;
     private AbstractSensorParametersSpec sensorParameters;
     private ProviderDialectSettings dialectSettings;
     @JsonIgnore
@@ -76,7 +76,7 @@ public class SensorExecutionRunParameters {
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
-     * @param groupings Effective data groupings configuration.
+     * @param dataGroupings Effective data groupings configuration.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
      * @param checkSearchFilter Check search filter to find this particular check.
@@ -91,7 +91,7 @@ public class SensorExecutionRunParameters {
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             TimeWindowFilterParameters timeWindowFilter,
-            DataGroupingConfigurationSpec groupings,
+            DataGroupingConfigurationSpec dataGroupings,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings,
             CheckSearchFilters checkSearchFilter) {
@@ -104,7 +104,7 @@ public class SensorExecutionRunParameters {
         this.checkType = checkType;
         this.timeSeries = timeSeries;
         this.timeWindowFilter = timeWindowFilter;
-        this.groupings = groupings;
+        this.dataGroupings = dataGroupings;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
         this.checkSearchFilter = checkSearchFilter;
@@ -258,16 +258,16 @@ public class SensorExecutionRunParameters {
      * Returns the effective data groupings configuration.
      * @return Effective data groupings configuration.
      */
-    public DataGroupingConfigurationSpec getGroupings() {
-        return groupings;
+    public DataGroupingConfigurationSpec getDataGroupings() {
+        return dataGroupings;
     }
 
     /**
      * Sets the effective data groupings configuration.
-     * @param groupings Effective data groupings configuration.
+     * @param dataGroupings Effective data groupings configuration.
      */
-    public void setGroupings(DataGroupingConfigurationSpec groupings) {
-        this.groupings = groupings;
+    public void setDataGroupings(DataGroupingConfigurationSpec dataGroupings) {
+        this.dataGroupings = dataGroupings;
     }
 
     /**

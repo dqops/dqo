@@ -204,13 +204,13 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
 
         TextColumn scopeColumn = TextColumn.create(StatisticsColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
-            scopeColumn.setMissingTo(sensorRunParameters.getGroupings() != null ? StatisticsDataScope.data_groupings.name() : StatisticsDataScope.table.name());
+            scopeColumn.setMissingTo(sensorRunParameters.getDataGroupings() != null ? StatisticsDataScope.data_groupings.name() : StatisticsDataScope.table.name());
         }
         normalizedResults.addColumns(scopeColumn);
 
         // now detect data stream level columns...
         TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
-                resultsTable, sensorRunParameters.getGroupings(), resultRowCount);
+                resultsTable, sensorRunParameters.getDataGroupings(), resultRowCount);
 
         for (int streamLevelId = 0; streamLevelId < dataStreamLevelColumns.length; streamLevelId++) {
             if (dataStreamLevelColumns[streamLevelId] != null) {
@@ -228,8 +228,8 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         normalizedResults.addColumns(dataStreamNameColumn);
 
         TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultRowCount);
-        if (sensorRunParameters.getGroupings() != null) {
-            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getGroupings().getDataGroupingConfigurationName());
+        if (sensorRunParameters.getDataGroupings() != null) {
+            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataGroupings().getDataGroupingConfigurationName());
         }
         normalizedResults.addColumns(dataStreamMappingNameColumn);
 

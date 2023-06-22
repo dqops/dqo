@@ -50,7 +50,7 @@ public interface CommonTableNormalizationService {
     long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns, int rowIndex);
 
     /**
-     * Creates and calculates a data_grouping_hash column from all grouping_level_X columns (stream_level_1, stream_level_2, ..., stream_level_9).
+     * Creates and calculates a data_grouping_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
      *
      * @param dataGroupingLevelColumns Array of data grouping dimension level columns.
      * @param rowCount               Count of rows to process.
