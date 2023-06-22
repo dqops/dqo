@@ -28,7 +28,6 @@ import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.CheckExecutionFailedException;
-import ai.dqo.execution.checks.progress.SavingSensorResultsEvent;
 import ai.dqo.execution.sensors.*;
 import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
 import ai.dqo.execution.sensors.grouping.GroupedSensorsCollection;
@@ -165,7 +164,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                     }
                 }
 
-                if (statisticsDataScope == StatisticsDataScope.data_stream && sensorExecutionResult.isSuccess() &&
+                if (statisticsDataScope == StatisticsDataScope.data_groupings && sensorExecutionResult.isSuccess() &&
                         sensorExecutionResult.getResultTable().rowCount() == 0) {
                     continue; // no results captured, moving to the next sensor
                 }

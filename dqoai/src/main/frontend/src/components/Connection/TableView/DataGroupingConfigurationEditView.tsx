@@ -1,76 +1,76 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import ActionGroup from "./TableActionGroup";
-import DataStreamsMappingView from "../DataStreamsMappingView";
-import { DataStreamBasicModel, DataStreamLevelSpecSourceEnum, DataStreamMappingSpec } from "../../../api";
+import DataGroupingConfigurationView from "../DataGroupingConfigurationView";
+import { DataGroupingConfigurationBasicModel, DataGroupingDimensionSpecSourceEnum, DataGroupingConfigurationSpec } from "../../../api";
 import Input from "../../Input";
 import Button from "../../Button";
 import SvgIcon from "../../SvgIcon";
-import { DataStreamsApi } from "../../../services/apiClient";
+import { DataGroupingConfigurationsApi } from "../../../services/apiClient";
 
-interface IDataStreamEditViewProps {
+interface IDataGroupingConfigurationEditViewProps {
   onBack: () => void;
-  selectedDataStream?: DataStreamBasicModel;
+  selectedGroupingConfiguration?: DataGroupingConfigurationBasicModel;
   connection: string;
   schema: string;
   table: string;
-  getDataStreams: () => void;
+  getGroupingConfigurations: () => void;
 }
 
 export interface Errors {
   [key: string]: string;
 }
 
-const DataStreamEditView = ({
+const DataGroupingConfigurationEditView = ({
   onBack,
-  selectedDataStream,
+  selectedGroupingConfiguration,
   connection,
   schema,
   table,
-  getDataStreams
-}: IDataStreamEditViewProps) => {
+  getGroupingConfigurations
+}: IDataGroupingConfigurationEditViewProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [dataStreamsMapping, setDataStreamMapping] = useState<DataStreamMappingSpec>();
+  const [dataGroupingConfiguration, setDataGroupingConfiguration] = useState<DataGroupingConfigurationSpec>();
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [levelErrors, setLevelErrors] = useState<Errors>({});
 
   useEffect(() => {
-    if (selectedDataStream) {
-      DataStreamsApi.getDataStream(
+    if (selectedGroupingConfiguration) {
+      DataGroupingConfigurationsApi.getTableGroupingConfiguration(
         connection,
         schema,
         table,
-        selectedDataStream.data_stream_name || ''
+        selectedGroupingConfiguration.data_grouping_configuration_name || ''
       ).then(res => {
-        setDataStreamMapping(res.data.spec);
+        setDataGroupingConfiguration(res.data.spec);
       });
     }
-  }, [selectedDataStream]);
+  }, [selectedGroupingConfiguration]);
 
   const onUpdate = async () => {
     try {
       setIsUpdating(true);
-      if (selectedDataStream) {
-        await DataStreamsApi.updateDataStream(
+      if (selectedGroupingConfiguration) {
+        await DataGroupingConfigurationsApi.updateTableGroupingConfiguration(
           connection,
           schema,
           table,
-          selectedDataStream.data_stream_name || '',
+          selectedGroupingConfiguration.data_grouping_configuration_name || '',
           {
-            data_stream_name: name,
-            spec: dataStreamsMapping
+            data_grouping_configuration_name: name,
+            spec: dataGroupingConfiguration
           }
         )
       } else {
-        if (!dataStreamsMapping) {
-          setError('Stream Mapping is Required');
+        if (!dataGroupingConfiguration) {
+          setError('Grouping Configuration is Required');
           return;
         }
         const errors: Errors = {};
 
-        Object.entries(dataStreamsMapping).forEach(([level, item]) => {
-          if (item.source === DataStreamLevelSpecSourceEnum.tag && !item.tag) {
+        Object.entries(dataGroupingConfiguration).forEach(([level, item]) => {
+          if (item.source === DataGroupingDimensionSpecSourceEnum.tag && !item.tag) {
             errors[level] = 'Tag is Required';
           }
         });
@@ -80,13 +80,13 @@ const DataStreamEditView = ({
           return;
         }
 
-        await DataStreamsApi.createDataStream(connection, schema, table, {
-          data_stream_name: name,
-          spec: dataStreamsMapping
+        await DataGroupingConfigurationsApi.createTableGroupingConfiguration(connection, schema, table, {
+          data_grouping_configuration_name: name,
+          spec: dataGroupingConfiguration
         });
       }
       setIsUpdated(false);
-      getDataStreams();
+      getGroupingConfigurations();
       onBack();
     } finally {
       setIsUpdating(false);
@@ -98,11 +98,11 @@ const DataStreamEditView = ({
     setIsUpdated(true);
   }
 
-  const onChangeDataStreamsMapping = (spec: DataStreamMappingSpec) => {
-    if (name || selectedDataStream) {
+  const onChangeDataGroupingConfiguration = (spec: DataGroupingConfigurationSpec) => {
+    if (name || selectedGroupingConfiguration) {
       setIsUpdated(true);
     }
-    setDataStreamMapping(spec);
+    setDataGroupingConfiguration(spec);
   }
 
   const onClearError = (idx: number) => {
@@ -120,11 +120,11 @@ const DataStreamEditView = ({
         isUpdating={isUpdating}
       />
       <div className="flex py-4 border-b border-gray-300 px-8 -mx-4 justify-between items-center">
-        {selectedDataStream ? (
-          <div>{selectedDataStream?.data_stream_name}</div>
+        {selectedGroupingConfiguration ? (
+          <div>{selectedGroupingConfiguration?.data_grouping_configuration_name}</div>
         ) : (
           <div className="flex space-x-4 items-center">
-            <div>Data stream name</div>
+            <div>Data grouping configuration name</div>
             <Input className="w-80" value={name} onChange={onChangeName} />
           </div>
         )}
@@ -140,9 +140,9 @@ const DataStreamEditView = ({
       {error && (
         <div className="text-red-700 text-xs pt-4 px-6">{error}</div>
       )}
-      <DataStreamsMappingView
-        dataStreamsMapping={dataStreamsMapping}
-        onChange={onChangeDataStreamsMapping}
+      <DataGroupingConfigurationView
+        dataGroupingConfiguration={dataGroupingConfiguration}
+        onChange={onChangeDataGroupingConfiguration}
         errors={levelErrors}
         onClearError={onClearError}
       />
@@ -150,4 +150,4 @@ const DataStreamEditView = ({
   );
 };
 
-export default DataStreamEditView;
+export default DataGroupingConfigurationEditView;

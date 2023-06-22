@@ -49,7 +49,7 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, table.column(columnIndex++).name());
-        Assertions.assertEquals(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME, table.column(columnIndex++).name());

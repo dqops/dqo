@@ -26,7 +26,7 @@ import ai.dqo.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import ai.dqo.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.sampledata.files.CsvSampleFilesObjectMother;
@@ -129,7 +129,7 @@ public class SampleTableMetadataObjectMother {
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
         PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
         TableSpec tableSpec = new TableSpec(physicalTableName);
-        tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
+        tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 
         for (Column<?> dataColumn : sampleTable.getTable().columns()) {

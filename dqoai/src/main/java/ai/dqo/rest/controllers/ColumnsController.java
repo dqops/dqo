@@ -179,7 +179,7 @@ public class ColumnsController {
 
         StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
                 this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
-                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME, true);
+                        CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME, true);
 
         List<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
                 .entrySet()
@@ -332,7 +332,7 @@ public class ColumnsController {
         StatisticsResultsForColumnModel mostRecentStatisticsMetricsForColumn =
                 this.statisticsDataService.getMostRecentStatisticsForColumn(
                         connectionName, tableWrapper.getPhysicalTableName(), columnName,
-                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
+                        CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
 
         ColumnStatisticsModel columnModel = ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
                 connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,

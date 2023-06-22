@@ -22,7 +22,7 @@ import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResultObjectMother;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.utils.BeanFactoryObjectMother;

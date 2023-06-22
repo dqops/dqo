@@ -31,24 +31,24 @@ public final class CommonColumnNames {
     public static final String EXECUTED_AT_COLUMN_NAME = "executed_at";
 
     /**
-     * Column name prefix for the data stream columns: stream_level_.
+     * The prefix for the data grouping columns: grouping_level_.
      */
-    public static final String DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX = "stream_level_";
+    public static final String DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX = "grouping_level_";
 
     /**
-     * The data stream hash, it is a hash of the data stream level names.
+     * The data group hash, it is a hash of the data grouping level names.
      */
-    public static final String DATA_STREAM_HASH_COLUMN_NAME = "data_stream_hash";
+    public static final String DATA_GROUP_HASH_COLUMN_NAME = "data_group_hash";
 
     /**
-     * The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
+     * The data group name, it is a concatenated name of the data grouping dimensions, created from [grouping_level_1] / [grouping_level_2] / ...
      */
-    public static final String DATA_STREAM_NAME_COLUMN_NAME = "data_stream_name";
+    public static final String DATA_GROUP_NAME_COLUMN_NAME = "data_group_name";
 
     /**
-     * The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check.
+     * The data grouping configuration name, it is a name of the named data grouping mapping configuration that was used to run the data quality check.
      */
-    public static final String DATA_STREAM_MAPPING_NAME_COLUMN_NAME = "data_stream_mapping_name";
+    public static final String DATA_GROUPING_CONFIGURATION_COLUMN_NAME = "data_grouping_configuration";
 
     /**
      * Column name for a connection hash.

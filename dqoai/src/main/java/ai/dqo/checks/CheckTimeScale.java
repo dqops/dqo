@@ -15,7 +15,7 @@
  */
 package ai.dqo.checks;
 
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

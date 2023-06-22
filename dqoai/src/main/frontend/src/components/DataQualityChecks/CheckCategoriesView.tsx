@@ -22,7 +22,7 @@ import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selector
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
   checkResultsOverview: CheckResultsOverviewDataModel[];
-  handleChangeDataDataStreams: (check: CheckModel, index: number) => void;
+  handleChangeDataGroupingConfiguration: (check: CheckModel, index: number) => void;
   onUpdate: () => void;
   getCheckOverview: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
@@ -34,7 +34,7 @@ const CheckCategoriesView = ({
   mode,
   category,
   checkResultsOverview,
-  handleChangeDataDataStreams,
+  handleChangeDataGroupingConfiguration,
   onUpdate,
   getCheckOverview,
   timeWindowFilter,
@@ -108,7 +108,7 @@ const CheckCategoriesView = ({
           <CheckListItem
             check={check}
             key={index}
-            onChange={(item) => handleChangeDataDataStreams(item, index)}
+            onChange={(item) => handleChangeDataGroupingConfiguration(item, index)}
             checkResult={checkResultsOverview.find(
               (item) =>
                 item.checkName === check.check_name &&

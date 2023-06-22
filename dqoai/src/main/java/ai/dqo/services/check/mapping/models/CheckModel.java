@@ -18,7 +18,7 @@ package ai.dqo.services.check.mapping.models;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
@@ -96,14 +96,20 @@ public class CheckModel implements Cloneable {
     /**
      * The data quality check supports a custom data stream mapping configuration.
      */
-    @JsonPropertyDescription("The data quality check supports a custom data stream mapping configuration.")
-    private boolean supportsDataStreams;
+    @JsonPropertyDescription("The data quality check supports a custom data grouping configuration.")
+    private boolean supportsGrouping;
 
     /**
-     * Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.
+     * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.
+     * Data grouping is configured in two cases:
+     * (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.
+     * (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.).
      */
-    @JsonPropertyDescription("Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
-    private DataStreamMappingSpec dataStreamsOverride;
+    @JsonPropertyDescription("Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. " +
+            "Data grouping is configured in two cases: " +
+            "(1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. " +
+            "(2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). ")
+    private DataGroupingConfigurationSpec dataGroupingOverride;
 
     /**
      * Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.
@@ -172,10 +178,10 @@ public class CheckModel implements Cloneable {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
-     * The name of a data stream mapping defined at a table that should be used for this check.
+     * The name of a data grouping configuration defined at a table that should be used for this check.
      */
-    @JsonPropertyDescription("The name of a data stream mapping defined at a table that should be used for this check.")
-    private String dataStream;
+    @JsonPropertyDescription("The name of a data grouping configuration defined at a table that should be used for this check.")
+    private String dataGroupingConfiguration;
 
     /**
      * Type of the check's target (column, table).
@@ -222,8 +228,8 @@ public class CheckModel implements Cloneable {
             if (cloned.rule != null) {
                 cloned.rule = cloned.rule.cloneForUpdate();
             }
-            if (cloned.dataStreamsOverride != null) {
-                cloned.dataStreamsOverride = cloned.dataStreamsOverride.deepClone();
+            if (cloned.dataGroupingOverride != null) {
+                cloned.dataGroupingOverride = cloned.dataGroupingOverride.deepClone();
             }
             if (cloned.scheduleOverride != null) {
                 cloned.scheduleOverride = cloned.scheduleOverride.deepClone();

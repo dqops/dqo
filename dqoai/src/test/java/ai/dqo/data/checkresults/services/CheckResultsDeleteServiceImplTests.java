@@ -26,7 +26,6 @@ import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
-import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.models.DataDeleteResult;
@@ -459,7 +458,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
         checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
         checkResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
-        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
         checkResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
         checkResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
         checkResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
@@ -471,7 +470,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
         checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
         checkResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
-        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
         checkResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
         checkResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
 
@@ -481,7 +480,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
         checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
         checkResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
-        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
         checkResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
 
         Row row4 = checkResultsTable.appendRow();
@@ -499,7 +498,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4));
         checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
         checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
-        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
         checkResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
 
         return checkResultsTable;

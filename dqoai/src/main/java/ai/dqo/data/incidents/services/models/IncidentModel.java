@@ -111,8 +111,8 @@ public class IncidentModel {
     /**
      * The data stream name that was affected by a data quality incident.
      */
-    @JsonPropertyDescription("The data stream name that was affected by a data quality incident.")
-    private String dataStreamName;
+    @JsonPropertyDescription("The data group that was affected by a data quality incident.")
+    private String dataGroup;
 
     /**
      * The data quality dimension that was affected by a data quality incident.
@@ -191,8 +191,8 @@ public class IncidentModel {
         model.setMonth(zonedFirstSeen.get(ChronoField.MONTH_OF_YEAR));
         model.setLastSeen(incidentRow.getInstant(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
         model.setIncidentUntil(incidentRow.getInstant(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME));
-        if (!incidentRow.isMissing(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME)) {
-            model.setDataStreamName(incidentRow.getString(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME));
+        if (!incidentRow.isMissing(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME)) {
+            model.setDataGroup(incidentRow.getString(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
         }
         if (!incidentRow.isMissing(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME)) {
             model.setQualityDimension(incidentRow.getString(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
@@ -244,7 +244,7 @@ public class IncidentModel {
         return StringPatternComparer.matchSearchPattern(this.incidentId, filter) ||
                 StringPatternComparer.matchSearchPattern(this.schema, filter) ||
                 StringPatternComparer.matchSearchPattern(this.table, filter) ||
-                StringPatternComparer.matchSearchPattern(this.dataStreamName, filter) ||
+                StringPatternComparer.matchSearchPattern(this.dataGroup, filter) ||
                 StringPatternComparer.matchSearchPattern(this.qualityDimension, filter) ||
                 StringPatternComparer.matchSearchPattern(this.checkCategory, filter) ||
                 StringPatternComparer.matchSearchPattern(this.checkType, filter) ||
@@ -267,8 +267,8 @@ public class IncidentModel {
                 return Comparator.comparing(o -> o.firstSeen);
             case lastSeen:
                 return Comparator.comparing(o -> o.lastSeen);
-            case dataStreamName:
-                return Comparator.comparing(o -> o.dataStreamName);
+            case dataGroup:
+                return Comparator.comparing(o -> o.dataGroup);
             case qualityDimension:
                 return Comparator.comparing(o -> o.qualityDimension);
             case checkName:

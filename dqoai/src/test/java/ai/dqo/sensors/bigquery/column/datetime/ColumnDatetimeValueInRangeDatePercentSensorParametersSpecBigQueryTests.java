@@ -27,6 +27,9 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
 import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -292,8 +295,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling("date4");
         runParameters.setTimeSeries(null);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -308,11 +311,11 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1
+                analyzed_table.`date2` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
-            GROUP BY stream_level_1
-            ORDER BY stream_level_1""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -332,8 +335,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring("date4", CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -348,13 +351,13 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
+                analyzed_table.`date2` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
-            GROUP BY stream_level_1, time_period, time_period_utc
-            ORDER BY stream_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, time_period, time_period_utc
+            ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -374,8 +377,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned("date4", CheckTimeScale.daily, "date1");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -390,15 +393,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                             END
                         ) / COUNT(*)
                     END AS actual_value,
-                    analyzed_table.`date2` AS stream_level_1,
+                    analyzed_table.`date2` AS grouping_level_1,
                     CAST(analyzed_table.`date1` AS DATE) AS time_period,
                     TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
                 FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
                       AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                       AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
-                GROUP BY stream_level_1, time_period, time_period_utc
-                ORDER BY stream_level_1, time_period, time_period_utc""";
+                GROUP BY grouping_level_1, time_period, time_period_utc
+                ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -424,8 +427,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date1");
         }});
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
 
@@ -441,14 +444,14 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
-                analyzed_table.`date3` AS stream_level_2,
+                analyzed_table.`date2` AS grouping_level_1,
+                analyzed_table.`date3` AS grouping_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
-            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -468,8 +471,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersRecurring("date4", CheckTimeScale.monthly);
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
 
@@ -485,14 +488,14 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
-                analyzed_table.`date3` AS stream_level_2,
+                analyzed_table.`date2` AS grouping_level_1,
+                analyzed_table.`date3` AS grouping_level_2,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
-            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -512,8 +515,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setMaxValue(upper);
         
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned("date4", CheckTimeScale.daily, "date1");
-        runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
 
@@ -529,16 +532,16 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                         END
                     ) / COUNT(*)
                 END AS actual_value,
-                analyzed_table.`date2` AS stream_level_1,
-                analyzed_table.`date3` AS stream_level_2,
+                analyzed_table.`date2` AS grouping_level_1,
+                analyzed_table.`date3` AS grouping_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
-            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

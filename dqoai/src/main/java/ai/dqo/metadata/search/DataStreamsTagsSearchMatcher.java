@@ -15,63 +15,63 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 
 import java.util.Arrays;
 
 /**
- * Data stream tags search matcher for CLI commands.
+ * Data grouping tags search matcher for CLI commands.
  */
 public class DataStreamsTagsSearchMatcher {
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param level Data stream level value.
-	 * @param dataStreams DimensionsConfigurationSpec.
+	 * @param dataGroupingConfiguration DimensionsConfigurationSpec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	public static boolean matchDataStreamsMapping(String level, DataStreamMappingSpec dataStreams) {
-		if (level == null || dataStreams == null) {
+	public static boolean matchDataGroupingConfigurationTag(String level, DataGroupingConfigurationSpec dataGroupingConfiguration) {
+		if (level == null || dataGroupingConfiguration == null) {
 			return true;
 		}
-		if(dataStreams.getLevel1() == null || dataStreams.getLevel2() == null || dataStreams.getLevel3() == null ||
-				dataStreams.getLevel4() == null || dataStreams.getLevel5() == null || dataStreams.getLevel6() == null ||
-				dataStreams.getLevel7() == null || dataStreams.getLevel8() == null || dataStreams.getLevel9() == null) {
+		if(dataGroupingConfiguration.getLevel1() == null || dataGroupingConfiguration.getLevel2() == null || dataGroupingConfiguration.getLevel3() == null ||
+				dataGroupingConfiguration.getLevel4() == null || dataGroupingConfiguration.getLevel5() == null || dataGroupingConfiguration.getLevel6() == null ||
+				dataGroupingConfiguration.getLevel7() == null || dataGroupingConfiguration.getLevel8() == null || dataGroupingConfiguration.getLevel9() == null) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel1().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel1().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel1().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel1().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel2().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel2().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel2().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel2().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel3().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel3().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel3().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel3().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel4().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel4().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel4().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel4().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel5().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel5().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel5().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel5().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel6().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel6().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel6().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel6().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel7().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel7().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel7().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel7().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel8().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel8().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel8().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel8().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel9().getTag()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel9().getTag(), level)) {
+		if (level.equals(dataGroupingConfiguration.getLevel9().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataGroupingConfiguration.getLevel9().getTag(), level)) {
 			return true;
 		}
 		return false;
@@ -80,41 +80,41 @@ public class DataStreamsTagsSearchMatcher {
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param columnSearchFilters Column search filters.
-	 * @param dataStreamsMappingSpec Data streams mapping spec.
+	 * @param dataGroupingConfigurationSpec Data grouping configuration spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllColumnDataStreams(ColumnSearchFilters columnSearchFilters, DataStreamMappingSpec dataStreamsMappingSpec) {
+	static boolean matchAllColumnDataGroupingTags(ColumnSearchFilters columnSearchFilters, DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
 		String[] tags = columnSearchFilters.getTags();
 		if (tags == null) {
 			return true;
 		}
-		return Arrays.stream(tags).allMatch(tag -> matchDataStreamsMapping(tag, dataStreamsMappingSpec));
+		return Arrays.stream(tags).allMatch(tag -> matchDataGroupingConfigurationTag(tag, dataGroupingConfigurationSpec));
 	}
 
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param checkSearchFilters Check search filters.
-	 * @param dataStreamMappingSpec Data streams mapping spec.
+	 * @param dataGroupingConfigurationSpec Data streams mapping spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllCheckDataStreamsMapping(CheckSearchFilters checkSearchFilters, DataStreamMappingSpec dataStreamMappingSpec) {
+	static boolean matchAllCheckDataStreamsMapping(CheckSearchFilters checkSearchFilters, DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
 		String[] tags = checkSearchFilters.getTags();
 		if (tags == null) {
 			return true;
 		}
-		return Arrays.stream(tags).allMatch(tag -> matchDataStreamsMapping(tag, dataStreamMappingSpec));
+		return Arrays.stream(tags).allMatch(tag -> matchDataGroupingConfigurationTag(tag, dataGroupingConfigurationSpec));
 	}
 
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param tags Array of required tags.
-	 * @param dataStreamMappingSpec Data streams mapping spec.
+	 * @param dataGroupingConfigurationSpec Data grouping configuration spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllRequiredTags(String[] tags, DataStreamMappingSpec dataStreamMappingSpec) {
+	static boolean matchAllRequiredTags(String[] tags, DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
 		if (tags == null) {
 			return true;
 		}
-		return Arrays.stream(tags).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamMappingSpec));
+		return Arrays.stream(tags).allMatch(dimension -> matchDataGroupingConfigurationTag(dimension, dataGroupingConfigurationSpec));
 	}
 }

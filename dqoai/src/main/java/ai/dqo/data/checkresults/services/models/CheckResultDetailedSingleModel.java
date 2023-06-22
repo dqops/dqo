@@ -71,8 +71,8 @@ public class CheckResultDetailedSingleModel {
 
     @JsonPropertyDescription("Column name.")
     String columnName;
-    @JsonPropertyDescription("Data stream.")
-    String dataStream;
+    @JsonPropertyDescription("Data group.")
+    String dataGroup;
 
     @JsonPropertyDescription("Duration (ms).")
     Integer durationMs;
@@ -118,7 +118,7 @@ public class CheckResultDetailedSingleModel {
 
         return StringPatternComparer.matchSearchPattern(this.checkDisplayName, filter) ||
                 StringPatternComparer.matchSearchPattern(this.columnName, filter) ||
-                StringPatternComparer.matchSearchPattern(this.dataStream, filter) ||
+                StringPatternComparer.matchSearchPattern(this.dataGroup, filter) ||
                 StringPatternComparer.matchSearchPattern(this.timeGradient, filter) ||
                 StringPatternComparer.matchSearchPattern(this.qualityDimension, filter) ||
                 StringPatternComparer.matchSearchPattern(this.checkCategory, filter) ||
@@ -154,8 +154,8 @@ public class CheckResultDetailedSingleModel {
                 return Comparator.comparing(o -> o.severity);
             case columnName:
                 return Comparator.comparing(o -> o.columnName);
-            case dataStream:
-                return Comparator.comparing(o -> o.dataStream);
+            case dataGroup:
+                return Comparator.comparing(o -> o.dataGroup);
             case timeGradient:
                 return Comparator.comparing(o -> o.timeGradient);
             case timePeriod:

@@ -88,9 +88,11 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String displayName;
 
-    @JsonPropertyDescription("Data stream name that should be applied to this data quality check. The data stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by the data quality check). Use a name of one of known data streams defined on the parent table.")
+    @JsonPropertyDescription("Data grouping configuration name that should be applied to this data quality check. " +
+            "The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. " +
+            "Use the name of one of data grouping configurations defined on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String dataStream;
+    private String dataGrouping;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -217,16 +219,16 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Returns the name of a named data stream that is defined on the parent table level and should be used on this check.
      * @return Data stream level.
      */
-    public String getDataStream() {
-        return dataStream;
+    public String getDataGrouping() {
+        return dataGrouping;
     }
 
     /**
      * Sets a data stream name to be used for this check.
-     * @param dataStream Data stream name.
+     * @param dataGrouping Data stream name.
      */
-    public void setDataStream(String dataStream) {
-        this.dataStream = dataStream;
+    public void setDataGrouping(String dataGrouping) {
+        this.dataGrouping = dataGrouping;
     }
 
     /**
@@ -369,7 +371,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
 
     /**
      * Returns the data quality check name (YAML compliant) that is used as a field name on a check category class.
-     * @return Check category name, for example "min_row_count", etc.
+     * @return Check category name, for example "row_count", etc.
      */
     @JsonIgnore
     public String getCheckName() {

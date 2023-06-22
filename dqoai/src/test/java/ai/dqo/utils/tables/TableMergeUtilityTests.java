@@ -37,7 +37,7 @@ public class TableMergeUtilityTests extends BaseTest {
 		this.newTable = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new");
 		this.joinColumnNames = new String[] {
                 SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME,
-                SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME
+                SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME
         };
     }
 
@@ -45,7 +45,7 @@ public class TableMergeUtilityTests extends BaseTest {
         Row row = targetTable.appendRow();
         row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
         row.setLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME, checkId);
-        row.setLong(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME, dimensionId);
+        row.setLong(SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, dimensionId);
     }
 
     @Test

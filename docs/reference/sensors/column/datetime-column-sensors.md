@@ -51,7 +51,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
                 {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -98,7 +98,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
                 {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -145,7 +145,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
                 {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -192,7 +192,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
                 {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -238,7 +238,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
                 {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -285,7 +285,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
                 {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -338,7 +338,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -370,7 +370,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -402,7 +402,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -434,7 +434,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -466,7 +466,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -491,11 +491,11 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% macro render_ordering_column_names() %}
         {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
             ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
-        {%- elif (lib.data_streams is not none and (lib.data_streams | length()) > 0) %}
+        {%- elif (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) %}
             {{ ', ' }}
         {% endif %}
-        {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) -%}
-            {%- for attribute in lib.data_streams -%}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) -%}
+            {%- for attribute in lib.data_groupings -%}
                 {%- if not loop.first -%}
                     {{ ', ' }}
                 {%- endif -%}
@@ -514,7 +514,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}

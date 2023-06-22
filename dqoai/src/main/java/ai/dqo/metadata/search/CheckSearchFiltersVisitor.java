@@ -17,7 +17,7 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.checks.*;
 import ai.dqo.checks.custom.CustomCheckSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -159,8 +159,8 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
-        dataStreamSearcherObject.setTableDataStreams(tableSpec.getDataStreams());
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
+        dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableSpec.getGroupings());
 
         if (tableSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -260,7 +260,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
     public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
@@ -270,9 +270,9 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        DataStreamMappingSpec selectedDataStream =
-                abstractCheckSpec.getDataStream() != null && dataStreamSearcherObject.getTableDataStreams() != null ?
-                        dataStreamSearcherObject.getTableDataStreams().get(abstractCheckSpec.getDataStream()) : null;
+        DataGroupingConfigurationSpec selectedGroupingConfiguration =
+                abstractCheckSpec.getDataGrouping() != null && dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations() != null ?
+                        dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations().get(abstractCheckSpec.getDataGrouping()) : null;
         LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -287,7 +287,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsTagsSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, selectedDataStream)) {
+        if (!DataStreamsTagsSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, selectedGroupingConfiguration)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {

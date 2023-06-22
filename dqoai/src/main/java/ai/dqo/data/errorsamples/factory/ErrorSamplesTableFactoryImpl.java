@@ -15,7 +15,6 @@
  */
 package ai.dqo.data.errorsamples.factory;
 
-import ai.dqo.data.readouts.factory.SensorReadoutsTableFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
@@ -40,9 +39,9 @@ public class ErrorSamplesTableFactoryImpl implements ErrorSamplesTableFactory {
         Table table = Table.create(tableName);
         table.addColumns(
                 TextColumn.create(ErrorSamplesColumnNames.ID_COLUMN_NAME),
-                LongColumn.create(ErrorSamplesColumnNames.DATA_STREAM_HASH_COLUMN_NAME),
-                TextColumn.create(ErrorSamplesColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
-                TextColumn.create(ErrorSamplesColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME),
+                LongColumn.create(ErrorSamplesColumnNames.DATA_GROUP_HASH_COLUMN_NAME),
+                TextColumn.create(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME),
+                TextColumn.create(ErrorSamplesColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME),
                 LongColumn.create(ErrorSamplesColumnNames.CONNECTION_HASH_COLUMN_NAME),
                 TextColumn.create(ErrorSamplesColumnNames.CONNECTION_NAME_COLUMN_NAME),
                 TextColumn.create(ErrorSamplesColumnNames.PROVIDER_COLUMN_NAME),

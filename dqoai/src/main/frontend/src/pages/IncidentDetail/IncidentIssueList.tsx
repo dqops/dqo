@@ -117,7 +117,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
           {issue.durationMs}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.dataStream}
+          {issue.dataGroup}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
           <span>{issue.id}</span>
@@ -267,9 +267,9 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             <SortableColumn
               className="justify-end"
-              label="Data Stream"
-              order="dataStream"
-              direction={filters?.order === 'dataStream' ? filters.direction : undefined}
+              label="Data Group"
+              order="dataGroup"
+              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
               onChange={handleSortChange}
             />
           </th>

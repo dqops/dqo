@@ -21,23 +21,16 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Configuration of data quality incident grouping on a connection level. Defines how similar data quality issues are grouped into incidents.
@@ -59,9 +52,10 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     @JsonPropertyDescription("Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported severity levels are 'error' and 'fatal'.")
     private MinimumGroupingSeverityLevel minimumSeverity = MinimumGroupingSeverityLevel.warning;
 
-    @JsonPropertyDescription("Create separate data quality incidents for each data stream, creating different incidents for different data streams. By default, data streams are ignored for grouping data quality issues into data quality incidents.")
+    @JsonPropertyDescription("Create separate data quality incidents for each data group, creating different incidents for different groups of rows. " +
+            "By default, data groups are ignored for grouping data quality issues into data quality incidents.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean divideByDataStream;
+    private boolean divideByDataGroups;
 
     @JsonPropertyDescription("The maximum length of a data quality incident in days. When a new data quality issue is detected after max_incident_length_days days since a similar data quality was first seen, a new data quality incident is created that will capture all following data quality issues for the next max_incident_length_days days. The default value is 60 days.")
     private int maxIncidentLengthDays = 60;
@@ -113,20 +107,20 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     }
 
     /**
-     * Returns a flat if the data stream is also included in the data quality issue grouping.
-     * @return True when incidents are created for data streams.
+     * Returns a flat if the data grouping is also included in the data quality issue grouping.
+     * @return True when incidents are created for data groups.
      */
-    public boolean isDivideByDataStream() {
-        return divideByDataStream;
+    public boolean isDivideByDataGroups() {
+        return divideByDataGroups;
     }
 
     /**
      * Sets a flag that enables creating separate data quality incidents for each data stream.
-     * @param divideByDataStream True when each data stream has a different incident.
+     * @param divideByDataGroups True when each data stream has a different incident.
      */
-    public void setDivideByDataStream(boolean divideByDataStream) {
-        this.setDirtyIf(this.divideByDataStream != divideByDataStream);
-        this.divideByDataStream = divideByDataStream;
+    public void setDivideByDataGroups(boolean divideByDataGroups) {
+        this.setDirtyIf(this.divideByDataGroups != divideByDataGroups);
+        this.divideByDataGroups = divideByDataGroups;
     }
 
     /**
