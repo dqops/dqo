@@ -40,7 +40,7 @@ const initSourceTabs = [
     value: 'schemas'
   },
   {
-    label: 'Default data grouping template',
+    label: 'Default grouping template',
     value: 'data-streams'
   },
   {
