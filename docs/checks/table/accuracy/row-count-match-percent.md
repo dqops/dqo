@@ -116,6 +116,40 @@ spec:
         COUNT(*) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM `<target_table>` AS analyzed_table
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -331,6 +365,39 @@ spec:
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -585,6 +652,40 @@ spec:
         COUNT(*) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM `<target_table>` AS analyzed_table
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -801,6 +902,39 @@ spec:
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -1055,6 +1189,40 @@ spec:
         COUNT(*) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM `<target_table>` AS analyzed_table
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -1271,6 +1439,39 @@ spec:
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       

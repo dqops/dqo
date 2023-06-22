@@ -47,6 +47,7 @@ Specification (configuration) for a provider specific implementation of a data q
 |java_class_name|Java class name for a sensor runner that will execute the sensor. The &quot;type&quot; must be &quot;java_class&quot;.|string| | | |
 |supports_grouping_by_data_stream|The sensor supports grouping by the data stream, using the GROUP BY clause in SQL. Sensors that support a GROUP BY condition can capture separate data quality scores for each data stream. The default value is true, because most of the data quality sensor support grouping.|boolean| | | |
 |supports_partitioned_checks|The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column could be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks.|boolean| | | |
+|disable_merging_queries|Disables merging this sensor&#x27;s SQL with other sensors. When this parameter is &#x27;true&#x27;, the sensor&#x27;s SQL will be executed as an independent query.|boolean| | | |
 
 
 

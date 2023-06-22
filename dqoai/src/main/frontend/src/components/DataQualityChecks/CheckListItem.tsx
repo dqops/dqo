@@ -22,6 +22,9 @@ import CheckDetails from './CheckDetails/CheckDetails';
 import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
 import Checkbox from '../Checkbox';
+import { setCurrentJobId } from "../../redux/actions/source.actions";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { getFirstLevelActiveTab } from "../../redux/selectors";
 
 export interface ITab {
   label: string;
@@ -64,6 +67,8 @@ const CheckListItem = ({
   const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const openCheckSettings = () => {
     if (showDetails) {
@@ -137,6 +142,7 @@ const CheckListItem = ({
         ? { timeWindowFilter }
         : {})
     });
+    dispatch(setCurrentJobId(checkTypes, firstLevelActiveTab, (res.data as any)?.jobId?.jobId));
     setJobId((res.data as any)?.jobId?.jobId);
   };
 
@@ -496,7 +502,6 @@ const CheckListItem = ({
               timeScale={check.run_checks_job_template?.timeScale}
               check={check}
               onClose={closeCheckDetails}
-              job={job}
             />
           </td>
         </tr>
