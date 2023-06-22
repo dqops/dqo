@@ -53,7 +53,7 @@ public class SensorReadoutsColumnNames {
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
 
     /**
-     * Column name prefix for the data stream columns: stream_level_.
+     * Column prefix for the data stream columns: stream_level_.
      */
     public static final String DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX = CommonColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX;
 
@@ -123,12 +123,12 @@ public class SensorReadoutsColumnNames {
     public static final String COLUMN_HASH_COLUMN_NAME = CommonColumnNames.COLUMN_HASH_COLUMN_NAME;
 
     /**
-     * The column name for which the results are stored.
+     * The column for which the results are stored.
      */
     public static final String COLUMN_NAME_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_COLUMN_NAME;
 
     /**
-     * The column name pattern, in case that a data quality check targets multiple columns.
+     * The column pattern, in case that a data quality check targets multiple columns.
      */
     public static final String COLUMN_NAME_PATTERN_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME;
 
