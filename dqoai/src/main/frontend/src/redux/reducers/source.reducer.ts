@@ -291,21 +291,21 @@ const connectionReducer = (state = initialState, action: Action) => {
     //     isUpdating: false,
     //     error: action.error
     //   };
-    case SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING:
+    case SOURCE_ACTION.GET_CONNECTION_DEFAULT_GROUPING_CONFIGURATION:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
+    case SOURCE_ACTION.GET_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_SUCCESS:
       return setActiveTabState(state, action,{
         loading: false,
-        updatedDataStreamsMapping: action.data,
+        updatedDataGroupingConfiguration: action.data,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING:
+    case SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_MAPPING:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
+    case SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_GROUPING_CONFIGURATION_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
@@ -357,14 +357,14 @@ const connectionReducer = (state = initialState, action: Action) => {
       return setActiveTabState(state, action, {
         isUpdatedLabels: action.data
       });
-    case SOURCE_ACTION.SET_UPDATED_DATA_STREAMS:
+    case SOURCE_ACTION.SET_UPDATED_DEFAULT_GROUPING_CONFIGURATION:
       return setActiveTabState(state, action, {
-        updatedDataStreamsMapping: action.data
+        updatedDataGroupingConfiguration: action.data
       });
-    case SOURCE_ACTION.SET_IS_UPDATED_DATA_STREAMS:
+    case SOURCE_ACTION.SET_IS_UPDATED_DEFAULT_GROUPING_CONFIGURATION:
       return setActiveTabState(state, action, {
         ...state,
-        isUpdatedDataStreamsMapping: action.data
+        isUpdatedDataGroupingConfiguration: action.data
       });
 
 // Table reducer here
@@ -532,32 +532,32 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING:
+    case SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        dataStreamsMapping: action.data,
-        isUpdatedDataStreamsMapping: false,
+        dataGroupingConfiguration: action.data,
+        isUpdatedDataGroupingConfiguration: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
+    case SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING:
+    case SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
@@ -766,10 +766,10 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedMonthlyPartitionedChecks: true,
         monthlyPartitionedChecks: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_DEFAULT_DATA_STREAMS_MAPPING:
+    case SOURCE_ACTION.SET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION:
       return setActiveTabState(state, action, {
-        isUpdatedDataStreamsMapping: true,
-        dataStreamsMapping: action.data
+        isUpdatedDataGroupingConfiguration: true,
+        dataGroupingConfiguration: action.data
       });
     case SOURCE_ACTION.SET_UPDATED_PROFILING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {

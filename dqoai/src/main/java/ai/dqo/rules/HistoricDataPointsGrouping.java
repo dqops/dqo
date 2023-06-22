@@ -16,7 +16,7 @@
 
 package ai.dqo.rules;
 
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.NoSuchElementException;

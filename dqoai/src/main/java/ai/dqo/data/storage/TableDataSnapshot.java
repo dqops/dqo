@@ -220,10 +220,22 @@ public class TableDataSnapshot {
 
                 HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
 
-                for (Column<?> expectedColumn : this.getTableDataChanges().getNewOrChangedRows().columns()) {
+                Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
+                for (Column<?> expectedColumn : emptyTableSample.columns()) {
                     if (!columnNamesInPartitionData.contains(expectedColumn.name())) {
                         Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
                         partitionData.addColumns(emptyColumnToAdd);
+                    }
+                }
+
+                if (partitionData.columnCount() != emptyTableSample.columnCount()) {
+                    // remove old columns
+                    HashSet<String> expectedColumnNames = new HashSet<>(emptyTableSample.columnNames());
+
+                    for (Column<?> existingColumn : new ArrayList<>(partitionData.columns())) {
+                        if (!expectedColumnNames.contains(existingColumn.name())) {
+                            partitionData.removeColumns(existingColumn);
+                        }
                     }
                 }
             }

@@ -20,7 +20,7 @@ import { TableApiClient } from '../../services/apiClient';
 import { SOURCE_ACTION } from '../types';
 import {
   CommentSpec,
-  DataStreamMappingSpec,
+  DataGroupingConfigurationSpec,
   RecurringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
   TableBasicModel,
@@ -430,76 +430,76 @@ export const updateTableProfilingChecksModel =
     }
   };
 
-export const getTableDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
+export const getTableDefaultDataGroupingConfigurationRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION,
   checkType, activeTab,
 });
 
-export const getTableDefaultDataStreamsMappingSuccess = (
-  checkType: CheckTypes, activeTab: string, data: DataStreamMappingSpec
+export const getTableDefaultDataGroupingConfigurationSuccess = (
+  checkType: CheckTypes, activeTab: string, data: DataGroupingConfigurationSpec
 ) => ({
-  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_SUCCESS,
   checkType, activeTab,
   data
 });
 
-export const getTableDefaultDataStreamsMappingFailed = (error: unknown) => ({
-  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+export const getTableDefaultDataGroupingConfigurationFailed = (error: unknown) => ({
+  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_ERROR,
   error
 });
 
-export const getTableDefaultDataStreamMapping =
+export const getTableDefaultDataGroupingConfiguration =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDefaultDataStreamsMappingRequest(checkType, activeTab));
+    dispatch(getTableDefaultDataGroupingConfigurationRequest(checkType, activeTab));
     try {
-      const res = await TableApiClient.getTableDefaultDataStreamsMapping(
+      const res = await TableApiClient.getTableDefaultGroupingConfiguration(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableDefaultDataStreamsMappingSuccess(checkType, activeTab, res.data));
+      dispatch(getTableDefaultDataGroupingConfigurationSuccess(checkType, activeTab, res.data));
     } catch (err) {
-      dispatch(getTableDefaultDataStreamsMappingFailed(err));
+      dispatch(getTableDefaultDataGroupingConfigurationFailed(err));
     }
   };
 
-export const updateTableDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
+export const updateTableDefaultDataGroupingConfigurationRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION,
   checkType, activeTab,
 });
 
-export const updateTableDefaultDataStreamsSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+export const updateTableDefaultDataGroupingConfigurationSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_SUCCESS,
   checkType, activeTab,
 });
 
-export const updateTableDefaultDataStreamsMappingFailed = (error: unknown) => ({
-  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+export const updateTableDefaultDataGroupingConfigurationFailed = (error: unknown) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION_ERROR,
   error
 });
 
-export const updateTableDefaultDataStreamMapping =
+export const updateTableDefaultDataGroupingConfiguration =
   (
     checkType: CheckTypes,
     activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: DataStreamMappingSpec
+    data: DataGroupingConfigurationSpec
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDefaultDataStreamsMappingRequest(checkType, activeTab));
+    dispatch(updateTableDefaultDataGroupingConfigurationRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableDefaultDataStreamsMapping(
+      await TableApiClient.updateTableDefaultGroupingConfiguration(
         connectionName,
         schemaName,
         tableName,
         data
       );
-      dispatch(updateTableDefaultDataStreamsSuccess(checkType, activeTab));
+      dispatch(updateTableDefaultDataGroupingConfigurationSuccess(checkType, activeTab));
     } catch (err) {
-      dispatch(updateTableDefaultDataStreamsMappingFailed(err));
+      dispatch(updateTableDefaultDataGroupingConfigurationFailed(err));
     }
   };
 
@@ -909,11 +909,11 @@ export const setUpdatedMonthlyPartitionedChecks = (
   activeTab
 });
 
-export const setUpdatedTableDataStreamsMapping = (
-  checkType: CheckTypes, activeTab: string, dataStreamsMapping?: DataStreamMappingSpec
+export const setUpdatedTableDataGroupingConfiguration = (
+  checkType: CheckTypes, activeTab: string, dataGroupConfiguration?: DataGroupingConfigurationSpec
 ) => ({
-  type: SOURCE_ACTION.SET_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
-  data: dataStreamsMapping,
+  type: SOURCE_ACTION.SET_TABLE_DEFAULT_DATA_GROUPING_CONFIGURATION,
+  data: dataGroupConfiguration,
   checkType,
   activeTab,
 });

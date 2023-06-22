@@ -25,18 +25,18 @@ import java.util.List;
  */
 public class SearchParameterObject {
 	private List<HierarchyNode> nodes;
-	private DataStreamSearcherObject dataStreamSearcherObject;
+	private DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject;
 	private LabelsSearcherObject labelsSearcherObject;
 
 	/**
 	 * Creates a new instance of search parameter object.
 	 * @param nodes Target collection of nodes that will receive values.
-	 * @param dataStreamSearcherObject Data stream search helper for searching for data streams at multiple levels.
+	 * @param dataGroupingConfigurationSearcherObject Data stream search helper for searching for data streams at multiple levels.
 	 * @param labelsSearcherObject Labels search helper for searching for labels at multiple levels.
 	 */
-	public SearchParameterObject(List<HierarchyNode> nodes, DataStreamSearcherObject dataStreamSearcherObject, LabelsSearcherObject labelsSearcherObject) {
+	public SearchParameterObject(List<HierarchyNode> nodes, DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject, LabelsSearcherObject labelsSearcherObject) {
 		this.nodes = nodes;
-		this.dataStreamSearcherObject = dataStreamSearcherObject;
+		this.dataGroupingConfigurationSearcherObject = dataGroupingConfigurationSearcherObject;
 		this.labelsSearcherObject = labelsSearcherObject;
 	}
 
@@ -46,7 +46,7 @@ public class SearchParameterObject {
 	 */
 	public SearchParameterObject(List<HierarchyNode> nodes) {
 		this.nodes = nodes;
-		this.dataStreamSearcherObject = new DataStreamSearcherObject();
+		this.dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
 		this.labelsSearcherObject = new LabelsSearcherObject();
 	}
 
@@ -69,8 +69,8 @@ public class SearchParameterObject {
 	 * Returns a data stream searcher that can search for data streams configured with static values.
 	 * @return Data stream searcher.
 	 */
-	public DataStreamSearcherObject getDataStreamSearcherObject() {
-		return dataStreamSearcherObject;
+	public DataGroupingConfigurationSearcherObject getDataStreamSearcherObject() {
+		return dataGroupingConfigurationSearcherObject;
 	}
 
 	/**

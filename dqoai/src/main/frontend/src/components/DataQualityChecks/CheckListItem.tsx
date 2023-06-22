@@ -81,10 +81,10 @@ const CheckListItem = ({
           label: 'Check Settings',
           value: 'check-settings'
         },
-        ...(check?.supports_data_streams
+        ...(check?.supports_grouping
           ? [
               {
-                label: 'Data streams override',
+                label: 'Grouping configuration override',
                 value: 'data-streams'
               }
             ]
@@ -389,9 +389,9 @@ const CheckListItem = ({
                             : ''}
                         </div>
                         <div>
-                          Data stream:{' '}
-                          {checkResult?.dataStreams
-                            ? checkResult.dataStreams[index]
+                          Data group:{' '}
+                          {checkResult?.dataGroups
+                            ? checkResult.dataGroups[index]
                             : ''}
                         </div>
                       </div>

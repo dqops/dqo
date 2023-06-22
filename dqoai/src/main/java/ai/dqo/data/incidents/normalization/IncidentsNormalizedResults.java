@@ -60,7 +60,7 @@ public class IncidentsNormalizedResults {
         this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
         this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
         this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
-        this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
         this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
         this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
         this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);

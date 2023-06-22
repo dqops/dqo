@@ -40,10 +40,10 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.metadata.incidents.TableIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -258,12 +258,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, P parameter);
 
     /**
-     * Accepts a data streams mapping specification on a table level.
-     * @param dataStreamMappingSpec Data streams mapping specification.
+     * Accepts a data groupings configuration specification on a table level.
+     * @param dataGroupingConfigurationSpec Data groupings configuration specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DataStreamMappingSpec dataStreamMappingSpec, P parameter);
+    R accept(DataGroupingConfigurationSpec dataGroupingConfigurationSpec, P parameter);
 
     /**
      * Accepts a table owner specification on a table level.
@@ -290,12 +290,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(CommentsListSpec commentSpecs, P parameter);
 
     /**
-     * Accepts a configuration of a single dimension.
-     * @param dataStreamLevelSpec Dimension mapping specification.
+     * Accepts a configuration of a single data grouping dimension.
+     * @param dataGroupingDimensionSpec Data grouping mapping specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DataStreamLevelSpec dataStreamLevelSpec, P parameter);
+    R accept(DataGroupingDimensionSpec dataGroupingDimensionSpec, P parameter);
 
     /**
      * Accepts a provider specific connection specification nested specification.
@@ -434,12 +434,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TimestampColumnsSpec timestampColumnsSpec, P parameter);
 
     /**
-     * Accepts a map (hashtable) of named data stream mappings.
-     * @param dataStreamMappingSpecMap Data stream mappings map.
+     * Accepts a map (hashtable) of named data groupings mappings.
+     * @param dataGroupingConfigurationSpecMap Data groupings mappings map.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, P parameter);
+    R accept(DataGroupingConfigurationSpecMap dataGroupingConfigurationSpecMap, P parameter);
 
     /**
      * Accepts a profiler check instance.

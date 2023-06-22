@@ -64,7 +64,7 @@ public class ErrorsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param dataStreamName Data-stream name.
+     * @param dataGroup      Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
@@ -83,7 +83,7 @@ public class ErrorsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
             @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
             @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -108,7 +108,7 @@ public class ErrorsController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
-        dataStreamName.ifPresent(loadParams::setDataStreamName);
+        dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
@@ -123,7 +123,7 @@ public class ErrorsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale      Time scale.
-     * @param dataStreamName Data-stream name.
+     * @param dataGroup      Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
@@ -143,7 +143,7 @@ public class ErrorsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
             @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
             @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -168,7 +168,7 @@ public class ErrorsController {
 
         AbstractRootChecksContainerSpec recurring = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
-        dataStreamName.ifPresent(loadParams::setDataStreamName);
+        dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
@@ -183,7 +183,7 @@ public class ErrorsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale      Time scale.
-     * @param dataStreamName Data-stream name.
+     * @param dataGroup      Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
      * @return View of the errors related to the recent partitioned checks results.
@@ -202,7 +202,7 @@ public class ErrorsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
             @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
             @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -227,7 +227,7 @@ public class ErrorsController {
 
         AbstractRootChecksContainerSpec Partitioned = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
-        dataStreamName.ifPresent(loadParams::setDataStreamName);
+        dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
@@ -242,7 +242,7 @@ public class ErrorsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param dataStreamName Data-stream name.
+     * @param dataGroup      Data- group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
@@ -262,7 +262,7 @@ public class ErrorsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
             @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
             @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -292,7 +292,7 @@ public class ErrorsController {
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
-        dataStreamName.ifPresent(loadParams::setDataStreamName);
+        dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
@@ -308,7 +308,7 @@ public class ErrorsController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale      Time scale.
-     * @param dataStreamName Data-stream name.
+     * @param dataGroup      Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
@@ -329,7 +329,7 @@ public class ErrorsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
             @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
             @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -359,7 +359,7 @@ public class ErrorsController {
 
         AbstractRootChecksContainerSpec recurring = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
-        dataStreamName.ifPresent(loadParams::setDataStreamName);
+        dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
@@ -375,7 +375,7 @@ public class ErrorsController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale      Time scale.
-     * @param dataStreamName Data-stream name.
+     * @param dataGroup      Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
      * @return View of errors related to the recent partitioned checks results.
@@ -396,7 +396,7 @@ public class ErrorsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
             @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
             @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -426,7 +426,7 @@ public class ErrorsController {
 
         AbstractRootChecksContainerSpec Partitioned = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
-        dataStreamName.ifPresent(loadParams::setDataStreamName);
+        dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 

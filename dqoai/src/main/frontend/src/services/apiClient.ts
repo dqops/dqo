@@ -24,7 +24,7 @@ import {
   ColumnsApiFactory,
   JobsApiFactory,
   DataSourcesApiFactory,
-  DataStreamsApiFactory,
+  DataGroupingConfigurationsApiFactory,
   CheckResultsOverviewApiFactory,
   DashboardsApiFactory,
   TimezonesApiFactory,
@@ -74,7 +74,7 @@ export const DataSourcesApi = DataSourcesApiFactory(
   axios
 );
 
-export const DataStreamsApi = DataStreamsApiFactory(
+export const DataGroupingConfigurationsApi = DataGroupingConfigurationsApiFactory(
   new Configuration(),
   '',
   axios

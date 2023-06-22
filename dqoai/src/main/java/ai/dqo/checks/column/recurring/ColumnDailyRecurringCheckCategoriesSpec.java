@@ -32,10 +32,10 @@ import ai.dqo.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpe
 import ai.dqo.checks.column.recurring.sql.ColumnSqlDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.strings.ColumnStringsDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringChecksSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.groupings.TimeSeriesMode;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;

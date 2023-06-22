@@ -8,13 +8,13 @@ import ErrorText from "./ErrorText";
 
 interface CheckErrorsTabProps {
   errors: ErrorsDetailedDataModel[];
-  dataStreamName?: string;
+  dataGroup?: string;
   month?: string;
   onChangeMonth: (month: string) => void;
-  onChangeDataStream: (name: string) => void;
+  onChangeDataGroup: (name: string) => void;
 }
 
-const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onChangeMonth }: CheckErrorsTabProps) => {
+const CheckErrorsTab = ({ errors, dataGroup, onChangeDataGroup, month, onChangeMonth }: CheckErrorsTabProps) => {
   const { sidebarWidth } = useTree();
 
   const columns = [
@@ -57,11 +57,11 @@ const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onC
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Data stream</div>
+          <div className="text-sm">Data group</div>
           <Select
-            value={dataStreamName}
-            options={(errors[0]?.dataStreamNames || []).map((item) => ({ label: item, value: item })) || []}
-            onChange={onChangeDataStream}
+            value={dataGroup}
+            options={(errors[0]?.dataGroupsNames || []).map((item) => ({ label: item, value: item })) || []}
+            onChange={onChangeDataGroup}
           />
         </div>
         <div className="flex space-x-4 items-center">

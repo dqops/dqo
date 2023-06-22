@@ -17,9 +17,7 @@ package ai.dqo.data.checkresults.factory;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -101,7 +99,7 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
             CHECK_HASH_COLUMN_NAME,
             CHECK_CATEGORY_COLUMN_NAME,
             CHECK_NAME_COLUMN_NAME,
-            DATA_STREAM_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
             ACTUAL_VALUE_COLUMN_NAME,
             SEVERITY_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
@@ -132,7 +130,7 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
             CHECK_TYPE_COLUMN_NAME,
 
             COLUMN_NAME_COLUMN_NAME,
-            DATA_STREAM_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,

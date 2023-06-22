@@ -22,9 +22,9 @@ import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-import ai.dqo.metadata.groupings.DataStreamLevelSource;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSource;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
@@ -33,7 +33,6 @@ import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec;
 import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
-import ai.dqo.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,12 +88,12 @@ public class SqlServerColumnStringsExpectedStringsInTopValuesCountSensorParamete
         this.sut.setTop(2L);
         this.sut.setFilter("id < 5");
 
-        DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
-        dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
-            setSource(DataStreamLevelSource.tag);
+        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getGroupings().getFirstDataGroupingConfiguration();
+        dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
+            setSource(DataGroupingDimensionSource.tag);
             setTag("mytag");
         }});
-        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+        this.sampleTableMetadata.getTableSpec().getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfiguration);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
@@ -116,12 +115,12 @@ public class SqlServerColumnStringsExpectedStringsInTopValuesCountSensorParamete
         this.sut.setTop(2L);
         this.sut.setFilter("id < 5");
 
-        DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
-        dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
-            setSource(DataStreamLevelSource.column_value);
+        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getGroupings().getFirstDataGroupingConfiguration();
+        dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
+            setSource(DataGroupingDimensionSource.column_value);
             setColumn("mix_string_int");
         }});
-        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+        this.sampleTableMetadata.getTableSpec().getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfiguration);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
@@ -136,10 +135,10 @@ public class SqlServerColumnStringsExpectedStringsInTopValuesCountSensorParamete
         Assertions.assertEquals(1L, resultTable.column("actual_value").get(2));
         Assertions.assertEquals(0L, resultTable.column("actual_value").get(3));
 
-        Assertions.assertEquals("11", resultTable.column("stream_level_1").get(0).toString());
-        Assertions.assertEquals("22", resultTable.column("stream_level_1").get(1).toString());
-        Assertions.assertEquals("aa", resultTable.column("stream_level_1").get(2).toString());
-        Assertions.assertEquals("bb", resultTable.column("stream_level_1").get(3).toString());
+        Assertions.assertEquals("11", resultTable.column("grouping_level_1").get(0).toString());
+        Assertions.assertEquals("22", resultTable.column("grouping_level_1").get(1).toString());
+        Assertions.assertEquals("aa", resultTable.column("grouping_level_1").get(2).toString());
+        Assertions.assertEquals("bb", resultTable.column("grouping_level_1").get(3).toString());
 
     }
 

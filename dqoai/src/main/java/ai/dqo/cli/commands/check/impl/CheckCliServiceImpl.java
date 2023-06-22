@@ -158,7 +158,7 @@ public class CheckCliServiceImpl implements CheckCliService {
 //        }
         checkModel.applySampleValues();
 
-        checkModel.setDataStreamsOverride(null);
+        checkModel.setDataGroupingOverride(null);
         checkModel.setScheduleOverride(null);
         checkModel.setEffectiveSchedule(null);
         checkModel.setScheduleEnabledStatus(ScheduleEnabledStatusModel.not_configured);
@@ -172,7 +172,7 @@ public class CheckCliServiceImpl implements CheckCliService {
         checkModel.setFilter(null);
         checkModel.setRunChecksJobTemplate(null);
         checkModel.setDataCleanJobTemplate(null);
-        checkModel.setDataStream(null);
+        checkModel.setDataGroupingConfiguration(null);
         checkModel.setConfigurationRequirementsErrors(null);
     }
 

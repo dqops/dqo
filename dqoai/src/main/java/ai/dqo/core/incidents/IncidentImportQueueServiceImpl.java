@@ -429,9 +429,9 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     if (tablePriority != null) {
                         newIncidentRow.setInt(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, tablePriority);
                     }
-                    if (incidentGroupingAtConnection.isDivideByDataStream()) {
-                        String dataStreamName = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
-                        newIncidentRow.setString(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
+                    if (incidentGroupingAtConnection.isDivideByDataGroups()) {
+                        String dataGroupName = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                        newIncidentRow.setString(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, dataGroupName);
                     }
 
                     newIncidentRow.setInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME, severity);

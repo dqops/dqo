@@ -14,7 +14,7 @@ Deletes stored data that matches specified conditions. Be careful when using thi
 ```
 $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
-             [-col=<column>] [-ct=<checkType>] [-ds=<dataStream>] [-e=<end>]
+             [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
              [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
              [-sc=<statisticsCollector>] [-stc=<statisticsCategory>]
              [-stt=<statisticsTarget>] [-t=<table>] [-tg=<timeGradient>]
@@ -24,7 +24,7 @@ $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=
 ```
 dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
-             [-col=<column>] [-ct=<checkType>] [-ds=<dataStream>] [-e=<end>]
+             [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
              [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
              [-sc=<statisticsCollector>] [-stc=<statisticsCategory>]
              [-stt=<statisticsTarget>] [-t=<table>] [-tg=<timeGradient>]
@@ -42,7 +42,7 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 |`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
-|`-ds`<br/>`--data-stream`<br/>|Data stream hierarchy level filter (tag)| ||
+|`-ds`<br/>`--data-group-tag`<br/>|Data group dimension level filter, that filters by tags.| ||
 |`-e`<br/>`--end`<br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
 |`-er`<br/>`--errors`<br/>|Delete the execution errors| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||

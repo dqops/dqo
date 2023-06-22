@@ -1,49 +1,49 @@
 import React from 'react';
-import { DataStreamLevelSpec, DataStreamLevelSpecSourceEnum } from '../../api';
+import { DataGroupingDimensionSpec, DataGroupingDimensionSpecSourceEnum } from '../../api';
 import Input from '../Input';
 import ColumnSelect from './ColumnSelect';
 import RadioButton from '../RadioButton';
 
-interface IDataStreamLevelItemProps {
-  dataStreamLevel?: DataStreamLevelSpec;
+interface IDataGroupingDimensionItemProps {
+  dataGroupingLevel?: DataGroupingDimensionSpec;
   idx: number;
-  onChange: (dataStreamLevel: DataStreamLevelSpec) => void;
+  onChange: (dataGroupingLevel: DataGroupingDimensionSpec) => void;
   scope?: string;
   error?: string;
   onClearError?: (idx: number) => void;
 }
 
-const DataStreamLevelItem = ({
+const DataGroupingDimensionItem = ({
   idx,
   onChange,
-  dataStreamLevel,
+  dataGroupingLevel,
   scope,
   error,
   onClearError
-}: IDataStreamLevelItemProps) => {
+}: IDataGroupingDimensionItemProps) => {
   return (
     <div className="mb-4 last:mb-0">
       <div className="flex justify-between items-center space-x-6">
-        <div className="text-sm font-semibold flex-1">{`Data stream level ${
+        <div className="text-sm font-semibold flex-1">{`Grouping dimension level ${
           idx + 1
         }`}</div>
         <div className="flex-1">
           <RadioButton
-            checked={dataStreamLevel?.source === undefined}
+            checked={dataGroupingLevel?.source === undefined}
             label="None"
-            onClick={() => onChange({ ...dataStreamLevel, source: undefined })}
+            onClick={() => onChange({ ...dataGroupingLevel, source: undefined })}
           />
         </div>
         <div className="">
           <RadioButton
             checked={
-              dataStreamLevel?.source === DataStreamLevelSpecSourceEnum.tag
+              dataGroupingLevel?.source === DataGroupingDimensionSpecSourceEnum.tag
             }
             label="Tag"
             onClick={() =>
               onChange({
-                ...dataStreamLevel,
-                source: DataStreamLevelSpecSourceEnum.tag
+                ...dataGroupingLevel,
+                source: DataGroupingDimensionSpecSourceEnum.tag
               })
             }
           />
@@ -51,10 +51,10 @@ const DataStreamLevelItem = ({
         <div className="flex-1">
           <Input
             className="h-8"
-            value={dataStreamLevel?.tag}
+            value={dataGroupingLevel?.tag}
             onChange={(e) => {
               onChange({
-                ...dataStreamLevel,
+                ...dataGroupingLevel,
                 tag: e.target.value
               });
               if (onClearError) {
@@ -62,7 +62,7 @@ const DataStreamLevelItem = ({
               }
             }}
             disabled={
-              dataStreamLevel?.source !== DataStreamLevelSpecSourceEnum.tag
+              dataGroupingLevel?.source !== DataGroupingDimensionSpecSourceEnum.tag
             }
           />
           {error && (
@@ -71,25 +71,25 @@ const DataStreamLevelItem = ({
         </div>
         <RadioButton
           checked={
-            dataStreamLevel?.source ===
-            DataStreamLevelSpecSourceEnum.column_value
+            dataGroupingLevel?.source ===
+            DataGroupingDimensionSpecSourceEnum.column_value
           }
           label="Group by column"
           onClick={() =>
             onChange({
-              ...dataStreamLevel,
-              source: DataStreamLevelSpecSourceEnum.column_value
+              ...dataGroupingLevel,
+              source: DataGroupingDimensionSpecSourceEnum.column_value
             })
           }
         />
         <div className="flex-1">
           <ColumnSelect
             triggerClassName="!h-8"
-            value={dataStreamLevel?.column}
+            value={dataGroupingLevel?.column}
             onChange={(value) =>
               onChange({
-                ...dataStreamLevel,
-                source: DataStreamLevelSpecSourceEnum.column_value,
+                ...dataGroupingLevel,
+                source: DataGroupingDimensionSpecSourceEnum.column_value,
                 column: value
               })
             }
@@ -101,4 +101,4 @@ const DataStreamLevelItem = ({
   );
 };
 
-export default DataStreamLevelItem;
+export default DataGroupingDimensionItem;

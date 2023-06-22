@@ -24,12 +24,10 @@ import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
-import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
-import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -68,7 +66,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 new TableVolumeRowCountSensorParametersSpec(),
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),
-                new DataStreamMappingSpec(),
+                new DataGroupingConfigurationSpec(),
                 new SensorDefinitionSpec(),
                 new ProviderSensorDefinitionSpec(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),

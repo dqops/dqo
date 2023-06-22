@@ -18,7 +18,7 @@ package ai.dqo.data.statistics.factory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of possible statistics scopes. "table" - a whole table was profiled, "data_stream" - a single data stream was profiled.
+ * Enumeration of possible statistics scopes. "table" - a whole table was profiled, "data_groupings" - groups of rows were profiled.
  */
 public enum StatisticsDataScope {
     /**
@@ -28,8 +28,8 @@ public enum StatisticsDataScope {
     table,
 
     /**
-     * The statistics (profile) is analyzed for each data stream.
+     * The statistics (profile) is analyzed for each group of data.
      */
-    @JsonProperty("data_stream")
-    data_stream
+    @JsonProperty("data_groupings")
+    data_groupings
 }

@@ -15,7 +15,7 @@
  */
 package ai.dqo.utils.datetime;
 
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

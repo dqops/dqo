@@ -30,7 +30,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
 import ai.dqo.data.storage.ParquetPartitionId;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.rest.models.common.SortDirection;
@@ -105,7 +105,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         InstantColumn timePeriodUtcColumn = sortedTable.instantColumn(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
         InstantColumn executedAtColumn = sortedTable.instantColumn(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
-        TextColumn dataStreamColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        TextColumn dataGroupNameColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
         TextColumn checkCategoryColumn = sortedTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
         TextColumn checkNameColumn = sortedTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
@@ -118,7 +118,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
             Instant executedAt = executedAtColumn.get(i);
             Integer severity = severityColumn.get(i);
-            String dataStreamName = dataStreamColumn.get(i);
+            String dataGroupName = dataGroupNameColumn.get(i);
             Long checkHash = checkHashColumn.get(i);
             Double actualValue = actualValueColumn.get(i);
 
@@ -135,7 +135,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             checkResultsOverviewDataModel.appendResult(timePeriod, timePeriodUtc, executedAt, rootChecksContainerSpec.getCheckTimeScale(),
-                    severity, actualValue, dataStreamName, loadParameters.getResultsCount());
+                    severity, actualValue, dataGroupName, loadParameters.getResultsCount());
         }
 
         resultMap.values().forEach(m -> m.reverseLists());
@@ -168,22 +168,22 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
 
-        TextColumn dataStreamColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
-        List<String> dataStreams = dataStreamColumn.unique().asList().stream().sorted().collect(Collectors.toList());
+        TextColumn dataGroupNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
 
-        if (dataStreams.size() > 1 && dataStreams.contains(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME)) {
-            dataStreams.remove(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
-            dataStreams.add(0, CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
+        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME)) {
+            dataGroups.remove(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
+            dataGroups.add(0, CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
         }
         
-        String selectedDataStream = Objects.requireNonNullElse(loadParameters.getDataStreamName(), dataStreams.get(0));
-        Table filteredByDataStream = filteredTable.where(dataStreamColumn.isEqualTo(selectedDataStream));
+        String selectedDataGroup = Objects.requireNonNullElse(loadParameters.getDataGroupName(), dataGroups.get(0));
+        Table filteredByDataGroup = filteredTable.where(dataGroupNameColumn.isEqualTo(selectedDataGroup));
 
-        if (filteredByDataStream.isEmpty()) {
+        if (filteredByDataGroup.isEmpty()) {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredByDataStream.sortDescendingOn(
+        Table sortedTable = filteredByDataGroup.sortDescendingOn(
                 SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                 CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
@@ -204,8 +204,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     setCheckHash(singleModel.getCheckHash());
                     setCheckType(singleModel.getCheckType());
                     setCheckDisplayName(singleModel.getCheckDisplayName());
-                    setDataStreamNames(dataStreams);
-                    setDataStream(singleModel.getDataStream());
+                    setDataGroups(dataGroups);
+                    setDataGroup(singleModel.getDataGroup());
                     setSingleCheckResults(new ArrayList<>());
                 }};
                 resultMap.put(singleModel.getCheckHash(), checkResultsDetailedDataModel);
@@ -242,7 +242,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
         String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-        String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        String dataGroupName = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
         Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
@@ -274,7 +274,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             setCheckDisplayName(checkDisplayName);
 
             setColumnName(columnName);
-            setDataStream(dataStream);
+            setDataGroup(dataGroupName);
 
             setDurationMs(durationMs);
             setExecutedAt(executedAt);

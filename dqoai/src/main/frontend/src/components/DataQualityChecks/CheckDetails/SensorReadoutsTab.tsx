@@ -7,13 +7,13 @@ import moment from "moment";
 
 interface SensorReadoutsTabProps {
   sensorReadouts: SensorReadoutsDetailedDataModel[];
-  dataStreamName?: string;
-  onChangeDataStream: (name: string) => void;
+  dataGroup?: string;
+  onChangeDataGroup: (name: string) => void;
   month?: string;
   onChangeMonth: (month: string) => void;
 }
 
-const SensorReadoutsTab = ({ sensorReadouts, dataStreamName, onChangeDataStream, month, onChangeMonth }: SensorReadoutsTabProps) => {
+const SensorReadoutsTab = ({ sensorReadouts, dataGroup, onChangeDataGroup, month, onChangeMonth }: SensorReadoutsTabProps) => {
   const { sidebarWidth } = useTree();
 
   const columns = [
@@ -54,8 +54,8 @@ const SensorReadoutsTab = ({ sensorReadouts, dataStreamName, onChangeDataStream,
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right',
     },
     {
-      label: 'Data Stream',
-      value: 'dataStream',
+      label: 'Data Grouping',
+      value: 'dataGroup',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
     },
   ];
@@ -71,11 +71,11 @@ const SensorReadoutsTab = ({ sensorReadouts, dataStreamName, onChangeDataStream,
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Data stream</div>
+          <div className="text-sm">Data group</div>
           <Select
-            value={dataStreamName}
-            options={(sensorReadouts[0]?.dataStreamNames || []).map((item) => ({ label: item, value: item })) || []}
-            onChange={onChangeDataStream}
+            value={dataGroup}
+            options={(sensorReadouts[0]?.dataGroupNames || []).map((item) => ({ label: item, value: item })) || []}
+            onChange={onChangeDataGroup}
           />
         </div>
         <div className="flex space-x-4 items-center">

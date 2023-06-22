@@ -41,10 +41,10 @@ import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
 import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderService;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
@@ -300,7 +300,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         }
 
         TableSpec trimmedTableSpec = tableSpec.trim();
-        trimmedTableSpec.setDataStreams(new DataStreamMappingSpecMap());
+        trimmedTableSpec.setGroupings(new DataGroupingConfigurationSpecMap());
         ColumnSpec columnSpec = trimmedTableSpec.getColumns().getAt(0);
         for (int i = 0; i < trimmedTableSpec.getColumns().size(); i++) {
             trimmedTableSpec.getColumns().getAt(i).setLabels(tableSpec.getColumns().getAt(i).getLabels().deepClone());
@@ -359,10 +359,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
         trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the second grouping key"));
-        DataStreamMappingSpec dataStreamMapping = new DataStreamMappingSpec();
-        dataStreamMapping.setLevel1(DataStreamLevelSpec.createForColumn("country"));
-        dataStreamMapping.setLevel2(DataStreamLevelSpec.createForColumn("state"));
-        trimmedTableSpec.getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+        DataGroupingConfigurationSpec groupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        groupingConfigurationSpec.setLevel1(DataGroupingDimensionSpec.createForColumn("country"));
+        groupingConfigurationSpec.setLevel2(DataGroupingDimensionSpec.createForColumn("state"));
+        trimmedTableSpec.getGroupings().setFirstDataGroupingConfiguration(groupingConfigurationSpec);
 
         TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
         String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
@@ -517,7 +517,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         checkRootContainer.getCheckType(),
                         timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
                         null,
-                        tableSpec.getDataStreams().getFirstDataStreamMapping(),
+                        tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
                         checkSpec.getParameters(),
                         providerDialectSettings,
                         new CheckSearchFilters()

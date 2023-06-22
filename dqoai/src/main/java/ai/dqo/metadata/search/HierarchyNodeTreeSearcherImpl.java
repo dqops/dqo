@@ -61,8 +61,8 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         CheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createCheckSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
-        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject);
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
+        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject);
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 searchParameterObject));
 
@@ -81,8 +81,8 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         StatisticsCollectorSearchFiltersVisitor searchFilterVisitor = statisticsCollectorSearchFilters.createProfilerSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
-        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject);
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
+        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject);
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 searchParameterObject));
 
@@ -99,9 +99,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         ConnectionSearchFiltersVisitor searchFilterVisitor = connectionSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
 		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
-                new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject)));
+                new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         return (List<ConnectionSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -116,9 +116,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         TableSearchFiltersVisitor searchFilterVisitor = tableSearchFilters.createTableSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
 		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
-                new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject)));
+                new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         return (List<TableWrapper>)(ArrayList<?>)matchingNodes;
     }
@@ -133,9 +133,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         ColumnSearchFiltersVisitor searchFilterVisitor = columnSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
 		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
-                new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject)));
+                new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         return (List<ColumnSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -150,9 +150,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         SensorDefinitionSearchFiltersVisitor searchFilterVisitor = sensorDefinitionSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
 		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
-                new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject)));
+                new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         return (List<SensorDefinitionSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -167,9 +167,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         RuleDefinitionSearchFiltersVisitor searchFilterVisitor = ruleDefinitionSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
 		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
-                new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject)));
+                new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         return (List<RuleDefinitionSpec>)(ArrayList<?>)matchingNodes;
     }

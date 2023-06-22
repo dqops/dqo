@@ -21,7 +21,7 @@ import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -65,7 +65,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         
         this.sut = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.tableSpec = TableSpecObjectMother.create("public", "tab1");
-        this.tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
+        this.tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
     }
 
     @Test

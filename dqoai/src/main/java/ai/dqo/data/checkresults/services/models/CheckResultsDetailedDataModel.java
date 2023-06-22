@@ -24,7 +24,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Check detailed results. Returned in the context of a single data-stream, with a supplied list of other data-streams.
+ * Check detailed results. Returned in the context of a single data group, with a supplied list of other data groups.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -45,11 +45,11 @@ public class CheckResultsDetailedDataModel {
     @JsonPropertyDescription("Check type.")
     private String checkType;
 
-    @JsonPropertyDescription("Data stream list.")
-    private List<String> dataStreamNames;
+    @JsonPropertyDescription("Data groups list.")
+    private List<String> dataGroups;
 
-    @JsonPropertyDescription("Selected data-stream.")
-    private String dataStream;
+    @JsonPropertyDescription("Selected data group.")
+    private String dataGroup;
 
     @JsonPropertyDescription("Single check results")
     private List<CheckResultDetailedSingleModel> singleCheckResults;

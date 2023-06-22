@@ -64,10 +64,10 @@ public class CheckResultsOverviewDataModel {
     @JsonPropertyDescription("List of check severity levels or an error status, indexes with the severity levels match the time periods.")
     private List<CheckResultStatus> statuses = new ArrayList<>();
 
-    @JsonPropertyDescription("List of data stream names. Identifies the data stream with the highest severity or error result.")
-    private List<String> dataStreams = new ArrayList<>();
+    @JsonPropertyDescription("List of data group names. Identifies the data group with the highest severity or error result.")
+    private List<String> dataGroups = new ArrayList<>();
 
-    @JsonPropertyDescription("List of sensor results. Returns the data quality result readout for the data stream with the alert of the higest severity level.")
+    @JsonPropertyDescription("List of sensor results. Returns the data quality result readout for the data group with the alert of the highest severity level.")
     private List<Double> results = new ArrayList<>();
 
     /**
@@ -80,7 +80,7 @@ public class CheckResultsOverviewDataModel {
      * @param checkTimeScale Time scale used by the check. For daily checks, the results are truncated.
      * @param severity Check severity.
      * @param actualValue Actual value returned by the sensor.
-     * @param dataStreamName Data stream name.
+     * @param dataGroup Data group.
      * @param resultsCount Maximum results count to store. The result is not added if the result count is exceeded.
      */
     public void appendResult(LocalDateTime timePeriod,
@@ -89,7 +89,7 @@ public class CheckResultsOverviewDataModel {
                              CheckTimeScale checkTimeScale,
                              Integer severity,
                              Double actualValue,
-                             String dataStreamName,
+                             String dataGroup,
                              int resultsCount) {
         assert this.timePeriods.size() == 0 || !this.timePeriods.get(this.timePeriods.size() - 1).isAfter(timePeriod);
 
@@ -99,7 +99,7 @@ public class CheckResultsOverviewDataModel {
             this.executedAtTimestamps.add(executedAt);
             this.timePeriodDisplayTexts.add(makeTimePeriodDisplayText(timePeriod, timePeriodUtc, checkTimeScale));
             this.statuses.add(CheckResultStatus.fromSeverity(severity));
-            this.dataStreams.add(dataStreamName);
+            this.dataGroups.add(dataGroup);
             this.results.add(actualValue);
             return;
         }
@@ -110,8 +110,8 @@ public class CheckResultsOverviewDataModel {
                 this.executedAtTimestamps.set(this.statuses.size() - 1, executedAt);
                 this.timePeriodDisplayTexts.set(this.statuses.size() - 1, makeTimePeriodDisplayText(timePeriod, timePeriodUtc, checkTimeScale));
                 this.statuses.set(this.statuses.size() - 1, CheckResultStatus.fromSeverity(severity));
-                this.dataStreams.set(this.dataStreams.size() - 1, dataStreamName);
-                this.results.set(this.dataStreams.size() - 1, actualValue);
+                this.dataGroups.set(this.dataGroups.size() - 1, dataGroup);
+                this.results.set(this.dataGroups.size() - 1, actualValue);
             }
         }
         else {
@@ -124,7 +124,7 @@ public class CheckResultsOverviewDataModel {
             this.executedAtTimestamps.add(executedAt);
             this.timePeriodDisplayTexts.add(makeTimePeriodDisplayText(timePeriod, timePeriodUtc, checkTimeScale));
             this.statuses.add(CheckResultStatus.fromSeverity(severity));
-            this.dataStreams.add(dataStreamName);
+            this.dataGroups.add(dataGroup);
             this.results.add(actualValue);
         }
     }
@@ -167,7 +167,7 @@ public class CheckResultsOverviewDataModel {
         this.executedAtTimestamps = Lists.reverse(this.executedAtTimestamps);
         this.timePeriodDisplayTexts = Lists.reverse(this.timePeriodDisplayTexts);
         this.statuses = Lists.reverse(this.statuses);
-        this.dataStreams = Lists.reverse(this.dataStreams);
+        this.dataGroups = Lists.reverse(this.dataGroups);
         this.results = Lists.reverse(this.results);
     }
 }

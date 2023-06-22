@@ -65,7 +65,7 @@ const DataQualityChecks = ({
   const [copyUI, setCopyUI] = useState<CheckContainerModel>();
 
   const { sidebarWidth } = useTree();
-  const handleChangeDataDataStreams = (
+  const handleChangeDataGrouping = (
     check: CheckModel,
     idx: number,
     jdx: number
@@ -424,8 +424,8 @@ const DataQualityChecks = ({
               category={category}
               checkResultsOverview={checkResultsOverview}
               timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
-              handleChangeDataDataStreams={(check, jIndex) =>
-                handleChangeDataDataStreams(check, index, jIndex)
+              handleChangeDataGroupingConfiguration={(check, jIndex) =>
+                handleChangeDataGrouping(check, index, jIndex)
               }
               onUpdate={onUpdate}
               getCheckOverview={getCheckOverview}

@@ -15,7 +15,7 @@
  */
 package ai.dqo.rest.models.metadata;
 
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -24,25 +24,16 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Model of data stream on a table returned by the rest api, including all configuration information.
+ * Data grouping on a table model with trimmed access path.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DataStreamModel", description = "Data stream model containing nested objects")
-public class DataStreamModel {
-    @JsonPropertyDescription("Connection name.")
-    private String connectionName;
+@ApiModel(value = "DataGroupingConfigurationTrimmedModel", description = "Data grouping configuration model with trimmed path")
+public class DataGroupingConfigurationTrimmedModel {
+    @JsonPropertyDescription("Data grouping configuration name.")
+    private String dataGroupingConfigurationName;
 
-    @JsonPropertyDescription("Schema name.")
-    private String schemaName;
-
-    @JsonPropertyDescription("Table name.")
-    private String tableName;
-
-    @JsonPropertyDescription("Data stream name.")
-    private String dataStreamName;
-
-    @JsonPropertyDescription("Data stream specification.")
-    private DataStreamMappingSpec spec;
+    @JsonPropertyDescription("Data grouping configuration specification.")
+    private DataGroupingConfigurationSpec spec;
 }

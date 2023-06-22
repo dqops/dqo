@@ -38,11 +38,11 @@ public class ErrorsDetailedParameters {
     private int errorsCount = 100;
 
     /**
-     * Name of the data-stream for which to get the errors.
+     * Name of the data group for which to get the errors.
      * If null, the default one is picked.
      */
-    @JsonPropertyDescription("Data-stream for which to load the errors.")
-    private String dataStreamName = null;
+    @JsonPropertyDescription("Data group for which to load the errors.")
+    private String dataGroup = null;
 
     /**
      * Start month to load. Loads the data for the whole month identified by the date.

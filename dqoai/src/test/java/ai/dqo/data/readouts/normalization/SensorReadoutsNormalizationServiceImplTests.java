@@ -28,8 +28,6 @@ import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -46,9 +44,6 @@ import tech.tablesaw.api.*;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
-import java.time.temporal.WeekFields;
-import java.util.Locale;
 import java.util.TimeZone;
 
 @SpringBootTest
@@ -133,11 +128,11 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime expectedTimePeriod = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(expectedTimePeriod.toInstant(TimeZone.getDefault().toZoneId().getRules().getOffset(expectedTimePeriod)), results.getTimePeriodUtcColumn().get(0));
-        Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
+        Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
     }
 
     @Test
@@ -158,10 +153,10 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         Assertions.assertEquals(timePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(timePeriodUtc, results.getTimePeriodUtcColumn().get(0));
-        Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
+        Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
     }
 
 //    @Test
@@ -200,13 +195,13 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         LocalDateTime expectedTimePeriod = LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT);
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(expectedTimePeriod.toInstant(TimeZone.getDefault().toZoneId().getRules().getOffset(expectedTimePeriod)), results.getTimePeriodUtcColumn().get(0));
-        Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
@@ -224,11 +219,11 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
-        Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
@@ -244,10 +239,10 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
-        Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
         Assertions.assertEquals("5e66efdc-b585-6460-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
         Assertions.assertEquals("60685857-4b08-6610-b6b0-03adefaca0c1", results.getIdColumn().get(0));
     }
@@ -267,18 +262,18 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         Assertions.assertEquals(LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT), results.getTimePeriodColumn().get(0));
-        Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension1_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(TextColumn.create("stream_level_1", "US"));
+		this.table.addColumns(TextColumn.create("grouping_level_1", "US"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 CheckTimeScale.daily, "date"));
 
@@ -290,18 +285,18 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
-        Assertions.assertEquals(6115115649832173011L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("US", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals(6115115649832173011L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals("US", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension2_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(TextColumn.create("stream_level_2", "US"));
+		this.table.addColumns(TextColumn.create("grouping_level_2", "US"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 CheckTimeScale.daily, "date"));
 
@@ -313,11 +308,11 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getActualValueColumn());
         Assertions.assertNotNull(results.getTimePeriodColumn());
         Assertions.assertNotNull(results.getTimePeriodUtcColumn());
-        Assertions.assertNotNull(results.getDataStreamHashColumn());
+        Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
-        Assertions.assertEquals(4298143061576664681L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals(" / US", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals(4298143061576664681L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals(" / US", results.getDataGroupNameColumn().get(0));
     }
 
     // TODO: write more tests, for data streams, different data types (cast required), time period granularity trimming, etc...

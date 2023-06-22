@@ -53,24 +53,24 @@ public class SensorReadoutsColumnNames {
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
 
     /**
-     * Column name prefix for the data stream columns: stream_level_.
+     * Column name prefix for the data grouping dimension level columns: grouping_level_.
      */
-    public static final String DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX = CommonColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX;
+    public static final String DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX = CommonColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX;
 
     /**
-     * The data stream hash, it is a hash of the data stream level names.
+     * The data group hash, it is a hash of the data group levels' values.
      */
-    public static final String DATA_STREAM_HASH_COLUMN_NAME = CommonColumnNames.DATA_STREAM_HASH_COLUMN_NAME;
+    public static final String DATA_GROUP_HASH_COLUMN_NAME = CommonColumnNames.DATA_GROUP_HASH_COLUMN_NAME;
 
     /**
-     * The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
+     * The data group name, it is a concatenated name of the data group dimension values, created from [grouping_level_1] / [grouping_level_2] / ...
      */
-    public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
+    public static final String DATA_GROUP_NAME_COLUMN_NAME = CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME;
 
     /**
-     * The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check.
+     * The data grouping configuration name, it is a name of the named data grouping configuration that was used to run the data quality check.
      */
-    public static final String DATA_STREAM_MAPPING_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME;
+    public static final String DATA_GROUPING_CONFIGURATION_COLUMN_NAME = CommonColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME;
 
     /**
      * A hash calculated from the connection name (the data source name).
@@ -217,7 +217,7 @@ public class SensorReadoutsColumnNames {
             CHECK_TYPE_COLUMN_NAME,
 
             COLUMN_NAME_COLUMN_NAME,
-            DATA_STREAM_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,

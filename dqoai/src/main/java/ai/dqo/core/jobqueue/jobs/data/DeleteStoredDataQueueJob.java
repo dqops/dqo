@@ -105,7 +105,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCollectorName(deletionParameters.getCollectorName());
             setCollectorTarget(deletionParameters.getCollectorTarget());
             setColumnNames(deletionParameters.getColumnNames());
-            setDataStreamName(deletionParameters.getDataStreamName());
+            setDataStreamName(deletionParameters.getDataGroupTag());
             setSensorName(deletionParameters.getSensorName());
         }};
     }
@@ -122,7 +122,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());
             setColumnNames(deletionParameters.getColumnNames());
-            setDataStreamName(deletionParameters.getDataStreamName());
+            setDataStreamName(deletionParameters.getDataGroupTag());
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
             setTimeGradient(deletionParameters.getTimeGradient());
@@ -141,7 +141,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());
             setColumnNames(deletionParameters.getColumnNames());
-            setDataStreamName(deletionParameters.getDataStreamName());
+            setDataStreamName(deletionParameters.getDataGroupTag());
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
             setTimeGradient(deletionParameters.getTimeGradient());

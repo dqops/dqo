@@ -101,16 +101,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -119,7 +119,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -127,7 +127,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -168,7 +168,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -196,7 +196,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -224,7 +224,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -257,16 +257,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -275,20 +275,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -316,7 +316,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 41-46"
+    ```yaml hl_lines="0-0 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -327,7 +327,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -378,16 +378,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -396,7 +396,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -404,7 +404,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -418,8 +418,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -430,14 +430,14 @@ spec:
             CURRENT_TIMESTAMP(),
             TIMESTAMP(CURRENT_TIMESTAMP())
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -448,7 +448,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -460,13 +460,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -477,7 +477,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -489,13 +489,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -506,7 +506,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -518,13 +518,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -540,16 +540,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -558,20 +558,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -579,8 +579,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT()
@@ -595,11 +595,11 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -709,16 +709,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -727,7 +727,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -735,7 +735,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -776,7 +776,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -804,7 +804,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -832,7 +832,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -865,16 +865,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -883,20 +883,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -924,7 +924,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 43-48"
+    ```yaml hl_lines="0-0 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -935,7 +935,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -988,16 +988,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -1006,7 +1006,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -1014,7 +1014,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1028,8 +1028,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -1040,14 +1040,14 @@ spec:
             CURRENT_TIMESTAMP(),
             TIMESTAMP(CURRENT_TIMESTAMP())
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -1058,7 +1058,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -1070,13 +1070,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -1087,7 +1087,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -1099,13 +1099,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -1116,7 +1116,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -1128,13 +1128,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -1150,16 +1150,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -1168,20 +1168,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -1189,8 +1189,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.5)
@@ -1205,11 +1205,11 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -1319,16 +1319,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -1337,7 +1337,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -1345,7 +1345,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1386,7 +1386,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1414,7 +1414,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1442,7 +1442,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1475,16 +1475,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -1493,20 +1493,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -1534,7 +1534,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 43-48"
+    ```yaml hl_lines="0-0 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1545,7 +1545,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -1598,16 +1598,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -1616,7 +1616,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -1624,7 +1624,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1638,8 +1638,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -1650,14 +1650,14 @@ spec:
             CURRENT_TIMESTAMP(),
             TIMESTAMP(CURRENT_TIMESTAMP())
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -1668,7 +1668,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -1680,13 +1680,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -1697,7 +1697,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -1709,13 +1709,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -1726,7 +1726,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -1738,13 +1738,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -1760,16 +1760,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -1778,20 +1778,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -1799,8 +1799,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.1)
@@ -1815,11 +1815,11 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -1929,16 +1929,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -1947,7 +1947,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -1955,7 +1955,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1996,7 +1996,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2024,7 +2024,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2052,7 +2052,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2085,16 +2085,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -2103,20 +2103,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -2144,7 +2144,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 43-48"
+    ```yaml hl_lines="0-0 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2155,7 +2155,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -2208,16 +2208,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -2226,7 +2226,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -2234,7 +2234,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2248,8 +2248,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -2260,14 +2260,14 @@ spec:
             CURRENT_TIMESTAMP(),
             TIMESTAMP(CURRENT_TIMESTAMP())
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -2278,7 +2278,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -2290,13 +2290,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -2307,7 +2307,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -2319,13 +2319,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -2336,7 +2336,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -2348,13 +2348,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -2370,16 +2370,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -2388,20 +2388,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -2409,8 +2409,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.25)
@@ -2425,11 +2425,11 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -2539,16 +2539,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -2557,7 +2557,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -2565,7 +2565,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2606,7 +2606,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2634,7 +2634,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2662,7 +2662,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2695,16 +2695,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -2713,20 +2713,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -2754,7 +2754,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 43-48"
+    ```yaml hl_lines="0-0 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2765,7 +2765,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -2818,16 +2818,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -2836,7 +2836,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -2844,7 +2844,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2858,8 +2858,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -2870,14 +2870,14 @@ spec:
             CURRENT_TIMESTAMP(),
             TIMESTAMP(CURRENT_TIMESTAMP())
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -2888,7 +2888,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -2900,13 +2900,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -2917,7 +2917,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -2929,13 +2929,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -2946,7 +2946,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -2958,13 +2958,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -2980,16 +2980,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -2998,20 +2998,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -3019,8 +3019,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.75)
@@ -3035,11 +3035,11 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -3149,16 +3149,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -3167,7 +3167,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -3175,7 +3175,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3216,7 +3216,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3244,7 +3244,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3272,7 +3272,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3305,16 +3305,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -3323,20 +3323,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -3364,7 +3364,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 43-48"
+    ```yaml hl_lines="0-0 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3375,7 +3375,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -3428,16 +3428,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -3446,7 +3446,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -3454,7 +3454,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3468,8 +3468,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -3480,14 +3480,14 @@ spec:
             CURRENT_TIMESTAMP(),
             TIMESTAMP(CURRENT_TIMESTAMP())
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -3498,7 +3498,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -3510,13 +3510,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -3527,7 +3527,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -3539,13 +3539,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -3556,7 +3556,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -3568,13 +3568,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -3590,16 +3590,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -3608,20 +3608,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -3629,8 +3629,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.9)
@@ -3645,11 +3645,11 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -3757,16 +3757,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -3775,7 +3775,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -3783,7 +3783,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3824,7 +3824,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3852,7 +3852,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3880,7 +3880,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3913,16 +3913,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -3931,20 +3931,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -3972,7 +3972,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 42-47"
+    ```yaml hl_lines="0-0 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3983,7 +3983,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -4035,16 +4035,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -4053,7 +4053,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -4061,7 +4061,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4075,8 +4075,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -4087,14 +4087,14 @@ spec:
             CAST(CURRENT_TIMESTAMP() AS DATE),
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -4105,7 +4105,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -4117,13 +4117,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -4134,7 +4134,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -4146,13 +4146,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -4163,7 +4163,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -4175,13 +4175,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -4197,16 +4197,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -4215,20 +4215,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -4236,8 +4236,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT()
@@ -4252,11 +4252,11 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -4368,16 +4368,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -4386,7 +4386,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -4394,7 +4394,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4435,7 +4435,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4463,7 +4463,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4491,7 +4491,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4524,16 +4524,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -4542,20 +4542,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -4583,7 +4583,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4594,7 +4594,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -4648,16 +4648,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -4666,7 +4666,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -4674,7 +4674,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4688,8 +4688,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -4700,14 +4700,14 @@ spec:
             CAST(CURRENT_TIMESTAMP() AS DATE),
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -4718,7 +4718,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -4730,13 +4730,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -4747,7 +4747,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -4759,13 +4759,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -4776,7 +4776,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -4788,13 +4788,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -4810,16 +4810,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -4828,20 +4828,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -4849,8 +4849,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.5)
@@ -4865,11 +4865,11 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -4981,16 +4981,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -4999,7 +4999,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -5007,7 +5007,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5048,7 +5048,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5076,7 +5076,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5104,7 +5104,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5137,16 +5137,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -5155,20 +5155,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -5196,7 +5196,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5207,7 +5207,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -5261,16 +5261,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -5279,7 +5279,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -5287,7 +5287,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5301,8 +5301,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -5313,14 +5313,14 @@ spec:
             CAST(CURRENT_TIMESTAMP() AS DATE),
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -5331,7 +5331,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -5343,13 +5343,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -5360,7 +5360,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -5372,13 +5372,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -5389,7 +5389,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -5401,13 +5401,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -5423,16 +5423,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -5441,20 +5441,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -5462,8 +5462,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.1)
@@ -5478,11 +5478,11 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -5594,16 +5594,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -5612,7 +5612,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -5620,7 +5620,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5661,7 +5661,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5689,7 +5689,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5717,7 +5717,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5750,16 +5750,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -5768,20 +5768,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -5809,7 +5809,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5820,7 +5820,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -5874,16 +5874,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -5892,7 +5892,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -5900,7 +5900,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5914,8 +5914,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -5926,14 +5926,14 @@ spec:
             CAST(CURRENT_TIMESTAMP() AS DATE),
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -5944,7 +5944,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -5956,13 +5956,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -5973,7 +5973,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -5985,13 +5985,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -6002,7 +6002,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -6014,13 +6014,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -6036,16 +6036,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -6054,20 +6054,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -6075,8 +6075,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.25)
@@ -6091,11 +6091,11 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -6207,16 +6207,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -6225,7 +6225,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -6233,7 +6233,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6274,7 +6274,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6302,7 +6302,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6330,7 +6330,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6363,16 +6363,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -6381,20 +6381,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -6422,7 +6422,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -6433,7 +6433,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -6487,16 +6487,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -6505,7 +6505,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -6513,7 +6513,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6527,8 +6527,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -6539,14 +6539,14 @@ spec:
             CAST(CURRENT_TIMESTAMP() AS DATE),
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -6557,7 +6557,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -6569,13 +6569,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -6586,7 +6586,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -6598,13 +6598,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -6615,7 +6615,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -6627,13 +6627,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -6649,16 +6649,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -6667,20 +6667,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -6688,8 +6688,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.75)
@@ -6704,11 +6704,11 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -6820,16 +6820,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -6838,7 +6838,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -6846,7 +6846,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6887,7 +6887,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6915,7 +6915,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6943,7 +6943,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6976,16 +6976,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -6994,20 +6994,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -7035,7 +7035,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -7046,7 +7046,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -7100,16 +7100,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -7118,7 +7118,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -7126,7 +7126,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -7140,8 +7140,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -7152,14 +7152,14 @@ spec:
             CAST(CURRENT_TIMESTAMP() AS DATE),
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -7170,7 +7170,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -7182,13 +7182,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -7199,7 +7199,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -7211,13 +7211,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -7228,7 +7228,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -7240,13 +7240,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -7262,16 +7262,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -7280,20 +7280,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -7301,8 +7301,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.9)
@@ -7317,11 +7317,11 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -7429,16 +7429,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -7447,7 +7447,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -7455,7 +7455,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -7496,7 +7496,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -7524,7 +7524,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -7552,7 +7552,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -7585,16 +7585,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -7603,20 +7603,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -7644,7 +7644,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 42-47"
+    ```yaml hl_lines="0-0 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -7655,7 +7655,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -7707,16 +7707,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -7725,7 +7725,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -7733,7 +7733,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -7747,8 +7747,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -7759,14 +7759,14 @@ spec:
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -7777,7 +7777,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -7789,13 +7789,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -7806,7 +7806,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -7818,13 +7818,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -7835,7 +7835,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -7847,13 +7847,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -7869,16 +7869,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -7887,20 +7887,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -7908,8 +7908,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT()
@@ -7924,11 +7924,11 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -8040,16 +8040,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -8058,7 +8058,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -8066,7 +8066,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -8107,7 +8107,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -8135,7 +8135,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -8163,7 +8163,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -8196,16 +8196,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -8214,20 +8214,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -8255,7 +8255,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -8266,7 +8266,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -8320,16 +8320,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -8338,7 +8338,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -8346,7 +8346,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -8360,8 +8360,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -8372,14 +8372,14 @@ spec:
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -8390,7 +8390,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -8402,13 +8402,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -8419,7 +8419,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -8431,13 +8431,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -8448,7 +8448,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -8460,13 +8460,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -8482,16 +8482,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -8500,20 +8500,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -8521,8 +8521,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.5)
@@ -8537,11 +8537,11 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -8653,16 +8653,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -8671,7 +8671,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -8679,7 +8679,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -8720,7 +8720,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -8748,7 +8748,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -8776,7 +8776,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -8809,16 +8809,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -8827,20 +8827,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -8868,7 +8868,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -8879,7 +8879,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -8933,16 +8933,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -8951,7 +8951,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -8959,7 +8959,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -8973,8 +8973,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -8985,14 +8985,14 @@ spec:
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -9003,7 +9003,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -9015,13 +9015,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -9032,7 +9032,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -9044,13 +9044,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -9061,7 +9061,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -9073,13 +9073,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -9095,16 +9095,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -9113,20 +9113,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -9134,8 +9134,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.1)
@@ -9150,11 +9150,11 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -9266,16 +9266,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -9284,7 +9284,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -9292,7 +9292,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -9333,7 +9333,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -9361,7 +9361,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -9389,7 +9389,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -9422,16 +9422,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -9440,20 +9440,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -9481,7 +9481,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -9492,7 +9492,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -9546,16 +9546,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -9564,7 +9564,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -9572,7 +9572,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -9586,8 +9586,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -9598,14 +9598,14 @@ spec:
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -9616,7 +9616,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -9628,13 +9628,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -9645,7 +9645,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -9657,13 +9657,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -9674,7 +9674,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -9686,13 +9686,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -9708,16 +9708,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -9726,20 +9726,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -9747,8 +9747,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.25)
@@ -9763,11 +9763,11 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -9879,16 +9879,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -9897,7 +9897,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -9905,7 +9905,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -9946,7 +9946,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -9974,7 +9974,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -10002,7 +10002,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -10035,16 +10035,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -10053,20 +10053,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -10094,7 +10094,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -10105,7 +10105,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -10159,16 +10159,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -10177,7 +10177,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -10185,7 +10185,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -10199,8 +10199,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -10211,14 +10211,14 @@ spec:
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -10229,7 +10229,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -10241,13 +10241,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -10258,7 +10258,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -10270,13 +10270,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -10287,7 +10287,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -10299,13 +10299,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -10321,16 +10321,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -10339,20 +10339,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -10360,8 +10360,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.75)
@@ -10376,11 +10376,11 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -10492,16 +10492,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -10510,7 +10510,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -10518,7 +10518,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -10559,7 +10559,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -10587,7 +10587,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -10615,7 +10615,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -10648,16 +10648,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -10666,20 +10666,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -10707,7 +10707,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -10718,7 +10718,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -10772,16 +10772,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -10790,7 +10790,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -10798,7 +10798,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -10812,8 +10812,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -10824,14 +10824,14 @@ spec:
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -10842,7 +10842,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -10854,13 +10854,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -10871,7 +10871,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -10883,13 +10883,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -10900,7 +10900,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -10912,13 +10912,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -10934,16 +10934,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -10952,20 +10952,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -10973,8 +10973,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.9)
@@ -10989,11 +10989,11 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -11101,16 +11101,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -11119,7 +11119,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -11127,7 +11127,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -11168,7 +11168,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -11196,7 +11196,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -11224,7 +11224,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -11257,16 +11257,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -11275,20 +11275,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -11316,7 +11316,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 42-47"
+    ```yaml hl_lines="0-0 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -11327,7 +11327,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -11379,16 +11379,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -11397,7 +11397,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -11405,7 +11405,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -11419,8 +11419,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -11431,14 +11431,14 @@ spec:
             CAST(analyzed_table.`` AS DATE),
             TIMESTAMP(CAST(analyzed_table.`` AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(analyzed_table.`` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -11449,7 +11449,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -11461,13 +11461,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -11478,7 +11478,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -11490,13 +11490,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -11507,7 +11507,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -11519,13 +11519,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -11541,16 +11541,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -11559,20 +11559,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -11580,8 +11580,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT()
@@ -11596,11 +11596,11 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -11712,16 +11712,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -11730,7 +11730,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -11738,7 +11738,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -11779,7 +11779,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -11807,7 +11807,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -11835,7 +11835,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -11868,16 +11868,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -11886,20 +11886,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -11927,7 +11927,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -11938,7 +11938,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -11992,16 +11992,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -12010,7 +12010,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -12018,7 +12018,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -12032,8 +12032,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -12044,14 +12044,14 @@ spec:
             CAST(analyzed_table.`` AS DATE),
             TIMESTAMP(CAST(analyzed_table.`` AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(analyzed_table.`` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -12062,7 +12062,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -12074,13 +12074,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -12091,7 +12091,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -12103,13 +12103,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -12120,7 +12120,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -12132,13 +12132,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -12154,16 +12154,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -12172,20 +12172,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -12193,8 +12193,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.5)
@@ -12209,11 +12209,11 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -12325,16 +12325,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -12343,7 +12343,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -12351,7 +12351,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -12392,7 +12392,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -12420,7 +12420,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -12448,7 +12448,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -12481,16 +12481,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -12499,20 +12499,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -12540,7 +12540,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -12551,7 +12551,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -12605,16 +12605,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -12623,7 +12623,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -12631,7 +12631,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -12645,8 +12645,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -12657,14 +12657,14 @@ spec:
             CAST(analyzed_table.`` AS DATE),
             TIMESTAMP(CAST(analyzed_table.`` AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(analyzed_table.`` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -12675,7 +12675,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -12687,13 +12687,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -12704,7 +12704,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -12716,13 +12716,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -12733,7 +12733,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -12745,13 +12745,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -12767,16 +12767,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -12785,20 +12785,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -12806,8 +12806,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.1)
@@ -12822,11 +12822,11 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -12938,16 +12938,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -12956,7 +12956,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -12964,7 +12964,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -13005,7 +13005,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -13033,7 +13033,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -13061,7 +13061,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -13094,16 +13094,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -13112,20 +13112,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -13153,7 +13153,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -13164,7 +13164,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -13218,16 +13218,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -13236,7 +13236,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -13244,7 +13244,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -13258,8 +13258,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -13270,14 +13270,14 @@ spec:
             CAST(analyzed_table.`` AS DATE),
             TIMESTAMP(CAST(analyzed_table.`` AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(analyzed_table.`` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -13288,7 +13288,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -13300,13 +13300,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -13317,7 +13317,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -13329,13 +13329,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -13346,7 +13346,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -13358,13 +13358,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -13380,16 +13380,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -13398,20 +13398,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -13419,8 +13419,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.25)
@@ -13435,11 +13435,11 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -13551,16 +13551,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -13569,7 +13569,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -13577,7 +13577,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -13618,7 +13618,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -13646,7 +13646,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -13674,7 +13674,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -13707,16 +13707,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -13725,20 +13725,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -13766,7 +13766,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -13777,7 +13777,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -13831,16 +13831,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -13849,7 +13849,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -13857,7 +13857,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -13871,8 +13871,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -13883,14 +13883,14 @@ spec:
             CAST(analyzed_table.`` AS DATE),
             TIMESTAMP(CAST(analyzed_table.`` AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(analyzed_table.`` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -13901,7 +13901,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -13913,13 +13913,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -13930,7 +13930,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -13942,13 +13942,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -13959,7 +13959,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -13971,13 +13971,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -13993,16 +13993,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -14011,20 +14011,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -14032,8 +14032,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.75)
@@ -14048,11 +14048,11 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -14164,16 +14164,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -14182,7 +14182,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -14190,7 +14190,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -14231,7 +14231,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -14259,7 +14259,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -14287,7 +14287,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -14320,16 +14320,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -14338,20 +14338,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -14379,7 +14379,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -14390,7 +14390,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -14444,16 +14444,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -14462,7 +14462,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -14470,7 +14470,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -14484,8 +14484,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -14496,14 +14496,14 @@ spec:
             CAST(analyzed_table.`` AS DATE),
             TIMESTAMP(CAST(analyzed_table.`` AS DATE))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             CAST(analyzed_table.`` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -14514,7 +14514,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -14526,13 +14526,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -14543,7 +14543,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -14555,13 +14555,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -14572,7 +14572,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -14584,13 +14584,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -14606,16 +14606,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -14624,20 +14624,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -14645,8 +14645,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.9)
@@ -14661,11 +14661,11 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -14773,16 +14773,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -14791,7 +14791,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -14799,7 +14799,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -14840,7 +14840,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -14868,7 +14868,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -14896,7 +14896,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -14929,16 +14929,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -14947,20 +14947,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -14988,7 +14988,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 42-47"
+    ```yaml hl_lines="0-0 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -14999,7 +14999,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -15051,16 +15051,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -15069,7 +15069,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -15077,7 +15077,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -15091,8 +15091,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -15103,14 +15103,14 @@ spec:
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -15121,7 +15121,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -15133,13 +15133,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -15150,7 +15150,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -15162,13 +15162,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -15179,7 +15179,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -15191,13 +15191,13 @@ spec:
         SELECT
             PERCENTILE_CONT()
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -15213,16 +15213,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -15231,20 +15231,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -15252,8 +15252,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT()
@@ -15268,11 +15268,11 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -15384,16 +15384,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -15402,7 +15402,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -15410,7 +15410,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -15451,7 +15451,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -15479,7 +15479,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -15507,7 +15507,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -15540,16 +15540,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -15558,20 +15558,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -15599,7 +15599,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -15610,7 +15610,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -15664,16 +15664,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -15682,7 +15682,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -15690,7 +15690,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -15704,8 +15704,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -15716,14 +15716,14 @@ spec:
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -15734,7 +15734,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -15746,13 +15746,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -15763,7 +15763,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -15775,13 +15775,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -15792,7 +15792,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -15804,13 +15804,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -15826,16 +15826,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -15844,20 +15844,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -15865,8 +15865,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.5)
@@ -15881,11 +15881,11 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -15997,16 +15997,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -16015,7 +16015,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -16023,7 +16023,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -16064,7 +16064,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -16092,7 +16092,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -16120,7 +16120,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -16153,16 +16153,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -16171,20 +16171,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -16212,7 +16212,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -16223,7 +16223,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -16277,16 +16277,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -16295,7 +16295,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -16303,7 +16303,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -16317,8 +16317,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -16329,14 +16329,14 @@ spec:
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -16347,7 +16347,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -16359,13 +16359,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -16376,7 +16376,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -16388,13 +16388,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -16405,7 +16405,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -16417,13 +16417,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.1)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -16439,16 +16439,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -16457,20 +16457,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -16478,8 +16478,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.1)
@@ -16494,11 +16494,11 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -16610,16 +16610,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -16628,7 +16628,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -16636,7 +16636,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -16677,7 +16677,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -16705,7 +16705,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -16733,7 +16733,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -16766,16 +16766,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -16784,20 +16784,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -16825,7 +16825,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -16836,7 +16836,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -16890,16 +16890,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -16908,7 +16908,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -16916,7 +16916,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -16930,8 +16930,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -16942,14 +16942,14 @@ spec:
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -16960,7 +16960,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -16972,13 +16972,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -16989,7 +16989,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -17001,13 +17001,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -17018,7 +17018,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -17030,13 +17030,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.25)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -17052,16 +17052,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -17070,20 +17070,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -17091,8 +17091,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.25)
@@ -17107,11 +17107,11 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -17223,16 +17223,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -17241,7 +17241,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -17249,7 +17249,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -17290,7 +17290,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -17318,7 +17318,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -17346,7 +17346,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -17379,16 +17379,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -17397,20 +17397,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -17438,7 +17438,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -17449,7 +17449,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -17503,16 +17503,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -17521,7 +17521,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -17529,7 +17529,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -17543,8 +17543,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -17555,14 +17555,14 @@ spec:
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -17573,7 +17573,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -17585,13 +17585,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -17602,7 +17602,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -17614,13 +17614,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -17631,7 +17631,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -17643,13 +17643,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.75)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -17665,16 +17665,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -17683,20 +17683,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -17704,8 +17704,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.75)
@@ -17720,11 +17720,11 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 
@@ -17836,16 +17836,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -17854,7 +17854,7 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -17862,7 +17862,7 @@ spec:
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -17903,7 +17903,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -17931,7 +17931,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -17959,7 +17959,7 @@ spec:
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -17992,16 +17992,16 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -18010,20 +18010,20 @@ spec:
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 === "Rendered SQL for SQL Server"
       
@@ -18051,7 +18051,7 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 44-49"
+    ```yaml hl_lines="0-0 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -18062,7 +18062,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -18116,16 +18116,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-                {%- for attribute in lib.data_streams -%}
-                    {%- with data_stream_level = lib.data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -18134,7 +18134,7 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -18142,7 +18142,7 @@ spec:
                 {{ parameters.percentile_value }})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -18156,8 +18156,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.`time_period` AS time_period,
             nested_table.`time_period_utc` AS time_period_utc,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1,
+            analyzed_table.`state` AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(
@@ -18168,14 +18168,14 @@ spec:
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH),
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH))
                     
-            analyzed_table.`country` AS stream_level_1
-            analyzed_table.`state` AS stream_level_2
+            analyzed_table.`country` AS grouping_level_1
+            analyzed_table.`state` AS grouping_level_2
                 ) AS actual_value,
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **PostgreSQL**  
       
@@ -18186,7 +18186,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -18198,13 +18198,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Redshift**  
       
@@ -18215,7 +18215,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -18227,13 +18227,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **Snowflake**  
       
@@ -18244,7 +18244,7 @@ spec:
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
@@ -18256,13 +18256,13 @@ spec:
         SELECT
             PERCENTILE_CONT(0.9)
             WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-            analyzed_table."country" AS stream_level_1,
-            analyzed_table."state" AS stream_level_2,
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
     **SQL Server**  
       
@@ -18278,16 +18278,16 @@ spec:
             {%- endif -%}
         {%- endmacro -%}
         
-        {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-            {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-                {%- for attribute in data_streams -%}
-                    {%- with data_stream_level = data_streams[attribute] -%}
-                        {%- if data_stream_level.source == 'tag' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                        {%- elif data_stream_level.source == 'column_value' -%}
-                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+                {%- for attribute in data_groupings -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                         {%- endif -%}
-                    {%- endwith %} AS stream_{{ attribute }}
+                    {%- endwith %} AS grouping_{{ attribute }}
                 {%- endfor -%}
             {%- endif -%}
         {%- endmacro -%}
@@ -18296,20 +18296,20 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc
-            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
         FROM(
             SELECT
                 PERCENTILE_CONT({{ parameters.percentile_value }})
                 WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
-                    {{render_local_data_stream_projections('analyzed_table') }}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
                 ) AS actual_value
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+        GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+        ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
         ```
     === "Rendered SQL for SQL Server"
         ```sql
@@ -18317,8 +18317,8 @@ spec:
             MAX(nested_table.actual_value) AS actual_value,
             nested_table.[time_period] AS time_period,
             nested_table.[time_period_utc] AS time_period_utc,
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         FROM(
             SELECT
                 PERCENTILE_CONT(0.9)
@@ -18333,11 +18333,11 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-            analyzed_table.[country] AS stream_level_1,
-            analyzed_table.[state] AS stream_level_2
+            analyzed_table.[country] AS grouping_level_1,
+            analyzed_table.[state] AS grouping_level_2
         ```
     
 

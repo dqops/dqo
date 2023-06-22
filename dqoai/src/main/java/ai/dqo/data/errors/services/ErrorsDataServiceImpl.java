@@ -24,7 +24,7 @@ import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.tables.TableRowUtility;
@@ -77,16 +77,16 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             return new ErrorsDetailedDataModel[0]; // empty array
         }
 
-        TextColumn dataStreamColumn = filteredTable.textColumn(ErrorsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
-        List<String> dataStreams = dataStreamColumn.unique().asList().stream().sorted().collect(Collectors.toList());
+        TextColumn dataGroupNameColumn = filteredTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
 
-        if (dataStreams.size() > 1 && dataStreams.contains(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME)) {
-            dataStreams.remove(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
-            dataStreams.add(0, CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
+        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME)) {
+            dataGroups.remove(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
+            dataGroups.add(0, CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
         }
 
-        String selectedDataStream = Objects.requireNonNullElse(loadParameters.getDataStreamName(), dataStreams.get(0));
-        Table filteredByDataStream = filteredTable.where(dataStreamColumn.isEqualTo(selectedDataStream));
+        String selectedDataStream = Objects.requireNonNullElse(loadParameters.getDataGroup(), dataGroups.get(0));
+        Table filteredByDataStream = filteredTable.where(dataGroupNameColumn.isEqualTo(selectedDataStream));
 
         if (filteredByDataStream.isEmpty()) {
             return new ErrorsDetailedDataModel[0]; // empty array
@@ -112,7 +112,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
             String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-            String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+            String dataGroupName = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
             Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
             Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
@@ -133,7 +133,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                 setExpectedValue(expectedValue);
 
                 setColumnName(columnName);
-                setDataStream(dataStream);
+                setDataGroup(dataGroupName);
 
                 setDurationMs(durationMs);
                 setExecutedAt(executedAt);
@@ -159,8 +159,8 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                     setCheckType(checkType);
                     setCheckDisplayName(checkDisplayName);
 
-                    setDataStreamNames(dataStreams);
-                    setDataStream(selectedDataStream);
+                    setDataGroupsNames(dataGroups);
+                    setDataGroup(selectedDataStream);
                     setSingleErrors(new ArrayList<>());
                 }};
                 errorMap.put(checkHash, errorsDetailedDataModel);

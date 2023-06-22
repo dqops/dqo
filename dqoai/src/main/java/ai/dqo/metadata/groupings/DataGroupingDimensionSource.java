@@ -18,17 +18,17 @@ package ai.dqo.metadata.groupings;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Data stream level property source. Specifies how a single level of a data stream value is populated.
+ * Data grouping dimension value source. Specifies how a single level of a data grouping dimension's value is populated.
  */
-public enum DataStreamLevelSource {
+public enum DataGroupingDimensionSource {
     /**
-     * The data stream level ID value is hardcoded as a static value (tag). All data quality results are assigned the same, hardcoded data stream level value.
+     * The data grouping dimension value is hardcoded as a static value (tag). All data quality results are assigned the same, hardcoded data grouping level value.
      */
     @JsonProperty("tag")
     tag,
 
     /**
-     * The data stream level ID value is obtained from the data. An extra GROUP BY [column name] is added to the sensor query.
+     * The data grouping dimensionvalue is obtained from the data. An extra GROUP BY [column name] is added to the sensor query.
      */
     @JsonProperty("column_value")
     column_value

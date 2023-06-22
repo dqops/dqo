@@ -25,10 +25,10 @@ import ai.dqo.checks.table.recurring.schema.TableSchemaMonthlyRecurringChecksSpe
 import ai.dqo.checks.table.recurring.sql.TableSqlMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.timeliness.TableTimelinessMonthlyRecurringChecksSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.groupings.TimeSeriesMode;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;

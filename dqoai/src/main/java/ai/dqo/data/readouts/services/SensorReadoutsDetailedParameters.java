@@ -38,11 +38,11 @@ public class SensorReadoutsDetailedParameters {
     private int readoutsCount = 100;
 
     /**
-     * Name of the data-stream for which to get the readouts.
+     * Name of the data group name for which to get the readouts.
      * If null, the default one is picked.
      */
-    @JsonPropertyDescription("Data-stream for which to load the readouts.")
-    private String dataStreamName = null;
+    @JsonPropertyDescription("Data group name for which to load the readouts.")
+    private String dataGroupName = null;
 
     /**
      * Start month to load. Loads the data for the whole month identified by the date.
