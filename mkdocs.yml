@@ -328,8 +328,8 @@ nav:
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
       - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
       - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings

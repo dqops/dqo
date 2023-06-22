@@ -24,6 +24,7 @@ import {
   DqoJobQueueInitialSnapshotModel
 } from '../../api';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
+import { CheckTypes } from "../../shared/routes";
 
 export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
