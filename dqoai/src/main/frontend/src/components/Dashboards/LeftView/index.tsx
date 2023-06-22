@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../redux/reducers";
 import SvgIcon from "../../SvgIcon";
@@ -12,15 +12,48 @@ interface FolderLevelProps {
 
 const LeftView = () => {
   const [selected, setSelected] = useState('');
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [isResizing, setIsResizing] = useState(false);
 
   const { dashboardFolders } = useSelector(
     (state: IRootState) => state.dashboard
   );
-  const { openDashboardFolder } = useDashboard();
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth } = useDashboard();
+
+  const startResizing = useCallback(() => {
+    setIsResizing(true);
+  }, []);
+
+  const stopResizing = useCallback(() => {
+    setIsResizing(false);
+  }, []);
 
   useEffect(() => {
     openDashboardFolder(dashboardFolders.map((item) => item.folder_name));
   }, [dashboardFolders]);
+
+  const resize = useCallback(
+    (mouseMoveEvent: MouseEvent) => {
+      if (isResizing) {
+        const newWidth =
+          mouseMoveEvent.clientX -
+          (sidebarRef.current as HTMLDivElement).getBoundingClientRect().left;
+        if (newWidth < 240 || newWidth > 700) return;
+
+        setSidebarWidth(newWidth);
+      }
+    },
+    [isResizing]
+  );
+
+  useEffect(() => {
+    window.addEventListener('mousemove', resize);
+    window.addEventListener('mouseup', stopResizing);
+    return () => {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+  }, [resize, stopResizing]);
 
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
     const { changeActiveTab, dashboardStatus, toggleDashboardFolder } =
@@ -82,7 +115,11 @@ const LeftView = () => {
   };
 
   return (
-    <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
+    <div
+      className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white"
+      ref={sidebarRef}
+      style={{ width: sidebarWidth }}
+    >
       {dashboardFolders.map((folder, index) => (
         <FolderLevel
           folder={folder}
@@ -90,6 +127,12 @@ const LeftView = () => {
           parents={[]}
         />
       ))}
+
+      <div
+        className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-50 top-16"
+        onMouseDown={startResizing}
+        style={{ left: sidebarWidth }}
+      />
     </div>
   );
 };
