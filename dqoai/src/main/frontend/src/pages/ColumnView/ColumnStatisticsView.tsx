@@ -89,20 +89,20 @@ const ColumnStatisticsView = () => {
   return (
     <div className="p-4">
       <div className="flex w-full h-15">
-        <div className="w-1/5 flex font-light ml-5">
+        <div className="w-1/4 flex font-light ml-5">
           Datatype{' '}
           <div className="font-bold ml-5">
             {statistics?.type_snapshot?.column_type}
           </div>
         </div>
-        <div className="w-1/4 flex font-light">
+        <div className="w-1/3 flex font-light">
           Detected Datatype
           <div className="font-bold ml-5">
             {statistics &&
             statistics?.statistics?.filter(
               (x) => x.collector === 'string_datatype_detect'
             ).length === 0 ? (
-              <div className="mr-2 font-bold">No datatype detected</div>
+              <div className="mr-2 font-bold ">No datatype detected</div>
             ) : (
               statistics?.statistics?.map((x, index) => (
                 <div className="mr-2 font-bold" key={index}>
@@ -325,7 +325,7 @@ const ColumnStatisticsView = () => {
               statistics?.statistics?.filter(
                 (x) => x.collector === 'string_min_length'
               ).length === 0 ? (
-                <div className="mr-2 font-bold">No string data type</div>
+                <div className="mr-2 font-bold">Not a string data type</div>
               ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
@@ -344,7 +344,7 @@ const ColumnStatisticsView = () => {
               statistics?.statistics?.filter(
                 (x) => x.collector === 'string_mean_length'
               ).length === 0 ? (
-                <div className="mr-2 font-bold">No string data type</div>
+                <div className="mr-2 font-bold">Not a string data type</div>
               ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
@@ -363,7 +363,7 @@ const ColumnStatisticsView = () => {
               statistics?.statistics?.filter(
                 (x) => x.collector === 'string_max_length'
               ).length === 0 ? (
-                <div className="mr-2 font-bold">No string data type</div>
+                <div className="mr-2 font-bold">Not a string data type</div>
               ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
@@ -376,50 +376,54 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
-          {statistics &&
-            statistics.statistics?.map((x, index) =>
-              x.category === 'sampling' ? (
-                <div key={index} className="h-10 flex items-center gap-x-5">
-                  <div className="flex gap-x-5 w-50">
-                    <div className="ml-2 font-light overflow-hidden whitespace-nowrap overflow-ellipsis">
-                      {renderValue(x.result) !== ''
-                        ? renderValue(x.result)
-                        : `""`}
+        {statistics?.statistics?.find((x) => x.category === 'sampling') ? (
+          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+            {statistics &&
+              statistics.statistics?.map((x, index) =>
+                x.category === 'sampling' ? (
+                  <div key={index} className="h-10 flex items-center gap-x-5">
+                    <div className="flex gap-x-5 w-50">
+                      <div className="ml-2 font-light overflow-hidden whitespace-nowrap overflow-ellipsis">
+                        {renderValue(x.result) !== ''
+                          ? renderValue(x.result)
+                          : `""`}
+                      </div>
+                    </div>
+                    <div className="w-8">
+                      {formatNumber(Number(x.sampleCount))}
+                    </div>
+                    <div
+                      className=" h-3 border border-gray-100 flex ml-5"
+                      style={{ width: '100px' }}
+                    >
+                      {statistics.statistics?.map((y) =>
+                        y.collector === 'not_nulls_count' ? (
+                          <div
+                            key={index}
+                            className="h-3 bg-green-700 gap-x-5"
+                            style={{
+                              width: `${
+                                x.sampleCount !== null
+                                  ? (Number(renderValue(x.sampleCount)) * 100) /
+                                    Number(renderValue(y.result))
+                                  : 0
+                              }px`
+                            }}
+                          ></div>
+                        ) : (
+                          ''
+                        )
+                      )}
                     </div>
                   </div>
-                  <div className="w-8">
-                    {formatNumber(Number(x.sampleCount))}
-                  </div>
-                  <div
-                    className=" h-3 border border-gray-100 flex ml-5"
-                    style={{ width: '100px' }}
-                  >
-                    {statistics.statistics?.map((y) =>
-                      y.collector === 'not_nulls_count' ? (
-                        <div
-                          key={index}
-                          className="h-3 bg-green-700 gap-x-5"
-                          style={{
-                            width: `${
-                              x.sampleCount !== null
-                                ? (Number(renderValue(x.sampleCount)) * 100) /
-                                  Number(renderValue(y.result))
-                                : 0
-                            }px`
-                          }}
-                        ></div>
-                      ) : (
-                        ''
-                      )
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <></>
-              )
-            )}
-        </div>
+                ) : (
+                  <></>
+                )
+              )}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
