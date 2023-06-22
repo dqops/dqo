@@ -340,7 +340,7 @@ export const IncidentDetail = () => {
           </SectionWrapper>
         </div>
 
-        <HistogramChart />
+        <HistogramChart onChangeFilter={onChangeFilter} />
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
             <IncidentIssueList
