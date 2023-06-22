@@ -4,6 +4,10 @@ import DataGroupingConfigurationListView from './DataGroupingConfigurationListVi
 import DataGroupingConfigurationEditView from './DataGroupingConfigurationEditView';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
+import { IRootState } from '../../../redux/reducers';
 
 const TableDataGroupingConfiguration = () => {
   const {
@@ -12,7 +16,14 @@ const TableDataGroupingConfiguration = () => {
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
+  const { dataStreamName, bool } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
+  const actionDispatch = useActionDispatch();
+  const setBackData = () => {
+    actionDispatch(setCreatedDataStream(false, '', {}));
+  };
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
     DataGroupingConfigurationBasicModel[]
   >([]);
@@ -46,13 +57,25 @@ const TableDataGroupingConfiguration = () => {
     setSelectedDataGroupingConfiguration(undefined);
     setIsEditing(true);
   };
+  const myObj: DataGroupingConfigurationBasicModel = {
+    connection_name: connectionName,
+    schema_name: schemaName,
+    table_name: tableName,
+    data_grouping_configuration_name: dataStreamName
+  };
 
   return (
     <div className="my-1">
-      {isEditing ? (
+      {isEditing || bool ? (
         <DataGroupingConfigurationEditView
-          onBack={() => setIsEditing(false)}
-          selectedGroupingConfiguration={selectedDataGroupingConfiguration}
+          onBack={() => {
+            setIsEditing(false), setBackData();
+          }}
+          selectedGroupingConfiguration={
+            dataStreamName.length !== 0
+              ? myObj
+              : selectedDataGroupingConfiguration
+          }
           connection={connectionName}
           schema={schemaName}
           table={tableName}
