@@ -5,7 +5,7 @@ import {
   SimilarCheckModelCheckTypeEnum,
   TimeWindowFilterParameters,
   CheckContainerModel
-} from "../../api";
+} from '../../api';
 import { JobApiClient, TableApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
@@ -15,8 +15,14 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useHistory, useParams } from 'react-router-dom';
 import Button from '../Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab, setCurrentJobId } from '../../redux/actions/source.actions';
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import {
+  addFirstLevelTab,
+  setCurrentJobId
+} from '../../redux/actions/source.actions';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
 
 interface TableHeaderProps {
   checksUI: CheckContainerModel;
@@ -36,7 +42,7 @@ const TableHeader = ({
   setMode,
   copyUI,
   setCopyUI,
-  onUpdate,
+  onUpdate
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -67,12 +73,18 @@ const TableHeader = ({
         ? { timeWindowFilter }
         : {})
     });
-    dispatch(setCurrentJobId(checkTypes, firstLevelActiveTab, (res.data as any)?.jobId?.jobId));
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        (res.data as any)?.jobId?.jobId
+      )
+    );
   };
 
   const onChangeMode = (newMode: string) => {
     setMode(newMode);
-    const newCheckUI: CheckContainerModel = {...checksUI};
+    const newCheckUI: CheckContainerModel = { ...checksUI };
     setCopyUI(newCheckUI);
   };
 
@@ -192,7 +204,10 @@ const TableHeader = ({
     <thead>
       <tr>
         {checkTypes === CheckTypes.PROFILING ? (
-          <td colSpan={2} className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+          <td
+            colSpan={2}
+            className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
+          >
             <div className="flex gap-2 items-center">
               {!mode && (
                 <>
@@ -200,7 +215,7 @@ const TableHeader = ({
                     color="primary"
                     label="Set up recurring checks"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     variant="outlined"
                     onClick={() => onChangeMode('recurring')}
                   />
@@ -208,7 +223,7 @@ const TableHeader = ({
                     color="primary"
                     label="Set up partition checks"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     variant="outlined"
                     onClick={() => onChangeMode('partitioned')}
                   />
@@ -221,21 +236,21 @@ const TableHeader = ({
                     color="primary"
                     label="Daily recurring checks"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     onClick={() => copyRecurringCheck('daily')}
                   />
                   <Button
                     color="primary"
                     label="Monthly recurring checks"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     onClick={() => copyRecurringCheck('monthly')}
                   />
                   <Button
                     color="primary"
                     label="Cancel"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     variant="outlined"
                     onClick={() => setMode(undefined)}
                   />
@@ -248,21 +263,21 @@ const TableHeader = ({
                     color="primary"
                     label="Daily partition checks"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     onClick={() => copyPartitionCheck('daily')}
                   />
                   <Button
                     color="primary"
                     label="Monthly partition checks"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     onClick={() => copyPartitionCheck('monthly')}
                   />
                   <Button
                     color="primary"
                     label="Cancel"
                     textSize="sm"
-                    className="font-medium px-4"
+                    className="font-medium px-1 py-1"
                     variant="outlined"
                     onClick={() => setMode(undefined)}
                   />
