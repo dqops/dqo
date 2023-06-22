@@ -19,6 +19,7 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.Column;
 
 /**
  * Describes the dataset (dataframe) returned from the sensor. Identifies the time series column, data stream columns, etc.

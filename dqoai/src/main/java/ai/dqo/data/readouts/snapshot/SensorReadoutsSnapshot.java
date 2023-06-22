@@ -23,6 +23,7 @@ import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.data.storage.TableDataSnapshot;
 import ai.dqo.data.storage.TablePartitioningPattern;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.table.TableSlice;
@@ -102,9 +103,10 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
             for (TableSlice tableSlice : tableSlices) {
                 Table timeSeriesTable = tableSlice.asTable();
                 LongColumn checkHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-                LongColumn dataStreamHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
+                LongColumn dataStreamHashColumn = (LongColumn) TableColumnUtility.findColumn(timeSeriesTable,
+                        SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
                 long checkHashId = checkHashColumn.get(0); // the first row has the value
-                long dataStreamHash = dataStreamHashColumn.get(0);
+                long dataStreamHash = dataStreamHashColumn.isMissing(0) ? 0L : dataStreamHashColumn.get(0);
 
                 SensorReadoutTimeSeriesKey timeSeriesKey = new SensorReadoutTimeSeriesKey(checkHashId, dataStreamHash);
                 Table sortedTimeSeriesTable = timeSeriesTable.sortOn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);

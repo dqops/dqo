@@ -35,6 +35,7 @@ import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.HistoricDataPointsGrouping;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import ai.dqo.utils.tables.TableColumnUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -101,7 +102,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
+            LongColumn dimensionColumn = (LongColumn) TableColumnUtility.findColumn(dimensionSensorResults,
+                    SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, "data_stream_hash");
             Long timeSeriesDimensionId = dimensionColumn.get(0);
             SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             HistoricDataPointsGrouping historicDataPointGrouping = ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getHistoricDataPointGrouping() : null;
