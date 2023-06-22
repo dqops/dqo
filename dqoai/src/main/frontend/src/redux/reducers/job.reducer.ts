@@ -39,7 +39,6 @@ export interface IJobsState {
   job_dictionary_state: Record<string, DqoJobHistoryEntryModel>;
   bool?: boolean;
   dataStreamName: string;
-  dataStreamButton: number;
   spec: DataStreamMappingSpec;
 }
 
@@ -55,7 +54,6 @@ const initialState: IJobsState = {
   job_dictionary_state: {},
   bool: false,
   dataStreamName: '',
-  dataStreamButton: 0,
   spec: {}
 };
 
@@ -169,12 +167,6 @@ const schemaReducer = (state = initialState, action: any) => {
         bool: action.bool,
         dataStreamName: action.dataStreamName,
         spec: action.spec
-      };
-    }
-    case JOB_ACTION.SHOW_DATASTREAM_BUTTON: {
-      return {
-        ...state,
-        dataStreamButton: action.dataStreamButton
       };
     }
     default:
