@@ -3,7 +3,7 @@
 {% set macro_table_name = target_table.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
-{% set data_streams = effective_data_streams | default(none, true) -%}
+{% set data_groupings = effective_data_groupings | default(none, true) -%}
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
 {% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
 
@@ -176,17 +176,17 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
-    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-        {%- for attribute in data_streams -%}
+{% macro render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
+    {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+        {%- for attribute in data_groupings -%}
             {{ ',' }}
-            {%- with data_stream_level = data_streams[attribute] -%}
-                {%- if data_stream_level.source == 'tag' -%}
-                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_stream_level.tag) }}
-                {%- elif data_stream_level.source == 'column_value' -%}
-                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+            {%- with data_grouping_level = data_groupings[attribute] -%}
+                {%- if data_grouping_level.source == 'tag' -%}
+                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_grouping_level.tag) }}
+                {%- elif data_grouping_level.source == 'column_value' -%}
+                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                 {%- endif -%}
-            {%- endwith %} AS stream_{{ attribute }}
+            {%- endwith %} AS grouping_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
 {% endmacro %}
@@ -310,16 +310,16 @@
 {% endmacro %}
 
 {% macro render_grouping_column_names(table_alias_prefix = 'analyzed_table') %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-        {%- for attribute in data_streams -%}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) -%}
+        {%- for attribute in data_groupings -%}
             {%- if not loop.first -%}
                 {{ ', ' }}
             {%- endif -%}
-                {{ table_alias_prefix }}.{{ quote_identifier(data_streams[attribute].column) }}
+                {{ table_alias_prefix }}.{{ quote_identifier(data_groupings[attribute].column) }}
         {%- endfor -%}
     {%- endif -%}
     {%- if time_series is not none and time_series.mode != 'current_time' -%}
-        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+        {%- if (data_groupings is not none and (data_groupings | length()) > 0) -%}
             {{ ', ' }}
         {%- endif -%}
             {{ render_time_dimension_expression(table_alias_prefix) }}, {{ render_time_dimension_expression_utc(table_alias_prefix) }}
@@ -327,14 +327,14 @@
 {% endmacro %}
 
 {% macro render_group_by(table_alias_prefix = 'analyzed_table', indentation = '') %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time') %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time') %}
 {{ indentation }}GROUP BY {{ render_grouping_column_names(table_alias_prefix) }}
     {%- endif -%}
 {% endmacro %}
 
 {% macro render_ordering_column_names() %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-        {%- for attribute in data_streams -%}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) -%}
+        {%- for attribute in data_groupings -%}
             {%- if not loop.first -%}
                 {{ ', ' }}
             {%- endif -%}
@@ -343,13 +343,13 @@
     {%- endif -%}
     {%- if time_series is not none and time_series.mode != 'current_time' -%}
         {{ render_time_dimension_expression(table_alias_prefix) }}
-    {%- elif (data_streams is not none and (data_streams | length()) > 0) %}
+    {%- elif (data_groupings is not none and (data_groupings | length()) > 0) %}
         {{ ', ' }}
     {% endif %}
 {% endmacro %}
 
 {% macro render_order_by(indentation = '') %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time')  %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time')  %}
 {{ indentation }}ORDER BY {{ render_ordering_column_names() }}
     {% endif %}
 {% endmacro %}

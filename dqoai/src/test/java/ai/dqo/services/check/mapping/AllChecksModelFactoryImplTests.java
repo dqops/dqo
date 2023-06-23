@@ -21,7 +21,7 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.ExecutionContextFactoryImpl;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.sources.*;
@@ -90,7 +90,7 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
         ColumnSpecMap columnSpecMap = this.tableSpec.getColumns();
         ColumnSpec columnSpec = new ColumnSpec();
         columnSpecMap.put("col1", columnSpec);
-        this.tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
+        this.tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
     }
 
     @Test

@@ -25,10 +25,7 @@ import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
-import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
-import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
-import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.models.DataDeleteResult;
@@ -461,7 +458,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
-        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
@@ -473,7 +470,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
-        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
 
@@ -483,7 +480,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
-        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
 
         Row row4 = sensorReadoutsTable.appendRow();
@@ -501,7 +498,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4));
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
-        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
         sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
 
         return sensorReadoutsTable;

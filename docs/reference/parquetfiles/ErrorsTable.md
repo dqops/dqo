@@ -12,18 +12,18 @@ Constants with the column names in the &quot;errors&quot; parquet tables.
  | time_period_utc | The time period of the sensor readout (timestamp) as a UTC timestamp. | instant |
  | time_gradient | The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks.
  When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
- | stream_level_1 | Column name for the data stream. | text |
- | stream_level_2 | Column name for the data stream. | text |
- | stream_level_3 | Column name for the data stream. | text |
- | stream_level_4 | Column name for the data stream. | text |
- | stream_level_5 | Column name for the data stream. | text |
- | stream_level_6 | Column name for the data stream. | text |
- | stream_level_7 | Column name for the data stream. | text |
- | stream_level_8 | Column name for the data stream. | text |
- | stream_level_9 | Column name for the data stream. | text |
- | data_stream_hash | The data stream hash, it is a hash of the data stream level names. | long |
- | data_stream_name | The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
- | data_stream_mapping_name | The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check. | text |
+ | grouping_level_1 | Column name for the data stream. | text |
+ | grouping_level_2 | Column name for the data stream. | text |
+ | grouping_level_3 | Column name for the data stream. | text |
+ | grouping_level_4 | Column name for the data stream. | text |
+ | grouping_level_5 | Column name for the data stream. | text |
+ | grouping_level_6 | Column name for the data stream. | text |
+ | grouping_level_7 | Column name for the data stream. | text |
+ | grouping_level_8 | Column name for the data stream. | text |
+ | grouping_level_9 | Column name for the data stream. | text |
+ | data_group_hash | The data group hash, it is a hash of the data group levels&#x27; values. | long |
+ | data_group_name | The data group name, it is a concatenated name of the data group dimension values, created from [grouping_level_1] / [grouping_level_2] / ... | text |
+ | data_grouping_configuration | The data grouping configuration name, it is a name of the named data grouping configuration that was used to run the data quality check. | text |
  | connection_hash | A hash calculated from the connection name (the data source name). | long |
  | connection_name | The connection name (the data source name). | text |
  | provider | The provider name, which is the type of the data source. | text |

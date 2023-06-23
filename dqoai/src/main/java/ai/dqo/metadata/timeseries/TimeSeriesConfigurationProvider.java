@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.groupings;
+package ai.dqo.metadata.timeseries;
 
 import ai.dqo.metadata.sources.TableSpec;
 

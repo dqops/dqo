@@ -20,9 +20,9 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -55,7 +55,7 @@ public class SensorExecutionRunParameters {
     private EffectiveSensorRuleNames effectiveSensorRuleNames;
     private TimeSeriesConfigurationSpec timeSeries;
     private TimeWindowFilterParameters timeWindowFilter;
-    private DataStreamMappingSpec dataStreams;
+    private DataGroupingConfigurationSpec dataGroupings;
     private AbstractSensorParametersSpec sensorParameters;
     private ProviderDialectSettings dialectSettings;
     @JsonIgnore
@@ -76,7 +76,7 @@ public class SensorExecutionRunParameters {
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
-     * @param dataStreams Effective data streams configuration.
+     * @param dataGroupings Effective data groupings configuration.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
      * @param checkSearchFilter Check search filter to find this particular check.
@@ -91,7 +91,7 @@ public class SensorExecutionRunParameters {
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             TimeWindowFilterParameters timeWindowFilter,
-            DataStreamMappingSpec dataStreams,
+            DataGroupingConfigurationSpec dataGroupings,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings,
             CheckSearchFilters checkSearchFilter) {
@@ -104,7 +104,7 @@ public class SensorExecutionRunParameters {
         this.checkType = checkType;
         this.timeSeries = timeSeries;
         this.timeWindowFilter = timeWindowFilter;
-        this.dataStreams = dataStreams;
+        this.dataGroupings = dataGroupings;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
         this.checkSearchFilter = checkSearchFilter;
@@ -255,19 +255,19 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Returns the effective data streams configuration.
-     * @return Effective data streams configuration.
+     * Returns the effective data groupings configuration.
+     * @return Effective data groupings configuration.
      */
-    public DataStreamMappingSpec getDataStreams() {
-        return dataStreams;
+    public DataGroupingConfigurationSpec getDataGroupings() {
+        return dataGroupings;
     }
 
     /**
-     * Sets the effective data streams configuration.
-     * @param dataStreams Effective data streams configuration.
+     * Sets the effective data groupings configuration.
+     * @param dataGroupings Effective data groupings configuration.
      */
-    public void setDataStreams(DataStreamMappingSpec dataStreams) {
-        this.dataStreams = dataStreams;
+    public void setDataGroupings(DataGroupingConfigurationSpec dataGroupings) {
+        this.dataGroupings = dataGroupings;
     }
 
     /**

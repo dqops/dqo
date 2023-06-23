@@ -51,7 +51,7 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
             CHECK_HASH_COLUMN_NAME,
             CHECK_CATEGORY_COLUMN_NAME,
             CHECK_NAME_COLUMN_NAME,
-            DATA_STREAM_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
             ACTUAL_VALUE_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
             TIME_PERIOD_UTC_COLUMN_NAME,
@@ -72,7 +72,7 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
             CHECK_TYPE_COLUMN_NAME,
 
             COLUMN_NAME_COLUMN_NAME,
-            DATA_STREAM_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,

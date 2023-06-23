@@ -23,7 +23,7 @@ import ai.dqo.data.readouts.services.models.SensorReadoutDetailedSingleModel;
 import ai.dqo.data.readouts.services.models.SensorReadoutsDetailedDataModel;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.tables.TableRowUtility;
@@ -76,22 +76,22 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             return new SensorReadoutsDetailedDataModel[0]; // empty array
         }
 
-        TextColumn dataStreamColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
-        List<String> dataStreams = dataStreamColumn.unique().asList().stream().sorted().collect(Collectors.toList());
+        TextColumn dataGroupNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
 
-        if (dataStreams.size() > 1 && dataStreams.contains(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME)) {
-            dataStreams.remove(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
-            dataStreams.add(0, CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
+        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME)) {
+            dataGroups.remove(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
+            dataGroups.add(0, CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
         }
 
-        String selectedDataStream = Objects.requireNonNullElse(loadParameters.getDataStreamName(), dataStreams.get(0));
-        Table filteredByDataStream = filteredTable.where(dataStreamColumn.isEqualTo(selectedDataStream));
+        String selectedDataGroups = Objects.requireNonNullElse(loadParameters.getDataGroupName(), dataGroups.get(0));
+        Table filteredByDataGroup = filteredTable.where(dataGroupNameColumn.isEqualTo(selectedDataGroups));
 
-        if (filteredByDataStream.isEmpty()) {
+        if (filteredByDataGroup.isEmpty()) {
             return new SensorReadoutsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredByDataStream.sortDescendingOn(
+        Table sortedTable = filteredByDataGroup.sortDescendingOn(
                 SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME,  // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME); // then the most recent reading (for partitioned checks) when many partitions were captured
 
@@ -112,7 +112,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
             String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-            String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+            String dataStream = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
             Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
             Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
@@ -129,7 +129,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 setExpectedValue(expectedValue);
 
                 setColumnName(columnName);
-                setDataStream(dataStream);
+                setDataGroup(dataStream);
 
                 setDurationMs(durationMs);
                 setExecutedAt(executedAt);
@@ -151,8 +151,8 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                     setCheckHash(checkHash);
                     setSensorName(sensorName);
 
-                    setDataStreamNames(dataStreams);
-                    setDataStream(selectedDataStream);
+                    setDataGroupNames(dataGroups);
+                    setDataGroup(selectedDataGroups);
                     setSingleSensorReadouts(new ArrayList<>());
                 }};
                 readoutMap.put(checkHash, sensorReadoutsDetailedDataModel);

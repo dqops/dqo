@@ -16,10 +16,9 @@
 package ai.dqo.execution.rules;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
-import ai.dqo.utils.exceptions.DqoRuntimeException;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.InstantColumn;

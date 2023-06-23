@@ -16,7 +16,7 @@
 package ai.dqo.utils.datetime;
 
 import ai.dqo.data.readouts.normalization.SensorResultNormalizeException;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -53,7 +53,7 @@ public class EffectiveIncidentGroupingConfiguration {
 
         this.groupingLevel = connectionIncidentGrouping.getGroupingLevel();
         this.minimumSeverity = connectionIncidentGrouping.getMinimumSeverity();
-        this.divideByDataStream = connectionIncidentGrouping.isDivideByDataStream();
+        this.divideByDataStream = connectionIncidentGrouping.isDivideByDataGroups();
         this.disabled = connectionIncidentGrouping.isDisabled();
         this.maxIncidentLengthDays = connectionIncidentGrouping.getMaxIncidentLengthDays();
         this.muteForDays = connectionIncidentGrouping.getMuteForDays();
@@ -68,8 +68,8 @@ public class EffectiveIncidentGroupingConfiguration {
                 this.minimumSeverity = tableIncidentGrouping.getMinimumSeverity();
             }
 
-            if (tableIncidentGrouping.getDivideByDataStream() != null) {
-                this.divideByDataStream = tableIncidentGrouping.getDivideByDataStream();
+            if (tableIncidentGrouping.getDivideByDataGroup() != null) {
+                this.divideByDataStream = tableIncidentGrouping.getDivideByDataGroup();
             }
 
             if (tableIncidentGrouping.getDisabled() != null) {

@@ -48,7 +48,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     
     SELECT
         {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -90,7 +90,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     
     SELECT
         {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -122,7 +122,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     
     SELECT
         {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -154,7 +154,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     
     SELECT
         {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -197,7 +197,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     
     SELECT
         {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -235,7 +235,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     
     SELECT
         {{ render_current_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -298,7 +298,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_ingestion_event_max_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -343,7 +343,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_ingestion_event_max_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -378,7 +378,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_ingestion_event_max_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -413,7 +413,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_ingestion_event_max_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -457,7 +457,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_ingestion_event_max_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -498,7 +498,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_ingestion_event_max_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -556,7 +556,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_current_ingestion_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -598,7 +598,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_current_ingestion_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -630,7 +630,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_current_ingestion_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -662,7 +662,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_current_ingestion_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -706,7 +706,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_current_ingestion_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -744,7 +744,7 @@ Table sensor that runs a query calculating the time difference in days between t
     
     SELECT
         {{ render_current_ingestion_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -811,7 +811,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     
     SELECT
         {{ render_ingestion_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -864,7 +864,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     
     SELECT
         {{ render_ingestion_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -908,7 +908,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     
     SELECT
         {{ render_ingestion_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -950,7 +950,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     
     SELECT
         {{ render_ingestion_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1003,7 +1003,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     
     SELECT
         {{ render_ingestion_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1053,7 +1053,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     
     SELECT
         {{ render_ingestion_event_diff() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}

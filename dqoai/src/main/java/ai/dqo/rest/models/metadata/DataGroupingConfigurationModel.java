@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,13 +24,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Basic model for data streams on a table, returned by the rest api.
+ * Model of data grouping configuration on a table returned by the rest api, including all configuration information.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DataStreamBasicModel", description = "Basic data stream model not containing nested objects")
-public class DataStreamBasicModel {
+@ApiModel(value = "DataGroupingConfigurationModel", description = "Data grouping configuration model containing nested objects and the configuration of grouping dimensions.")
+public class DataGroupingConfigurationModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
@@ -39,9 +40,9 @@ public class DataStreamBasicModel {
     @JsonPropertyDescription("Table name.")
     private String tableName;
 
-    @JsonPropertyDescription("Data stream name.")
-    private String dataStreamName;
+    @JsonPropertyDescription("Data grouping configuration name.")
+    private String dataGroupingConfigurationName;
 
-    @JsonPropertyDescription("True when this is the default data stream for the table.")
-    private boolean defaultDataStream;
+    @JsonPropertyDescription("Data stream specification.")
+    private DataGroupingConfigurationSpec spec;
 }

@@ -30,7 +30,7 @@ public enum CheckResultSortOrder {
     expectedValue,
     severity,
     columnName,
-    dataStream,
+    dataGroup,
     timeGradient,
     timePeriod,
     qualityDimension,

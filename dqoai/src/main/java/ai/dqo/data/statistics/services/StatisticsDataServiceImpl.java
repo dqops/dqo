@@ -73,7 +73,7 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         if (allData == null) {
             return tableStatisticsResults; // no statistics data
         }
-        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName));
+        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME).isEqualTo(dataStreamName));
         if (!includeColumnLevelStatistics) {
             selectedDataStreamData = selectedDataStreamData.where(
                     allData.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).isEqualTo(StatisticsCollectorTarget.table.name()));
@@ -150,7 +150,7 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
             return columnStatisticsResults; // no profiling data
         }
         Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
-                .and(allData.textColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName)));
+                .and(allData.textColumn(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME).isEqualTo(dataStreamName)));
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
 
         TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);

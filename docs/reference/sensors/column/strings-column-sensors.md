@@ -45,14 +45,14 @@ Column level sensor that counts how many expected string values are among the TO
             top_col_values.top_value as top_value,
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 {{ lib.render_target_column('analyzed_table') }} AS top_value,
                 COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
@@ -64,15 +64,15 @@ Column level sensor that counts how many expected string values are among the TO
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
                 {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
                     {%- endif -%}
                 {%- endwith %}
             {%- endfor -%}
@@ -83,7 +83,7 @@ Column level sensor that counts how many expected string values are among the TO
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
         NULL AS actual_value,
         MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
         {%- else %}
@@ -96,7 +96,7 @@ Column level sensor that counts how many expected string values are among the TO
         MAX({{ parameters.expected_values | length }}) AS expected_value,
         top_values.time_period,
         top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
     {{- lib.render_group_by() -}}
@@ -124,14 +124,14 @@ Column level sensor that counts how many expected string values are among the TO
             top_col_values.top_value as top_value,
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 {{ lib.render_target_column('analyzed_table') }} AS top_value,
                 COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
@@ -143,15 +143,15 @@ Column level sensor that counts how many expected string values are among the TO
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
                 {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
                     {%- endif -%}
                 {%- endwith %}
             {%- endfor -%}
@@ -162,7 +162,7 @@ Column level sensor that counts how many expected string values are among the TO
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
         NULL AS actual_value,
         MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
         {%- else %}
@@ -175,7 +175,7 @@ Column level sensor that counts how many expected string values are among the TO
         MAX({{ parameters.expected_values | length }}) AS expected_value,
         top_values.time_period,
         top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
     {{- lib.render_group_by() -}}
@@ -203,14 +203,14 @@ Column level sensor that counts how many expected string values are among the TO
             top_col_values.top_value as top_value,
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 {{ lib.render_target_column('analyzed_table') }} AS top_value,
                 COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
@@ -222,15 +222,15 @@ Column level sensor that counts how many expected string values are among the TO
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
                 {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
                     {%- endif -%}
                 {%- endwith %}
             {%- endfor -%}
@@ -241,7 +241,7 @@ Column level sensor that counts how many expected string values are among the TO
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
         NULL AS actual_value,
         MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
         {%- else %}
@@ -254,7 +254,7 @@ Column level sensor that counts how many expected string values are among the TO
         MAX({{ parameters.expected_values | length }}) AS expected_value,
         top_values.time_period,
         top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
     {{- lib.render_group_by() -}}
@@ -282,14 +282,14 @@ Column level sensor that counts how many expected string values are among the TO
             top_col_values.top_value as top_value,
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 {{ lib.render_target_column('analyzed_table') }} AS top_value,
                 COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
@@ -301,15 +301,15 @@ Column level sensor that counts how many expected string values are among the TO
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
                 {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
                     {%- endif -%}
                 {%- endwith %}
             {%- endfor -%}
@@ -320,7 +320,7 @@ Column level sensor that counts how many expected string values are among the TO
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
         NULL AS actual_value,
         MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
         {%- else %}
@@ -333,7 +333,7 @@ Column level sensor that counts how many expected string values are among the TO
         MAX({{ parameters.expected_values | length }}) AS expected_value,
         top_values.time_period,
         top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
     {{- lib.render_group_by() -}}
@@ -361,14 +361,14 @@ Column level sensor that counts how many expected string values are among the TO
             top_col_values.top_value as top_value,
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 {{ lib.render_target_column('analyzed_table') }} AS top_value,
                 COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
@@ -380,15 +380,15 @@ Column level sensor that counts how many expected string values are among the TO
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
                 {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
                     {%- endif -%}
                 {%- endwith %}
             {%- endfor -%}
@@ -399,7 +399,7 @@ Column level sensor that counts how many expected string values are among the TO
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
         NULL AS actual_value,
         MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
         {%- else %}
@@ -412,7 +412,7 @@ Column level sensor that counts how many expected string values are among the TO
         MAX({{ parameters.expected_values | length }}) AS expected_value,
         top_values.time_period,
         top_values.time_period_utc
-        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+        {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
     {{- lib.render_group_by() -}}
@@ -440,19 +440,19 @@ Column level sensor that counts how many expected string values are among the TO
             top_col_values.top_value as top_value,
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 {{ lib.render_target_column('analyzed_table') }} AS top_value,
                 COUNT_BIG(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(indentation = '        ') }}
-            {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
+            {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                 {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
             {%- else %}
             GROUP BY {{ lib.render_target_column('analyzed_table') }}
@@ -462,15 +462,15 @@ Column level sensor that counts how many expected string values are among the TO
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
-    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
                 {{ ',' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
                     {%- endif -%}
                 {%- endwith %}
             {%- endfor -%}
@@ -481,7 +481,7 @@ Column level sensor that counts how many expected string values are among the TO
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
         NULL AS actual_value,
         MAX(0) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
         {%- else %}
@@ -492,9 +492,9 @@ Column level sensor that counts how many expected string values are among the TO
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value,
-        {%- if (lib.data_streams is not none and (lib.data_streams | length) > 0) -%}
-            {%- for attribute in lib.data_streams -%}
-                top_values.stream_{{ attribute }}{{ ', ' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length) > 0) -%}
+            {%- for attribute in lib.data_groupings -%}
+                top_values.grouping_{{ attribute }}{{ ', ' }}
             {%- endfor -%}
         {%- endif -%}
         top_values.time_period,
@@ -502,9 +502,9 @@ Column level sensor that counts how many expected string values are among the TO
     {{ render_from_subquery() }}
     {%- endif %}
     GROUP BY time_period, time_period_utc
-    {%- if (lib.data_streams is not none and (lib.data_streams | length) > 0) -%}
-        {%- for attribute in lib.data_streams -%}
-            {{ ', ' }}top_values.stream_{{ attribute }}
+    {%- if (lib.data_groupings is not none and (lib.data_groupings | length) > 0) -%}
+        {%- for attribute in lib.data_groupings -%}
+            {{ ', ' }}top_values.grouping_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
     ```
@@ -562,7 +562,7 @@ Column level sensor that counts how many expected string values are used in a te
     SELECT
         {{ actual_value() }} AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -604,7 +604,7 @@ Column level sensor that counts how many expected string values are used in a te
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -646,7 +646,7 @@ Column level sensor that counts how many expected string values are used in a te
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -687,7 +687,7 @@ Column level sensor that counts how many expected string values are used in a te
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -729,7 +729,7 @@ Column level sensor that counts how many expected string values are used in a te
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -771,7 +771,7 @@ Column level sensor that counts how many expected string values are used in a te
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -807,7 +807,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -829,7 +829,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -851,7 +851,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -873,7 +873,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -895,7 +895,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -917,7 +917,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1010,7 +1010,7 @@ Column level sensor that analyzes all values in a text column and detects the da
                 THEN 6
             ELSE 7
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1088,7 +1088,7 @@ Column level sensor that analyzes all values in a text column and detects the da
                 THEN 6
             ELSE 7
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1166,7 +1166,7 @@ Column level sensor that analyzes all values in a text column and detects the da
                 THEN 6
             ELSE 7
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1244,7 +1244,7 @@ Column level sensor that analyzes all values in a text column and detects the da
                 THEN 6
             ELSE 7
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1322,7 +1322,7 @@ Column level sensor that analyzes all values in a text column and detects the da
                 THEN 6
             ELSE 7
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1407,7 +1407,7 @@ Column level sensor that analyzes all values in a text column and detects the da
                 THEN 6
             ELSE 7
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1484,7 +1484,7 @@ Column level sensor that calculates the number of rows with an empty string.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1505,7 +1505,7 @@ Column level sensor that calculates the number of rows with an empty string.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1525,7 +1525,7 @@ Column level sensor that calculates the number of rows with an empty string.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1545,7 +1545,7 @@ Column level sensor that calculates the number of rows with an empty string.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1565,7 +1565,7 @@ Column level sensor that calculates the number of rows with an empty string.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1585,7 +1585,7 @@ Column level sensor that calculates the number of rows with an empty string.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1665,7 +1665,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1688,7 +1688,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1711,7 +1711,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1734,7 +1734,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1757,7 +1757,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1780,7 +1780,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1813,7 +1813,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1832,7 +1832,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1851,7 +1851,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1870,7 +1870,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1889,7 +1889,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1908,7 +1908,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1941,7 +1941,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1960,7 +1960,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1979,7 +1979,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1998,7 +1998,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2017,7 +2017,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2041,7 +2041,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2074,7 +2074,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2093,7 +2093,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2112,7 +2112,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2131,7 +2131,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2150,7 +2150,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2169,7 +2169,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2202,7 +2202,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2221,7 +2221,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2240,7 +2240,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2259,7 +2259,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2278,7 +2278,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2297,7 +2297,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2379,7 +2379,7 @@ Column level sensor that calculates the count of values that are longer than a g
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2399,7 +2399,7 @@ Column level sensor that calculates the count of values that are longer than a g
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2418,7 +2418,7 @@ Column level sensor that calculates the count of values that are longer than a g
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2437,7 +2437,7 @@ Column level sensor that calculates the count of values that are longer than a g
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2457,7 +2457,7 @@ Column level sensor that calculates the count of values that are longer than a g
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2476,7 +2476,7 @@ Column level sensor that calculates the count of values that are longer than a g
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2561,7 +2561,7 @@ Column level sensor that calculates the percentage of values that are longer tha
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2584,7 +2584,7 @@ Column level sensor that calculates the percentage of values that are longer tha
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2606,7 +2606,7 @@ Column level sensor that calculates the percentage of values that are longer tha
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2628,7 +2628,7 @@ Column level sensor that calculates the percentage of values that are longer tha
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2651,7 +2651,7 @@ Column level sensor that calculates the percentage of values that are longer tha
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2673,7 +2673,7 @@ Column level sensor that calculates the percentage of values that are longer tha
                 END
             )/ COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2755,7 +2755,7 @@ Column level sensor that calculates the count of values that are shorter than a 
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2775,7 +2775,7 @@ Column level sensor that calculates the count of values that are shorter than a 
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2794,7 +2794,7 @@ Column level sensor that calculates the count of values that are shorter than a 
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2813,7 +2813,7 @@ Column level sensor that calculates the count of values that are shorter than a 
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2833,7 +2833,7 @@ Column level sensor that calculates the count of values that are shorter than a 
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2852,7 +2852,7 @@ Column level sensor that calculates the count of values that are shorter than a 
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2937,7 +2937,7 @@ Column level sensor that calculates the percentage of values that are shorter th
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2960,7 +2960,7 @@ Column level sensor that calculates the percentage of values that are shorter th
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2982,7 +2982,7 @@ Column level sensor that calculates the percentage of values that are shorter th
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3004,7 +3004,7 @@ Column level sensor that calculates the percentage of values that are shorter th
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3027,7 +3027,7 @@ Column level sensor that calculates the percentage of values that are shorter th
                 END
             )/ COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3049,7 +3049,7 @@ Column level sensor that calculates the percentage of values that are shorter th
                 END
             )/ COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3125,7 +3125,7 @@ Column level sensor that calculates percentage of strings with a length below th
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3148,7 +3148,7 @@ Column level sensor that calculates percentage of strings with a length below th
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3170,7 +3170,7 @@ Column level sensor that calculates percentage of strings with a length below th
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3193,7 +3193,7 @@ Column level sensor that calculates percentage of strings with a length below th
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3216,7 +3216,7 @@ Column level sensor that calculates percentage of strings with a length below th
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3238,7 +3238,7 @@ Column level sensor that calculates percentage of strings with a length below th
                     END
             ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3295,7 +3295,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3332,7 +3332,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3368,7 +3368,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3404,7 +3404,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3441,7 +3441,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3478,7 +3478,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3514,7 +3514,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3536,7 +3536,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3558,7 +3558,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3580,7 +3580,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3602,7 +3602,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3624,7 +3624,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3675,7 +3675,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3706,7 +3706,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3737,7 +3737,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3768,7 +3768,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3799,7 +3799,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3829,7 +3829,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3901,7 +3901,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MAX(
             LENGTH({{render_column_cast_to_string('analyzed_table')}})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3917,7 +3917,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MAX(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3932,7 +3932,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MAX(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3947,7 +3947,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MAX(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3962,7 +3962,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MAX(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -3977,7 +3977,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MAX(
             LEN({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4049,7 +4049,7 @@ Column level sensor that ensures that the length of string in a column does not 
         AVG(
             LENGTH({{render_column_cast_to_string('analyzed_table')}})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4065,7 +4065,7 @@ Column level sensor that ensures that the length of string in a column does not 
         AVG(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4080,7 +4080,7 @@ Column level sensor that ensures that the length of string in a column does not 
         AVG(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4095,7 +4095,7 @@ Column level sensor that ensures that the length of string in a column does not 
         AVG(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4110,7 +4110,7 @@ Column level sensor that ensures that the length of string in a column does not 
         AVG(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4125,7 +4125,7 @@ Column level sensor that ensures that the length of string in a column does not 
         AVG(
             LEN({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4197,7 +4197,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MIN(
             LENGTH({{render_column_cast_to_string('analyzed_table')}})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4213,7 +4213,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MIN(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4228,7 +4228,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MIN(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4243,7 +4243,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MIN(
             LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4258,7 +4258,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MIN(
             LENGTH({{lib.render_target_column('analyzed_table')}})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4273,7 +4273,7 @@ Column level sensor that ensures that the length of string in a column does not 
         MIN(
             LEN({{lib.render_target_column('analyzed_table')}})
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4330,7 +4330,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4367,7 +4367,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4403,7 +4403,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4439,7 +4439,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4476,7 +4476,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4512,7 +4512,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4563,7 +4563,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4594,7 +4594,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4625,7 +4625,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4656,7 +4656,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4687,7 +4687,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4717,7 +4717,7 @@ Column level sensor that calculates the number of values that does not fit to a 
                 END
             )
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4793,7 +4793,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4813,7 +4813,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4833,7 +4833,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4853,7 +4853,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4873,7 +4873,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4892,7 +4892,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4971,7 +4971,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -4994,7 +4994,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5017,7 +5017,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5040,7 +5040,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5063,7 +5063,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5086,7 +5086,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5119,7 +5119,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
                 SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5138,7 +5138,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
                 {{ lib.render_target_column('analyzed_table') }}
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5156,7 +5156,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
                 {{ lib.render_target_column('analyzed_table') }} ~ '^([0-9]+\.?[0-9]*|\.[0-9]+)$'
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5174,7 +5174,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
                 {{ lib.render_target_column('analyzed_table') }} ~ '^([0-9]+\.?[0-9]*|\.[0-9]+)$'
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5193,7 +5193,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
                 TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5211,7 +5211,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
                 TRY_CONVERT(FLOAT, {{ lib.render_target_column('analyzed_table') }})
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5244,7 +5244,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
                 SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS INT64)
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5263,7 +5263,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5281,7 +5281,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
                 {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5299,7 +5299,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
                 {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5318,7 +5318,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
                 TRY_TO_NUMBER({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5336,7 +5336,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
                 TRY_CONVERT(INT, {{ lib.render_target_column('analyzed_table') }})
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5414,7 +5414,7 @@ Column level sensor that calculates the number of rows with string surrounded by
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5436,7 +5436,7 @@ Column level sensor that calculates the number of rows with string surrounded by
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5457,7 +5457,7 @@ Column level sensor that calculates the number of rows with string surrounded by
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5478,7 +5478,7 @@ Column level sensor that calculates the number of rows with string surrounded by
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5500,7 +5500,7 @@ Column level sensor that calculates the number of rows with string surrounded by
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5521,7 +5521,7 @@ Column level sensor that calculates the number of rows with string surrounded by
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5602,7 +5602,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5627,7 +5627,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5651,7 +5651,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5675,7 +5675,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5700,7 +5700,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5725,7 +5725,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5761,7 +5761,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5783,7 +5783,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5805,7 +5805,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5827,7 +5827,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5849,7 +5849,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5871,7 +5871,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5950,7 +5950,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5973,7 +5973,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -5995,7 +5995,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6017,7 +6017,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6039,7 +6039,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6061,7 +6061,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6140,7 +6140,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6163,7 +6163,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6185,7 +6185,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6210,7 +6210,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6232,7 +6232,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6254,7 +6254,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6290,7 +6290,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6312,7 +6312,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6334,7 +6334,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6356,7 +6356,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6378,7 +6378,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6400,7 +6400,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6463,7 +6463,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     
     SELECT
         {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6504,7 +6504,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     
     SELECT
         {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6545,7 +6545,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     
     SELECT
         {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6586,7 +6586,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     
     SELECT
         {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6627,7 +6627,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     
     SELECT
         {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6668,7 +6668,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     
     SELECT
         {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6746,7 +6746,7 @@ Column level sensor that calculates the number of rows with an whitespace string
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6768,7 +6768,7 @@ Column level sensor that calculates the number of rows with an whitespace string
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6789,7 +6789,7 @@ Column level sensor that calculates the number of rows with an whitespace string
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6810,7 +6810,7 @@ Column level sensor that calculates the number of rows with an whitespace string
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6831,7 +6831,7 @@ Column level sensor that calculates the number of rows with an whitespace string
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6852,7 +6852,7 @@ Column level sensor that calculates the number of rows with an whitespace string
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6933,7 +6933,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6958,7 +6958,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -6982,7 +6982,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -7006,7 +7006,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -7031,7 +7031,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -7055,7 +7055,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}

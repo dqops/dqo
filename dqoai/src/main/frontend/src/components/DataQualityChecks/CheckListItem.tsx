@@ -22,9 +22,9 @@ import CheckDetails from './CheckDetails/CheckDetails';
 import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
 import Checkbox from '../Checkbox';
-import { setCurrentJobId } from "../../redux/actions/source.actions";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getFirstLevelActiveTab } from "../../redux/selectors";
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 export interface ITab {
   label: string;
@@ -64,27 +64,65 @@ const CheckListItem = ({
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
-  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
+  const {
+    checkTypes,
+    connection,
+    schema,
+    table,
+    column
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+    column: string;
+  } = useParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
+  useEffect(() => {
+    const localState = localStorage.getItem(`${checkTypes}_${check.check_name}`);
+
+    if (localState === 'true') {
+      openCheckSettings();
+    }
+
+    const detailsLocalState = localStorage.getItem(`${checkTypes}_${check.check_name}_details`);
+
+    if (detailsLocalState === 'true') {
+      toggleCheckDetails();
+    }
+
+  }, [checkTypes, check.check_name]);
+
+  const toggleExpand = () => {
+    const newValue = !expanded;
+    setExpanded(newValue)
+    localStorage.setItem(`${checkTypes}_${check.check_name}`, newValue.toString());
+  }
+
+  const closeExpand = () => {
+    setExpanded(false)
+    localStorage.setItem(`${checkTypes}_${check.check_name}`, "false");
+  }
+
   const openCheckSettings = () => {
     if (showDetails) {
-      setShowDetails(false);
+      closeCheckDetails();
     }
     if (check?.configured) {
-      setExpanded(!expanded);
+      toggleExpand();
       const initTabs = [
         {
           label: 'Check Settings',
           value: 'check-settings'
         },
-        ...(check?.supports_data_streams
+        ...(check?.supports_grouping
           ? [
               {
-                label: 'Data streams override',
+                label: 'Grouping configuration override',
                 value: 'data-streams'
               }
             ]
@@ -112,7 +150,7 @@ const CheckListItem = ({
 
   const onChangeConfigured = (configured: boolean) => {
     if (!configured) {
-      setExpanded(false);
+      closeExpand();
     }
     handleChange({
       configured,
@@ -142,7 +180,13 @@ const CheckListItem = ({
         ? { timeWindowFilter }
         : {})
     });
-    dispatch(setCurrentJobId(checkTypes, firstLevelActiveTab, (res.data as any)?.jobId?.jobId));
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        (res.data as any)?.jobId?.jobId
+      )
+    );
     setJobId((res.data as any)?.jobId?.jobId);
   };
 
@@ -188,13 +232,17 @@ const CheckListItem = ({
 
   const closeCheckDetails = () => {
     setShowDetails(false);
+    localStorage.setItem(`${checkTypes}_${check.check_name}_details`, "false");
   };
 
   const toggleCheckDetails = () => {
     if (expanded && !showDetails) {
-      setExpanded(false);
+      closeExpand();
     }
-    setShowDetails(!showDetails);
+    const newValue = !showDetails;
+
+    localStorage.setItem(`${checkTypes}_${check.check_name}_details`, newValue.toString());
+    setShowDetails(newValue);
   };
   const getLocalDateInUserTimeZone = (date: Date): string => {
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -373,13 +421,13 @@ const CheckListItem = ({
                         <div>
                           Executed at:{' '}
                           {checkResult?.executedAtTimestamps
-                            ? getLocalDateInUserTimeZone(
-                                new Date(
-                                  moment(
+                            ? moment(
+                                getLocalDateInUserTimeZone(
+                                  new Date(
                                     checkResult.executedAtTimestamps[index]
-                                  ).format('YYYY-MM-DD HH:mm:ss')
+                                  )
                                 )
-                              )
+                              ).format('YYYY-MM-DD HH:mm:ss')
                             : ''}
                         </div>
                         <div>
@@ -389,9 +437,9 @@ const CheckListItem = ({
                             : ''}
                         </div>
                         <div>
-                          Data stream:{' '}
-                          {checkResult?.dataStreams
-                            ? checkResult.dataStreams[index]
+                          Data group:{' '}
+                          {checkResult?.dataGroups
+                            ? checkResult.dataGroups[index]
                             : ''}
                         </div>
                       </div>
@@ -481,7 +529,7 @@ const CheckListItem = ({
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               tabs={tabs}
-              onClose={() => setExpanded(false)}
+              onClose={closeExpand}
               onChange={onChange}
               check={check}
             />

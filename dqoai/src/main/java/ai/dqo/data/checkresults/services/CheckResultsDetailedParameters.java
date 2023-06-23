@@ -38,11 +38,11 @@ public class CheckResultsDetailedParameters {
     private int resultsCount = 100;
 
     /**
-     * Name of the data-stream for which to get the results.
+     * Name of the data group name for which to get the results.
      * If null, the default one is picked.
      */
-    @JsonPropertyDescription("Data-stream for which to load the results.")
-    private String dataStreamName = null;
+    @JsonPropertyDescription("Data group name for which to load the results.")
+    private String dataGroupName = null;
 
     /**
      * Start month to load. Loads the data for the whole month identified by the date.

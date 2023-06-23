@@ -12,7 +12,7 @@ import RecurringView from '../../components/Connection/TableView/RecurringView';
 import PartitionedChecks from '../../components/Connection/TableView/PartitionedChecks';
 import TableCommentView from '../../components/Connection/TableView/TableCommentView';
 import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
-import TableDataStream from '../../components/Connection/TableView/TableDataStream';
+import TableDataGroupingConfiguration from '../../components/Connection/TableView/TableDataGroupingConfigurations';
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
 import { getFirstLevelActiveTab, getFirstLevelState } from '../../redux/selectors';
 import TableNavigation from '../../components/TableNavigation';
@@ -38,7 +38,7 @@ const initTabs = [
     value: 'labels'
   },
   {
-    label: 'Data Streams',
+    label: 'Data Groupings',
     value: 'data-streams'
   },
   {
@@ -77,7 +77,7 @@ const TablePage = () => {
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks,
     isUpdatedSchedule,
-    isUpdatedDataStreamsMapping
+    isUpdatedDataGroupingConfiguration
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
@@ -138,11 +138,11 @@ const TablePage = () => {
     setTabs(
       tabs.map((item) =>
         item.value === 'data-streams'
-          ? { ...item, isUpdated: isUpdatedDataStreamsMapping }
+          ? { ...item, isUpdated: isUpdatedDataGroupingConfiguration }
           : item
       )
     );
-  }, [isUpdatedDataStreamsMapping]);
+  }, [isUpdatedDataGroupingConfiguration]);
 
   useEffect(() => {
     setTabs(
@@ -252,7 +252,7 @@ const TablePage = () => {
             <div>{activeTab === 'schedule' && <ScheduleDetail />}</div>
             <div>{activeTab === 'comments' && <TableCommentView />}</div>
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
-            <div>{activeTab === 'data-streams' && <TableDataStream />}</div>
+            <div>{activeTab === 'data-streams' && <TableDataGroupingConfiguration />}</div>
             <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
             <div>{activeTab === 'incident_configuration' && <TableIncidentsNotificationsView />}</div>
           </>

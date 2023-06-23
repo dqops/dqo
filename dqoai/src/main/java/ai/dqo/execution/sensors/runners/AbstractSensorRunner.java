@@ -24,7 +24,7 @@ import ai.dqo.execution.sensors.SensorPrepareResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.grouping.GroupedSensorExecutionResult;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import tech.tablesaw.api.*;
 

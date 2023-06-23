@@ -15,9 +15,9 @@
  */
 package ai.dqo.data.normalization;
 
-import ai.dqo.metadata.groupings.DataStreamLevelSource;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSource;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.utils.tables.TableColumnUtility;
 import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
@@ -36,59 +36,59 @@ import java.util.stream.Collectors;
 @Component
 public class CommonTableNormalizationServiceImpl implements CommonTableNormalizationService {
     /**
-     * Finds all data stream level columns and returns them as an array of columns. The array length is 9 elements (the number of data stream levels supported).
-     * Data stream level columns are returned at their respective index, shifted one index down (because the array indexes start at 0).
-     * The stream_level_1 column (if present) is returned at result[0] index.
+     * Finds all data grouping dimension level columns and returns them as an array of columns. The array length is 9 elements (the number of data grouping dimension levels supported).
+     * Data grouping dimension level columns are returned at their respective index, shifted one index down (because the array indexes start at 0).
+     * The grouping_level_1 column (if present) is returned at result[0] index.
      * All columns are also converted to a string column.
      * @param resultsTable Sensor results table to analyze.
-     * @param dataStreamMappingSpec Data stream mapping configuration (optional) used to retrieve the tags if the data stream columns were not returned (due to an error in sensor execution).
+     * @param dataGroupingConfigurationSpec Data grouping configuration (optional) used to retrieve the tags if the data stream columns were not returned (due to an error in sensor execution).
      * @param rowCount Number of rows in the result table or 1 when the table is null.
-     * @return Array of data stream level columns that were found.
+     * @return Array of data grouping dimension level columns that were found.
      */
     @Override
-    public TextColumn[] extractAndNormalizeDataStreamLevelColumns(Table resultsTable, DataStreamMappingSpec dataStreamMappingSpec, int rowCount) {
-        TextColumn[] dataStreamLevelColumns = new TextColumn[9]; // we support 9 data stream levels, we store them at their respective indexes shifted 1 value down (0-based array)
+    public TextColumn[] extractAndNormalizeDataGroupingDimensionColumns(Table resultsTable, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowCount) {
+        TextColumn[] dataGroupingLevelColumns = new TextColumn[9]; // we support 9 data stream levels, we store them at their respective indexes shifted 1 value down (0-based array)
 
         for (int levelIndex = 1; levelIndex <= 9; levelIndex++) {
-            String dataStreamLevelColumnName = CommonColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + levelIndex;
-            Column<?> existingDataStreamLevelColumn = resultsTable != null ? TableColumnUtility.findColumn(resultsTable, dataStreamLevelColumnName) : null;
-            if (existingDataStreamLevelColumn == null) {
+            String dataGroupingLevelColumnName = CommonColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + levelIndex;
+            Column<?> existingDataGroupingLevelColumn = resultsTable != null ? TableColumnUtility.findColumn(resultsTable, dataGroupingLevelColumnName) : null;
+            if (existingDataGroupingLevelColumn == null) {
                 continue; // no data stream level
             }
             else {
-                if (dataStreamMappingSpec != null && dataStreamMappingSpec.getLevel(levelIndex) != null) {
-                    DataStreamLevelSpec dataStreamLevelSpec = dataStreamMappingSpec.getLevel(levelIndex);
-                    if (dataStreamLevelSpec.getSource() == DataStreamLevelSource.tag && !Strings.isNullOrEmpty(dataStreamLevelSpec.getTag())) {
-                        TextColumn tagColumn = TextColumn.create(dataStreamLevelColumnName, rowCount);
-                        tagColumn.setMissingTo(dataStreamLevelSpec.getTag());
-                        dataStreamLevelColumns[levelIndex - 1] = tagColumn;
+                if (dataGroupingConfigurationSpec != null && dataGroupingConfigurationSpec.getLevel(levelIndex) != null) {
+                    DataGroupingDimensionSpec dataGroupingDimensionSpec = dataGroupingConfigurationSpec.getLevel(levelIndex);
+                    if (dataGroupingDimensionSpec.getSource() == DataGroupingDimensionSource.tag && !Strings.isNullOrEmpty(dataGroupingDimensionSpec.getTag())) {
+                        TextColumn tagColumn = TextColumn.create(dataGroupingLevelColumnName, rowCount);
+                        tagColumn.setMissingTo(dataGroupingDimensionSpec.getTag());
+                        dataGroupingLevelColumns[levelIndex - 1] = tagColumn;
                     }
                 }
             }
 
-            if (existingDataStreamLevelColumn instanceof TextColumn) {
-                TextColumn stringExistingStreamLevelCol = (TextColumn)existingDataStreamLevelColumn;
-                dataStreamLevelColumns[levelIndex - 1] = stringExistingStreamLevelCol.copy();
+            if (existingDataGroupingLevelColumn instanceof TextColumn) {
+                TextColumn stringExistingGroupingLevelCol = (TextColumn)existingDataGroupingLevelColumn;
+                dataGroupingLevelColumns[levelIndex - 1] = stringExistingGroupingLevelCol.copy();
                 continue;
             }
 
-            TextColumn stringifiedColumn = TableColumnUtility.convertToTextColumn(existingDataStreamLevelColumn);
-            dataStreamLevelColumns[levelIndex - 1] = stringifiedColumn;
+            TextColumn stringifiedColumn = TableColumnUtility.convertToTextColumn(existingDataGroupingLevelColumn);
+            dataGroupingLevelColumns[levelIndex - 1] = stringifiedColumn;
         }
 
-        return dataStreamLevelColumns;
+        return dataGroupingLevelColumns;
     }
 
     /**
-     * Calculates a data_stream_hash hash from all the data stream level columns. Returns 0 when there are no stream levels.
-     * @param dataStreamLevelColumns Array of data stream level columns.
+     * Calculates a data_grouping_hash hash from all the data grouping dimension level columns. Returns 0 when there are no grouping dimension levels.
+     * @param dataGroupingLevelColumns Array of data grouping dimension level columns.
      * @param rowIndex Row index to calculate.
-     * @return Data stream hash.
+     * @return Data grouping hash.
      */
     @Override
-    public long calculateDataStreamHashForRow(TextColumn[] dataStreamLevelColumns, int rowIndex) {
+    public long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns, int rowIndex) {
         int notNullColumnCount = 0;
-        for (TextColumn dataStreamLevelColumn : dataStreamLevelColumns) {
+        for (TextColumn dataStreamLevelColumn : dataGroupingLevelColumns) {
             if (dataStreamLevelColumn != null) {
                 notNullColumnCount++;
             }
@@ -99,7 +99,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
             return 0L;
         }
 
-        List<HashCode> dataStreamColumnHashes = Arrays.stream(dataStreamLevelColumns)
+        List<HashCode> dataGroupingColumnHashes = Arrays.stream(dataGroupingLevelColumns)
                 .map(column -> {
                     if (column == null) {
                         return HashCode.fromLong(0L);
@@ -111,39 +111,39 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                     return  Hashing.farmHashFingerprint64().hashString(columnValue, StandardCharsets.UTF_8);
                 })
                 .collect(Collectors.toList());
-        return Math.abs(Hashing.combineOrdered(dataStreamColumnHashes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users
+        return Math.abs(Hashing.combineOrdered(dataGroupingColumnHashes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users
     }
 
     /**
-     * Creates and calculates a data_stream_hash column from all stream_level_X columns (stream_level_1, stream_level_2, ..., stream_level_9).
-     * @param dataStreamLevelColumns Array of data stream level columns.
+     * Creates and calculates a data_stream_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
+     * @param dataGroupingLevelColumns Array of data stream level columns.
      * @param rowCount Count of rows to process.
      * @return Data stream hash column.
      */
     @Override
-    public LongColumn createDataStreamHashColumn(TextColumn[] dataStreamLevelColumns, int rowCount) {
-        LongColumn dataStreamHashColumn = LongColumn.create(CommonColumnNames.DATA_STREAM_HASH_COLUMN_NAME, rowCount);
+    public LongColumn createDataGroupingHashColumn(TextColumn[] dataGroupingLevelColumns, int rowCount) {
+        LongColumn dataGroupingHashColumn = LongColumn.create(CommonColumnNames.DATA_GROUP_HASH_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
-            long dimensionIdHash = calculateDataStreamHashForRow(dataStreamLevelColumns, i);
-            dataStreamHashColumn.set(i, dimensionIdHash);
+            long dimensionIdHash = calculateDataGroupingHashForRow(dataGroupingLevelColumns, i);
+            dataGroupingHashColumn.set(i, dimensionIdHash);
         }
 
-        return dataStreamHashColumn;
+        return dataGroupingHashColumn;
     }
 
     /**
      * Calculates a data_stream_name name from all the data stream level columns. Returns 0 when there are no stream levels.
-     * @param dataStreamLevelColumns Array of data stream level columns.
+     * @param dataGroupingLevelColumns Array of data stream level columns.
      * @param rowIndex Row index to calculate.
      * @return Data stream name.
      */
     @Override
-    public String calculateDataStreamNameForRow(TextColumn[] dataStreamLevelColumns, int rowIndex) {
+    public String calculateDataGroupingNameForRow(TextColumn[] dataGroupingLevelColumns, int rowIndex) {
         int notNullColumnCount = 0;
         int lastNotNullColumn = -1;
-        for (int i = 0; i < dataStreamLevelColumns.length ; i++) {
-            TextColumn dataStreamLevelColumn = dataStreamLevelColumns[i];
+        for (int i = 0; i < dataGroupingLevelColumns.length ; i++) {
+            TextColumn dataStreamLevelColumn = dataGroupingLevelColumns[i];
             if (dataStreamLevelColumn != null) {
                 notNullColumnCount++;
                 lastNotNullColumn = i;
@@ -152,7 +152,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
 
         if (notNullColumnCount == 0) {
             // when no data stream columns are used, we return data_stream_name as "all data"
-            return ALL_DATA_DATA_STREAM_NAME;
+            return ALL_DATA_DATA_GROUP_NAME;
         }
 
         StringBuilder sb = new StringBuilder();
@@ -161,7 +161,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 sb.append(" / ");
             }
 
-            TextColumn levelColumn = dataStreamLevelColumns[i];
+            TextColumn levelColumn = dataGroupingLevelColumns[i];
             if (levelColumn == null) {
                 continue;
             }
@@ -176,27 +176,27 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
     }
 
     /**
-     * Creates and calculates a data_stream_name column from all stream_level_X columns (stream_level_1, stream_level_2, ..., stream_level_9).
-     * The data stream name is in the form [stream_level_1] / [stream_level_2] / [stream_level_3] / ...
-     * @param dataStreamLevelColumns Array of data stream level columns.
+     * Creates and calculates a data_grouping_name column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
+     * The data grouping name is in the form [grouping_level_1] / [grouping_level_2] / [grouping_level_3] / ...
+     * @param dataGroupingLevelColumns Array of data grouping level columns.
      * @param rowCount Count of rows to process.
-     * @return Data stream name column.
+     * @return Data grouping name column.
      */
     @Override
-    public TextColumn createDataStreamNameColumn(TextColumn[] dataStreamLevelColumns, int rowCount) {
-        TextColumn dataStreamNameColumn = TextColumn.create(CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME, rowCount);
+    public TextColumn createDataGroupingNameColumn(TextColumn[] dataGroupingLevelColumns, int rowCount) {
+        TextColumn dataGroupingNameColumn = TextColumn.create(CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
-            String dataStreamName = calculateDataStreamNameForRow(dataStreamLevelColumns, i);
-            dataStreamNameColumn.set(i, dataStreamName);
+            String dataGroupingName = calculateDataGroupingNameForRow(dataGroupingLevelColumns, i);
+            dataGroupingNameColumn.set(i, dataGroupingName);
         }
 
-        return dataStreamNameColumn;
+        return dataGroupingNameColumn;
     }
 
     /**
-     * Creates and populates a time_series_uuid column that is a hash of the check hash (or profiler hash) and the data_stream_hash and uniquely identifies a time series.
-     * @param sortedDataStreamHashColumn Column with data stream hashes for each row.
+     * Creates and populates a time_series_uuid column that is a hash of the check hash (or profiler hash) and the data_grouping_hash and uniquely identifies a time series.
+     * @param sortedDataGroupingHashColumn Column with data grouping hashes for each row.
      * @param checkOrProfilerHash Check hash (or a profiler hash) that should be hashed into the time_series_uuid.
      * @param tableHash Table hash.
      * @param columnHash Column hash (or 0L when the check is not on a column level).
@@ -204,7 +204,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Time series uuid column, filled with values.
      */
     @Override
-    public TextColumn createTimeSeriesUuidColumn(LongColumn sortedDataStreamHashColumn,
+    public TextColumn createTimeSeriesUuidColumn(LongColumn sortedDataGroupingHashColumn,
                                                  long checkOrProfilerHash,
                                                  long tableHash,
                                                  long columnHash,
@@ -212,7 +212,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
         TextColumn timeSeriesUuidColumn = TextColumn.create(CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
-            Long dataStreamHash = sortedDataStreamHashColumn.get(i);
+            Long dataStreamHash = sortedDataGroupingHashColumn.get(i);
             UUID uuid = new UUID(checkOrProfilerHash, dataStreamHash ^ tableHash ^ columnHash);
             String timeSeriesUuidString = uuid.toString();
             timeSeriesUuidColumn.set(i, timeSeriesUuidString);
@@ -223,7 +223,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
 
     /**
      * Creates and fills the "id" column by combining hashes.
-     * @param sortedDataStreamHashColumn Data stream hashes column.
+     * @param sortedDataGroupingHashColumn Data grouping hashes column.
      * @param sortedTimePeriodColumn Time period column.
      * @param checkHash Check hash value.
      * @param tableHash Table hash value.
@@ -232,7 +232,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataStreamHashColumn,
+    public TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
                                                         DateTimeColumn sortedTimePeriodColumn,
                                                         long checkHash,
                                                         long tableHash,
@@ -241,10 +241,10 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
         TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
-            Long dataStreamHash = sortedDataStreamHashColumn.get(i);
+            Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
             long timePeriodLong = sortedTimePeriodColumn.getLongInternal(i);
             long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
-            UUID uuid = new UUID(checkHash ^ timePeriodHashed, dataStreamHash ^ tableHash ^ columnHash ^ ~timePeriodHashed);
+            UUID uuid = new UUID(checkHash ^ timePeriodHashed, dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed);
             String idString = uuid.toString();
             idColumn.set(i, idString);
         }
@@ -255,7 +255,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
     /**
      * Creates and fills the "id" column by combining hashes. Also when a hash was already seen, assigns a new index to it
      * and updates the <code>sampleIndexColumn</code> with the next available index.
-     * @param sortedDataStreamHashColumn Data stream hashes column.
+     * @param sortedDataGroupingHashColumn Data grouping hashes column.
      * @param sortedTimePeriodColumn Time period column.
      * @param sampleIndexColumn Optional sample index column.
      * @param checkHash Check hash value.
@@ -265,7 +265,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataStreamHashColumn,
+    public TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
                                                         InstantColumn sortedTimePeriodColumn,
                                                         IntColumn sampleIndexColumn,
                                                         long checkHash,
@@ -276,13 +276,13 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
         Map<UUID, Integer> idsGenerated = new HashMap<>();
 
         for (int i = 0; i < rowCount ; i++) {
-            Long dataStreamHash = sortedDataStreamHashColumn.get(i);
+            Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
             long timePeriodLong = sortedTimePeriodColumn.getLongInternal(i);
             long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
             long sampleIndexHashed = sampleIndexColumn == null || sampleIndexColumn.isMissing(i) ? 0L :
                     Hashing.farmHashFingerprint64().hashInt(sampleIndexColumn.get(i) + 1).asLong();
             UUID uuid = new UUID(checkHash ^ timePeriodHashed ^ sampleIndexHashed,
-                    dataStreamHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~sampleIndexHashed);
+                    dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~sampleIndexHashed);
             Integer lastSampleIndexForUuid = idsGenerated.get(uuid);
             if (lastSampleIndexForUuid == null) {
                 idsGenerated.put(uuid, 0);
@@ -292,7 +292,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 sampleIndexColumn.set(i, lastSampleIndexForUuid);
                 long newSampleIndexHashed = Hashing.farmHashFingerprint64().hashInt(lastSampleIndexForUuid + 1).asLong();
                 uuid = new UUID(checkHash ^ timePeriodHashed ^ newSampleIndexHashed,
-                        dataStreamHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~newSampleIndexHashed);
+                        dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~newSampleIndexHashed);
             }
 
             String idString = uuid.toString();

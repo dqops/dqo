@@ -16,6 +16,9 @@
 package ai.dqo.metadata.groupings;
 
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 
 /**
  * Object mother for TimeSeriesConfigurationSpec.

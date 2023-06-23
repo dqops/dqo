@@ -22,18 +22,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class DataStreamLevelSpecTests extends BaseTest {
-    private DataStreamLevelSpec sut;
+public class DataGroupingDimensionSpecTests extends BaseTest {
+    private DataGroupingDimensionSpec sut;
 
     @BeforeEach
     void setUp() {
-        this.sut = new DataStreamLevelSpec();
+        this.sut = new DataGroupingDimensionSpec();
     }
 
     @Test
     void getSource_whenNewObject_thenHasDefaultValueTag() {
         Assertions.assertNotNull(this.sut.getSource());
-        Assertions.assertEquals(DataStreamLevelSource.tag, this.sut.getSource());
+        Assertions.assertEquals(DataGroupingDimensionSource.tag, this.sut.getSource());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class DataStreamLevelSpecTests extends BaseTest {
 
     @Test
     void isDefault_whenSourceConfigured_thenReturnsFalse() {
-        this.sut.setSource(DataStreamLevelSource.tag);
+        this.sut.setSource(DataGroupingDimensionSource.tag);
         Assertions.assertFalse(this.sut.isDefault());
     }
 

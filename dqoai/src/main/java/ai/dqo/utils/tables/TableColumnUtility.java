@@ -45,6 +45,24 @@ public final class TableColumnUtility {
     }
 
     /**
+     * Finds a named column in the table. Performs a case-insensitive search, so the columns may be named in upper or lower case.
+     * Accepts a list of column names, finds the first name that matches. This method is designed for a case when we renamed a column.
+     * @param resultsTable Table to analyze.
+     * @param columnNames Expected column names.
+     * @return Column that was found or null.
+     */
+    public static Column<?> findColumn(Table resultsTable, String... columnNames) {
+        for (String columnName : columnNames) {
+            Column<?> column = findColumn(resultsTable, columnName);
+            if (column != null) {
+                return column;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Creates (or casts) a given column to a {@link TextColumn}.
      * @param sourceColumn Source column.
      * @return TextColumn. It is a copy of the original column (with casting to a string) or the original column object instance if it is a TextColumn.

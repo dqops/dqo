@@ -31,7 +31,7 @@ export const CONNECTION_LEVEL_TABS: {
       value: 'schemas'
     },
     {
-      label: 'Default data stream template',
+      label: 'Default grouping template',
       value: 'data-streams'
     }
   ],
@@ -88,7 +88,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'labels'
     },
     {
-      label: 'Data Streams',
+      label: 'Data Groupings',
       value: 'data-streams'
     },
     {
@@ -261,4 +261,28 @@ export const dateToString = (k: string) => {
   }
   const a = k.replace(/T/g, ' ');
   return a;
+};
+
+export const datatype_detected = (numberForFile: any) => {
+  if (Number(numberForFile) === 1) {
+    return 'INTEGER';
+  }
+  if (Number(numberForFile) === 2) {
+    return 'FLOAT';
+  }
+  if (Number(numberForFile) === 3) {
+    return 'DATETIME';
+  }
+  if (Number(numberForFile) === 4) {
+    return 'TIMESTAMP';
+  }
+  if (Number(numberForFile) === 5) {
+    return 'BOOLEAN';
+  }
+  if (Number(numberForFile) === 6) {
+    return 'STRING';
+  }
+  if (Number(numberForFile) === 7) {
+    return 'Mixed data type';
+  }
 };

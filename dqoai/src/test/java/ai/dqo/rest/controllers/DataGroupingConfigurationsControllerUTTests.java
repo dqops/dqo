@@ -17,17 +17,17 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.rest.models.metadata.DataStreamBasicModel;
-import ai.dqo.rest.models.metadata.DataStreamModel;
-import ai.dqo.rest.models.metadata.DataStreamTrimmedModel;
+import ai.dqo.rest.models.metadata.DataGroupingConfigurationBasicModel;
+import ai.dqo.rest.models.metadata.DataGroupingConfigurationModel;
+import ai.dqo.rest.models.metadata.DataGroupingConfigurationTrimmedModel;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -45,8 +45,8 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @SpringBootTest
-public class DataStreamsControllerUTTests extends BaseTest {
-    private DataStreamsController sut;
+public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
+    private DataGroupingConfigurationsController sut;
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
@@ -56,45 +56,45 @@ public class DataStreamsControllerUTTests extends BaseTest {
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new DataStreamsController(this.userHomeContextFactory);
+        this.sut = new DataGroupingConfigurationsController(this.userHomeContextFactory);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 SampleCsvFileNames.continuous_days_one_row_per_day,
                 ProviderType.bigquery);
 
-        DataStreamMappingSpec dsmSpec1 = new DataStreamMappingSpec(){{
-            setLevel3(new DataStreamLevelSpec(){{
+        DataGroupingConfigurationSpec dsmSpec1 = new DataGroupingConfigurationSpec(){{
+            setLevel3(new DataGroupingDimensionSpec(){{
                 setColumn("date");
             }});
         }};
-        DataStreamMappingSpec dsmSpec2 = new DataStreamMappingSpec(){{
-            setLevel5(new DataStreamLevelSpec(){{
+        DataGroupingConfigurationSpec dsmSpec2 = new DataGroupingConfigurationSpec(){{
+            setLevel5(new DataGroupingDimensionSpec(){{
                 setColumn("value");
             }});
         }};
-        DataStreamMappingSpecMap dataStreamMappingSpecMap = new DataStreamMappingSpecMap(){{
+        DataGroupingConfigurationSpecMap dataGroupingConfigurationSpecMap = new DataGroupingConfigurationSpecMap(){{
             put(DATASTREAM_NAME_1, dsmSpec1);
             put(DATASTREAM_NAME_2, dsmSpec2);
         }};
-        this.sampleTable.getTableSpec().setDataStreams(dataStreamMappingSpecMap);
+        this.sampleTable.getTableSpec().setGroupings(dataGroupingConfigurationSpecMap);
     }
 
     @Test
     void getDataStreams_whenSampleTableRequested_thenReturnsListOfDataStreams() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Flux<DataStreamBasicModel>> responseEntity = this.sut.getDataStreams(
+        ResponseEntity<Flux<DataGroupingConfigurationBasicModel>> responseEntity = this.sut.getTableGroupingConfigurations(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        List<DataStreamBasicModel> result = responseEntity.getBody().collectList().block();
+        List<DataGroupingConfigurationBasicModel> result = responseEntity.getBody().collectList().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(
-                result.get(0).getDataStreamName(),
-                this.sampleTable.getTableSpec().getDataStreams().getFirstDataStreamMappingName());
+                result.get(0).getDataGroupingConfigurationName(),
+                this.sampleTable.getTableSpec().getGroupings().getFirstDataGroupingConfigurationName());
     }
 
 
@@ -104,17 +104,17 @@ public class DataStreamsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<DataStreamModel>> responseEntity = this.sut.getDataStream(
+        ResponseEntity<Mono<DataGroupingConfigurationModel>> responseEntity = this.sut.getTableGroupingConfiguration(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        DataStreamModel result = responseEntity.getBody().block();
+        DataGroupingConfigurationModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(result.getDataStreamName(), dataStreamName);
-        Assertions.assertEquals(result.getSpec(), sampleTableSpec.getDataStreams().get(dataStreamName));
+        Assertions.assertEquals(result.getDataGroupingConfigurationName(), dataStreamName);
+        Assertions.assertEquals(result.getSpec(), sampleTableSpec.getGroupings().get(dataStreamName));
     }
 
     @ParameterizedTest
@@ -124,32 +124,32 @@ public class DataStreamsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
         String newName = "new_stream";
-        DataStreamMappingSpec newSpec = new DataStreamMappingSpec() {{
-            setLevel1(new DataStreamLevelSpec() {{
+        DataGroupingConfigurationSpec newSpec = new DataGroupingConfigurationSpec() {{
+            setLevel1(new DataGroupingDimensionSpec() {{
                 setColumn("date");
             }});
         }};
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateDataStream(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName,
-                new DataStreamTrimmedModel() {{
-                    setDataStreamName(newName);
+                new DataGroupingConfigurationTrimmedModel() {{
+                    setDataGroupingConfigurationName(newName);
                     setSpec(newSpec);
                 }});
         Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertNull(sampleTableSpec.getDataStreams().get(dataStreamName));
+        Assertions.assertNull(sampleTableSpec.getGroupings().get(dataStreamName));
 
-        DataStreamMappingSpec resultNewSpec = sampleTableSpec.getDataStreams().get(newName);
+        DataGroupingConfigurationSpec resultNewSpec = sampleTableSpec.getGroupings().get(newName);
         Assertions.assertNotNull(resultNewSpec);
         Assertions.assertEquals(newSpec, resultNewSpec);
 
-        Assertions.assertEquals(2, sampleTableSpec.getDataStreams().size());
+        Assertions.assertEquals(2, sampleTableSpec.getGroupings().size());
     }
 
     @ParameterizedTest
@@ -158,19 +158,19 @@ public class DataStreamsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        DataStreamMappingSpec newSpec = new DataStreamMappingSpec() {{
-            setLevel1(new DataStreamLevelSpec() {{
+        DataGroupingConfigurationSpec newSpec = new DataGroupingConfigurationSpec() {{
+            setLevel1(new DataGroupingDimensionSpec() {{
                 setColumn("date");
             }});
         }};
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateDataStream(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 DATASTREAM_NAME_1,
-                new DataStreamTrimmedModel() {{
-                    setDataStreamName(substitutableName);
+                new DataGroupingConfigurationTrimmedModel() {{
+                    setDataGroupingConfigurationName(substitutableName);
                     setSpec(newSpec);
                 }});
         Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
@@ -178,11 +178,11 @@ public class DataStreamsControllerUTTests extends BaseTest {
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
 
-        DataStreamMappingSpec resultSpec = sampleTableSpec.getDataStreams().get(DATASTREAM_NAME_1);
+        DataGroupingConfigurationSpec resultSpec = sampleTableSpec.getGroupings().get(DATASTREAM_NAME_1);
         Assertions.assertNotNull(resultSpec);
         Assertions.assertEquals(newSpec, resultSpec);
 
-        Assertions.assertEquals(2, sampleTableSpec.getDataStreams().size());
+        Assertions.assertEquals(2, sampleTableSpec.getGroupings().size());
     }
 
     @ParameterizedTest
@@ -191,19 +191,19 @@ public class DataStreamsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        DataStreamMappingSpec newSpec = new DataStreamMappingSpec() {{
-            setLevel1(new DataStreamLevelSpec() {{
+        DataGroupingConfigurationSpec newSpec = new DataGroupingConfigurationSpec() {{
+            setLevel1(new DataGroupingDimensionSpec() {{
                 setColumn("date");
             }});
         }};
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateDataStream(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName,
-                new DataStreamTrimmedModel() {{
-                    setDataStreamName(null);
+                new DataGroupingConfigurationTrimmedModel() {{
+                    setDataGroupingConfigurationName(null);
                     setSpec(newSpec);
                 }});
         Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
@@ -211,11 +211,11 @@ public class DataStreamsControllerUTTests extends BaseTest {
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
 
-        DataStreamMappingSpec resultSpec = sampleTableSpec.getDataStreams().get(dataStreamName);
+        DataGroupingConfigurationSpec resultSpec = sampleTableSpec.getGroupings().get(dataStreamName);
         Assertions.assertNotNull(resultSpec);
         Assertions.assertEquals(newSpec, resultSpec);
 
-        Assertions.assertEquals(2, sampleTableSpec.getDataStreams().size());
+        Assertions.assertEquals(2, sampleTableSpec.getGroupings().size());
     }
 
     @ParameterizedTest
@@ -224,9 +224,9 @@ public class DataStreamsControllerUTTests extends BaseTest {
         // Setting the already default data stream as default should have no effect.
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
-        DataStreamMappingSpec specBeforeAction = sampleTableSpec.getDataStreams().get(dataStreamName);
+        DataGroupingConfigurationSpec specBeforeAction = sampleTableSpec.getGroupings().get(dataStreamName);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.setDefaultDataStream(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.setTableDefaultGroupingConfiguration(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
@@ -236,10 +236,10 @@ public class DataStreamsControllerUTTests extends BaseTest {
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
 
-        Assertions.assertEquals(dataStreamName, sampleTableSpec.getDataStreams().getFirstDataStreamMappingName());
-        Assertions.assertEquals(specBeforeAction, sampleTableSpec.getDataStreams().getFirstDataStreamMapping());
+        Assertions.assertEquals(dataStreamName, sampleTableSpec.getGroupings().getFirstDataGroupingConfigurationName());
+        Assertions.assertEquals(specBeforeAction, sampleTableSpec.getGroupings().getFirstDataGroupingConfiguration());
 
-        Assertions.assertEquals(2, sampleTableSpec.getDataStreams().size());
+        Assertions.assertEquals(2, sampleTableSpec.getGroupings().size());
     }
 
     @ParameterizedTest
@@ -248,7 +248,7 @@ public class DataStreamsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.deleteDataStream(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
@@ -258,9 +258,9 @@ public class DataStreamsControllerUTTests extends BaseTest {
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
 
-        Assertions.assertNull(sampleTableSpec.getDataStreams().get(dataStreamName));
-        Assertions.assertEquals(1, sampleTableSpec.getDataStreams().size());
-        Assertions.assertNotNull(sampleTableSpec.getDataStreams().getFirstDataStreamMapping());
+        Assertions.assertNull(sampleTableSpec.getGroupings().get(dataStreamName));
+        Assertions.assertEquals(1, sampleTableSpec.getGroupings().size());
+        Assertions.assertNotNull(sampleTableSpec.getGroupings().getFirstDataGroupingConfiguration());
     }
 
     @Test
@@ -269,7 +269,7 @@ public class DataStreamsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         String dataStreamName = "I'm_not_there";
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.deleteDataStream(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
@@ -279,7 +279,7 @@ public class DataStreamsControllerUTTests extends BaseTest {
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
 
-        Assertions.assertNull(sampleTableSpec.getDataStreams().get(dataStreamName));
-        Assertions.assertEquals(2, sampleTableSpec.getDataStreams().size());
+        Assertions.assertNull(sampleTableSpec.getGroupings().get(dataStreamName));
+        Assertions.assertEquals(2, sampleTableSpec.getGroupings().size());
     }
 }

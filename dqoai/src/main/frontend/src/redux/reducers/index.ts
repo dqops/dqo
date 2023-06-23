@@ -17,11 +17,11 @@
 import { combineReducers } from 'redux';
 
 import jobReducer, { IJobsState } from './job.reducer';
-import dashboardReducer, { IDashboardState } from "./dashboard.reducer";
-import sourceReducer, { INestTab, ISourceState } from "./source.reducer";
-import sensorReducer, { ISensorState } from "./sensor.reducer";
-import ruleReducer, { IRuleState } from "./rule.reducer";
-import incidentsReducer , { IIncidentsState } from "./incidents.reducer";
+import dashboardReducer, { IDashboardState } from './dashboard.reducer';
+import sourceReducer, { INestTab, ISourceState } from './source.reducer';
+import sensorReducer, { ISensorState } from './sensor.reducer';
+import ruleReducer, { IRuleState } from './rule.reducer';
+import incidentsReducer, { IIncidentsState } from './incidents.reducer';
 export interface IRootState {
   job: IJobsState;
   dashboard: IDashboardState;
@@ -38,7 +38,7 @@ const rootReducer = combineReducers({
   source: sourceReducer,
   sensor: sensorReducer,
   rule: ruleReducer,
-  incidents: incidentsReducer,
+  incidents: incidentsReducer
 });
 
 export default rootReducer;

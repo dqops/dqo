@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
@@ -124,11 +124,11 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
-        dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
+        dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableWrapper.getSpec().getGroupings());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -156,11 +156,11 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
-        dataStreamSearcherObject.setTableDataStreams(tableSpec.getDataStreams());
+        dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableSpec.getGroupings());
         if (enabledFilter != null) {
             if (enabledFilter && tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -211,7 +211,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
@@ -234,9 +234,9 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        DataStreamMappingSpec overriddenDataStreams =
-                dataStreamSearcherObject.getTableDataStreams() != null ?
-                dataStreamSearcherObject.getTableDataStreams().getFirstDataStreamMapping() : null;
+        DataGroupingConfigurationSpec overriddenDataGroupingConfiguration =
+                dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations() != null ?
+                dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations().getFirstDataGroupingConfiguration() : null;
         LabelSetSpec overridenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -251,7 +251,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsTagsSearchMatcher.matchAllColumnDataStreams(this.filters, overriddenDataStreams)) {
+        if (!DataStreamsTagsSearchMatcher.matchAllColumnDataGroupingTags(this.filters, overriddenDataGroupingConfiguration)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overridenLabels)) {

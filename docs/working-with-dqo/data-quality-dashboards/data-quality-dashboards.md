@@ -7,7 +7,7 @@ intelligence environment.
 In DQO, you can choose from a variety of built-in dashboard groups.
 
 - **Governance dashboards** allows to review summarized key data metrics per [check category](../../checks/#categories-of-checks),
-[data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md) or [data streams](../../dqo-concepts/data-stream-segmentation/data-stream-segmentation.md).
+[data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md) or [data streams](../../dqo-concepts/data-grouping/data-grouping.md).
 Government dashboards are useful for senior management to review aggregated key data metrics.
 
 - **Operational dashboards** helps data engineers and data owners to identify areas (tables or data pipelines) in a data 

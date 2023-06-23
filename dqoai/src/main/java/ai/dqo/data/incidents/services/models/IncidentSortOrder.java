@@ -24,7 +24,7 @@ public enum IncidentSortOrder {
     tablePriority,
     firstSeen,
     lastSeen,
-    dataStreamName,
+    dataGroup,
     qualityDimension,
     checkName,
     highestSeverity,

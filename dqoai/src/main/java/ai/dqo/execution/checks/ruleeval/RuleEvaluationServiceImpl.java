@@ -27,7 +27,7 @@ import ai.dqo.execution.rules.*;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.incidents.EffectiveIncidentGroupingConfiguration;
 import ai.dqo.metadata.incidents.TableIncidentGroupingSpec;
@@ -35,6 +35,7 @@ import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.HistoricDataPointsGrouping;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import ai.dqo.utils.tables.TableColumnUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -86,7 +87,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                                               SensorReadoutsSnapshot sensorReadoutsSnapshot,
                                               CheckExecutionProgressListener progressListener) {
         Table sensorResultsTable = normalizedSensorResults.getTable();
-        TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDataStreamHashColumn());
+        TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDataGroupHashColumn());
         SensorReadoutsTimeSeriesMap historicReadoutsTimeSeries = sensorReadoutsSnapshot.getHistoricReadoutsTimeSeries();
         long checkHashId = checkSpec.getHierarchyId().hashCode64();
 
@@ -101,7 +102,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
+            LongColumn dimensionColumn = (LongColumn) TableColumnUtility.findColumn(dimensionSensorResults,
+                    SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, "data_stream_hash");
             Long timeSeriesDimensionId = dimensionColumn.get(0);
             SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             HistoricDataPointsGrouping historicDataPointGrouping = ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getHistoricDataPointGrouping() : null;
@@ -257,8 +259,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (effectiveIncidentGrouping != null && !effectiveIncidentGrouping.isDisabled() &&
                         highestSeverity >= effectiveIncidentGrouping.getMinimumSeverity().getSeverityLevel()) {
-                    String dataStreamName = !normalizedSensorResults.getDataStreamNameColumn().isMissing(allSensorResultsRowIndex) ?
-                            normalizedSensorResults.getDataStreamNameColumn().get(allSensorResultsRowIndex) : null;
+                    String dataStreamName = !normalizedSensorResults.getDataGroupNameColumn().isMissing(allSensorResultsRowIndex) ?
+                            normalizedSensorResults.getDataGroupNameColumn().get(allSensorResultsRowIndex) : null;
                     String qualityDimension = !normalizedSensorResults.getQualityDimensionColumn().isMissing(allSensorResultsRowIndex) ?
                             normalizedSensorResults.getQualityDimensionColumn().get(allSensorResultsRowIndex) : null;
                     String checkCategory = !normalizedSensorResults.getCheckCategoryColumn().isMissing(allSensorResultsRowIndex) ?

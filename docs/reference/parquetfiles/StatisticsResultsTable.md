@@ -20,18 +20,18 @@ Constants with the column names of the &quot;statistics&quot; table that contain
  | sample_index | The index of the sample for statistics collector that collect data samples. | integer |
  | sample_count | The count of the samples for statistics collector that collect data samples. | long |
  | scope | Column name for string column that says if the result is for a whole table (&quot;table&quot;) or for each data stream separately (&quot;data_stream&quot;) | text |
- | stream_level_1 | Column name for the data stream. | text |
- | stream_level_2 | Column name for the data stream. | text |
- | stream_level_3 | Column name for the data stream. | text |
- | stream_level_4 | Column name for the data stream. | text |
- | stream_level_5 | Column name for the data stream. | text |
- | stream_level_6 | Column name for the data stream. | text |
- | stream_level_7 | Column name for the data stream. | text |
- | stream_level_8 | Column name for the data stream. | text |
- | stream_level_9 | Column name for the data stream. | text |
- | data_stream_hash | Column name for a data stream hash, it is a hash of the data stream level names. | long |
- | data_stream_name | Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
- | data_stream_mapping_name | The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check. | text |
+ | grouping_level_1 | Column name for the data stream. | text |
+ | grouping_level_2 | Column name for the data stream. | text |
+ | grouping_level_3 | Column name for the data stream. | text |
+ | grouping_level_4 | Column name for the data stream. | text |
+ | grouping_level_5 | Column name for the data stream. | text |
+ | grouping_level_6 | Column name for the data stream. | text |
+ | grouping_level_7 | Column name for the data stream. | text |
+ | grouping_level_8 | Column name for the data stream. | text |
+ | grouping_level_9 | Column name for the data stream. | text |
+ | data_group_hash | Column name for a data group hash, it is a hash of the data group level values. | long |
+ | data_group_name | The data group name, it is a concatenated name of the data group dimensions, created from [grouping_level_1] / [grouping_level_2] / ... | text |
+ | data_grouping_configuration | The data grouping configuration name, it is a name of the named data grouping configuration that was used to run the data quality check. | text |
  | connection_hash | Column name for a connection hash. | long |
  | connection_name | Column name for a connection name. | text |
  | provider | Column name for a provider name. | text |
