@@ -1,6 +1,6 @@
 # Percentage of valid emails
 
-Verifies that the percentage of valid email values in a column does not exceed the maximum accepted percentage.
+Verifies that the percentage of S in a column does not exceed the maximum accepted percentage.
 
 **PROBLEM**
 
