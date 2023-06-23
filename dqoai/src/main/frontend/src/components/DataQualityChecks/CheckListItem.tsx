@@ -22,9 +22,9 @@ import CheckDetails from './CheckDetails/CheckDetails';
 import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
 import Checkbox from '../Checkbox';
-import { setCurrentJobId } from "../../redux/actions/source.actions";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getFirstLevelActiveTab } from "../../redux/selectors";
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 export interface ITab {
   label: string;
@@ -64,7 +64,19 @@ const CheckListItem = ({
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
-  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
+  const {
+    checkTypes,
+    connection,
+    schema,
+    table,
+    column
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+    column: string;
+  } = useParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();
@@ -142,7 +154,13 @@ const CheckListItem = ({
         ? { timeWindowFilter }
         : {})
     });
-    dispatch(setCurrentJobId(checkTypes, firstLevelActiveTab, (res.data as any)?.jobId?.jobId));
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        (res.data as any)?.jobId?.jobId
+      )
+    );
     setJobId((res.data as any)?.jobId?.jobId);
   };
 
@@ -373,13 +391,13 @@ const CheckListItem = ({
                         <div>
                           Executed at:{' '}
                           {checkResult?.executedAtTimestamps
-                            ? getLocalDateInUserTimeZone(
-                                new Date(
-                                  moment(
+                            ? moment(
+                                getLocalDateInUserTimeZone(
+                                  new Date(
                                     checkResult.executedAtTimestamps[index]
-                                  ).format('YYYY-MM-DD HH:mm:ss')
+                                  )
                                 )
-                              )
+                              ).format('YYYY-MM-DD HH:mm:ss')
                             : ''}
                         </div>
                         <div>
