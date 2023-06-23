@@ -3,7 +3,8 @@ import Tabs from '../../Tabs';
 import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum,
-  CheckModel, DeleteStoredDataQueueJobParameters
+  CheckModel,
+  DeleteStoredDataQueueJobParameters
 } from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
@@ -20,11 +21,14 @@ import {
   getCheckErrors,
   getCheckReadouts,
   getCheckResults,
-  setCheckFilters,
+  setCheckFilters
 } from '../../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
-import { getFirstLevelActiveTab, getFirstLevelState } from '../../../redux/selectors';
-import { IRootState } from "../../../redux/reducers";
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../../redux/selectors';
+import { IRootState } from '../../../redux/reducers';
 
 const tabs = [
   {
@@ -70,30 +74,34 @@ const CheckDetails = ({
   defaultFilters
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
+  const [isChartOpenState, setIsChartOpenState] = useState(false);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const {
     checkResults: resultsData,
     sensorReadouts: readoutsData,
     sensorErrors: errorsData,
     checkFilters: filtersData,
-    currentJobId,
+    currentJobId
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
-  const currentJob = currentJobId ? job_dictionary_state[currentJobId] : undefined;
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const currentJob = currentJobId
+    ? job_dictionary_state[currentJobId]
+    : undefined;
 
-  const checkResults = resultsData
-    ? resultsData[checkName ?? ''] || []
-    : [];
+  const checkResults = resultsData ? resultsData[checkName ?? ''] || [] : [];
   const sensorReadouts = readoutsData
     ? readoutsData[checkName ?? ''] || []
     : [];
-  const sensorErrors = errorsData
-    ? errorsData[checkName ?? ''] || []
-    : [];
-  const filters = filtersData && filtersData[checkName ?? ''] ? filtersData[checkName ?? ''] : (defaultFilters || {
-    month: moment().format('MMMM YYYY')
-  });
+  const sensorErrors = errorsData ? errorsData[checkName ?? ''] || [] : [];
+  const filters =
+    filtersData && filtersData[checkName ?? '']
+      ? filtersData[checkName ?? '']
+      : defaultFilters || {
+          month: moment().format('MMMM YYYY')
+        };
 
   const dispatch = useActionDispatch();
 
@@ -104,45 +112,28 @@ const CheckDetails = ({
 
     if (month === 'Last 3 months') {
       return {
-        startDate: moment().add(-2, 'month').startOf('month').format('YYYY-MM-DD'),
+        startDate: moment()
+          .add(-2, 'month')
+          .startOf('month')
+          .format('YYYY-MM-DD'),
         endDate: moment().endOf('month').format('YYYY-MM-DD')
-      }
+      };
     }
 
     return {
-      startDate: moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD'),
+      startDate: moment(month, 'MMMM YYYY')
+        .startOf('month')
+        .format('YYYY-MM-DD'),
       endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-    }
-  }
+    };
+  };
 
   const fetchCheckErrors = useCallback(
     (month: string, dataGroup?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
-      dispatch(getCheckErrors(checkTypes, firstLevelActiveTab, {
-        connection,
-        schema,
-        table,
-        column,
-        dataGroup,
-        startDate,
-        endDate,
-        runCheckType,
-        timeScale,
-        checkName: checkName ?? ''
-      }));
-    },
-    [checkName, timeScale, runCheckType, connection, schema, table, column]
-  );
-
-  const fetchCheckReadouts = useCallback(
-    (month: string, dataGroup?: string) => {
-      const { startDate, endDate } = calculateDateRange(month);
-
-      dispatch(getCheckReadouts(
-        checkTypes,
-        firstLevelActiveTab,
-        {
+      dispatch(
+        getCheckErrors(checkTypes, firstLevelActiveTab, {
           connection,
           schema,
           table,
@@ -153,8 +144,30 @@ const CheckDetails = ({
           runCheckType,
           timeScale,
           checkName: checkName ?? ''
-        }
-      ));
+        })
+      );
+    },
+    [checkName, timeScale, runCheckType, connection, schema, table, column]
+  );
+
+  const fetchCheckReadouts = useCallback(
+    (month: string, dataGroup?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
+
+      dispatch(
+        getCheckReadouts(checkTypes, firstLevelActiveTab, {
+          connection,
+          schema,
+          table,
+          column,
+          dataGroup,
+          startDate,
+          endDate,
+          runCheckType,
+          timeScale,
+          checkName: checkName ?? ''
+        })
+      );
     },
     [runCheckType, checkName, timeScale, connection, schema, table, column]
   );
@@ -163,10 +176,8 @@ const CheckDetails = ({
     (month: string, dataGroup?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
-      dispatch(getCheckResults(
-        checkTypes,
-        firstLevelActiveTab,
-        {
+      dispatch(
+        getCheckResults(checkTypes, firstLevelActiveTab, {
           connection,
           schema,
           table,
@@ -176,9 +187,9 @@ const CheckDetails = ({
           endDate,
           runCheckType,
           checkName: checkName ?? '',
-          timeScale,
-        }
-      ));
+          timeScale
+        })
+      );
     },
     [runCheckType, checkName, timeScale, connection, schema, table, column]
   );
@@ -201,10 +212,10 @@ const CheckDetails = ({
     }
   }, []);
 
-  useEffect(() =>{
+  useEffect(() => {
     if (
-      (currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-        currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed)
+      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       refetch(filters.month, filters.dataGroup);
     }
@@ -216,8 +227,7 @@ const CheckDetails = ({
 
   const onChangeDataGroup = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab,
-      checkName ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
         ...filters,
         onChangeDataGroup: value
       })
@@ -241,10 +251,17 @@ const CheckDetails = ({
     fetchCheckReadouts(month, name);
   };
 
+  const isChartOpen = (arg: boolean): void => {
+    setIsChartOpenState(arg);
+  };
+
   return (
     <div
       className="my-4"
-      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 85}px` }}
+      style={{
+        maxWidth: `calc(100vw - ${sidebarWidth + 85}px`,
+        width: isChartOpenState ? '45%' : 'auto'
+      }}
     >
       <div className="bg-white px-4 py-6 border border-gray-200 relative">
         <IconButton
@@ -276,6 +293,7 @@ const CheckDetails = ({
             month={filters.month}
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
+            isChartOpen={isChartOpen}
           />
         )}
         {activeTab === 'sensor_readouts' && (
@@ -303,7 +321,7 @@ const CheckDetails = ({
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
-              ...data_clean_job_template || {},
+              ...(data_clean_job_template || {}),
               ...params
             });
           }}

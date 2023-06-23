@@ -131,7 +131,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
   };
 
   return (
-    <div className="my-8 w-1/2">
+    <div className="my-8 ">
       <Line data={dataSource} options={options as any} />
     </div>
   );
