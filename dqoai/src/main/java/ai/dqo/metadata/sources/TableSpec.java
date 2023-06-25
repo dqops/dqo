@@ -28,6 +28,7 @@ import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpecMap;
 import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -62,6 +63,7 @@ public class TableSpec extends AbstractSpec {
             put("timestamp_columns", o -> o.timestampColumns);
             put("incremental_time_window", o -> o.incrementalTimeWindow);
 			put("groupings", o -> o.groupings);
+            put("comparisons", o -> o.comparisons);
             put("incident_grouping", o -> o.incidentGrouping);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
@@ -121,6 +123,15 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DataGroupingConfigurationSpecMap groupings = new DataGroupingConfigurationSpecMap();
+
+    @JsonPropertyDescription("Dictionary of named cross data-source comparisons to compare this table (called the parent table) with other reference tables (the source of truth). " +
+                             "The reference table's metadata must be imported into DQO, but the reference table could be located on a different data source. " +
+                             "DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
+                             "The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. " +
+                             "DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ReferenceTableComparisonSpecMap comparisons = new ReferenceTableComparisonSpecMap();
 
     @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -290,6 +301,24 @@ public class TableSpec extends AbstractSpec {
 		setDirtyIf(!Objects.equals(this.groupings, groupings));
         this.groupings = groupings;
 		propagateHierarchyIdToField(groupings, "groupings");
+    }
+
+    /**
+     * Returns the map of named comparisons to reference tables.
+     * @return Dictionary of comparisons to reference tables.
+     */
+    public ReferenceTableComparisonSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the dictionary of comparisons to reference tables.
+     * @param comparisons Dictionary of comparisons to reference tables.
+     */
+    public void setComparisons(ReferenceTableComparisonSpecMap comparisons) {
+        setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**
@@ -723,6 +752,7 @@ public class TableSpec extends AbstractSpec {
             cloned.owner = null;
             cloned.comments = null;
             cloned.statistics = null;
+            cloned.comparisons = null;
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
@@ -762,6 +792,7 @@ public class TableSpec extends AbstractSpec {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.groupings = null;
+            cloned.comparisons = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.statistics = null;
@@ -789,6 +820,7 @@ public class TableSpec extends AbstractSpec {
             cloned.timestampColumns = null;
             cloned.incrementalTimeWindow = null;
             cloned.groupings = null;
+            cloned.comparisons = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.columns = null;

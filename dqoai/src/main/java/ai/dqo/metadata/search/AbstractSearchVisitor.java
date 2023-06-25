@@ -22,6 +22,8 @@ import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpecMap;
 import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -828,6 +830,30 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(TableIncidentGroupingSpec tableIncidentGroupingSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a description of the reference table to which the current table is compared.
+     *
+     * @param referenceTableComparisonSpec Reference table specification.
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ReferenceTableComparisonSpec referenceTableComparisonSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of reference table comparisons.
+     *
+     * @param referenceTableComparisonSpecMap Dictionary of reference table comparisons.
+     * @param parameter                       Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ReferenceTableComparisonSpecMap referenceTableComparisonSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }
