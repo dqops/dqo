@@ -20,6 +20,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpec;
@@ -854,6 +855,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(ReferenceTableComparisonSpecMap referenceTableComparisonSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a map of comparison checks for a named comparison.
+     *
+     * @param abstractComparisonCheckCategorySpecMap Comparison map with checks.
+     * @param parameter                              Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

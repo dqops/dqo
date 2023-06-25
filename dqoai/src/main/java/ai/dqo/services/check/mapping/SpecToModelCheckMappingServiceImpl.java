@@ -16,6 +16,7 @@
 package ai.dqo.services.check.mapping;
 
 import ai.dqo.checks.*;
+import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.scheduler.quartz.SchedulesUtilityService;
@@ -161,6 +162,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
+                continue; // not supported here
+            }
+
             QualityCategoryModel categoryModel = createCategoryModel(categoryFieldInfo,
                     categoryFieldValue,
                     checkCategoriesSpec.getSchedulingGroup(),
@@ -213,6 +218,9 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object checkCategoryParentNode = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            if (checkCategoryParentNode instanceof AbstractComparisonCheckCategorySpecMap<?>) {
+                continue; // not supported
+            }
 
             ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
             List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, Optional.empty());

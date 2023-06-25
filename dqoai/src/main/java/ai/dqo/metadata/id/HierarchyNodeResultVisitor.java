@@ -20,6 +20,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpec;
+import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpec;
@@ -594,4 +596,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(ReferenceTableComparisonSpecMap referenceTableComparisonSpecMap, P parameter);
+
+    /**
+     * Accepts a map of comparison checks for a named comparison.
+     * @param abstractComparisonCheckCategorySpecMap Comparison map with checks.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, P parameter);
 }
