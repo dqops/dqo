@@ -10,7 +10,6 @@ import {
   DataGroupingConfigurationsApi
 } from '../../services/apiClient';
 import {
-  DataGroupingConfigurationBasicModel,
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
