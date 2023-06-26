@@ -34,4 +34,11 @@ public abstract class AbstractComparisonCheckCategorySpecMap<V extends AbstractC
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
+
+    /**
+     * Retrieves or creates, adds and returns a check container for a given comparison.
+     * @param comparisonName Table comparison name.
+     * @return Check container for the given comparison. Never null.
+     */
+    public abstract V getOrAdd(String comparisonName);
 }

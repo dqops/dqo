@@ -20,7 +20,9 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -45,7 +47,7 @@ public class ReferenceTableComparisonSpec extends AbstractSpec {
 
     @JsonPropertyDescription("The name of the data grouping configuration on the parent table that will be used for comparison. " +
             "When not provided, uses the 'default' grouping name. When the parent table has no data grouping configurations, compares the whole table without grouping.")
-    private String parentTableGroupingName = DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME;
+    private String comparedTableGroupingName = DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME;
 
     @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
             "When not provided, uses the 'default' grouping name. When the reference table has no data grouping configurations, compares the whole table without grouping. " +
@@ -66,17 +68,17 @@ public class ReferenceTableComparisonSpec extends AbstractSpec {
      * Returns the data grouping configuration name on the parent table.
      * @return Grouping configuration name.
      */
-    public String getParentTableGroupingName() {
-        return parentTableGroupingName;
+    public String getComparedTableGroupingName() {
+        return comparedTableGroupingName;
     }
 
     /**
-     * Sets the name of the data grouping configuration name for the parent table.
-     * @param parentTableGroupingName Data grouping configuration name.
+     * Sets the name of the data grouping configuration name for the parent (compared) table.
+     * @param comparedTableGroupingName Data grouping configuration name.
      */
-    public void setParentTableGroupingName(String parentTableGroupingName) {
-        this.setDirtyIf(!Objects.equals(this.parentTableGroupingName, parentTableGroupingName));
-        this.parentTableGroupingName = parentTableGroupingName;
+    public void setComparedTableGroupingName(String comparedTableGroupingName) {
+        this.setDirtyIf(!Objects.equals(this.comparedTableGroupingName, comparedTableGroupingName));
+        this.comparedTableGroupingName = comparedTableGroupingName;
     }
 
     /**
@@ -145,6 +147,20 @@ public class ReferenceTableComparisonSpec extends AbstractSpec {
     public void setReferenceTableName(String referenceTableName) {
         this.setDirtyIf(!Objects.equals(this.referenceTableName, referenceTableName));
         this.referenceTableName = referenceTableName;
+    }
+
+    /**
+     * Retrieves the comparison name from the parent hierarchy. Works only when the comparison specification was added to the comparison's map under a comparison name.
+     * @return Comparison name.
+     */
+    @JsonIgnore
+    public String getComparisonName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+
+        return hierarchyId.getLast().toString();
     }
 
     /**

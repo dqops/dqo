@@ -68,6 +68,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy total sum match percent check specification.
      * @return Accuracy total sum match percent check specification.
      */
+    @Override
     public ColumnComparisonSumMatchCheckSpec getSumMatch() {
         return sumMatch;
     }
@@ -76,6 +77,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an Accuracy total sum match percent check.
      * @param sumMatch accuracy total sum match percent check specification.
      */
+    @Override
     public void setSumMatch(ColumnComparisonSumMatchCheckSpec sumMatch) {
         this.setDirtyIf(!Objects.equals(this.sumMatch, sumMatch));
         this.sumMatch = sumMatch;
@@ -86,6 +88,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy min percent check specification.
      * @return Accuracy min percent check specification.
      */
+    @Override
     public ColumnComparisonMinMatchCheckSpec getMinMatch() {
         return minMatch;
     }
@@ -94,6 +97,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy min percent check.
      * @param minMatch Accuracy min percent check specification.
      */
+    @Override
     public void setMinMatch(ColumnComparisonMinMatchCheckSpec minMatch) {
         this.setDirtyIf(!Objects.equals(this.minMatch, minMatch));
         this.minMatch = minMatch;
@@ -104,6 +108,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy max percent check specification.
      * @return Accuracy max percent check specification.
      */
+    @Override
     public ColumnComparisonMaxMatchCheckSpec getMaxMatch() {
         return maxMatch;
     }
@@ -112,6 +117,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy max percent check.
      * @param maxMatch Accuracy max percent check specification.
      */
+    @Override
     public void setMaxMatch(ColumnComparisonMaxMatchCheckSpec maxMatch) {
         this.setDirtyIf(!Objects.equals(this.maxMatch, maxMatch));
         this.maxMatch = maxMatch;
@@ -122,6 +128,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy average percent check specification.
      * @return Accuracy average percent check specification.
      */
+    @Override
     public ColumnComparisonMeanMatchCheckSpec getMeanMatch() {
         return meanMatch;
     }
@@ -130,6 +137,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy average percent check.
      * @param meanMatch Accuracy average percent check specification.
      */
+    @Override
     public void setMeanMatch(ColumnComparisonMeanMatchCheckSpec meanMatch) {
         this.setDirtyIf(!Objects.equals(this.meanMatch, meanMatch));
         this.meanMatch = meanMatch;
@@ -140,6 +148,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy not null count percent check specification.
      * @return Accuracy not null count percent check specification.
      */
+    @Override
     public ColumnComparisonNotNullCountMatchCheckSpec getNotNullCountMatch() {
         return this.notNullCountMatch;
     }
@@ -148,6 +157,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy not null count percent check.
      * @param notNullCountMatch Accuracy not null count percent check specification.
      */
+    @Override
     public void setNotNullCountMatch(ColumnComparisonNotNullCountMatchCheckSpec notNullCountMatch) {
         this.setDirtyIf(!Objects.equals(this.notNullCountMatch, notNullCountMatch));
         this.notNullCountMatch = notNullCountMatch;
@@ -158,6 +168,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy null count percent check specification.
      * @return Accuracy null count percent check specification.
      */
+    @Override
     public ColumnComparisonNullCountMatchCheckSpec getNullCountMatch() {
         return this.nullCountMatch;
     }
@@ -166,6 +177,7 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy null count percent check.
      * @param nullCountMatch Accuracy null count percent check specification.
      */
+    @Override
     public void setNullCountMatch(ColumnComparisonNullCountMatchCheckSpec nullCountMatch) {
         this.setDirtyIf(!Objects.equals(this.nullCountMatch, nullCountMatch));
         this.nullCountMatch = nullCountMatch;

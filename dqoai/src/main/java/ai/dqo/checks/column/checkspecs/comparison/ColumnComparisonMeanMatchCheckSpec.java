@@ -17,6 +17,7 @@ package ai.dqo.checks.column.checkspecs.comparison;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
+import ai.dqo.checks.comparison.ComparisonCheckRules;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxDiffPercentRule0ParametersSpec;
@@ -41,7 +42,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnComparisonMeanMatchCheckSpec
-        extends AbstractCheckSpec<ColumnNumericMeanSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericMeanSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec>
+        implements ComparisonCheckRules {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnComparisonMeanMatchCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }

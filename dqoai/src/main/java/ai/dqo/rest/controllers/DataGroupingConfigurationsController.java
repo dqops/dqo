@@ -102,15 +102,15 @@ public class DataGroupingConfigurationsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param groupingConfigurationName Data stream name.
+     * @param groupingConfigurationName Data grouping name.
      * @return Model of the data grouping configuration.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{groupingConfigurationName}", produces = "application/json")
     @ApiOperation(value = "getTableGroupingConfiguration", notes = "Returns a model of the data grouping configuration", response = DataGroupingConfigurationModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DataGroupingConfigurationModel[].class),
-            @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
+            @ApiResponse(code = 200, message = "OK", response = DataGroupingConfigurationModel.class),
+            @ApiResponse(code = 404, message = "Connection, table or data grouping not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<DataGroupingConfigurationModel>> getTableGroupingConfiguration(
@@ -119,8 +119,8 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String groupingConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        DataGroupingConfigurationSpecMap dataStreamMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
-        if (dataStreamMapping == null || !dataStreamMapping.containsKey(groupingConfigurationName)) {
+        DataGroupingConfigurationSpecMap dataGroupingMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
+        if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(groupingConfigurationName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
@@ -129,7 +129,7 @@ public class DataGroupingConfigurationsController {
             setSchemaName(schemaName);
             setTableName(tableName);
             setDataGroupingConfigurationName(groupingConfigurationName);
-            setSpec(dataStreamMapping.get(groupingConfigurationName));
+            setSpec(dataGroupingMapping.get(groupingConfigurationName));
         }};
         return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
     }
@@ -137,7 +137,7 @@ public class DataGroupingConfigurationsController {
 
     /**
      * Update a specific data grouping configuration using a new model.
-     * Remark: POST method is used, because renaming the data grouping configuration would break idempotence.
+     * Remark: PUT method is used, because renaming the data grouping configuration would break idempotence.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
@@ -150,7 +150,7 @@ public class DataGroupingConfigurationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data grouping configuration successfully updated"),
-            @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
+            @ApiResponse(code = 404, message = "Connection, table or data grouping not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
             @ApiResponse(code = 409, message = "Data grouping configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -170,8 +170,8 @@ public class DataGroupingConfigurationsController {
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        DataGroupingConfigurationSpecMap dataStreamMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
-        if (dataStreamMapping == null || !dataStreamMapping.containsKey(dataGroupingConfigurationName)) {
+        DataGroupingConfigurationSpecMap dataGroupingMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
+        if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
@@ -180,15 +180,15 @@ public class DataGroupingConfigurationsController {
             newName = dataGroupingConfigurationName;
         }
 
-        if (newName != null && !Objects.equals(newName, dataGroupingConfigurationName) && dataStreamMapping.containsKey(newName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data stream configuration with this name already exists
+        if (newName != null && !Objects.equals(newName, dataGroupingConfigurationName) && dataGroupingMapping.containsKey(newName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data grouping configuration with this name already exists
         }
 
         DataGroupingConfigurationSpec newSpec = dataGroupingConfigurationModel.getSpec();
-        dataStreamMapping.put(newName, newSpec);
+        dataGroupingMapping.put(newName, newSpec);
         if (!newName.equals(dataGroupingConfigurationName)) {
             // If renaming actually happened.
-            dataStreamMapping.remove(dataGroupingConfigurationName);
+            dataGroupingMapping.remove(dataGroupingConfigurationName);
         }
 
         userHomeContext.flush();
@@ -232,7 +232,7 @@ public class DataGroupingConfigurationsController {
         }
 
         if (tableSpec.getGroupings().containsKey(dataGroupingConfigurationModel.getDataGroupingConfigurationName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data stream configuration with this name already exists
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data grouping configuration with this name already exists
         }
 
         tableSpec.getGroupings().put(dataGroupingConfigurationModel.getDataGroupingConfigurationName(), dataGroupingConfigurationModel.getSpec());
@@ -268,20 +268,20 @@ public class DataGroupingConfigurationsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        DataGroupingConfigurationSpecMap dataStreamMapping = tableSpec.getGroupings();
-        if (!dataStreamMapping.containsKey(dataGroupingConfigurationName)) {
+        DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
+        if (!dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        if (!dataGroupingConfigurationName.equals(dataStreamMapping.getFirstDataGroupingConfigurationName())) {
-            // TODO: Think about implementing this inside DataStreamMappingSpecMap.
+        if (!dataGroupingConfigurationName.equals(dataGroupingMapping.getFirstDataGroupingConfigurationName())) {
+            // TODO: Think about implementing this inside DataGroupingMappingSpecMap.
             DataGroupingConfigurationSpecMap newMapping = new DataGroupingConfigurationSpecMap();
-            newMapping.put(dataGroupingConfigurationName, dataStreamMapping.get(dataGroupingConfigurationName));
-            for (Map.Entry<String, DataGroupingConfigurationSpec> dataStreamEntry : dataStreamMapping.entrySet()) {
-                if (dataStreamEntry.getKey().equals(dataGroupingConfigurationName)) {
+            newMapping.put(dataGroupingConfigurationName, dataGroupingMapping.get(dataGroupingConfigurationName));
+            for (Map.Entry<String, DataGroupingConfigurationSpec> dataGroupingEntry : dataGroupingMapping.entrySet()) {
+                if (dataGroupingEntry.getKey().equals(dataGroupingConfigurationName)) {
                     continue;
                 }
-                newMapping.put(dataStreamEntry.getKey(), dataStreamEntry.getValue());
+                newMapping.put(dataGroupingEntry.getKey(), dataGroupingEntry.getValue());
             }
             tableSpec.setGroupings(newMapping);
         }
