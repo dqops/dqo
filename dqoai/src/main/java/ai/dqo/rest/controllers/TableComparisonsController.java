@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpec;
 import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpecMap;
 import ai.dqo.metadata.sources.*;
@@ -22,6 +23,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.comparison.TableComparisonBasicModel;
+import ai.dqo.rest.models.comparison.TableComparisonModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -40,8 +42,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "DataComparisons", description = "Manages the configuration of table comparisons between data sources")
-public class DataComparisonsController {
+@Api(value = "TableComparisons", description = "Manages the configuration of table comparisons between data sources")
+public class TableComparisonsController {
     private UserHomeContextFactory userHomeContextFactory;
 
     /**
@@ -49,7 +51,7 @@ public class DataComparisonsController {
      * @param userHomeContextFactory      User home context factory.
      */
     @Autowired
-    public DataComparisonsController(UserHomeContextFactory userHomeContextFactory) {
+    public TableComparisonsController(UserHomeContextFactory userHomeContextFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
     }
 
@@ -100,7 +102,7 @@ public class DataComparisonsController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableComparisonBasicModel.class),
-            @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
+            @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableComparisonBasicModel>> getTableComparisonConfiguration(
@@ -129,8 +131,8 @@ public class DataComparisonsController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param tableComparisonName  Data grouping configuration name up until now.
-     * @param tableComparisonConfigurationModel Data grouping configuration trimmed model.
+     * @param tableComparisonName  Table comparison configuration name up until now.
+     * @param tableComparisonConfigurationModel Table comparison configuration trimmed model.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{tableComparisonName}", consumes = "application/json", produces = "application/json")
@@ -138,9 +140,9 @@ public class DataComparisonsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table comparison configuration successfully updated"),
-            @ApiResponse(code = 404, message = "Connection, table or data comparison not found"),
+            @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
-            @ApiResponse(code = 409, message = "Data comparison configuration with the same name already exists"),
+            @ApiResponse(code = 409, message = "Table comparison configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableComparisonConfiguration(
@@ -206,7 +208,7 @@ public class DataComparisonsController {
             @ApiResponse(code = 201, message = "New table comparison configuration successfully created"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
-            @ApiResponse(code = 409, message = "Data comparison configuration with the same name already exists"),
+            @ApiResponse(code = 409, message = "Table comparison configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> createTableComparisonConfiguration(
@@ -279,6 +281,97 @@ public class DataComparisonsController {
         comparisonSpecMap.remove(tableComparisonName);
 
         // TODO: We can also disable the configuration of all comparison checks in all check types that are using the deleted comparison, it should be defined in the TableSpec class
+
+        userHomeContext.flush();
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Returns the table comparison in the profiling check type.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param tableComparisonName Table comparison name.
+     * @return Model of the table comparison using profiling checks.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{tableComparisonName}/profiling", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using advanced profiling checks (comparison at any time)", response = TableComparisonModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = TableComparisonModel.class),
+            @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonProfiling(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        ReferenceTableComparisonSpec tableComparisonSpec = tableSpec.getComparisons().get(tableComparisonName);
+        if (tableComparisonSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, tableComparisonName, CheckType.PROFILING, null);
+        return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Update the configuration of profiling checks for performing the table comparison.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
+     * @param tableComparisonName  Table comparison configuration name up until now.
+     * @param tableComparisonModel Table comparison model with all checks to enable or disable.
+     * @return Empty response.
+     */
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{tableComparisonName}/profiling", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableComparisonProfiling", notes = "Updates a table comparison profiling checks")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table comparison profiling checks successfully updated"),
+            @ApiResponse(code = 404, message = "Connection, table or table comparison not found"),
+            @ApiResponse(code = 406, message = "Incorrect request"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTableComparisonProfiling(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonName,
+            @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
+            @RequestBody TableComparisonModel tableComparisonModel) {
+        if (Strings.isNullOrEmpty(connectionName)     ||
+                Strings.isNullOrEmpty(schemaName)     ||
+                Strings.isNullOrEmpty(tableName)      ||
+                Strings.isNullOrEmpty(tableComparisonName) ||
+                tableComparisonModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        ReferenceTableComparisonSpecMap comparisonSpecMap = this.readComparisonConfigurations(userHomeContext, connectionName, schemaName, tableName);
+        if (comparisonSpecMap == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        ReferenceTableComparisonSpec tableComparisonSpec = comparisonSpecMap.get(tableComparisonName);
+        if (tableComparisonSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonName, CheckType.PROFILING, null);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

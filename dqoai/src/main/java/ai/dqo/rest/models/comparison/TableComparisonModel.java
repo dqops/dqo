@@ -34,7 +34,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,24 +59,28 @@ public class TableComparisonModel {
      * Compared connection name - the connection name to the data source that is compared (verified).
      */
     @JsonPropertyDescription("Compared connection name - the connection name to the data source that is compared (verified).")
+    @Setter(AccessLevel.NONE)
     private String comparedConnection;
 
     /**
      * The schema and table name of the compared table that is verified.
      */
     @JsonPropertyDescription("The schema and table name of the compared table that is verified.")
+    @Setter(AccessLevel.NONE)
     private PhysicalTableName comparedTable;
 
     /**
      * Reference connection name - the connection name to the data source that has the reference data to compare to.
      */
     @JsonPropertyDescription("Reference connection name - the connection name to the data source that has the reference data to compare to.")
+    @Setter(AccessLevel.NONE)
     private String referenceConnection;
 
     /**
      * The schema and table name of the reference table that has the expected data.
      */
     @JsonPropertyDescription("The schema and table name of the reference table that has the expected data.")
+    @Setter(AccessLevel.NONE)
     private PhysicalTableName referenceTable;
 
     /**
@@ -82,6 +88,7 @@ public class TableComparisonModel {
      */
     @JsonPropertyDescription("The name of the data grouping configuration on the parent table that will be used for comparison. " +
             "When the parent table has no data grouping configurations, compares the whole table without grouping.")
+    @Setter(AccessLevel.NONE)
     private String comparedTableGroupingName;
 
     /**
@@ -90,6 +97,7 @@ public class TableComparisonModel {
     @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
             "When the reference table has no data grouping configurations, compares the whole table without grouping. " +
             "The data grouping configurations on the compared table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
+    @Setter(AccessLevel.NONE)
     private String referenceTableGroupingName;
 
     /**
@@ -134,12 +142,12 @@ public class TableComparisonModel {
         }
 
         tableComparisonModel.setComparisonName(comparisonSpec.getComparisonName());
-        tableComparisonModel.setComparedConnection(comparedTableHierarchyId.getConnectionName());
-        tableComparisonModel.setComparedTable(comparedTableHierarchyId.getPhysicalTableName());
-        tableComparisonModel.setReferenceConnection(comparisonSpec.getReferenceTableConnectionName());
-        tableComparisonModel.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
-        tableComparisonModel.setComparedTableGroupingName(comparisonSpec.getComparedTableGroupingName());
-        tableComparisonModel.setReferenceTableGroupingName(comparisonSpec.getReferenceTableGroupingName());
+        tableComparisonModel.comparedConnection = comparedTableHierarchyId.getConnectionName();
+        tableComparisonModel.comparedTable = comparedTableHierarchyId.getPhysicalTableName();
+        tableComparisonModel.referenceConnection = comparisonSpec.getReferenceTableConnectionName();
+        tableComparisonModel.referenceTable = new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName());
+        tableComparisonModel.comparedTableGroupingName = comparisonSpec.getComparedTableGroupingName();
+        tableComparisonModel.referenceTableGroupingName = comparisonSpec.getReferenceTableGroupingName();
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = tableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false);
@@ -177,19 +185,7 @@ public class TableComparisonModel {
                                 CheckTimeScale checkTimeScale) {
         ReferenceTableComparisonSpec comparisonSpec = targetTableSpec.getComparisons().get(tableComparisonName);
         if (comparisonSpec == null) {
-            comparisonSpec = new ReferenceTableComparisonSpec();
-            targetTableSpec.getComparisons().put(tableComparisonName, comparisonSpec);
-        }
-
-        comparisonSpec.setComparedTableGroupingName(this.getComparedTableGroupingName());
-        comparisonSpec.setReferenceTableGroupingName(this.getReferenceTableGroupingName());
-        comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
-        if (this.getReferenceTable() != null) {
-            comparisonSpec.setReferenceTableSchemaName(this.getReferenceTable().getSchemaName());
-            comparisonSpec.setReferenceTableName(this.getReferenceTable().getTableName());
-        } else {
-            comparisonSpec.setReferenceTableSchemaName(null);
-            comparisonSpec.setReferenceTableName(null);
+            throw new DqoRuntimeException("Table comparison '" + tableComparisonName + "' was not found in table " + targetTableSpec.getHierarchyId());
         }
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = targetTableSpec.getTableCheckRootContainer(
