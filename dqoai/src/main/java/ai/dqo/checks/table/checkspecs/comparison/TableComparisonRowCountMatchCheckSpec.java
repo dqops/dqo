@@ -19,10 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.rules.comparison.MaxDiffPercentRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule1ParametersSpec;
-import ai.dqo.rules.comparison.MaxDiffPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule5ParametersSpec;
-import ai.dqo.sensors.table.accuracy.TableAccuracyRowCountMatchPercentSensorParametersSpec;
 import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableComparisonRowCountMatchCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule2ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableComparisonRowCountMatchCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -56,13 +55,13 @@ public class TableComparisonRowCountMatchCheckSpec
             "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDiffPercentRule1ParametersSpec warning;
+    private MaxDiffPercentRule0ParametersSpec warning;
 
     @JsonPropertyDescription("Error level threshold to raise a data quality incident with an error severity level when the row count in the parent table " +
             "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDiffPercentRule2ParametersSpec error;
+    private MaxDiffPercentRule1ParametersSpec error;
 
     @JsonPropertyDescription("Fatal level threshold to raise a data quality incident with a fatal severity level when the row count in the parent table " +
             "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
@@ -95,7 +94,7 @@ public class TableComparisonRowCountMatchCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxDiffPercentRule1ParametersSpec getWarning() {
+    public MaxDiffPercentRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -103,7 +102,7 @@ public class TableComparisonRowCountMatchCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxDiffPercentRule1ParametersSpec warning) {
+    public void setWarning(MaxDiffPercentRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -115,7 +114,7 @@ public class TableComparisonRowCountMatchCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxDiffPercentRule2ParametersSpec getError() {
+    public MaxDiffPercentRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +122,7 @@ public class TableComparisonRowCountMatchCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxDiffPercentRule2ParametersSpec error) {
+    public void setError(MaxDiffPercentRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
