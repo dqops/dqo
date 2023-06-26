@@ -20,8 +20,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { ROUTES, CheckTypes } from '../../shared/routes';
-import { LocationState } from './TableColumnsFunctions';
 import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+
+interface LocationState {
+  bool: boolean;
+  data_stream_name: string;
+  spec: DataGroupingConfigurationSpec;
+}
 
 const TableColumnsView = () => {
   const {
