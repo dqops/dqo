@@ -158,7 +158,6 @@ const connectionReducer = (state = initialState, action: Action) => {
           : item
       );
 
-      console.log('SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_URL', action, newTabs);
       return {
         ...state,
         [action.checkType]: {

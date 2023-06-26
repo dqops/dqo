@@ -7,9 +7,10 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
+import { setActiveFirstLevelTab } from '../../../redux/actions/source.actions';
 
 const SchemasView = () => {
-  const { connection, checkTypes }: { connection: string; checkTypes: string } = useParams();
+  const { connection, checkTypes }: { connection: string; checkTypes: CheckTypes } = useParams();
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const history = useHistory();
@@ -23,8 +24,7 @@ const SchemasView = () => {
   }, [connection]);
 
   const onImportTables = (schema: SchemaModel) => {
-    JobApiClient.importTables(schema.import_table_job_parameters);
-    dispatch(toggleMenu(true));
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connection, 'schemas')}?import_schema=true&import_table=true&schema=${schema.schema_name}`);
   };
 
   const goToSchemas = () => {
