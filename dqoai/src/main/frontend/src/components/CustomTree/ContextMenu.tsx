@@ -17,6 +17,8 @@ import {
   TimeWindowFilterParameters,
   RunChecksQueueJobParameters
 } from '../../api';
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -45,6 +47,8 @@ const ContextMenu = ({
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const dispatch = useActionDispatch();
+
   const handleRefresh = () => {
     refreshNode(node);
     setOpen(false);
@@ -67,6 +71,7 @@ const ContextMenu = ({
   };
 
   const importMetaData = () => {
+    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label)));
     history.push(
       `${ROUTES.CONNECTION_DETAIL(
         checkTypes,
@@ -74,11 +79,19 @@ const ContextMenu = ({
         'schemas'
       )}?import_schema=true`
     );
-    setOpen(false);
   };
 
   const importTables = () => {
-    setOpen(false);
+    const [connection, schema] = node.id.toString().split('.');
+    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.SCHEMA_LEVEL_VALUE(checkTypes, connection, schema)));
+    history.push(
+      `${ROUTES.SCHEMA_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        'tables'
+      )}`
+    );
   };
 
   const openPopover = (e: MouseEvent) => {
