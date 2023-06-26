@@ -53,6 +53,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -85,6 +86,11 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSchemaProfilingChecksSpec schema;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableComparisonProfilingChecksSpecMap comparisons = new TableComparisonProfilingChecksSpecMap();
 
     /**
      * Returns a container of volume check configuration on a table level.
@@ -192,6 +198,24 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns the dictionary of comparisons.
+     * @return Dictionary of comparisons.
+     */
+    public TableComparisonProfilingChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the dictionary of comparisons.
+     * @param comparisons Dictionary of comparisons.
+     */
+    public void setComparisons(TableComparisonProfilingChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**

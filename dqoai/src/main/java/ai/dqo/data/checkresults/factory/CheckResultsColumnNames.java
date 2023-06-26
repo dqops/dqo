@@ -30,7 +30,7 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String SEVERITY_COLUMN_NAME = "severity";
 
     /**
-     * Column name for a matching data quality incident hash. The value is used to map a failed data quality check to an incident.
+     * The matching data quality incident hash. The value is used to map a failed data quality check to an incident.
      */
     public static final String INCIDENT_HASH_COLUMN_NAME = "incident_hash";
 
@@ -50,42 +50,42 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String REFERENCE_TABLE_COLUMN_NAME = "reference_table";
 
     /**
-     * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality KPI.
+     * The boolean column that identifies data quality rule results that should be counted in the data quality KPI.
      */
     public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";
 
     /**
-     * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality SLA.
+     * The boolean column that identifies data quality rule results that should be counted in the data quality SLA.
      */
     public static final String INCLUDE_IN_SLA_COLUMN_NAME = "include_in_sla";
 
     /**
-     * Column name for the warning lower bound, returned by the fatal severity rule.
+     * The warning lower bound, returned by the fatal severity rule.
      */
     public static final String FATAL_LOWER_BOUND_COLUMN_NAME = "fatal_lower_bound";
 
     /**
-     * Column name for the fatal upper bound, returned by the fatal severity rule.
+     * The fatal upper bound, returned by the fatal severity rule.
      */
     public static final String FATAL_UPPER_BOUND_COLUMN_NAME = "fatal_upper_bound";
 
     /**
-     * Column name for the error lower bound, returned by the error (medium) severity rule.
+     * The error lower bound, returned by the error (medium) severity rule.
      */
     public static final String ERROR_LOWER_BOUND_COLUMN_NAME = "error_lower_bound";
 
     /**
-     * Column name for the error upper bound, returned by the error severity rule.
+     * The error upper bound, returned by the error severity rule.
      */
     public static final String ERROR_UPPER_BOUND_COLUMN_NAME = "error_upper_bound";
 
     /**
-     * Column name for the warning lower bound, returned by the warning severity rule.
+     * The warning lower bound, returned by the warning severity rule.
      */
     public static final String WARNING_LOWER_BOUND_COLUMN_NAME = "warning_lower_bound";
 
     /**
-     * Column name for the warning upper bound, returned by the warning severity rule.
+     * The warning upper bound, returned by the warning severity rule.
      */
     public static final String WARNING_UPPER_BOUND_COLUMN_NAME = "warning_upper_bound";
 

@@ -34,8 +34,8 @@ Constants with the column names in the &quot;errors&quot; parquet tables.
  | table_stage | The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: &quot;landing&quot;, &quot;staging&quot;, &quot;cleansing&quot;, etc. | text |
  | table_priority | The table priority value copied from the table&#x27;s definition. The table priority could be used for sorting tables by their importance. | integer |
  | column_hash | The hash of a column. | long |
- | column_name | The column name for which the results are stored. | text |
- | column_name_pattern | The column name pattern, in case that a data quality check targets multiple columns. | text |
+ | column_name | The column for which the results are stored. | text |
+ | column_name_pattern | The column pattern, in case that a data quality check targets multiple columns. | text |
  | check_hash | The hash of a data quality check. | long |
  | check_name | The data quality check name. | text |
  | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
@@ -50,7 +50,7 @@ Constants with the column names in the &quot;errors&quot; parquet tables.
  | updated_at | The timestamp when the row was updated at. | instant |
  | created_by | The login of the user that created the row. | text |
  | updated_by | The login of the user that updated the row. | text |
- | readout_id | Column name that stores the sensor readout ID. | text |
- | error_message | Column name that stores the error message. | text |
- | error_source | Column name that stores the error source, which is the component that raised an error (sensor or rule). | text |
- | error_timestamp | Column name that stores the error timestamp using the local timestamp. | local_date_time |
+ | readout_id | Column that stores the sensor readout ID. | text |
+ | error_message | Column that stores the error message. | text |
+ | error_source | Column that stores the error source, which is the component that raised an error (sensor or rule). | text |
+ | error_timestamp | Column that stores the error timestamp using the local timestamp. | local_date_time |

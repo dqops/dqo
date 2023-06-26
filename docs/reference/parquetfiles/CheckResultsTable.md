@@ -34,8 +34,8 @@ Class with constants - the column names in the check_results parquet table.
  | table_stage | The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: &quot;landing&quot;, &quot;staging&quot;, &quot;cleansing&quot;, etc. | text |
  | table_priority | The table priority value copied from the table&#x27;s definition. The table priority could be used for sorting tables by their importance. | integer |
  | column_hash | The hash of a column. | long |
- | column_name | The column name for which the results are stored. | text |
- | column_name_pattern | The column name pattern, in case that a data quality check targets multiple columns. | text |
+ | column_name | The column for which the results are stored. | text |
+ | column_name_pattern | The column pattern, in case that a data quality check targets multiple columns. | text |
  | check_hash | The hash of a data quality check. | long |
  | check_name | The data quality check name. | text |
  | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
@@ -51,15 +51,15 @@ Class with constants - the column names in the check_results parquet table.
  | created_by | The login of the user that created the row. | text |
  | updated_by | The login of the user that updated the row. | text |
  | severity | Check (rule) severity (0, 1, 2, 3) for none, warning, error and fatal severity failed data quality checks. | integer |
- | incident_hash | Column name for a matching data quality incident hash. The value is used to map a failed data quality check to an incident. | long |
+ | incident_hash | The matching data quality incident hash. The value is used to map a failed data quality check to an incident. | long |
  | reference_connection | The name of a connection to another data source that contains the reference data used as the expected values for accuracy checks. | text |
  | reference_table | The table name in another data source that contains the reference data used as the expected values for accuracy checks. | text |
  | reference_schema | The schema in another data source that contains the reference data used as the expected values for accuracy checks. | text |
- | include_in_kpi | Column name for a boolean column that identifies data quality rule results that should be counted in the data quality KPI. | boolean |
- | include_in_sla | Column name for a boolean column that identifies data quality rule results that should be counted in the data quality SLA. | boolean |
- | fatal_lower_bound | Column name for the warning lower bound, returned by the fatal severity rule. | double |
- | fatal_upper_bound | Column name for the fatal upper bound, returned by the fatal severity rule. | double |
- | error_lower_bound | Column name for the error lower bound, returned by the error (medium) severity rule. | double |
- | error_upper_bound | Column name for the error upper bound, returned by the error severity rule. | double |
- | warning_lower_bound | Column name for the warning lower bound, returned by the warning severity rule. | double |
- | warning_upper_bound | Column name for the warning upper bound, returned by the warning severity rule. | double |
+ | include_in_kpi | The boolean column that identifies data quality rule results that should be counted in the data quality KPI. | boolean |
+ | include_in_sla | The boolean column that identifies data quality rule results that should be counted in the data quality SLA. | boolean |
+ | fatal_lower_bound | The warning lower bound, returned by the fatal severity rule. | double |
+ | fatal_upper_bound | The fatal upper bound, returned by the fatal severity rule. | double |
+ | error_lower_bound | The error lower bound, returned by the error (medium) severity rule. | double |
+ | error_upper_bound | The error upper bound, returned by the error severity rule. | double |
+ | warning_lower_bound | The warning lower bound, returned by the warning severity rule. | double |
+ | warning_upper_bound | The warning upper bound, returned by the warning severity rule. | double |

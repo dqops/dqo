@@ -61,6 +61,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("consistency", o -> o.consistency);
             put("anomaly", o -> o.anomaly);
             put("schema", o -> o.schema);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -128,6 +129,11 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSchemaProfilingChecksSpec schema;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnComparisonProfilingChecksSpecMap comparisons = new ColumnComparisonProfilingChecksSpecMap();
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -361,6 +367,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns the container of column level comparisons to columns in the reference table.
+     * @return Dictionary of comparisons to columns.
+     */
+    public ColumnComparisonProfilingChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the container of named comparisons to columns in other reference tables.
+     * @param comparisons Container of column level comparisons.
+     */
+    public void setComparisons(ColumnComparisonProfilingChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**

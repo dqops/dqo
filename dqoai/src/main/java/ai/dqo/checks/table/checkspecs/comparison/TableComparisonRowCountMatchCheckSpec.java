@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.checkspecs.accuracy;
+package ai.dqo.checks.table.checkspecs.comparison;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxDiffPercentRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.accuracy.ColumnAccuracyTotalSumMatchPercentSensorParametersSpec;
+import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,34 +34,37 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum percentage of difference of sum of a table column and of a sum of another table column.
+ * Table level comparison check compares the row count of the current (parent) table to a reference table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyTotalSumMatchPercentCheckSpec
-        extends AbstractCheckSpec<ColumnAccuracyTotalSumMatchPercentSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyTotalSumMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableComparisonRowCountMatchCheckSpec
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableComparisonRowCountMatchCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Row count data quality sensor.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAccuracyTotalSumMatchPercentSensorParametersSpec parameters = new ColumnAccuracyTotalSumMatchPercentSensorParametersSpec();
+    private TableVolumeRowCountSensorParametersSpec parameters = new TableVolumeRowCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Warning level threshold to raise a data quality incident with a warning severity level when the row count in the parent table " +
+            "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxDiffPercentRule0ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum percentage of difference of sum of a table column and of a sum of another table column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Error level threshold to raise a data quality incident with an error severity level when the row count in the parent table " +
+            "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxDiffPercentRule1ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Fatal level threshold to raise a data quality incident with a fatal severity level when the row count in the parent table " +
+            "and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxDiffPercentRule5ParametersSpec fatal;
@@ -71,7 +74,7 @@ public class ColumnAccuracyTotalSumMatchPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnAccuracyTotalSumMatchPercentSensorParametersSpec getParameters() {
+    public TableVolumeRowCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +82,7 @@ public class ColumnAccuracyTotalSumMatchPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnAccuracyTotalSumMatchPercentSensorParametersSpec parameters) {
+    public void setParameters(TableVolumeRowCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

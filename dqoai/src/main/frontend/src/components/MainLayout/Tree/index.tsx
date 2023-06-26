@@ -14,11 +14,17 @@ import { getFirstLevelActiveTab } from "../../../redux/selectors";
 import { useParams, useRouteMatch } from "react-router-dom";
 import { findTreeNode } from "../../../utils/tree";
 import { AxiosResponse } from "axios";
-import { ConnectionBasicModel } from "../../../api";
+import {
+  ConnectionBasicModel,
+  DqoJobHistoryEntryModel,
+  DqoJobHistoryEntryModelJobTypeEnum,
+  DqoJobHistoryEntryModelStatusEnum
+} from "../../../api";
 import { ConnectionApiClient } from "../../../services/apiClient";
 import AddColumnDialog from "../../CustomTree/AddColumnDialog";
 import AddTableDialog from "../../CustomTree/AddTableDialog";
 import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
+import { IRootState } from "../../../redux/reducers";
 
 const Tree = () => {
   const { removeNode, loadingNodes, changeActiveTab, setActiveTab, treeData, toggleOpenNode, activeTab, switchTab, refreshNode, setTreeData } = useTree();
@@ -31,6 +37,24 @@ const Tree = () => {
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+
+  useEffect(() => {
+    const jobs = Object.values(job_dictionary_state).filter(item => item.jobType === DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables);
+
+    jobs.forEach((job: DqoJobHistoryEntryModel) => {
+      const key = (job?.jobId?.jobId || 0).toString();
+      const str = localStorage.getItem(key);
+      if (str !== DqoJobHistoryEntryModelStatusEnum.succeeded && job.status == DqoJobHistoryEntryModelStatusEnum.succeeded) {
+        localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.succeeded);
+
+        const id = [job.parameters?.importTableParameters?.connectionName, job.parameters?.importTableParameters?.schemaName].join('.');
+        const schemaNode = findTreeNode(treeData, id);
+
+        refreshNode(schemaNode, false);
+      }
+    })
+  }, [job_dictionary_state]);
 
   const handleNodeClick = (node: CustomTreeNode) => {
     switchTab(node, checkTypes);
