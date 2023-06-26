@@ -260,7 +260,7 @@ const TableColumns = ({
         minimalValue: renderValue(minimalValueData?.[i]),
         length: renderValue(lengthData?.[i]),
         scale: renderValue(scaleData?.[i]),
-        importedDatatype: renderValue(typeData?.[i]),
+        importedDatatype: String(renderValue(typeData?.[i])),
         columnHash: Number(hashData?.[i]),
         isColumnSelected: false
       };
@@ -485,6 +485,8 @@ const TableColumns = ({
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
+  console.log(dataArray?.filter((x) => x.importedDatatype));
+
   setCreatedDataStream(true, fixString(), setSpec2());
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
@@ -527,35 +529,47 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {dateToString(String(column.minimalValue))
+            {column.minimalValue
               ? dateToString(String(column.minimalValue))
-              : cutString(String(column.minimalValue))}
+                ? dateToString(String(column.minimalValue))
+                : cutString(String(column.minimalValue))
+              : ''}
           </div>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {column.null_count}
+            {isNaN(Number(column.null_count)) ? '' : column.null_count}
           </div>
         </td>
         <td className="border-b border-gray-100 text-right px-4 py-2">
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center">
-              <div>{Number(column.null_percent).toFixed(2)}</div>
+              <div>
+                {isNaN(Number(column.null_percent))
+                  ? ''
+                  : Number(column.null_percent).toFixed(2)}
+              </div>
               <div>{isNaN(Number(column.null_percent)) ? '' : '%'}</div>
             </div>
-            <div
-              className=" h-3 border border-gray-100 flex ml-5"
-              style={{ width: '66.66px' }}
-            >
+            {isNaN(Number(column.null_percent)) ? (
+              ''
+            ) : (
               <div
-                className="h-3 bg-amber-700"
-                style={{
-                  width: column.null_percent
-                    ? `${(Number(renderValue(column.null_percent)) * 2) / 3}px`
-                    : ''
-                }}
-              ></div>
-            </div>
+                className=" h-3 border border-gray-100 flex ml-5"
+                style={{ width: '66.66px' }}
+              >
+                <div
+                  className="h-3 bg-amber-700"
+                  style={{
+                    width: column.null_percent
+                      ? `${
+                          (Number(renderValue(column.null_percent)) * 2) / 3
+                        }px`
+                      : ''
+                  }}
+                ></div>
+              </div>
+            )}
           </div>
         </td>
         <td className="border-b border-gray-100 text-right px-4 my-0 py-0">
