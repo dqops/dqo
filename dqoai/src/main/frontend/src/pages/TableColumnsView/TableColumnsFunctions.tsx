@@ -32,7 +32,7 @@ export interface MyData {
   detectedDatatypeVar: number | undefined;
   length?: number | undefined;
   scale?: number | undefined;
-  importedDatatype?: string | undefined;
+  importedDatatype: string | undefined;
   columnHash: number;
   isColumnSelected: boolean;
 }
