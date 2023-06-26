@@ -15,10 +15,7 @@ import { setCreatedDataStream } from '../../redux/actions/rule.actions';
 export default function TableStatisticsView({
   connectionName,
   schemaName,
-  tableName,
-  updateData2,
-  setLevelsData2,
-  setNumberOfSelected2
+  tableName
 }: {
   connectionName: string;
   schemaName: string;
