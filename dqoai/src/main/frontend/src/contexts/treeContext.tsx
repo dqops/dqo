@@ -26,6 +26,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFirstLevelTab } from '../redux/actions/source.actions';
 import { getFirstLevelActiveTab } from '../redux/selectors';
+import { useActionDispatch } from "../hooks/useActionDispatch";
 
 const TreeContext = React.createContext({} as any);
 
@@ -95,7 +96,7 @@ function TreeProvider(props: any) {
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useActionDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
@@ -170,9 +171,7 @@ function TreeProvider(props: any) {
       {}
     );
 
-    setTreeDataMaps(newTreeDataMaps);
-
-    dispatch(
+    await dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
         url: `${ROUTES.CONNECTION_DETAIL(
           CheckTypes.SOURCES,
@@ -187,6 +186,8 @@ function TreeProvider(props: any) {
         label: connection.connection_name ?? ''
       })
     );
+    setTreeDataMaps(newTreeDataMaps);
+
     history.push(
       `${ROUTES.CONNECTION_DETAIL(
         CheckTypes.SOURCES,
