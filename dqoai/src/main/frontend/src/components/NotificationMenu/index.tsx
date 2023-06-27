@@ -19,7 +19,9 @@ import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
 
 const NotificationMenu = () => {
-  const { job_dictionary_state, isOpen } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state, isOpen } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const { errors } = useError();
@@ -40,10 +42,11 @@ const NotificationMenu = () => {
   }, []);
 
   const data = useMemo(() => {
-    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
-      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-    })
-    .map((item) => ({ type: 'job', item }));
+    const jobsData = Object.values(job_dictionary_state)
+      .sort((a, b) => {
+        return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+      })
+      .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
@@ -90,7 +93,7 @@ const NotificationMenu = () => {
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
-      <PopoverHandler>
+      <PopoverHandler style={{ position: 'relative' }}>
         <IconButton
           className="!mr-3 !bg-transparent"
           ripple={false}
@@ -110,7 +113,10 @@ const NotificationMenu = () => {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="z-30 min-w-120 max-w-120 px-0 relative">
+      <PopoverContent
+        className="z-30 min-w-120 max-w-120 px-0 relative"
+        style={{ position: 'relative' }}
+      >
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
           <div>Notifications ({data.length})</div>
           <div className="flex items-center gap-x-3 text-sm">

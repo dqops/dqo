@@ -113,7 +113,7 @@ const JobChild = ({
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
 
-                <div className="hidden group-hover:block fixed p-2 w-50 h-40 rounded-md border border-gray-400 z-50 top-50 right-50 bg-white">
+                <div className="hidden group-hover:block fixed px-1 w-50 h-30 rounded-md border border-gray-400 z-50 top-50 right-25 bg-white">
                   <div className="flex gap-x-2">
                     <div className="font-light">Highest severity:</div>
                     <div
