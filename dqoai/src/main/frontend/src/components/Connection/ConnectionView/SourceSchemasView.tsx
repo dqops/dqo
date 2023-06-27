@@ -37,6 +37,8 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
   const [selectedSchema, setSelectedSchema] = useState<string>();
   const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
 
+  const isImported = !!schemas.find(item => item.alreadyImported);
+
   useEffect(() => {
     if (defaultSchema) {
       setSelectedSchema(defaultSchema);
@@ -79,6 +81,7 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
         connectionName={connection}
         schemaName={selectedSchema ?? ''}
         onBack={() => setSelectedSchema(undefined)}
+        isImported={isImported}
       />
     );
   }

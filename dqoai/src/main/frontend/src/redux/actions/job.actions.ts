@@ -110,3 +110,8 @@ export const toggleSettings = (areSettingsOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_SETTINGS,
   areSettingsOpen
 });
+
+export const toggleAdvisor = (isOpen: boolean) => ({
+  type: JOB_ACTION.TOGGLE_ADVISOR,
+  isOpen
+});

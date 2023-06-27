@@ -40,6 +40,7 @@ export interface IJobsState {
   bool?: boolean;
   dataStreamName: string;
   spec: DataGroupingConfigurationSpec;
+  isAdvisorOpen: boolean;
 }
 
 const initialState: IJobsState = {
@@ -54,7 +55,8 @@ const initialState: IJobsState = {
   job_dictionary_state: {},
   bool: false,
   dataStreamName: '',
-  spec: {}
+  spec: {},
+  isAdvisorOpen: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -169,6 +171,11 @@ const schemaReducer = (state = initialState, action: any) => {
         spec: action.spec
       };
     }
+    case JOB_ACTION.TOGGLE_ADVISOR:
+      return {
+        ...state,
+        isAdvisorOpen: action.isOpen
+      };
     default:
       return state;
   }
