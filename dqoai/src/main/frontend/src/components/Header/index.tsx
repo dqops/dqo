@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NotificationMenu from '../NotificationMenu';
 import Logo from '../Logo';
 import clsx from 'clsx';
@@ -22,6 +22,8 @@ import {
 } from '../../shared/constants';
 import { SynchronizeButton } from './SynchronizeButton';
 import UserProfile from '../UserProfile';
+import { HeaderBanner } from "./HeaderBanner";
+import { toggleAdvisor } from "../../redux/actions/job.actions";
 
 const Header = () => {
   const history = useHistory();
@@ -51,6 +53,7 @@ const Header = () => {
   );
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
+  const { isAdvisorOpen } = useSelector((state: IRootState) => state.job)
 
   const onClick = (newCheckTypes: CheckTypes) => () => {
     let url = '';
@@ -149,8 +152,17 @@ const Header = () => {
     }
   };
 
+  const onCloseAdvisor = () => {
+    dispatch(toggleAdvisor(false));
+  };
+
   return (
     <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4">
+      {isAdvisorOpen && (
+        <div className="fixed top-0 left-0 z-50 right-0">
+          <HeaderBanner onClose={onCloseAdvisor} />
+        </div>
+      )}
       <div className="flex space-x-2">
         <div onClick={() => history.push('/')}>
           <Logo className="w-30 cursor-pointer" />
