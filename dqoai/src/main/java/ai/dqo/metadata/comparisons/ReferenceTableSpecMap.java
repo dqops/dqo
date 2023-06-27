@@ -25,7 +25,7 @@ import java.util.Map;
  * Dictionary of comparisons of the current table (the parent of this node) and another reference table (the source of truth)
  * to which we are comparing the tables to measure the accuracy of the data.
  */
-public class ReferenceTableComparisonSpecMap extends AbstractDirtyTrackingSpecMap<ReferenceTableComparisonSpec> {
+public class ReferenceTableSpecMap extends AbstractDirtyTrackingSpecMap<ReferenceTableSpec> {
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
@@ -42,13 +42,13 @@ public class ReferenceTableComparisonSpecMap extends AbstractDirtyTrackingSpecMa
      * Creates and returns a copy of this object.
      */
     @Override
-    public ReferenceTableComparisonSpecMap deepClone() {
-        ReferenceTableComparisonSpecMap cloned = new ReferenceTableComparisonSpecMap();
+    public ReferenceTableSpecMap deepClone() {
+        ReferenceTableSpecMap cloned = new ReferenceTableSpecMap();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
-        for (Map.Entry<String, ReferenceTableComparisonSpec> keyPair : this.entrySet()) {
+        for (Map.Entry<String, ReferenceTableSpec> keyPair : this.entrySet()) {
             cloned.put(keyPair.getKey(), keyPair.getValue().deepClone());
         }
 

@@ -20,10 +20,9 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpec;
 import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpecMap;
-import ai.dqo.checks.comparison.CheckCategoriesColumnComparisonMapParent;
 import ai.dqo.checks.comparison.CheckCategoriesTableComparisonMapParent;
 import ai.dqo.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
-import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -136,7 +135,7 @@ public class TableComparisonModel {
             throw new DqoRuntimeException("Cannot map a detached table, because the connection and table name is unknown");
         }
 
-        ReferenceTableComparisonSpec comparisonSpec = tableSpec.getComparisons().get(tableComparisonName);
+        ReferenceTableSpec comparisonSpec = tableSpec.getReferenceTables().get(tableComparisonName);
         if (comparisonSpec == null) {
             throw new DqoRuntimeException("Table comparison '" + tableComparisonName + "' not found in the table " + comparedTableHierarchyId.toString());
         }
@@ -183,7 +182,7 @@ public class TableComparisonModel {
                                 String tableComparisonName,
                                 CheckType checkType,
                                 CheckTimeScale checkTimeScale) {
-        ReferenceTableComparisonSpec comparisonSpec = targetTableSpec.getComparisons().get(tableComparisonName);
+        ReferenceTableSpec comparisonSpec = targetTableSpec.getReferenceTables().get(tableComparisonName);
         if (comparisonSpec == null) {
             throw new DqoRuntimeException("Table comparison '" + tableComparisonName + "' was not found in table " + targetTableSpec.getHierarchyId());
         }

@@ -23,8 +23,8 @@ import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpec;
-import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpecMap;
+import ai.dqo.metadata.comparisons.ReferenceTableSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpecMap;
 import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -837,24 +837,24 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     /**
      * Accepts a description of the reference table to which the current table is compared.
      *
-     * @param referenceTableComparisonSpec Reference table specification.
+     * @param referenceTableSpec Reference table specification.
      * @param parameter           Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ReferenceTableComparisonSpec referenceTableComparisonSpec, T parameter) {
+    public TreeNodeTraversalResult accept(ReferenceTableSpec referenceTableSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
      * Accepts a dictionary of reference table comparisons.
      *
-     * @param referenceTableComparisonSpecMap Dictionary of reference table comparisons.
+     * @param referenceTableSpecMap Dictionary of reference table comparisons.
      * @param parameter                       Visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ReferenceTableComparisonSpecMap referenceTableComparisonSpecMap, T parameter) {
+    public TreeNodeTraversalResult accept(ReferenceTableSpecMap referenceTableSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

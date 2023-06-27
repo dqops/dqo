@@ -39,8 +39,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class ReferenceTableComparisonSpec extends AbstractSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<ReferenceTableComparisonSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class ReferenceTableSpec extends AbstractSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ReferenceTableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
@@ -189,8 +189,8 @@ public class ReferenceTableComparisonSpec extends AbstractSpec {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ReferenceTableComparisonSpec deepClone() {
-        ReferenceTableComparisonSpec cloned = (ReferenceTableComparisonSpec) super.deepClone();
+    public ReferenceTableSpec deepClone() {
+        ReferenceTableSpec cloned = (ReferenceTableSpec) super.deepClone();
         return cloned;
     }
 }

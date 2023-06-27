@@ -15,7 +15,7 @@
  */
 package ai.dqo.rest.models.comparison;
 
-import ai.dqo.metadata.comparisons.ReferenceTableComparisonSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
@@ -27,13 +27,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Model that contains the basic information about a table-to-table comparison defined on a compared table.
+ * Model that contains the basic information about a reference table that could be compared and is used as a source of truth for comparison.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableComparisonBasicModel", description = "Model that contains the basic information about a table-to-table comparison defined on a compared table.")
+@ApiModel(value = "ReferenceTableModel", description = "Model that contains the basic information about a reference table that could be compared and is used as a source of truth for comparison.")
 @Data
-public class TableComparisonBasicModel {
+public class ReferenceTableModel {
     @JsonPropertyDescription("The name of the table comparison that is defined in the 'comparisons' node on the table specification.")
     private String comparisonName;
 
@@ -73,15 +73,15 @@ public class TableComparisonBasicModel {
     /**
      * Creates a basic model with the comparison from teh comparison specification.
      * @param comparisonSpec Comparison specification.
-     * @return Basic comparison model with the basic information.
+     * @return Reference table with the basic information.
      */
-    public static TableComparisonBasicModel fromReferenceTableComparisonSpec(ReferenceTableComparisonSpec comparisonSpec) {
+    public static ReferenceTableModel fromReferenceTableComparisonSpec(ReferenceTableSpec comparisonSpec) {
         HierarchyId comparedTableHierarchyId = comparisonSpec.getHierarchyId();
         if (comparedTableHierarchyId == null) {
             throw new DqoRuntimeException("Cannot map a detached comparison, because the connection and table name is unknown");
         }
 
-        TableComparisonBasicModel model = new TableComparisonBasicModel();
+        ReferenceTableModel model = new ReferenceTableModel();
         model.setComparisonName(comparisonSpec.getComparisonName());
         model.setComparedConnection(comparedTableHierarchyId.getConnectionName());
         model.setComparedTable(comparedTableHierarchyId.getPhysicalTableName());
@@ -97,7 +97,7 @@ public class TableComparisonBasicModel {
      * Copies selected values (the reference table name and data grouping names) to the comparison specification.
      * @param comparisonSpec Target comparison specification to copy values to.
      */
-    public void copyToReferenceTableComparisonSpec(ReferenceTableComparisonSpec comparisonSpec) {
+    public void copyToReferenceTableComparisonSpec(ReferenceTableSpec comparisonSpec) {
         comparisonSpec.setComparedTableGroupingName(this.getComparedTableGroupingName());
         comparisonSpec.setReferenceTableGroupingName(this.getReferenceTableGroupingName());
         comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
