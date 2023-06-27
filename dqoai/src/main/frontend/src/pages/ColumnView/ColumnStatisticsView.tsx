@@ -206,7 +206,7 @@ const ColumnStatisticsView = () => {
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
-                    {x.collector === 'unique_count'
+                    {x.collector === 'distinct_count'
                       ? formatNumber(Number(renderValue(x.result)))
                       : ''}
                   </div>
@@ -219,7 +219,7 @@ const ColumnStatisticsView = () => {
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
-                    {x.collector === 'unique_percent'
+                    {x.collector === 'distinct_percent'
                       ? (Number(renderValue(x.result)) ===
                         Math.floor(Number(renderValue(x.result)))
                           ? Number(renderValue(x.result))

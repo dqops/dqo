@@ -20,10 +20,15 @@ import Tabs from '../../Tabs';
 
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 import { DataGroupingConfigurationSpec } from '../../../api';
-import { LocationState } from '../../../pages/TableColumnsView/TableColumnsFunctions';
+
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+interface LocationState {
+  bool: boolean;
+  data_stream_name: string;
+  spec: DataGroupingConfigurationSpec;
+}
 
 const tabs = [
   {
@@ -114,6 +119,9 @@ const ProfilingView = () => {
   const setNumberOfSelected2 = (param: number): void => {
     setSelected(param);
   };
+
+  console.log(selected);
+
   const doNothing = (): void => {};
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
