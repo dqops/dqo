@@ -119,6 +119,9 @@ const ProfilingView = () => {
   const setNumberOfSelected2 = (param: number): void => {
     setSelected(param);
   };
+
+  console.log(selected);
+
   const doNothing = (): void => {};
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(

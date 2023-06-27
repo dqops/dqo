@@ -15,7 +15,10 @@ import { setCreatedDataStream } from '../../redux/actions/rule.actions';
 export default function TableStatisticsView({
   connectionName,
   schemaName,
-  tableName
+  tableName,
+  updateData2,
+  setLevelsData2,
+  setNumberOfSelected2
 }: {
   connectionName: string;
   schemaName: string;
@@ -27,9 +30,6 @@ export default function TableStatisticsView({
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
-  const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
-  const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
-  const [selected, setSelected] = useState<number>(0);
 
   const {
     connection,
@@ -75,15 +75,15 @@ export default function TableStatisticsView({
     return value;
   };
   const updateData = (nameOfDS: string): void => {
-    setNameOfDataStream(nameOfDS);
+    updateData2(nameOfDS);
   };
 
   const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
-    setLevels(levelsToSet);
+    setLevelsData2(levelsToSet);
   };
 
   const setNumberOfSelected = (param: number): void => {
-    setSelected(param);
+    setNumberOfSelected2(param);
   };
 
   if (loading) {
