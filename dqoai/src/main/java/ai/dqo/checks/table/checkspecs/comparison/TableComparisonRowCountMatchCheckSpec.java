@@ -17,6 +17,7 @@ package ai.dqo.checks.table.checkspecs.comparison;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
+import ai.dqo.checks.comparison.ComparisonCheckRules;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxDiffPercentRule0ParametersSpec;
@@ -40,7 +41,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableComparisonRowCountMatchCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec>
+        implements ComparisonCheckRules {
     public static final ChildHierarchyNodeFieldMapImpl<TableComparisonRowCountMatchCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }

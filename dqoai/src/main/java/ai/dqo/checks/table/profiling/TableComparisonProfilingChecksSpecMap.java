@@ -16,11 +16,28 @@
 
 package ai.dqo.checks.table.profiling;
 
-import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import ai.dqo.checks.column.profiling.ColumnComparisonProfilingChecksSpec;
+import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpecMap;
 
 /**
  * Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  * must match a name of a table comparison that is defined on the parent table.
  */
-public class TableComparisonProfilingChecksSpecMap extends AbstractComparisonCheckCategorySpecMap<TableComparisonProfilingChecksSpec> {
+public class TableComparisonProfilingChecksSpecMap extends AbstractTableComparisonCheckCategorySpecMap<TableComparisonProfilingChecksSpec> {
+    /**
+     * Retrieves or creates, adds and returns a check container for a given comparison.
+     *
+     * @param comparisonName Table comparison name.
+     * @return Check container for the given comparison. Never null.
+     */
+    @Override
+    public TableComparisonProfilingChecksSpec getOrAdd(String comparisonName) {
+        TableComparisonProfilingChecksSpec checksSpec = this.get(comparisonName);
+        if (checksSpec == null) {
+            checksSpec = new TableComparisonProfilingChecksSpec();
+            this.put(comparisonName, checksSpec);
+        }
+
+        return checksSpec;
+    }
 }

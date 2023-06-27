@@ -16,6 +16,7 @@
 
 package ai.dqo.checks.comparison;
 
+import ai.dqo.checks.column.checkspecs.comparison.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -57,4 +58,77 @@ public abstract class AbstractColumnComparisonCheckCategorySpec extends Abstract
         this.setDirtyIf(!Objects.equals(this.referenceColumn, referenceColumn));
         this.referenceColumn = referenceColumn;
     }
+
+
+    /**
+     * Returns an accuracy total sum match percent check specification.
+     * @return Accuracy total sum match percent check specification.
+     */
+    public abstract ColumnComparisonSumMatchCheckSpec getSumMatch();
+
+    /**
+     * Sets a new definition of an Accuracy total sum match percent check.
+     * @param sumMatch accuracy total sum match percent check specification.
+     */
+    public abstract void setSumMatch(ColumnComparisonSumMatchCheckSpec sumMatch);
+
+    /**
+     * Returns an accuracy min percent check specification.
+     * @return Accuracy min percent check specification.
+     */
+    public abstract ColumnComparisonMinMatchCheckSpec getMinMatch();
+
+    /**
+     * Sets a new definition of an accuracy min percent check.
+     * @param minMatch Accuracy min percent check specification.
+     */
+    public abstract void setMinMatch(ColumnComparisonMinMatchCheckSpec minMatch);
+
+    /**
+     * Returns an accuracy max percent check specification.
+     * @return Accuracy max percent check specification.
+     */
+    public abstract ColumnComparisonMaxMatchCheckSpec getMaxMatch();
+
+    /**
+     * Sets a new definition of an accuracy max percent check.
+     * @param maxMatch Accuracy max percent check specification.
+     */
+    public abstract void setMaxMatch(ColumnComparisonMaxMatchCheckSpec maxMatch);
+
+    /**
+     * Returns an accuracy average percent check specification.
+     * @return Accuracy average percent check specification.
+     */
+    public abstract ColumnComparisonMeanMatchCheckSpec getMeanMatch();
+
+    /**
+     * Sets a new definition of an accuracy average percent check.
+     * @param meanMatch Accuracy average percent check specification.
+     */
+    public abstract void setMeanMatch(ColumnComparisonMeanMatchCheckSpec meanMatch);
+
+    /**
+     * Returns an accuracy not null count percent check specification.
+     * @return Accuracy not null count percent check specification.
+     */
+    public abstract ColumnComparisonNotNullCountMatchCheckSpec getNotNullCountMatch();
+
+    /**
+     * Sets a new definition of an accuracy not null count percent check.
+     * @param notNullCountMatch Accuracy not null count percent check specification.
+     */
+    public abstract void setNotNullCountMatch(ColumnComparisonNotNullCountMatchCheckSpec notNullCountMatch);
+
+    /**
+     * Returns an accuracy null count percent check specification.
+     * @return Accuracy null count percent check specification.
+     */
+    public abstract ColumnComparisonNullCountMatchCheckSpec getNullCountMatch();
+
+    /**
+     * Sets a new definition of an accuracy null count percent check.
+     * @param nullCountMatch Accuracy null count percent check specification.
+     */
+    public abstract void setNullCountMatch(ColumnComparisonNullCountMatchCheckSpec nullCountMatch);
 }

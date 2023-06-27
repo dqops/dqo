@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Rules", description = "Rule management")
-public class RuleController {
+public class RulesController {
 
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
@@ -58,7 +58,7 @@ public class RuleController {
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired
-    public RuleController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory) {
+    public RulesController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory) {
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.userHomeContextFactory = userHomeContextFactory;
     }

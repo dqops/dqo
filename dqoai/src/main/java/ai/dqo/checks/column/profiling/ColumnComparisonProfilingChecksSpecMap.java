@@ -24,4 +24,20 @@ import ai.dqo.checks.comparison.AbstractColumnComparisonCheckCategorySpecMap;
  * Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
  */
 public class ColumnComparisonProfilingChecksSpecMap extends AbstractColumnComparisonCheckCategorySpecMap<ColumnComparisonProfilingChecksSpec> {
+    /**
+     * Retrieves or creates, adds and returns a check container for a given comparison.
+     *
+     * @param comparisonName Table comparison name.
+     * @return Check container for the given comparison. Never null.
+     */
+    @Override
+    public ColumnComparisonProfilingChecksSpec getOrAdd(String comparisonName) {
+        ColumnComparisonProfilingChecksSpec checksSpec = this.get(comparisonName);
+        if (checksSpec == null) {
+            checksSpec = new ColumnComparisonProfilingChecksSpec();
+            this.put(comparisonName, checksSpec);
+        }
+
+        return checksSpec;
+    }
 }

@@ -15,7 +15,10 @@
  */
 package ai.dqo.rest.models.comparison;
 
+import ai.dqo.metadata.comparisons.ReferenceTableSpec;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -24,13 +27,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Model that contains the basic information about a table-to-table comparison defined on a compared table.
+ * Model that contains the basic information about a reference table that could be compared and is used as a source of truth for comparison.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableComparisonBasicModel", description = "Model that contains the basic information about a table-to-table comparison defined on a compared table.")
+@ApiModel(value = "ReferenceTableModel", description = "Model that contains the basic information about a reference table that could be compared and is used as a source of truth for comparison.")
 @Data
-public class TableComparisonBasicModel {
+public class ReferenceTableModel {
     @JsonPropertyDescription("The name of the table comparison that is defined in the 'comparisons' node on the table specification.")
     private String comparisonName;
 
@@ -66,4 +69,44 @@ public class TableComparisonBasicModel {
             "When the reference table has no data grouping configurations, compares the whole table without grouping. " +
             "The data grouping configurations on the compared table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
     private String referenceTableGroupingName;
+
+    /**
+     * Creates a basic model with the comparison from teh comparison specification.
+     * @param comparisonSpec Comparison specification.
+     * @return Reference table with the basic information.
+     */
+    public static ReferenceTableModel fromReferenceTableComparisonSpec(ReferenceTableSpec comparisonSpec) {
+        HierarchyId comparedTableHierarchyId = comparisonSpec.getHierarchyId();
+        if (comparedTableHierarchyId == null) {
+            throw new DqoRuntimeException("Cannot map a detached comparison, because the connection and table name is unknown");
+        }
+
+        ReferenceTableModel model = new ReferenceTableModel();
+        model.setComparisonName(comparisonSpec.getComparisonName());
+        model.setComparedConnection(comparedTableHierarchyId.getConnectionName());
+        model.setComparedTable(comparedTableHierarchyId.getPhysicalTableName());
+        model.setReferenceConnection(comparisonSpec.getReferenceTableConnectionName());
+        model.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
+        model.setComparedTableGroupingName(comparisonSpec.getComparedTableGroupingName());
+        model.setReferenceTableGroupingName(comparisonSpec.getReferenceTableGroupingName());
+
+        return model;
+    }
+
+    /**
+     * Copies selected values (the reference table name and data grouping names) to the comparison specification.
+     * @param comparisonSpec Target comparison specification to copy values to.
+     */
+    public void copyToReferenceTableComparisonSpec(ReferenceTableSpec comparisonSpec) {
+        comparisonSpec.setComparedTableGroupingName(this.getComparedTableGroupingName());
+        comparisonSpec.setReferenceTableGroupingName(this.getReferenceTableGroupingName());
+        comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
+        if (this.getReferenceTable() != null) {
+            comparisonSpec.setReferenceTableSchemaName(this.getReferenceTable().getSchemaName());
+            comparisonSpec.setReferenceTableName(this.getReferenceTable().getTableName());
+        } else {
+            comparisonSpec.setReferenceTableSchemaName(null);
+            comparisonSpec.setReferenceTableName(null);
+        }
+    }
 }

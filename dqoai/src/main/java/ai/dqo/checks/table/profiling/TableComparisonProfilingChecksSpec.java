@@ -15,8 +15,7 @@
  */
 package ai.dqo.checks.table.profiling;
 
-import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.accuracy.TableAccuracyRowCountMatchPercentCheckSpec;
+import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -34,8 +33,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableComparisonProfilingChecksSpec extends AbstractComparisonCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableComparisonProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractComparisonCheckCategorySpec.FIELDS) {
+public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableComparisonProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableComparisonCheckCategorySpec.FIELDS) {
         {
             put("row_count_match", o -> o.rowCountMatch);
         }
@@ -48,6 +47,7 @@ public class TableComparisonProfilingChecksSpec extends AbstractComparisonCheckC
      * Returns the row count match check.
      * @return Row count match check.
      */
+    @Override
     public TableComparisonRowCountMatchCheckSpec getRowCountMatch() {
         return rowCountMatch;
     }
@@ -56,6 +56,7 @@ public class TableComparisonProfilingChecksSpec extends AbstractComparisonCheckC
      * Sets a new row count match check.
      * @param rowCountMatch Row count match check.
      */
+    @Override
     public void setRowCountMatch(TableComparisonRowCountMatchCheckSpec rowCountMatch) {
         this.setDirtyIf(!Objects.equals(this.rowCountMatch, rowCountMatch));
         this.rowCountMatch = rowCountMatch;

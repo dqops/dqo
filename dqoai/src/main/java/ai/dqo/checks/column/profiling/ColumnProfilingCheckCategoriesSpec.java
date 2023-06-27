@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.comparison.CheckCategoriesColumnComparisonMapParent;
 import ai.dqo.metadata.timeseries.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.timeseries.TimePeriodGradient;
@@ -45,7 +46,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec
+        implements TimeSeriesConfigurationProvider, CheckCategoriesColumnComparisonMapParent {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
