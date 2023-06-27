@@ -7,8 +7,8 @@ import {
   BigQueryParametersSpec,
   BigQueryParametersSpecAuthenticationModeEnum
 } from '../../../../api';
-import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
-import FieldTypeTextarea from "../../../Connection/ConnectionView/FieldTypeTextarea";
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import FieldTypeTextarea from '../../../Connection/ConnectionView/FieldTypeTextarea';
 
 const options = [
   {
@@ -63,7 +63,10 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         label="Authentication mode to the Google Cloud"
         options={options}
         className="mb-4"
-        value={bigquery?.authentication_mode}
+        value={
+          bigquery?.authentication_mode ||
+          BigQueryAuthenticationMode.google_application_credentials
+        }
         onChange={(value) => handleChange({ authentication_mode: value })}
       />
       {bigquery?.authentication_mode ===
