@@ -556,19 +556,22 @@ const TableColumns = ({
       .filter((column) => column !== undefined);
 
     const joinedValues = columnValues.join(',');
-    updateData(joinedValues);
-    setLevelsData(setSpec2());
-    countTrueValues(objectStates);
 
     return joinedValues;
   };
 
   const showDataStreamButtonFunc = async () => {
-    await fixString();
     await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
   };
 
-  setCreatedDataStream(true, fixString(), setSpec2());
+  useEffect(() => {
+    const joinedValues = fixString();
+    setLevelsData(setSpec2());
+    countTrueValues(objectStates);
+    updateData(joinedValues);
+    setCreatedDataStream(true, fixString(), setSpec2());
+  }, [spec, objectStates]);
+
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
