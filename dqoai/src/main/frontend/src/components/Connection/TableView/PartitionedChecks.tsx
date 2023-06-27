@@ -11,7 +11,7 @@ import {
   updateTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useHistory, useParams } from "react-router-dom";
@@ -20,11 +20,11 @@ import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selec
 
 const initTabs = [
   {
-    label: 'Days',
+    label: 'Daily',
     value: 'daily'
   },
   {
-    label: 'Months',
+    label: 'Monthly',
     value: 'monthly'
   }
 ];
@@ -92,11 +92,11 @@ const TablePartitionedChecksView = () => {
     }
   };
 
-  const onDailyPartitionedChecksChange = (ui: UICheckContainerModel) => {
+  const onDailyPartitionedChecksChange = (ui: CheckContainerModel) => {
     dispatch(setUpdatedDailyPartitionedChecks(checkTypes, firstLevelActiveTab, ui));
   };
 
-  const onMonthlyPartitionedChecksChange = (ui: UICheckContainerModel) => {
+  const onMonthlyPartitionedChecksChange = (ui: CheckContainerModel) => {
     dispatch(setUpdatedMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, ui));
   };
 

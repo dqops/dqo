@@ -56,7 +56,7 @@ public class CheckResultsFragmentFilter extends ParquetDataFragmentFilter {
             result.put(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME, checkType);
         }
         if (!Strings.isNullOrEmpty(dataStreamName)) {
-            result.put(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
+            result.put(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, dataStreamName);
         }
         if (!Strings.isNullOrEmpty(sensorName)) {
             result.put(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);

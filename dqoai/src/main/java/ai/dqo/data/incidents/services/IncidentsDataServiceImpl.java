@@ -116,7 +116,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
             InstantColumn lastSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
             InstantColumn incidentUntilColumn = partitionTable.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
-            TextColumn dataStreamNameColumn = partitionTable.textColumn(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+            TextColumn dataStreamNameColumn = partitionTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
             TextColumn qualityDimensionColumn = partitionTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
             TextColumn checkCategoryColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
             TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
@@ -156,7 +156,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.setLastSeen(lastSeenColumn.get(rowIndex));
                 incidentModel.setIncidentUntil(incidentUntilColumn.get(rowIndex));
                 if (!dataStreamNameColumn.isMissing(rowIndex)) {
-                    incidentModel.setDataStreamName(dataStreamNameColumn.get(rowIndex));
+                    incidentModel.setDataGroup(dataStreamNameColumn.get(rowIndex));
                 }
                 if (!qualityDimensionColumn.isMissing(rowIndex)) {
                     incidentModel.setQualityDimension(qualityDimensionColumn.get(rowIndex));

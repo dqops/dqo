@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import DataStreamLevelItem from './DataStreamLevelItem';
+import DataGroupingDimensionItem from './DataGroupingDimensionItem';
 import ScheduleTab from './ScheduleTab';
 import CommentsView from '../Connection/CommentsView';
 import SensorParametersSettings from './SensorParametersSettings';
@@ -7,16 +7,16 @@ import Tabs from '../Tabs';
 import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
-import { DataStreamLevelSpec, UICheckModel } from '../../api';
+import { DataGroupingDimensionSpec, CheckModel } from '../../api';
 import CheckSettingsTab from './CheckSettingsTab';
 
 interface ICheckSettingsProps {
-  check?: UICheckModel;
+  check?: CheckModel;
   activeTab: string;
   setActiveTab: (value: string) => void;
   tabs: ITab[];
   onClose: () => void;
-  onChange: (check: UICheckModel) => void;
+  onChange: (check: CheckModel) => void;
 }
 
 const CheckSettings = ({
@@ -28,27 +28,27 @@ const CheckSettings = ({
   onChange
 }: ICheckSettingsProps) => {
   const [text, setText] = useState('');
-  const getDataStreamLevel = (index: number) => {
-    if (index === 0) return check?.data_streams_override?.level_1;
-    if (index === 1) return check?.data_streams_override?.level_2;
-    if (index === 2) return check?.data_streams_override?.level_3;
-    if (index === 3) return check?.data_streams_override?.level_4;
-    if (index === 4) return check?.data_streams_override?.level_5;
-    if (index === 5) return check?.data_streams_override?.level_6;
-    if (index === 6) return check?.data_streams_override?.level_7;
-    if (index === 7) return check?.data_streams_override?.level_8;
-    if (index === 8) return check?.data_streams_override?.level_9;
+  const getDataGroupingDimensionLevel = (index: number) => {
+    if (index === 0) return check?.data_grouping_override?.level_1;
+    if (index === 1) return check?.data_grouping_override?.level_2;
+    if (index === 2) return check?.data_grouping_override?.level_3;
+    if (index === 3) return check?.data_grouping_override?.level_4;
+    if (index === 4) return check?.data_grouping_override?.level_5;
+    if (index === 5) return check?.data_grouping_override?.level_6;
+    if (index === 6) return check?.data_grouping_override?.level_7;
+    if (index === 7) return check?.data_grouping_override?.level_8;
+    if (index === 8) return check?.data_grouping_override?.level_9;
   };
 
-  const onChangeDataStreamLevel = (
-    dataStreamLevel: DataStreamLevelSpec,
+  const onChangeDataGroupingDimensionLevel = (
+    dataGroupingDimensionLevel: DataGroupingDimensionSpec,
     index: number
   ) => {
     onChange({
       ...check,
-      data_streams_override: {
-        ...check?.data_streams_override,
-        [`level${index + 1}`]: dataStreamLevel
+      data_grouping_override: {
+        ...check?.data_grouping_override,
+        [`level${index + 1}`]: dataGroupingDimensionLevel
       }
     });
   };
@@ -79,12 +79,12 @@ const CheckSettings = ({
               {Array(9)
                 .fill(0)
                 .map((item, index) => (
-                  <DataStreamLevelItem
+                  <DataGroupingDimensionItem
                     idx={index}
                     key={index}
-                    dataStreamLevel={getDataStreamLevel(index)}
-                    onChange={(dataStreamsLevel) =>
-                      onChangeDataStreamLevel(dataStreamsLevel, index)
+                    dataGroupingLevel={getDataGroupingDimensionLevel(index)}
+                    onChange={(dataGroupingDimensionLevel) =>
+                      onChangeDataGroupingDimensionLevel(dataGroupingDimensionLevel, index)
                     }
                   />
                 ))}

@@ -18,7 +18,7 @@ package ai.dqo.metadata.traversal;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.AbstractSearchVisitor;
-import ai.dqo.metadata.search.DataStreamSearcherObject;
+import ai.dqo.metadata.search.DataGroupingConfigurationSearcherObject;
 import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.metadata.search.SearchParameterObject;
 import ai.dqo.metadata.sources.*;
@@ -46,9 +46,9 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
         VisitAllVisitor visitor = new VisitAllVisitor();
-		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
+		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(2, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(columns.get("col1")));
@@ -63,9 +63,9 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
         VisitSelectedColumnVisitor visitor = new VisitSelectedColumnVisitor(columns.get("col1"));
-		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
+		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(1, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(columns.get("col1")));
@@ -79,9 +79,9 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
         VisitStopTraversalAfterFound visitor = new VisitStopTraversalAfterFound(columns.get("col1")); // java maps are iterated in the reverse order, so we need to look at col2
-		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
+		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(1, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(columns.get("col1")));
@@ -100,9 +100,9 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
         VisitAllVisitor visitor = new VisitAllVisitor();
-		this.sut.traverseHierarchyNodeTree(connectionWrapper, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
+		this.sut.traverseHierarchyNodeTree(connectionWrapper, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(2, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(col1));

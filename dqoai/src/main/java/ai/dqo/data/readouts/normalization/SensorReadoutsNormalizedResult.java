@@ -16,9 +16,10 @@
 package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.Column;
 
 /**
  * Describes the dataset (dataframe) returned from the sensor. Identifies the time series column, data stream columns, etc.
@@ -32,18 +33,18 @@ public class SensorReadoutsNormalizedResult {
     private final DateTimeColumn timePeriodColumn;
     private final InstantColumn timePeriodUtcColumn;
     private final TextColumn timeGradientColumn;
-    private final TextColumn dataStreamLevel1Column;
-    private final TextColumn dataStreamLevel2Column;
-    private final TextColumn dataStreamLevel3Column;
-    private final TextColumn dataStreamLevel4Column;
-    private final TextColumn dataStreamLevel5Column;
-    private final TextColumn dataStreamLevel6Column;
-    private final TextColumn dataStreamLevel7Column;
-    private final TextColumn dataStreamLevel8Column;
-    private final TextColumn dataStreamLevel9Column;
-    private final LongColumn dataStreamHashColumn;
-    private final TextColumn dataStreamNameColumn;
-    private final TextColumn dataStreamMappingNameColumn;
+    private final TextColumn dataGroupingLevel1Column;
+    private final TextColumn dataGroupingLevel2Column;
+    private final TextColumn dataGroupingLevel3Column;
+    private final TextColumn dataGroupingLevel4Column;
+    private final TextColumn dataGroupingLevel5Column;
+    private final TextColumn dataGroupingLevel6Column;
+    private final TextColumn dataGroupingLevel7Column;
+    private final TextColumn dataGroupingLevel8Column;
+    private final TextColumn dataGroupingLevel9Column;
+    private final LongColumn dataGroupHashColumn;
+    private final TextColumn dataGroupNameColumn;
+    private final TextColumn dataGroupingConfigurationColumn;
     private final LongColumn connectionHashColumn;
     private final TextColumn connectionNameColumn;
     private final TextColumn providerColumn;
@@ -84,18 +85,18 @@ public class SensorReadoutsNormalizedResult {
         this.timePeriodColumn = TableColumnUtility.getOrAddDateTimeColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
         this.timePeriodUtcColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
         this.timeGradientColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-        this.dataStreamLevel1Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1");
-        this.dataStreamLevel2Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2");
-        this.dataStreamLevel3Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "3");
-        this.dataStreamLevel4Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "4");
-        this.dataStreamLevel5Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "5");
-        this.dataStreamLevel6Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "6");
-        this.dataStreamLevel7Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "7");
-        this.dataStreamLevel8Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "8");
-        this.dataStreamLevel9Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9");
-        this.dataStreamHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
-        this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
-        this.dataStreamMappingNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME);
+        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1");
+        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2");
+        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3");
+        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4");
+        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5");
+        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6");
+        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7");
+        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8");
+        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9");
+        this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
+        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME);
         this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME);
         this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME);
         this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
@@ -183,98 +184,98 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Returns the column that contains the value of the data stream at the level 1.
-     * @return Data stream value for the stream_level_1.
+     * @return Data stream value for the grouping_level_1.
      */
-    public TextColumn getDataStreamLevel1Column() {
-        return dataStreamLevel1Column;
+    public TextColumn getDataGroupingLevel1Column() {
+        return dataGroupingLevel1Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 2.
-     * @return Data stream value for the stream_level_2.
+     * @return Data stream value for the grouping_level_2.
      */
-    public TextColumn getDataStreamLevel2Column() {
-        return dataStreamLevel2Column;
+    public TextColumn getDataGroupingLevel2Column() {
+        return dataGroupingLevel2Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 3.
-     * @return Data stream value for the stream_level_3.
+     * @return Data stream value for the grouping_level_3.
      */
-    public TextColumn getDataStreamLevel3Column() {
-        return dataStreamLevel3Column;
+    public TextColumn getDataGroupingLevel3Column() {
+        return dataGroupingLevel3Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 4.
-     * @return Data stream value for the stream_level_4.
+     * @return Data stream value for the grouping_level_4.
      */
-    public TextColumn getDataStreamLevel4Column() {
-        return dataStreamLevel4Column;
+    public TextColumn getDataGroupingLevel4Column() {
+        return dataGroupingLevel4Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 5.
-     * @return Data stream value for the stream_level_5.
+     * @return Data stream value for the grouping_level_5.
      */
-    public TextColumn getDataStreamLevel5Column() {
-        return dataStreamLevel5Column;
+    public TextColumn getDataGroupingLevel5Column() {
+        return dataGroupingLevel5Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 6.
-     * @return Data stream value for the stream_level_6.
+     * @return Data stream value for the grouping_level_6.
      */
-    public TextColumn getDataStreamLevel6Column() {
-        return dataStreamLevel6Column;
+    public TextColumn getDataGroupingLevel6Column() {
+        return dataGroupingLevel6Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 7.
-     * @return Data stream value for the stream_level_7.
+     * @return Data stream value for the grouping_level_7.
      */
-    public TextColumn getDataStreamLevel7Column() {
-        return dataStreamLevel7Column;
+    public TextColumn getDataGroupingLevel7Column() {
+        return dataGroupingLevel7Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 8.
-     * @return Data stream value for the stream_level_8.
+     * @return Data stream value for the grouping_level_8.
      */
-    public TextColumn getDataStreamLevel8Column() {
-        return dataStreamLevel8Column;
+    public TextColumn getDataGroupingLevel8Column() {
+        return dataGroupingLevel8Column;
     }
 
     /**
      * Returns the column that contains the value of the data stream at the level 9.
-     * @return Data stream value for the stream_level_9.
+     * @return Data stream value for the grouping_level_9.
      */
-    public TextColumn getDataStreamLevel9Column() {
-        return dataStreamLevel9Column;
+    public TextColumn getDataGroupingLevel9Column() {
+        return dataGroupingLevel9Column;
     }
 
     /**
      * Data stream hash column.
      * @return Data stream hash column.
      */
-    public LongColumn getDataStreamHashColumn() {
-        return dataStreamHashColumn;
+    public LongColumn getDataGroupHashColumn() {
+        return dataGroupHashColumn;
     }
 
     /**
      * Data stream name column. The data stream name is concatenated from data stream levels and is a user friendly value.
      * @return Data stream name column.
      */
-    public TextColumn getDataStreamNameColumn() {
-        return dataStreamNameColumn;
+    public TextColumn getDataGroupNameColumn() {
+        return dataGroupNameColumn;
     }
 
     /**
      * Returns the data stream mapping name column. It contains the name of the selected data stream mapping that was used.
      * @return Data stream mapping name column.
      */
-    public TextColumn getDataStreamMappingNameColumn() {
-        return dataStreamMappingNameColumn;
+    public TextColumn getDataGroupingConfigurationColumn() {
+        return dataGroupingConfigurationColumn;
     }
 
     /**

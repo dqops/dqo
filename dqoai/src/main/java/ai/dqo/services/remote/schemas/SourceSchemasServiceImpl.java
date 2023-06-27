@@ -25,6 +25,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.remote.SchemaRemoteModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  * Schema on remote database management service.
  */
 @Component
+@Slf4j
 public class SourceSchemasServiceImpl implements SourceSchemasService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
@@ -86,6 +88,7 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
                     setImportTableJobParameters(new ImportTablesQueueJobParameters(connectionName, sourceSchemaModel.getSchemaName(), null));
                 }}).collect(Collectors.toList());
         } catch (Exception e) {
+            log.error("Failed to list schemas from a connection, error: " + e.getMessage(), e);
             throw new SourceSchemasServiceException("Source database connection error: " + e.getMessage(), e);
         }
 

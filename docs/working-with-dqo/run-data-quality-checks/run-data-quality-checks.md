@@ -7,7 +7,7 @@ In DQO there are two ways to enable and run data quality checks:
 
 To enable checks, you need to add a connection. You can learn [how to add connection here](../adding-data-source-connection/index.md).
 
-For more information about checks, see [DQO concepts section](../../dqo-concepts/checks/index.md).
+For more information about different categories of checks, see [DQO concepts section](../../dqo-concepts/checks/index.md).
 
 ## Run data quality checks using the graphical interface
 
@@ -19,16 +19,16 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
     ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest.jpg)
 
-4. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
+3. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
 
     ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check.jpg)
 
-5. Set the threshold levels or leave default values. Set parameters if the check has any. Click the Save button in the upper right corner.
+4. Set the threshold levels or leave default values. Set parameters if the check has any. Click the Save button in the upper right corner.
     You can read more about threshold severity levels in [DQO concepts section](../../dqo-concepts/checks/#severity-levels).
 
     ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels.jpg)
 
-3. Run data quality check by clicking the Run Check icon
+5. Run data quality check by clicking the Run Check icon
 
     ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-check.jpg)
 
@@ -40,24 +40,24 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
    You can view the details by placing the mouse cursor on the square.
 
-4. Click the "Check Details" icon to view more details of the results.
+6. Click the "Check Details" icon to view more details of the results.
 
     ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/check-results.jpg)
 
     A table will appear with more details about the run check.
 
+7. Synchronize locally stored results with your DQO Cloud account to be able to view the results on the dashboards.
 
-5. Synchronize locally stored results with your DQO Cloud account to be able to view the results on the dashboards.
+    To synchronize all the data click on Synchronize button in the upper right corner of the navigation menu.
+8. 
 
-    To synchronize all the data click on Synchronize button in the upper right corner .
-
-### Configuring date or datetime column for partition checks
+### Configure date or datetime column for partition checks
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 
 To learn more about partition checks, go to [DQO concepts section](../../dqo-concepts/checks/partition-checks/partition-checks.md)
 
-To run partition checks you need to configure a DATE or DATETIME colum which will be used as the time partitioning key for the table.
+To run partition checks you need to configure a date or datetime columns which will be used as the time partitioning key for the table.
 
 To configure the date or datetime colum:
 
@@ -65,7 +65,7 @@ To configure the date or datetime colum:
 
 2. Select the table of interest from the tree view.
 
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "DATE or DATETIME 
+3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime 
     column name for partition checks" input field.
 
     ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.jpg)
@@ -73,7 +73,7 @@ To configure the date or datetime colum:
 4. Click the Save button in the upper right corner.
 
 
-### Configuring event and ingestion timestamp columns for timeliness checks
+### Configure event and ingestion timestamp columns for timeliness checks
 
 To run timeliness checks you need to configure event and/or ingestion timestamp columns.
 
@@ -210,7 +210,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 ### Configuring date or datetime column for partition checks and event and ingestion timestamps for timeliness checks
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
-To run partition checks you need to configure DATE or DATETIME colum which will be used as the time partitioning key for the table.
+To run partition checks you need to configure Date or datetime colum which will be used as the time partitioning key for the table.
 
 To run timeliness checks you need to configure event and/or ingestion timestamp columns.
 

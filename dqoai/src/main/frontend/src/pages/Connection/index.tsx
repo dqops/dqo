@@ -11,7 +11,7 @@ import ConnectionCommentView from "../../components/Connection/ConnectionView/Co
 import ConnectionLabelsView from "../../components/Connection/ConnectionView/ConnectionLabelsView";
 import SourceSchemasView from "../../components/Connection/ConnectionView/SourceSchemasView";
 import SchemasView from "../../components/Connection/ConnectionView/SchemasView";
-import ConnectionDataStream from "../../components/Connection/ConnectionView/ConnectionDataStream";
+import ConnectionDefaultGroupingConfiguration from "../../components/Connection/ConnectionView/ConnectionDataStream";
 import qs from 'query-string';
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { IncidentsNotificationsView } from "../../components/Connection/ConnectionView/IncidentsNotificationsView";
@@ -40,7 +40,7 @@ const initSourceTabs = [
     value: 'schemas'
   },
   {
-    label: 'Default data stream template',
+    label: 'Default grouping template',
     value: 'data-streams'
   },
   {
@@ -60,7 +60,7 @@ const ConnectionPage = () => {
   const [tabs, setTabs] = useState(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs);
   const history = useHistory();
   const location = useLocation() as any;
-  const { import_schema, create_success } = qs.parse(location.search);
+  const { import_schema, create_success, schema } = qs.parse(location.search);
 
   const {
     isUpdatedConnectionBasic,
@@ -174,9 +174,9 @@ const ConnectionPage = () => {
         {activeTab === 'comments' && <ConnectionCommentView />}
         {activeTab === 'labels' && <ConnectionLabelsView />}
         {activeTab === 'schemas' && (
-          import_schema === 'true' ? <SourceSchemasView /> : <SchemasView />
+          import_schema === 'true' ? <SourceSchemasView defaultSchema={schema as string} /> : <SchemasView />
         )}
-        {activeTab === 'data-streams' && <ConnectionDataStream />}
+        {activeTab === 'data-streams' && <ConnectionDefaultGroupingConfiguration />}
         {activeTab === 'incidents' && <IncidentsNotificationsView />}
       </div>
     </ConnectionLayout>

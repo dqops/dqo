@@ -5,12 +5,14 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_check_spec import (
+        ColumnDistinctPercentCheckSpec,
+    )
     from ..models.column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
-    from ..models.column_unique_count_check_spec import ColumnUniqueCountCheckSpec
-    from ..models.column_unique_percent_check_spec import ColumnUniquePercentCheckSpec
 
 
 T = TypeVar("T", bound="ColumnUniquenessMonthlyRecurringChecksSpec")
@@ -20,26 +22,26 @@ T = TypeVar("T", bound="ColumnUniquenessMonthlyRecurringChecksSpec")
 class ColumnUniquenessMonthlyRecurringChecksSpec:
     """
     Attributes:
-        monthly_unique_count (Union[Unset, ColumnUniqueCountCheckSpec]):
-        monthly_unique_percent (Union[Unset, ColumnUniquePercentCheckSpec]):
+        monthly_distinct_count (Union[Unset, ColumnDistinctCountCheckSpec]):
+        monthly_distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
         monthly_duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
         monthly_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
     """
 
-    monthly_unique_count: Union[Unset, "ColumnUniqueCountCheckSpec"] = UNSET
-    monthly_unique_percent: Union[Unset, "ColumnUniquePercentCheckSpec"] = UNSET
+    monthly_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
+    monthly_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
     monthly_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
     monthly_duplicate_percent: Union[Unset, "ColumnDuplicatePercentCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        monthly_unique_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_unique_count, Unset):
-            monthly_unique_count = self.monthly_unique_count.to_dict()
+        monthly_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_distinct_count, Unset):
+            monthly_distinct_count = self.monthly_distinct_count.to_dict()
 
-        monthly_unique_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_unique_percent, Unset):
-            monthly_unique_percent = self.monthly_unique_percent.to_dict()
+        monthly_distinct_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_distinct_percent, Unset):
+            monthly_distinct_percent = self.monthly_distinct_percent.to_dict()
 
         monthly_duplicate_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_duplicate_count, Unset):
@@ -52,10 +54,10 @@ class ColumnUniquenessMonthlyRecurringChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if monthly_unique_count is not UNSET:
-            field_dict["monthly_unique_count"] = monthly_unique_count
-        if monthly_unique_percent is not UNSET:
-            field_dict["monthly_unique_percent"] = monthly_unique_percent
+        if monthly_distinct_count is not UNSET:
+            field_dict["monthly_distinct_count"] = monthly_distinct_count
+        if monthly_distinct_percent is not UNSET:
+            field_dict["monthly_distinct_percent"] = monthly_distinct_percent
         if monthly_duplicate_count is not UNSET:
             field_dict["monthly_duplicate_count"] = monthly_duplicate_count
         if monthly_duplicate_percent is not UNSET:
@@ -65,34 +67,36 @@ class ColumnUniquenessMonthlyRecurringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_distinct_count_check_spec import (
+            ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_check_spec import (
+            ColumnDistinctPercentCheckSpec,
+        )
         from ..models.column_duplicate_count_check_spec import (
             ColumnDuplicateCountCheckSpec,
         )
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
         )
-        from ..models.column_unique_count_check_spec import ColumnUniqueCountCheckSpec
-        from ..models.column_unique_percent_check_spec import (
-            ColumnUniquePercentCheckSpec,
-        )
 
         d = src_dict.copy()
-        _monthly_unique_count = d.pop("monthly_unique_count", UNSET)
-        monthly_unique_count: Union[Unset, ColumnUniqueCountCheckSpec]
-        if isinstance(_monthly_unique_count, Unset):
-            monthly_unique_count = UNSET
+        _monthly_distinct_count = d.pop("monthly_distinct_count", UNSET)
+        monthly_distinct_count: Union[Unset, ColumnDistinctCountCheckSpec]
+        if isinstance(_monthly_distinct_count, Unset):
+            monthly_distinct_count = UNSET
         else:
-            monthly_unique_count = ColumnUniqueCountCheckSpec.from_dict(
-                _monthly_unique_count
+            monthly_distinct_count = ColumnDistinctCountCheckSpec.from_dict(
+                _monthly_distinct_count
             )
 
-        _monthly_unique_percent = d.pop("monthly_unique_percent", UNSET)
-        monthly_unique_percent: Union[Unset, ColumnUniquePercentCheckSpec]
-        if isinstance(_monthly_unique_percent, Unset):
-            monthly_unique_percent = UNSET
+        _monthly_distinct_percent = d.pop("monthly_distinct_percent", UNSET)
+        monthly_distinct_percent: Union[Unset, ColumnDistinctPercentCheckSpec]
+        if isinstance(_monthly_distinct_percent, Unset):
+            monthly_distinct_percent = UNSET
         else:
-            monthly_unique_percent = ColumnUniquePercentCheckSpec.from_dict(
-                _monthly_unique_percent
+            monthly_distinct_percent = ColumnDistinctPercentCheckSpec.from_dict(
+                _monthly_distinct_percent
             )
 
         _monthly_duplicate_count = d.pop("monthly_duplicate_count", UNSET)
@@ -114,8 +118,8 @@ class ColumnUniquenessMonthlyRecurringChecksSpec:
             )
 
         column_uniqueness_monthly_recurring_checks_spec = cls(
-            monthly_unique_count=monthly_unique_count,
-            monthly_unique_percent=monthly_unique_percent,
+            monthly_distinct_count=monthly_distinct_count,
+            monthly_distinct_percent=monthly_distinct_percent,
             monthly_duplicate_count=monthly_duplicate_count,
             monthly_duplicate_percent=monthly_duplicate_percent,
         )

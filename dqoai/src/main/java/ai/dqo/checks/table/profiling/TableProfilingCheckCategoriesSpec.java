@@ -19,10 +19,11 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.groupings.TimeSeriesMode;
+import ai.dqo.checks.comparison.CheckCategoriesTableComparisonMapParent;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
@@ -44,7 +45,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec
+        implements TimeSeriesConfigurationProvider, CheckCategoriesTableComparisonMapParent {
     public static final ChildHierarchyNodeFieldMapImpl<TableProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);
@@ -53,6 +55,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -85,6 +88,11 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSchemaProfilingChecksSpec schema;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableComparisonProfilingChecksSpecMap comparisons = new TableComparisonProfilingChecksSpecMap();
 
     /**
      * Returns a container of volume check configuration on a table level.
@@ -192,6 +200,24 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns the dictionary of comparisons.
+     * @return Dictionary of comparisons.
+     */
+    public TableComparisonProfilingChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the dictionary of comparisons.
+     * @param comparisons Dictionary of comparisons.
+     */
+    public void setComparisons(TableComparisonProfilingChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**

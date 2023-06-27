@@ -50,8 +50,8 @@ Creates a new connection to the database with the specified details such as conn
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                [--redshift-ssl] [--sqlserver-ssl]
+$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
+                [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -61,7 +61,10 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgres
                 [--mysql-database=<database>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                [-of=<outputFormat>] [--postgresql-database=<database>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>] [--oracle-options=<options>]
+                [--oracle-password=<password>] [--oracle-port=<port>]
+                [--oracle-user=<user>] [--postgresql-database=<database>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-user=<user>] [--redshift-database=<database>]
@@ -76,14 +79,14 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgres
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [-F=<String=String>]... [-M=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
 
 ```
 **DQO Shell synopsis**
 ```
-dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                [--redshift-ssl] [--sqlserver-ssl]
+dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
+                [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -93,7 +96,10 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                 [--mysql-database=<database>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                [-of=<outputFormat>] [--postgresql-database=<database>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>] [--oracle-options=<options>]
+                [--oracle-password=<password>] [--oracle-port=<port>]
+                [--oracle-user=<user>] [--postgresql-database=<database>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-user=<user>] [--redshift-database=<database>]
@@ -108,8 +114,8 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [-F=<String=String>]... [-M=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
 
 ```
 
@@ -117,7 +123,7 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`--bigquery-authentication-mode`<br/>|Bigquery authentication mode.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
+|`--bigquery-authentication-mode`<br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |`--bigquery-billing-project-id`<br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
 |`--bigquery-json-key-content`<br/>|Bigquery service account key content as JSON.| ||
 |`--bigquery-json-key-path`<br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
@@ -134,6 +140,13 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--mysql-ssl`<br/>|Connect to MySQL using SSL| ||
 |`--mysql-user`<br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-n`<br/>`--name`<br/>|Connection name| ||
+|`--oracle-database`<br/>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
+|`--oracle-host`<br/>|Oracle host name| ||
+|`--oracle-options`<br/>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|`--oracle-password`<br/>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
+|`--oracle-port`<br/>|Oracle port number| ||
+|`--oracle-ssl`<br/>|Connect to Oracle using SSL| ||
+|`--oracle-user`<br/>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--postgresql-database`<br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
 |`--postgresql-host`<br/>|PostgreSQL host name| ||
@@ -142,7 +155,7 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--postgresql-port`<br/>|PostgreSQL port number| ||
 |`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
 |`--postgresql-user`<br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
-|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>|
+|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>oracle<br/>|
 |`--redshift-database`<br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-host`<br/>|Redshift host name| ||
 |`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -165,6 +178,7 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-M`<br/>|MySQL additional properties that are added to the JDBC connection string| ||
+|`-O`<br/>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
 |`-S`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
@@ -218,8 +232,8 @@ Update the connection or connections that match the conditions specified in the 
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                   [--redshift-ssl] [--sqlserver-ssl]
+$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
+                   [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -229,7 +243,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postg
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                   [-of=<outputFormat>] [--postgresql-database=<database>]
+                   [-of=<outputFormat>] [--oracle-database=<database>]
+                   [--oracle-host=<host>] [--oracle-options=<options>]
+                   [--oracle-password=<password>] [--oracle-port=<port>]
+                   [--oracle-user=<user>] [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-user=<user>]
@@ -245,14 +262,15 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postg
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [-F=<String=String>]...
-                   [-M=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-M=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]...
 
 ```
 **DQO Shell synopsis**
 ```
-dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                   [--redshift-ssl] [--sqlserver-ssl]
+dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
+                   [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -262,7 +280,10 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                   [-of=<outputFormat>] [--postgresql-database=<database>]
+                   [-of=<outputFormat>] [--oracle-database=<database>]
+                   [--oracle-host=<host>] [--oracle-options=<options>]
+                   [--oracle-password=<password>] [--oracle-port=<port>]
+                   [--oracle-user=<user>] [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-user=<user>]
@@ -278,8 +299,9 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [-F=<String=String>]...
-                   [-M=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-M=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]...
 
 ```
 
@@ -287,7 +309,7 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`--bigquery-authentication-mode`<br/>|Bigquery authentication mode.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
+|`--bigquery-authentication-mode`<br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |`--bigquery-billing-project-id`<br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
 |`--bigquery-json-key-content`<br/>|Bigquery service account key content as JSON.| ||
 |`--bigquery-json-key-path`<br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
@@ -304,6 +326,13 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--mysql-ssl`<br/>|Connect to MySQL using SSL| ||
 |`--mysql-user`<br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-n`<br/>`--name`<br/>|Connection name, supports wildcards for changing multiple connections at once, i.e. &quot;conn*&quot;| ||
+|`--oracle-database`<br/>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
+|`--oracle-host`<br/>|Oracle host name| ||
+|`--oracle-options`<br/>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|`--oracle-password`<br/>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
+|`--oracle-port`<br/>|Oracle port number| ||
+|`--oracle-ssl`<br/>|Connect to Oracle using SSL| ||
+|`--oracle-user`<br/>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--postgresql-database`<br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
 |`--postgresql-host`<br/>|PostgreSQL host name| ||
@@ -334,6 +363,7 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-M`<br/>|MySQL additional properties that are added to the JDBC connection string| ||
+|`-O`<br/>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
 |`-S`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||

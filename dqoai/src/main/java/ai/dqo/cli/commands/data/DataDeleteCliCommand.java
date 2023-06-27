@@ -132,8 +132,8 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-tg", "--time-gradient"}, description = "Time gradient of the sensor")
     private String timeGradient;
 
-    @CommandLine.Option(names = {"-ds", "--data-stream"}, description = "Data stream hierarchy level filter (tag)")
-    private String dataStream;
+    @CommandLine.Option(names = {"-ds", "--data-group-tag"}, description = "Data group dimension level filter, that filters by tags.")
+    private String dataGroupTag;
 
     @CommandLine.Option(names = {"-qd", "--quality-dimension"}, description = "Data quality dimension")
     private String qualityDimension;
@@ -185,8 +185,8 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
             deleteStoredDataJobParameters.setSensorName(this.sensor);
         }
 
-        if (!Strings.isNullOrEmpty(this.dataStream)) {
-            deleteStoredDataJobParameters.setDataStreamName(this.dataStream);
+        if (!Strings.isNullOrEmpty(this.dataGroupTag)) {
+            deleteStoredDataJobParameters.setDataGroupTag(this.dataGroupTag);
         }
 
         if (!Strings.isNullOrEmpty(this.qualityDimension)) {

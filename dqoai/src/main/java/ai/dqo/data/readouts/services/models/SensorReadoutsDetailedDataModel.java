@@ -24,7 +24,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Sensor readout detailed results. Returned in the context of a single data-stream, with a supplied list of other data-streams.
+ * Sensor readout detailed results. Returned in the context of a single data group, with a supplied list of other data groups.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -37,10 +37,10 @@ public class SensorReadoutsDetailedDataModel {
     @JsonPropertyDescription("Sensor name.")
     private String sensorName;
 
-    @JsonPropertyDescription("Data stream list.")
-    private List<String> dataStreamNames;
-    @JsonPropertyDescription("Selected data-stream.")
-    private String dataStream;
+    @JsonPropertyDescription("Data groups list.")
+    private List<String> dataGroupNames;
+    @JsonPropertyDescription("Selected data group.")
+    private String dataGroup;
 
     @JsonPropertyDescription("Single sensor readouts")
     private List<SensorReadoutDetailedSingleModel> singleSensorReadouts;

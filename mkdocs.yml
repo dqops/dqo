@@ -24,7 +24,7 @@ nav:
     - Data quality KPIs: 'dqo-concepts/data-quality-kpis/data-quality-kpis.md'
     - Dashboards: 'dqo-concepts/data-quality-dashboards/data-quality-dashboards.md'
     - Data quality dimensions: 'dqo-concepts/data-quality-dimensions/data-quality-dimensions.md'
-    - Data stream segmentation: 'dqo-concepts/data-stream-segmentation/data-stream-segmentation.md'
+    - Data grouping: 'dqo-concepts/data-grouping/data-grouping.md'
     - Data storage: 'dqo-concepts/data-storage/data-storage.md'
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
@@ -63,6 +63,7 @@ nav:
       - Install DQO from Git: 'working-with-dqo/installation/install-dqo-from-git.md'
       - Install DQO from release package: 'working-with-dqo/installation/install-dqo-from-release-package.md'
       - Run DQO as Docker container: 'working-with-dqo/installation/run-dqo-as-docker-container.md'
+    - Navigating the graphical interface: 'working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md'
     - Adding connections:
       - 'working-with-dqo/adding-data-source-connection/index.md'
       - BigQuery: 'working-with-dqo/adding-data-source-connection/bigquery.md'
@@ -73,6 +74,7 @@ nav:
       - MySQL: 'working-with-dqo/adding-data-source-connection/mysql.md'
     - Basic data statistics: 'working-with-dqo/basic-data-statistics/basic-data-statistics.md'
     - Run data quality checks: 'working-with-dqo/run-data-quality-checks/run-data-quality-checks.md'
+    - Review the results of data quality monitoring on dashboards: 'working-with-dqo/data-quality-dashboards/data-quality-dashboards.md'
     - Delete data quality results: 'working-with-dqo/delete-data-quality-results/delete-data-quality-results.md'
     - Schedules:
       - 'working-with-dqo/schedules/index.md'
@@ -80,7 +82,7 @@ nav:
       - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
       - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
     - Incidents and notifications: 'working-with-dqo/incidents-and-notifications/incidents-and-notifications.md'
-    - Set up data stream segmentation: 'working-with-dqo/set-up-data-streams/set-up-data-stream.md'
+    - Set up data grouping: 'working-with-dqo/set-up-data-grouping/set-up-data-grouping.md'
     - Working with DQO Shell: 'working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
@@ -117,9 +119,9 @@ nav:
         - sql condition failed count on table: 'checks/table/sql/sql-condition-failed-count-on-table.md'
         - sql aggregate expr table: 'checks/table/sql/sql-aggregate-expr-table.md'
       - timeliness:
-        - days since most recent event: 'checks/table/timeliness/days-since-most-recent-event.md'
+        - data freshness: 'checks/table/timeliness/data-freshness.md'
+        - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
-        - days since most recent ingestion: 'checks/table/timeliness/days-since-most-recent-ingestion.md'
         - daily partition reload lag: 'checks/table/timeliness/daily-partition-reload-lag.md'
       - volume:
         - row count: 'checks/table/volume/row-count.md'
@@ -270,8 +272,8 @@ nav:
         - expected strings in top values count: 'checks/column/strings/expected-strings-in-top-values-count.md'
         - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
       - uniqueness:
-        - unique count: 'checks/column/uniqueness/unique-count.md'
-        - unique percent: 'checks/column/uniqueness/unique-percent.md'
+        - distinct count: 'checks/column/uniqueness/distinct-count.md'
+        - distinct percent: 'checks/column/uniqueness/distinct-percent.md'
         - duplicate count: 'checks/column/uniqueness/duplicate-count.md'
         - duplicate percent: 'checks/column/uniqueness/duplicate-percent.md'
     - index: 'checks/index.md'
@@ -324,10 +326,10 @@ nav:
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
+      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
       - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings

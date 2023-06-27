@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

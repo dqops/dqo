@@ -1,11 +1,11 @@
 import { CheckResultDetailedSingleModel, IncidentModel } from "../../api";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
-import { ChecksApi } from "../../services/apiClient";
 import { SortableColumn } from "../IncidentConnection/SortableColumn";
 import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
 import moment from "moment";
+import { CheckTypes } from "../../shared/routes";
 
 type IncidentIssueRowProps = {
   issue: CheckResultDetailedSingleModel;
@@ -45,13 +45,6 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
     return '';
   };
 
-  useEffect(() => {
-    if (!issue?.checkName) return;
-
-    ChecksApi.getCheck(issue?.checkName).then((res) => {
-      console.log('res', res);
-    });
-  }, []);
   const closeCheckDetails = () => {
     setOpen(false);
   };
@@ -124,7 +117,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
           {issue.durationMs}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.dataStream}
+          {issue.dataGroup}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
           <span>{issue.id}</span>
@@ -134,7 +127,14 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <tr>
           <td colSpan={12}>
             <CheckDetails
+              checkTypes={(incidentDetail?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+              connection={incidentDetail?.connection ?? ''}
+              schema={incidentDetail?.schema ?? ''}
+              table={incidentDetail?.table ?? ''}
+              checkName={issue.checkName}
+              runCheckType={issue.checkType}
               onClose={closeCheckDetails}
+              defaultFilters={moment(issue.timePeriod).format("MMMM YYYY")}
             />
           </td>
         </tr>
@@ -267,9 +267,9 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             <SortableColumn
               className="justify-end"
-              label="Data Stream"
-              order="dataStream"
-              direction={filters?.order === 'dataStream' ? filters.direction : undefined}
+              label="Data Group"
+              order="dataGroup"
+              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
               onChange={handleSortChange}
             />
           </th>

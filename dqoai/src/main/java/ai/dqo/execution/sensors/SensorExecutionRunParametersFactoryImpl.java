@@ -23,10 +23,11 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.groupings.TimeSeriesMode;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PartitionIncrementalTimeWindowSpec;
@@ -84,8 +85,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
-        DataStreamMappingSpec dataStreams = check.getDataStream() != null ?
-                expandedTable.getDataStreams().get(check.getDataStream()) : expandedTable.getDataStreams().getFirstDataStreamMapping();
+        DataGroupingConfigurationSpec dataGroupingConfiguration = check.getDataGrouping() != null ?
+                expandedTable.getGroupings().get(check.getDataGrouping()) : expandedTable.getGroupings().getFirstDataGroupingConfiguration();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
         EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames();
@@ -107,9 +108,17 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             }
         }
 
+        CheckSearchFilters exactCheckSearchFilters = new CheckSearchFilters();
+        exactCheckSearchFilters.setConnectionName(connection.getConnectionName());
+        exactCheckSearchFilters.setSchemaTableName(table.getPhysicalTableName().toTableSearchFilter());
+        exactCheckSearchFilters.setColumnName(column == null ? null : column.getColumnName());
+        exactCheckSearchFilters.setCheckCategory(check.getCategoryName());
+        exactCheckSearchFilters.setCheckName(check.getCheckName());
+        exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());
+
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
-                dataStreams, sensorParameters, dialectSettings);
+                dataGroupingConfiguration, sensorParameters, dialectSettings, exactCheckSearchFilters);
     }
 
     /**
@@ -138,8 +147,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
-        DataStreamMappingSpec dataStreams = statisticsDataScope == StatisticsDataScope.table ? null :
-                expandedTable.getDataStreams().getFirstDataStreamMapping();
+        DataGroupingConfigurationSpec dataStreams = statisticsDataScope == StatisticsDataScope.table ? null :
+                expandedTable.getGroupings().getFirstDataGroupingConfiguration();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
         EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
@@ -147,7 +156,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
-                dataStreams, sensorParameters, dialectSettings);
+                dataStreams, sensorParameters, dialectSettings, null);
     }
 
     /**

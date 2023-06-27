@@ -26,7 +26,6 @@ import IncidentNavigation from "./IncidentNavigation";
 import Button from "../../components/Button";
 import { HistogramChart } from "./HistogramChart";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
-import { Warning } from "postcss";
 import { addFirstLevelTab as addSourceFirstLevelTab } from "../../redux/actions/source.actions";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 
@@ -96,7 +95,7 @@ export const IncidentDetail = () => {
       month,
       incidentId
     }));
-  }, []);
+  }, [connection, year, month, incidentId]);
 
   const onChangeIncidentStatus = async (status: IncidentModelStatusEnum) => {
     if (!incidentDetail) return;
@@ -143,14 +142,14 @@ export const IncidentDetail = () => {
   }, [debouncedSearchTerm]);
 
   const getWarnings = (minimumSeverity?: number) => {
-    if (!minimumSeverity) return '';
+    if (!minimumSeverity) return 'No warnings';
     if (minimumSeverity > 1) return `${minimumSeverity} Warnings`;
 
     return 'Warning';
   };
 
   const getSeverity = (highestSeverity?: number) => {
-    if (!highestSeverity || highestSeverity / 3 < 1) return '';
+    if (!highestSeverity || highestSeverity / 3 < 1) return 'No fatals';
     if (Math.floor(highestSeverity / 3) > 1) return `${highestSeverity} Fatals`;
 
     return 'Fatal';
@@ -268,7 +267,7 @@ export const IncidentDetail = () => {
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Highest detected issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{getSeverity(incidentDetail?.highestSeverity)} Fatal</div>
+              <div className="flex-[1] text-right font-bold">{getSeverity(incidentDetail?.highestSeverity)}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Total data quality issues:</div>
@@ -335,13 +334,13 @@ export const IncidentDetail = () => {
               <div className="flex-1 font-bold">{incidentDetail?.checkName}</div>
             </div>
             <div className="flex gap-3 items-center">
-              <div className="flex-1">Data stream:</div>
-              <div className="flex-1 font-bold">{incidentDetail?.dataStreamName}</div>
+              <div className="flex-1">Data group:</div>
+              <div className="flex-1 font-bold">{incidentDetail?.dataGroup}</div>
             </div>
           </SectionWrapper>
         </div>
 
-        <HistogramChart />
+        <HistogramChart onChangeFilter={onChangeFilter} />
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
             <IncidentIssueList

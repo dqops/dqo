@@ -20,7 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHomeImpl;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import ai.dqo.utils.reflection.ReflectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -46,7 +46,7 @@ public class SimilarCheckCacheImpl implements SimilarCheckCache {
      */
     @Autowired
     public SimilarCheckCacheImpl(ReflectionService reflectionService, SensorDefinitionFindService sensorDefinitionFindService) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, sensorDefinitionFindService);
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, sensorDefinitionFindService);
         this.similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService);
     }
 

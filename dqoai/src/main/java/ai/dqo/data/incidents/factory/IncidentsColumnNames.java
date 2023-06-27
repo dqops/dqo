@@ -22,52 +22,52 @@ import ai.dqo.data.normalization.CommonColumnNames;
  */
 public final class IncidentsColumnNames {
     /**
-     * Column name for a incident id (primary key), it is a UUID created from a hash of target affected by the incident (target_hash) and a first_seen_utc. This value identifies a single row.
+     * The incident id (primary key), it is a UUID created from a hash of target affected by the incident (target_hash) and a first_seen_utc. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
 
     /**
-     * Column name for a hash of the incident.
+     * The hash of the incident.
      */
     public static final String INCIDENT_HASH_COLUMN_NAME = "incident_hash";
 
     /**
-     * Column name for a table schema.
+     * The table schema.
      */
     public static final String SCHEMA_NAME_COLUMN_NAME = CommonColumnNames.SCHEMA_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a table name.
+     * The table name.
      */
     public static final String TABLE_NAME_COLUMN_NAME = CommonColumnNames.TABLE_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a table priority.
+     * The table priority.
      */
     public static final String TABLE_PRIORITY_COLUMN_NAME = CommonColumnNames.TABLE_PRIORITY_COLUMN_NAME;
 
     /**
-     * Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
+     * The data group name, it is a concatenated name of the data group dimension values, created from [grouping_level_1] / [grouping_level_2] / ...
      */
-    public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
+    public static final String DATA_GROUP_NAME_COLUMN_NAME = CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a data quality dimension.
+     * The data quality dimension.
      */
     public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
 
     /**
-     * Column name for a check category.
+     * The check category.
      */
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
 
     /**
-     * Column name for a check type (adhoc, checkpoint, partitioned).
+     * The check type (adhoc, checkpoint, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 
     /**
-     * Column name for a check name.
+     * The check name.
      */
     public static final String CHECK_NAME_COLUMN_NAME = "check_name";
 
@@ -82,27 +82,27 @@ public final class IncidentsColumnNames {
     public static final String MINIMUM_SEVERITY_COLUMN_NAME = "minimum_severity";
 
     /**
-     * Column name that stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen.
+     * Stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen.
      */
     public static final String FIRST_SEEN_COLUMN_NAME = "first_seen";
 
     /**
-     * Column name that stores the exact time when the incident was raised (seen) for the last time, as a UTC timestamp: last_seen.
+     * Stores the exact time when the incident was raised (seen) for the last time, as a UTC timestamp: last_seen.
      */
     public static final String LAST_SEEN_COLUMN_NAME = "last_seen";
 
     /**
-     * Column name that stores the timestamp of the end of the incident when new issues will not be appended to this incident, as a UTC timestamp: incident_until.
+     * Stores the timestamp of the end of the incident when new issues will not be appended to this incident, as a UTC timestamp: incident_until.
      */
     public static final String INCIDENT_UNTIL_COLUMN_NAME = "incident_until";
 
     /**
-     * Column name that stores the number of checks that failed.
+     * Stores the number of checks that failed.
      */
     public static final String FAILED_CHECKS_COUNT_COLUMN_NAME = "failed_checks_count";
 
     /**
-     * Column name that stores the user provided url to an external ticket management platform that is tracking this incident.
+     * Stores the user provided url to an external ticket management platform that is tracking this incident.
      */
     public static final String ISSUE_URL_COLUMN_NAME = "issue_url";
 
@@ -117,7 +117,7 @@ public final class IncidentsColumnNames {
     public static final String UPDATED_AT_COLUMN_NAME = CommonColumnNames.UPDATED_AT_COLUMN_NAME;
 
     /**
-     * Column name that stores the login of the user who created the incident by running a check.
+     * Stores the login of the user who created the incident by running a check.
      */
     public static final String CREATED_BY_COLUMN_NAME = CommonColumnNames.CREATED_BY_COLUMN_NAME;
 
@@ -127,12 +127,12 @@ public final class IncidentsColumnNames {
     public static final String UPDATED_BY_COLUMN_NAME = CommonColumnNames.UPDATED_BY_COLUMN_NAME;
 
     /**
-     * Column name that stores the login of the user who resolved the incident.
+     * Stores the login of the user who resolved the incident.
      */
     public static final String RESOLVED_BY_COLUMN_NAME = "resolved_by";
 
     /**
-     * Column name that stores the current status of the incident. The statuses are described in the {@link IncidentStatus} enumeration.
+     * Stores the current status of the incident. The statuses are described in the {@link IncidentStatus} enumeration.
      */
     public static final String STATUS_COLUMN_NAME = "status";
 }

@@ -246,19 +246,19 @@ public class JobsController {
     }
 
     /**
-     * Starts a new background job that will run selected data statistics collectors for each data stream separately. Uses the default data stream mapping configured on each table.
+     * Starts a new background job that will run selected data statistics collectors for each data stream separately. Uses the default data group on each table.
      * @param statisticsCollectorSearchFilters Data statistics collectors filters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping(value = "/collectstatistics/datastreams", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "collectStatisticsOnDataStreams", notes = "Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data stream", response = DqoQueueJobId.class)
+    @PostMapping(value = "/collectstatistics/withgrouping", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "collectStatisticsOnDataGroups", notes = "Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New job that will run data statistics collection was added to the queue", response = DqoQueueJobId.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoQueueJobId>> collectStatisticsOnDataStreams(
+    public ResponseEntity<Mono<DqoQueueJobId>> collectStatisticsOnDataGroups(
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
         CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
         StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
@@ -266,7 +266,7 @@ public class JobsController {
         CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
                 statisticsCollectorSearchFilters,
                 progressListener,
-                StatisticsDataScope.data_stream,
+                StatisticsDataScope.data_groupings,
                 false);
         runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
 

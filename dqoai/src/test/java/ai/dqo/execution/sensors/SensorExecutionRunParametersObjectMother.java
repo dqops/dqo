@@ -21,7 +21,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
@@ -48,7 +48,8 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createEmptyBigQuery() {
         return new SensorExecutionRunParameters(BigQueryConnectionSpecObjectMother.create(),
-                null, null, null,  null,null, null, null, null, null, null, null);
+                null, null, null,  null,null, null, null,
+                null, null, null, null, null);
     }
 
     /**

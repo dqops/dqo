@@ -72,7 +72,7 @@ In order to enable time partition check, set a column that contains date, dateti
 
 2. Select the table of interest from the tree view.
 
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "DATE or DATETIME
+3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime
    column name for partition checks" input field.
 
    ![Checking results](https://dqops.com/docs/images/run-data-quality-checks/working-with-dqo/date-or-datetime-column-configuration-for-partion-checks.jpg)

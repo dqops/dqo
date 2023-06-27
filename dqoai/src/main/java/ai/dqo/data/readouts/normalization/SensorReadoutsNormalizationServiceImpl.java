@@ -19,7 +19,8 @@ import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableColumnUtility;
@@ -55,15 +56,15 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Analyzes a given dataset, fixes wrong column types, calculates a data stream hash, sorts the data,
      * prepares the data for using in a sensor. Returns a new table with fixed column types.
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data.
-     * @param timePeriodGradient Time series gradient.
      * @param sensorRunParameters Sensor run parameters.
      * @return Metadata object that describes the sensor result table. Contains also a normalized results table.
      */
     public SensorReadoutsNormalizedResult normalizeResults(SensorExecutionResult sensorExecutionResult,
-                                                           TimePeriodGradient timePeriodGradient,
                                                            SensorExecutionRunParameters sensorRunParameters) {
         Table resultsTable = sensorExecutionResult.getResultTable();
         int resultsRowCount = resultsTable.rowCount();
+        TimePeriodGradient timePeriodGradient = sensorRunParameters.getTimePeriodGradient();
+
         ZoneId defaultTimeZone = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
         Column<?> actualValueColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
@@ -92,27 +93,29 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         normalizedResults.addColumns(normalizedTimePeriodUtcColumn);
 
         // now detect data stream level columns...
-        TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataStreamLevelColumns(
-                resultsTable, sensorRunParameters.getDataStreams(), resultsRowCount);
+        TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
+                resultsTable, sensorRunParameters.getDataGroupings(), resultsRowCount);
 
         for (int streamLevelId = 0; streamLevelId < dataStreamLevelColumns.length; streamLevelId++) {
             if (dataStreamLevelColumns[streamLevelId] != null) {
                 normalizedResults.addColumns(dataStreamLevelColumns[streamLevelId]);
             } else {
-                String dataStreamLevelColumnName = SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + (streamLevelId + 1);
+                String dataStreamLevelColumnName = SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + (streamLevelId + 1);
                 normalizedResults.addColumns(TextColumn.create(dataStreamLevelColumnName, resultsRowCount));
             }
         }
 
-        LongColumn dataStreamHashColumn = this.commonNormalizationService.createDataStreamHashColumn(dataStreamLevelColumns, resultsRowCount);
+        LongColumn dataStreamHashColumn = this.commonNormalizationService.createDataGroupingHashColumn(dataStreamLevelColumns, resultsRowCount);
         normalizedResults.addColumns(dataStreamHashColumn);
 
-        TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataStreamNameColumn(dataStreamLevelColumns, resultsRowCount);
+        TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultsRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
-        TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME, resultsRowCount);
-        if (sensorRunParameters.getDataStreams() != null) {
-            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataStreams().getDataStreamMappingName());
+        TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultsRowCount);
+        if (sensorRunParameters.getDataGroupings() != null) {
+            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataGroupings().getDataGroupingConfigurationName());
+        } else {
+            dataStreamMappingNameColumn.setMissingTo(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
         }
         normalizedResults.addColumns(dataStreamMappingNameColumn);
 
@@ -228,7 +231,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sensorNameColumn.setMissingTo(sensorDefinitionName);
         sortedNormalizedTable.addColumns(sensorNameColumn);
 
-        LongColumn sortedDataStreamHashColumn = (LongColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
+        LongColumn sortedDataStreamHashColumn = (LongColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
         TextColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(sortedDataStreamHashColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.addColumns(timeSeriesUuidColumn);

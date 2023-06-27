@@ -27,6 +27,9 @@ interface ITableActionGroupProps {
   shouldDelete?: boolean;
   collectStatistic?: boolean;
   addSaveButton?: boolean;
+  createDataStream?: boolean;
+  maxToCreateDataStream?: boolean;
+  createDataStreamFunc?: () => void;
 }
 
 const TableActionGroup = ({
@@ -36,7 +39,10 @@ const TableActionGroup = ({
   onUpdate,
   shouldDelete = true,
   collectStatistic,
-  addSaveButton = true
+  addSaveButton = true,
+  createDataStream,
+  maxToCreateDataStream,
+  createDataStreamFunc
 }: ITableActionGroupProps) => {
   const {
     checkTypes,
@@ -55,7 +61,10 @@ const TableActionGroup = ({
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const fetchColumns = async () => {
     try {
@@ -103,7 +112,6 @@ const TableActionGroup = ({
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
   );
-
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
@@ -124,9 +132,27 @@ const TableActionGroup = ({
           onClick={() => setIsOpen(true)}
         />
       )}
+      {createDataStream && (
+        <Button
+          label="Create Data Stream"
+          color="primary"
+          onClick={createDataStreamFunc}
+        />
+      )}
+      {maxToCreateDataStream && (
+        <div className="flex items-center justify-center text-red-500 gap-x-2">
+          {' '}
+          (You can choose max 9 columns)
+          <Button
+            label="Create Data Stream"
+            color="secondary"
+            className="text-black "
+          />
+        </div>
+      )}
       {collectStatistic && (
         <Button
-          className="flex items-center gap-x-2 justify-center"
+          className="flex items-center gap-x-2 justify-center "
           label={
             filteredJobs?.find(
               (x) =>
@@ -159,9 +185,7 @@ const TableActionGroup = ({
               ''
             )
           }
-          onClick={() => {
-            collectStatistics();
-          }}
+          onClick={collectStatistics}
           loading={loadingJob}
         />
       )}
@@ -176,6 +200,7 @@ const TableActionGroup = ({
           disabled={isDisabled}
         />
       )}
+
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}

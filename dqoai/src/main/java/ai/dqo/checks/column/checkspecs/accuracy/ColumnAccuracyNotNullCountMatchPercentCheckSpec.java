@@ -19,8 +19,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.rules.comparison.MaxDiffPercentRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule1ParametersSpec;
-import ai.dqo.rules.comparison.MaxDiffPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule5ParametersSpec;
 import ai.dqo.sensors.column.accuracy.ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnAccuracyNotNullCountMatchPercentCheckSpec
-        extends AbstractCheckSpec<ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule2ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec, MaxDiffPercentRule0ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyNotNullCountMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +54,12 @@ public class ColumnAccuracyNotNullCountMatchPercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDiffPercentRule1ParametersSpec warning;
+    private MaxDiffPercentRule0ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a maximum percentage of difference of row count of a table column and of a row count of another table column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDiffPercentRule2ParametersSpec error;
+    private MaxDiffPercentRule1ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +91,7 @@ public class ColumnAccuracyNotNullCountMatchPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxDiffPercentRule1ParametersSpec getWarning() {
+    public MaxDiffPercentRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnAccuracyNotNullCountMatchPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxDiffPercentRule1ParametersSpec warning) {
+    public void setWarning(MaxDiffPercentRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class ColumnAccuracyNotNullCountMatchPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxDiffPercentRule2ParametersSpec getError() {
+    public MaxDiffPercentRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnAccuracyNotNullCountMatchPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxDiffPercentRule2ParametersSpec error) {
+    public void setError(MaxDiffPercentRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

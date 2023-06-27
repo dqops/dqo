@@ -22,22 +22,28 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
+import ai.dqo.services.check.CheckFlatConfigurationFactory;
+import ai.dqo.services.check.mapping.AllChecksModelFactory;
 import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,13 +51,16 @@ import java.util.stream.Stream;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SchemaServiceImpl implements SchemaService {
     private final UserHomeContextFactory userHomeContextFactory;
-    private final UIAllChecksModelFactory uiAllChecksModelFactory;
+    private final AllChecksModelFactory allChecksModelFactory;
+    private final CheckFlatConfigurationFactory checkFlatConfigurationFactory;
 
     @Autowired
     public SchemaServiceImpl(UserHomeContextFactory userHomeContextFactory,
-                             UIAllChecksModelFactory uiAllChecksModelFactory) {
+                             AllChecksModelFactory allChecksModelFactory,
+                             CheckFlatConfigurationFactory checkFlatConfigurationFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
+        this.allChecksModelFactory = allChecksModelFactory;
+        this.checkFlatConfigurationFactory = checkFlatConfigurationFactory;
     }
 
     /**
@@ -117,33 +126,33 @@ public class SchemaServiceImpl implements SchemaService {
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
 
-        Stream<UICheckContainerModel> columnCheckContainers = uiAllChecksModels.stream()
-                .map(UIAllChecksModel::getColumnChecksModel)
-                .flatMap(model -> model.getUiTableColumnChecksModels().stream())
-                .flatMap(model -> model.getUiColumnChecksModels().stream())
+        Stream<CheckContainerModel> columnCheckContainers = allChecksModels.stream()
+                .map(AllChecksModel::getColumnChecksModel)
+                .flatMap(model -> model.getTableColumnChecksModels().stream())
+                .flatMap(model -> model.getColumnChecksModels().stream())
                 .flatMap(model -> model.getCheckContainers().values().stream());
-        Stream<UICheckContainerModel> tableCheckContainers = uiAllChecksModels.stream()
-                .map(UIAllChecksModel::getTableChecksModel)
-                .flatMap(model -> model.getUiSchemaTableChecksModels().stream())
-                .flatMap(model -> model.getUiTableChecksModels().stream())
+        Stream<CheckContainerModel> tableCheckContainers = allChecksModels.stream()
+                .map(AllChecksModel::getTableChecksModel)
+                .flatMap(model -> model.getSchemaTableChecksModels().stream())
+                .flatMap(model -> model.getTableChecksModels().stream())
                 .flatMap(model -> model.getCheckContainers().values().stream());
 
-        UICheckContainerTypeModel uiCheckContainerTypeModel = new UICheckContainerTypeModel(checkType, checkTimeScale);
+        CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 
         Stream<CheckTemplate> checkTemplates;
         if (checkTarget == null) {
             checkTemplates = Stream.concat(
-                    this.getCheckTemplatesFromCheckContainers(columnCheckContainers, uiCheckContainerTypeModel, CheckTarget.column),
-                    this.getCheckTemplatesFromCheckContainers(tableCheckContainers, uiCheckContainerTypeModel, CheckTarget.table));
+                    this.getCheckTemplatesFromCheckContainers(columnCheckContainers, checkContainerTypeModel, CheckTarget.column),
+                    this.getCheckTemplatesFromCheckContainers(tableCheckContainers, checkContainerTypeModel, CheckTarget.table));
         } else {
             switch (checkTarget) {
                 case column:
-                    checkTemplates = this.getCheckTemplatesFromCheckContainers(columnCheckContainers, uiCheckContainerTypeModel, CheckTarget.column);
+                    checkTemplates = this.getCheckTemplatesFromCheckContainers(columnCheckContainers, checkContainerTypeModel, CheckTarget.column);
                     break;
                 case table:
-                    checkTemplates = this.getCheckTemplatesFromCheckContainers(tableCheckContainers, uiCheckContainerTypeModel, CheckTarget.table);
+                    checkTemplates = this.getCheckTemplatesFromCheckContainers(tableCheckContainers, checkContainerTypeModel, CheckTarget.table);
                     break;
                 default:
                     throw new IllegalArgumentException("Unsupported check target: " + checkTarget.name());
@@ -154,21 +163,69 @@ public class SchemaServiceImpl implements SchemaService {
     }
 
     /**
-     * Generates a distinct {@link CheckTemplate} stream from {@link UICheckContainerModel} stream,
+     * Retrieves a UI friendly data quality profiling check configuration list on a requested schema.
+     * @param connectionName    Connection name.
+     * @param schemaName        Schema name.
+     * @param checkContainerTypeModel Check container type model.
+     * @param tableNamePattern  (Optional) Table search pattern filter.
+     * @param columnNamePattern (Optional) Column search pattern filter.
+     * @param columnDataType    (Optional) Filter on column data-type.
+     * @param checkTarget       (Optional) Filter on check target.
+     * @param checkCategory     (Optional) Filter on check category.
+     * @param checkName         (Optional) Filter on check name.
+     * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @param checkConfigured   (Optional) Filter on check configured status.
+     * @return UI friendly data quality profiling check configuration list on a requested schema.
+     */
+    @Override
+    public List<CheckConfigurationModel> getCheckConfigurationsOnSchema(String connectionName,
+                                                                        String schemaName,
+                                                                        CheckContainerTypeModel checkContainerTypeModel,
+                                                                        String tableNamePattern,
+                                                                        String columnNamePattern,
+                                                                        String columnDataType,
+                                                                        CheckTarget checkTarget,
+                                                                        String checkCategory,
+                                                                        String checkName,
+                                                                        Boolean checkEnabled,
+                                                                        Boolean checkConfigured) {
+        String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
+                new PhysicalTableName(schemaName, Optional.ofNullable(tableNamePattern).orElse(""))
+                        .toTableSearchFilter()
+        ).toTableSearchFilter();
+
+        CheckSearchFilters filters = new CheckSearchFilters();
+        filters.setCheckType(checkContainerTypeModel.getCheckType());
+        filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
+        filters.setConnectionName(connectionName);
+        filters.setSchemaTableName(tableSearchPattern);
+        filters.setColumnName(columnNamePattern);
+        filters.setColumnDataType(columnDataType);
+        filters.setCheckTarget(checkTarget);
+        filters.setCheckCategory(checkCategory);
+        filters.setCheckName(checkName);
+        filters.setEnabled(checkEnabled);
+        filters.setCheckConfigured(checkConfigured);
+
+        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
+    }
+
+    /**
+     * Generates a distinct {@link CheckTemplate} stream from {@link CheckContainerModel} stream,
      * provided parameters specifying the source of the base stream.
      * @param checkContainers    Base check containers stream.
      * @param checkTarget        Check target specifying the source of the base stream.
      * @param checkContainerType Check container type specifying the source of the base stream.
      * @return Stream of check templates modelling the checks that are present in the base stream.
      */
-    protected Stream<CheckTemplate> getCheckTemplatesFromCheckContainers(Stream<UICheckContainerModel> checkContainers,
-                                                                         UICheckContainerTypeModel checkContainerType,
+    protected Stream<CheckTemplate> getCheckTemplatesFromCheckContainers(Stream<CheckContainerModel> checkContainers,
+                                                                         CheckContainerTypeModel checkContainerType,
                                                                          CheckTarget checkTarget) {
         return checkContainers
                 .flatMap(model -> model.getCategories().stream())
                 .map(categoryModel -> {
-                    Map<String, UICheckModel> checkNameToExampleCheck = new HashMap<>();
-                    for (UICheckModel checkModel: categoryModel.getChecks()) {
+                    Map<String, CheckModel> checkNameToExampleCheck = new HashMap<>();
+                    for (CheckModel checkModel: categoryModel.getChecks()) {
                         if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
                             checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
                         }
@@ -181,4 +238,6 @@ public class SchemaServiceImpl implements SchemaService {
                 })
                 .reduce(Stream.empty(), Stream::concat);
     }
+
+
 }

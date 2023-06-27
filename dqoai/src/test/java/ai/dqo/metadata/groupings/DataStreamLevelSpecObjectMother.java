@@ -16,7 +16,7 @@
 package ai.dqo.metadata.groupings;
 
 /**
- * Object mother for {@link DataStreamLevelSpec}.
+ * Object mother for {@link DataGroupingDimensionSpec}.
  */
 public class DataStreamLevelSpecObjectMother {
     /**
@@ -24,9 +24,9 @@ public class DataStreamLevelSpecObjectMother {
      * @param value Tag value.
      * @return Data stream level mapping.
      */
-    public static DataStreamLevelSpec createTag(String value) {
-        return new DataStreamLevelSpec() {{
-			setSource(DataStreamLevelSource.tag);
+    public static DataGroupingDimensionSpec createTag(String value) {
+        return new DataGroupingDimensionSpec() {{
+			setSource(DataGroupingDimensionSource.tag);
 			setTag(value);
         }};
     }
@@ -36,9 +36,9 @@ public class DataStreamLevelSpecObjectMother {
      * @param columnName Column name.
      * @return Data stream level mapping.
      */
-    public static DataStreamLevelSpec createColumnMapping(String columnName) {
-        return new DataStreamLevelSpec() {{
-			setSource(DataStreamLevelSource.column_value);
+    public static DataGroupingDimensionSpec createColumnMapping(String columnName) {
+        return new DataGroupingDimensionSpec() {{
+			setSource(DataGroupingDimensionSource.column_value);
 			setColumn(columnName);
         }};
     }

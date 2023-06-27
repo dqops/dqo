@@ -58,6 +58,10 @@ connection or table.
 
 To initiate a scheduler in the DQO Shell, simply enter the command `scheduler start`. To stop the scheduler, use the 
 command `scheduler stop`.
+
+You can also use the graphical interface to start the scheduler. Simply enable **Jobs scheduler** located in the Notifications
+on the [right side of the navigation bar.](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md)
+
 For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md). 
 
 Scheduler can also be started in a server mode that continuously run a job scheduler and synchronize the data every 10 minutes.

@@ -16,7 +16,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
   const dataSource: any = {
     datasets: [
       {
-        label: 'FATAL_LOWER_BOUND',
+        label: 'Fatal (lower bound)',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.fatalLowerBound
@@ -26,7 +26,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
         backgroundColor: '#E3170A30',
       },
       {
-        label: 'ERROR_LOWER_BOUND',
+        label: 'Error (lower bound)',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.errorLowerBound
@@ -36,17 +36,17 @@ export const ChartView = ({ data }: ChartViewProps) => {
         backgroundColor: '#FF990030',
       },
       {
-        label: 'WARNING_LOWER_BOUND',
+        label: 'Warning (lower bound)',
         data: data.map((item) => ({
           x: item.timePeriod,
-          y: item.errorLowerBound
+          y: item.warningLowerBound
         })),
         fill: isFatalLowerExist || isErrorLowerExist ? '-1' : 'start',
         borderColor: '#EBE51E',
         backgroundColor: '#EBE51E30',
       },
       {
-        label: 'ACTUAL VALUE',
+        label: 'Actual value',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.actualValue
@@ -56,7 +56,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
         backgroundColor: 'rgb(54, 162, 235)',
       },
       {
-        label: 'Expected VALUE',
+        label: 'Expected value',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.expectedValue
@@ -66,7 +66,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
         backgroundColor: 'rgb(201, 203, 207)',
       },
       {
-        label: 'WARNING_UPPER_BOUND',
+        label: 'Warning (upper bound)',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.warningUpperBound
@@ -76,7 +76,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
         backgroundColor: '#EBE51E30',
       },
       {
-        label: 'ERROR_UPPER_BOUND',
+        label: 'Error (upper bound)',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.errorUpperBound
@@ -86,7 +86,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
         backgroundColor: '#FF990030',
       },
       {
-        label: 'FATAL_UPPER_BOUND',
+        label: 'Fatal (upper bound)',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.fatalUpperBound
@@ -116,15 +116,18 @@ export const ChartView = ({ data }: ChartViewProps) => {
     scales: {
       x: {
         type: 'time',
+        time: {
+          unit: 'day'
+        }
       },
       y: {
-        stacked: true,
+        stacked: false,
       },
     }
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 max-h-100 w-full">
       <Line data={dataSource} options={options as any} />
     </div>
   );

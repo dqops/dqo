@@ -21,10 +21,9 @@ import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyMinMatchPercentChe
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
-import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;

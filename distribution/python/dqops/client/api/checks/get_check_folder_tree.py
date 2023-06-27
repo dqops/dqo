@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.check_basic_folder_model import CheckBasicFolderModel
+from ...models.check_spec_folder_basic_model import CheckSpecFolderBasicModel
 from ...types import Response
 
 
@@ -30,9 +30,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[CheckBasicFolderModel]:
+) -> Optional[CheckSpecFolderBasicModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = CheckBasicFolderModel.from_dict(response.json())
+        response_200 = CheckSpecFolderBasicModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -43,7 +43,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[CheckBasicFolderModel]:
+) -> Response[CheckSpecFolderBasicModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -55,7 +55,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-) -> Response[CheckBasicFolderModel]:
+) -> Response[CheckSpecFolderBasicModel]:
     """getCheckFolderTree
 
      Returns a tree of all checks available in DQO, both built-in checks and user defined or customized
@@ -66,7 +66,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckBasicFolderModel]
+        Response[CheckSpecFolderBasicModel]
     """
 
     kwargs = _get_kwargs(
@@ -84,7 +84,7 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-) -> Optional[CheckBasicFolderModel]:
+) -> Optional[CheckSpecFolderBasicModel]:
     """getCheckFolderTree
 
      Returns a tree of all checks available in DQO, both built-in checks and user defined or customized
@@ -95,7 +95,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckBasicFolderModel
+        CheckSpecFolderBasicModel
     """
 
     return sync_detailed(
@@ -106,7 +106,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-) -> Response[CheckBasicFolderModel]:
+) -> Response[CheckSpecFolderBasicModel]:
     """getCheckFolderTree
 
      Returns a tree of all checks available in DQO, both built-in checks and user defined or customized
@@ -117,7 +117,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckBasicFolderModel]
+        Response[CheckSpecFolderBasicModel]
     """
 
     kwargs = _get_kwargs(
@@ -133,7 +133,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-) -> Optional[CheckBasicFolderModel]:
+) -> Optional[CheckSpecFolderBasicModel]:
     """getCheckFolderTree
 
      Returns a tree of all checks available in DQO, both built-in checks and user defined or customized
@@ -144,7 +144,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckBasicFolderModel
+        CheckSpecFolderBasicModel
     """
 
     return (

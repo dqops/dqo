@@ -25,7 +25,7 @@ import ai.dqo.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.utils.serialization.YamlSerializer;
 import ai.dqo.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
@@ -179,17 +179,17 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void serialize_whenHasAnyDataStreams_thenDataStreamsSerialized() {
+    void serialize_whenHasAnyDataGroupingConfigurations_thenDataGroupingsSerialized() {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
-        DataStreamMappingSpec dataStreamMapping = new DataStreamMappingSpec();
-        dataStreamMapping.setLevel1(DataStreamLevelSpecObjectMother.createTag("tag1"));
-        this.sut.getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+        DataGroupingConfigurationSpec dataGroupingConfiguration = new DataGroupingConfigurationSpec();
+        dataGroupingConfiguration.setLevel1(DataStreamLevelSpecObjectMother.createTag("tag1"));
+        this.sut.getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfiguration);
 
         String yaml = yamlSerializer.serialize(this.sut);
 
         TableSpec deserialized = yamlSerializer.deserialize(yaml, TableSpec.class);
-        Assertions.assertNotNull(deserialized.getDataStreams());
-        Assertions.assertEquals(1, deserialized.getDataStreams().size());
-        Assertions.assertEquals("tag1", deserialized.getDataStreams().get("default").getLevel1().getTag());
+        Assertions.assertNotNull(deserialized.getGroupings());
+        Assertions.assertEquals(1, deserialized.getGroupings().size());
+        Assertions.assertEquals("tag1", deserialized.getGroupings().get("default").getLevel1().getTag());
     }
 }

@@ -16,7 +16,7 @@
 package ai.dqo.metadata.sources;
 
 import ai.dqo.metadata.basespecs.AbstractIndexingList;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
 import java.util.List;
@@ -82,7 +82,7 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
      * @param sourceTableSpecs Source tables.
      */
     @Override
-    public void importTables(List<TableSpec> sourceTableSpecs, DataStreamMappingSpec defaultDataStreamMapping) {
+    public void importTables(List<TableSpec> sourceTableSpecs, DataGroupingConfigurationSpec defaultDataGroupingConfiguration) {
         for (TableSpec sourceTableSpec : sourceTableSpecs) {
             PhysicalTableName sourceTablePhysicalName = sourceTableSpec.getPhysicalTableName();
 
@@ -90,7 +90,7 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
             if (existingTableWrapper == null) {
                 TableWrapper newTableWrapper = this.createAndAddNew(sourceTablePhysicalName);
                 newTableWrapper.setSpec(sourceTableSpec);
-                sourceTableSpec.getDataStreams().setFirstDataStreamMapping(defaultDataStreamMapping);
+                sourceTableSpec.getGroupings().setFirstDataGroupingConfiguration(defaultDataGroupingConfiguration);
             }
             else {
                 // merge columns and update

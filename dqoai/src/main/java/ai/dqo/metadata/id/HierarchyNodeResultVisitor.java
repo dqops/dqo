@@ -20,8 +20,11 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpecMap;
 import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -40,10 +43,10 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.metadata.incidents.TableIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -258,12 +261,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, P parameter);
 
     /**
-     * Accepts a data streams mapping specification on a table level.
-     * @param dataStreamMappingSpec Data streams mapping specification.
+     * Accepts a data groupings configuration specification on a table level.
+     * @param dataGroupingConfigurationSpec Data groupings configuration specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DataStreamMappingSpec dataStreamMappingSpec, P parameter);
+    R accept(DataGroupingConfigurationSpec dataGroupingConfigurationSpec, P parameter);
 
     /**
      * Accepts a table owner specification on a table level.
@@ -290,12 +293,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(CommentsListSpec commentSpecs, P parameter);
 
     /**
-     * Accepts a configuration of a single dimension.
-     * @param dataStreamLevelSpec Dimension mapping specification.
+     * Accepts a configuration of a single data grouping dimension.
+     * @param dataGroupingDimensionSpec Data grouping mapping specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DataStreamLevelSpec dataStreamLevelSpec, P parameter);
+    R accept(DataGroupingDimensionSpec dataGroupingDimensionSpec, P parameter);
 
     /**
      * Accepts a provider specific connection specification nested specification.
@@ -434,12 +437,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TimestampColumnsSpec timestampColumnsSpec, P parameter);
 
     /**
-     * Accepts a map (hashtable) of named data stream mappings.
-     * @param dataStreamMappingSpecMap Data stream mappings map.
+     * Accepts a map (hashtable) of named data groupings mappings.
+     * @param dataGroupingConfigurationSpecMap Data groupings mappings map.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, P parameter);
+    R accept(DataGroupingConfigurationSpecMap dataGroupingConfigurationSpecMap, P parameter);
 
     /**
      * Accepts a profiler check instance.
@@ -576,4 +579,28 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(TableIncidentGroupingSpec tableIncidentGroupingSpec, P parameter);
+
+    /**
+     * Accepts a description of the reference table to which the current table is compared.
+     * @param referenceTableSpec Reference table specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ReferenceTableSpec referenceTableSpec, P parameter);
+
+    /**
+     * Accepts a dictionary of reference table comparisons.
+     * @param referenceTableSpecMap Dictionary of reference table comparisons.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ReferenceTableSpecMap referenceTableSpecMap, P parameter);
+
+    /**
+     * Accepts a map of comparison checks for a named comparison.
+     * @param abstractComparisonCheckCategorySpecMap Comparison map with checks.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, P parameter);
 }

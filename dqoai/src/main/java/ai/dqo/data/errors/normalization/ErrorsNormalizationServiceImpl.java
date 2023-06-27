@@ -22,7 +22,6 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizationService;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,61 +55,53 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
     /**
      * Creates an error result with one row for a sensor execution error.
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data. Must be an error result with an exception.
-     * @param timePeriodGradient Time series gradient.
      * @param sensorRunParameters Sensor run parameters.
      * @return Metadata object that describes the sensor result table. Contains also a normalized results table.
      */
     @Override
     public ErrorsNormalizedResult createNormalizedSensorErrorResults(SensorExecutionResult sensorExecutionResult,
-                                                                     TimePeriodGradient timePeriodGradient,
                                                                      SensorExecutionRunParameters sensorRunParameters) {
         assert sensorExecutionResult.getException() != null && sensorExecutionResult.getResultTable() != null &&
                 sensorExecutionResult.getResultTable().rowCount() == 1 &&
                 sensorExecutionResult.getResultTable().columnCount() == 0;  // we can call this method with an error result which also has one fake row, so the normalization service can fill all the remaining values
 
         ErrorsNormalizedResult normalizedErrorResults = createNormalizedErrorResults(sensorExecutionResult,
-                timePeriodGradient, sensorRunParameters, ErrorSource.sensor, sensorExecutionResult.getException());
+                sensorRunParameters, ErrorSource.sensor, sensorExecutionResult.getException());
         return normalizedErrorResults;
     }
 
     /**
      * Creates an error result with one row for a rule execution error.
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data.
-     * @param timePeriodGradient Time series gradient.
      * @param sensorRunParameters Sensor run parameters.
      * @param ruleEvaluationException Exception thrown at the rule evaluation.
      * @return Metadata object that describes the sensor result table. Contains also a normalized results table.
      */
     @Override
     public ErrorsNormalizedResult createNormalizedRuleErrorResults(SensorExecutionResult sensorExecutionResult,
-                                                                   TimePeriodGradient timePeriodGradient,
                                                                    SensorExecutionRunParameters sensorRunParameters,
                                                                    Throwable ruleEvaluationException) {
         assert sensorExecutionResult.getException() == null && sensorExecutionResult.getResultTable() != null;
 
         ErrorsNormalizedResult normalizedErrorResults = createNormalizedErrorResults(sensorExecutionResult,
-                timePeriodGradient, sensorRunParameters, ErrorSource.rule, ruleEvaluationException);
+                sensorRunParameters, ErrorSource.rule, ruleEvaluationException);
         return normalizedErrorResults;
     }
 
     /**
      * Common method that creates an error evaluation normalized table given the exception and the source (rule or sensor).
      * @param sensorExecutionResult Sensor execution result.
-     * @param timePeriodGradient Time series gradient.
      * @param sensorRunParameters Sensor run parameters.
      * @param errorSource Error source (sensor or rule).
      * @param exception Exception that was thrown at the sensor or rule evaluation.
      * @return Normalized error result.
      */
     public ErrorsNormalizedResult createNormalizedErrorResults(SensorExecutionResult sensorExecutionResult,
-                                                               TimePeriodGradient timePeriodGradient,
                                                                SensorExecutionRunParameters sensorRunParameters,
                                                                ErrorSource errorSource,
                                                                Throwable exception) {
-        assert sensorExecutionResult.getException() == null && sensorExecutionResult.getResultTable() != null;
-
         SensorReadoutsNormalizedResult normalizedSensorReadout = this.sensorReadoutsNormalizationService.normalizeResults(
-                sensorExecutionResult, timePeriodGradient, sensorRunParameters);
+                sensorExecutionResult, sensorRunParameters);
         normalizedSensorReadout.getIdColumn().setName(ErrorsColumnNames.READOUT_ID_COLUMN_NAME); // renaming the ID column
         Table table = normalizedSensorReadout.getTable();
 
@@ -133,7 +124,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         long tableHash = sensorRunParameters.getTable().getHierarchyId().hashCode64();
         long columnHash = sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getHierarchyId().hashCode64() : 0L;
 
-        LongColumn dataStreamHashColumn = normalizedSensorReadout.getDataStreamHashColumn();
+        LongColumn dataStreamHashColumn = normalizedSensorReadout.getDataGroupHashColumn();
         TextColumn rowIdColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(dataStreamHashColumn, errorTimestampColumn,
                 checkHash, tableHash, columnHash, table.rowCount());
         table.addColumns(rowIdColumn);

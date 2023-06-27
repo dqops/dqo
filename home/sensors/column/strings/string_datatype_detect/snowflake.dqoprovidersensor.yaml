@@ -3,6 +3,6 @@ apiVersion: dqo/v1
 kind: provider_sensor
 spec:
   type: sql_template
-  java_class_name: ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner
-  supports_grouping_by_data_stream: true
+  java_class_name: ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner
+  supports_grouping: false
   supports_partitioned_checks: true

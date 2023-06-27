@@ -20,8 +20,11 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpecMap;
 import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -40,10 +43,10 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingDimensionSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.metadata.incidents.TableIncidentGroupingSpec;
@@ -367,24 +370,24 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     /**
      * Accepts a data streams mapping configuration specification on a table level.
      *
-     * @param dataStreamMappingSpec Data streams mapping specification.
+     * @param dataGroupingConfigurationSpec Data streams mapping specification.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DataStreamMappingSpec dataStreamMappingSpec, T parameter) {
+    public TreeNodeTraversalResult accept(DataGroupingConfigurationSpec dataGroupingConfigurationSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
      * Accepts a configuration of a single data stream level.
      *
-     * @param dataStreamLevelSpec Data stream level mapping specification.
+     * @param dataGroupingDimensionSpec Data stream level mapping specification.
      * @param parameter           Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DataStreamLevelSpec dataStreamLevelSpec, T parameter) {
+    public TreeNodeTraversalResult accept(DataGroupingDimensionSpec dataGroupingDimensionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -616,14 +619,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a map (hashtable) of named data stream mappings.
+     * Accepts a map (hashtable) of named data grouping configurations map.
      *
-     * @param dataStreamMappingSpecMap Data stream mappings map.
+     * @param dataGroupingConfigurationSpecMap Data grouping configurations map.
      * @param parameter                Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, T parameter) {
+    public TreeNodeTraversalResult accept(DataGroupingConfigurationSpecMap dataGroupingConfigurationSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -828,6 +831,42 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(TableIncidentGroupingSpec tableIncidentGroupingSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a description of the reference table to which the current table is compared.
+     *
+     * @param referenceTableSpec Reference table specification.
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ReferenceTableSpec referenceTableSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of reference table comparisons.
+     *
+     * @param referenceTableSpecMap Dictionary of reference table comparisons.
+     * @param parameter                       Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ReferenceTableSpecMap referenceTableSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a map of comparison checks for a named comparison.
+     *
+     * @param abstractComparisonCheckCategorySpecMap Comparison map with checks.
+     * @param parameter                              Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

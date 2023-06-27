@@ -1,0 +1,96 @@
+import React, { useEffect, useState } from 'react';
+import { DataGroupingConfigurationBasicModel } from '../../../api';
+import DataGroupingConfigurationListView from './DataGroupingConfigurationListView';
+import DataGroupingConfigurationEditView from './DataGroupingConfigurationEditView';
+import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
+import { IRootState } from '../../../redux/reducers';
+
+const TableDataGroupingConfiguration = () => {
+  const {
+    connection: connectionName,
+    schema: schemaName,
+    table: tableName
+  }: { connection: string; schema: string; table: string } = useParams();
+  const [isEditing, setIsEditing] = useState(false);
+  const { dataStreamName, bool } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+
+  const actionDispatch = useActionDispatch();
+  const setBackData = () => {
+    actionDispatch(setCreatedDataStream(false, '', {}));
+  };
+  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
+    DataGroupingConfigurationBasicModel[]
+  >([]);
+  const [
+    selectedDataGroupingConfiguration,
+    setSelectedDataGroupingConfiguration
+  ] = useState<DataGroupingConfigurationBasicModel>();
+
+  useEffect(() => {
+    getDataGroupingConfigurations();
+  }, [connectionName, schemaName, tableName]);
+
+  const getDataGroupingConfigurations = () => {
+    DataGroupingConfigurationsApi.getTableGroupingConfigurations(
+      connectionName,
+      schemaName,
+      tableName
+    ).then((res) => {
+      setDataGroupingConfigurations(res.data);
+    });
+  };
+
+  const onEdit = (
+    groupingConfiguration: DataGroupingConfigurationBasicModel
+  ) => {
+    setSelectedDataGroupingConfiguration(groupingConfiguration);
+    setIsEditing(true);
+  };
+
+  const onCreate = () => {
+    setSelectedDataGroupingConfiguration(undefined);
+    setIsEditing(true);
+  };
+  const myObj: DataGroupingConfigurationBasicModel = {
+    connection_name: connectionName,
+    schema_name: schemaName,
+    table_name: tableName,
+    data_grouping_configuration_name: dataStreamName
+  };
+
+  return (
+    <div className="my-1">
+      {isEditing || bool ? (
+        <DataGroupingConfigurationEditView
+          onBack={() => {
+            setIsEditing(false), setBackData();
+          }}
+          selectedGroupingConfiguration={
+            dataStreamName.length !== 0
+              ? myObj
+              : selectedDataGroupingConfiguration
+          }
+          connection={connectionName}
+          schema={schemaName}
+          table={tableName}
+          getGroupingConfigurations={getDataGroupingConfigurations}
+        />
+      ) : (
+        <DataGroupingConfigurationListView
+          dataGroupingConfigurations={dataGroupingConfigurations}
+          getDataGroupingConfigurations={getDataGroupingConfigurations}
+          onCreate={onCreate}
+          onEdit={onEdit}
+        />
+      )}
+    </div>
+  );
+};
+
+export default TableDataGroupingConfiguration;

@@ -16,9 +16,9 @@
 package ai.dqo.checks.table.partitioned.timeliness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TablePartitionReloadLagCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -41,9 +41,9 @@ import java.util.Objects;
 public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("daily_partition_days_since_most_recent_event", o -> o.dailyPartitionDaysSinceMostRecentEvent);
+           put("daily_partition_data_freshness", o -> o.dailyPartitionDataFreshness);
+           put("daily_partition_data_staleness", o -> o.dailyPartitionDataStaleness);
            put("daily_partition_data_ingestion_delay", o -> o.dailyPartitionDataIngestionDelay);
-           put("daily_partition_days_since_most_recent_ingestion", o -> o.dailyPartitionDaysSinceMostRecentIngestion);
            put("daily_partition_reload_lag", o -> o.dailyPartitionReloadLag);
         }
     };
@@ -51,17 +51,17 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceMostRecentEventCheckSpec dailyPartitionDaysSinceMostRecentEvent;
+    private TableDataFreshnessCheckSpec dailyPartitionDataFreshness;
+
+    @JsonPropertyDescription("Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDataStalenessCheckSpec dailyPartitionDataStaleness;
 
     @JsonPropertyDescription("Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataIngestionDelayCheckSpec dailyPartitionDataIngestionDelay;
-
-    @JsonPropertyDescription("Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceMostRecentIngestionCheckSpec dailyPartitionDaysSinceMostRecentIngestion;
 
     @JsonPropertyDescription("Daily partitioned check calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,18 +72,36 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
      * Returns the number of days since the most recent event check configuration.
      * @return The number of days since the most recent event check configuration.
      */
-    public TableDaysSinceMostRecentEventCheckSpec getDailyPartitionDaysSinceMostRecentEvent() {
-        return dailyPartitionDaysSinceMostRecentEvent;
+    public TableDataFreshnessCheckSpec getDailyPartitionDataFreshness() {
+        return dailyPartitionDataFreshness;
     }
 
     /**
      * Sets the number of days since the most recent event.
-     * @param dailyPartitionDaysSinceMostRecentEvent New days since the most recent event check.
+     * @param dailyPartitionDataFreshness New days since the most recent event check.
      */
-    public void setDailyPartitionDaysSinceMostRecentEvent(TableDaysSinceMostRecentEventCheckSpec dailyPartitionDaysSinceMostRecentEvent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDaysSinceMostRecentEvent, dailyPartitionDaysSinceMostRecentEvent));
-        this.dailyPartitionDaysSinceMostRecentEvent = dailyPartitionDaysSinceMostRecentEvent;
-        this.propagateHierarchyIdToField(dailyPartitionDaysSinceMostRecentEvent, "daily_partition_days_since_most_recent_event");
+    public void setDailyPartitionDataFreshness(TableDataFreshnessCheckSpec dailyPartitionDataFreshness) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDataFreshness, dailyPartitionDataFreshness));
+        this.dailyPartitionDataFreshness = dailyPartitionDataFreshness;
+        this.propagateHierarchyIdToField(dailyPartitionDataFreshness, "daily_partition_data_freshness");
+    }
+
+    /**
+     * Returns a number of days since the last data ingestion check configuration.
+     * @return A number of days since the last data ingestion check configuration..
+     */
+    public TableDataStalenessCheckSpec getDailyPartitionDataStaleness() {
+        return dailyPartitionDataStaleness;
+    }
+
+    /**
+     * Sets a number of days since the last data ingestion check configuration.
+     * @param dailyPartitionDataStaleness A number of days since the last data ingestion check configuration.
+     */
+    public void setDailyPartitionDataStaleness(TableDataStalenessCheckSpec dailyPartitionDataStaleness) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDataStaleness, dailyPartitionDataStaleness));
+        this.dailyPartitionDataStaleness = dailyPartitionDataStaleness;
+        this.propagateHierarchyIdToField(dailyPartitionDataStaleness, "daily_partition_data_staleness");
     }
 
     /**
@@ -102,24 +120,6 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.dailyPartitionDataIngestionDelay, dailyPartitionDataIngestionDelay));
         this.dailyPartitionDataIngestionDelay = dailyPartitionDataIngestionDelay;
         this.propagateHierarchyIdToField(dailyPartitionDataIngestionDelay, "daily_partition_data_ingestion_delay");
-    }
-
-    /**
-     * Returns a number of days since the last data ingestion check configuration.
-     * @return A number of days since the last data ingestion check configuration..
-     */
-    public TableDaysSinceMostRecentIngestionCheckSpec getDailyPartitionDaysSinceMostRecentIngestion() {
-        return dailyPartitionDaysSinceMostRecentIngestion;
-    }
-
-    /**
-     * Sets a number of days since the last data ingestion check configuration.
-     * @param dailyPartitionDaysSinceMostRecentIngestion A number of days since the last data ingestion check configuration.
-     */
-    public void setDailyPartitionDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec dailyPartitionDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDaysSinceMostRecentIngestion, dailyPartitionDaysSinceMostRecentIngestion));
-        this.dailyPartitionDaysSinceMostRecentIngestion = dailyPartitionDaysSinceMostRecentIngestion;
-        this.propagateHierarchyIdToField(dailyPartitionDaysSinceMostRecentIngestion, "daily_partition_days_since_most_recent_ingestion");
     }
 
     /**

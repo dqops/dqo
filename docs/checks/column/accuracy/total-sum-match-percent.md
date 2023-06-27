@@ -121,15 +121,15 @@ spec:
         SUM(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+      {{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -144,16 +144,16 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         (SELECT
-            SUM(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            SUM(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
         ) AS expected_value,
-        SUM(analyzed_table."target_column") AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        SUM(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -223,6 +223,40 @@ spec:
         SUM(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            SUM(referenced_table."customer_id")
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        SUM(analyzed_table."target_column") AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -257,44 +291,10 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-      {{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        (SELECT
-            SUM(referenced_table.`customer_id`)
-        FROM `dim_customer` AS referenced_table
-        ) AS expected_value,
-        SUM(analyzed_table.`target_column`) AS actual_value
-    FROM `<target_table>` AS analyzed_table
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 41-46"
+    ```yaml hl_lines="0-0 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -305,7 +305,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -375,15 +375,15 @@ spec:
             SUM(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
         {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+          {{- lib.quote_identifier(referenced_table) -}}
         {%- else -%}
            {{ referenced_table }}
         {%- endif -%}
@@ -398,15 +398,15 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             (SELECT
-                SUM(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                SUM(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
             ) AS expected_value,
-            SUM(analyzed_table."target_column") AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            SUM(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -474,6 +474,39 @@ spec:
             SUM(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                SUM(referenced_table."customer_id")
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            SUM(analyzed_table."target_column") AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -506,39 +539,6 @@ spec:
             ) AS expected_value,
             SUM(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-          {{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            (SELECT
-                SUM(referenced_table.`customer_id`)
-            FROM `dim_customer` AS referenced_table
-            ) AS expected_value,
-            SUM(analyzed_table.`target_column`) AS actual_value
-        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -666,15 +666,15 @@ spec:
         SUM(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+      {{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -689,16 +689,16 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         (SELECT
-            SUM(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            SUM(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
         ) AS expected_value,
-        SUM(analyzed_table."target_column") AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        SUM(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -768,6 +768,40 @@ spec:
         SUM(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            SUM(referenced_table."customer_id")
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        SUM(analyzed_table."target_column") AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -802,44 +836,10 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-      {{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        (SELECT
-            SUM(referenced_table.`customer_id`)
-        FROM `dim_customer` AS referenced_table
-        ) AS expected_value,
-        SUM(analyzed_table.`target_column`) AS actual_value
-    FROM `<target_table>` AS analyzed_table
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 42-47"
+    ```yaml hl_lines="0-0 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -850,7 +850,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -921,15 +921,15 @@ spec:
             SUM(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
         {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+          {{- lib.quote_identifier(referenced_table) -}}
         {%- else -%}
            {{ referenced_table }}
         {%- endif -%}
@@ -944,15 +944,15 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             (SELECT
-                SUM(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                SUM(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
             ) AS expected_value,
-            SUM(analyzed_table."target_column") AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            SUM(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -1020,6 +1020,39 @@ spec:
             SUM(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                SUM(referenced_table."customer_id")
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            SUM(analyzed_table."target_column") AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -1052,39 +1085,6 @@ spec:
             ) AS expected_value,
             SUM(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-          {{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            (SELECT
-                SUM(referenced_table.`customer_id`)
-            FROM `dim_customer` AS referenced_table
-            ) AS expected_value,
-            SUM(analyzed_table.`target_column`) AS actual_value
-        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -1212,15 +1212,15 @@ spec:
         SUM(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+      {{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -1235,16 +1235,16 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
       
     ```sql
     SELECT
         (SELECT
-            SUM(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            SUM(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
         ) AS expected_value,
-        SUM(analyzed_table."target_column") AS actual_value
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        SUM(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
@@ -1314,6 +1314,40 @@ spec:
         SUM(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    SELECT
+        (SELECT
+            SUM(referenced_table."customer_id")
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        SUM(analyzed_table."target_column") AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -1348,44 +1382,10 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro render_referenced_table(referenced_table) -%}
-    {%- if referenced_table.find(".") < 0 -%}
-      {{- lib.quote_identifier(referenced_table) -}}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        (SELECT
-            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-        ) AS expected_value,
-        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        (SELECT
-            SUM(referenced_table.`customer_id`)
-        FROM `dim_customer` AS referenced_table
-        ) AS expected_value,
-        SUM(analyzed_table.`target_column`) AS actual_value
-    FROM `<target_table>` AS analyzed_table
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 42-47"
+    ```yaml hl_lines="0-0 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1396,7 +1396,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -1467,15 +1467,15 @@ spec:
             SUM(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
         {%- if referenced_table.find(".") < 0 -%}
-           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+          {{- lib.quote_identifier(referenced_table) -}}
         {%- else -%}
            {{ referenced_table }}
         {%- endif -%}
@@ -1490,15 +1490,15 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
         ```sql
         SELECT
             (SELECT
-                SUM(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                SUM(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
             ) AS expected_value,
-            SUM(analyzed_table."target_column") AS actual_value
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            SUM(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     **PostgreSQL**  
       
@@ -1566,6 +1566,39 @@ spec:
             SUM(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        SELECT
+            (SELECT
+                SUM(referenced_table."customer_id")
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            SUM(analyzed_table."target_column") AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
@@ -1598,39 +1631,6 @@ spec:
             ) AS expected_value,
             SUM(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        
-        {%- macro render_referenced_table(referenced_table) -%}
-        {%- if referenced_table.find(".") < 0 -%}
-          {{- lib.quote_identifier(referenced_table) -}}
-        {%- else -%}
-           {{ referenced_table }}
-        {%- endif -%}
-        {%- endmacro -%}
-        
-        SELECT
-            (SELECT
-                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
-            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
-            ) AS expected_value,
-            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            (SELECT
-                SUM(referenced_table.`customer_id`)
-            FROM `dim_customer` AS referenced_table
-            ) AS expected_value,
-            SUM(analyzed_table.`target_column`) AS actual_value
-        FROM `<target_table>` AS analyzed_table
         ```
     
 

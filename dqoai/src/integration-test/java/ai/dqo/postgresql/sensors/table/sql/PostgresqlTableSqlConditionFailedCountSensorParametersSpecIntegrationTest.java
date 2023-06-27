@@ -56,7 +56,7 @@ public class PostgresqlTableSqlConditionFailedCountSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("{alias}.date3 is null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -66,12 +66,12 @@ public class PostgresqlTableSqlConditionFailedCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(8L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("{alias}.date3 is null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -81,12 +81,12 @@ public class PostgresqlTableSqlConditionFailedCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(8L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("{alias}.date3 is null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -96,12 +96,12 @@ public class PostgresqlTableSqlConditionFailedCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(8L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("{alias}.date3 is null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
@@ -111,12 +111,12 @@ public class PostgresqlTableSqlConditionFailedCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("{alias}.date3 is null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
@@ -126,6 +126,6 @@ public class PostgresqlTableSqlConditionFailedCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(8L, resultTable.column(0).get(0));
     }
 }

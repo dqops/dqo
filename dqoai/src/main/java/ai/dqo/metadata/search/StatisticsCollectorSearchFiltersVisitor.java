@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -305,10 +305,10 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
         }
 
         if (this.filters.getTags() != null && this.filters.getTags().length > 0) {
-            DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
-            DataStreamMappingSpec selectedDataStream = dataStreamSearcherObject.getTableDataStreams().getFirstDataStreamMapping();
+            DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
+            DataGroupingConfigurationSpec selectedDataGroupingConfiguration = dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations().getFirstDataGroupingConfiguration();
 
-            if (!DataStreamsTagsSearchMatcher.matchAllRequiredTags(this.filters.getTags(), selectedDataStream)) {
+            if (!DataStreamsTagsSearchMatcher.matchAllRequiredTags(this.filters.getTags(), selectedDataGroupingConfiguration)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }

@@ -31,10 +31,10 @@ import ai.dqo.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpe
 import ai.dqo.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.groupings.TimeSeriesMode;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;

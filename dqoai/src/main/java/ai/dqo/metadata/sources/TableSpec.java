@@ -28,7 +28,8 @@ import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
+import ai.dqo.metadata.comparisons.ReferenceTableSpecMap;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpecMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
@@ -61,7 +62,8 @@ public class TableSpec extends AbstractSpec {
         {
             put("timestamp_columns", o -> o.timestampColumns);
             put("incremental_time_window", o -> o.incrementalTimeWindow);
-			put("data_streams", o -> o.dataStreams);
+			put("groupings", o -> o.groupings);
+            put("reference_tables", o -> o.referenceTables);
             put("incident_grouping", o -> o.incidentGrouping);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
@@ -115,10 +117,21 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PartitionIncrementalTimeWindowSpec incrementalTimeWindow = new PartitionIncrementalTimeWindowSpec();
 
-    @JsonPropertyDescription("Data stream mappings list. Data streams are configured in two cases: (1) a tag is assigned to a table (within a data stream level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Data grouping configurations list. Data grouping configurations are configured in two cases:" +
+            " (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning." +
+            " (2) a tag is assigned to a table (within a data grouping level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DataStreamMappingSpecMap dataStreams = new DataStreamMappingSpecMap();
+    private DataGroupingConfigurationSpecMap groupings = new DataGroupingConfigurationSpecMap();
+
+    @JsonPropertyDescription("Dictionary of reference table configurations. Reference tables are ued for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). " +
+                             "The reference table's metadata must be imported into DQO, but the reference table could be located on a different data source. " +
+                             "DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
+                             "The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. " +
+                             "DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ReferenceTableSpecMap referenceTables = new ReferenceTableSpecMap();
 
     @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -273,21 +286,39 @@ public class TableSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the data streams configurations for the table.
-     * @return Data streams configurations.
+     * Returns the data groupings configurations for the table.
+     * @return Data groupings configurations.
      */
-    public DataStreamMappingSpecMap getDataStreams() {
-        return dataStreams;
+    public DataGroupingConfigurationSpecMap getGroupings() {
+        return groupings;
     }
 
     /**
-     * Returns the data streams configuration for the table.
-     * @param dataStreams Data streams configuration.
+     * Returns the data groupings configuration for the table.
+     * @param groupings Data groupings configuration.
      */
-    public void setDataStreams(DataStreamMappingSpecMap dataStreams) {
-		setDirtyIf(!Objects.equals(this.dataStreams, dataStreams));
-        this.dataStreams = dataStreams;
-		propagateHierarchyIdToField(dataStreams, "data_streams");
+    public void setGroupings(DataGroupingConfigurationSpecMap groupings) {
+		setDirtyIf(!Objects.equals(this.groupings, groupings));
+        this.groupings = groupings;
+		propagateHierarchyIdToField(groupings, "groupings");
+    }
+
+    /**
+     * Returns the map of named comparisons to reference tables.
+     * @return Dictionary of comparisons to reference tables.
+     */
+    public ReferenceTableSpecMap getReferenceTables() {
+        return referenceTables;
+    }
+
+    /**
+     * Sets the dictionary of comparisons to reference tables.
+     * @param referenceTables Dictionary of comparisons to reference tables.
+     */
+    public void setReferenceTables(ReferenceTableSpecMap referenceTables) {
+        setDirtyIf(!Objects.equals(this.referenceTables, referenceTables));
+        this.referenceTables = referenceTables;
+        propagateHierarchyIdToField(referenceTables, "reference_tables");
     }
 
     /**
@@ -721,14 +752,15 @@ public class TableSpec extends AbstractSpec {
             cloned.owner = null;
             cloned.comments = null;
             cloned.statistics = null;
+            cloned.referenceTables = null;
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
             if (cloned.incrementalTimeWindow != null) {
                 cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
             }
-            if (cloned.dataStreams != null) {
-                cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
+            if (cloned.groupings != null) {
+                cloned.groupings = cloned.groupings.expandAndTrim(secretValueProvider);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
@@ -759,7 +791,8 @@ public class TableSpec extends AbstractSpec {
             cloned.recurringChecks = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
-            cloned.dataStreams = null;
+            cloned.groupings = null;
+            cloned.referenceTables = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.statistics = null;
@@ -786,7 +819,8 @@ public class TableSpec extends AbstractSpec {
             cloned.owner = null;
             cloned.timestampColumns = null;
             cloned.incrementalTimeWindow = null;
-            cloned.dataStreams = null;
+            cloned.groupings = null;
+            cloned.referenceTables = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.columns = null;

@@ -3,15 +3,15 @@ import Tabs from '../../Tabs';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableDailyRecurring,
-  getTableMonthlyRecurring,
-  setUpdatedDailyRecurring,
-  setUpdatedMonthlyRecurring,
-  updateTableDailyRecurring,
-  updateTableMonthlyRecurring
+  getTableDailyRecurringChecks,
+  getTableMonthlyRecurringChecks,
+  setUpdatedDailyRecurringChecks,
+  setUpdatedMonthlyRecurringChecks,
+  updateTableDailyRecurringChecks,
+  updateTableMonthlyRecurringChecks
 } from '../../../redux/actions/table.actions';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useHistory, useParams } from "react-router-dom";
@@ -48,9 +48,9 @@ const RecurringView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    dispatch(getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    dispatch(getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
     dispatch(
-      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
@@ -59,7 +59,7 @@ const RecurringView = () => {
       if (!dailyRecurring) return;
 
       await dispatch(
-        updateTableDailyRecurring(
+        updateTableDailyRecurringChecks(
           checkTypes,
           firstLevelActiveTab,
           connectionName,
@@ -69,13 +69,13 @@ const RecurringView = () => {
         )
       );
       await dispatch(
-        getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+        getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
       );
     } else {
       if (!monthlyRecurring) return;
 
       await dispatch(
-        updateTableMonthlyRecurring(
+        updateTableMonthlyRecurringChecks(
           checkTypes,
           firstLevelActiveTab,
           connectionName,
@@ -85,17 +85,17 @@ const RecurringView = () => {
         )
       );
       await dispatch(
-        getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+        getTableMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
       );
     }
   };
 
-  const onDailyRecurringChange = (ui: UICheckContainerModel) => {
-    dispatch(setUpdatedDailyRecurring(checkTypes, firstLevelActiveTab, ui));
+  const onDailyRecurringChange = (ui: CheckContainerModel) => {
+    dispatch(setUpdatedDailyRecurringChecks(checkTypes, firstLevelActiveTab, ui));
   };
 
-  const onMonthlyRecurringChange = (ui: UICheckContainerModel) => {
-    dispatch(setUpdatedMonthlyRecurring(checkTypes, firstLevelActiveTab, ui));
+  const onMonthlyRecurringChange = (ui: CheckContainerModel) => {
+    dispatch(setUpdatedMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, ui));
   };
 
   useEffect(() => {

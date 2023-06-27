@@ -33,13 +33,13 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
-import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
+import ai.dqo.services.check.mapping.AllChecksModelFactory;
+import ai.dqo.services.check.mapping.AllChecksPatchApplier;
 import ai.dqo.services.check.mapping.models.*;
-import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
-import ai.dqo.services.check.mapping.utils.UIAllChecksModelUtility;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.mapping.models.column.AllColumnChecksModel;
+import ai.dqo.services.check.mapping.models.table.AllTableChecksModel;
+import ai.dqo.services.check.mapping.utils.AllChecksModelUtility;
+import ai.dqo.services.check.models.AllChecksPatchParameters;
 import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,28 +54,28 @@ import java.util.stream.Stream;
  */
 @Service
 public class CheckServiceImpl implements CheckService {
-    private UIAllChecksModelFactory uiAllChecksModelFactory;
-    private UIAllChecksPatchApplier uiAllChecksPatchApplier;
+    private AllChecksModelFactory allChecksModelFactory;
+    private AllChecksPatchApplier allChecksPatchApplier;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue parentDqoJobQueue;
     private UserHomeContextFactory userHomeContextFactory;
 
     /**
      * Default injection constructor.
-     * @param uiAllChecksModelFactory UI all checks patch factory for creating patches to be updated.
-     * @param uiAllChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
+     * @param allChecksModelFactory UI all checks patch factory for creating patches to be updated.
+     * @param allChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
      * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
      * @param parentDqoJobQueue DQO job queue to execute the operation.
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired
-    public CheckServiceImpl(UIAllChecksModelFactory uiAllChecksModelFactory,
-                            UIAllChecksPatchApplier uiAllChecksPatchApplier,
+    public CheckServiceImpl(AllChecksModelFactory allChecksModelFactory,
+                            AllChecksPatchApplier allChecksPatchApplier,
                             DqoQueueJobFactory dqoQueueJobFactory,
                             ParentDqoJobQueue parentDqoJobQueue,
                             UserHomeContextFactory userHomeContextFactory) {
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
-        this.uiAllChecksPatchApplier = uiAllChecksPatchApplier;
+        this.allChecksModelFactory = allChecksModelFactory;
+        this.allChecksPatchApplier = allChecksPatchApplier;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.parentDqoJobQueue = parentDqoJobQueue;
         this.userHomeContextFactory = userHomeContextFactory;
@@ -164,7 +164,7 @@ public class CheckServiceImpl implements CheckService {
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
     @Override
-    public List<UIAllChecksModel> updateAllChecksPatch(UIAllChecksPatchParameters parameters) {
+    public List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters) {
         if (parameters == null
                 || parameters.getCheckSearchFilters() == null
                 || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getConnectionName())
@@ -174,10 +174,10 @@ public class CheckServiceImpl implements CheckService {
             return new ArrayList<>();
         }
 
-        List<UIAllChecksModel> patches = this.uiAllChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
+        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
         if (parameters.getSelectedTablesToColumns() != null) {
-            for (UIAllChecksModel patch: patches) {
-                UIAllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);
+            for (AllChecksModel patch: patches) {
+                AllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);
             }
 
             // Discard empty models after pruning.
@@ -186,75 +186,75 @@ public class CheckServiceImpl implements CheckService {
                     .collect(Collectors.toList());
         }
 
-        Stream<UICheckContainerModel> collectedCheckContainers = Stream.empty();
+        Stream<CheckContainerModel> collectedCheckContainers = Stream.empty();
 
-        List<UIAllColumnChecksModel> allColumnChecksModels = patches.stream()
-                .map(UIAllChecksModel::getColumnChecksModel)
+        List<AllColumnChecksModel> allColumnChecksModels = patches.stream()
+                .map(AllChecksModel::getColumnChecksModel)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         if (!allColumnChecksModels.isEmpty()) {
-            Stream<UICheckContainerModel> columnCheckContainers = allColumnChecksModels.stream()
-                    .flatMap(model -> model.getUiTableColumnChecksModels().stream())
-                    .flatMap(model -> model.getUiColumnChecksModels().stream())
+            Stream<CheckContainerModel> columnCheckContainers = allColumnChecksModels.stream()
+                    .flatMap(model -> model.getTableColumnChecksModels().stream())
+                    .flatMap(model -> model.getColumnChecksModels().stream())
                     .flatMap(model -> model.getCheckContainers().values().stream());
             collectedCheckContainers = Stream.concat(collectedCheckContainers, columnCheckContainers);
         }
 
-        List<UIAllTableChecksModel> allTableChecksModels = patches.stream()
-                .map(UIAllChecksModel::getTableChecksModel)
+        List<AllTableChecksModel> allTableChecksModels = patches.stream()
+                .map(AllChecksModel::getTableChecksModel)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         if (!allTableChecksModels.isEmpty()) {
-            Stream<UICheckContainerModel> tableCheckContainers = allTableChecksModels.stream()
-                    .flatMap(model -> model.getUiSchemaTableChecksModels().stream())
-                    .flatMap(model -> model.getUiTableChecksModels().stream())
+            Stream<CheckContainerModel> tableCheckContainers = allTableChecksModels.stream()
+                    .flatMap(model -> model.getSchemaTableChecksModels().stream())
+                    .flatMap(model -> model.getTableChecksModels().stream())
                     .flatMap(model -> model.getCheckContainers().values().stream());
             collectedCheckContainers = Stream.concat(collectedCheckContainers, tableCheckContainers);
         }
 
-        Iterable<UICheckModel> checks = collectedCheckContainers
+        Iterable<CheckModel> checks = collectedCheckContainers
                 .flatMap(model -> model.getCategories().stream())
                 .flatMap(model -> model.getChecks().stream())
                 .collect(Collectors.toList());
 
-        for (UICheckModel check: checks) {
-            patchUICheckModel(check, parameters);
+        for (CheckModel check: checks) {
+            patchCheckModel(check, parameters);
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connectionList = userHome.getConnections();
 
-        for (UIAllChecksModel patch: patches) {
+        for (AllChecksModel patch: patches) {
             String connectionName = patch.getConnectionName();
             ConnectionWrapper connectionWrapper = connectionList.getByObjectName(connectionName, true);
             if (connectionWrapper == null) {
                 continue;
             }
 
-            this.uiAllChecksPatchApplier.applyPatchOnConnection(patch, connectionWrapper);
+            this.allChecksPatchApplier.applyPatchOnConnection(patch, connectionWrapper);
         }
         userHomeContext.flush();
 
         return patches;
     }
 
-    protected void patchUICheckModel(UICheckModel model,
-                                     UIAllChecksPatchParameters parameters) {
-        UIRuleThresholdsModel ruleThresholdsModel = model.getRule();
+    protected void patchCheckModel(CheckModel model,
+                                   AllChecksPatchParameters parameters) {
+        RuleThresholdsModel ruleThresholdsModel = model.getRule();
         if (ruleThresholdsModel == null) {
-            ruleThresholdsModel = new UIRuleThresholdsModel();
+            ruleThresholdsModel = new RuleThresholdsModel();
             model.setRule(ruleThresholdsModel);
         }
 
         patchRuleThresholdsModel(ruleThresholdsModel,
-                parameters.getUiCheckModelPatch().getRule(),
+                parameters.getCheckModelPatch().getRule(),
                 parameters.isOverrideConflicts());
 
-        List<UIFieldModel> newSensorFields = getPatchedFields(model.getSensorParameters(),
-                parameters.getUiCheckModelPatch().getSensorParameters(),
+        List<FieldModel> newSensorFields = getPatchedFields(model.getSensorParameters(),
+                parameters.getCheckModelPatch().getSensorParameters(),
                 parameters.isOverrideConflicts());
         model.setSensorParameters(newSensorFields);
 
@@ -267,8 +267,8 @@ public class CheckServiceImpl implements CheckService {
                 && (ruleThresholdsModel.getFatal() == null || ruleThresholdsModel.getFatal().isDisabled()));
     }
 
-    protected void patchRuleThresholdsModel(UIRuleThresholdsModel ruleThresholdsModel,
-                                            UIRuleThresholdsModel rulePatchModel,
+    protected void patchRuleThresholdsModel(RuleThresholdsModel ruleThresholdsModel,
+                                            RuleThresholdsModel rulePatchModel,
                                             boolean isOverride) {
         if (ruleThresholdsModel.getWarning() == null || !ruleThresholdsModel.getWarning().isConfigured() || isOverride) {
             ruleThresholdsModel.setWarning(rulePatchModel.getWarning());
@@ -283,15 +283,15 @@ public class CheckServiceImpl implements CheckService {
         }
     }
 
-    protected List<UIFieldModel> getPatchedFields(List<UIFieldModel> sourceFields,
-                                                  List<UIFieldModel> patches,
-                                                  boolean overrideConflicts) {
-        Map<String, UIFieldModel> paramsByName = new HashMap<>();
-        for (UIFieldModel fieldModel: sourceFields) {
+    protected List<FieldModel> getPatchedFields(List<FieldModel> sourceFields,
+                                                List<FieldModel> patches,
+                                                boolean overrideConflicts) {
+        Map<String, FieldModel> paramsByName = new HashMap<>();
+        for (FieldModel fieldModel: sourceFields) {
             paramsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }
 
-        for (UIFieldModel patch: patches) {
+        for (FieldModel patch: patches) {
             String paramName = patch.getDefinition().getDisplayName();
             if (!paramsByName.containsKey(paramName)) {
                 throw new IllegalArgumentException(String.format("Check doesn't have field %s.", paramName));

@@ -11,7 +11,7 @@ import { TabOption } from "../../components/PageTabs/tab";
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
-  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards } = useDashboard();
+  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error } = useDashboard();
 
   useEffect(() => {
     dispatch(getAllDashboards());
@@ -52,7 +52,7 @@ const Dashboards = () => {
                     />
                   ) : (
                     <div>
-                      Choose a data quality dashboard from the tree
+                      {error[tab.value] ? 'DQO Cloud API Key expired, please run "cloud login" from the DQO shell to get a new key' : 'Choose a data quality dashboard from the tree'}
                     </div>
                   )}
                 </div>

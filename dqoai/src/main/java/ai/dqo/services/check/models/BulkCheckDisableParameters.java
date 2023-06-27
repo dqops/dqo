@@ -39,5 +39,6 @@ public class BulkCheckDisableParameters {
     CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
 
     @JsonPropertyDescription("List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.")
-    Map<String, List<String>> selectedTablesToColumns = new LinkedHashMap<>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    Map<String, List<String>> selectedTablesToColumns = null;
 }

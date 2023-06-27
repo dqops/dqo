@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableProfilingChecksUIFilter, setTableUpdatedCheckUiFilter,
+  getTableProfilingChecksModelFilter, setTableUpdatedProfilingChecksModelFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
@@ -30,26 +30,26 @@ const TableProfilingChecksUIFilterView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await TableApiClient.updateTableProfilingChecksUI(
+    await TableApiClient.updateTableProfilingChecksModel(
       connectionName,
       schemaName,
       tableName,
       checksUIFilter
     );
     dispatch(
-      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName, false)
+      getTableProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
-  const onChange = (data: UICheckContainerModel) => {
-    dispatch(setTableUpdatedCheckUiFilter(checkTypes, firstLevelActiveTab, data));
+  const onChange = (data: CheckContainerModel) => {
+    dispatch(setTableUpdatedProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, data));
   };
 
   return (

@@ -19,8 +19,8 @@ import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.mapping.models.AllChecksModel;
+import ai.dqo.services.check.models.AllChecksPatchParameters;
 import ai.dqo.services.check.models.BulkCheckDisableParameters;
 
 import java.util.List;
@@ -54,5 +54,5 @@ public interface CheckService {
      * @param parameters Parameters for creating the patches and updating.
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
-    List<UIAllChecksModel> updateAllChecksPatch(UIAllChecksPatchParameters parameters);
+    List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters);
 }

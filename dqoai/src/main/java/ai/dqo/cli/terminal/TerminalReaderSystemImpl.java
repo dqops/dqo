@@ -70,10 +70,11 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
      * Tries to read one character from the terminal.
      *
      * @param timeoutMillis Read timeout.
+     * @param peekOnly True when the method should only try to detect if there is any input within the timeout, without reading.
      * @return Character that was read.
      */
     @Override
-    public Character tryReadChar(long timeoutMillis) {
+    public Character tryReadChar(long timeoutMillis, boolean peekOnly) {
         CompletableFuture<Character> waitForInput = CompletableFuture.supplyAsync(() -> {
             try {
                 PushbackInputStream pushbackInputStream = (PushbackInputStream) System.in;
@@ -81,7 +82,10 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
                 if (readResult == -1) {
                     return null;
                 }
-                pushbackInputStream.unread(readResult);
+
+                if (peekOnly || Thread.currentThread().isInterrupted()) {
+                    pushbackInputStream.unread(readResult);
+                }
                 return (char)readResult;
             } catch (IOException e) {
                 return null;
@@ -95,6 +99,7 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
             waitForInput.cancel(true);
             return null;
         } catch (InterruptedException | ExecutionException e) {
+            waitForInput.cancel(true);
             throw new RuntimeException(e);
         }
     }

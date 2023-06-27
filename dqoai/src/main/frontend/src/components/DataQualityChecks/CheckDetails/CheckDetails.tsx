@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Tabs from '../../Tabs';
-import { useParams } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum,
-  UICheckModel
+  CheckModel,
+  DeleteStoredDataQueueJobParameters
 } from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
@@ -21,10 +21,14 @@ import {
   getCheckErrors,
   getCheckReadouts,
   getCheckResults,
-  setCheckFilters,
+  setCheckFilters
 } from '../../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
-import { getFirstLevelActiveTab, getFirstLevelState } from '../../../redux/selectors';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../../redux/selectors';
+import { IRootState } from '../../../redux/reducers';
 
 const tabs = [
   {
@@ -42,168 +46,189 @@ const tabs = [
 ];
 
 interface CheckDetailsProps {
-  check?: UICheckModel;
+  checkTypes: CheckTypes;
+  connection: string;
+  schema: string;
+  table: string;
+  column?: string;
+  check?: CheckModel;
+  runCheckType?: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName?: string;
   onClose: () => void;
-  job?: DqoJobHistoryEntryModel;
+  data_clean_job_template?: DeleteStoredDataQueueJobParameters;
+  defaultFilters?: any;
 }
-
-const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
+//deleted dataGroup from here
+const CheckDetails = ({
+  checkTypes,
+  connection,
+  schema,
+  table,
+  column,
+  data_clean_job_template,
+  runCheckType,
+  checkName,
+  timeScale,
+  onClose,
+  defaultFilters
+}: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
-  const {
-    checkTypes,
-    connection,
-    schema,
-    table,
-    column
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-    column: string;
-  } = useParams();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const {
     checkResults: resultsData,
     sensorReadouts: readoutsData,
     sensorErrors: errorsData,
-    checkFilters: filtersData
+    checkFilters: filtersData,
+    currentJobId
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const currentJob = currentJobId
+    ? job_dictionary_state[currentJobId]
+    : undefined;
 
-  const checkResults = resultsData
-    ? resultsData[check?.check_name ?? ''] || []
-    : [];
+  const checkResults = resultsData ? resultsData[checkName ?? ''] || [] : [];
   const sensorReadouts = readoutsData
-    ? readoutsData[check?.check_name ?? ''] || []
+    ? readoutsData[checkName ?? ''] || []
     : [];
-  const sensorErrors = errorsData
-    ? errorsData[check?.check_name ?? ''] || []
-    : [];
-  const filters = filtersData ? filtersData[check?.check_name ?? ''] || {
-    month: moment().format('MMMM YYYY')
-  } : {
-    month: moment().format('MMMM YYYY')
-  };
+  const sensorErrors = errorsData ? errorsData[checkName ?? ''] || [] : [];
+  const filters =
+    filtersData && filtersData[checkName ?? '']
+      ? filtersData[checkName ?? '']
+      : defaultFilters || {
+          month: moment().format('MMMM YYYY')
+        };
 
   const dispatch = useActionDispatch();
 
   const { sidebarWidth } = useTree();
 
-  useEffect(() => {
-    if (!sensorErrors.length) {
-      fetchCheckErrors(filters.month, filters.dataStreamName);
-    }
-  }, []);
+  const calculateDateRange = (month: string) => {
+    if (!month) return { startDate: '', endDate: '' };
 
-  useEffect(() => {
-    if (!sensorReadouts.length) {
-      fetchCheckReadouts(filters.month, filters.dataStreamName);
+    if (month === 'Last 3 months') {
+      return {
+        startDate: moment()
+          .add(-2, 'month')
+          .startOf('month')
+          .format('YYYY-MM-DD'),
+        endDate: moment().endOf('month').format('YYYY-MM-DD')
+      };
     }
-  }, []);
 
-  useEffect(() => {
-    if (!checkResults.length) {
-      fetchCheckResults(filters.month, filters.dataStreamName);
-    }
-  }, []);
+    return {
+      startDate: moment(month, 'MMMM YYYY')
+        .startOf('month')
+        .format('YYYY-MM-DD'),
+      endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+    };
+  };
 
   const fetchCheckErrors = useCallback(
-    (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
+    (month: string, dataGroup?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
 
-      dispatch(getCheckErrors(checkTypes, firstLevelActiveTab, {
-        connection,
-        schema,
-        table,
-        column,
-        dataStreamName,
-        startDate,
-        endDate,
-        check
-      }));
+      dispatch(
+        getCheckErrors(checkTypes, firstLevelActiveTab, {
+          connection,
+          schema,
+          table,
+          column,
+
+          startDate,
+          endDate,
+          runCheckType,
+          timeScale,
+          checkName: checkName ?? ''
+        })
+      );
     },
-    [check, connection, schema, table, column]
+    [checkName, timeScale, runCheckType, connection, schema, table, column]
   );
 
   const fetchCheckReadouts = useCallback(
-    (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
+    (month: string, dataGroup?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
 
-      dispatch(getCheckReadouts(
-        checkTypes,
-        firstLevelActiveTab,
-        {
+      dispatch(
+        getCheckReadouts(checkTypes, firstLevelActiveTab, {
           connection,
           schema,
           table,
           column,
-          dataStreamName,
-          check,
+
           startDate,
-          endDate
-        }
-      ));
+          endDate,
+          runCheckType,
+          timeScale,
+          checkName: checkName ?? ''
+        })
+      );
     },
-    [check, connection, schema, table, column]
+    [runCheckType, checkName, timeScale, connection, schema, table, column]
   );
 
   const fetchCheckResults = useCallback(
-    (month: string, dataStreamName?: string) => {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
+    (month: string, dataGroup?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
 
-      dispatch(getCheckResults(
-        checkTypes,
-        firstLevelActiveTab,
-        {
+      dispatch(
+        getCheckResults(checkTypes, firstLevelActiveTab, {
           connection,
           schema,
           table,
           column,
-          dataStreamName,
-          check,
+
           startDate,
-          endDate
-        }
-      ));
+          endDate,
+          runCheckType,
+          checkName: checkName ?? '',
+          timeScale
+        })
+      );
     },
-    [check, connection, schema, table, column]
+    [runCheckType, checkName, timeScale, connection, schema, table, column]
   );
 
   useEffect(() => {
-    if (
-      (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-        job?.status === DqoJobHistoryEntryModelStatusEnum.failed)
-    ) {
-      refetch(filters.month, filters.dataStreamName);
+    if (!sensorErrors?.length) {
+      fetchCheckErrors(filters.month, filters.dataGroup);
     }
-  }, [job?.status]);
+  }, []);
+
+  useEffect(() => {
+    if (!sensorReadouts?.length) {
+      fetchCheckReadouts(filters.month, filters.dataGroup);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!checkResults?.length) {
+      fetchCheckResults(filters.month, filters.dataGroup);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
+      refetch(filters.month, filters.dataGroup);
+    }
+  }, [currentJob?.status]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);
   };
 
-  const onChangeDataStream = (value: string) => {
+  const onChangeDataGroup = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab,
-      check?.check_name ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
         ...filters,
-        dataStreamName: value
+        onChangeDataGroup: value
       })
     );
     refetch(filters.month, value);
@@ -211,12 +236,12 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   const onChangeMonth = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, check?.check_name ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
         ...filters,
         month: value
       })
     );
-    refetch(value, filters.dataStreamName);
+    refetch(value, filters.dataGroup);
   };
 
   const refetch = (month: string, name?: string) => {
@@ -252,30 +277,32 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         {activeTab === 'check_results' && (
           <CheckResultsTab
-            check={check}
+            runCheckType={runCheckType || ''}
+            checkName={checkName || ''}
+            timeScale={timeScale}
             results={checkResults || []}
-            dataStreamName={filters.dataStreamName}
+            dataGroup={filters.dataGroup}
             month={filters.month}
             onChangeMonth={onChangeMonth}
-            onChangeDataStream={onChangeDataStream}
+            onChangeDataGroup={onChangeDataGroup}
           />
         )}
         {activeTab === 'sensor_readouts' && (
           <SensorReadoutsTab
             sensorReadouts={sensorReadouts || []}
-            dataStreamName={filters.dataStreamName}
+            dataGroup={filters.dataGroup}
             month={filters.month}
             onChangeMonth={onChangeMonth}
-            onChangeDataStream={onChangeDataStream}
+            onChangeDataGroup={onChangeDataGroup}
           />
         )}
         {activeTab === 'execution_errors' && (
           <CheckErrorsTab
             errors={sensorErrors || []}
-            dataStreamName={filters.dataStreamName}
+            dataGroup={filters.dataGroup}
             month={filters.month}
             onChangeMonth={onChangeMonth}
-            onChangeDataStream={onChangeDataStream}
+            onChangeDataGroup={onChangeDataGroup}
           />
         )}
 
@@ -285,7 +312,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
-              ...check?.data_clean_job_template,
+              ...(data_clean_job_template || {}),
               ...params
             });
           }}

@@ -5,8 +5,8 @@ import {
   CheckResultsOverviewDataModel,
   DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
-  UICheckModel,
-  UIQualityCategoryModel
+  CheckModel,
+  QualityCategoryModel
 } from '../../api';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
@@ -15,23 +15,32 @@ import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import CheckMenu from './CheckMenu';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../shared/routes';
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
 
 interface CheckCategoriesViewProps {
-  category: UIQualityCategoryModel;
+  category: QualityCategoryModel;
   checkResultsOverview: CheckResultsOverviewDataModel[];
-  handleChangeDataDataStreams: (check: UICheckModel, index: number) => void;
+  handleChangeDataGroupingConfiguration: (
+    check: CheckModel,
+    index: number
+  ) => void;
   onUpdate: () => void;
   getCheckOverview: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
   mode?: string;
   changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
-  copyCategory?: UIQualityCategoryModel;
+  copyCategory?: QualityCategoryModel;
 }
 const CheckCategoriesView = ({
   mode,
   category,
   checkResultsOverview,
-  handleChangeDataDataStreams,
+  handleChangeDataGroupingConfiguration,
   onUpdate,
   getCheckOverview,
   timeWindowFilter,
@@ -43,19 +52,26 @@ const CheckCategoriesView = ({
   );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const [jobId, setJobId] = useState<number>();
-
-  const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { currentJobId } = useSelector(getFirstLevelState(checkTypes));
+  const job = currentJobId ? job_dictionary_state[currentJobId] : undefined;
 
   const onRunChecks = async () => {
+    await onUpdate();
     const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: category?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
         : {})
     });
-
-    // setJobId(res.data?.jobId?.jobId);
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        (res.data as any)?.jobId?.jobId
+      )
+    );
 
     if (getCheckOverview) {
       getCheckOverview();
@@ -104,7 +120,9 @@ const CheckCategoriesView = ({
           <CheckListItem
             check={check}
             key={index}
-            onChange={(item) => handleChangeDataDataStreams(item, index)}
+            onChange={(item) =>
+              handleChangeDataGroupingConfiguration(item, index)
+            }
             checkResult={checkResultsOverview.find(
               (item) =>
                 item.checkName === check.check_name &&

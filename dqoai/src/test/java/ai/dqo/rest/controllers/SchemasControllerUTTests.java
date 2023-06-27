@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
+import ai.dqo.checks.column.profiling.ColumnNumericProfilingChecksSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnStringsProfilingChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
@@ -42,18 +43,21 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectM
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.*;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactoryImpl;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
-import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.column.UIColumnChecksModel;
-import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
-import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
-import ai.dqo.services.check.mapping.models.table.UISchemaTableChecksModel;
-import ai.dqo.services.check.mapping.models.table.UITableChecksModel;
+import ai.dqo.services.check.CheckFlatConfigurationFactory;
+import ai.dqo.services.check.CheckFlatConfigurationFactoryImpl;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.AllChecksModelFactory;
+import ai.dqo.services.check.mapping.AllChecksModelFactoryImpl;
+import ai.dqo.services.check.mapping.models.AllChecksModel;
+import ai.dqo.services.check.mapping.models.CheckContainerModel;
+import ai.dqo.services.check.mapping.models.CheckContainerTypeModel;
+import ai.dqo.services.check.mapping.models.column.AllColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.ColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.TableColumnChecksModel;
+import ai.dqo.services.check.mapping.models.table.AllTableChecksModel;
+import ai.dqo.services.check.mapping.models.table.SchemaTableChecksModel;
+import ai.dqo.services.check.mapping.models.table.TableChecksModel;
+import ai.dqo.services.check.models.CheckConfigurationModel;
 import ai.dqo.services.metadata.SchemaService;
 import ai.dqo.services.metadata.SchemaServiceImpl;
 import ai.dqo.utils.reflection.ReflectionService;
@@ -63,6 +67,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -86,11 +91,12 @@ public class SchemasControllerUTTests extends BaseTest {
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
 
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
-        UIAllChecksModelFactory uiAllChecksModelFactory = new UIAllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
+        AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        CheckFlatConfigurationFactory checkFlatConfigurationFactory = new CheckFlatConfigurationFactoryImpl(allChecksModelFactory);
 
-        SchemaService schemaService = new SchemaServiceImpl(userHomeContextFactory, uiAllChecksModelFactory);
-        this.sut = new SchemasController(schemaService, this.userHomeContextFactory, uiAllChecksModelFactory);
+        SchemaService schemaService = new SchemaServiceImpl(userHomeContextFactory, allChecksModelFactory, checkFlatConfigurationFactory);
+        this.sut = new SchemasController(schemaService, this.userHomeContextFactory);
     }
 
     private ColumnSpec createColumn(String type, boolean nullable) {
@@ -160,14 +166,12 @@ public class SchemasControllerUTTests extends BaseTest {
         col21categoriesSpec.setStrings(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
-        ColumnRecurringChecksRootSpec col23recurringSpec = new ColumnRecurringChecksRootSpec();
-        col23.setRecurringChecks(col23recurringSpec);
-        ColumnDailyRecurringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
-        col23recurringSpec.setDaily(col23categoriesSpec);
-        ColumnNumericDailyRecurringChecksSpec col23numericChecksSpec = new ColumnNumericDailyRecurringChecksSpec();
+        ColumnProfilingCheckCategoriesSpec col23categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+        col23.setProfilingChecks(col23categoriesSpec);
+        ColumnNumericProfilingChecksSpec col23numericChecksSpec = new ColumnNumericProfilingChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
+        col23numericChecksSpec.setNegativeCount(columnNegativeCountCheckSpec);
         MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);
@@ -177,12 +181,12 @@ public class SchemasControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getSchemaProfilingChecksUI_whenAllChecksRequested_thenReturnsAllProfilingChecks() {
+    void getSchemaProfilingChecksModel_whenAllChecksRequested_thenReturnsAllProfilingChecks() {
         UserHomeContext userHomeContext = this.createHierarchyTree();
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksUI(
+        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -191,70 +195,42 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.empty());
+                Optional.empty(),
+                Optional.of(true));
         Assertions.assertNotNull(responseEntity.getBody());
 
-        UIAllChecksModel result = responseEntity.getBody().blockOptional().orElse(null);
+        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
-        UIAllTableChecksModel resultAllTables = result.getTableChecksModel();
+        List<CheckConfigurationModel> resultAllTables = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.table)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllTables);
-        List<UISchemaTableChecksModel> resultSchemaTables = resultAllTables.getUiSchemaTableChecksModels();
-        Assertions.assertEquals(1, resultSchemaTables.size());
-        List<UITableChecksModel> resultTables = resultSchemaTables.get(0).getUiTableChecksModels();
-        Assertions.assertEquals(2, resultTables.size());
-        for (UITableChecksModel resultTable: resultTables) {
-            Set<Map.Entry<UICheckContainerTypeModel, UICheckContainerModel>> checkContainers = resultTable.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<UICheckContainerTypeModel, UICheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(2, resultAllTables.size());
+        resultAllTables.forEach(Assertions::assertNotNull);
+        resultAllTables.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        UIAllColumnChecksModel resultAllColumns = result.getColumnChecksModel();
+        List<CheckConfigurationModel> resultAllColumns = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.column)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllColumns);
-        List<UITableColumnChecksModel> resultTableColumns = resultAllColumns.getUiTableColumnChecksModels();
-        Assertions.assertEquals(2, resultTableColumns.size());
+        Assertions.assertEquals(2, resultAllColumns.size());
+        resultAllColumns.forEach(Assertions::assertNotNull);
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        UITableColumnChecksModel resultTableColumn1 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab1")))
-                .findAny().get();
-        List<UIColumnChecksModel> resultColumns1 = resultTableColumn1.getUiColumnChecksModels();
-        Assertions.assertEquals(1, resultColumns1.size());
-        for (UIColumnChecksModel resultColumn: resultColumns1) {
-            Set<Map.Entry<UICheckContainerTypeModel, UICheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<UICheckContainerTypeModel, UICheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
 
-        UITableColumnChecksModel resultTableColumn2 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab2")))
-                .findAny().get();
-        List<UIColumnChecksModel> resultColumns2 = resultTableColumn2.getUiColumnChecksModels();
-        Assertions.assertEquals(3, resultColumns2.size());
-        for (UIColumnChecksModel resultColumn: resultColumns2) {
-            Set<Map.Entry<UICheckContainerTypeModel, UICheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<UICheckContainerTypeModel, UICheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(1, result.stream().filter(c -> c.getTableName().equals("tab1")).count());
+        Assertions.assertEquals(3, result.stream().filter(c -> c.getTableName().equals("tab2")).count());
     }
 
     @Test
-    void getSchemaProfilingChecksUI_whenColumnChecksRequested_thenReturnsColumnProfilingChecks() {
+    void getSchemaProfilingChecksModel_whenColumnChecksRequested_thenReturnsColumnProfilingChecks() {
         UserHomeContext userHomeContext = this.createHierarchyTree();
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksUI(
+        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -263,58 +239,40 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.of(CheckTarget.column),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.empty());
+                Optional.empty(),
+                Optional.of(true));
         Assertions.assertNotNull(responseEntity.getBody());
 
-        UIAllChecksModel result = responseEntity.getBody().blockOptional().orElse(null);
+        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
-        UIAllTableChecksModel resultAllTables = result.getTableChecksModel();
-        Assertions.assertNull(resultAllTables);
+        List<CheckConfigurationModel> resultAllTables = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.table)
+                .collect(Collectors.toList());
+        Assertions.assertNotNull(resultAllTables);
+        Assertions.assertEquals(0, resultAllTables.size());
 
-        UIAllColumnChecksModel resultAllColumns = result.getColumnChecksModel();
+        List<CheckConfigurationModel> resultAllColumns = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.column)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllColumns);
-        List<UITableColumnChecksModel> resultTableColumns = resultAllColumns.getUiTableColumnChecksModels();
-        Assertions.assertEquals(2, resultTableColumns.size());
+        Assertions.assertEquals(2, resultAllColumns.size());
+        resultAllColumns.forEach(Assertions::assertNotNull);
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        UITableColumnChecksModel resultTableColumn1 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab1")))
-                .findAny().get();
-        List<UIColumnChecksModel> resultColumns1 = resultTableColumn1.getUiColumnChecksModels();
-        Assertions.assertEquals(1, resultColumns1.size());
-        for (UIColumnChecksModel resultColumn: resultColumns1) {
-            Set<Map.Entry<UICheckContainerTypeModel, UICheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<UICheckContainerTypeModel, UICheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
 
-        UITableColumnChecksModel resultTableColumn2 = resultTableColumns.stream()
-                .filter(resultColumns -> resultColumns.getSchemaTableName().equals(
-                        new PhysicalTableName("sch", "tab2")))
-                .findAny().get();
-        List<UIColumnChecksModel> resultColumns2 = resultTableColumn2.getUiColumnChecksModels();
-        Assertions.assertEquals(3, resultColumns2.size());
-        for (UIColumnChecksModel resultColumn: resultColumns2) {
-            Set<Map.Entry<UICheckContainerTypeModel, UICheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<UICheckContainerTypeModel, UICheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
+        Assertions.assertEquals(0, resultAllColumns.stream().filter(c -> c.getTableName().equals("tab1")).count());
+        Assertions.assertEquals(2, resultAllColumns.stream().filter(c -> c.getTableName().equals("tab2")).count());
     }
 
     @Test
-    void getSchemaProfilingChecksUI_whenColumnChecksOnNumericColumnsRequested_thenReturnsCorrectProfilingChecks() {
+    void getSchemaProfilingChecksModel_whenColumnChecksOnNumericColumnsRequested_thenReturnsCorrectProfilingChecks() {
         UserHomeContext userHomeContext = this.createHierarchyTree();
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getSchemaProfilingChecksUI(
+        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 connectionName,
                 schemaName,
                 Optional.empty(),
@@ -323,35 +281,32 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.of(CheckTarget.column),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.empty());
+                Optional.empty(),
+                Optional.of(true));
         Assertions.assertNotNull(responseEntity.getBody());
 
-        UIAllChecksModel result = responseEntity.getBody().blockOptional().orElse(null);
+        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
-        UIAllTableChecksModel resultAllTables = result.getTableChecksModel();
-        Assertions.assertNull(resultAllTables);
+        List<CheckConfigurationModel> resultAllTables = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.table)
+                .collect(Collectors.toList());
+        Assertions.assertNotNull(resultAllTables);
+        Assertions.assertEquals(0, resultAllTables.size());
 
-        UIAllColumnChecksModel resultAllColumns = result.getColumnChecksModel();
+        List<CheckConfigurationModel> resultAllColumns = result.stream()
+                .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.column)
+                .collect(Collectors.toList());
         Assertions.assertNotNull(resultAllColumns);
-        List<UITableColumnChecksModel> resultTableColumns = resultAllColumns.getUiTableColumnChecksModels();
-        Assertions.assertEquals(1, resultTableColumns.size());
+        Assertions.assertEquals(1, resultAllColumns.size());
+        resultAllColumns.forEach(Assertions::assertNotNull);
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
 
-        UITableColumnChecksModel resultTableColumn = resultTableColumns.get(0);
-        List<UIColumnChecksModel> resultColumns = resultTableColumn.getUiColumnChecksModels();
-        Assertions.assertEquals(2, resultColumns.size());
+        Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
+
         Assertions.assertIterableEquals(
-                Stream.of("col2", "col3").collect(Collectors.toList()),
-                resultColumns.stream().map(UIColumnChecksModel::getColumnName).sorted().collect(Collectors.toList())
+                Stream.of("col3").collect(Collectors.toList()),
+                resultAllColumns.stream().map(CheckConfigurationModel::getColumnName).sorted().collect(Collectors.toList())
         );
-
-        for (UIColumnChecksModel resultColumn: resultColumns) {
-            Set<Map.Entry<UICheckContainerTypeModel, UICheckContainerModel>> checkContainers = resultColumn.getCheckContainers().entrySet();
-            Assertions.assertEquals(1, checkContainers.size());
-            for (Map.Entry<UICheckContainerTypeModel, UICheckContainerModel> checkContainerEntry: checkContainers) {
-                Assertions.assertEquals(CheckType.PROFILING, checkContainerEntry.getKey().getCheckType());
-                Assertions.assertNotNull(checkContainerEntry.getValue());
-            }
-        }
     }
 }

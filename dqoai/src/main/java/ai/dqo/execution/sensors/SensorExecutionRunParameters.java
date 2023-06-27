@@ -18,9 +18,12 @@ package ai.dqo.execution.sensors;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -52,11 +55,15 @@ public class SensorExecutionRunParameters {
     private EffectiveSensorRuleNames effectiveSensorRuleNames;
     private TimeSeriesConfigurationSpec timeSeries;
     private TimeWindowFilterParameters timeWindowFilter;
-    private DataStreamMappingSpec dataStreams;
+    private DataGroupingConfigurationSpec dataGroupings;
     private AbstractSensorParametersSpec sensorParameters;
     private ProviderDialectSettings dialectSettings;
     @JsonIgnore
     private Instant startedAt = Instant.now();
+    @JsonIgnore
+    private CheckSearchFilters checkSearchFilter;
+    private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
+    private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
 
     /**
      * Creates a sensor run parameters object with all objects required to run a sensor.
@@ -69,9 +76,10 @@ public class SensorExecutionRunParameters {
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
-     * @param dataStreams Effective data streams configuration.
+     * @param dataGroupings Effective data groupings configuration.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
+     * @param checkSearchFilter Check search filter to find this particular check.
      */
     public SensorExecutionRunParameters(
 			ConnectionSpec connection,
@@ -83,9 +91,10 @@ public class SensorExecutionRunParameters {
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             TimeWindowFilterParameters timeWindowFilter,
-            DataStreamMappingSpec dataStreams,
+            DataGroupingConfigurationSpec dataGroupings,
 			AbstractSensorParametersSpec sensorParameters,
-			ProviderDialectSettings dialectSettings) {
+			ProviderDialectSettings dialectSettings,
+            CheckSearchFilters checkSearchFilter) {
         this.connection = connection;
         this.table = table;
         this.column = column;
@@ -95,9 +104,10 @@ public class SensorExecutionRunParameters {
         this.checkType = checkType;
         this.timeSeries = timeSeries;
         this.timeWindowFilter = timeWindowFilter;
-        this.dataStreams = dataStreams;
+        this.dataGroupings = dataGroupings;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
+        this.checkSearchFilter = checkSearchFilter;
     }
 
     /**
@@ -245,19 +255,19 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Returns the effective data streams configuration.
-     * @return Effective data streams configuration.
+     * Returns the effective data groupings configuration.
+     * @return Effective data groupings configuration.
      */
-    public DataStreamMappingSpec getDataStreams() {
-        return dataStreams;
+    public DataGroupingConfigurationSpec getDataGroupings() {
+        return dataGroupings;
     }
 
     /**
-     * Sets the effective data streams configuration.
-     * @param dataStreams Effective data streams configuration.
+     * Sets the effective data groupings configuration.
+     * @param dataGroupings Effective data groupings configuration.
      */
-    public void setDataStreams(DataStreamMappingSpec dataStreams) {
-        this.dataStreams = dataStreams;
+    public void setDataGroupings(DataGroupingConfigurationSpec dataGroupings) {
+        this.dataGroupings = dataGroupings;
     }
 
     /**
@@ -307,5 +317,66 @@ public class SensorExecutionRunParameters {
      */
     public void setStartedAt(Instant startedAt) {
         this.startedAt = startedAt;
+    }
+
+    /**
+     * Returns a check search filter that will find this check again (to rerun it, or report it).
+     * @return Check search filter to find this check.
+     */
+    public CheckSearchFilters getCheckSearchFilter() {
+        return checkSearchFilter;
+    }
+
+    /**
+     * Sets a check search filter that will find this check.
+     * @param checkSearchFilter Check search filter.
+     */
+    public void setCheckSearchFilter(CheckSearchFilters checkSearchFilter) {
+        this.checkSearchFilter = checkSearchFilter;
+    }
+
+    /**
+     * Returns the column alias that should be used for the actual_value output column.
+     * @return The alias for the actual_value primary sensor readout column.
+     */
+    public String getActualValueAlias() {
+        return actualValueAlias;
+    }
+
+    /**
+     * Sets the the column alias that should be used for the actual_value output column.
+     * @param actualValueAlias The alias for the actual_value primary sensor readout column.
+     */
+    public void setActualValueAlias(String actualValueAlias) {
+        this.actualValueAlias = actualValueAlias;
+    }
+
+    /**
+     * Returns the column alias that should be used for the expected_value output column.
+     * @return The alias for the expected_value secondary sensor readout column.
+     */
+    public String getExpectedValueAlias() {
+        return expectedValueAlias;
+    }
+
+    /**
+     * Sets the column alias that should be used for the expected_value output column.
+     * @param expectedValueAlias The alias for the expected_value secondary sensor readout column.
+     */
+    public void setExpectedValueAlias(String expectedValueAlias) {
+        this.expectedValueAlias = expectedValueAlias;
+    }
+
+    /**
+     * Returns the time series gradient that is used for time partitioning the analyzed table.
+     * @return Time period gradient.
+     */
+    @JsonIgnore
+    public TimePeriodGradient getTimePeriodGradient() {
+        if (this.timeSeries == null) {
+            return null;
+        }
+
+        return this.timeSeries.getTimeGradient();
     }
 }

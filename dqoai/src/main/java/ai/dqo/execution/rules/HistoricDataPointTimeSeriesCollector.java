@@ -16,10 +16,9 @@
 package ai.dqo.execution.rules;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.timeseries.TimePeriodGradient;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
-import ai.dqo.utils.exceptions.DqoRuntimeException;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.InstantColumn;
@@ -79,8 +78,9 @@ public class HistoricDataPointTimeSeriesCollector {
         }
 
         LocalDateTime startTimePeriod = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(readoutTimestamp, timePeriodsCount, this.gradient);
+        LocalDateTime endTimePeriod = LocalDateTimeTruncateUtility.truncateTimePeriod(readoutTimestamp, this.gradient);
         Selection readoutsSinceStartTime = this.timePeriodIndex.atLeast(startTimePeriod);  // inclusive
-        Selection readoutBeforeReadoutTimestamp = this.timePeriodIndex.lessThan(readoutTimestamp); // exclusive
+        Selection readoutBeforeReadoutTimestamp = this.timePeriodIndex.lessThan(endTimePeriod); // exclusive
         Selection readoutsInRange = readoutsSinceStartTime.and(readoutBeforeReadoutTimestamp);
         int[] rowIndexes = readoutsInRange.toArray();
         Arrays.sort(rowIndexes); // just in case...

@@ -20,7 +20,7 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //import ai.dqo.connectors.ProviderType;
 //import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 //import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-//import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
+//import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 //import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 //import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
 //import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
@@ -423,10 +423,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'FR' AS stream_level_1
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'FR' AS grouping_level_1
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1
-//                        ORDER BY stream_level_1""",
+//                        GROUP BY grouping_level_1
+//                        ORDER BY grouping_level_1""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -442,10 +442,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'IT' AS stream_level_1
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'IT' AS grouping_level_1
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1
-//                        ORDER BY stream_level_1""",
+//                        GROUP BY grouping_level_1
+//                        ORDER BY grouping_level_1""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -460,10 +460,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE' AS stream_level_1
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE' AS grouping_level_1
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1
-//                        ORDER BY stream_level_1""",
+//                        GROUP BY grouping_level_1
+//                        ORDER BY grouping_level_1""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -478,10 +478,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE''s' AS stream_level_1
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE''s' AS grouping_level_1
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1
-//                        ORDER BY stream_level_1""",
+//                        GROUP BY grouping_level_1
+//                        ORDER BY grouping_level_1""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -498,10 +498,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE' AS grouping_level_1, 'PL' AS grouping_level_2
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1, stream_level_2
-//                        ORDER BY stream_level_1, stream_level_2""",
+//                        GROUP BY grouping_level_1, grouping_level_2
+//                        ORDER BY grouping_level_1, grouping_level_2""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -519,10 +519,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2, 'UK' AS stream_level_3
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'DE' AS grouping_level_1, 'PL' AS grouping_level_2, 'UK' AS grouping_level_3
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1, stream_level_2, stream_level_3
-//                        ORDER BY stream_level_1, stream_level_2, stream_level_3""",
+//                        GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
+//                        ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -540,10 +540,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'PL' AS stream_level_2, 'UK' AS stream_level_3
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'PL' AS grouping_level_2, 'UK' AS grouping_level_3
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_2, stream_level_3
-//                        ORDER BY stream_level_2, stream_level_3""",
+//                        GROUP BY grouping_level_2, grouping_level_3
+//                        ORDER BY grouping_level_2, grouping_level_3""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -560,10 +560,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, 'US' AS stream_level_1, 'PL' AS stream_level_2, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
+//                            COUNT(analyzed_table.`id`) AS actual_value, 'US' AS grouping_level_1, 'PL' AS grouping_level_2, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1, stream_level_2, time_period
-//                        ORDER BY stream_level_1, stream_level_2, time_period""",
+//                        GROUP BY grouping_level_1, grouping_level_2, time_period
+//                        ORDER BY grouping_level_1, grouping_level_2, time_period""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }
@@ -580,10 +580,10 @@ package ai.dqo.sensors.bigquery.column.nulls;
 //
 //        Assertions.assertEquals(String.format("""
 //                        SELECT
-//                            COUNT(analyzed_table.`id`) AS actual_value, analyzed_table.`country` AS stream_level_1, 'UK' AS stream_level_2
+//                            COUNT(analyzed_table.`id`) AS actual_value, analyzed_table.`country` AS grouping_level_1, 'UK' AS grouping_level_2
 //                        FROM %s AS analyzed_table
-//                        GROUP BY stream_level_1, stream_level_2
-//                        ORDER BY stream_level_1, stream_level_2""",
+//                        GROUP BY grouping_level_1, grouping_level_2
+//                        ORDER BY grouping_level_1, grouping_level_2""",
 //                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
 //                renderedTemplate);
 //    }

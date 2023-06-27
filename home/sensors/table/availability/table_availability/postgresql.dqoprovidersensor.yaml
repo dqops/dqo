@@ -4,5 +4,6 @@ kind: provider_sensor
 spec:
   type: java_class
   java_class_name: ai.dqo.sensors.table.availability.TableAvailabilitySensorRunner
-  supports_grouping_by_data_stream: false
+  supports_grouping: false
   supports_partitioned_checks: false
+  disable_merging_queries: true

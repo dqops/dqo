@@ -5,12 +5,14 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_check_spec import (
+        ColumnDistinctPercentCheckSpec,
+    )
     from ..models.column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
     from ..models.column_duplicate_percent_check_spec import (
         ColumnDuplicatePercentCheckSpec,
     )
-    from ..models.column_unique_count_check_spec import ColumnUniqueCountCheckSpec
-    from ..models.column_unique_percent_check_spec import ColumnUniquePercentCheckSpec
 
 
 T = TypeVar("T", bound="ColumnUniquenessProfilingChecksSpec")
@@ -20,26 +22,26 @@ T = TypeVar("T", bound="ColumnUniquenessProfilingChecksSpec")
 class ColumnUniquenessProfilingChecksSpec:
     """
     Attributes:
-        unique_count (Union[Unset, ColumnUniqueCountCheckSpec]):
-        unique_percent (Union[Unset, ColumnUniquePercentCheckSpec]):
+        distinct_count (Union[Unset, ColumnDistinctCountCheckSpec]):
+        distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
         duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
         duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
     """
 
-    unique_count: Union[Unset, "ColumnUniqueCountCheckSpec"] = UNSET
-    unique_percent: Union[Unset, "ColumnUniquePercentCheckSpec"] = UNSET
+    distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
+    distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
     duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
     duplicate_percent: Union[Unset, "ColumnDuplicatePercentCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        unique_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.unique_count, Unset):
-            unique_count = self.unique_count.to_dict()
+        distinct_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.distinct_count, Unset):
+            distinct_count = self.distinct_count.to_dict()
 
-        unique_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.unique_percent, Unset):
-            unique_percent = self.unique_percent.to_dict()
+        distinct_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.distinct_percent, Unset):
+            distinct_percent = self.distinct_percent.to_dict()
 
         duplicate_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.duplicate_count, Unset):
@@ -52,10 +54,10 @@ class ColumnUniquenessProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if unique_count is not UNSET:
-            field_dict["unique_count"] = unique_count
-        if unique_percent is not UNSET:
-            field_dict["unique_percent"] = unique_percent
+        if distinct_count is not UNSET:
+            field_dict["distinct_count"] = distinct_count
+        if distinct_percent is not UNSET:
+            field_dict["distinct_percent"] = distinct_percent
         if duplicate_count is not UNSET:
             field_dict["duplicate_count"] = duplicate_count
         if duplicate_percent is not UNSET:
@@ -65,31 +67,35 @@ class ColumnUniquenessProfilingChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_distinct_count_check_spec import (
+            ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_check_spec import (
+            ColumnDistinctPercentCheckSpec,
+        )
         from ..models.column_duplicate_count_check_spec import (
             ColumnDuplicateCountCheckSpec,
         )
         from ..models.column_duplicate_percent_check_spec import (
             ColumnDuplicatePercentCheckSpec,
         )
-        from ..models.column_unique_count_check_spec import ColumnUniqueCountCheckSpec
-        from ..models.column_unique_percent_check_spec import (
-            ColumnUniquePercentCheckSpec,
-        )
 
         d = src_dict.copy()
-        _unique_count = d.pop("unique_count", UNSET)
-        unique_count: Union[Unset, ColumnUniqueCountCheckSpec]
-        if isinstance(_unique_count, Unset):
-            unique_count = UNSET
+        _distinct_count = d.pop("distinct_count", UNSET)
+        distinct_count: Union[Unset, ColumnDistinctCountCheckSpec]
+        if isinstance(_distinct_count, Unset):
+            distinct_count = UNSET
         else:
-            unique_count = ColumnUniqueCountCheckSpec.from_dict(_unique_count)
+            distinct_count = ColumnDistinctCountCheckSpec.from_dict(_distinct_count)
 
-        _unique_percent = d.pop("unique_percent", UNSET)
-        unique_percent: Union[Unset, ColumnUniquePercentCheckSpec]
-        if isinstance(_unique_percent, Unset):
-            unique_percent = UNSET
+        _distinct_percent = d.pop("distinct_percent", UNSET)
+        distinct_percent: Union[Unset, ColumnDistinctPercentCheckSpec]
+        if isinstance(_distinct_percent, Unset):
+            distinct_percent = UNSET
         else:
-            unique_percent = ColumnUniquePercentCheckSpec.from_dict(_unique_percent)
+            distinct_percent = ColumnDistinctPercentCheckSpec.from_dict(
+                _distinct_percent
+            )
 
         _duplicate_count = d.pop("duplicate_count", UNSET)
         duplicate_count: Union[Unset, ColumnDuplicateCountCheckSpec]
@@ -108,8 +114,8 @@ class ColumnUniquenessProfilingChecksSpec:
             )
 
         column_uniqueness_profiling_checks_spec = cls(
-            unique_count=unique_count,
-            unique_percent=unique_percent,
+            distinct_count=distinct_count,
+            distinct_percent=distinct_percent,
             duplicate_count=duplicate_count,
             duplicate_percent=duplicate_percent,
         )

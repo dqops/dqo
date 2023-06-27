@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableDailyRecurring,
-  updateTableDailyRecurring
+  getTableDailyRecurringChecks,
+  updateTableDailyRecurringChecks
 } from '../../redux/actions/table.actions';
 import Button from '../../components/Button';
 import { CheckResultOverviewApi } from "../../services/apiClient";
@@ -19,7 +19,7 @@ import TableNavigation from "../../components/TableNavigation";
 const TableDailyChecksView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const { dailyRecurring, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
@@ -36,14 +36,14 @@ const TableDailyChecksView = () => {
   }, [dailyRecurring]);
 
   useEffect(() => {
-    dispatch(getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    dispatch(getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateTableDailyRecurring(
+      updateTableDailyRecurringChecks(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -53,12 +53,12 @@ const TableDailyChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+      getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };
 
-  const onChangeUI = (ui: UICheckContainerModel) => {
+  const onChangeUI = (ui: CheckContainerModel) => {
     setUpdatedChecksUI(ui);
     setIsUpdated(true);
   };
@@ -83,7 +83,7 @@ const TableDailyChecksView = () => {
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}
-          className="max-h-checks-1"
+          className="max-h-checks-2"
           checksUI={updatedChecksUI}
           onChange={onChangeUI}
           checkResultsOverview={checkResultsOverview}

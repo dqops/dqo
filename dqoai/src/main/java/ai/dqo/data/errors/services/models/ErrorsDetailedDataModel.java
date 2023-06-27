@@ -24,7 +24,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Error detailed statuses. Returned in the context of a single data-stream, with a supplied list of other data-streams.
+ * Error detailed statuses. Returned in the context of a single data- group, with a supplied list of other data groups.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -41,10 +41,10 @@ public class ErrorsDetailedDataModel {
     @JsonPropertyDescription("Check category name.")
     private String checkCategory;
 
-    @JsonPropertyDescription("Data stream list.")
-    private List<String> dataStreamNames;
-    @JsonPropertyDescription("Selected data-stream.")
-    private String dataStream;
+    @JsonPropertyDescription("Data groups list.")
+    private List<String> dataGroupsNames;
+    @JsonPropertyDescription("Selected data group.")
+    private String dataGroup;
 
     @JsonPropertyDescription("Single error statuses")
     private List<ErrorDetailedSingleModel> singleErrors;

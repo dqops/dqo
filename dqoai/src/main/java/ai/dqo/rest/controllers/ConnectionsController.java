@@ -19,7 +19,7 @@ import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataGroupingConfigurationSpec;
 import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -33,7 +33,7 @@ import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.CheckService;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.models.AllChecksPatchParameters;
 import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import ai.dqo.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
@@ -254,19 +254,19 @@ public class ConnectionsController {
     }
 
     /**
-     * Retrieves the default data streams configuration of a connection for a requested connection identified by the connection name.
+     * Retrieves the default data grouping configuration of a connection for a requested connection identified by the connection name.
      * @param connectionName Connection name.
-     * @return Connection's default data streams configuration.
+     * @return Connection's default data grouping configuration.
      */
-    @GetMapping(value = "/{connectionName}/defaultdatastreamsmapping", produces = "application/json")
-    @ApiOperation(value = "getConnectionDefaultDataStreamsMapping", notes = "Return the default data streams mapping for a connection", response = DataStreamMappingSpec.class)
+    @GetMapping(value = "/{connectionName}/defaultgroupingconfiguration", produces = "application/json")
+    @ApiOperation(value = "getConnectionDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a connection", response = DataGroupingConfigurationSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's default data streams mapping returned", response = DataStreamMappingSpec.class),
+            @ApiResponse(code = 200, message = "Connection's default data grouping configuration returned", response = DataGroupingConfigurationSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DataStreamMappingSpec>> getConnectionDefaultDataStreamsMapping(
+    public ResponseEntity<Mono<DataGroupingConfigurationSpec>> getConnectionDefaultGroupingConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -278,9 +278,9 @@ public class ConnectionsController {
         }
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        DataStreamMappingSpec dataStreamsSpec = connectionSpec.getDefaultDataStreamMapping();
+        DataGroupingConfigurationSpec dataGroupingConfiguration = connectionSpec.getDefaultGroupingConfiguration();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.justOrEmpty(dataGroupingConfiguration), HttpStatus.OK); // 200
     }
 
     /**
@@ -659,24 +659,24 @@ public class ConnectionsController {
     }
 
     /**
-     * Updates the default data streams mapping of an existing connection.
+     * Updates the default data grouping configuration of an existing connection.
      * @param connectionName         Connection name.
-     * @param dataStreamsMappingSpec New default data streams mapping for a connection.
+     * @param dataGroupingConfigurationSpec New default data grouping mapping for a connection.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/defaultdatastreamsmapping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionDefaultDataStreamsMapping", notes = "Updates the default data streams mapping of a connection")
+    @PutMapping(value = "/{connectionName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateConnectionDefaultGroupingConfiguration", notes = "Updates the default data grouping connection of a connection")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's default data streams mapping successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's default data grouping configuration successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionDefaultDataStreamsMapping(
+    public ResponseEntity<Mono<?>> updateConnectionDefaultGroupingConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Default data streams mapping to be assigned to a connection")
-                @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
+            @ApiParam("Default data grouping configuration to be assigned to a connection")
+                @RequestBody Optional<DataGroupingConfigurationSpec> dataGroupingConfigurationSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -687,11 +687,11 @@ public class ConnectionsController {
         }
 
         ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (dataStreamsMappingSpec.isPresent()) {
-            existingConnectionSpec.setDefaultDataStreamMapping(dataStreamsMappingSpec.get());
+        if (dataGroupingConfigurationSpec.isPresent()) {
+            existingConnectionSpec.setDefaultGroupingConfiguration(dataGroupingConfigurationSpec.get());
         }
         else {
-            existingConnectionSpec.setDefaultDataStreamMapping(null);
+            existingConnectionSpec.setDefaultGroupingConfiguration(null);
         }
         userHomeContext.flush();
 
@@ -757,7 +757,7 @@ public class ConnectionsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and rules configuration")
-            @RequestBody UIAllChecksPatchParameters updatePatchParameters) {
+            @RequestBody AllChecksPatchParameters updatePatchParameters) {
         if (updatePatchParameters == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
         }

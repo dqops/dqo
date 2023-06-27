@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import {
-  getColumnRecurringChecksUIFilter, setColumnUpdatedRecurringChecksUIFilter,
+  getColumnRecurringChecksModelFilter, setColumnUpdatedRecurringChecksModelFilter,
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
@@ -38,7 +38,7 @@ const ColumnRecurringChecksUIFilterView = () => {
   };
   const onUpdate = async () => {
     setIsUpdating(true);
-    await ColumnApiClient.updateColumnRecurringChecksUI(
+    await ColumnApiClient.updateColumnRecurringChecksModel(
       connectionName,
       schemaName,
       tableName,
@@ -47,19 +47,19 @@ const ColumnRecurringChecksUIFilterView = () => {
       recurringChecksUIFilter
     );
     await dispatch(
-      getColumnRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
+      getColumnRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   useEffect(() => {
     dispatch(
-      getColumnRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+      getColumnRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName]);
 
-  const onChange = (ui: UICheckContainerModel) => {
-    dispatch(setColumnUpdatedRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, ui));
+  const onChange = (ui: CheckContainerModel) => {
+    dispatch(setColumnUpdatedRecurringChecksModelFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

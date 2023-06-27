@@ -74,11 +74,11 @@ const ProvideSensor = ({
       )}
 
       <div className="flex gap-4 text-sm items-center mb-4">
-        <p className="w-60">Supports grouping by a data stream:</p>
+        <p className="w-60">Supports grouping by GROUP BY:</p>
         <Checkbox
-          checked={providerSensor?.providerSensorDefinitionSpec?.supports_grouping_by_data_stream}
+          checked={providerSensor?.providerSensorDefinitionSpec?.supports_grouping}
           onChange={(checked) => handleChange({
-            supports_grouping_by_data_stream: checked
+            supports_grouping: checked
           })}
         />
       </div>
@@ -103,11 +103,13 @@ const ProvideSensor = ({
         />
       </SectionWrapper>
 
+          {providerSensor?.providerSensorDefinitionSpec?.type !== ProviderSensorDefinitionSpecTypeEnum.java_class &&
 
-      <Jinja2Code
-        providerSensor={providerSensor}
-        onChange={handleChangeTemplate}
-      />
+            <Jinja2Code
+            providerSensor={providerSensor}
+            onChange={handleChangeTemplate}
+            />
+          }
     </div>
   );
 };

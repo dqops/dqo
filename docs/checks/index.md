@@ -110,11 +110,20 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#days-since-most-recent-event)|profiling|Calculates the number of days since the most recent event timestamp (freshness)|
-|[daily_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-days-since-most-recent-event)|recurring|Daily  calculating the number of days since the most recent event timestamp (freshness)|
-|[monthly_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-days-since-most-recent-event)|recurring|Monthly recurring calculating the number of days since the most recent event timestamp (freshness)|
-|[daily_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-partition-days-since-most-recent-event)|partitioned|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|
-|[monthly_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-partition-days-since-most-recent-event)|partitioned|Monthly partitioned check calculating the number of days since the most recent event (freshness)|
+|[data_freshness](./table/timeliness/data-freshness/#data-freshness)|profiling|Calculates the number of days since the most recent event timestamp (freshness)|
+|[daily_data_freshness](./table/timeliness/data-freshness/#daily-data-freshness)|recurring|Daily  calculating the number of days since the most recent event timestamp (freshness)|
+|[monthly_data_freshness](./table/timeliness/data-freshness/#monthly-data-freshness)|recurring|Monthly recurring calculating the number of days since the most recent event timestamp (freshness)|
+|[daily_partition_data_freshness](./table/timeliness/data-freshness/#daily-partition-data-freshness)|partitioned|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|
+|[monthly_partition_data_freshness](./table/timeliness/data-freshness/#monthly-partition-data-freshness)|partitioned|Monthly partitioned check calculating the number of days since the most recent event (freshness)|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[data_staleness](./table/timeliness/data-staleness/#data-staleness)|profiling|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
+|[daily_data_staleness](./table/timeliness/data-staleness/#daily-data-staleness)|recurring|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
+|[monthly_data_staleness](./table/timeliness/data-staleness/#monthly-data-staleness)|recurring|Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
+|[daily_partition_data_staleness](./table/timeliness/data-staleness/#daily-partition-data-staleness)|partitioned|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
+|[monthly_partition_data_staleness](./table/timeliness/data-staleness/#monthly-partition-data-staleness)|partitioned|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|
 
 
 | Check name | Check type | Description |
@@ -124,15 +133,6 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[monthly_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-data-ingestion-delay)|recurring|Monthly recurring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 |[daily_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#daily-partition-data-ingestion-delay)|partitioned|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 |[monthly_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-partition-data-ingestion-delay)|partitioned|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#days-since-most-recent-ingestion)|profiling|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[daily_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-days-since-most-recent-ingestion)|recurring|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[monthly_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-days-since-most-recent-ingestion)|recurring|Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[daily_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-partition-days-since-most-recent-ingestion)|partitioned|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[monthly_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-partition-days-since-most-recent-ingestion)|partitioned|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|
 
 
 | Check name | Check type | Description |
@@ -1396,20 +1396,20 @@ Counts the number or percent of duplicate or unique values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[unique_count](./column/uniqueness/unique-count/#unique-count)|profiling|Verifies that the number of unique values in a column does not fall below the minimum accepted count.|
-|[daily_unique_count](./column/uniqueness/unique-count/#daily-unique-count)|recurring|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_unique_count](./column/uniqueness/unique-count/#monthly-unique-count)|recurring|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_unique_count](./column/uniqueness/unique-count/#daily-partition-unique-count)|partitioned|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_unique_count](./column/uniqueness/unique-count/#monthly-partition-unique-count)|partitioned|Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[distinct_count](./column/uniqueness/distinct-count/#distinct-count)|profiling|Verifies that the number of distinct values in a column does not fall below the minimum accepted count.|
+|[daily_distinct_count](./column/uniqueness/distinct-count/#daily-distinct-count)|recurring|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_distinct_count](./column/uniqueness/distinct-count/#monthly-distinct-count)|recurring|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_distinct_count](./column/uniqueness/distinct-count/#daily-partition-distinct-count)|partitioned|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_distinct_count](./column/uniqueness/distinct-count/#monthly-partition-distinct-count)|partitioned|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[unique_percent](./column/uniqueness/unique-percent/#unique-percent)|profiling|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent.|
-|[daily_unique_percent](./column/uniqueness/unique-percent/#daily-unique-percent)|recurring|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_unique_percent](./column/uniqueness/unique-percent/#monthly-unique-percent)|recurring|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_unique_percent](./column/uniqueness/unique-percent/#daily-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_unique_percent](./column/uniqueness/unique-percent/#monthly-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[distinct_percent](./column/uniqueness/distinct-percent/#distinct-percent)|profiling|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.|
+|[daily_distinct_percent](./column/uniqueness/distinct-percent/#daily-distinct-percent)|recurring|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_distinct_percent](./column/uniqueness/distinct-percent/#monthly-distinct-percent)|recurring|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_distinct_percent](./column/uniqueness/distinct-percent/#daily-partition-distinct-percent)|partitioned|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_distinct_percent](./column/uniqueness/distinct-percent/#monthly-partition-distinct-percent)|partitioned|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |

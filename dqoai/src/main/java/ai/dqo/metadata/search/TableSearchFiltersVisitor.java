@@ -120,15 +120,15 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         if (labelsSearcherObject != null) {
             labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
         }
 
-        if (dataStreamSearcherObject != null) {
-            dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
+        if (dataGroupingConfigurationSearcherObject != null) {
+            dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableWrapper.getSpec().getGroupings());
         }
 
         LabelSetSpec overridenLabels = new LabelSetSpec();

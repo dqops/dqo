@@ -33,6 +33,7 @@ class CheckSearchFilters:
         check_category (Union[Unset, str]):
         check_name (Union[Unset, str]):
         sensor_name (Union[Unset, str]):
+        check_configured (Union[Unset, bool]):
         check_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
 
@@ -50,6 +51,7 @@ class CheckSearchFilters:
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
+    check_configured: Union[Unset, bool] = UNSET
     check_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -83,6 +85,7 @@ class CheckSearchFilters:
         check_category = self.check_category
         check_name = self.check_name
         sensor_name = self.sensor_name
+        check_configured = self.check_configured
         check_hierarchy_ids_models: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.check_hierarchy_ids_models, Unset):
             check_hierarchy_ids_models = []
@@ -124,6 +127,8 @@ class CheckSearchFilters:
             field_dict["checkName"] = check_name
         if sensor_name is not UNSET:
             field_dict["sensorName"] = sensor_name
+        if check_configured is not UNSET:
+            field_dict["checkConfigured"] = check_configured
         if check_hierarchy_ids_models is not UNSET:
             field_dict["checkHierarchyIdsModels"] = check_hierarchy_ids_models
 
@@ -177,6 +182,8 @@ class CheckSearchFilters:
 
         sensor_name = d.pop("sensorName", UNSET)
 
+        check_configured = d.pop("checkConfigured", UNSET)
+
         check_hierarchy_ids_models = []
         _check_hierarchy_ids_models = d.pop("checkHierarchyIdsModels", UNSET)
         for check_hierarchy_ids_models_item_data in _check_hierarchy_ids_models or []:
@@ -201,6 +208,7 @@ class CheckSearchFilters:
             check_category=check_category,
             check_name=check_name,
             sensor_name=sensor_name,
+            check_configured=check_configured,
             check_hierarchy_ids_models=check_hierarchy_ids_models,
         )
 

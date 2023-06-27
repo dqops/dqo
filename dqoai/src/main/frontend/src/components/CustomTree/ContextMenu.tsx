@@ -12,6 +12,13 @@ import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from '../../shared/routes';
 import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
+import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
+import {
+  TimeWindowFilterParameters,
+  RunChecksQueueJobParameters
+} from '../../api';
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -29,11 +36,18 @@ const ContextMenu = ({
   openAddSchemaDialog
 }: ContextMenuProps) => {
   const { checkTypes }: { checkTypes: any } = useParams();
-  const { refreshNode, runChecks, collectStatisticsOnTable, deleteStoredData } =
-    useTree();
+  const {
+    refreshNode,
+    runChecks,
+    collectStatisticsOnTable,
+    deleteStoredData,
+    runPartitionedChecks
+  } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const dispatch = useActionDispatch();
 
   const handleRefresh = () => {
     refreshNode(node);
@@ -57,6 +71,7 @@ const ContextMenu = ({
   };
 
   const importMetaData = () => {
+    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label)));
     history.push(
       `${ROUTES.CONNECTION_DETAIL(
         checkTypes,
@@ -64,16 +79,32 @@ const ContextMenu = ({
         'schemas'
       )}?import_schema=true`
     );
-    setOpen(false);
   };
 
   const importTables = () => {
-    setOpen(false);
+    const [connection, schema] = node.id.toString().split('.');
+    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.SCHEMA_LEVEL_VALUE(checkTypes, connection, schema)));
+    history.push(
+      `${ROUTES.SCHEMA_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        'tables'
+      )}`
+    );
   };
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
     e.stopPropagation();
+  };
+
+  const setSetectedRun = (selected: TimeWindowFilterParameters) => {
+    const obj: RunChecksQueueJobParameters = {
+      timeWindowFilter: selected,
+      checkSearchFilters: node.run_checks_job_template
+    };
+    return obj;
   };
 
   return (
@@ -88,12 +119,44 @@ const ContextMenu = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div onClick={(e) => e.stopPropagation()}>
-          {node.level !== TREE_LEVEL.COLUMNS && (
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={handleRunChecks}
-            >
-              Run checks
+          {node.level !== TREE_LEVEL.COLUMNS &&
+            checkTypes !== 'partitioned' && (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={handleRunChecks}
+              >
+                Run checks
+              </div>
+            )}
+          {checkTypes === 'partitioned' &&
+            (node.level === TREE_LEVEL.COLUMN ||
+              node.level === TREE_LEVEL.TABLE) && (
+              <div className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded flex items-center gap-x-14">
+                Run checks
+                <SvgIcon
+                  name="options"
+                  className="w-5 h-5"
+                  onClick={() => setIsClicked(!isClicked)}
+                />
+              </div>
+            )}
+          {isClicked && (
+            <div className="w-80 h-81 bg-white absolute left-50 top-0 rounded border">
+              {Object.entries(RUN_CHECK_TIME_WINDOW_FILTERS).map(
+                ([key, value]) => (
+                  <div
+                    className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                    key={key}
+                    onClick={() =>
+                      value
+                        ? runPartitionedChecks(setSetectedRun(value))
+                        : handleRunChecks()
+                    }
+                  >
+                    {key}
+                  </div>
+                )
+              )}
             </div>
           )}
           {[

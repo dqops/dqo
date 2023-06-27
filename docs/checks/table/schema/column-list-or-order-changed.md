@@ -83,12 +83,21 @@ spec:
       
     ```sql
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Oracle"
       
     ```sql
     ```
@@ -110,6 +119,15 @@ spec:
       
     ```sql
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -119,19 +137,10 @@ spec:
       
     ```sql
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 32-37"
+    ```yaml hl_lines="0-0 32-37"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -142,7 +151,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -178,12 +187,20 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
+        ```sql
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Oracle"
         ```sql
         ```
     **PostgreSQL**  
@@ -202,20 +219,20 @@ spec:
     === "Rendered SQL for Redshift"
         ```sql
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
         ```sql+jinja
         ```
     === "Rendered SQL for SQL Server"
-        ```sql
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        ```
-    === "Rendered SQL for MySQL"
         ```sql
         ```
     
@@ -304,12 +321,21 @@ spec:
       
     ```sql
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Oracle"
       
     ```sql
     ```
@@ -331,6 +357,15 @@ spec:
       
     ```sql
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -340,19 +375,10 @@ spec:
       
     ```sql
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 33-38"
+    ```yaml hl_lines="0-0 33-38"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -363,7 +389,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -400,12 +426,20 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
+        ```sql
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Oracle"
         ```sql
         ```
     **PostgreSQL**  
@@ -424,20 +458,20 @@ spec:
     === "Rendered SQL for Redshift"
         ```sql
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
         ```sql+jinja
         ```
     === "Rendered SQL for SQL Server"
-        ```sql
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        ```
-    === "Rendered SQL for MySQL"
         ```sql
         ```
     
@@ -526,12 +560,21 @@ spec:
       
     ```sql
     ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
+### **MySQL**
+=== "Sensor template for MySQL"
       
     ```sql+jinja
     ```
-=== "Rendered SQL for Snowflake"
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Oracle"
       
     ```sql
     ```
@@ -553,6 +596,15 @@ spec:
       
     ```sql
     ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```sql+jinja
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```sql
+    ```
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
@@ -562,19 +614,10 @@ spec:
       
     ```sql
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-18 33-38"
+    ```yaml hl_lines="0-0 33-38"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -585,7 +628,7 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
+      groupings:
         default:
           level_1:
             source: column_value
@@ -622,12 +665,20 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         ```
-    **Snowflake**  
+    **MySQL**  
       
-    === "Sensor template for Snowflake"
+    === "Sensor template for MySQL"
         ```sql+jinja
         ```
-    === "Rendered SQL for Snowflake"
+    === "Rendered SQL for MySQL"
+        ```sql
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Oracle"
         ```sql
         ```
     **PostgreSQL**  
@@ -646,20 +697,20 @@ spec:
     === "Rendered SQL for Redshift"
         ```sql
         ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```sql+jinja
+        ```
+    === "Rendered SQL for Snowflake"
+        ```sql
+        ```
     **SQL Server**  
       
     === "Sensor template for SQL Server"
         ```sql+jinja
         ```
     === "Rendered SQL for SQL Server"
-        ```sql
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        ```
-    === "Rendered SQL for MySQL"
         ```sql
         ```
     

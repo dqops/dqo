@@ -21,7 +21,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     private String checkName;
     private String checkType;
     private String sensorName;
-    private String dataStreamName;
+    private String dataGroupTag;
     private String qualityDimension;
     private String timeGradient;
 
