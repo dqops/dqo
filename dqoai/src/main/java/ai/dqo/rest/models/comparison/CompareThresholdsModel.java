@@ -39,23 +39,32 @@ import lombok.Data;
         "thresholds as a percentage of difference between the actual value and the expected value from the reference table.")
 @Data
 public class CompareThresholdsModel {
-    @JsonPropertyDescription("Enables raising a warning severity data quality issue when the difference between the measure on the compared table and the reference table is above the warning level threshold (the percentage difference).")
-    private boolean enableWarning = true;
-
     @JsonPropertyDescription("The percentage difference between the measure value on the compared table and the reference table that raises a warning severity data quality issue when the difference is bigger.")
-    private double warningDifferencePercent = 0.0;
-
-    @JsonPropertyDescription("Enables raising an error severity data quality issue when the difference between the measure on the compared table and the reference table is above the error level threshold (the percentage difference).")
-    private boolean enableError = true;
+    private Double warningDifferencePercent;
 
     @JsonPropertyDescription("The percentage difference between the measure value on the compared table and the reference table that raises an error severity data quality issue when the difference is bigger.")
-    private double errorDifferencePercent = 1.0;
-
-    @JsonPropertyDescription("Enables raising a fatal severity data quality issue when the difference between the measure on the compared table and the reference table is above the fatal level threshold (the percentage difference).")
-    private boolean enableFatal = true;
+    private Double errorDifferencePercent;
 
     @JsonPropertyDescription("The percentage difference between the measure value on the compared table and the reference table that raises a fatal severity data quality issue when the difference is bigger.")
-    private double fatalDifferencePercent = 5.0;
+    private Double fatalDifferencePercent;
+
+    /**
+     * Default constructor.
+     */
+    public CompareThresholdsModel() {
+    }
+
+    /**
+     * Creates a compare threshold with given threshold values.
+     * @param warningDifferencePercent Warning issue threshold.
+     * @param errorDifferencePercent Error issue threshold.
+     * @param fatalDifferencePercent Fatal issue threshold.
+     */
+    public CompareThresholdsModel(Double warningDifferencePercent, Double errorDifferencePercent, Double fatalDifferencePercent) {
+        this.warningDifferencePercent = warningDifferencePercent;
+        this.errorDifferencePercent = errorDifferencePercent;
+        this.fatalDifferencePercent = fatalDifferencePercent;
+    }
 
     /**
      * Creates a compare threshold object from the comparison check.
@@ -70,19 +79,16 @@ public class CompareThresholdsModel {
         CompareThresholdsModel thresholdsModel = new CompareThresholdsModel();
 
         MaxDiffPercentRule0ParametersSpec warning = comparisonCheckRules.getWarning();
-        thresholdsModel.enableWarning = warning != null;
         if (warning != null) {
             thresholdsModel.warningDifferencePercent = warning.getMaxDiffPercent();
         }
 
         MaxDiffPercentRule1ParametersSpec error = comparisonCheckRules.getError();
-        thresholdsModel.enableError = error != null;
         if (error != null) {
             thresholdsModel.errorDifferencePercent = error.getMaxDiffPercent();
         }
 
         MaxDiffPercentRule5ParametersSpec fatal = comparisonCheckRules.getFatal();
-        thresholdsModel.enableFatal = fatal != null;
         if (fatal != null) {
             thresholdsModel.fatalDifferencePercent = fatal.getMaxDiffPercent();
         }
@@ -91,13 +97,21 @@ public class CompareThresholdsModel {
     }
 
     /**
+     * Creates a default compare threshold, using the default values.
+     * @return Default compare threshold.
+     */
+    public static CompareThresholdsModel createDefaultCompareThreshold() {
+        return new CompareThresholdsModel(0.0, 1.0, 5.0);
+    }
+
+    /**
      * Copies the configuration of comparison difference thresholds to the comparison rules, creating or removing rules that are enabled or disabled in the threshold model.
      * @param targetComparisonCheckSpec Target comparison check specification to alter the rules.
      */
     public void copyToComparisonCheckSpec(ComparisonCheckRules targetComparisonCheckSpec) {
-        targetComparisonCheckSpec.setWarning(this.enableWarning ? new MaxDiffPercentRule0ParametersSpec(this.warningDifferencePercent) : null);
-        targetComparisonCheckSpec.setError(this.enableError ? new MaxDiffPercentRule1ParametersSpec(this.errorDifferencePercent) : null);
-        targetComparisonCheckSpec.setFatal(this.enableFatal ? new MaxDiffPercentRule5ParametersSpec(this.fatalDifferencePercent) : null);
+        targetComparisonCheckSpec.setWarning(this.warningDifferencePercent != null ? new MaxDiffPercentRule0ParametersSpec(this.warningDifferencePercent) : null);
+        targetComparisonCheckSpec.setError(this.errorDifferencePercent != null ? new MaxDiffPercentRule1ParametersSpec(this.errorDifferencePercent) : null);
+        targetComparisonCheckSpec.setFatal(this.fatalDifferencePercent != null ? new MaxDiffPercentRule5ParametersSpec(this.fatalDifferencePercent) : null);
     }
 
     /**
@@ -106,6 +120,6 @@ public class CompareThresholdsModel {
      */
     @JsonIgnore
     public boolean isAnyThresholdRuleEnabled() {
-        return this.enableWarning || this.enableError || this.enableFatal;
+        return this.warningDifferencePercent != null || this.errorDifferencePercent != null || this.fatalDifferencePercent != null;
     }
 }

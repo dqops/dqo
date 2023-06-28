@@ -103,7 +103,7 @@ public class TableComparisonModel {
      * The template of the compare thresholds that should be applied to all comparisons when the comparison is enabled.
      */
     @JsonPropertyDescription("The template of the compare thresholds that should be applied to all comparisons when the comparison is enabled.")
-    private CompareThresholdsModel defaultCompareThresholds = new CompareThresholdsModel();
+    private CompareThresholdsModel defaultCompareThresholds = CompareThresholdsModel.createDefaultCompareThreshold();
 
     /**
      * The row count comparison configuration.

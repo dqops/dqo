@@ -204,6 +204,7 @@ public class ColumnComparisonModel {
         }
 
         AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks = columnCheckComparisonsMap.getOrAdd(tableComparisonName);
+        columnCheckComparisonChecks.setReferenceColumn(this.referenceColumnName);
 
         if (this.compareMin != null) {
             columnCheckComparisonChecks.setMinMatch(new ColumnComparisonMinMatchCheckSpec());
