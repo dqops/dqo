@@ -59,7 +59,7 @@ public class TableComparisonModelTests extends BaseTest {
         this.referenceTableSpec.setReferenceTableSchemaName("refsch");
         this.referenceTableSpec.setReferenceTableName("reftab");
         this.comparedTableSpec.getReferenceTables().put("reftable", referenceTableSpec);
-        this.sut.setComparisonName("reftable");
+        this.sut.setReferenceTableConfigurationName("reftable");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TableComparisonModelTests extends BaseTest {
         TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
         Assertions.assertEquals(2, sut.getColumns().size());
         Assertions.assertNotNull(sut.getDefaultCompareThresholds());
-        Assertions.assertEquals("reftable", sut.getComparisonName());
+        Assertions.assertEquals("reftable", sut.getReferenceTableConfigurationName());
         Assertions.assertNull(sut.getCompareRowCount());
     }
 

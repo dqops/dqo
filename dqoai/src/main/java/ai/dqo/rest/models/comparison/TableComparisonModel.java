@@ -49,10 +49,10 @@ import java.util.List;
 @Data
 public class TableComparisonModel {
     /**
-     * The name of the table comparison that is defined in the 'comparisons' node on the table specification.
+     * The name of the reference table configuration that is defined in the 'reference_tables' node on the table specification.
      */
-    @JsonPropertyDescription("The name of the table comparison that is defined in the 'comparisons' node on the table specification.")
-    private String comparisonName;
+    @JsonPropertyDescription("The name of the reference table configuration that is defined in the 'reference_tables' node on the table specification.")
+    private String referenceTableConfigurationName;
 
     /**
      * Compared connection name - the connection name to the data source that is compared (verified).
@@ -140,7 +140,7 @@ public class TableComparisonModel {
             throw new DqoRuntimeException("Table comparison '" + tableComparisonName + "' not found in the table " + comparedTableHierarchyId.toString());
         }
 
-        tableComparisonModel.setComparisonName(comparisonSpec.getComparisonName());
+        tableComparisonModel.setReferenceTableConfigurationName(comparisonSpec.getComparisonName());
         tableComparisonModel.comparedConnection = comparedTableHierarchyId.getConnectionName();
         tableComparisonModel.comparedTable = comparedTableHierarchyId.getPhysicalTableName();
         tableComparisonModel.referenceConnection = comparisonSpec.getReferenceTableConnectionName();

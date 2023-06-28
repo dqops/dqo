@@ -171,7 +171,7 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String newName = referenceTableModel.getComparisonName();
+        String newName = referenceTableModel.getReferenceTableConfigurationName();
         if (Strings.isNullOrEmpty(newName)) {
             newName = referenceTableName;
         }
@@ -220,7 +220,7 @@ public class TableComparisonsController {
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
                 referenceTableModel == null               ||
-                Strings.isNullOrEmpty(referenceTableModel.getComparisonName())) {
+                Strings.isNullOrEmpty(referenceTableModel.getReferenceTableConfigurationName())) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -230,13 +230,13 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        if (tableSpec.getReferenceTables().containsKey(referenceTableModel.getComparisonName())) {
+        if (tableSpec.getReferenceTables().containsKey(referenceTableModel.getReferenceTableConfigurationName())) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table comparison configuration with this name already exists
         }
 
         ReferenceTableSpec referenceTableSpec = new ReferenceTableSpec();
         referenceTableModel.copyToReferenceTableComparisonSpec(referenceTableSpec);
-        tableSpec.getReferenceTables().put(referenceTableModel.getComparisonName(), referenceTableSpec);
+        tableSpec.getReferenceTables().put(referenceTableModel.getReferenceTableConfigurationName(), referenceTableSpec);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
