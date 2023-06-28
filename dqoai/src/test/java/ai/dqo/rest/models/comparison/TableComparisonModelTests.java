@@ -41,7 +41,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableComparisonModelTests extends BaseTest {
     private TableComparisonModel sut;
     private TableSpec comparedTableSpec;
-    private ReferenceTableSpec referenceTableSpec;
+    private ReferenceTableSpec referenceTableConfigSpec;
+    private TableSpec referencedTableSpec;
 
     @BeforeEach
     void setUp() {
@@ -49,22 +50,25 @@ public class TableComparisonModelTests extends BaseTest {
         this.comparedTableSpec = new TableSpec();
         this.comparedTableSpec.setHierarchyId(HierarchyId.makeHierarchyIdForTable("conn1",
                 new PhysicalTableName("schema1", "comp_table")));
+        this.referencedTableSpec = new TableSpec();
+        this.referencedTableSpec.setHierarchyId(HierarchyId.makeHierarchyIdForTable("refconn",
+                new PhysicalTableName("refsch", "reftab")));
         this.comparedTableSpec.getColumns().put("col1", new ColumnSpec());
         this.comparedTableSpec.getColumns().put("col2", new ColumnSpec());
         this.comparedTableSpec.getGroupings().put("mygrouping", new DataGroupingConfigurationSpec());
-        this.referenceTableSpec = new ReferenceTableSpec();
-        this.referenceTableSpec.setComparedTableGroupingName("mygrouping");
-        this.referenceTableSpec.setReferenceTableGroupingName("refgrouping");
-        this.referenceTableSpec.setReferenceTableConnectionName("refconn");
-        this.referenceTableSpec.setReferenceTableSchemaName("refsch");
-        this.referenceTableSpec.setReferenceTableName("reftab");
-        this.comparedTableSpec.getReferenceTables().put("reftable", referenceTableSpec);
+        this.referenceTableConfigSpec = new ReferenceTableSpec();
+        this.referenceTableConfigSpec.setComparedTableGroupingName("mygrouping");
+        this.referenceTableConfigSpec.setReferenceTableGroupingName("refgrouping");
+        this.referenceTableConfigSpec.setReferenceTableConnectionName("refconn");
+        this.referenceTableConfigSpec.setReferenceTableSchemaName("refsch");
+        this.referenceTableConfigSpec.setReferenceTableName("reftab");
+        this.comparedTableSpec.getReferenceTables().put("reftable", referenceTableConfigSpec);
         this.sut.setReferenceTableConfigurationName("reftable");
     }
 
     @Test
     void fromTableSpec_whenTableGivenAndProfilingChecksEmpty_thenCreatesModel() {
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec,"reftable", CheckType.PROFILING, null);
         Assertions.assertEquals(2, sut.getColumns().size());
         Assertions.assertNotNull(sut.getDefaultCompareThresholds());
         Assertions.assertEquals("reftable", sut.getReferenceTableConfigurationName());
@@ -81,11 +85,55 @@ public class TableComparisonModelTests extends BaseTest {
         rowCountMatch.setError(new MaxDiffPercentRule1ParametersSpec(3.5));
         rowCountMatch.setFatal(new MaxDiffPercentRule5ParametersSpec(4.5));
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
         Assertions.assertNotNull(sut.getCompareRowCount());
         Assertions.assertEquals(2.5, sut.getCompareRowCount().getWarningDifferencePercent());
         Assertions.assertEquals(3.5, sut.getCompareRowCount().getErrorDifferencePercent());
         Assertions.assertEquals(4.5, sut.getCompareRowCount().getFatalDifferencePercent());
+    }
+
+    @Test
+    void fromTableSpec_whenMatchingColumnInReferencedTableNotFound_thenReferenceColumnNameNull() {
+        this.referencedTableSpec.getColumns().put("somethingelse", new ColumnSpec());
+
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+
+        ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
+        Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
+        Assertions.assertEquals(null, columnComparisonModel.getReferenceColumnName());
+    }
+
+    @Test
+    void fromTableSpec_whenColumnInReferencedTableFoundWithFullCase_thenReturnsItAsSuggestedMatch() {
+        this.referencedTableSpec.getColumns().put("col1", new ColumnSpec());
+
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+
+        ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
+        Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
+        Assertions.assertEquals("col1", columnComparisonModel.getReferenceColumnName());
+    }
+
+    @Test
+    void fromTableSpec_whenColumnInReferencedTableFoundButDifferentCase_thenReturnsItAsSuggestedMatch() {
+        this.referencedTableSpec.getColumns().put("COL1", new ColumnSpec());
+
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+
+        ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
+        Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
+        Assertions.assertEquals("COL1", columnComparisonModel.getReferenceColumnName());
+    }
+
+    @Test
+    void fromTableSpec_whenColumnInReferencedTableNotFoundExactlyButSimilarColumnFound_thenReturnsItAsSuggestedMatch() {
+        this.referencedTableSpec.getColumns().put("COL1_fk", new ColumnSpec());
+
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+
+        ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
+        Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
+        Assertions.assertEquals("COL1_fk", columnComparisonModel.getReferenceColumnName());
     }
 
     @Test
@@ -122,7 +170,7 @@ public class TableComparisonModelTests extends BaseTest {
         }});
         columnSpec.getProfilingChecks().getComparisons().put("reftable", columnComparison);
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
         ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
         Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
         Assertions.assertEquals("refcol1", columnComparisonModel.getReferenceColumnName());

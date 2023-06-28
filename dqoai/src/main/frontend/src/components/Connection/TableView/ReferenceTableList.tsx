@@ -28,7 +28,7 @@ const ReferenceTableList = ({ references, setIsEditing }: ReferenceTableListProp
         {references.map((reference, index) => (
           <tr key={index}>
             <td className="pr-2 py-2">
-              {reference.comparison_name}
+              {reference.reference_table_configuration_name}
             </td>
             <td className="px-2 py-2">
               {reference.reference_connection}

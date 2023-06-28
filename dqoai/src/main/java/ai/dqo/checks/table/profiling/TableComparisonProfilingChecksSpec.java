@@ -16,6 +16,8 @@
 package ai.dqo.checks.table.profiling;
 
 import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpec;
+import ai.dqo.checks.comparison.ComparisonCheckRules;
+import ai.dqo.checks.comparison.TableCompareCheckType;
 import ai.dqo.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -47,7 +49,6 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
      * Returns the row count match check.
      * @return Row count match check.
      */
-    @Override
     public TableComparisonRowCountMatchCheckSpec getRowCountMatch() {
         return rowCountMatch;
     }
@@ -56,11 +57,48 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
      * Sets a new row count match check.
      * @param rowCountMatch Row count match check.
      */
-    @Override
     public void setRowCountMatch(TableComparisonRowCountMatchCheckSpec rowCountMatch) {
         this.setDirtyIf(!Objects.equals(this.rowCountMatch, rowCountMatch));
         this.rowCountMatch = rowCountMatch;
         propagateHierarchyIdToField(rowCountMatch, "row_count_match");
+    }
+
+    /**
+     * Returns the check specification for the given check type or null when it is not present and <code>createWhenMissing</code> is false.
+     *
+     * @param tableCompareCheckType Compare check type.
+     * @param createWhenMissing     When true and the check specification is not present, it is created, added to the check compare container and returned.
+     * @return Check specification or null (when <code>createWhenMissing</code> is false).
+     */
+    @Override
+    public ComparisonCheckRules getCheckSpec(TableCompareCheckType tableCompareCheckType, boolean createWhenMissing) {
+        switch (tableCompareCheckType) {
+            case row_count_match: {
+                if (this.rowCountMatch == null) {
+                    if (createWhenMissing) {
+                        this.setRowCountMatch(new TableComparisonRowCountMatchCheckSpec());
+                    }
+                }
+
+                return this.rowCountMatch;
+            }
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Removes the check specification for the given check.
+     *
+     * @param tableCompareCheckType Check type.
+     */
+    @Override
+    public void removeCheckSpec(TableCompareCheckType tableCompareCheckType) {
+        switch (tableCompareCheckType) {
+            case row_count_match:
+                this.setRowCountMatch(null);
+                break;
+        }
     }
 
     /**

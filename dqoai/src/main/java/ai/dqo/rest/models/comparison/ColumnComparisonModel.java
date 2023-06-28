@@ -128,13 +128,13 @@ public class ColumnComparisonModel {
     /**
      * Creates a column comparison model, copying the configuration of all comparison checks on the column level.
      * @param columnSpec Source column specification.
-     * @param tableComparisonName The table comparison name.
+     * @param referenceTableConfigurationName The table comparison name.
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param checkTimeScale Check time scale for recurring and partitioned checks.
      * @return Column comparison model.
      */
     public static ColumnComparisonModel fromColumnSpec(ColumnSpec columnSpec,
-                                                       String tableComparisonName,
+                                                       String referenceTableConfigurationName,
                                                        CheckType checkType,
                                                        CheckTimeScale checkTimeScale) {
         ColumnComparisonModel columnComparisonModel = new ColumnComparisonModel();
@@ -145,30 +145,30 @@ public class ColumnComparisonModel {
         columnComparisonModel.setComparedColumnName(columnSpec.getColumnName());
 
         AbstractRootChecksContainerSpec columnCheckRootContainer = columnSpec.getColumnCheckRootContainer(checkType, checkTimeScale, false);
-        if (columnCheckRootContainer != null && columnCheckRootContainer instanceof CheckCategoriesColumnComparisonMapParent) {
+        if (columnCheckRootContainer instanceof CheckCategoriesColumnComparisonMapParent) {
             CheckCategoriesColumnComparisonMapParent columnComparisonMapParent = (CheckCategoriesColumnComparisonMapParent)columnCheckRootContainer;
             AbstractColumnComparisonCheckCategorySpecMap<? extends AbstractColumnComparisonCheckCategorySpec> columnCheckComparisonsMap = columnComparisonMapParent.getComparisons();
-            AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks = columnCheckComparisonsMap.get(tableComparisonName);
+            AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks = columnCheckComparisonsMap.get(referenceTableConfigurationName);
 
             if (columnCheckComparisonChecks != null) {
                 columnComparisonModel.setReferenceColumnName(columnCheckComparisonChecks.getReferenceColumn());
 
-                ColumnComparisonMinMatchCheckSpec minMatch = columnCheckComparisonChecks.getMinMatch();
+                ComparisonCheckRules minMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.min_match, false);
                 columnComparisonModel.setCompareMin(CompareThresholdsModel.fromComparisonCheckSpec(minMatch));
 
-                ColumnComparisonMaxMatchCheckSpec maxMatch = columnCheckComparisonChecks.getMaxMatch();
+                ComparisonCheckRules maxMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.max_match, false);
                 columnComparisonModel.setCompareMax(CompareThresholdsModel.fromComparisonCheckSpec(maxMatch));
 
-                ColumnComparisonSumMatchCheckSpec sumMatch = columnCheckComparisonChecks.getSumMatch();
+                ComparisonCheckRules sumMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.sum_match, false);
                 columnComparisonModel.setCompareSum(CompareThresholdsModel.fromComparisonCheckSpec(sumMatch));
 
-                ColumnComparisonMeanMatchCheckSpec meanMatch = columnCheckComparisonChecks.getMeanMatch();
+                ComparisonCheckRules meanMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.mean_match, false);
                 columnComparisonModel.setCompareMean(CompareThresholdsModel.fromComparisonCheckSpec(meanMatch));
 
-                ColumnComparisonNullCountMatchCheckSpec nullCountMatch = columnCheckComparisonChecks.getNullCountMatch();
+                ComparisonCheckRules nullCountMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.null_count_match, false);
                 columnComparisonModel.setCompareNullCount(CompareThresholdsModel.fromComparisonCheckSpec(nullCountMatch));
 
-                ColumnComparisonNotNullCountMatchCheckSpec notNullCountMatch = columnCheckComparisonChecks.getNotNullCountMatch();
+                ComparisonCheckRules notNullCountMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.not_null_count_match, false);
                 columnComparisonModel.setCompareNotNullCount(CompareThresholdsModel.fromComparisonCheckSpec(notNullCountMatch));
             }
         }
@@ -179,12 +179,12 @@ public class ColumnComparisonModel {
     /**
      * Copies the configuration of comparisons to column level checks at the given column.
      * @param targetColumnSpec Target column specification.
-     * @param tableComparisonName Table comparison name.
+     * @param referenceTableConfigurationName Table comparison name.
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param checkTimeScale Optional time scale for recurring and partitioned checks.
      */
     public void copyToColumnSpec(ColumnSpec targetColumnSpec,
-                                 String tableComparisonName,
+                                 String referenceTableConfigurationName,
                                  CheckType checkType,
                                  CheckTimeScale checkTimeScale) {
         AbstractRootChecksContainerSpec columnCheckRootContainer = targetColumnSpec.getColumnCheckRootContainer(
@@ -199,53 +199,53 @@ public class ColumnComparisonModel {
 
         if (Strings.isNullOrEmpty(this.referenceColumnName)) {
             // comparison is disabled and should be removed, because there is no reference column, so the model was send to UI and returned back only to show it
-            columnCheckComparisonsMap.remove(tableComparisonName);
+            columnCheckComparisonsMap.remove(referenceTableConfigurationName);
             return;
         }
 
-        AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks = columnCheckComparisonsMap.getOrAdd(tableComparisonName);
+        AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks = columnCheckComparisonsMap.getOrAdd(referenceTableConfigurationName);
         columnCheckComparisonChecks.setReferenceColumn(this.referenceColumnName);
 
         if (this.compareMin != null) {
-            columnCheckComparisonChecks.setMinMatch(new ColumnComparisonMinMatchCheckSpec());
-            this.compareMin.copyToComparisonCheckSpec(columnCheckComparisonChecks.getMinMatch());
+            ComparisonCheckRules minMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.min_match, true);
+            this.compareMin.copyToComparisonCheckSpec(minMatch);
         } else {
-            columnCheckComparisonChecks.setMinMatch(null);
+            columnCheckComparisonChecks.removeCheckSpec(ColumnCompareCheckType.min_match);
         }
 
         if (this.compareMax != null) {
-            columnCheckComparisonChecks.setMaxMatch(new ColumnComparisonMaxMatchCheckSpec());
-            this.compareMax.copyToComparisonCheckSpec(columnCheckComparisonChecks.getMaxMatch());
+            ComparisonCheckRules maxMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.max_match, true);
+            this.compareMax.copyToComparisonCheckSpec(maxMatch);
         } else {
-            columnCheckComparisonChecks.setMaxMatch(null);
+            columnCheckComparisonChecks.removeCheckSpec(ColumnCompareCheckType.max_match);
         }
 
         if (this.compareSum != null) {
-            columnCheckComparisonChecks.setSumMatch(new ColumnComparisonSumMatchCheckSpec());
-            this.compareSum.copyToComparisonCheckSpec(columnCheckComparisonChecks.getSumMatch());
+            ComparisonCheckRules sumMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.sum_match, true);
+            this.compareSum.copyToComparisonCheckSpec(sumMatch);
         } else {
-            columnCheckComparisonChecks.setSumMatch(null);
+            columnCheckComparisonChecks.removeCheckSpec(ColumnCompareCheckType.sum_match);
         }
 
         if (this.compareMean != null) {
-            columnCheckComparisonChecks.setMeanMatch(new ColumnComparisonMeanMatchCheckSpec());
-            this.compareMean.copyToComparisonCheckSpec(columnCheckComparisonChecks.getMeanMatch());
+            ComparisonCheckRules meanMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.mean_match, true);
+            this.compareMean.copyToComparisonCheckSpec(meanMatch);
         } else {
-            columnCheckComparisonChecks.setMeanMatch(null);
+            columnCheckComparisonChecks.removeCheckSpec(ColumnCompareCheckType.mean_match);
         }
 
         if (this.compareNullCount != null) {
-            columnCheckComparisonChecks.setNullCountMatch(new ColumnComparisonNullCountMatchCheckSpec());
-            this.compareNullCount.copyToComparisonCheckSpec(columnCheckComparisonChecks.getNullCountMatch());
+            ComparisonCheckRules nullCountMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.null_count_match, true);
+            this.compareNullCount.copyToComparisonCheckSpec(nullCountMatch);
         } else {
-            columnCheckComparisonChecks.setNullCountMatch(null);
+            columnCheckComparisonChecks.removeCheckSpec(ColumnCompareCheckType.null_count_match);
         }
 
         if (this.compareNotNullCount != null) {
-            columnCheckComparisonChecks.setNotNullCountMatch(new ColumnComparisonNotNullCountMatchCheckSpec());
-            this.compareNotNullCount.copyToComparisonCheckSpec(columnCheckComparisonChecks.getNotNullCountMatch());
+            ComparisonCheckRules notNullCountMatch = columnCheckComparisonChecks.getCheckSpec(ColumnCompareCheckType.not_null_count_match, true);
+            this.compareNotNullCount.copyToComparisonCheckSpec(notNullCountMatch);
         } else {
-            columnCheckComparisonChecks.setNotNullCountMatch(null);
+            columnCheckComparisonChecks.removeCheckSpec(ColumnCompareCheckType.not_null_count_match);
         }
     }
 }

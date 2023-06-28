@@ -10,7 +10,7 @@ const TableReferences = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [references, setReferences] = useState<ReferenceTableModel[]>([
     {
-      comparison_name: 'reference_tab_1',
+      reference_table_configuration_name: 'reference_tab_1',
       reference_connection: 'conn1',
       reference_table:  {
         schema_name: 'schema',

@@ -18,9 +18,7 @@ package ai.dqo.rest.models.comparison;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpec;
-import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpecMap;
-import ai.dqo.checks.comparison.CheckCategoriesTableComparisonMapParent;
+import ai.dqo.checks.comparison.*;
 import ai.dqo.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import ai.dqo.metadata.comparisons.ReferenceTableSpec;
 import ai.dqo.metadata.id.HierarchyId;
@@ -119,25 +117,27 @@ public class TableComparisonModel {
 
     /**
      * Creates a table comparison model, copying the configuration of all comparison checks on the table level and on the column level.
-     * @param tableSpec Source table specification.
-     * @param tableComparisonName The table comparison name.
+     * @param comparedTableSpec Source table specification (the compared table).
+     * @param referenceTableSpec Reference table specification.
+     * @param referenceTableConfigurationName The table comparison name (the reference table configuration name).
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param checkTimeScale Check time scale for recurring and partitioned checks.
      * @return Table comparison mode.
      */
-    public static TableComparisonModel fromTableSpec(TableSpec tableSpec,
-                                                     String tableComparisonName,
+    public static TableComparisonModel fromTableSpec(TableSpec comparedTableSpec,
+                                                     TableSpec referenceTableSpec,
+                                                     String referenceTableConfigurationName,
                                                      CheckType checkType,
                                                      CheckTimeScale checkTimeScale) {
         TableComparisonModel tableComparisonModel = new TableComparisonModel();
-        HierarchyId comparedTableHierarchyId = tableSpec.getHierarchyId();
+        HierarchyId comparedTableHierarchyId = comparedTableSpec.getHierarchyId();
         if (comparedTableHierarchyId == null) {
             throw new DqoRuntimeException("Cannot map a detached table, because the connection and table name is unknown");
         }
 
-        ReferenceTableSpec comparisonSpec = tableSpec.getReferenceTables().get(tableComparisonName);
+        ReferenceTableSpec comparisonSpec = comparedTableSpec.getReferenceTables().get(referenceTableConfigurationName);
         if (comparisonSpec == null) {
-            throw new DqoRuntimeException("Table comparison '" + tableComparisonName + "' not found in the table " + comparedTableHierarchyId.toString());
+            throw new DqoRuntimeException("Table comparison '" + referenceTableConfigurationName + "' not found in the table " + comparedTableHierarchyId.toString());
         }
 
         tableComparisonModel.setReferenceTableConfigurationName(comparisonSpec.getComparisonName());
@@ -148,23 +148,32 @@ public class TableComparisonModel {
         tableComparisonModel.comparedTableGroupingName = comparisonSpec.getComparedTableGroupingName();
         tableComparisonModel.referenceTableGroupingName = comparisonSpec.getReferenceTableGroupingName();
 
-        AbstractRootChecksContainerSpec tableCheckRootContainer = tableSpec.getTableCheckRootContainer(
+        AbstractRootChecksContainerSpec tableCheckRootContainer = comparedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false);
 
         if (tableCheckRootContainer instanceof CheckCategoriesTableComparisonMapParent) {
             CheckCategoriesTableComparisonMapParent tableComparisonMapParent = (CheckCategoriesTableComparisonMapParent)tableCheckRootContainer;
             AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap = tableComparisonMapParent.getComparisons();
-            AbstractTableComparisonCheckCategorySpec tableCheckComparisonChecks = tableCheckComparisonsMap.get(tableComparisonName);
+            AbstractTableComparisonCheckCategorySpec tableCheckComparisonChecks = tableCheckComparisonsMap.get(referenceTableConfigurationName);
 
             if (tableCheckComparisonChecks != null) {
-                TableComparisonRowCountMatchCheckSpec rowCountMatch = tableCheckComparisonChecks.getRowCountMatch();
+                ComparisonCheckRules rowCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, false);
                 tableComparisonModel.setCompareRowCount(CompareThresholdsModel.fromComparisonCheckSpec(rowCountMatch));
             }
         }
 
-        for (ColumnSpec columnSpec : tableSpec.getColumns().values()) {
+        for (ColumnSpec columnSpec : comparedTableSpec.getColumns().values()) {
             ColumnComparisonModel columnComparisonModel = ColumnComparisonModel.fromColumnSpec(
-                    columnSpec, tableComparisonName, checkType, checkTimeScale);
+                    columnSpec, referenceTableConfigurationName, checkType, checkTimeScale);
+            if (columnComparisonModel.getReferenceColumnName() == null) {
+                // reference column is not configured, let's try to find a column that will match
+                if (referenceTableSpec != null) {
+                    ColumnSpec mostSimilarReferenceColumn = referenceTableSpec.getColumns().findMostSimilarColumn(columnSpec.getColumnName());
+                    if (mostSimilarReferenceColumn != null) {
+                        columnComparisonModel.setReferenceColumnName(mostSimilarReferenceColumn.getColumnName());
+                    }
+                }
+            }
             tableComparisonModel.getColumns().add(columnComparisonModel);
         }
 
@@ -174,17 +183,17 @@ public class TableComparisonModel {
     /**
      * Copies the configuration of table comparison on the table level and columns level to correct checks, creating these checks when comparison checks are not enabled.
      * @param targetTableSpec Target table specification to update.
-     * @param tableComparisonName Table comparison name.
+     * @param referenceTableConfigurationName Table comparison name (the reference table configuration name).
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param checkTimeScale Check time scale.
      */
     public void copyToTableSpec(TableSpec targetTableSpec,
-                                String tableComparisonName,
+                                String referenceTableConfigurationName,
                                 CheckType checkType,
                                 CheckTimeScale checkTimeScale) {
-        ReferenceTableSpec comparisonSpec = targetTableSpec.getReferenceTables().get(tableComparisonName);
+        ReferenceTableSpec comparisonSpec = targetTableSpec.getReferenceTables().get(referenceTableConfigurationName);
         if (comparisonSpec == null) {
-            throw new DqoRuntimeException("Table comparison '" + tableComparisonName + "' was not found in table " + targetTableSpec.getHierarchyId());
+            throw new DqoRuntimeException("Table comparison '" + referenceTableConfigurationName + "' was not found in table " + targetTableSpec.getHierarchyId());
         }
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = targetTableSpec.getTableCheckRootContainer(
@@ -195,12 +204,12 @@ public class TableComparisonModel {
 
         CheckCategoriesTableComparisonMapParent tableComparisonMapParent = (CheckCategoriesTableComparisonMapParent)tableCheckRootContainer;
         AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap = tableComparisonMapParent.getComparisons();
-        AbstractTableComparisonCheckCategorySpec tableCheckComparisonChecks = tableCheckComparisonsMap.getOrAdd(tableComparisonName);
+        AbstractTableComparisonCheckCategorySpec tableCheckComparisonChecks = tableCheckComparisonsMap.getOrAdd(referenceTableConfigurationName);
         if (this.compareRowCount != null) {
-            tableCheckComparisonChecks.setRowCountMatch(new TableComparisonRowCountMatchCheckSpec());
-            this.compareRowCount.copyToComparisonCheckSpec(tableCheckComparisonChecks.getRowCountMatch());
+            ComparisonCheckRules rowCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);
+            this.compareRowCount.copyToComparisonCheckSpec(rowCountMatch);
         } else {
-            tableCheckComparisonChecks.setRowCountMatch(null);
+            tableCheckComparisonChecks.removeCheckSpec(TableCompareCheckType.row_count_match);
         }
 
         for (ColumnComparisonModel columnComparisonModel : this.columns) {
@@ -214,7 +223,7 @@ public class TableComparisonModel {
                 throw new DqoRuntimeException("Compared column " + comparedColumnName + " not found on the table " + targetTableSpec.getHierarchyId());
             }
 
-            columnComparisonModel.copyToColumnSpec(columnSpec, tableComparisonName, checkType, checkTimeScale);
+            columnComparisonModel.copyToColumnSpec(columnSpec, referenceTableConfigurationName, checkType, checkTimeScale);
         }
     }
 }

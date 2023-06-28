@@ -313,12 +313,17 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = tableSpec.getReferenceTables().get(referenceTableName);
-        if (referenceTableSpec == null) {
+        ReferenceTableSpec referenceTableConfigurationSpec = tableSpec.getReferenceTables().get(referenceTableName);
+        if (referenceTableConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referenceTableName, CheckType.PROFILING, null);
+        TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
+                referenceTableConfigurationSpec.getReferenceTableConnectionName(),
+                referenceTableConfigurationSpec.getReferenceTableSchemaName(),
+                referenceTableConfigurationSpec.getReferenceTableName());
+
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, referenceTableName, CheckType.PROFILING, null);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 

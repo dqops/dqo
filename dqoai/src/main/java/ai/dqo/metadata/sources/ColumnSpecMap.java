@@ -18,6 +18,7 @@ package ai.dqo.metadata.sources;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecMap;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -80,5 +81,34 @@ public class ColumnSpecMap extends AbstractDirtyTrackingSpecMap<ColumnSpec> {
             trimmed.put(keyValuePair.getKey(), keyValuePair.getValue().trim());
         }
         return trimmed;
+    }
+
+    /**
+     * Finds the most similar column by name.
+     * First finds an exact name (case-sensitive), when not found, finds a column name with the name that differs by case.
+     * When case insensitive search does not result in finding a column, then tries to find a column that contains the name of the expected column
+     * or the expected column name contains the name of the column in this collection.
+     * @param columnNameToFind Name of the column to find.
+     * @return Column that was found or null when no column matched.
+     */
+    public ColumnSpec findMostSimilarColumn(String columnNameToFind) {
+        ColumnSpec columnSpec = this.get(columnNameToFind);
+        if (columnSpec != null) {
+            return columnSpec; // we found a column with exactly the same name
+        }
+
+        for (String columnName : this.keySet()) {
+            if (columnName.equalsIgnoreCase(columnNameToFind)){
+                return this.get(columnName);
+            }
+        }
+
+        for (String columnName : this.keySet()) {
+            if (StringUtils.containsIgnoreCase(columnName, columnNameToFind) || StringUtils.containsIgnoreCase(columnNameToFind, columnName)) {
+                return this.get(columnName);
+            }
+        }
+
+        return null;
     }
 }
