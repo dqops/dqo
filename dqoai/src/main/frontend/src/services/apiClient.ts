@@ -36,7 +36,7 @@ import {
   IncidentsApiFactory,
   LogShippingApiFactory,
   EnvironmentApiFactory,
-  ChecksApiFactory
+  ChecksApiFactory, TableComparisonsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -117,3 +117,5 @@ export const LogErrorsApi = LogShippingApiFactory(
 );
 
 export const ChecksApi = ChecksApiFactory(new Configuration(), '', axios);
+
+export const TableComparisonsApi = TableComparisonsApiFactory(new Configuration(), '', axios);
