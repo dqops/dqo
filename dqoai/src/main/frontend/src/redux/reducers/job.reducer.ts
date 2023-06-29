@@ -58,7 +58,7 @@ const initialState: IJobsState = {
   dataStreamName: '',
   spec: {},
   isAdvisorOpen: false,
-  isCronScheduled: false
+  isCronScheduled: true
 };
 
 const schemaReducer = (state = initialState, action: any) => {
