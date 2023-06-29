@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
 import MainLayout from "../MainLayout";
 import PageTabs from "../PageTabs";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import { CheckTypes } from "../../shared/routes";
+import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 import { TabOption } from "../PageTabs/tab";
+import qs from "query-string";
 
 interface ConnectionLayoutProps {
   children: any;
@@ -20,6 +21,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const dispatch= useDispatch();
   const history = useHistory();
   const location = useLocation();
+  const match = useRouteMatch();
 
   const handleChange = (tab: TabOption) => {
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
@@ -43,8 +45,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   useEffect(() => {
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
+      const { import_schema } = qs.parse(location.search);
       if (activeUrl && activeUrl !== location.pathname) {
-        history.push(activeUrl);
+        if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
+          history.push(activeUrl);
+        }
       }
     }
   }, [activeTab]);

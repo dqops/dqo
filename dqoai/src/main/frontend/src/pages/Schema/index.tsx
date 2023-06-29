@@ -10,12 +10,15 @@ import Button from "../../components/Button";
 import AddTableDialog from "../../components/CustomTree/AddTableDialog";
 import { SchemaTables } from "./SchemaTables";
 import { MultiChecks } from "./MultiChecks";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 
 const SchemaPage = () => {
   const { connection, schema, tab: activeTab, checkTypes }: { connection: string, schema: string, tab: string, checkTypes: CheckTypes } = useParams();
   const [tables, setTables] = useState<TableBasicModel[]>([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
+  const dispatch = useActionDispatch();
 
   const history = useHistory();
 
@@ -42,6 +45,11 @@ const SchemaPage = () => {
     history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab));
   };
 
+  const onImportMoreTables = () => {
+    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, connection)));
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connection, 'schemas')}?import_schema=true&import_table=true&schema=${schema}`);
+  };
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
@@ -50,15 +58,25 @@ const SchemaPage = () => {
           <div className="text-xl font-semibold truncate">{`${connection}.schema.${schema}`}</div>
         </div>
 
-        {isSourceScreen && (
+        <div className="flex gap-4 items-center">
           <Button
             className="!h-10"
             color="primary"
             variant="outlined"
-            label="Add Table"
-            onClick={() => setAddTableDialogOpen(true)}
+            label="Import more tables"
+            onClick={onImportMoreTables}
           />
-        )}
+
+          {isSourceScreen && (
+            <Button
+              className="!h-10"
+              color="primary"
+              variant="outlined"
+              label="Add Table"
+              onClick={() => setAddTableDialogOpen(true)}
+            />
+          )}
+        </div>
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />

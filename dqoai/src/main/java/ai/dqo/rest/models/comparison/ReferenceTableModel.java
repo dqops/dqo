@@ -34,8 +34,8 @@ import lombok.Data;
 @ApiModel(value = "ReferenceTableModel", description = "Model that contains the basic information about a reference table that could be compared and is used as a source of truth for comparison.")
 @Data
 public class ReferenceTableModel {
-    @JsonPropertyDescription("The name of the table comparison that is defined in the 'comparisons' node on the table specification.")
-    private String comparisonName;
+    @JsonPropertyDescription("The name of the reference table configuration that is defined in the 'reference_tables' node on the table specification.")
+    private String referenceTableConfigurationName;
 
     /**
      * Compared connection name - the connection name to the data source that is compared (verified).
@@ -82,7 +82,7 @@ public class ReferenceTableModel {
         }
 
         ReferenceTableModel model = new ReferenceTableModel();
-        model.setComparisonName(comparisonSpec.getComparisonName());
+        model.setReferenceTableConfigurationName(comparisonSpec.getComparisonName());
         model.setComparedConnection(comparedTableHierarchyId.getConnectionName());
         model.setComparedTable(comparedTableHierarchyId.getPhysicalTableName());
         model.setReferenceConnection(comparisonSpec.getReferenceTableConnectionName());

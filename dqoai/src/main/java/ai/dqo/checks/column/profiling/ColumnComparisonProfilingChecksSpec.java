@@ -17,6 +17,9 @@ package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.column.checkspecs.comparison.*;
 import ai.dqo.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
+import ai.dqo.checks.comparison.ColumnCompareCheckType;
+import ai.dqo.checks.comparison.ComparisonCheckRules;
+import ai.dqo.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -68,7 +71,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy total sum match percent check specification.
      * @return Accuracy total sum match percent check specification.
      */
-    @Override
     public ColumnComparisonSumMatchCheckSpec getSumMatch() {
         return sumMatch;
     }
@@ -77,7 +79,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an Accuracy total sum match percent check.
      * @param sumMatch accuracy total sum match percent check specification.
      */
-    @Override
     public void setSumMatch(ColumnComparisonSumMatchCheckSpec sumMatch) {
         this.setDirtyIf(!Objects.equals(this.sumMatch, sumMatch));
         this.sumMatch = sumMatch;
@@ -88,7 +89,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy min percent check specification.
      * @return Accuracy min percent check specification.
      */
-    @Override
     public ColumnComparisonMinMatchCheckSpec getMinMatch() {
         return minMatch;
     }
@@ -97,7 +97,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy min percent check.
      * @param minMatch Accuracy min percent check specification.
      */
-    @Override
     public void setMinMatch(ColumnComparisonMinMatchCheckSpec minMatch) {
         this.setDirtyIf(!Objects.equals(this.minMatch, minMatch));
         this.minMatch = minMatch;
@@ -108,7 +107,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy max percent check specification.
      * @return Accuracy max percent check specification.
      */
-    @Override
     public ColumnComparisonMaxMatchCheckSpec getMaxMatch() {
         return maxMatch;
     }
@@ -117,7 +115,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy max percent check.
      * @param maxMatch Accuracy max percent check specification.
      */
-    @Override
     public void setMaxMatch(ColumnComparisonMaxMatchCheckSpec maxMatch) {
         this.setDirtyIf(!Objects.equals(this.maxMatch, maxMatch));
         this.maxMatch = maxMatch;
@@ -128,7 +125,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy average percent check specification.
      * @return Accuracy average percent check specification.
      */
-    @Override
     public ColumnComparisonMeanMatchCheckSpec getMeanMatch() {
         return meanMatch;
     }
@@ -137,7 +133,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy average percent check.
      * @param meanMatch Accuracy average percent check specification.
      */
-    @Override
     public void setMeanMatch(ColumnComparisonMeanMatchCheckSpec meanMatch) {
         this.setDirtyIf(!Objects.equals(this.meanMatch, meanMatch));
         this.meanMatch = meanMatch;
@@ -148,7 +143,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy not null count percent check specification.
      * @return Accuracy not null count percent check specification.
      */
-    @Override
     public ColumnComparisonNotNullCountMatchCheckSpec getNotNullCountMatch() {
         return this.notNullCountMatch;
     }
@@ -157,7 +151,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy not null count percent check.
      * @param notNullCountMatch Accuracy not null count percent check specification.
      */
-    @Override
     public void setNotNullCountMatch(ColumnComparisonNotNullCountMatchCheckSpec notNullCountMatch) {
         this.setDirtyIf(!Objects.equals(this.notNullCountMatch, notNullCountMatch));
         this.notNullCountMatch = notNullCountMatch;
@@ -168,7 +161,6 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Returns an accuracy null count percent check specification.
      * @return Accuracy null count percent check specification.
      */
-    @Override
     public ColumnComparisonNullCountMatchCheckSpec getNullCountMatch() {
         return this.nullCountMatch;
     }
@@ -177,11 +169,119 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
      * Sets a new definition of an accuracy null count percent check.
      * @param nullCountMatch Accuracy null count percent check specification.
      */
-    @Override
     public void setNullCountMatch(ColumnComparisonNullCountMatchCheckSpec nullCountMatch) {
         this.setDirtyIf(!Objects.equals(this.nullCountMatch, nullCountMatch));
         this.nullCountMatch = nullCountMatch;
         propagateHierarchyIdToField(nullCountMatch, "null_count_match");
+    }
+
+    /**
+     * Returns the check specification for the given check type or null when it is not present and <code>createWhenMissing</code> is false.
+     *
+     * @param columnCompareCheckType Compare check type.
+     * @param createWhenMissing      When true and the check specification is not present, it is created, added to the check compare container and returned.
+     * @return Check specification or null (when <code>createWhenMissing</code> is false).
+     */
+    @Override
+    public ComparisonCheckRules getCheckSpec(ColumnCompareCheckType columnCompareCheckType, boolean createWhenMissing) {
+        switch (columnCompareCheckType) {
+            case min_match: {
+                if (this.minMatch == null) {
+                    if (createWhenMissing) {
+                        this.setMinMatch(new ColumnComparisonMinMatchCheckSpec());
+                    }
+                }
+
+                return this.minMatch;
+            }
+
+            case max_match: {
+                if (this.maxMatch == null) {
+                    if (createWhenMissing) {
+                        this.setMaxMatch(new ColumnComparisonMaxMatchCheckSpec());
+                    }
+                }
+
+                return this.maxMatch;
+            }
+
+            case sum_match: {
+                if (this.sumMatch == null) {
+                    if (createWhenMissing) {
+                        this.setSumMatch(new ColumnComparisonSumMatchCheckSpec());
+                    }
+                }
+
+                return this.sumMatch;
+            }
+
+            case mean_match: {
+                if (this.meanMatch == null) {
+                    if (createWhenMissing) {
+                        this.setMeanMatch(new ColumnComparisonMeanMatchCheckSpec());
+                    }
+                }
+
+                return this.meanMatch;
+            }
+
+            case null_count_match: {
+                if (this.nullCountMatch == null) {
+                    if (createWhenMissing) {
+                        this.setNullCountMatch(new ColumnComparisonNullCountMatchCheckSpec());
+                    }
+                }
+
+                return this.nullCountMatch;
+            }
+
+            case not_null_count_match: {
+                if (this.notNullCountMatch == null) {
+                    if (createWhenMissing) {
+                        this.setNotNullCountMatch(new ColumnComparisonNotNullCountMatchCheckSpec());
+                    }
+                }
+
+                return this.notNullCountMatch;
+            }
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Removes the check specification for the given check.
+     *
+     * @param columnCompareCheckType Check type.
+     */
+    @Override
+    public void removeCheckSpec(ColumnCompareCheckType columnCompareCheckType) {
+        switch (columnCompareCheckType) {
+            case min_match:
+                this.setMinMatch(null);
+                break;
+
+            case max_match:
+                this.setMaxMatch(null);
+                break;
+
+            case sum_match:
+                this.setSumMatch(null);
+                break;
+
+            case mean_match:
+                this.setMeanMatch(null);
+                break;
+
+            case null_count_match:
+                this.setNullCountMatch(null);
+                break;
+
+            case not_null_count_match:
+                this.setNotNullCountMatch(null);
+                break;
+        }
     }
 
     /**

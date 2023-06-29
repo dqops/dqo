@@ -6,6 +6,12 @@ import { RecurringScheduleSpec } from '../../api';
 import clsx from 'clsx';
 import RadioButton from '../RadioButton';
 import { useParams } from 'react-router-dom';
+import { JobApiClient } from '../../services/apiClient';
+import Switch from '../Switch';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import { setCronScheduler } from '../../redux/actions/job.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 
 interface IScheduleViewProps {
   schedule?: RecurringScheduleSpec;
@@ -17,6 +23,29 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
   const { table, column }: { table: string; column: string } = useParams();
+
+  const { isCronScheduled } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const dispatch = useActionDispatch();
+
+  const scheduleCron = (bool: boolean) => {
+    dispatch(setCronScheduler(bool));
+  };
+
+  const getData = async () => {
+    const res = await JobApiClient.isCronSchedulerRunning();
+    scheduleCron(res.data);
+  };
+
+  const startCroner = async () => {
+    await JobApiClient.startCronScheduler();
+  };
+
+  const changeStatus = () => {
+    startCroner();
+    scheduleCron(true);
+  };
 
   const onChangeMode = (value: string) => {
     setMode(value);
@@ -60,6 +89,10 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
     }
     setHour(val);
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   useEffect(() => {
     const cron_expression = schedule?.cron_expression ?? '';
@@ -136,6 +169,18 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
 
   return (
     <div>
+      {isCronScheduled === false ? (
+        <div className="w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300">
+          Warning: the job scheduler is disabled and no scheduled jobs will be
+          executed, enable the job scheduler?{' '}
+          <Switch
+            checked={isCronScheduled ? isCronScheduled : false}
+            onChange={() => changeStatus()}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       <table className="mb-6">
         <tbody>
           <tr>

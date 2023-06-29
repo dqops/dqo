@@ -22,6 +22,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.comparison.ColumnComparisonDailyPartitionedChecksSpecMap;
 import ai.dqo.checks.column.partitioned.consistency.ColumnConsistencyDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
@@ -71,6 +72,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("accuracy", o -> o.accuracy);
             put("consistency", o -> o.consistency);
             put("anomaly", o -> o.anomaly);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -133,6 +135,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAnomalyDailyPartitionedChecksSpec anomaly;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnComparisonDailyPartitionedChecksSpecMap comparisons = new ColumnComparisonDailyPartitionedChecksSpecMap();
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -348,6 +355,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
         this.anomaly = anomaly;
         propagateHierarchyIdToField(anomaly, "anomaly");
+    }
+
+    /**
+     * Returns the container of column level comparisons to columns in the reference table.
+     * @return Dictionary of comparisons to columns.
+     */
+    public ColumnComparisonDailyPartitionedChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the container of named comparisons to columns in other reference tables.
+     * @param comparisons Container of column level comparisons.
+     */
+    public void setComparisons(ColumnComparisonDailyPartitionedChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**

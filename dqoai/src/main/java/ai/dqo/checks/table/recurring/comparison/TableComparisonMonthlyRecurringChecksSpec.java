@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.profiling;
+package ai.dqo.checks.table.recurring.comparison;
 
 import ai.dqo.checks.comparison.AbstractTableComparisonCheckCategorySpec;
 import ai.dqo.checks.comparison.ComparisonCheckRules;
@@ -31,36 +31,37 @@ import java.util.Objects;
 
 /**
  * Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
+ * Contains the monthly recurring comparison checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableComparisonProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableComparisonCheckCategorySpec.FIELDS) {
+public class TableComparisonMonthlyRecurringChecksSpec extends AbstractTableComparisonCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableComparisonMonthlyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableComparisonCheckCategorySpec.FIELDS) {
         {
-            put("row_count_match", o -> o.rowCountMatch);
+            put("monthly_row_count_match", o -> o.monthlyRowCountMatch);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.")
-    private TableComparisonRowCountMatchCheckSpec rowCountMatch;
+    @JsonPropertyDescription("Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private TableComparisonRowCountMatchCheckSpec monthlyRowCountMatch;
 
     /**
      * Returns the row count match check.
      * @return Row count match check.
      */
-    public TableComparisonRowCountMatchCheckSpec getRowCountMatch() {
-        return rowCountMatch;
+    public TableComparisonRowCountMatchCheckSpec getMonthlyRowCountMatch() {
+        return monthlyRowCountMatch;
     }
 
     /**
      * Sets a new row count match check.
-     * @param rowCountMatch Row count match check.
+     * @param monthlyRowCountMatch Row count match check.
      */
-    public void setRowCountMatch(TableComparisonRowCountMatchCheckSpec rowCountMatch) {
-        this.setDirtyIf(!Objects.equals(this.rowCountMatch, rowCountMatch));
-        this.rowCountMatch = rowCountMatch;
-        propagateHierarchyIdToField(rowCountMatch, "row_count_match");
+    public void setMonthlyRowCountMatch(TableComparisonRowCountMatchCheckSpec monthlyRowCountMatch) {
+        this.setDirtyIf(!Objects.equals(this.monthlyRowCountMatch, monthlyRowCountMatch));
+        this.monthlyRowCountMatch = monthlyRowCountMatch;
+        propagateHierarchyIdToField(monthlyRowCountMatch, "monthly_row_count_match");
     }
 
     /**
@@ -74,13 +75,13 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
     public ComparisonCheckRules getCheckSpec(TableCompareCheckType tableCompareCheckType, boolean createWhenMissing) {
         switch (tableCompareCheckType) {
             case row_count_match: {
-                if (this.rowCountMatch == null) {
+                if (this.monthlyRowCountMatch == null) {
                     if (createWhenMissing) {
-                        this.setRowCountMatch(new TableComparisonRowCountMatchCheckSpec());
+                        this.setMonthlyRowCountMatch(new TableComparisonRowCountMatchCheckSpec());
                     }
                 }
 
-                return this.rowCountMatch;
+                return this.monthlyRowCountMatch;
             }
             default:
                 return null;
@@ -96,7 +97,7 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
     public void removeCheckSpec(TableCompareCheckType tableCompareCheckType) {
         switch (tableCompareCheckType) {
             case row_count_match:
-                this.setRowCountMatch(null);
+                this.setMonthlyRowCountMatch(null);
                 break;
         }
     }

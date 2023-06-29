@@ -14,11 +14,15 @@ import TableCommentView from '../../components/Connection/TableView/TableComment
 import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TableDataGroupingConfiguration from '../../components/Connection/TableView/TableDataGroupingConfigurations';
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
-import { getFirstLevelActiveTab, getFirstLevelState } from '../../redux/selectors';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
 import TableNavigation from '../../components/TableNavigation';
-import TableIncidentsNotificationsView from "../../components/Connection/TableView/TableIncidentsNotificationsView";
-import { setActiveFirstLevelUrl } from "../../redux/actions/source.actions";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
+import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import TableReferences from '../../components/Connection/TableView/TableReferences';
 
 const initTabs = [
   {
@@ -40,6 +44,10 @@ const initTabs = [
   {
     label: 'Data Groupings',
     value: 'data-streams'
+  },
+  {
+    label: 'Reference Tables',
+    value: 'reference-tables'
   },
   {
     label: 'Date and time columns',
@@ -100,7 +108,6 @@ const TablePage = () => {
   );
 
   const onChangeTab = (tab: string) => {
-
     dispatch(
       setActiveFirstLevelUrl(
         checkTypes,
@@ -252,9 +259,18 @@ const TablePage = () => {
             <div>{activeTab === 'schedule' && <ScheduleDetail />}</div>
             <div>{activeTab === 'comments' && <TableCommentView />}</div>
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
-            <div>{activeTab === 'data-streams' && <TableDataGroupingConfiguration />}</div>
+            <div>
+              {activeTab === 'data-streams' && (
+                <TableDataGroupingConfiguration />
+              )}
+            </div>
+            <div>{activeTab === 'reference-tables' && <TableReferences />}</div>
             <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
-            <div>{activeTab === 'incident_configuration' && <TableIncidentsNotificationsView />}</div>
+            <div>
+              {activeTab === 'incident_configuration' && (
+                <TableIncidentsNotificationsView />
+              )}
+            </div>
           </>
         )}
       </div>

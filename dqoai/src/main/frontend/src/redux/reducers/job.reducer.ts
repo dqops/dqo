@@ -40,6 +40,8 @@ export interface IJobsState {
   bool?: boolean;
   dataStreamName: string;
   spec: DataGroupingConfigurationSpec;
+  isAdvisorOpen: boolean;
+  isCronScheduled: boolean;
 }
 
 const initialState: IJobsState = {
@@ -54,7 +56,9 @@ const initialState: IJobsState = {
   job_dictionary_state: {},
   bool: false,
   dataStreamName: '',
-  spec: {}
+  spec: {},
+  isAdvisorOpen: false,
+  isCronScheduled: true
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -167,6 +171,17 @@ const schemaReducer = (state = initialState, action: any) => {
         bool: action.bool,
         dataStreamName: action.dataStreamName,
         spec: action.spec
+      };
+    }
+    case JOB_ACTION.TOGGLE_ADVISOR:
+      return {
+        ...state,
+        isAdvisorOpen: action.isOpen
+      };
+    case JOB_ACTION.SET_CRON_SCHEDULER: {
+      return {
+        ...state,
+        isCronScheduled: action.isCronScheduled
       };
     }
     default:

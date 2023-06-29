@@ -22,6 +22,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.anomaly.ColumnAnomalyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.comparison.ColumnComparisonMonthlyPartitionedChecksSpecMap;
 import ai.dqo.checks.column.partitioned.consistency.ColumnConsistencyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
@@ -71,6 +72,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("accuracy", o -> o.accuracy);
             put("consistency", o -> o.consistency);
             put("anomaly", o -> o.anomaly);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -133,6 +135,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAnomalyMonthlyPartitionedChecksSpec anomaly;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnComparisonMonthlyPartitionedChecksSpecMap comparisons = new ColumnComparisonMonthlyPartitionedChecksSpecMap();
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -350,6 +357,23 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
+    /**
+     * Returns the container of column level comparisons to columns in the reference table.
+     * @return Dictionary of comparisons to columns.
+     */
+    public ColumnComparisonMonthlyPartitionedChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the container of named comparisons to columns in other reference tables.
+     * @param comparisons Container of column level comparisons.
+     */
+    public void setComparisons(ColumnComparisonMonthlyPartitionedChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

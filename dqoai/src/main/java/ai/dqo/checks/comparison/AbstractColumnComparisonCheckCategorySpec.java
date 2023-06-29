@@ -59,76 +59,17 @@ public abstract class AbstractColumnComparisonCheckCategorySpec extends Abstract
         this.referenceColumn = referenceColumn;
     }
 
+    /**
+     * Returns the check specification for the given check type or null when it is not present and <code>createWhenMissing</code> is false.
+     * @param columnCompareCheckType Compare check type.
+     * @param createWhenMissing When true and the check specification is not present, it is created, added to the check compare container and returned.
+     * @return Check specification or null (when <code>createWhenMissing</code> is false).
+     */
+    public abstract ComparisonCheckRules getCheckSpec(ColumnCompareCheckType columnCompareCheckType, boolean createWhenMissing);
 
     /**
-     * Returns an accuracy total sum match percent check specification.
-     * @return Accuracy total sum match percent check specification.
+     * Removes the check specification for the given check.
+     * @param columnCompareCheckType Check type.
      */
-    public abstract ColumnComparisonSumMatchCheckSpec getSumMatch();
-
-    /**
-     * Sets a new definition of an Accuracy total sum match percent check.
-     * @param sumMatch accuracy total sum match percent check specification.
-     */
-    public abstract void setSumMatch(ColumnComparisonSumMatchCheckSpec sumMatch);
-
-    /**
-     * Returns an accuracy min percent check specification.
-     * @return Accuracy min percent check specification.
-     */
-    public abstract ColumnComparisonMinMatchCheckSpec getMinMatch();
-
-    /**
-     * Sets a new definition of an accuracy min percent check.
-     * @param minMatch Accuracy min percent check specification.
-     */
-    public abstract void setMinMatch(ColumnComparisonMinMatchCheckSpec minMatch);
-
-    /**
-     * Returns an accuracy max percent check specification.
-     * @return Accuracy max percent check specification.
-     */
-    public abstract ColumnComparisonMaxMatchCheckSpec getMaxMatch();
-
-    /**
-     * Sets a new definition of an accuracy max percent check.
-     * @param maxMatch Accuracy max percent check specification.
-     */
-    public abstract void setMaxMatch(ColumnComparisonMaxMatchCheckSpec maxMatch);
-
-    /**
-     * Returns an accuracy average percent check specification.
-     * @return Accuracy average percent check specification.
-     */
-    public abstract ColumnComparisonMeanMatchCheckSpec getMeanMatch();
-
-    /**
-     * Sets a new definition of an accuracy average percent check.
-     * @param meanMatch Accuracy average percent check specification.
-     */
-    public abstract void setMeanMatch(ColumnComparisonMeanMatchCheckSpec meanMatch);
-
-    /**
-     * Returns an accuracy not null count percent check specification.
-     * @return Accuracy not null count percent check specification.
-     */
-    public abstract ColumnComparisonNotNullCountMatchCheckSpec getNotNullCountMatch();
-
-    /**
-     * Sets a new definition of an accuracy not null count percent check.
-     * @param notNullCountMatch Accuracy not null count percent check specification.
-     */
-    public abstract void setNotNullCountMatch(ColumnComparisonNotNullCountMatchCheckSpec notNullCountMatch);
-
-    /**
-     * Returns an accuracy null count percent check specification.
-     * @return Accuracy null count percent check specification.
-     */
-    public abstract ColumnComparisonNullCountMatchCheckSpec getNullCountMatch();
-
-    /**
-     * Sets a new definition of an accuracy null count percent check.
-     * @param nullCountMatch Accuracy null count percent check specification.
-     */
-    public abstract void setNullCountMatch(ColumnComparisonNullCountMatchCheckSpec nullCountMatch);
+    public abstract void removeCheckSpec(ColumnCompareCheckType columnCompareCheckType);
 }

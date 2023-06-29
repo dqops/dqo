@@ -16,7 +16,6 @@
 
 package ai.dqo.checks.comparison;
 
-import ai.dqo.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,14 +35,16 @@ public abstract class AbstractTableComparisonCheckCategorySpec extends AbstractC
     };
 
     /**
-     * Returns the row count match check.
-     * @return Row count match check.
+     * Returns the check specification for the given check type or null when it is not present and <code>createWhenMissing</code> is false.
+     * @param tableCompareCheckType Compare check type.
+     * @param createWhenMissing When true and the check specification is not present, it is created, added to the check compare container and returned.
+     * @return Check specification or null (when <code>createWhenMissing</code> is false).
      */
-    public abstract TableComparisonRowCountMatchCheckSpec getRowCountMatch();
+    public abstract ComparisonCheckRules getCheckSpec(TableCompareCheckType tableCompareCheckType, boolean createWhenMissing);
 
     /**
-     * Sets a new row count match check.
-     * @param rowCountMatch Row count match check.
+     * Removes the check specification for the given check.
+     * @param tableCompareCheckType Check type.
      */
-    public abstract void setRowCountMatch(TableComparisonRowCountMatchCheckSpec rowCountMatch);
+    public abstract void removeCheckSpec(TableCompareCheckType tableCompareCheckType);
 }

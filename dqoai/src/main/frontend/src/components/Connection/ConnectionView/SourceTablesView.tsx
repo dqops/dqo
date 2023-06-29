@@ -7,23 +7,31 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import Checkbox from '../../Checkbox';
 import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleMenu } from '../../../redux/actions/job.actions';
+import { toggleAdvisor, toggleMenu } from '../../../redux/actions/job.actions';
 
 interface ISourceSchemasViewProps {
   connectionName: string;
   schemaName: string;
   onBack: () => void;
+  isImported?: boolean;
 }
 
 const SourceTablesView = ({
   connectionName,
   schemaName,
-  onBack
+  onBack,
+  isImported,
 }: ISourceSchemasViewProps) => {
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
   const dispatch = useActionDispatch();
+
+  useEffect(() => {
+    if (!isImported) {
+      dispatch(toggleAdvisor(true));
+    }
+  }, [isImported]);
 
   const fetchSourceTables = async () => {
     setLoading(true);

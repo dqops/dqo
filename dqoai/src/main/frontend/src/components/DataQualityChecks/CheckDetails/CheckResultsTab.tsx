@@ -26,6 +26,7 @@ interface CheckResultsTabProps {
   runCheckType: string;
   timeScale?: 'daily' | 'monthly';
   checkName: string;
+  isChartOpen: (arg: boolean) => void;
 }
 
 const CheckResultsTab = ({
@@ -36,7 +37,8 @@ const CheckResultsTab = ({
   onChangeDataGroup,
   runCheckType,
   timeScale,
-  checkName
+  checkName,
+  isChartOpen
 }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
   const [mode, setMode] = useState('table');
@@ -354,7 +356,9 @@ const CheckResultsTab = ({
               'w-5 h-5 cursor-pointer',
               mode === 'table' ? 'font-bold' : 'text-gray-400'
             )}
-            onClick={() => setMode('table')}
+            onClick={() => {
+              isChartOpen(false), setMode('table');
+            }}
           />
           <SvgIcon
             name="chart-line"
@@ -362,7 +366,9 @@ const CheckResultsTab = ({
               'w-5 h-5 cursor-pointer',
               mode === 'chart' ? 'font-bold' : 'text-gray-400'
             )}
-            onClick={() => setMode('chart')}
+            onClick={() => {
+              isChartOpen(true), setMode('chart');
+            }}
           />
         </div>
       </div>
