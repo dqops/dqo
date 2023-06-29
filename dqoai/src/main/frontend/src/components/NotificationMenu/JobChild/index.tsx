@@ -12,16 +12,14 @@ import {
 import moment from 'moment';
 import { JobApiClient } from '../../../services/apiClient';
 
-type GetColorFunc = (status: string) => string;
 const JobChild = ({
   job,
   parentId
 }: {
   job: DqoJobHistoryEntryModel;
   parentId: number;
-  renderStatusFunc?: void;
-  getColorFunc?: GetColorFunc;
 }) => {
+  const [open, setOpen] = useState(false);
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
       return value ? 'Yes' : 'No';
@@ -31,7 +29,6 @@ const JobChild = ({
     }
     return value;
   };
-  const [open, setOpen] = useState(false);
 
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
@@ -60,7 +57,7 @@ const JobChild = ({
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
             <div className="flex flex-wrap space-x-1 items-center">
-              <div className="px-2">{job.jobType}</div>
+              <div className="px-2">{job.jobType} </div>
 
               {renderStatus()}
             </div>
@@ -92,7 +89,18 @@ const JobChild = ({
           <tbody>
             <tr>
               <td className="px-2">Status</td>
-              <td className="px-2">{job?.status}</td>
+              <td className="px-2 ">
+                {job?.status}
+                {'  '}
+
+                {job.errorMessage &&
+                  job.errorMessage.includes('dqocloud.accesskey') && (
+                    <span className="px-2 text-red-500">
+                      (Cloud DQO Api Key is invalid or outdated, please run{' '}
+                      {"'"}cloud login{"'"} from DQO shell)
+                    </span>
+                  )}
+              </td>
             </tr>
             <tr>
               <td className="px-2">Last Changed</td>
