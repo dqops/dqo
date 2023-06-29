@@ -42,6 +42,7 @@ export interface IJobsState {
   spec: DataGroupingConfigurationSpec;
   isAdvisorOpen: boolean;
   isCronScheduled: boolean;
+  isLicenseFree: boolean;
 }
 
 const initialState: IJobsState = {
@@ -58,7 +59,8 @@ const initialState: IJobsState = {
   dataStreamName: '',
   spec: {},
   isAdvisorOpen: false,
-  isCronScheduled: true
+  isCronScheduled: true,
+  isLicenseFree: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -182,6 +184,12 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isCronScheduled: action.isCronScheduled
+      };
+    }
+    case JOB_ACTION.SET_IS_LICENSE_FREE: {
+      return {
+        ...state,
+        isLicenseFree: action.isLicenseFree
       };
     }
     default:
