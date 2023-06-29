@@ -14,12 +14,10 @@ import { JobApiClient } from '../../../services/apiClient';
 
 const JobChild = ({
   job,
-  parentId,
-  succeededCounter
+  parentId
 }: {
   job: DqoJobHistoryEntryModel;
   parentId: number;
-  succeededCounter?: number;
 }) => {
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -60,7 +58,7 @@ const JobChild = ({
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
             <div className="flex flex-wrap space-x-1 items-center">
-              <div className="px-2">{job.jobType}</div>
+              <div className="px-2">{job.jobType} </div>
 
               {renderStatus()}
             </div>
