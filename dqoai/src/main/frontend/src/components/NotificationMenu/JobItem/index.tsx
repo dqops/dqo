@@ -18,7 +18,6 @@ import { IRootState } from '../../../redux/reducers';
 import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { JobApiClient } from '../../../services/apiClient';
-import clsx from 'clsx';
 
 const JobItem = ({
   job,
@@ -90,19 +89,20 @@ const JobItem = ({
   const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
     switch (status) {
       case 'valid':
-        return 'teal-500';
+        return '#029a80';
       case 'warning':
-        return 'yellow-900';
+        return '#ebe51e';
       case 'error':
-        return 'orange-900';
+        return '#ff9900';
       case 'fatal':
-        return 'red-900';
+        return '#e3170a';
       case 'execution_error':
         return 'black';
       default:
         return 'black';
     }
   };
+
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
@@ -140,7 +140,7 @@ const JobItem = ({
           className="!outline-none"
           onClick={() => setOpen(!open)}
         >
-          <div className="flex justify-between items-center text-sm w-full text-gray-700 ">
+          <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
             <div className="flex space-x-1 items-center">
               <div>{job.jobType || (job as any).updatedModel?.jobType}</div>
               {renderStatus()}
@@ -157,19 +157,20 @@ const JobItem = ({
               ) : (
                 <div></div>
               )}
-              <div className="group relative">
+              <div className=" relative">
                 <div className="flex items-center gap-x-3">
                   {job.jobType === 'run checks' && (
                     <div
-                      className={clsx(
-                        `w-3 h-3 bg-${getColor(
+                      className="w-3 h-3"
+                      style={{
+                        backgroundColor: getColor(
                           job.parameters?.runChecksParameters?.runChecksResult
                             ?.highestSeverity
                             ? job.parameters?.runChecksParameters
                                 ?.runChecksResult?.highestSeverity
                             : 'error'
-                        )}`
-                      )}
+                        )
+                      }}
                     />
                   )}
                   <div>
@@ -178,25 +179,25 @@ const JobItem = ({
                 </div>
                 {job.jobType === 'run checks' && (
                   <div
-                    className="hidden group-hover:block absolute px-2 gap-y-1 w-50 h-29 rounded-md border border-gray-400 z-50 bg-white"
+                    className="hidden group-hover:block absolute px-5 gap-y-1 w-80 h-29 rounded-md border border-gray-400 z-50 bg-white"
                     style={{
                       transform: 'translate(50%, -50%)',
-                      top: '150%',
-                      right: '40%'
+                      top: '550%',
+                      right: '165%'
                     }}
                   >
                     <div className="flex gap-x-2">
                       <div className="font-light">Highest severity:</div>
                       <div
-                        className={clsx(
-                          `text-${getColor(
+                        style={{
+                          color: getColor(
                             job.parameters?.runChecksParameters?.runChecksResult
                               ?.highestSeverity
                               ? job.parameters?.runChecksParameters
                                   ?.runChecksResult?.highestSeverity
                               : 'error'
-                          )}`
-                        )}
+                          )
+                        }}
                       >
                         {
                           job.parameters?.runChecksParameters?.runChecksResult
@@ -216,46 +217,51 @@ const JobItem = ({
                     <div className="flex gap-x-2">
                       <div className="font-light">Valid result:</div>
                       <div>
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.validResults
-                        }
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.validResults === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.validResults}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Warnings:</div>
                       <div>
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.warnings
-                        }
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.warnings === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.warnings}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Errors</div>
                       <div>
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.errors
-                        }
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.errors === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.errors}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Fatals:</div>
                       <div>
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.fatals
-                        }
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.fatals === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.fatals}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
                       <div className="font-light">Execution Fatals:</div>
                       <div>
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.executionErrors
-                        }
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.executionErrors === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.executionErrors}
                       </div>
                     </div>
                   </div>
