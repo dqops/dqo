@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Tabs from '../../Tabs';
 import {
-  DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum,
   CheckModel,
   DeleteStoredDataQueueJobParameters
@@ -258,8 +257,7 @@ const CheckDetails = ({
     <div
       className="my-4"
       style={{
-        maxWidth: `calc(100vw - ${sidebarWidth + 85}px`,
-        width: isChartOpenState ? '45%' : 'auto'
+        maxWidth: `calc(100vw - ${sidebarWidth + 85}px`
       }}
     >
       <div className="bg-white px-4 py-6 border border-gray-200 relative">

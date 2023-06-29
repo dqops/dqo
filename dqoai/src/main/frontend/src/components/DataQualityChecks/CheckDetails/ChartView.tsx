@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckResultDetailedSingleModel } from '../../../api';
 import { Line } from 'react-chartjs-2';
+import { useTree } from '../../../contexts/treeContext';
 
 type ChartViewProps = {
   data: CheckResultDetailedSingleModel[];
@@ -12,6 +13,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
 
   const isFatalUpperExist = data.find((item) => item.fatalUpperBound);
   const isErrorUpperExist = data.find((item) => item.errorUpperBound);
+  const { sidebarWidth } = useTree();
 
   const dataSource: any = {
     datasets: [
@@ -131,7 +133,13 @@ export const ChartView = ({ data }: ChartViewProps) => {
   };
 
   return (
-    <div className="my-8 ">
+    <div
+      className="my-8"
+      style={{
+        minWidth: '1280px',
+        width: `calc(100vw - ${sidebarWidth + 150}px`
+      }}
+    >
       <Line data={dataSource} options={options as any} />
     </div>
   );
