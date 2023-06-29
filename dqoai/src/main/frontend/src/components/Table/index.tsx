@@ -94,7 +94,9 @@ export const Table: React.FC<TableProps> = ({
                             getRowClass ? getRowClass(item) : ''
                           )}
                         >
-                          {column.render ? column.render(item[column.value], item, index) : item[column.value]}
+                          {column.render
+                            ? column.render(item[column.value], item, index)
+                            : item[column.value]}
                         </td>
                       ))}
                     </tr>
