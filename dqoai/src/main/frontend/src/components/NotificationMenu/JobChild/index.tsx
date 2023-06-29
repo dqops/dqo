@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -19,7 +19,6 @@ const JobChild = ({
   job: DqoJobHistoryEntryModel;
   parentId: number;
 }) => {
-  const [errorString, setErrorString] = useState<string>('');
   const [open, setOpen] = useState(false);
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -51,14 +50,6 @@ const JobChild = ({
   const cancelJob = async (jobId: number) => {
     await JobApiClient.cancelJob(jobId);
   };
-
-  useEffect(() => {
-    if (job.errorMessage) {
-      setErrorString(job.errorMessage);
-    }
-  }, []);
-
-  console.log(errorString);
 
   return (
     <Accordion open={open}>
@@ -96,13 +87,17 @@ const JobChild = ({
           <tbody>
             <tr>
               <td className="px-2">Status</td>
-              <td className="px-2 gap-x-4 text-red-500">
+              <td className="px-2 ">
                 {job?.status}
                 {'  '}
 
                 {job.errorMessage &&
-                  job.errorMessage.includes('dqocloud.accesskey') &&
-                  '(Wrong Api Key)'}
+                  job.errorMessage.includes('dqocloud.accesskey') && (
+                    <span className="px-2 text-red-500">
+                      (Cloud DQO Api Key is invalid or outdated, please run{' '}
+                      {"'"}cloud login{"'"} from DQO shell)
+                    </span>
+                  )}
               </td>
             </tr>
             <tr>
