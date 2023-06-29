@@ -24,7 +24,6 @@ import {
   DqoJobQueueInitialSnapshotModel
 } from '../../api';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
-import { CheckTypes } from '../../shared/routes';
 
 export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
@@ -114,4 +113,9 @@ export const toggleSettings = (areSettingsOpen: boolean) => ({
 export const toggleAdvisor = (isOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_ADVISOR,
   isOpen
+});
+
+export const setCronScheduler = (isCronScheduled: boolean) => ({
+  type: JOB_ACTION.SET_CRON_SCHEDULER,
+  isCronScheduled
 });
