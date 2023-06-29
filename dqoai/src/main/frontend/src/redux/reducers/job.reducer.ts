@@ -41,6 +41,7 @@ export interface IJobsState {
   dataStreamName: string;
   spec: DataGroupingConfigurationSpec;
   isAdvisorOpen: boolean;
+  isCronScheduled: boolean;
 }
 
 const initialState: IJobsState = {
@@ -56,7 +57,8 @@ const initialState: IJobsState = {
   bool: false,
   dataStreamName: '',
   spec: {},
-  isAdvisorOpen: false
+  isAdvisorOpen: false,
+  isCronScheduled: true
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -176,6 +178,12 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         isAdvisorOpen: action.isOpen
       };
+    case JOB_ACTION.SET_CRON_SCHEDULER: {
+      return {
+        ...state,
+        isCronScheduled: action.isCronScheduled
+      };
+    }
     default:
       return state;
   }
