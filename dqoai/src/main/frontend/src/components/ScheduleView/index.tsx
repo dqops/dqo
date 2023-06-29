@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Input from '../Input';
 import Checkbox from '../Checkbox';
 import NumberInput from '../NumberInput';
@@ -6,6 +6,8 @@ import { RecurringScheduleSpec } from '../../api';
 import clsx from 'clsx';
 import RadioButton from '../RadioButton';
 import { useParams } from 'react-router-dom';
+import { JobApiClient } from '../../services/apiClient';
+import Switch from '../Switch';
 
 interface IScheduleViewProps {
   schedule?: RecurringScheduleSpec;
@@ -17,6 +19,22 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
   const { table, column }: { table: string; column: string } = useParams();
+  const [cronBoolean, setCronBoolean] = useState<boolean>();
+  const getData = async () => {
+    const res = await JobApiClient.isCronSchedulerRunning();
+    setCronBoolean(res.data);
+  };
+
+  const startCroner = async () => {
+    await JobApiClient.startCronScheduler();
+    setCronBoolean(true);
+  };
+
+  const changeStatus = () => {
+    if (cronBoolean === false) {
+      startCroner();
+    }
+  };
 
   const onChangeMode = (value: string) => {
     setMode(value);
@@ -60,6 +78,39 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
     }
     setHour(val);
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   const fetchDataRecursive = async () => {
+  //     await getData();
+
+  //     if (isMounted) {
+  //       fetchDataRecursive();
+  //     }
+  //   };
+
+  //   fetchDataRecursive();
+
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getData();
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  console.log(cronBoolean);
 
   useEffect(() => {
     const cron_expression = schedule?.cron_expression ?? '';
@@ -136,6 +187,18 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
 
   return (
     <div>
+      {cronBoolean === false ? (
+        <div className="w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300">
+          Warning: the job scheduler is disabled and no scheduled jobs will be
+          executed, enable the job scheduler?{' '}
+          <Switch
+            checked={cronBoolean ? cronBoolean : false}
+            onChange={() => changeStatus()}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       <table className="mb-6">
         <tbody>
           <tr>
