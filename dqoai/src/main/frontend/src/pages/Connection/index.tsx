@@ -60,7 +60,7 @@ const ConnectionPage = () => {
   const [tabs, setTabs] = useState(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs);
   const history = useHistory();
   const location = useLocation() as any;
-  const { import_schema, create_success } = qs.parse(location.search);
+  const { import_schema, create_success, schema } = qs.parse(location.search);
 
   const {
     isUpdatedConnectionBasic,
@@ -174,7 +174,7 @@ const ConnectionPage = () => {
         {activeTab === 'comments' && <ConnectionCommentView />}
         {activeTab === 'labels' && <ConnectionLabelsView />}
         {activeTab === 'schemas' && (
-          import_schema === 'true' ? <SourceSchemasView /> : <SchemasView />
+          import_schema === 'true' ? <SourceSchemasView defaultSchema={schema as string} /> : <SchemasView />
         )}
         {activeTab === 'data-streams' && <ConnectionDefaultGroupingConfiguration />}
         {activeTab === 'incidents' && <IncidentsNotificationsView />}

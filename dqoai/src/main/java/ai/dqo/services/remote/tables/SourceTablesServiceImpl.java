@@ -22,6 +22,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.remote.TableRemoteBasicModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
  * Schema on remote database management service.
  */
 @Component
+@Slf4j
 public class SourceTablesServiceImpl implements SourceTablesService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
@@ -87,6 +89,7 @@ public class SourceTablesServiceImpl implements SourceTablesService {
                         setTableName(sourceTableModel.getTableName().getTableName());
                     }}).collect(Collectors.toList());
         } catch (Exception e) {
+            log.error("Failed to list remote tables, error: " + e.getMessage(), e);
             throw new SourceTablesServiceException("Source database connection error: " + e.getMessage(), e);
         }
 

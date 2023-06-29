@@ -19,6 +19,7 @@ import TableNavigation from '../../components/TableNavigation';
 import TableIncidentsNotificationsView from "../../components/Connection/TableView/TableIncidentsNotificationsView";
 import { setActiveFirstLevelUrl } from "../../redux/actions/source.actions";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
+import TableReferences from "../../components/Connection/TableView/TableReferences";
 
 const initTabs = [
   {
@@ -40,6 +41,10 @@ const initTabs = [
   {
     label: 'Data Groupings',
     value: 'data-streams'
+  },
+  {
+    label: 'Reference Tables',
+    value: 'reference-tables'
   },
   {
     label: 'Date and time columns',
@@ -253,6 +258,7 @@ const TablePage = () => {
             <div>{activeTab === 'comments' && <TableCommentView />}</div>
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
             <div>{activeTab === 'data-streams' && <TableDataGroupingConfiguration />}</div>
+            <div>{activeTab === 'reference-tables' && <TableReferences />}</div>
             <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
             <div>{activeTab === 'incident_configuration' && <TableIncidentsNotificationsView />}</div>
           </>

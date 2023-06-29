@@ -47,8 +47,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Checks", description = "Check management")
-public class CheckController {
+@Api(value = "Checks", description = "Data quality check definition management")
+public class ChecksController {
 
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
@@ -59,7 +59,7 @@ public class CheckController {
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired
-    public CheckController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory) {
+    public ChecksController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory) {
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.userHomeContextFactory = userHomeContextFactory;
     }

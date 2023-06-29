@@ -66,6 +66,8 @@ const CheckResultsTab = ({
     return '';
   };
 
+  //delete dataGroup from here
+
   const columns = [
     {
       label: 'Id',
@@ -278,7 +280,7 @@ const CheckResultsTab = ({
           schema,
           table,
           column,
-          dataGroup,
+
           runCheckType,
           checkName,
           timeScale,
@@ -300,7 +302,7 @@ const CheckResultsTab = ({
           schema,
           table,
           column,
-          dataGroup,
+
           runCheckType,
           checkName,
           timeScale,

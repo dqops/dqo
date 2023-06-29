@@ -24,7 +24,7 @@ nav:
     - Data quality KPIs: 'dqo-concepts/data-quality-kpis/data-quality-kpis.md'
     - Dashboards: 'dqo-concepts/data-quality-dashboards/data-quality-dashboards.md'
     - Data quality dimensions: 'dqo-concepts/data-quality-dimensions/data-quality-dimensions.md'
-    - Data stream segmentation: 'dqo-concepts/data-stream-segmentation/data-stream-segmentation.md'
+    - Data grouping: 'dqo-concepts/data-grouping/data-grouping.md'
     - Data storage: 'dqo-concepts/data-storage/data-storage.md'
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
@@ -82,7 +82,7 @@ nav:
       - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
       - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
     - Incidents and notifications: 'working-with-dqo/incidents-and-notifications/incidents-and-notifications.md'
-    - Set up data stream segmentation: 'working-with-dqo/set-up-data-streams/set-up-data-stream.md'
+    - Set up data grouping: 'working-with-dqo/set-up-data-grouping/set-up-data-grouping.md'
     - Working with DQO Shell: 'working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
@@ -325,10 +325,10 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
+      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
       - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 

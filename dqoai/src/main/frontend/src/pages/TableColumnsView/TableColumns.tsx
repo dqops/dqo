@@ -1,8 +1,9 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useLayoutEffect } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
+  DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -13,17 +14,45 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { setCreatedDataStream } from '../../redux/actions/rule.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
 import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
+import Checkbox from '../../components/Checkbox';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { datatype_detected } from '../../shared/constants';
 
-interface ITableColumnsProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
+const spec: DataGroupingConfigurationSpec = {
+  level_1: {
+    column: undefined
+  },
+  level_2: {
+    column: undefined
+  },
+  level_3: {
+    column: undefined
+  },
+  level_4: {
+    column: undefined
+  },
+  level_5: {
+    column: undefined
+  },
+  level_6: {
+    column: undefined
+  },
+  level_7: {
+    column: undefined
+  },
+  level_8: {
+    column: undefined
+  },
+  level_9: {
+    column: undefined
+  }
+};
 
 interface MyData {
   null_percent: number | undefined;
@@ -36,12 +65,25 @@ interface MyData {
   scale?: number | undefined;
   importedDatatype?: string | undefined;
   columnHash: number;
+  isColumnSelected: boolean;
+}
+
+interface ITableColumnsProps {
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
+  updateData: (arg: string) => void;
+  setLevelsData: (arg: DataGroupingConfigurationSpec) => void;
+  setNumberOfSelected: (arg: number) => void;
 }
 
 const TableColumns = ({
   connectionName,
   schemaName,
-  tableName
+  tableName,
+  updateData,
+  setLevelsData,
+  setNumberOfSelected
 }: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +91,17 @@ const TableColumns = ({
   const [columnToDelete, setColumnToDelete] = useState<ColumnStatisticsModel>();
   const [dataArray1, setDataArray1] = useState<MyData[]>();
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+  const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
 
+  const handleButtonClick = (name: string) => {
+    setObjectStates((prevStates) => ({
+      ...prevStates,
+      [name]: !prevStates[name]
+    }));
+  };
   const dispatch = useDispatch();
   const {
     connection,
@@ -63,21 +115,12 @@ const TableColumns = ({
     checkTypes: CheckTypes;
   } = useParams();
   const history = useHistory();
+  const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
-  const labels = [
-    'Column name',
-    'Detected data type',
-    'Imported data type',
-    'Length',
-    'Scale',
-    'Minimal value',
-    'Null count'
-  ];
 
   const fetchColumns = async () => {
     try {
@@ -92,10 +135,6 @@ const TableColumns = ({
       console.error(err);
     }
   };
-
-  useEffect(() => {
-    fetchColumns().then();
-  }, [connectionName, schemaName, tableName]);
 
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
     setIsOpen(true);
@@ -155,7 +194,15 @@ const TableColumns = ({
 
   useEffect(() => {
     fetchColumns();
+    setShouldResetCheckboxes(true);
   }, [connectionName, schemaName, tableName]);
+
+  useLayoutEffect(() => {
+    if (shouldResetCheckboxes) {
+      setObjectStates({});
+      setShouldResetCheckboxes(false);
+    }
+  }, [shouldResetCheckboxes]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -175,28 +222,33 @@ const TableColumns = ({
     }
   };
 
-  const datatype_detected = (numberForFile: any) => {
-    if (Number(numberForFile) === 1) {
-      return 'INTEGER';
+  const labels = [
+    'Column name',
+    'Detected data type',
+    'Imported data type',
+    'Length',
+    'Scale',
+    'Minimal value',
+    'Null count'
+  ];
+  const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
+    if (uniqueCount === 0) {
+      return 'rgba(255, 255, 255, 1)';
     }
-    if (Number(numberForFile) === 2) {
-      return 'FLOAT';
+
+    if (uniqueCount === maxUniqueCount) {
+      return 'rgba(2, 154, 128, 0.1)';
     }
-    if (Number(numberForFile) === 3) {
-      return 'DATETIME';
+
+    if (uniqueCount === 1) {
+      return 'rgba(2, 154, 128, 0.8)';
     }
-    if (Number(numberForFile) === 4) {
-      return 'TIMESTAMP';
-    }
-    if (Number(numberForFile) === 5) {
-      return 'BOOLEAN';
-    }
-    if (Number(numberForFile) === 6) {
-      return 'STRING';
-    }
-    if (Number(numberForFile) === 7) {
-      return 'Mixed data type';
-    }
+
+    const logarithm = Math.log2(uniqueCount);
+    const alpha = (1 - (logarithm / Math.log2(maxUniqueCount)) * 0.9) / 1.3;
+    const color = `rgba(2, 154, 128, ${alpha})`;
+
+    return color;
   };
 
   const max_unique_value = () => {
@@ -233,26 +285,6 @@ const TableColumns = ({
       x.parameters?.collectStatisticsParameters
         ?.statisticsCollectorSearchFilters?.columnName
   );
-
-  const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
-    if (uniqueCount === 0) {
-      return 'rgba(255, 255, 255, 1)';
-    }
-
-    if (uniqueCount === maxUniqueCount) {
-      return 'rgba(2, 154, 128, 0.1)';
-    }
-
-    if (uniqueCount === 1) {
-      return 'rgba(2, 154, 128, 0.8)';
-    }
-
-    const logarithm = Math.log2(uniqueCount);
-    const alpha = (1 - (logarithm / Math.log2(maxUniqueCount)) * 0.9) / 1.3;
-    const color = `rgba(2, 154, 128, ${alpha})`;
-
-    return color;
-  };
 
   const nullPercentData = statistics?.column_statistics?.map((x) =>
     x.statistics
@@ -298,55 +330,22 @@ const TableColumns = ({
   const hashData = statistics?.column_statistics?.map((x) => x.column_hash);
 
   const dataArray: MyData[] = [];
-
-  if (
-    nullPercentData &&
-    uniqueCountData &&
-    nullCountData &&
-    detectedDatatypeVar &&
-    columnNameData &&
-    minimalValueData &&
-    lengthData &&
-    scaleData &&
-    typeData &&
-    hashData
-  ) {
-    const maxLength = Math.max(
-      nullPercentData.length,
-      uniqueCountData.length,
-      nullCountData.length,
-      detectedDatatypeVar.length,
-      columnNameData.length,
-      minimalValueData.length,
-      lengthData.length,
-      scaleData.length,
-      typeData.length,
-      hashData.length
-    );
+  if (columnNameData && hashData) {
+    const maxLength = Math.max(columnNameData.length, hashData.length);
 
     for (let i = 0; i < maxLength; i++) {
-      const nullPercent = nullPercentData[i];
-      const uniqueValue = uniqueCountData[i];
-      const nullCount = nullCountData[i];
-      const detectedDatatype = detectedDatatypeVar[i];
-      const columnname = columnNameData[i];
-      const minimalValue = minimalValueData[i];
-      const lengthValue = lengthData[i];
-      const scaleValue = scaleData[i];
-      const typeValue = typeData[i];
-      const hashValue = hashData[i];
-
       const newData: MyData = {
-        null_percent: Number(renderValue(nullPercent)),
-        unique_value: Number(renderValue(uniqueValue)),
-        null_count: Number(renderValue(nullCount)),
-        detectedDatatypeVar: Number(detectedDatatype),
-        nameOfCol: columnname,
-        minimalValue: renderValue(minimalValue),
-        length: renderValue(lengthValue),
-        scale: renderValue(scaleValue),
-        importedDatatype: renderValue(typeValue),
-        columnHash: Number(hashValue)
+        null_percent: Number(renderValue(nullPercentData?.[i])),
+        unique_value: Number(renderValue(uniqueCountData?.[i])),
+        null_count: Number(renderValue(nullCountData?.[i])),
+        detectedDatatypeVar: Number(detectedDatatypeVar?.[i]),
+        nameOfCol: columnNameData?.[i],
+        minimalValue: renderValue(minimalValueData?.[i]),
+        length: renderValue(lengthData?.[i]),
+        scale: renderValue(scaleData?.[i]),
+        importedDatatype: String(renderValue(typeData?.[i])),
+        columnHash: Number(hashData?.[i]),
+        isColumnSelected: false
       };
 
       dataArray.push(newData);
@@ -461,151 +460,19 @@ const TableColumns = ({
     setDataArray1(sortedResult);
   };
 
-  const sortDataByLength = () => {
+  const sortData = <T extends { [key: string]: any }>(key: keyof T) => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsPercentA = String(a.length);
-      const nullsPercentB = String(b.length);
+      const valueA = String(a[key as keyof typeof a]);
+      const valueB = String(b[key as keyof typeof b]);
 
-      if (nullsPercentA && nullsPercentB) {
+      if (valueA && valueB) {
         return sortDirection === 'asc'
-          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
-          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
-      } else if (nullsPercentA) {
+          ? parseFloat(valueA) - parseFloat(valueB)
+          : parseFloat(valueB) - parseFloat(valueA);
+      } else if (valueA) {
         return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsPercentB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByScale = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsPercentA = String(a.scale);
-      const nullsPercentB = String(b.scale);
-
-      if (nullsPercentA && nullsPercentB) {
-        return sortDirection === 'asc'
-          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
-          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
-      } else if (nullsPercentA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsPercentB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByNullPercent = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsPercentA = String(a.null_percent);
-      const nullsPercentB = String(b.null_percent);
-
-      if (nullsPercentA && nullsPercentB) {
-        return sortDirection === 'asc'
-          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
-          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
-      } else if (nullsPercentA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsPercentB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByNullCount = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.null_count);
-      const nullsCountB = String(b.null_count);
-
-      if (nullsCountA && nullsCountB) {
-        return sortDirection === 'asc'
-          ? Number(nullsCountA) - Number(nullsCountB)
-          : Number(nullsCountB) - Number(nullsCountA);
-      } else if (nullsCountA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsCountB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByUniqueValue = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const uniqueValueA = a.unique_value;
-      const uniqueValueB = b.unique_value;
-
-      if (uniqueValueA && uniqueValueB) {
-        return sortDirection === 'asc'
-          ? uniqueValueA - uniqueValueB
-          : uniqueValueB - uniqueValueA;
-      } else if (uniqueValueA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (uniqueValueB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByDetectedtype = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.detectedDatatypeVar);
-      const nullsCountB = String(b.detectedDatatypeVar);
-
-      if (nullsCountA && nullsCountB) {
-        return sortDirection === 'asc'
-          ? Number(nullsCountA) - Number(nullsCountB)
-          : Number(nullsCountB) - Number(nullsCountA);
-      } else if (nullsCountA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsCountB) {
-        return sortDirection === 'asc' ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    setDataArray1(sortedArray);
-    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  };
-
-  const sortDataByImportedtype = () => {
-    const sortedArray = [...dataArray];
-    sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.importedDatatype);
-      const nullsCountB = String(b.importedDatatype);
-
-      if (nullsCountA && nullsCountB) {
-        return sortDirection === 'asc'
-          ? nullsCountA.localeCompare(nullsCountB)
-          : nullsCountB.localeCompare(nullsCountA);
-      } else if (nullsCountA) {
-        return sortDirection === 'asc' ? -1 : 1;
-      } else if (nullsCountB) {
+      } else if (valueB) {
         return sortDirection === 'asc' ? 1 : -1;
       } else {
         return 0;
@@ -617,23 +484,23 @@ const TableColumns = ({
 
   const handleSorting = (param: string) => {
     switch (param) {
-      case 'Name':
+      case 'Column name':
         sortAlphabetictly();
         break;
       case 'Detected data type':
-        sortDataByDetectedtype();
+        sortData<MyData>('detectedDatatypeVar');
         break;
-      case 'Imported type':
-        sortDataByImportedtype();
+      case 'Imported data type':
+        sortData<MyData>('importedDatatype');
         break;
       case 'Length':
-        sortDataByLength();
+        sortData<MyData>('length');
         break;
       case 'Scale':
-        sortDataByScale();
+        sortData<MyData>('scale');
         break;
       case 'Null count':
-        sortDataByNullCount();
+        sortData<MyData>('null_count');
         break;
       case 'Minimal value':
         sortDataByMinimalValue();
@@ -654,9 +521,76 @@ const TableColumns = ({
     }
   };
 
+  const countTrueValues = (obj: Record<string, boolean>): number => {
+    let count = 0;
+    for (const key in obj) {
+      if (obj[key] === true) {
+        count++;
+      }
+    }
+    setNumberOfSelected(count);
+
+    return count;
+  };
+  const selectStrings = (obj: Record<string, boolean>) => {
+    return Object.keys(obj).filter((key) => obj[key] === true);
+  };
+  const listOfStr = selectStrings(objectStates);
+
+  const setSpec2 = () => {
+    for (let i = 1; i <= 9; i++) {
+      const levelKey = `level_${i}` as keyof DataGroupingConfigurationSpec;
+      const level = spec[levelKey];
+
+      if (level) {
+        level.column = listOfStr.at(i - 1);
+        level.source = 'column_value';
+      }
+    }
+    return spec;
+  };
+
+  const fixString = () => {
+    const columnValues = Object.values(spec)
+      .map((level) => level.column)
+      .filter((column) => column !== undefined);
+
+    const joinedValues = columnValues.join(',');
+
+    return joinedValues;
+  };
+
+  const showDataStreamButtonFunc = async () => {
+    await actionDispatch(setCreatedDataStream(true, fixString(), setSpec2()));
+  };
+
+  useEffect(() => {
+    const joinedValues = fixString();
+    setLevelsData(setSpec2());
+    countTrueValues(objectStates);
+    updateData(joinedValues);
+    setCreatedDataStream(true, fixString(), setSpec2());
+  }, [spec, objectStates]);
+
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
+        <td className="border-b border-gray-100 text-right px-4 py-2">
+          <div>
+            <Checkbox
+              checked={
+                objectStates[column.nameOfCol ? column.nameOfCol : '']
+                  ? true
+                  : false
+              }
+              onChange={() => {
+                showDataStreamButtonFunc();
+                handleButtonClick(column.nameOfCol ? column.nameOfCol : '');
+              }}
+              className="py-4"
+            />
+          </div>
+        </td>
         <td
           className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
           onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
@@ -679,35 +613,47 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {dateToString(String(column.minimalValue))
+            {column.minimalValue
               ? dateToString(String(column.minimalValue))
-              : cutString(String(column.minimalValue))}
+                ? dateToString(String(column.minimalValue))
+                : cutString(String(column.minimalValue))
+              : ''}
           </div>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {column.null_count}
+            {isNaN(Number(column.null_count)) ? '' : column.null_count}
           </div>
         </td>
         <td className="border-b border-gray-100 text-right px-4 py-2">
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center">
-              <div>{Number(column.null_percent).toFixed(2)}</div>
+              <div>
+                {isNaN(Number(column.null_percent))
+                  ? ''
+                  : Number(column.null_percent).toFixed(2)}
+              </div>
               <div>{isNaN(Number(column.null_percent)) ? '' : '%'}</div>
             </div>
-            <div
-              className=" h-3 border border-gray-100 flex ml-5"
-              style={{ width: '66.66px' }}
-            >
+            {isNaN(Number(column.null_percent)) ? (
+              ''
+            ) : (
               <div
-                className="h-3 bg-amber-700"
-                style={{
-                  width: column.null_percent
-                    ? `${(Number(renderValue(column.null_percent)) * 2) / 3}px`
-                    : ''
-                }}
-              ></div>
-            </div>
+                className=" h-3 border border-gray-100 flex ml-5"
+                style={{ width: '66.66px' }}
+              >
+                <div
+                  className="h-3 bg-amber-700"
+                  style={{
+                    width: column.null_percent
+                      ? `${
+                          (Number(renderValue(column.null_percent)) * 2) / 3
+                        }px`
+                      : ''
+                  }}
+                ></div>
+              </div>
+            )}
           </div>
         </td>
         <td className="border-b border-gray-100 text-right px-4 my-0 py-0">
@@ -777,10 +723,14 @@ const TableColumns = ({
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 py-6 relative">
       <table className="mb-6 mt-4 w-full">
         <thead>
           <tr>
+            <th
+              className="border-b border-gray-100 "
+              style={{ width: '6px' }}
+            ></th>
             {labels.map((x, index) => (
               <th
                 className="border-b border-gray-100 text-left px-4 py-2 cursor-pointer"
@@ -810,9 +760,11 @@ const TableColumns = ({
             <th className="border-b border-gray-100 text-right px-10 py-2 ">
               <div
                 className="flex justify-center cursor-pointer"
-                onClick={() => sortDataByNullPercent()}
+                onClick={() => sortData<MyData>('null_percent')}
               >
-                <div>Null percent</div>
+                <div onClick={() => updateData('updated data')}>
+                  Null percent
+                </div>
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />
                   <SvgIcon name="chevron-down" className="w-3 h-3" />
@@ -822,9 +774,9 @@ const TableColumns = ({
             <th className="border-b border-gray-100 text-right px-4 py-2">
               <div
                 className="flex justify-end cursor-pointer"
-                onClick={() => sortDataByUniqueValue()}
+                onClick={() => sortData<MyData>('unique_value')}
               >
-                <div>Unique Count</div>
+                <div>Distinct Count</div>
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />
                   <SvgIcon name="chevron-down" className="w-3 h-3" />

@@ -14,7 +14,11 @@ import { isEqual } from 'lodash';
 import SourceTablesView from './SourceTablesView';
 import { useParams } from "react-router-dom";
 
-const SourceSchemasView = () => {
+interface SourceSchemasViewProps {
+  defaultSchema?: string;
+}
+
+const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
   const { connection }: { connection: string } = useParams();
   const [loading, setLoading] = useState(false);
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([
@@ -30,8 +34,16 @@ const SourceSchemasView = () => {
     }
   ]);
 
-  const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
+  const [selectedSchema, setSelectedSchema] = useState<string>();
   const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+
+  const isImported = !!schemas.find(item => item.alreadyImported);
+
+  useEffect(() => {
+    if (defaultSchema) {
+      setSelectedSchema(defaultSchema);
+    }
+  }, [defaultSchema])
 
   useEffect(() => {
     setLoading(true);
@@ -45,7 +57,7 @@ const SourceSchemasView = () => {
   }, [connection]);
 
   const onImportTables = (schema: SchemaRemoteModel) => {
-    setSelectedSchema(schema);
+    setSelectedSchema(schema.schemaName);
   };
 
   const isExist = (schema: SchemaRemoteModel) => {
@@ -67,8 +79,9 @@ const SourceSchemasView = () => {
     return (
       <SourceTablesView
         connectionName={connection}
-        schemaName={selectedSchema.schemaName ?? ''}
+        schemaName={selectedSchema ?? ''}
         onBack={() => setSelectedSchema(undefined)}
+        isImported={isImported}
       />
     );
   }

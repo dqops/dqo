@@ -20,8 +20,11 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpec;
+import ai.dqo.metadata.comparisons.ReferenceTableSpecMap;
 import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -576,4 +579,28 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(TableIncidentGroupingSpec tableIncidentGroupingSpec, P parameter);
+
+    /**
+     * Accepts a description of the reference table to which the current table is compared.
+     * @param referenceTableSpec Reference table specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ReferenceTableSpec referenceTableSpec, P parameter);
+
+    /**
+     * Accepts a dictionary of reference table comparisons.
+     * @param referenceTableSpecMap Dictionary of reference table comparisons.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ReferenceTableSpecMap referenceTableSpecMap, P parameter);
+
+    /**
+     * Accepts a map of comparison checks for a named comparison.
+     * @param abstractComparisonCheckCategorySpecMap Comparison map with checks.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, P parameter);
 }

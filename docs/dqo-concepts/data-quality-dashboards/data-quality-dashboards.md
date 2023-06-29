@@ -17,7 +17,7 @@ Data quality dashboards are divided into multiple groups, depending on the audie
 - **Governance dashboards**. These dashboards show high-level data quality KPIs, aggregated on a macro scale that should be shared
 at a corporate level. With governance dashboards senior management is able to review key data metrics per connection, 
 [data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md), [check category](../checks/#categories-of-checks) 
-and [data streams](../data-stream-segmentation/data-stream-segmentation.md).
+and [data streams](../data-grouping/data-grouping.md).
 The governance dashboards allows filtering data by time period and previously defined data streams which can represent location, 
 business unit, vendor, supplier, or subsidiary.
 

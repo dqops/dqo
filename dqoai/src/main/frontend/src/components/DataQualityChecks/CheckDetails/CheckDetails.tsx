@@ -59,7 +59,7 @@ interface CheckDetailsProps {
   data_clean_job_template?: DeleteStoredDataQueueJobParameters;
   defaultFilters?: any;
 }
-
+//deleted dataGroup from here
 const CheckDetails = ({
   checkTypes,
   connection,
@@ -138,7 +138,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-          dataGroup,
+
           startDate,
           endDate,
           runCheckType,
@@ -160,7 +160,6 @@ const CheckDetails = ({
           schema,
           table,
           column,
-          dataGroup,
           startDate,
           endDate,
           runCheckType,
@@ -182,7 +181,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-          dataGroup,
+
           startDate,
           endDate,
           runCheckType,

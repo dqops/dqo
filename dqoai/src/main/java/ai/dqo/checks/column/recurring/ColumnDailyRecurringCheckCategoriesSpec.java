@@ -22,6 +22,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.bool.ColumnBoolDailyRecurringChecksSpec;
+import ai.dqo.checks.column.recurring.comparison.ColumnComparisonDailyRecurringChecksSpecMap;
 import ai.dqo.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityDailyRecurringChecksSpec;
@@ -73,6 +74,7 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
             put("consistency", o -> o.consistency);
             put("anomaly", o -> o.anomaly);
             put("schema", o -> o.schema);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -140,6 +142,11 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSchemaDailyRecurringChecksSpec schema;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnComparisonDailyRecurringChecksSpecMap comparisons = new ColumnComparisonDailyRecurringChecksSpecMap();
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -373,6 +380,24 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns the container of column level comparisons to columns in the reference table.
+     * @return Dictionary of comparisons to columns.
+     */
+    public ColumnComparisonDailyRecurringChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the container of named comparisons to columns in other reference tables.
+     * @param comparisons Container of column level comparisons.
+     */
+    public void setComparisons(ColumnComparisonDailyRecurringChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**

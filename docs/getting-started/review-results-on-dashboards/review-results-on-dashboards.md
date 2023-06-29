@@ -9,7 +9,7 @@ Now let's review the results on the data quality dashboards. This is a unique fe
 In DQO, you can choose from a variety of built-in dashboard groups.
 
 **Governance dashboards** allows to review summarized key data metrics per [check category](../../checks/#categories-of-checks),
-[data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md) or [data streams](../../dqo-concepts/data-stream-segmentation/data-stream-segmentation.md).
+[data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md) or [data streams](../../dqo-concepts/data-grouping/data-grouping.md).
 Government dashboards are useful for senior management to review aggregated key data metrics.
 
 **Issue Details** are useful for data engineers and data owners to better understand data dynamics during the investigation phase when the data quality issue is being diagnosed and

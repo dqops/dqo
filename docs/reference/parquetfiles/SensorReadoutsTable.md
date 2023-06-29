@@ -34,8 +34,8 @@ Constants with the column names in the sensor readout parquet tables.
  | table_stage | The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: &quot;landing&quot;, &quot;staging&quot;, &quot;cleansing&quot;, etc. | text |
  | table_priority | The table priority value copied from the table&#x27;s definition. The table priority could be used for sorting tables by their importance. | integer |
  | column_hash | The hash of a column. | long |
- | column_name | The column name for which the results are stored. | text |
- | column_name_pattern | The column name pattern, in case that a data quality check targets multiple columns. | text |
+ | column_name | The column for which the results are stored. | text |
+ | column_name_pattern | The column pattern, in case that a data quality check targets multiple columns. | text |
  | check_hash | The hash of a data quality check. | long |
  | check_name | The data quality check name. | text |
  | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
