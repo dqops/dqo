@@ -8,36 +8,47 @@ import EditReferenceTable from "./EditReferenceTable";
 const TableReferences = () => {
   const { connection, schema, table }: { connection: string; schema: string; table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [references, setReferences] = useState<ReferenceTableModel[]>([
-    {
-      reference_table_configuration_name: 'reference_tab_1',
-      reference_connection: 'conn1',
-      reference_table:  {
-        schema_name: 'schema',
-        table_name: 'table'
-      },
-      compared_table_grouping_name: 'by_country',
-      reference_table_grouping_name: 'by_countries'
-    }
-  ]);
+  const [references, setReferences] = useState<ReferenceTableModel[]>([]);
+  const [selectedReference, setSelectedReference] = useState<ReferenceTableModel>();
 
   useEffect(() => {
-    TableComparisonsApi.getReferenceTables(connection, schema, table).then((res) => {
-      // setReferences(res.data);
-    });
+    getReferences();
   }, []);
 
+  const getReferences = () => {
+    TableComparisonsApi.getReferenceTables(connection, schema, table).then((res) => {
+      setReferences(res.data);
+    });
+  };
+
+  const onBack = () => {
+    setIsEditing(false);
+    getReferences();
+  };
+
+  const onEditReferenceTable = (reference: ReferenceTableModel) => {
+    setSelectedReference(reference);
+    setIsEditing(true);
+  };
+
+  const onCreate = () => {
+    setSelectedReference(undefined);
+    setIsEditing(true);
+  };
 
   return (
     <div className="my-1">
       {isEditing ? (
         <EditReferenceTable
-          onBack={() => setIsEditing(false)}
+          onBack={onBack}
+          selectedReference={selectedReference}
         />
       ) : (
         <ReferenceTableList
           references={references}
-          setIsEditing={setIsEditing}
+          onCreate={onCreate}
+          refetch={getReferences}
+          onEditReferenceTable={onEditReferenceTable}
         />
       )}
     </div>
