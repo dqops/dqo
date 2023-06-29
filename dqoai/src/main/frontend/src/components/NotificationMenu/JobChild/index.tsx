@@ -73,8 +73,10 @@ const JobChild = ({
               ) : (
                 <div></div>
               )}
-              <div>
-                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+              <div className="group relative">
+                <div className="flex items-center gap-x-2">
+                  {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+                </div>
               </div>
             </div>
           </div>
