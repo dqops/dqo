@@ -9,7 +9,7 @@ import SvgIcon from '../SvgIcon';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { toggleMenu } from '../../redux/actions/job.actions';
+import { setCronScheduler, toggleMenu } from '../../redux/actions/job.actions';
 
 import { useError, IError } from '../../contexts/errrorContext';
 import JobItem from './JobItem';
@@ -19,13 +19,18 @@ import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
 
 const NotificationMenu = () => {
-  const { job_dictionary_state, isOpen } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state, isOpen, isCronScheduled } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const { errors } = useError();
-  const [cronBoolean, setCronBoolean] = useState<boolean>();
+
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
+  };
+  const scheduleCron = (bool: boolean) => {
+    dispatch(setCronScheduler(bool));
   };
 
   const getNotificationDate = (notification: any) => {
@@ -40,10 +45,11 @@ const NotificationMenu = () => {
   }, []);
 
   const data = useMemo(() => {
-    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
-      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-    })
-    .map((item) => ({ type: 'job', item }));
+    const jobsData = Object.values(job_dictionary_state)
+      .sort((a, b) => {
+        return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+      })
+      .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
@@ -67,24 +73,25 @@ const NotificationMenu = () => {
 
   const getData = async () => {
     const res = await JobApiClient.isCronSchedulerRunning();
-    setCronBoolean(res.data);
+
+    scheduleCron(res.data);
   };
 
   const startCroner = async () => {
     await JobApiClient.startCronScheduler();
-    setCronBoolean(true);
   };
   const stopCroner = async () => {
     await JobApiClient.stopCronScheduler();
-    setCronBoolean(false);
   };
 
   const changeStatus = () => {
-    if (cronBoolean === true) {
+    if (isCronScheduled === true) {
       stopCroner();
+      scheduleCron(false);
     }
-    if (cronBoolean === false) {
+    if (isCronScheduled === false) {
       startCroner();
+      scheduleCron(true);
     }
   };
 
@@ -117,11 +124,11 @@ const NotificationMenu = () => {
             <div className="whitespace-no-wrap">Jobs scheduler </div>
             <div>
               <Switch
-                checked={cronBoolean ? cronBoolean : false}
+                checked={isCronScheduled ? isCronScheduled : false}
                 onChange={() => changeStatus()}
               />
             </div>
-            {cronBoolean === false && (
+            {isCronScheduled === false && (
               <div className="font-light text-xs text-red-500 text-center">
                 (Warning: scheduled jobs will not be executed)
               </div>
