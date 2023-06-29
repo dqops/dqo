@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import ReferenceTableList from "./ReferenceTableList";
-import { TableComparisonsApi } from "../../../services/apiClient";
-import { useParams } from "react-router-dom";
-import { ReferenceTableModel } from "../../../api";
-import EditReferenceTable from "./EditReferenceTable";
+import ReferenceTableList from './ReferenceTableList';
+import { TableComparisonsApi } from '../../../services/apiClient';
+import { useParams } from 'react-router-dom';
+import { ReferenceTableModel } from '../../../api';
+import EditReferenceTable from './EditReferenceTable';
 
 const TableReferences = () => {
-  const { connection, schema, table }: { connection: string; schema: string; table: string } = useParams();
+  const {
+    connection,
+    schema,
+    table
+  }: { connection: string; schema: string; table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [references, setReferences] = useState<ReferenceTableModel[]>([]);
   const [selectedReference, setSelectedReference] = useState<ReferenceTableModel>();

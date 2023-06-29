@@ -5,7 +5,7 @@ import { EnviromentApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { toggleProfile } from '../../redux/actions/job.actions';
+import { toggleProfile, setLicenseFree } from '../../redux/actions/job.actions';
 import {
   Popover,
   PopoverHandler,
@@ -29,6 +29,10 @@ export default function UserProfile({ name, email }: UserProfile) {
     dispatch(toggleProfile(!isProfileOpen));
   };
 
+  const setLicenseFreeFunc = () => {
+    dispatch(setLicenseFree(true));
+  };
+
   const [userProfile, setUserProfile] = useState<DqoUserProfileModel>();
 
   const fetchUserProfile = async () => {
@@ -42,7 +46,9 @@ export default function UserProfile({ name, email }: UserProfile) {
   };
 
   useEffect(() => {
-    fetchUserProfile().then();
+    fetchUserProfile().then(
+      () => userProfile?.license_type === 'FREE' && setLicenseFreeFunc()
+    );
   }, [name, email]);
 
   return (

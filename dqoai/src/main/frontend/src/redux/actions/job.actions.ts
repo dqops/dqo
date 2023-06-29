@@ -119,3 +119,8 @@ export const setCronScheduler = (isCronScheduled: boolean) => ({
   type: JOB_ACTION.SET_CRON_SCHEDULER,
   isCronScheduled
 });
+
+export const setLicenseFree = (isLicenseFree: boolean) => ({
+  type: JOB_ACTION.SET_IS_LICENSE_FREE,
+  isLicenseFree
+});

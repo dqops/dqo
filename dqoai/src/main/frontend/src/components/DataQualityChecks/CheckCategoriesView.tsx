@@ -15,14 +15,20 @@ import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import CheckMenu from './CheckMenu';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../shared/routes';
-import { setCurrentJobId } from "../../redux/actions/source.actions";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
   checkResultsOverview: CheckResultsOverviewDataModel[];
-  handleChangeDataGroupingConfiguration: (check: CheckModel, index: number) => void;
+  handleChangeDataGroupingConfiguration: (
+    check: CheckModel,
+    index: number
+  ) => void;
   onUpdate: () => void;
   getCheckOverview: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
@@ -59,7 +65,13 @@ const CheckCategoriesView = ({
         ? { timeWindowFilter }
         : {})
     });
-    dispatch(setCurrentJobId(checkTypes, firstLevelActiveTab, (res.data as any)?.jobId?.jobId));
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        (res.data as any)?.jobId?.jobId
+      )
+    );
 
     if (getCheckOverview) {
       getCheckOverview();
@@ -108,7 +120,9 @@ const CheckCategoriesView = ({
           <CheckListItem
             check={check}
             key={index}
-            onChange={(item) => handleChangeDataGroupingConfiguration(item, index)}
+            onChange={(item) =>
+              handleChangeDataGroupingConfiguration(item, index)
+            }
             checkResult={checkResultsOverview.find(
               (item) =>
                 item.checkName === check.check_name &&

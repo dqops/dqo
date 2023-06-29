@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Tabs from '../../Tabs';
 import {
-  DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum,
   CheckModel,
   DeleteStoredDataQueueJobParameters
@@ -74,6 +73,7 @@ const CheckDetails = ({
   defaultFilters
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
+  const [isChartOpenState, setIsChartOpenState] = useState(false);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const {
     checkResults: resultsData,
@@ -159,7 +159,6 @@ const CheckDetails = ({
           schema,
           table,
           column,
-
           startDate,
           endDate,
           runCheckType,
@@ -250,10 +249,16 @@ const CheckDetails = ({
     fetchCheckReadouts(month, name);
   };
 
+  const isChartOpen = (arg: boolean): void => {
+    setIsChartOpenState(arg);
+  };
+
   return (
     <div
       className="my-4"
-      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 85}px` }}
+      style={{
+        maxWidth: `calc(100vw - ${sidebarWidth + 85}px`
+      }}
     >
       <div className="bg-white px-4 py-6 border border-gray-200 relative">
         <IconButton
@@ -285,6 +290,7 @@ const CheckDetails = ({
             month={filters.month}
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
+            isChartOpen={isChartOpen}
           />
         )}
         {activeTab === 'sensor_readouts' && (

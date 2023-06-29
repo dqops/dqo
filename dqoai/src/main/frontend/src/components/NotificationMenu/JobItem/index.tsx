@@ -1,4 +1,5 @@
 import {
+  CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
@@ -25,7 +26,9 @@ const JobItem = ({
   job: DqoJobHistoryEntryModel;
   notifnumber?: number;
 }) => {
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const { errors } = useError();
   const dispatch = useActionDispatch();
 
@@ -46,10 +49,11 @@ const JobItem = ({
   }, []);
 
   const data = useMemo(() => {
-    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
-      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-    })
-    .map((item) => ({ type: 'job', item }));
+    const jobsData = Object.values(job_dictionary_state)
+      .sort((a, b) => {
+        return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+      })
+      .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
@@ -80,6 +84,23 @@ const JobItem = ({
 
   const cancelJob = async (jobId: number) => {
     await JobApiClient.cancelJob(jobId);
+  };
+
+  const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
+    switch (status) {
+      case 'valid':
+        return '#029a80';
+      case 'warning':
+        return '#ebe51e';
+      case 'error':
+        return '#ff9900';
+      case 'fatal':
+        return '#e3170a';
+      case 'execution_error':
+        return 'black';
+      default:
+        return 'black';
+    }
   };
 
   const renderStatus = () => {
@@ -113,13 +134,13 @@ const JobItem = ({
   };
 
   return (
-    <Accordion open={open}>
+    <Accordion open={open} style={{ position: 'relative' }}>
       {job.jobId?.parentJobId?.jobId === undefined ? (
         <AccordionHeader
           className="!outline-none"
           onClick={() => setOpen(!open)}
         >
-          <div className="flex justify-between items-center text-sm w-full text-gray-700">
+          <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
             <div className="flex space-x-1 items-center">
               <div>{job.jobType || (job as any).updatedModel?.jobType}</div>
               {renderStatus()}
@@ -136,8 +157,115 @@ const JobItem = ({
               ) : (
                 <div></div>
               )}
-              <div>
-                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+              <div className=" relative">
+                <div className="flex items-center gap-x-3">
+                  {job.jobType === 'run checks' && (
+                    <div
+                      className="w-3 h-3"
+                      style={{
+                        backgroundColor: getColor(
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.highestSeverity
+                            ? job.parameters?.runChecksParameters
+                                ?.runChecksResult?.highestSeverity
+                            : 'error'
+                        )
+                      }}
+                    />
+                  )}
+                  <div>
+                    {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+                  </div>
+                </div>
+                {job.jobType === 'run checks' && (
+                  <div
+                    className="hidden group-hover:block absolute px-5 gap-y-1 w-80 h-29 rounded-md border border-gray-400 z-50 bg-white"
+                    style={{
+                      transform: 'translate(50%, -50%)',
+                      top: '550%',
+                      right: '165%'
+                    }}
+                  >
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Highest severity:</div>
+                      <div
+                        style={{
+                          color: getColor(
+                            job.parameters?.runChecksParameters?.runChecksResult
+                              ?.highestSeverity
+                              ? job.parameters?.runChecksParameters
+                                  ?.runChecksResult?.highestSeverity
+                              : 'error'
+                          )
+                        }}
+                      >
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.highestSeverity
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Executed check:</div>
+                      <div>
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.executedChecks
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Valid result:</div>
+                      <div>
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.validResults === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.validResults}
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Warnings:</div>
+                      <div>
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.warnings === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.warnings}
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Errors</div>
+                      <div>
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.errors === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.errors}
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Fatals:</div>
+                      <div>
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.fatals === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.fatals}
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Execution Fatals:</div>
+                      <div>
+                        {job.parameters?.runChecksParameters?.runChecksResult
+                          ?.executionErrors === 0
+                          ? '-'
+                          : job.parameters?.runChecksParameters?.runChecksResult
+                              ?.executionErrors}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -193,17 +321,21 @@ const JobItem = ({
                 <tr>
                   <td className="px-2 capitalize">Synchronized folder</td>
                   <td className="px-2 max-w-76">
-                    {
-                      job?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.folder || ((job as any).updatedModel?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.folder)
-                    }
+                    {job?.parameters?.synchronizeRootFolderParameters
+                      ?.synchronizationParameter?.folder ||
+                      (job as any).updatedModel?.parameters
+                        ?.synchronizeRootFolderParameters
+                        ?.synchronizationParameter?.folder}
                   </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize">Synchronization direction</td>
                   <td className="px-2 max-w-76">
-                    {
-                      job?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.direction || ((job as any).updatedModel?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.direction)
-                    }
+                    {job?.parameters?.synchronizeRootFolderParameters
+                      ?.synchronizationParameter?.direction ||
+                      (job as any).updatedModel?.parameters
+                        ?.synchronizeRootFolderParameters
+                        ?.synchronizationParameter?.direction}
                   </td>
                 </tr>
               </>
@@ -272,7 +404,6 @@ const JobItem = ({
                       <div key={index}>
                         <JobChild
                           job={notification.item}
-                          succeededCounter={index}
                           parentId={Number(job.jobId?.jobId)}
                         />
                       </div>
