@@ -25,7 +25,9 @@ const JobItem = ({
   job: DqoJobHistoryEntryModel;
   notifnumber?: number;
 }) => {
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const { errors } = useError();
   const dispatch = useActionDispatch();
 
@@ -46,10 +48,11 @@ const JobItem = ({
   }, []);
 
   const data = useMemo(() => {
-    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
-      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-    })
-    .map((item) => ({ type: 'job', item }));
+    const jobsData = Object.values(job_dictionary_state)
+      .sort((a, b) => {
+        return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+      })
+      .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
@@ -193,17 +196,21 @@ const JobItem = ({
                 <tr>
                   <td className="px-2 capitalize">Synchronized folder</td>
                   <td className="px-2 max-w-76">
-                    {
-                      job?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.folder || ((job as any).updatedModel?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.folder)
-                    }
+                    {job?.parameters?.synchronizeRootFolderParameters
+                      ?.synchronizationParameter?.folder ||
+                      (job as any).updatedModel?.parameters
+                        ?.synchronizeRootFolderParameters
+                        ?.synchronizationParameter?.folder}
                   </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize">Synchronization direction</td>
                   <td className="px-2 max-w-76">
-                    {
-                      job?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.direction || ((job as any).updatedModel?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.direction)
-                    }
+                    {job?.parameters?.synchronizeRootFolderParameters
+                      ?.synchronizationParameter?.direction ||
+                      (job as any).updatedModel?.parameters
+                        ?.synchronizeRootFolderParameters
+                        ?.synchronizationParameter?.direction}
                   </td>
                 </tr>
               </>
@@ -272,7 +279,6 @@ const JobItem = ({
                       <div key={index}>
                         <JobChild
                           job={notification.item}
-                          succeededCounter={index}
                           parentId={Number(job.jobId?.jobId)}
                         />
                       </div>

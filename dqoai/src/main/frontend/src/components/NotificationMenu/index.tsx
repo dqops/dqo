@@ -19,7 +19,9 @@ import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
 
 const NotificationMenu = () => {
-  const { job_dictionary_state, isOpen } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state, isOpen } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
   const { errors } = useError();
@@ -40,10 +42,11 @@ const NotificationMenu = () => {
   }, []);
 
   const data = useMemo(() => {
-    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
-      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-    })
-    .map((item) => ({ type: 'job', item }));
+    const jobsData = Object.values(job_dictionary_state)
+      .sort((a, b) => {
+        return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+      })
+      .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 

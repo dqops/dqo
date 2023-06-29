@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -19,6 +19,8 @@ const JobChild = ({
   job: DqoJobHistoryEntryModel;
   parentId: number;
 }) => {
+  const [errorString, setErrorString] = useState<string>('');
+  const [open, setOpen] = useState(false);
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
       return value ? 'Yes' : 'No';
@@ -28,8 +30,6 @@ const JobChild = ({
     }
     return value;
   };
-
-  const [open, setOpen] = useState(false);
 
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
@@ -51,6 +51,14 @@ const JobChild = ({
   const cancelJob = async (jobId: number) => {
     await JobApiClient.cancelJob(jobId);
   };
+
+  useEffect(() => {
+    if (job.errorMessage) {
+      setErrorString(job.errorMessage);
+    }
+  }, []);
+
+  console.log(errorString);
 
   return (
     <Accordion open={open}>
@@ -88,7 +96,14 @@ const JobChild = ({
           <tbody>
             <tr>
               <td className="px-2">Status</td>
-              <td className="px-2">{job?.status}</td>
+              <td className="px-2 gap-x-4 text-red-500">
+                {job?.status}
+                {'  '}
+
+                {job.errorMessage &&
+                  job.errorMessage.includes('dqocloud.accesskey') &&
+                  '(Wrong Api Key)'}
+              </td>
             </tr>
             <tr>
               <td className="px-2">Last Changed</td>
