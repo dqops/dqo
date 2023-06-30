@@ -24,7 +24,7 @@ import { DataGroupingConfigurationSpec } from '../../../api';
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
-import { ReferenceTableComparisons } from "./ReferenceTableComparisons";
+import { TableReferenceComparisons } from "./TableReferenceComparisons";
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -211,7 +211,7 @@ const ProfilingView = () => {
         />
       )}
       {activeTab === 'advanced' && <TableAdvancedProfiling />}
-      {activeTab === 'reference-comparisons' && <ReferenceTableComparisons />}
+      {activeTab === 'reference-comparisons' && <TableReferenceComparisons />}
     </div>
   );
 };
