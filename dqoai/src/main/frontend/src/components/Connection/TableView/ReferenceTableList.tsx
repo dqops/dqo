@@ -64,6 +64,7 @@ const ReferenceTableList = ({ references, onCreate, refetch, onEditReferenceTabl
             </td>
             <td className="px-2">
               <Button
+                className="text-sm"
                 variant="text"
                 color="primary"
                 label="Edit"
@@ -72,6 +73,7 @@ const ReferenceTableList = ({ references, onCreate, refetch, onEditReferenceTabl
             </td>
             <td className="px-2">
               <Button
+                className="text-sm"
                 variant="text"
                 color="primary"
                 label="Delete"
@@ -85,6 +87,7 @@ const ReferenceTableList = ({ references, onCreate, refetch, onEditReferenceTabl
       </table>
 
       <Button
+        className="text-sm"
         color="primary"
         label="New reference table for comparison"
         onClick={onCreate}
