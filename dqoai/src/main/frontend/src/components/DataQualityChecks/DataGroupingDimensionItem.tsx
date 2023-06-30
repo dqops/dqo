@@ -1,5 +1,8 @@
 import React from 'react';
-import { DataGroupingDimensionSpec, DataGroupingDimensionSpecSourceEnum } from '../../api';
+import {
+  DataGroupingDimensionSpec,
+  DataGroupingDimensionSpecSourceEnum
+} from '../../api';
 import Input from '../Input';
 import ColumnSelect from './ColumnSelect';
 import RadioButton from '../RadioButton';
@@ -29,15 +32,16 @@ const DataGroupingDimensionItem = ({
         }`}</div>
         <div className="flex-1">
           <RadioButton
-            checked={dataGroupingLevel?.source === undefined}
+            checked={dataGroupingLevel === undefined}
             label="None"
-            onClick={() => onChange({ ...dataGroupingLevel, source: undefined })}
+            onClick={() => onChange(undefined!)}
           />
         </div>
         <div className="">
           <RadioButton
             checked={
-              dataGroupingLevel?.source === DataGroupingDimensionSpecSourceEnum.tag
+              dataGroupingLevel?.source ===
+              DataGroupingDimensionSpecSourceEnum.tag
             }
             label="Tag"
             onClick={() =>
@@ -62,12 +66,11 @@ const DataGroupingDimensionItem = ({
               }
             }}
             disabled={
-              dataGroupingLevel?.source !== DataGroupingDimensionSpecSourceEnum.tag
+              dataGroupingLevel?.source !==
+              DataGroupingDimensionSpecSourceEnum.tag
             }
           />
-          {error && (
-            <div className="text-red-700 text-xs">{error}</div>
-          )}
+          {error && <div className="text-red-700 text-xs">{error}</div>}
         </div>
         <RadioButton
           checked={
