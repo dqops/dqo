@@ -32,8 +32,8 @@ const DeleteOnlyDataDialog = ({
   const [mode, setMode] = useState('all');
   const [params, setParams] = useState({
     deleteErrors: true,
-    deleteProfilingResults: true,
-    deleteRuleResults: true,
+    deleteStatistics: true,
+    deleteCheckResults: true,
     deleteSensorReadouts: true
   });
 
@@ -46,21 +46,18 @@ const DeleteOnlyDataDialog = ({
 
   const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
   const onConfirm = () => {
-    if (myArr.length === 1) {
-      onDelete({}, myArr);
-    } else if (mode === 'all') {
-      onDelete({});
-    } else {
+    if (mode === 'part') {
       onDelete({
         ...params,
         dateStart: toUTCString(startDate),
         dateEnd: toUTCString(endDate)
       });
+    } else {
+      onDelete({ ...params });
     }
   };
 
   const onChangeParams = (obj: { [key: string]: boolean }) => {
-    setMode('part');
     setParams({
       ...params,
       ...obj
@@ -123,17 +120,17 @@ const DeleteOnlyDataDialog = ({
             </div>
             <div className="flex flex-col gap-4 px-4 my-4 text-gray-700 ml-7">
               <Checkbox
-                checked={params.deleteProfilingResults}
-                onChange={(deleteProfilingResults) =>
-                  onChangeParams({ deleteProfilingResults })
+                checked={params.deleteStatistics}
+                onChange={(deleteStatistics) =>
+                  onChangeParams({ deleteStatistics })
                 }
                 label="Basic statistics results"
                 checkClassName="bg-teal-500"
               />
               <Checkbox
-                checked={params.deleteRuleResults}
-                onChange={(deleteRuleResults) =>
-                  onChangeParams({ deleteRuleResults })
+                checked={params.deleteCheckResults}
+                onChange={(deleteCheckResults) =>
+                  onChangeParams({ deleteCheckResults })
                 }
                 label="Check results"
                 checkClassName="bg-teal-500"

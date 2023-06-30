@@ -26,7 +26,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFirstLevelTab } from '../redux/actions/source.actions';
 import { getFirstLevelActiveTab } from '../redux/selectors';
-import { useActionDispatch } from "../hooks/useActionDispatch";
+import { useActionDispatch } from '../hooks/useActionDispatch';
 
 const TreeContext = React.createContext({} as any);
 
@@ -1094,6 +1094,28 @@ function TreeProvider(props: any) {
         ...params
       });
       return;
+    } else {
+      let checkType;
+      switch (checkTypes) {
+        case CheckTypes.RECURRING:
+          checkType = 'recurring';
+          break;
+        case CheckTypes.PROFILING:
+          checkType = 'profiling';
+          break;
+        case CheckTypes.PARTITIONED:
+          checkType = 'partitioned';
+          break;
+        default:
+          checkType = undefined;
+          break;
+      }
+      JobApiClient.deleteStoredData({
+        connectionName: node.collect_statistics_job_template?.connectionName,
+        schemaTableName: node.collect_statistics_job_template?.schemaTableName,
+        checkType,
+        ...params
+      });
     }
   };
 
