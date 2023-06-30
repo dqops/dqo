@@ -32,11 +32,9 @@ const DataGroupingDimensionItem = ({
         }`}</div>
         <div className="flex-1">
           <RadioButton
-            checked={dataGroupingLevel?.source === undefined}
+            checked={dataGroupingLevel === undefined}
             label="None"
-            onClick={() =>
-              onChange({ ...dataGroupingLevel, source: undefined })
-            }
+            onClick={() => onChange(undefined!)}
           />
         </div>
         <div className="">

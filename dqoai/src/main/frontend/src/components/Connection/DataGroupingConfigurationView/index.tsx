@@ -1,8 +1,11 @@
 import React from 'react';
-import { DataGroupingConfigurationSpec, DataGroupingDimensionSpec } from '../../../api';
+import {
+  DataGroupingConfigurationSpec,
+  DataGroupingDimensionSpec
+} from '../../../api';
 import DataGroupingDimensionItem from '../../DataQualityChecks/DataGroupingDimensionItem';
-import { Errors } from "../TableView/DataGroupingConfigurationEditView";
-import { useParams } from "react-router-dom";
+import { Errors } from '../TableView/DataGroupingConfigurationEditView';
+import { useParams } from 'react-router-dom';
 
 interface IDataGroupingConfigurationViewProps {
   dataGroupingConfiguration?: DataGroupingConfigurationSpec;
@@ -51,9 +54,12 @@ const DataGroupingConfigurationView = ({
             key={index}
             dataGroupingLevel={getDataGroupingDimensionLevel(index)}
             onChange={(dataGroupingDimensionLevel) =>
-              onChangeDataGroupingDimensionLevel(dataGroupingDimensionLevel, index)
+              onChangeDataGroupingDimensionLevel(
+                dataGroupingDimensionLevel,
+                index
+              )
             }
-            scope={table ? "table" : "connection"}
+            scope={table ? 'table' : 'connection'}
             error={errors ? errors[`level_${index + 1}`] : ''}
             onClearError={onClearError}
           />
