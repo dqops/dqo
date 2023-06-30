@@ -10,7 +10,12 @@ import { ProfilingReferenceTableList } from "./ProfilingReferenceTableList";
 import { EditProfilingReferenceTable } from "./EditProfilingReferenceTable";
 import qs from "query-string";
 
-export const TableReferenceComparisons = () => {
+type TableReferenceComparisonsProps = {
+  checkTypes: CheckTypes;
+  timePartitioned?: 'daily' | 'monthly';
+};
+
+export const TableReferenceComparisons = ({ checkTypes, timePartitioned }: TableReferenceComparisonsProps) => {
   const {
     connection,
     schema,
@@ -89,6 +94,8 @@ export const TableReferenceComparisons = () => {
     <>
       {isEditing ? (
         <EditProfilingReferenceTable
+          checkTypes={checkTypes}
+          timePartitioned={timePartitioned}
           onBack={onBack}
           selectedReference={selectedReference}
         />
