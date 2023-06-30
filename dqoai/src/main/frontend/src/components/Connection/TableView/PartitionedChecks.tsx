@@ -17,6 +17,7 @@ import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useHistory, useParams } from "react-router-dom";
 import { CheckTypes, ROUTES } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { TableReferenceComparisons } from "./TableReferenceComparisons";
 
 const initTabs = [
   {
@@ -25,8 +26,16 @@ const initTabs = [
   },
   {
     label: 'Monthly',
-    value: 'monthly'
-  }
+    value: 'monthly',
+  },
+  {
+    label: 'Daily Comparisons',
+    value: 'daily_comparisons'
+  },
+  {
+    label: 'Monthly Comparisons',
+    value: 'monthly_comparisons'
+  },
 ];
 
 const TablePartitionedChecksView = () => {
@@ -121,7 +130,7 @@ const TablePartitionedChecksView = () => {
   }, [isUpdatedMonthlyPartitionedChecks]);
 
   useEffect(() => {
-    if (tab !== 'daily' && tab !== 'monthly') {
+    if (tab !== 'daily' && tab !== 'monthly' && tab !== 'daily_comparisons' && tab !== 'monthly_comparisons') {
       history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, 'daily'));
     }
   }, [tab]);
@@ -173,6 +182,18 @@ const TablePartitionedChecksView = () => {
           checkResultsOverview={monthlyCheckResultsOverview}
           getCheckOverview={getMonthlyCheckOverview}
           loading={loading}
+        />
+      )}
+      {tab === 'daily_comparisons' && (
+        <TableReferenceComparisons
+          checkTypes={checkTypes}
+          timePartitioned="daily"
+        />
+      )}
+      {tab === 'monthly_comparisons' && (
+        <TableReferenceComparisons
+          checkTypes={checkTypes}
+          timePartitioned="monthly"
         />
       )}
     </div>

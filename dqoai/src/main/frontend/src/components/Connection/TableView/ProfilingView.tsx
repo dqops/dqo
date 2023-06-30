@@ -211,7 +211,11 @@ const ProfilingView = () => {
         />
       )}
       {activeTab === 'advanced' && <TableAdvancedProfiling />}
-      {activeTab === 'reference-comparisons' && <TableReferenceComparisons />}
+      {activeTab === 'reference-comparisons' && (
+        <TableReferenceComparisons
+          checkTypes={checkTypes}
+        />
+      )}
     </div>
   );
 };

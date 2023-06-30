@@ -10,23 +10,26 @@ import { ColumnComparisonModel, CompareThresholdsModel, TableComparisonModel } f
 import SectionWrapper from "../../Dashboard/SectionWrapper";
 import Checkbox from "../../Checkbox";
 import Select, { Option } from "../../Select";
+import { AxiosPromise } from "axios";
 
 type EditProfilingReferenceTableProps = {
   onBack: () => void;
   selectedReference?: string;
+  checkTypes: CheckTypes;
+  timePartitioned?: 'daily' | 'monthly';
 };
 
-export const EditProfilingReferenceTable = ({ onBack, selectedReference }: EditProfilingReferenceTableProps) => {
+export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBack, selectedReference }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const { checkTypes, connection, schema, table }: { checkTypes: CheckTypes, connection: string; schema: string; table: string } = useParams();
+  const { connection, schema, table }: { checkTypes: CheckTypes, connection: string; schema: string; table: string } = useParams();
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
 
   useEffect(() => {
     if (selectedReference) {
-      TableComparisonsApi.getTableComparisonProfiling(connection, schema, table, selectedReference).then((res) => {
+      const callback = (res: { data: TableComparisonModel }) => {
         setReference(res.data);
 
         ColumnApiClient.getColumns(
@@ -39,18 +42,72 @@ export const EditProfilingReferenceTable = ({ onBack, selectedReference }: EditP
             value: item.column_name ?? ''
           })));
         });
-      });
+      }
+      if (checkTypes === CheckTypes.PROFILING) {
+        TableComparisonsApi.getTableComparisonProfiling(connection, schema, table, selectedReference).then(callback);
+      } else if (checkTypes === CheckTypes.RECURRING) {
+        if (timePartitioned === 'daily') {
+          TableComparisonsApi.getTableComparisonRecurringDaily(connection, schema, table, selectedReference).then(callback);
+        } else if (timePartitioned === 'monthly') {
+          TableComparisonsApi.getTableComparisonRecurringMonthly(connection, schema, table, selectedReference).then(callback);
+        }
+      } else if (checkTypes === CheckTypes.PARTITIONED) {
+        if (timePartitioned === 'daily') {
+          TableComparisonsApi.getTableComparisonPartitionedDaily(connection, schema, table, selectedReference).then(callback);
+        } else if (timePartitioned === 'monthly') {
+          TableComparisonsApi.getTableComparisonPartitionedMonthly(connection, schema, table, selectedReference).then(callback);
+        }
+      }
     }
   }, [selectedReference]);
 
   const onUpdate = () => {
     setIsUpdating(true);
-    console.log('reference', reference);
-    TableComparisonsApi.updateTableComparisonProfiling(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
-      onBack();
-    }).finally(() => {
-      setIsUpdating(false);
-    });
+    if (checkTypes === CheckTypes.PROFILING) {
+      TableComparisonsApi.updateTableComparisonProfiling(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+        onBack();
+      }).catch(err => {
+        console.log(err);
+      }).finally(() => {
+        setIsUpdating(false);
+      });
+    } else if (checkTypes === CheckTypes.RECURRING) {
+      if (timePartitioned === 'daily') {
+        TableComparisonsApi.updateTableComparisonRecurringDaily(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+          onBack();
+        }).catch(err => {
+          console.log(err);
+        }).finally(() => {
+          setIsUpdating(false);
+        });
+      } else if (timePartitioned === 'monthly') {
+        TableComparisonsApi.updateTableComparisonRecurringMonthly(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+          onBack();
+        }).catch(err => {
+          console.log(err);
+        }).finally(() => {
+          setIsUpdating(false);
+        });
+      }
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
+      if (timePartitioned === 'daily') {
+        TableComparisonsApi.updateTableComparisonPartitionedDaily(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+          onBack();
+        }).catch(err => {
+          console.log(err);
+        }).finally(() => {
+          setIsUpdating(false);
+        });
+      } else if (timePartitioned === 'monthly') {
+        TableComparisonsApi.updateTableComparisonPartitionedMonthly(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+          onBack();
+        }).catch(err => {
+          console.log(err);
+        }).finally(() => {
+          setIsUpdating(false);
+        });
+      }
+    }
   }
 
   const onChange = (obj: Partial<TableComparisonModel>) => {
