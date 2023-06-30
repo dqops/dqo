@@ -6,7 +6,7 @@ import {
   TableApiClient,
   TableComparisonsApi
 } from "../../../services/apiClient";
-import { DataGroupingConfigurationBasicModel, ReferenceTableModel } from "../../../api";
+import { DataGroupingConfigurationBasicModel } from "../../../api";
 import Button from "../../Button";
 import Input from "../../Input";
 import SvgIcon from "../../SvgIcon";
@@ -21,7 +21,7 @@ import TableActionGroup from './TableActionGroup';
 
 type EditReferenceTableProps = {
   onBack: () => void;
-  selectedReference?: ReferenceTableModel;
+  selectedReference?: string;
 };
 
 const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTableProps) => {
@@ -53,10 +53,12 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
 
   useEffect(() => {
     if (selectedReference) {
-      setName(selectedReference.reference_table_configuration_name ?? '');
-      setRefConnection(selectedReference.reference_connection ?? '');
-      setRefSchema(selectedReference.reference_table?.schema_name ?? '');
-      setRefTable(selectedReference.reference_table?.table_name ?? '');
+      TableComparisonsApi.getTableComparisonConfiguration(connection, schema, table, selectedReference).then(res => {
+        setName(res.data?.reference_table_configuration_name ?? '');
+        setRefConnection(res.data?.reference_connection ?? '');
+        setRefSchema(res.data?.reference_table?.schema_name ?? '');
+        setRefTable(res.data?.reference_table?.table_name ?? '');
+      });
     }
   }, [selectedReference]);
 
@@ -151,7 +153,7 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
         connection,
         schema,
         table,
-        selectedReference.reference_table_configuration_name ?? '',
+        selectedReference ?? '',
         {
           reference_table_configuration_name: name,
           compared_connection: connection,

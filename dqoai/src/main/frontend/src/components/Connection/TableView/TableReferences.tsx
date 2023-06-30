@@ -14,13 +14,14 @@ const TableReferences = () => {
   }: { connection: string; schema: string; table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [references, setReferences] = useState<ReferenceTableModel[]>([]);
-  const [selectedReference, setSelectedReference] = useState<ReferenceTableModel>();
+  const [selectedReference, setSelectedReference] = useState<string>();
   const location = useLocation();
   const history = useHistory();
 
   useEffect(() => {
-    const { isEditing: editing } = qs.parse(location.search);
+    const { isEditing: editing, reference } = qs.parse(location.search);
     setIsEditing(editing === 'true');
+    setSelectedReference(reference as string);
   }, [location]);
 
   useEffect(() => {
@@ -33,22 +34,31 @@ const TableReferences = () => {
     });
   };
 
+
+  const onChangeEditing = (value: boolean, reference?: string) => {
+    setIsEditing(value);
+    const parsed = qs.parse(location.search);
+    parsed.isEditing = value.toString();
+
+    if (reference !== undefined) {
+      parsed.reference = reference;
+    }
+    history.replace(`${location.pathname}?${qs.stringify(parsed)}`);
+  };
+
   const onBack = () => {
-    setIsEditing(false);
-    history.replace(`${location.pathname}?isEditing=false`);
+    onChangeEditing(false);
     getReferences();
   };
 
   const onEditReferenceTable = (reference: ReferenceTableModel) => {
-    setSelectedReference(reference);
-    setIsEditing(true);
-    history.replace(`${location.pathname}?isEditing=true`);
+    setSelectedReference(reference.reference_table_configuration_name);
+    onChangeEditing(true, reference.reference_table_configuration_name);
   };
 
   const onCreate = () => {
-    setSelectedReference(undefined);
-    setIsEditing(true);
-    history.replace(`${location.pathname}?isEditing=true`);
+    setSelectedReference('');
+    onChangeEditing(true, '');
   };
 
   return (

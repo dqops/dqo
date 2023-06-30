@@ -83,14 +83,14 @@ const Input = ({
           'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full text-sm rounded',
           className
         )}
-        value={value || ''}
+        value={value !== undefined ? value : ''}
         onChange={onChange}
         onBlur={onBlur}
         data-testid={dataTestId}
         defaultValue={defaultValue}
         onKeyDown={onKeyDown}
       />
-      {value && (
+      {value !== undefined && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">
           <SvgIcon
             name="subtract"

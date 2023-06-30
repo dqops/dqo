@@ -1,44 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { TableComparisonsApi } from "../../../services/apiClient";
-import { ReferenceTableModel } from "../../../api";
+import React from "react";
 import Button from "../../Button";
-import { useActionDispatch } from "../../../hooks/useActionDispatch";
-import { addFirstLevelTab } from "../../../redux/actions/source.actions";
-import { CheckTypes, ROUTES } from "../../../shared/routes";
+import { ReferenceTableModel } from "../../../api";
 
-export const ReferenceTableComparisons = () => {
-  const {
-    connection,
-    schema,
-    table
-  }: { connection: string; schema: string; table: string } = useParams();
-  const [references, setReferences] = useState<ReferenceTableModel[]>([]);
-  const dispatch = useActionDispatch();
-  const history = useHistory();
+type ProfilingReferenceTableListProps = {
+  references: ReferenceTableModel[];
+  onCreate: () => void;
+  selectReference: (reference: ReferenceTableModel) => void;
+  onEdit: (reference: ReferenceTableModel) => void;
+}
 
-  useEffect(() => {
-    getReferenceComparisons();
-  }, []);
-
-  const getReferenceComparisons = () => {
-    TableComparisonsApi.getReferenceTables(connection, schema, table).then((res) => {
-      setReferences(res.data);
-    });
-  };
-
-  const onCreateNewReference = () => {
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'reference-tables')}?isEditing=true`;
-    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
-      url,
-      value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
-      state: {},
-      label: table
-    }));
-
-    history.push(url);
-  };
-
+export const ProfilingReferenceTableList = ({ references, onCreate, selectReference, onEdit }: ProfilingReferenceTableListProps) => {
   return (
     <div className="px-8 py-4 text-sm">
       <table className="mb-4 w-full">
@@ -81,6 +52,7 @@ export const ReferenceTableComparisons = () => {
                 color="primary"
                 className="text-sm"
                 label="Configure comparison checks"
+                onClick={() => selectReference(reference)}
               />
             </td>
             <td className="px-2">
@@ -89,6 +61,7 @@ export const ReferenceTableComparisons = () => {
                 color="primary"
                 className="text-sm"
                 label="Edit reference table"
+                onClick={() => onEdit(reference)}
               />
             </td>
           </tr>
@@ -100,8 +73,9 @@ export const ReferenceTableComparisons = () => {
         color="primary"
         label="New reference table for comparison"
         className="text-sm"
-        onClick={onCreateNewReference}
+        onClick={onCreate}
       />
     </div>
-  )
-}
+  );
+};
+
