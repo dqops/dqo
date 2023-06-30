@@ -3,11 +3,12 @@ import { DataGroupingConfigurationBasicModel } from '../../../api';
 import DataGroupingConfigurationListView from './DataGroupingConfigurationListView';
 import DataGroupingConfigurationEditView from './DataGroupingConfigurationEditView';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
-import { useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { IRootState } from '../../../redux/reducers';
+import qs from "query-string";
 
 const TableDataGroupingConfiguration = () => {
   const {
@@ -15,10 +16,12 @@ const TableDataGroupingConfiguration = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
+  const location = useLocation();
   const [isEditing, setIsEditing] = useState(false);
   const { dataStreamName, bool } = useSelector(
     (state: IRootState) => state.job || {}
   );
+  const history = useHistory();
 
   const actionDispatch = useActionDispatch();
   const setBackData = () => {
@@ -27,6 +30,7 @@ const TableDataGroupingConfiguration = () => {
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
     DataGroupingConfigurationBasicModel[]
   >([]);
+
   const [
     selectedDataGroupingConfiguration,
     setSelectedDataGroupingConfiguration
@@ -35,6 +39,11 @@ const TableDataGroupingConfiguration = () => {
   useEffect(() => {
     getDataGroupingConfigurations();
   }, [connectionName, schemaName, tableName]);
+
+  useEffect(() => {
+    const { isEditing: editing } = qs.parse(location.search);
+    setIsEditing(editing === 'true');
+  }, [location]);
 
   const getDataGroupingConfigurations = () => {
     DataGroupingConfigurationsApi.getTableGroupingConfigurations(
@@ -50,13 +59,14 @@ const TableDataGroupingConfiguration = () => {
     groupingConfiguration: DataGroupingConfigurationBasicModel
   ) => {
     setSelectedDataGroupingConfiguration(groupingConfiguration);
-    setIsEditing(true);
+    history.replace(`${location.pathname}?isEditing=true`);
   };
 
   const onCreate = () => {
     setSelectedDataGroupingConfiguration(undefined);
-    setIsEditing(true);
+    history.replace(`${location.pathname}?isEditing=true`);
   };
+
   const myObj: DataGroupingConfigurationBasicModel = {
     connection_name: connectionName,
     schema_name: schemaName,
@@ -64,13 +74,16 @@ const TableDataGroupingConfiguration = () => {
     data_grouping_configuration_name: dataStreamName
   };
 
+  const onBack = () => {
+    history.replace(`${location.pathname}?isEditing=false`);
+    setBackData()
+  };
+
   return (
     <div className="my-1">
       {isEditing || bool ? (
         <DataGroupingConfigurationEditView
-          onBack={() => {
-            setIsEditing(false), setBackData();
-          }}
+          onBack={onBack}
           selectedGroupingConfiguration={
             dataStreamName.length !== 0
               ? myObj
