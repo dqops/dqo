@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   Popover,
@@ -262,7 +262,8 @@ const ContextMenu = ({
             </div>
           )}
           {(node.level === TREE_LEVEL.DATABASE ||
-            node.level === TREE_LEVEL.SCHEMA) && (
+            node.level === TREE_LEVEL.SCHEMA ||
+            node.level === TREE_LEVEL.TABLE) && (
             <>
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
@@ -281,25 +282,7 @@ const ContextMenu = ({
               />
             </>
           )}
-          {node.level === TREE_LEVEL.TABLE && (
-            <>
-              <div
-                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() => setDeleteDataDialogOpened(true)}
-              >
-                Delete data
-              </div>
-              <DeleteOnlyDataDialog
-                open={deleteDataDialogOpened}
-                onClose={() => setDeleteDataDialogOpened(false)}
-                onDelete={(params) => {
-                  setDeleteDataDialogOpened(false);
-                  deleteStoredData(node, params);
-                  setOpen(false);
-                }}
-              />
-            </>
-          )}
+
           {node.level === TREE_LEVEL.COLUMN && (
             <>
               <div

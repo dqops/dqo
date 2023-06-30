@@ -46,16 +46,18 @@ const DeleteOnlyDataDialog = ({
 
   const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
   const onConfirm = () => {
-    onDelete({
-      ...params,
-      dateStart: toUTCString(startDate),
-      dateEnd: toUTCString(endDate)
-    });
-    console.log(params);
+    if (mode === 'part') {
+      onDelete({
+        ...params,
+        dateStart: toUTCString(startDate),
+        dateEnd: toUTCString(endDate)
+      });
+    } else {
+      onDelete({ ...params });
+    }
   };
 
   const onChangeParams = (obj: { [key: string]: boolean }) => {
-    setMode('part');
     setParams({
       ...params,
       ...obj
@@ -63,8 +65,6 @@ const DeleteOnlyDataDialog = ({
   };
 
   const isDisabled = useMemo(() => mode === 'all', [mode]);
-
-  console.log(params);
 
   return (
     <Dialog open={open} handler={onClose} className="min-w-200 p-4">
