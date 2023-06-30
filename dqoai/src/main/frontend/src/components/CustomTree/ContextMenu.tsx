@@ -17,8 +17,8 @@ import {
   TimeWindowFilterParameters,
   RunChecksQueueJobParameters
 } from '../../api';
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { setActiveFirstLevelTab } from "../../redux/actions/source.actions";
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -71,7 +71,12 @@ const ContextMenu = ({
   };
 
   const importMetaData = () => {
-    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label)));
+    dispatch(
+      setActiveFirstLevelTab(
+        checkTypes,
+        ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label)
+      )
+    );
     history.push(
       `${ROUTES.CONNECTION_DETAIL(
         checkTypes,
@@ -83,14 +88,14 @@ const ContextMenu = ({
 
   const importTables = () => {
     const [connection, schema] = node.id.toString().split('.');
-    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.SCHEMA_LEVEL_VALUE(checkTypes, connection, schema)));
-    history.push(
-      `${ROUTES.SCHEMA_LEVEL_PAGE(
+    dispatch(
+      setActiveFirstLevelTab(
         checkTypes,
-        connection,
-        schema,
-        'tables'
-      )}`
+        ROUTES.SCHEMA_LEVEL_VALUE(checkTypes, connection, schema)
+      )
+    );
+    history.push(
+      `${ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, 'tables')}`
     );
   };
 
