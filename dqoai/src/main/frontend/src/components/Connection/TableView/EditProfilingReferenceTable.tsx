@@ -100,34 +100,48 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
 
   const goToCreateNew = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
+      CheckTypes.SOURCES,
       connection,
       schema,
       table,
       'data-streams'
     );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+    );
 
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url: `${url}?isEditing=true`,
+        value,
+        label: reference?.reference_table?.table_name ?? '',
+        state: {}
+      })
+    );
     history.push(`${url}?isEditing=true`);
   }
 
   const goToRefCreateNew = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
+      CheckTypes.SOURCES,
       reference?.reference_connection ?? '',
       reference?.reference_table?.schema_name ?? '',
       reference?.reference_table?.table_name ?? '',
       'data-streams'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
-      checkTypes,
+      CheckTypes.SOURCES,
       reference?.reference_connection ?? '',
       reference?.reference_table?.schema_name ?? '',
       reference?.reference_table?.table_name ?? '',
     );
 
     dispatch(
-      addFirstLevelTab(checkTypes, {
-        url,
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url: `${url}?isEditing=true`,
         value,
         label: reference?.reference_table?.table_name ?? '',
         state: {}
