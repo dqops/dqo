@@ -40,7 +40,7 @@ DQO_REPO_HOME = os.path.abspath("../../")
 try:
     exec(open('dqops/version.py').read())
 except IOError:
-    print("Failed to load DQO.ai version file for packaging. You must be in dqops' distribution/python dir.",
+    print("Failed to load DQOps version file for packaging. You must be in dqops' distribution/python dir.",
           file=sys.stderr)
     sys.exit(-1)
 
@@ -64,7 +64,7 @@ If you are installing DQO from https://github.com/dqops/dqo source, you must fir
 DISTRIBUTION_PATH = os.path.join(DQO_REPO_HOME, "distribution/target/dqo-distribution-{0}-bin.zip".format(VERSION))
 
 in_dqo = os.path.isfile(os.path.join(DQO_REPO_HOME, "pom.xml")) and \
-         os.path.isfile(os.path.join(DQO_REPO_HOME, "dqoai/src/main/java/ai/dqo/cli/CliApplication.java"))
+         os.path.isfile(os.path.join(DQO_REPO_HOME, "dqops/src/main/java/com/dqops/cli/CliApplication.java"))
 
 
 class InstallCommand(install):

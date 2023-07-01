@@ -1,0 +1,850 @@
+/*
+ * Copyright © 2021 DQOps (support@dqops.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.dqops.checks.column.profiling;
+
+import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.column.checkspecs.strings.*;
+import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
+import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
+
+/**
+ * Container of built-in preconfigured data quality checks on a column level that are checking for string.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@EqualsAndHashCode(callSuper = true)
+public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+        {
+            put("string_max_length", o -> o.stringMaxLength);
+            put("string_min_length", o -> o.stringMinLength);
+            put("string_mean_length", o -> o.stringMeanLength);
+            put("string_length_below_min_length_count", o -> o.stringLengthBelowMinLengthCount);
+            put("string_length_below_min_length_percent", o -> o.stringLengthBelowMinLengthPercent);
+            put("string_length_above_max_length_count", o -> o.stringLengthAboveMaxLengthCount);
+            put("string_length_above_max_length_percent", o -> o.stringLengthAboveMaxLengthPercent);
+            put("string_length_in_range_percent", o -> o.stringLengthInRangePercent);
+
+            put("string_empty_count", o -> o.stringEmptyCount);
+            put("string_empty_percent", o -> o.stringEmptyPercent);
+            put("string_whitespace_count", o -> o.stringWhitespaceCount);
+            put("string_whitespace_percent", o -> o.stringWhitespacePercent);
+            put("string_surrounded_by_whitespace_count", o -> o.stringSurroundedByWhitespaceCount);
+            put("string_surrounded_by_whitespace_percent", o -> o.stringSurroundedByWhitespacePercent);
+
+            put("string_null_placeholder_count", o -> o.stringNullPlaceholderCount);
+            put("string_null_placeholder_percent", o -> o.stringNullPlaceholderPercent);
+            put("string_boolean_placeholder_percent", o -> o.stringBooleanPlaceholderPercent);
+            put("string_parsable_to_integer_percent", o -> o.stringParsableToIntegerPercent);
+            put("string_parsable_to_float_percent", o -> o.stringParsableToFloatPercent);
+
+            put("expected_strings_in_use_count", o -> o.expectedStringsInUseCount);
+            put("string_value_in_set_percent", o -> o.stringValueInSetPercent);
+
+            put("string_valid_dates_percent", o -> o.stringValidDatesPercent);
+            put("string_valid_country_code_percent", o -> o.stringValidCountryCodePercent);
+            put("string_valid_currency_code_percent", o -> o.stringValidCurrencyCodePercent);
+            put("string_invalid_email_count", o -> o.stringInvalidEmailCount);
+            put("string_invalid_uuid_count", o -> o.stringInvalidUuidCount);
+            put("string_valid_uuid_percent", o -> o.stringValidUuidPercent);
+            put("string_invalid_ip4_address_count", o -> o.stringInvalidIp4AddressCount);
+            put("string_invalid_ip6_address_count", o -> o.stringInvalidIp6AddressCount);
+
+            put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
+            put("string_match_regex_percent", o -> o.stringMatchRegexPercent);
+            put("string_not_match_date_regex_count", o -> o.stringNotMatchDateRegexCount);
+            put("string_match_date_regex_percent", o -> o.stringMatchDateRegexPercent);
+            put("string_match_name_regex_percent", o -> o.stringMatchNameRegexPercent);
+
+            put("expected_strings_in_top_values_count", o -> o.expectedStringsInTopValuesCount);
+
+            put("string_datatype_detected", o -> o.stringDatatypeDetected);
+        }
+    };
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
+    private ColumnStringMaxLengthCheckSpec stringMaxLength;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not fall below the minimum accepted length.")
+    private ColumnStringMinLengthCheckSpec stringMinLength;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length.")
+    private ColumnStringMeanLengthCheckSpec stringMeanLength;
+
+    @JsonPropertyDescription("The check counts the number of strings in the column that is below the length defined by the user as a parameter.")
+    private ColumnStringLengthBelowMinLengthCountCheckSpec stringLengthBelowMinLengthCount;
+
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is below the length defined by the user as a parameter.")
+    private ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent;
+
+    @JsonPropertyDescription("The check counts the number of strings in the column that is above the length defined by the user as a parameter.")
+    private ColumnStringLengthAboveMaxLengthCountCheckSpec stringLengthAboveMaxLengthCount;
+
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is above the length defined by the user as a parameter.")
+    private ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent;
+
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. ")
+    private ColumnStringLengthInRangePercentCheckSpec stringLengthInRangePercent;
+
+    @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
+    private ColumnStringEmptyCountCheckSpec stringEmptyCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.")
+    private ColumnStringEmptyPercentCheckSpec stringEmptyPercent;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.")
+    private ColumnStringWhitespaceCountCheckSpec stringWhitespaceCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.")
+    private ColumnStringWhitespacePercentCheckSpec stringWhitespacePercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count.")
+    private ColumnStringSurroundedByWhitespaceCountCheckSpec stringSurroundedByWhitespaceCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage.")
+    private ColumnStringSurroundedByWhitespacePercentCheckSpec stringSurroundedByWhitespacePercent;
+
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.")
+    private ColumnStringNullPlaceholderCountCheckSpec stringNullPlaceholderCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.")
+    private ColumnStringNullPlaceholderPercentCheckSpec stringNullPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringBooleanPlaceholderPercentCheckSpec stringBooleanPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringParsableToIntegerPercentCheckSpec stringParsableToIntegerPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringParsableToFloatPercentCheckSpec stringParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
+    private ColumnExpectedStringsInUseCountCheckSpec expectedStringsInUseCount;
+
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
+    private ColumnStringValueInSetPercentCheckSpec stringValueInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringValidDatesPercentCheckSpec stringValidDatesPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringValidCountryCodePercentCheckSpec stringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringValidCurrencyCodePercentCheckSpec stringValidCurrencyCodePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidEmailCountCheckSpec stringInvalidEmailCount;
+
+    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
+    private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringMatchRegexPercentCheckSpec stringMatchRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count.")
+    private ColumnStringNotMatchDateRegexCountCheckSpec stringNotMatchDateRegexCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringMatchDateRegexPercentCheckSpec stringMatchDateRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not fall below the minimum accepted percentage.")
+    private ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec expectedStringsInTopValuesCount;
+
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.")
+    private ColumnStringDatatypeDetectedCheckSpec stringDatatypeDetected;
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnStringMaxLengthCheckSpec getStringMaxLength() {
+        return stringMaxLength;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length check.
+     * @param stringMaxLength Maximum string length check.
+     */
+    public void setStringMaxLength(ColumnStringMaxLengthCheckSpec stringMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.stringMaxLength, stringMaxLength));
+        this.stringMaxLength = stringMaxLength;
+        propagateHierarchyIdToField(stringMaxLength, "string_max_length");
+    }
+
+    /**
+     * Returns a minimum string length above check.
+     * @return Minimum string length above check.
+     */
+    public ColumnStringMinLengthCheckSpec getStringMinLength() {
+        return stringMinLength;
+    }
+
+    /**
+     * Sets a new definition of a minimum string length check.
+     * @param stringMinLength Minimum string length check.
+     */
+    public void setStringMinLength(ColumnStringMinLengthCheckSpec stringMinLength) {
+        this.setDirtyIf(!Objects.equals(this.stringMinLength, stringMinLength));
+        this.stringMinLength = stringMinLength;
+        propagateHierarchyIdToField(stringMinLength, "string_min_length");
+    }
+
+    /**
+     * Returns a mean string length between check.
+     * @return Mean string length between check.
+     */
+    public ColumnStringMeanLengthCheckSpec getStringMeanLength() {
+        return stringMeanLength;
+    }
+
+    /**
+     * Sets a new definition of a mean string length check.
+     * @param stringMeanLength Mean string length check.
+     */
+    public void setStringMeanLength(ColumnStringMeanLengthCheckSpec stringMeanLength) {
+        this.setDirtyIf(!Objects.equals(this.stringMeanLength, stringMeanLength));
+        this.stringMeanLength = stringMeanLength;
+        propagateHierarchyIdToField(stringMeanLength, "string_mean_length");
+    }
+
+    /**
+     * Returns a string length below min length count check.
+     * @return String length below min length count check.
+     */
+    public ColumnStringLengthBelowMinLengthCountCheckSpec getStringLengthBelowMinLengthCount() {
+        return stringLengthBelowMinLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length below min length count check.
+     * @param stringLengthBelowMinLengthCount String length below min length count check.
+     */
+    public void setStringLengthBelowMinLengthCount(ColumnStringLengthBelowMinLengthCountCheckSpec stringLengthBelowMinLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthBelowMinLengthCount, stringLengthBelowMinLengthCount));
+        this.stringLengthBelowMinLengthCount = stringLengthBelowMinLengthCount;
+        propagateHierarchyIdToField(stringLengthBelowMinLengthCount, "string_length_below_min_length_count");
+    }
+
+    /**
+     * Returns a string length below min length percent check.
+     * @return String length below min length percent check.
+     */
+    public ColumnStringLengthBelowMinLengthPercentCheckSpec getStringLengthBelowMinLengthPercent() {
+        return stringLengthBelowMinLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length below min length percent check.
+     * @param stringLengthBelowMinLengthPercent String length below min length percent check.
+     */
+    public void setStringLengthBelowMinLengthPercent(ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthBelowMinLengthPercent, stringLengthBelowMinLengthPercent));
+        this.stringLengthBelowMinLengthPercent = stringLengthBelowMinLengthPercent;
+        propagateHierarchyIdToField(stringLengthBelowMinLengthPercent, "string_length_below_min_length_percent");
+    }
+
+    /**
+     * Returns a string length above max length count check.
+     * @return String length above max length count check.
+     */
+    public ColumnStringLengthAboveMaxLengthCountCheckSpec getStringLengthAboveMaxLengthCount() {
+        return stringLengthAboveMaxLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length count check.
+     * @param stringLengthAboveMaxLengthCount String length above max length count check.
+     */
+    public void setStringLengthAboveMaxLengthCount(ColumnStringLengthAboveMaxLengthCountCheckSpec stringLengthAboveMaxLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthAboveMaxLengthCount, stringLengthAboveMaxLengthCount));
+        this.stringLengthAboveMaxLengthCount = stringLengthAboveMaxLengthCount;
+        propagateHierarchyIdToField(stringLengthAboveMaxLengthCount, "string_length_above_max_length_count");
+    }
+
+    /**
+     * Returns a string length above max length percent check.
+     * @return String length above max length percent check.
+     */
+    public ColumnStringLengthAboveMaxLengthPercentCheckSpec getStringLengthAboveMaxLengthPercent() {
+        return stringLengthAboveMaxLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length percent check.
+     * @param stringLengthAboveMaxLengthPercent String length above max length percent check.
+     */
+    public void setStringLengthAboveMaxLengthPercent(ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthAboveMaxLengthPercent, stringLengthAboveMaxLengthPercent));
+        this.stringLengthAboveMaxLengthPercent = stringLengthAboveMaxLengthPercent;
+        propagateHierarchyIdToField(stringLengthAboveMaxLengthPercent, "string_length_above_max_length_percent");
+    }
+
+    /**
+     * Returns a string length in range percent check.
+     * @return String length in range percent check.
+     */
+    public ColumnStringLengthInRangePercentCheckSpec getStringLengthInRangePercent() {
+        return stringLengthInRangePercent;
+    }
+
+    /**
+     * Sets a new definition of a string length in range percent check.
+     * @param stringLengthInRangePercent String length in range percent check.
+     */
+    public void setStringLengthInRangePercent(ColumnStringLengthInRangePercentCheckSpec stringLengthInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthInRangePercent, stringLengthInRangePercent));
+        this.stringLengthInRangePercent = stringLengthInRangePercent;
+        propagateHierarchyIdToField(stringLengthInRangePercent, "string_length_in_range_percent");
+    }
+
+    /**
+     * Returns a maximum string empty percent check.
+     * @return Maximum string empty percent check.
+     */
+    public ColumnStringEmptyCountCheckSpec getStringEmptyCount() {
+        return stringEmptyCount;
+    }
+
+    /**
+     * Sets a new definition of a string empty count check.
+     * @param stringEmptyCount String empty count check.
+     */
+    public void setStringEmptyCount(ColumnStringEmptyCountCheckSpec stringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.stringEmptyCount, stringEmptyCount));
+        this.stringEmptyCount = stringEmptyCount;
+        propagateHierarchyIdToField(stringEmptyCount, "string_empty_count");
+    }
+
+    /**
+     * Returns a max string empty count check.
+     * @return Max string empty count check.
+     */
+    public ColumnStringEmptyPercentCheckSpec getStringEmptyPercent() {
+        return stringEmptyPercent;
+    }
+
+    /**
+     * Sets a new definition of a string empty percent check.
+     * @param stringEmptyPercent String empty percent check.
+     */
+    public void setStringEmptyPercent(ColumnStringEmptyPercentCheckSpec stringEmptyPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringEmptyPercent, stringEmptyPercent));
+        this.stringEmptyPercent = stringEmptyPercent;
+        propagateHierarchyIdToField(stringEmptyPercent, "string_empty_percent");
+    }
+
+    /**
+     * Returns a maximum string whitespace count check.
+     * @return Maximum string whitespace count check.
+     */
+    public ColumnStringWhitespaceCountCheckSpec getStringWhitespaceCount() {
+        return stringWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a string whitespace count check.
+     * @param stringWhitespaceCount String whitespace count check.
+     */
+    public void setStringWhitespaceCount(ColumnStringWhitespaceCountCheckSpec stringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.stringWhitespaceCount, stringWhitespaceCount));
+        this.stringWhitespaceCount = stringWhitespaceCount;
+        propagateHierarchyIdToField(stringWhitespaceCount, "string_whitespace_count");
+    }
+
+    /**
+     * Returns a maximum string whitespace percent check.
+     * @return Maximum string whitespace percent check.
+     */
+    public ColumnStringWhitespacePercentCheckSpec getStringWhitespacePercent() {
+        return stringWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string whitespace percent check.
+     * @param stringWhitespacePercent String whitespace percent check.
+     */
+    public void setStringWhitespacePercent(ColumnStringWhitespacePercentCheckSpec stringWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.stringWhitespacePercent, stringWhitespacePercent));
+        this.stringWhitespacePercent = stringWhitespacePercent;
+        propagateHierarchyIdToField(stringWhitespacePercent, "string_whitespace_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnStringSurroundedByWhitespaceCountCheckSpec getStringSurroundedByWhitespaceCount() {
+        return stringSurroundedByWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param stringSurroundedByWhitespaceCount String surrounded by whitespace count check.
+     */
+    public void setStringSurroundedByWhitespaceCount(ColumnStringSurroundedByWhitespaceCountCheckSpec stringSurroundedByWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.stringSurroundedByWhitespaceCount, stringSurroundedByWhitespaceCount));
+        this.stringSurroundedByWhitespaceCount = stringSurroundedByWhitespaceCount;
+        propagateHierarchyIdToField(stringSurroundedByWhitespaceCount, "string_surrounded_by_whitespace_count");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnStringSurroundedByWhitespacePercentCheckSpec getStringSurroundedByWhitespacePercent() {
+        return stringSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param stringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setStringSurroundedByWhitespacePercent(ColumnStringSurroundedByWhitespacePercentCheckSpec stringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.stringSurroundedByWhitespacePercent, stringSurroundedByWhitespacePercent));
+        this.stringSurroundedByWhitespacePercent = stringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(stringSurroundedByWhitespacePercent, "string_surrounded_by_whitespace_percent");
+    }
+
+    /**
+     * Returns a maximum string null placeholder percent check.
+     * @return Maximum string null placeholder percent check.
+     */
+    public ColumnStringNullPlaceholderCountCheckSpec getStringNullPlaceholderCount() {
+        return stringNullPlaceholderCount;
+    }
+
+    /**
+     * Sets a new definition of a string null placeholder count check.
+     * @param stringNullPlaceholderCount String null placeholder count check.
+     */
+    public void setStringNullPlaceholderCount(ColumnStringNullPlaceholderCountCheckSpec stringNullPlaceholderCount) {
+        this.setDirtyIf(!Objects.equals(this.stringNullPlaceholderCount, stringNullPlaceholderCount));
+        this.stringNullPlaceholderCount = stringNullPlaceholderCount;
+        propagateHierarchyIdToField(stringNullPlaceholderCount, "string_null_placeholder_count");
+    }
+
+    /**
+     * Returns a minimum string boolean placeholder percent check.
+     * @return Minimum string boolean placeholder percent check.
+     */
+    public ColumnStringNullPlaceholderPercentCheckSpec getStringNullPlaceholderPercent() {
+        return stringNullPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a string null placeholder percent check.
+     * @param stringNullPlaceholderPercent String null placeholder percent check.
+     */
+    public void setStringNullPlaceholderPercent(ColumnStringNullPlaceholderPercentCheckSpec stringNullPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringNullPlaceholderPercent, stringNullPlaceholderPercent));
+        this.stringNullPlaceholderPercent = stringNullPlaceholderPercent;
+        propagateHierarchyIdToField(stringNullPlaceholderPercent, "string_null_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent check.
+     */
+    public ColumnStringBooleanPlaceholderPercentCheckSpec getStringBooleanPlaceholderPercent() {
+        return stringBooleanPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a string boolean placeholder percent check.
+     * @param stringBooleanPlaceholderPercent String boolean placeholder percent check.
+     */
+    public void setStringBooleanPlaceholderPercent(ColumnStringBooleanPlaceholderPercentCheckSpec stringBooleanPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringBooleanPlaceholderPercent, stringBooleanPlaceholderPercent));
+        this.stringBooleanPlaceholderPercent = stringBooleanPlaceholderPercent;
+        propagateHierarchyIdToField(stringBooleanPlaceholderPercent, "string_boolean_placeholder_percent");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace count check.
+     * @return Maximum string surrounded by whitespace count check.
+     */
+    public ColumnStringParsableToIntegerPercentCheckSpec getStringParsableToIntegerPercent() {
+        return stringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a string parsable to integer percent check.
+     * @param stringParsableToIntegerPercent String parsable to integer percent check.
+     */
+    public void setStringParsableToIntegerPercent(ColumnStringParsableToIntegerPercentCheckSpec stringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringParsableToIntegerPercent, stringParsableToIntegerPercent));
+        this.stringParsableToIntegerPercent = stringParsableToIntegerPercent;
+        propagateHierarchyIdToField(stringParsableToIntegerPercent, "string_parsable_to_integer_percent");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace percent check.
+     * @return Maximum string surrounded by whitespace percent check.
+     */
+    public ColumnStringParsableToFloatPercentCheckSpec getStringParsableToFloatPercent() {
+        return stringParsableToFloatPercent;
+    }
+
+    /**
+     * Sets a new definition of a string parsable to float percent check.
+     * @param stringParsableToFloatPercent String parsable to float percent check.
+     */
+    public void setStringParsableToFloatPercent(ColumnStringParsableToFloatPercentCheckSpec stringParsableToFloatPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringParsableToFloatPercent, stringParsableToFloatPercent));
+        this.stringParsableToFloatPercent = stringParsableToFloatPercent;
+        propagateHierarchyIdToField(stringParsableToFloatPercent, "string_parsable_to_float_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to float percent check.
+     * @return Minimum string parsable to float percent check.
+     */
+    public ColumnExpectedStringsInUseCountCheckSpec getExpectedStringsInUseCount() {
+        return expectedStringsInUseCount;
+    }
+
+    /**
+     * Sets a new definition of a string in set count check.
+     * @param expectedStringsInUseCount String in set count check.
+     */
+    public void setExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec expectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.expectedStringsInUseCount, expectedStringsInUseCount));
+        this.expectedStringsInUseCount = expectedStringsInUseCount;
+        propagateHierarchyIdToField(expectedStringsInUseCount, "expected_strings_in_use_count");
+    }
+
+    /**
+     * Returns a minimum string valid usa zip code percent check.
+     * @return Minimum string valid usa zip code percent check.
+     */
+    public ColumnStringValueInSetPercentCheckSpec getStringValueInSetPercent() {
+        return stringValueInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a strings in set percent check.
+     * @param stringValueInSetPercent Strings in set percent check.
+     */
+    public void setStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec stringValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValueInSetPercent, stringValueInSetPercent));
+        this.stringValueInSetPercent = stringValueInSetPercent;
+        propagateHierarchyIdToField(stringValueInSetPercent, "string_value_in_set_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
+     */
+    public ColumnStringValidDatesPercentCheckSpec getStringValidDatesPercent() {
+        return stringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid dates percent check.
+     * @param stringValidDatesPercent String valid dates percent check.
+     */
+    public void setStringValidDatesPercent(ColumnStringValidDatesPercentCheckSpec stringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidDatesPercent, stringValidDatesPercent));
+        this.stringValidDatesPercent = stringValidDatesPercent;
+        propagateHierarchyIdToField(stringValidDatesPercent, "string_valid_dates_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
+     */
+    public ColumnStringValidCountryCodePercentCheckSpec getStringValidCountryCodePercent() {
+        return stringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid country code percent check.
+     * @param stringValidCountryCodePercent String valid country code percent check.
+     */
+    public void setStringValidCountryCodePercent(ColumnStringValidCountryCodePercentCheckSpec stringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidCountryCodePercent, stringValidCountryCodePercent));
+        this.stringValidCountryCodePercent = stringValidCountryCodePercent;
+        propagateHierarchyIdToField(stringValidCountryCodePercent, "string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
+     */
+    public ColumnStringValidCurrencyCodePercentCheckSpec getStringValidCurrencyCodePercent() {
+        return stringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid currency code percent check.
+     * @param stringValidCurrencyCodePercent String valid currency code percent check.
+     */
+    public void setStringValidCurrencyCodePercent(ColumnStringValidCurrencyCodePercentCheckSpec stringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidCurrencyCodePercent, stringValidCurrencyCodePercent));
+        this.stringValidCurrencyCodePercent = stringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(stringValidCurrencyCodePercent, "string_valid_currency_code_percent");
+    }
+
+    /**
+     * Returns a maximum invalid email count check.
+     * @return Maximum invalid email count check.
+     */
+    public ColumnStringInvalidEmailCountCheckSpec getStringInvalidEmailCount() {
+        return stringInvalidEmailCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid email count check.
+     * @param stringInvalidEmailCount Invalid email count check.
+     */
+    public void setStringInvalidEmailCount(ColumnStringInvalidEmailCountCheckSpec stringInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidEmailCount, stringInvalidEmailCount));
+        this.stringInvalidEmailCount = stringInvalidEmailCount;
+        propagateHierarchyIdToField(stringInvalidEmailCount, "string_invalid_email_count");
+    }
+
+    /**
+     * Returns a maximum invalid UUID count check.
+     * @return Maximum invalid UUID count check.
+     */
+    public ColumnStringInvalidUuidCountCheckSpec getStringInvalidUuidCount() {
+        return stringInvalidUuidCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid UUID count check.
+     * @param stringInvalidUuidCount Invalid UUID count check.
+     */
+    public void setStringInvalidUuidCount(ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidUuidCount, stringInvalidUuidCount));
+        this.stringInvalidUuidCount = stringInvalidUuidCount;
+        propagateHierarchyIdToField(stringInvalidUuidCount, "string_invalid_uuid_count");
+    }
+
+    /**
+     * Returns a valid UUID percent check.
+     * @return Valid UUID percent check.
+     */
+    public ColumnStringValidUuidPercentCheckSpec getStringValidUuidPercent() {
+        return stringValidUuidPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid UUID percent check.
+     * @param stringValidUuidPercent Valid UUID percent check.
+     */
+    public void setStringValidUuidPercent(ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidUuidPercent, stringValidUuidPercent));
+        this.stringValidUuidPercent = stringValidUuidPercent;
+        propagateHierarchyIdToField(stringValidUuidPercent, "string_valid_uuid_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP4 address count check.
+     * @return Maximum invalid IP4 address count check.
+     */
+    public ColumnStringInvalidIp4AddressCountCheckSpec getStringInvalidIp4AddressCount() {
+        return stringInvalidIp4AddressCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid IP4 address count check.
+     * @param stringInvalidIp4AddressCount Invalid IP4 address count check.
+     */
+    public void setStringInvalidIp4AddressCount(ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidIp4AddressCount, stringInvalidIp4AddressCount));
+        this.stringInvalidIp4AddressCount = stringInvalidIp4AddressCount;
+        propagateHierarchyIdToField(stringInvalidIp4AddressCount, "string_invalid_ip4_address_count");
+    }
+
+    /**
+     * Returns a maximum invalid IP6 address count check.
+     * @return Maximum invalid IP6 address count check.
+     */
+    public ColumnStringInvalidIp6AddressCountCheckSpec getStringInvalidIp6AddressCount() {
+        return stringInvalidIp6AddressCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid IP6 address count check.
+     * @param stringInvalidIp6AddressCount Invalid IP6 address count check.
+     */
+    public void setStringInvalidIp6AddressCount(ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidIp6AddressCount, stringInvalidIp6AddressCount));
+        this.stringInvalidIp6AddressCount = stringInvalidIp6AddressCount;
+        propagateHierarchyIdToField(stringInvalidIp6AddressCount, "string_invalid_ip6_address_count");
+    }
+
+    /**
+     * Returns a maximum not match regex count check.
+     * @return Maximum not match regex count check.
+     */
+    public ColumnStringNotMatchRegexCountCheckSpec getStringNotMatchRegexCount() {
+        return stringNotMatchRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match regex count check.
+     * @param stringNotMatchRegexCount Maximum not match regex count check.
+     */
+    public void setStringNotMatchRegexCount(ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.stringNotMatchRegexCount, stringNotMatchRegexCount));
+        this.stringNotMatchRegexCount = stringNotMatchRegexCount;
+        propagateHierarchyIdToField(stringNotMatchRegexCount, "string_not_match_regex_count");
+    }
+
+    /**
+     * Returns a minimum match regex percent check.
+     * @return Minimum match regex percent check.
+     */
+    public ColumnStringMatchRegexPercentCheckSpec getStringMatchRegexPercent() {
+        return stringMatchRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum match regex percent check.
+     * @param stringMatchRegexPercent Minimum match regex percent check.
+     */
+    public void setStringMatchRegexPercent(ColumnStringMatchRegexPercentCheckSpec stringMatchRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringMatchRegexPercent, stringMatchRegexPercent));
+        this.stringMatchRegexPercent = stringMatchRegexPercent;
+        propagateHierarchyIdToField(stringMatchRegexPercent, "string_match_regex_percent");
+    }
+
+    /**
+     * Returns a maximum not match date regex count check.
+     * @return Maximum not match date regex count check.
+     */
+    public ColumnStringNotMatchDateRegexCountCheckSpec getStringNotMatchDateRegexCount() {
+        return stringNotMatchDateRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match date regex count check.
+     * @param stringNotMatchDateRegexCount Maximum not match date regex count check.
+     */
+    public void setStringNotMatchDateRegexCount(ColumnStringNotMatchDateRegexCountCheckSpec stringNotMatchDateRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.stringNotMatchDateRegexCount, stringNotMatchDateRegexCount));
+        this.stringNotMatchDateRegexCount = stringNotMatchDateRegexCount;
+        propagateHierarchyIdToField(stringNotMatchDateRegexCount, "string_not_match_date_regex_count");
+    }
+
+    /**
+     * Returns a maximum match date regex percent check.
+     * @return Maximum match date regex percent check.
+     */
+    public ColumnStringMatchDateRegexPercentCheckSpec getStringMatchDateRegexPercent() {
+        return stringMatchDateRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match date regex percent check.
+     * @param stringMatchDateRegexPercent Maximum match date regex percent check.
+     */
+    public void setStringMatchDateRegexPercent(ColumnStringMatchDateRegexPercentCheckSpec stringMatchDateRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringMatchDateRegexPercent, stringMatchDateRegexPercent));
+        this.stringMatchDateRegexPercent = stringMatchDateRegexPercent;
+        propagateHierarchyIdToField(stringMatchDateRegexPercent, "string_match_date_regex_percent");
+    }
+
+    /**
+     * Returns a maximum match name regex percent check.
+     * @return Maximum match name regex percent check.
+     */
+    public ColumnStringMatchNameRegexPercentCheckSpec getStringMatchNameRegexPercent() {
+        return stringMatchNameRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match name regex percent check.
+     * @param stringMatchNameRegexPercent Maximum match name regex percent check.
+     */
+    public void setStringMatchNameRegexPercent(ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringMatchNameRegexPercent, stringMatchNameRegexPercent));
+        this.stringMatchNameRegexPercent = stringMatchNameRegexPercent;
+        propagateHierarchyIdToField(stringMatchNameRegexPercent, "string_match_name_regex_percent");
+    }
+
+    /**
+     * Returns a count of expected values in most popular values set count check.
+     * @return Most popular values count check.
+     */
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getExpectedStringsInTopValuesCount() {
+        return expectedStringsInTopValuesCount;
+    }
+
+    /**
+     * Sets a new definition of a most popular values count check.
+     * @param expectedStringsInTopValuesCount Most popular values count check.
+     */
+    public void setExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec expectedStringsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.expectedStringsInTopValuesCount, expectedStringsInTopValuesCount));
+        this.expectedStringsInTopValuesCount = expectedStringsInTopValuesCount;
+        propagateHierarchyIdToField(expectedStringsInTopValuesCount, "expected_strings_in_top_values_count");
+    }
+
+    /**
+     * Returns a count of expected values in datatype detected check.
+     * @return Datatype detected check.
+     */
+    public ColumnStringDatatypeDetectedCheckSpec getStringDatatypeDetected() {
+        return stringDatatypeDetected;
+    }
+
+    /**
+     * Sets a new definition of a datatype detected check.
+     * @param stringDatatypeDetected Datatype detected check.
+     */
+    public void setStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec stringDatatypeDetected) {
+        this.setDirtyIf(!Objects.equals(this.stringDatatypeDetected, stringDatatypeDetected));
+        this.stringDatatypeDetected = stringDatatypeDetected;
+        propagateHierarchyIdToField(stringDatatypeDetected, "string_datatype_detected");
+    }
+
+    /**
+     * Returns the child map on the spec class with all fields.
+     *
+     * @return Return the field map.
+     */
+    @Override
+    protected ChildHierarchyNodeFieldMap getChildMap() {
+        return FIELDS;
+    }
+}

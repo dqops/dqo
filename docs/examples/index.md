@@ -34,10 +34,10 @@ To run the examples, follow the steps below.
 1. If you have not installed DQO, create an empty catalogue.
 
 
-2. Open a terminal, navigate to the created directory and clone the DQO repository from [GitHub](https://github.com/dqoai/dqo).
+2. Open a terminal, navigate to the created directory and clone the DQO repository from [GitHub](https://github.com/dqops/dqo).
 
     ```
-    git clone https://github.com/dqoai/dqo.git
+    git clone https://github.com/dqops/dqo.git
     ```
 
 3. To run a specific example, go to the directory where it is located. For instance, you can navigate to 

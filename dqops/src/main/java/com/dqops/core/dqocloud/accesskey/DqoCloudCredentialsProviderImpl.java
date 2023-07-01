@@ -1,0 +1,99 @@
+/*
+ * Copyright © 2021 DQOps (support@dqops.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.dqops.core.dqocloud.accesskey;
+
+import com.dqops.cloud.rest.api.AccessTokenIssueApi;
+import com.dqops.cloud.rest.handler.ApiClient;
+import com.dqops.cloud.rest.model.TenantAccessTokenModel;
+import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.synchronization.contract.DqoRoot;
+import com.google.auth.oauth2.AccessToken;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
+/**
+ * DQO Cloud bucket credentials provider.
+ */
+@Component
+public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvider {
+    private DqoCloudApiClientFactory dqoCloudApiClientFactory;
+
+    /**
+     * Default injection constructor.
+     * @param dqoCloudApiClientFactory DQO Cloud API Client factory.
+     */
+    @Autowired
+    public DqoCloudCredentialsProviderImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory) {
+        this.dqoCloudApiClientFactory = dqoCloudApiClientFactory;
+    }
+
+    /**
+     * Issues a tenant access token to access the bucket.
+     * @param rootType Root type.
+     * @return Tenant access token.
+     */
+    public TenantAccessTokenModel issueTenantAccessToken(DqoRoot rootType) {
+        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+        AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(authenticatedClient);
+        switch (rootType) {
+            case data_sensor_readouts:
+                return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken();
+
+            case data_check_results:
+                return accessTokenIssueApi.issueBucketCheckResultsRWAccessToken();
+
+            case data_errors:
+                return accessTokenIssueApi.issueBucketErrorsRWAccessToken();
+
+            case data_statistics:
+                return accessTokenIssueApi.issueBucketStatisticsRWAccessToken();
+
+            case data_incidents:
+                return accessTokenIssueApi.issueBucketIncidentsRWAccessToken();
+
+            case sources:
+                return accessTokenIssueApi.issueBucketSourcesRWAccessToken();
+
+            case sensors:
+                return accessTokenIssueApi.issueBucketSensorsRWAccessToken();
+
+            case rules:
+                return accessTokenIssueApi.issueBucketRulesRWAccessToken();
+
+            case checks:
+                return accessTokenIssueApi.issueBucketChecksRWAccessToken();
+
+            default:
+                throw new RuntimeException("Unknown root: " + rootType);
+        }
+    }
+
+    /**
+     * Creates an OAuth2 access token.
+     * @param tenantAccessTokenModel Tenant access token model that was returned from the engine.
+     * @return Access token.
+     */
+    public AccessToken createAccessToken(TenantAccessTokenModel tenantAccessTokenModel) {
+        Instant accessTokenExpiresAt = Instant.parse(tenantAccessTokenModel.getExpiresAt());
+        Instant expiresAtWithMargin = accessTokenExpiresAt.minus(1, ChronoUnit.MINUTES);
+        Date expirationDate = new Date(expiresAtWithMargin.toEpochMilli());
+        return new AccessToken(tenantAccessTokenModel.getAccessToken(), expirationDate);
+    }
+}

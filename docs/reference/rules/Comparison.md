@@ -25,7 +25,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: from
@@ -137,7 +137,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: from
@@ -250,7 +250,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: expected_datatype
@@ -349,7 +349,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: max_diff_percent
@@ -447,7 +447,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: expected_value
@@ -552,7 +552,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: expected_value
@@ -650,7 +650,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: max_value
@@ -749,7 +749,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: max_count
@@ -846,7 +846,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: max_days
@@ -943,7 +943,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
@@ -1064,7 +1064,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: max_missing
@@ -1167,7 +1167,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: max_percent
@@ -1264,7 +1264,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: max_value
@@ -1363,7 +1363,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: min_value
@@ -1462,7 +1462,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: min_count
@@ -1561,7 +1561,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: min_percent
@@ -1658,7 +1658,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
   - field_name: min_value

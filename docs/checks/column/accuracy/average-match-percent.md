@@ -45,9 +45,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=average_mat
               referenced_table: dim_customer
               referenced_column: customer_id
             warning:
-              max_diff_percent: 1.0
+              max_diff_percent: 0.0
             error:
-              max_diff_percent: 2.0
+              max_diff_percent: 1.0
             fatal:
               max_diff_percent: 5.0
 ```
@@ -72,9 +72,9 @@ spec:
               referenced_table: dim_customer
               referenced_column: customer_id
             warning:
-              max_diff_percent: 1.0
+              max_diff_percent: 0.0
             error:
-              max_diff_percent: 2.0
+              max_diff_percent: 1.0
             fatal:
               max_diff_percent: 5.0
       labels:
@@ -325,9 +325,9 @@ spec:
                   referenced_table: dim_customer
                   referenced_column: customer_id
                 warning:
-                  max_diff_percent: 1.0
+                  max_diff_percent: 0.0
                 error:
-                  max_diff_percent: 2.0
+                  max_diff_percent: 1.0
                 fatal:
                   max_diff_percent: 5.0
           labels:
@@ -595,9 +595,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_avera
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
 ```
@@ -623,9 +623,9 @@ spec:
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       labels:
@@ -877,9 +877,9 @@ spec:
                     referenced_table: dim_customer
                     referenced_column: customer_id
                   warning:
-                    max_diff_percent: 1.0
+                    max_diff_percent: 0.0
                   error:
-                    max_diff_percent: 2.0
+                    max_diff_percent: 1.0
                   fatal:
                     max_diff_percent: 5.0
           labels:
@@ -1147,9 +1147,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_ave
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
 ```
@@ -1175,9 +1175,9 @@ spec:
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       labels:
@@ -1429,9 +1429,9 @@ spec:
                     referenced_table: dim_customer
                     referenced_column: customer_id
                   warning:
-                    max_diff_percent: 1.0
+                    max_diff_percent: 0.0
                   error:
-                    max_diff_percent: 2.0
+                    max_diff_percent: 1.0
                   fatal:
                     max_diff_percent: 5.0
           labels:

@@ -62,10 +62,10 @@ To start DQO in a Shell mode follow the steps below.
 ## Build a custom DQO container image
 
 1. Create an empty catalogue. 
-2. Open a terminal, navigate to the created directory and clone the DQO repository from [GitHub](https://github.com/dqoai/dqo).
+2. Open a terminal, navigate to the created directory and clone the DQO repository from [GitHub](https://github.com/dqops/dqo).
     
     ```
-    git clone https://github.com/dqoai/dqo.git
+    git clone https://github.com/dqops/dqo.git
     ```
 
 3. Modify the DQO Docker file `Dockerfile` located in the main directory.

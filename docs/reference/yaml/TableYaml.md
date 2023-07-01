@@ -50,6 +50,7 @@ Table specification that defines data quality tests that are enabled on a table 
 |[timestamp_columns](#timestampcolumnsspec)|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|[TimestampColumnsSpec](#timestampcolumnsspec)| | | |
 |[incremental_time_window](#partitionincrementaltimewindowspec)|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|[PartitionIncrementalTimeWindowSpec](#partitionincrementaltimewindowspec)| | | |
 |[groupings](#datagroupingconfigurationspecmap)|Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a tag is assigned to a table (within a data grouping level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.).|[DataGroupingConfigurationSpecMap](#datagroupingconfigurationspecmap)| | | |
+|[reference_tables](#referencetablespecmap)|Dictionary of reference table configurations. Reference tables are ued for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The reference table&#x27;s metadata must be imported into DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.|[ReferenceTableSpecMap](#referencetablespecmap)| | | |
 |[incident_grouping](#tableincidentgroupingspec)|Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.|[TableIncidentGroupingSpec](#tableincidentgroupingspec)| | | |
 |[owner](#tableownerspec)|Table owner information like the data steward name or the business application name.|[TableOwnerSpec](#tableownerspec)| | | |
 |[profiling_checks](#tableprofilingcheckcategoriesspec)|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|[TableProfilingCheckCategoriesSpec](#tableprofilingcheckcategoriesspec)| | | |
@@ -230,6 +231,68 @@ Single data grouping dimension configuration. A data grouping dimension may be c
 
 ___  
 
+## ReferenceTableSpecMap  
+Dictionary of comparisons of the current table (the parent of this node) and another reference table (the source of truth)
+ to which we are comparing the tables to measure the accuracy of the data.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ReferenceTableSpec  
+Identifies a target table from another data source (a reference table) that is compared to the current table (the parent table for this object).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|compared_table_grouping_name|The name of the data grouping configuration on the parent table that will be used for comparison. When not provided, uses the &#x27;default&#x27; grouping name. When the parent table has no data grouping configurations, compares the whole table without grouping.|string| | | |
+|reference_table_grouping_name|The name of the data grouping configuration on the referenced name that will be used for comparison. When not provided, uses the &#x27;default&#x27; grouping name. When the reference table has no data grouping configurations, compares the whole table without grouping. The data grouping configurations on the parent table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.|string| | | |
+|reference_table_connection_name|The name of the connection in DQO where the reference table (the source of truth) is configured. When the connection name is not provided, DQO will find the reference table on the connection of the parent table.|string| | | |
+|reference_table_schema_name|The name of the schema where the reference table is imported into DQO. The reference table&#x27;s metadata must be imported into DQO.|string| | | |
+|reference_table_name|The name of the reference table that is imported into DQO. The reference table&#x27;s metadata must be imported into DQO.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## TableIncidentGroupingSpec  
 Configuration of data quality incident grouping on a table level. Defines how similar data quality issues are grouped into incidents.  
   
@@ -309,6 +372,7 @@ Container of table level checks that are activated on a table level.
 |[sql](#tablesqlprofilingchecksspec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|[TableSqlProfilingChecksSpec](#tablesqlprofilingchecksspec)| | | |
 |[availability](#tableavailabilityprofilingchecksspec)|Configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](#tableavailabilityprofilingchecksspec)| | | |
 |[schema](#tableschemaprofilingchecksspec)|Configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](#tableschemaprofilingchecksspec)| | | |
+|[comparisons](#tablecomparisonprofilingchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonProfilingChecksSpecMap](#tablecomparisonprofilingchecksspecmap)| | | |
 |[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](#customcheckspecmap)| | | |
 
 
@@ -1385,8 +1449,8 @@ Table level check that ensures that there are no more than a maximum percentage 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tableaccuracyrowcountmatchpercentsensorparametersspec)|Data quality check parameters|[TableAccuracyRowCountMatchPercentSensorParametersSpec](#tableaccuracyrowcountmatchpercentsensorparametersspec)| | | |
-|[warning](#maxdiffpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
-|[error](#maxdiffpercentrule2parametersspec)|Default alerting threshold for a maximum percentage of difference of row count of a table column and of a row count of another table column that raises a data quality error (alert).|[MaxDiffPercentRule2ParametersSpec](#maxdiffpercentrule2parametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of row count of a table column and of a row count of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -1435,7 +1499,7 @@ Table level sensor that calculates percentage of the difference of the total row
 
 ___  
 
-## MaxDiffPercentRule1ParametersSpec  
+## MaxDiffPercentRule0ParametersSpec  
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
   
 
@@ -1462,7 +1526,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 ___  
 
-## MaxDiffPercentRule2ParametersSpec  
+## MaxDiffPercentRule1ParametersSpec  
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
   
 
@@ -2489,6 +2553,102 @@ Table schema data quality sensor detects if the list of columns has changed or a
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonProfilingChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonProfilingChecksSpec  
+Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[row_count_match](#tablecomparisonrowcountmatchcheckspec)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.|[TableComparisonRowCountMatchCheckSpec](#tablecomparisonrowcountmatchcheckspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonRowCountMatchCheckSpec  
+Table level comparison check compares the row count of the current (parent) table to a reference table.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#tablevolumerowcountsensorparametersspec)|Row count data quality sensor.|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Warning level threshold to raise a data quality incident with a warning severity level when the row count in the parent table and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Error level threshold to raise a data quality incident with an error severity level when the row count in the parent table and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
+|[fatal](#maxdiffpercentrule5parametersspec)|Fatal level threshold to raise a data quality incident with a fatal severity level when the row count in the parent table and the reference table do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
 
 
 
@@ -3818,6 +3978,7 @@ Container of column level, preconfigured checks.
 |[consistency](#columnconsistencyprofilingchecksspec)|Configuration of consistency checks on a column level.|[ColumnConsistencyProfilingChecksSpec](#columnconsistencyprofilingchecksspec)| | | |
 |[anomaly](#columnanomalyprofilingchecksspec)|Configuration of anomaly checks on a column level.|[ColumnAnomalyProfilingChecksSpec](#columnanomalyprofilingchecksspec)| | | |
 |[schema](#columnschemaprofilingchecksspec)|Configuration of schema checks on a column level.|[ColumnSchemaProfilingChecksSpec](#columnschemaprofilingchecksspec)| | | |
+|[comparisons](#columncomparisonprofilingchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonProfilingChecksSpecMap](#columncomparisonprofilingchecksspecmap)| | | |
 |[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](#customcheckspecmap)| | | |
 
 
@@ -10768,8 +10929,8 @@ Column level check that ensures that there are no more than a maximum percentage
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnaccuracytotalsummatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyTotalSumMatchPercentSensorParametersSpec](#columnaccuracytotalsummatchpercentsensorparametersspec)| | | |
-|[warning](#maxdiffpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
-|[error](#maxdiffpercentrule2parametersspec)|Default alerting threshold for a maximum percentage of difference of sum of a table column and of a sum of another table column that raises a data quality error (alert).|[MaxDiffPercentRule2ParametersSpec](#maxdiffpercentrule2parametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of sum of a table column and of a sum of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -10835,8 +10996,8 @@ Column level check that ensures that there are no more than a maximum percentage
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnaccuracyminmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyMinMatchPercentSensorParametersSpec](#columnaccuracyminmatchpercentsensorparametersspec)| | | |
-|[warning](#maxdiffpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
-|[error](#maxdiffpercentrule2parametersspec)|Default alerting threshold for a maximum percentage of difference of min of a table column and of a min of another table column that raises a data quality error (alert).|[MaxDiffPercentRule2ParametersSpec](#maxdiffpercentrule2parametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of min of a table column and of a min of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -10902,8 +11063,8 @@ Column level check that ensures that there are no more than a maximum percentage
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnaccuracymaxmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyMaxMatchPercentSensorParametersSpec](#columnaccuracymaxmatchpercentsensorparametersspec)| | | |
-|[warning](#maxdiffpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
-|[error](#maxdiffpercentrule2parametersspec)|Default alerting threshold for a maximum percentage of difference of max of a table column and of a max of another table column that raises a data quality error (alert).|[MaxDiffPercentRule2ParametersSpec](#maxdiffpercentrule2parametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of max of a table column and of a max of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -10969,8 +11130,8 @@ Column level check that ensures that there are no more than a maximum percentage
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnaccuracyaveragematchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyAverageMatchPercentSensorParametersSpec](#columnaccuracyaveragematchpercentsensorparametersspec)| | | |
-|[warning](#maxdiffpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
-|[error](#maxdiffpercentrule2parametersspec)|Default alerting threshold for a maximum percentage of difference of average of a table column and of a average of another table column that raises a data quality error (alert).|[MaxDiffPercentRule2ParametersSpec](#maxdiffpercentrule2parametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of average of a table column and of a average of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -11036,8 +11197,8 @@ Column level check that ensures that there are no more than a maximum percentage
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnaccuracynotnullcountmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec](#columnaccuracynotnullcountmatchpercentsensorparametersspec)| | | |
-|[warning](#maxdiffpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
-|[error](#maxdiffpercentrule2parametersspec)|Default alerting threshold for a maximum percentage of difference of row count of a table column and of a row count of another table column that raises a data quality error (alert).|[MaxDiffPercentRule2ParametersSpec](#maxdiffpercentrule2parametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of row count of a table column and of a row count of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -12257,6 +12418,306 @@ Column level data quality sensor that reads the metadata of the table from the d
 
 ___  
 
+## ColumnComparisonProfilingChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonProfilingChecksSpec  
+Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
+ between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[sum_match](#columncomparisonsummatchcheckspec)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds.|[ColumnComparisonSumMatchCheckSpec](#columncomparisonsummatchcheckspec)| | | |
+|[min_match](#columncomparisonminmatchcheckspec)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds.|[ColumnComparisonMinMatchCheckSpec](#columncomparisonminmatchcheckspec)| | | |
+|[max_match](#columncomparisonmaxmatchcheckspec)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds.|[ColumnComparisonMaxMatchCheckSpec](#columncomparisonmaxmatchcheckspec)| | | |
+|[mean_match](#columncomparisonmeanmatchcheckspec)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds.|[ColumnComparisonMeanMatchCheckSpec](#columncomparisonmeanmatchcheckspec)| | | |
+|[not_null_count_match](#columncomparisonnotnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds.|[ColumnComparisonNotNullCountMatchCheckSpec](#columncomparisonnotnullcountmatchcheckspec)| | | |
+|[null_count_match](#columncomparisonnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds.|[ColumnComparisonNullCountMatchCheckSpec](#columncomparisonnullcountmatchcheckspec)| | | |
+|reference_column|The name of the reference column name in the reference table. It is the column to which the current column is compared to.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonSumMatchCheckSpec  
+Column level check that ensures that compares the sum of the values in the tested column to the sum of values in a reference column from the reference table.
+ Compares the sum of values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnnumericsumsensorparametersspec)|Sum sensor parameters.|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Warning level threshold to raise a data quality incident with a warning severity level when the sum of the values in the column in the parent table and the sum of values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Error level threshold to raise a data quality incident with an error severity level when the sum of the values in the column in the parent table and the sum of values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
+|[fatal](#maxdiffpercentrule5parametersspec)|Fatal level threshold to raise a data quality incident with a fatal severity level when the sum of the values in the column in the parent table and the sum of values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonMinMatchCheckSpec  
+Column level check that ensures that compares the minimum value in the tested column to minimum value in a reference column from the reference table.
+ Compares the minimum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnnumericminsensorparametersspec)|Sum sensor parameters.|[ColumnNumericMinSensorParametersSpec](#columnnumericminsensorparametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Warning level threshold to raise a data quality incident with a warning severity level when the minimum values in the column in the parent table and the minimum value in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Error level threshold to raise a data quality incident with an error severity level when the minimum values in the column in the parent table and the minimum value in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
+|[fatal](#maxdiffpercentrule5parametersspec)|Fatal level threshold to raise a data quality incident with a fatal severity level when the minimum values in the column in the parent table and the minimum value in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonMaxMatchCheckSpec  
+Column level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table.
+ Compares the maximum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnnumericmaxsensorparametersspec)|Sum sensor parameters.|[ColumnNumericMaxSensorParametersSpec](#columnnumericmaxsensorparametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Warning level threshold to raise a data quality incident with a warning severity level when the maximum values in the column in the parent table and the maximum value in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Error level threshold to raise a data quality incident with an error severity level when the maximum values in the column in the parent table and the maximum value in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
+|[fatal](#maxdiffpercentrule5parametersspec)|Fatal level threshold to raise a data quality incident with a fatal severity level when the maximum values in the column in the parent table and the maximum value in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonMeanMatchCheckSpec  
+Column level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.
+ Compares the mean (average) value for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnnumericmeansensorparametersspec)|Sum sensor parameters.|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Warning level threshold to raise a data quality incident with a warning severity level when the mean (average) of the values in the column in the parent table and the mean (average) of values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Error level threshold to raise a data quality incident with an error severity level when the mean (average) of the values in the column in the parent table and the mean (average) of values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
+|[fatal](#maxdiffpercentrule5parametersspec)|Fatal level threshold to raise a data quality incident with a fatal severity level when the mean (average) of the values in the column in the parent table and the mean (average) of values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonNotNullCountMatchCheckSpec  
+Column level check that ensures that compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table.
+ Compares the count of not null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnnullsnotnullscountsensorparametersspec)|Sum sensor parameters.|[ColumnNullsNotNullsCountSensorParametersSpec](#columnnullsnotnullscountsensorparametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Warning level threshold to raise a data quality incident with a warning severity level when the count of not null values in the column in the parent table and the count of not null values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Error level threshold to raise a data quality incident with an error severity level when the count of not null values in the column in the parent table and the count of not null values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
+|[fatal](#maxdiffpercentrule5parametersspec)|Fatal level threshold to raise a data quality incident with a fatal severity level when the count of not null values in the column in the parent table and the count of not null values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonNullCountMatchCheckSpec  
+Column level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table.
+ Compares the count of null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnnullsnullscountsensorparametersspec)|Sum sensor parameters.|[ColumnNullsNullsCountSensorParametersSpec](#columnnullsnullscountsensorparametersspec)| | | |
+|[warning](#maxdiffpercentrule0parametersspec)|Warning level threshold to raise a data quality incident with a warning severity level when the count of null values in the column in the parent table and the count of null values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
+|[error](#maxdiffpercentrule1parametersspec)|Error level threshold to raise a data quality incident with an error severity level when the count of null values in the column in the parent table and the count of null values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
+|[fatal](#maxdiffpercentrule5parametersspec)|Fatal level threshold to raise a data quality incident with a fatal severity level when the count of null values in the column in the parent table and the count of null values in the compared column (in the reference table) do not match. The alert is generated for every compared group of rows (when data grouping is enabled).|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## ColumnRecurringChecksRootSpec  
 Container of column level recurring, divided by the time window (daily, monthly, etc.)  
   
@@ -12313,6 +12774,7 @@ Container of column level daily recurring checks. Contains categories of daily r
 |[consistency](#columnconsistencydailyrecurringchecksspec)|Daily recurring checks of consistency in the column|[ColumnConsistencyDailyRecurringChecksSpec](#columnconsistencydailyrecurringchecksspec)| | | |
 |[anomaly](#columnanomalydailyrecurringchecksspec)|Daily recurring checks of anomaly in the column|[ColumnAnomalyDailyRecurringChecksSpec](#columnanomalydailyrecurringchecksspec)| | | |
 |[schema](#columnschemadailyrecurringchecksspec)|Daily recurring column schema checks|[ColumnSchemaDailyRecurringChecksSpec](#columnschemadailyrecurringchecksspec)| | | |
+|[comparisons](#columncomparisondailyrecurringchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonDailyRecurringChecksSpecMap](#columncomparisondailyrecurringchecksspecmap)| | | |
 |[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](#customcheckspecmap)| | | |
 
 
@@ -12786,6 +13248,73 @@ Container of built-in preconfigured data quality checks on a column level that a
 
 ___  
 
+## ColumnComparisonDailyRecurringChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonDailyRecurringChecksSpec  
+Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
+ between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
+ This is the configuration for daily recurring checks that are counted in KPIs.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily_sum_match](#columncomparisonsummatchcheckspec)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnComparisonSumMatchCheckSpec](#columncomparisonsummatchcheckspec)| | | |
+|[daily_min_match](#columncomparisonminmatchcheckspec)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnComparisonMinMatchCheckSpec](#columncomparisonminmatchcheckspec)| | | |
+|[daily_max_match](#columncomparisonmaxmatchcheckspec)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnComparisonMaxMatchCheckSpec](#columncomparisonmaxmatchcheckspec)| | | |
+|[daily_mean_match](#columncomparisonmeanmatchcheckspec)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnComparisonMeanMatchCheckSpec](#columncomparisonmeanmatchcheckspec)| | | |
+|[daily_not_null_count_match](#columncomparisonnotnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnComparisonNotNullCountMatchCheckSpec](#columncomparisonnotnullcountmatchcheckspec)| | | |
+|[daily_null_count_match](#columncomparisonnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnComparisonNullCountMatchCheckSpec](#columncomparisonnullcountmatchcheckspec)| | | |
+|reference_column|The name of the reference column name in the reference table. It is the column to which the current column is compared to.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## ColumnMonthlyRecurringCheckCategoriesSpec  
 Container of column level monthly recurring checks. Contains categories of monthly recurring checks.  
   
@@ -12814,6 +13343,7 @@ Container of column level monthly recurring checks. Contains categories of month
 |[consistency](#columnconsistencymonthlyrecurringchecksspec)|Monthly recurring checks of consistency in the column|[ColumnConsistencyMonthlyRecurringChecksSpec](#columnconsistencymonthlyrecurringchecksspec)| | | |
 |[anomaly](#columnanomalymonthlyrecurringchecksspec)|Monthly recurring checks of anomaly in the column|[ColumnAnomalyMonthlyRecurringChecksSpec](#columnanomalymonthlyrecurringchecksspec)| | | |
 |[schema](#columnschemamonthlyrecurringchecksspec)|Monthly recurring column schema checks|[ColumnSchemaMonthlyRecurringChecksSpec](#columnschemamonthlyrecurringchecksspec)| | | |
+|[comparisons](#columncomparisonmonthlyrecurringchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyRecurringChecksSpecMap](#columncomparisonmonthlyrecurringchecksspecmap)| | | |
 |[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](#customcheckspecmap)| | | |
 
 
@@ -13269,6 +13799,73 @@ Container of built-in preconfigured data quality checks on a column level that a
 
 ___  
 
+## ColumnComparisonMonthlyRecurringChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonMonthlyRecurringChecksSpec  
+Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
+ between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
+ This is the configuration for monthly recurring checks that are counted in KPIs.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_sum_match](#columncomparisonsummatchcheckspec)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|[ColumnComparisonSumMatchCheckSpec](#columncomparisonsummatchcheckspec)| | | |
+|[monthly_min_match](#columncomparisonminmatchcheckspec)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|[ColumnComparisonMinMatchCheckSpec](#columncomparisonminmatchcheckspec)| | | |
+|[monthly_max_match](#columncomparisonmaxmatchcheckspec)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|[ColumnComparisonMaxMatchCheckSpec](#columncomparisonmaxmatchcheckspec)| | | |
+|[monthly_mean_match](#columncomparisonmeanmatchcheckspec)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|[ColumnComparisonMeanMatchCheckSpec](#columncomparisonmeanmatchcheckspec)| | | |
+|[monthly_not_null_count_match](#columncomparisonnotnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|[ColumnComparisonNotNullCountMatchCheckSpec](#columncomparisonnotnullcountmatchcheckspec)| | | |
+|[monthly_null_count_match](#columncomparisonnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|[ColumnComparisonNullCountMatchCheckSpec](#columncomparisonnullcountmatchcheckspec)| | | |
+|reference_column|The name of the reference column name in the reference table. It is the column to which the current column is compared to.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## ColumnPartitionedChecksRootSpec  
 Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)  
   
@@ -13324,6 +13921,7 @@ Container of data quality partitioned checks on a column level that are checking
 |[accuracy](#columnaccuracydailypartitionedchecksspec)|Daily partitioned checks for accuracy in the column|[ColumnAccuracyDailyPartitionedChecksSpec](#columnaccuracydailypartitionedchecksspec)| | | |
 |[consistency](#columnconsistencydailypartitionedchecksspec)|Daily partitioned checks for consistency in the column|[ColumnConsistencyDailyPartitionedChecksSpec](#columnconsistencydailypartitionedchecksspec)| | | |
 |[anomaly](#columnanomalydailypartitionedchecksspec)|Daily partitioned checks for anomaly in the column|[ColumnAnomalyDailyPartitionedChecksSpec](#columnanomalydailypartitionedchecksspec)| | | |
+|[comparisons](#columncomparisondailypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonDailyPartitionedChecksSpecMap](#columncomparisondailypartitionedchecksspecmap)| | | |
 |[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](#customcheckspecmap)| | | |
 
 
@@ -14106,6 +14704,73 @@ Column level check that ensures that the sum in a monitored column is within a t
 
 ___  
 
+## ColumnComparisonDailyPartitionedChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonDailyPartitionedChecksSpec  
+Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
+ between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
+ This is the configuration for daily partitioned checks that are counted in KPIs.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily_partition_sum_match](#columncomparisonsummatchcheckspec)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonSumMatchCheckSpec](#columncomparisonsummatchcheckspec)| | | |
+|[daily_partition_min_match](#columncomparisonminmatchcheckspec)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonMinMatchCheckSpec](#columncomparisonminmatchcheckspec)| | | |
+|[daily_partition_max_match](#columncomparisonmaxmatchcheckspec)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonMaxMatchCheckSpec](#columncomparisonmaxmatchcheckspec)| | | |
+|[daily_partition_mean_match](#columncomparisonmeanmatchcheckspec)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonMeanMatchCheckSpec](#columncomparisonmeanmatchcheckspec)| | | |
+|[daily_partition_not_null_count_match](#columncomparisonnotnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonNotNullCountMatchCheckSpec](#columncomparisonnotnullcountmatchcheckspec)| | | |
+|[daily_partition_null_count_match](#columncomparisonnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonNullCountMatchCheckSpec](#columncomparisonnullcountmatchcheckspec)| | | |
+|reference_column|The name of the reference column name in the reference table. It is the column to which the current column is compared to.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## ColumnMonthlyPartitionedCheckCategoriesSpec  
 Container of data quality partitioned checks on a column level that are checking numeric values at a monthly level.  
   
@@ -14133,6 +14798,7 @@ Container of data quality partitioned checks on a column level that are checking
 |[accuracy](#columnaccuracymonthlypartitionedchecksspec)|Monthly partitioned checks for accuracy in the column|[ColumnAccuracyMonthlyPartitionedChecksSpec](#columnaccuracymonthlypartitionedchecksspec)| | | |
 |[consistency](#columnconsistencymonthlypartitionedchecksspec)|Monthly partitioned checks for consistency in the column|[ColumnConsistencyMonthlyPartitionedChecksSpec](#columnconsistencymonthlypartitionedchecksspec)| | | |
 |[anomaly](#columnanomalymonthlypartitionedchecksspec)|Monthly partitioned checks for anomaly in the column|[ColumnAnomalyMonthlyPartitionedChecksSpec](#columnanomalymonthlypartitionedchecksspec)| | | |
+|[comparisons](#columncomparisonmonthlypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyPartitionedChecksSpecMap](#columncomparisonmonthlypartitionedchecksspecmap)| | | |
 |[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|[CustomCheckSpecMap](#customcheckspecmap)| | | |
 
 
@@ -14544,6 +15210,73 @@ Container of built-in preconfigured data quality checks on a column level for de
 |[monthly_partition_mean_change](#columnchangemeancheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](#columnchangemeancheckspec)| | | |
 |[monthly_partition_median_change](#columnchangemediancheckspec)|Verifies that the median in a column changed in a fixed rate since last readout.|[ColumnChangeMedianCheckSpec](#columnchangemediancheckspec)| | | |
 |[monthly_partition_sum_change](#columnchangesumcheckspec)|Verifies that the sum in a column changed in a fixed rate since last readout.|[ColumnChangeSumCheckSpec](#columnchangesumcheckspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonMonthlyPartitionedChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnComparisonMonthlyPartitionedChecksSpec  
+Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
+ between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
+ This is the configuration for daily partitioned checks that are counted in KPIs.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_partition_sum_match](#columncomparisonsummatchcheckspec)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonSumMatchCheckSpec](#columncomparisonsummatchcheckspec)| | | |
+|[monthly_partition_min_match](#columncomparisonminmatchcheckspec)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonMinMatchCheckSpec](#columncomparisonminmatchcheckspec)| | | |
+|[monthly_partition_max_match](#columncomparisonmaxmatchcheckspec)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonMaxMatchCheckSpec](#columncomparisonmaxmatchcheckspec)| | | |
+|[monthly_partition_mean_match](#columncomparisonmeanmatchcheckspec)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonMeanMatchCheckSpec](#columncomparisonmeanmatchcheckspec)| | | |
+|[monthly_partition_not_null_count_match](#columncomparisonnotnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonNotNullCountMatchCheckSpec](#columncomparisonnotnullcountmatchcheckspec)| | | |
+|[monthly_partition_null_count_match](#columncomparisonnullcountmatchcheckspec)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|[ColumnComparisonNullCountMatchCheckSpec](#columncomparisonnullcountmatchcheckspec)| | | |
+|reference_column|The name of the reference column name in the reference table. It is the column to which the current column is compared to.|string| | | |
 
 
 

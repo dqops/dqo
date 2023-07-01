@@ -25,7 +25,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 1
@@ -51,7 +51,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -161,7 +161,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -195,7 +195,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -315,7 +315,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -349,7 +349,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -471,7 +471,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -505,7 +505,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -626,7 +626,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 1
@@ -652,7 +652,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -757,7 +757,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -791,7 +791,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -905,7 +905,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -939,7 +939,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1055,7 +1055,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -1089,7 +1089,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1203,7 +1203,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 1
@@ -1224,7 +1224,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1327,7 +1327,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -1356,7 +1356,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1468,7 +1468,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -1497,7 +1497,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1611,7 +1611,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -1640,7 +1640,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1753,7 +1753,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 1
@@ -1774,7 +1774,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1877,7 +1877,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -1906,7 +1906,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -2018,7 +2018,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -2047,7 +2047,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -2161,7 +2161,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -2190,7 +2190,7 @@ spec:
 **Rule implementation (Python)**
 ```python
 #
-# Copyright © 2023 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

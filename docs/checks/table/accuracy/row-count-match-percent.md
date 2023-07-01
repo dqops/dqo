@@ -44,9 +44,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_m
         parameters:
           referenced_table: dim_customer
         warning:
-          max_diff_percent: 1.0
+          max_diff_percent: 0.0
         error:
-          max_diff_percent: 2.0
+          max_diff_percent: 1.0
         fatal:
           max_diff_percent: 5.0
 ```
@@ -68,9 +68,9 @@ spec:
         parameters:
           referenced_table: dim_customer
         warning:
-          max_diff_percent: 1.0
+          max_diff_percent: 0.0
         error:
-          max_diff_percent: 2.0
+          max_diff_percent: 1.0
         fatal:
           max_diff_percent: 5.0
   columns:
@@ -314,9 +314,9 @@ spec:
             parameters:
               referenced_table: dim_customer
             warning:
-              max_diff_percent: 1.0
+              max_diff_percent: 0.0
             error:
-              max_diff_percent: 2.0
+              max_diff_percent: 1.0
             fatal:
               max_diff_percent: 5.0
       columns:
@@ -579,9 +579,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
 ```
@@ -604,9 +604,9 @@ spec:
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
   columns:
@@ -851,9 +851,9 @@ spec:
               parameters:
                 referenced_table: dim_customer
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       columns:
@@ -1116,9 +1116,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
 ```
@@ -1141,9 +1141,9 @@ spec:
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
   columns:
@@ -1388,9 +1388,9 @@ spec:
               parameters:
                 referenced_table: dim_customer
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       columns:

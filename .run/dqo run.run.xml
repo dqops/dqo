@@ -9,7 +9,6 @@
       <env name="DQO_USER_HOME" value="$PROJECT_DIR$/userhome" />
       <env name="HADOOP_HOME" value="$PROJECT_DIR$/home" />
     </envs>
-    <module name="dqo-dqoai" />
     <method v="2" />
   </configuration>
 </component>

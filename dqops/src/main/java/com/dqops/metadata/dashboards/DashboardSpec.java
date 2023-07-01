@@ -1,0 +1,191 @@
+/*
+ * Copyright © 2021 DQOps (support@dqops.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.dqops.metadata.dashboards;
+
+import com.dqops.metadata.basespecs.AbstractSpec;
+import com.dqops.metadata.id.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.EqualsAndHashCode;
+
+import java.util.*;
+
+/**
+ * Description of a single dashboard that is available in the platform.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@EqualsAndHashCode(callSuper = true)
+public class DashboardSpec extends AbstractSpec implements Cloneable {
+    private static final ChildHierarchyNodeFieldMapImpl<DashboardSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+        {
+        }
+    };
+
+    @JsonPropertyDescription("Dashboard name")
+    private String dashboardName;
+
+    @JsonPropertyDescription("Dashboard url")
+    private String url;
+
+    @JsonPropertyDescription("Dashboard width (px)")
+    private Integer width;
+
+    @JsonPropertyDescription("Dashboard height (px)")
+    private Integer height;
+
+    @JsonPropertyDescription("Key/value dictionary of additional parameters to be passed to the dashboard")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, String> parameters;
+
+    /**
+     * Returns the name of the dashboard.
+     * @return Dashboard name.
+     */
+    public String getDashboardName() {
+        return dashboardName;
+    }
+
+    /**
+     * Sets the name of the dashboard.
+     * @param dashboardName Dashboard name.
+     */
+    public void setDashboardName(String dashboardName) {
+        this.setDirtyIf(!Objects.equals(this.dashboardName, dashboardName));
+        this.dashboardName = dashboardName;
+    }
+
+    /**
+     * Returns the url of the dashboard.
+     * @return Url of the dashboard.
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Sets the url to the dashboard.
+     * @param url Url of the dashboard.
+     */
+    public void setUrl(String url) {
+        this.setDirtyIf(!Objects.equals(this.url, url));
+        this.url = url;
+    }
+
+    /**
+     * Returns the dashboard width in pixels.
+     * @return Dashboard width.
+     */
+    public Integer getWidth() {
+        return width;
+    }
+
+    /**
+     * Sets the dashboard width in pixels.
+     * @param width Dashboard width.
+     */
+    public void setWidth(Integer width) {
+        this.setDirtyIf(!Objects.equals(this.width, width));
+        this.width = width;
+    }
+
+    /**
+     * Returns the dashboard height in pixels.
+     * @return Dashboard height.
+     */
+    public Integer getHeight() {
+        return height;
+    }
+
+    /**
+     * Sets the dashboard height in pixels.
+     * @param height Dashboard height.
+     */
+    public void setHeight(Integer height) {
+        this.setDirtyIf(!Objects.equals(this.height, height));
+        this.height = height;
+    }
+
+    /**
+     * Returns a key/value map of additional parameters passed to the dashboard in an url.
+     * @return Key/value dictionary of additional dashboard parameters.
+     */
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    /**
+     * Sets a dictionary of additional parameters passed to the dashboard.
+     * @param parameters Key/value dictionary with extra parameters.
+     */
+    public void setParameters(Map<String, String> parameters) {
+        setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
+    }
+
+    /**
+     * Retrieves the folder path to this dashboard.
+     * @param rootNode Root node, used to find folder nodes to retrieve their names.
+     * @return Folder path to this dashboard.
+     */
+    @JsonIgnore
+    public List<String> getFolderPath(HierarchyNode rootNode) {
+        List<String> folderPath = new ArrayList<>();
+        HierarchyId hierarchyId = this.getHierarchyId();
+        HierarchyNode[] nodesOnPath = hierarchyId.getNodesOnPath(rootNode);
+
+        for (HierarchyNode nodeOnPath : nodesOnPath) {
+            if (nodeOnPath instanceof DashboardsFolderSpec) {
+                DashboardsFolderSpec folderSpec = (DashboardsFolderSpec) nodeOnPath;
+                folderPath.add(folderSpec.getFolderName());
+            }
+        }
+
+        return folderPath;
+    }
+
+    /**
+     * Returns the child map on the spec class with all fields.
+     *
+     * @return Return the field map.
+     */
+    @Override
+    protected ChildHierarchyNodeFieldMap getChildMap() {
+        return FIELDS;
+    }
+
+    /**
+     * Calls a visitor (using a visitor design pattern) that returns a result.
+     *
+     * @param visitor   Visitor instance.
+     * @param parameter Additional parameter that will be passed back to the visitor.
+     */
+    @Override
+    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
+        return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public DashboardSpec deepClone() {
+        return (DashboardSpec) super.deepClone();
+    }
+}

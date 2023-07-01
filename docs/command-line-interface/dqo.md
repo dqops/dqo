@@ -59,7 +59,7 @@ $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file<br/>This parameter could be also configured by setting _FWFILE_WRITE  environment variable.| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode<br/>This parameter could be also configured by setting _HLHEADLESS  environment variable.| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters<br/>This parameter could be also configured by setting _HHELP  environment variable.| ||
-|`--logging.level.ai.dqo`<br/>|Default logging level for the DQO runtime.<br/>This parameter could be also configured by setting LOGGING_LEVEL_AI_DQO  environment variable.| |ERROR<br/>WARN<br/>INFO<br/>DEBUG<br/>TRACE<br/>|
+|`--logging.level.com.dqops`<br/>|Default logging level for the DQO runtime.<br/>This parameter could be also configured by setting LOGGING_LEVEL_COM_DQOPS  environment variable.| |ERROR<br/>WARN<br/>INFO<br/>DEBUG<br/>TRACE<br/>|
 |`--logging.level.root`<br/>|Default logging level at the root level of the logging hierarchy.<br/>This parameter could be also configured by setting LOGGING_LEVEL_ROOT  environment variable.| |ERROR<br/>WARN<br/>INFO<br/>DEBUG<br/>TRACE<br/>|
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses<br/>This parameter could be also configured by setting _OFOUTPUT_FORMAT  environment variable.| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--server.port`<br/>|Sets the web server port to host the DQO local web UI.<br/>This parameter could be also configured by setting SERVER_PORT  environment variable.| ||
