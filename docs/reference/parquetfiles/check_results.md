@@ -1,5 +1,12 @@
-##SensorReadoutsTable  
-Constants with the column names in the sensor readout parquet tables.  
+##check_results  
+The data quality check results table that stores check results - a copy of sensor readouts (copied from the sensor_readouts table) and evaluated by the data quality rules.
+ This table differs from the sensor_readouts by adding also the result of the rule evaluation. The additional columns are the &#x27;severity&#x27; which says if the check passed (the severity is 0)
+ or the data quality check raised a data quality issue with a severity warning - 1, error - 2 or fatal - 3.
+ The check results are stored in the check_results table is located in the $DQO_USER_HOME/.data/check_results folder that contains uncompressed parquet files.
+ The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user&#x27;s home folder).
+
+ The folder partitioning structure for this table is:
+ c&#x3D;[connection_name]/t&#x3D;[schema_name.table_name]/m&#x3D;[first_day_of_month]/, for example: c&#x3D;myconnection/t&#x3D;public.testedtable/m&#x3D;2023-01-01/.  
   
 **The columns of this table is described below**  
   
@@ -10,8 +17,7 @@ Constants with the column names in the sensor readout parquet tables.
  | expected_value | The expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks). | double |
  | time_period | The time period of the sensor readout (timestamp), using a local timezone from the data source. | local_date_time |
  | time_period_utc | The time period of the sensor readout (timestamp) as a UTC timestamp. | instant |
- | time_gradient | The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks.
- When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
+ | time_gradient | The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
  | grouping_level_1 | Column name for the data stream. | text |
  | grouping_level_2 | Column name for the data stream. | text |
  | grouping_level_3 | Column name for the data stream. | text |
@@ -50,3 +56,16 @@ Constants with the column names in the sensor readout parquet tables.
  | updated_at | The timestamp when the row was updated at. | instant |
  | created_by | The login of the user that created the row. | text |
  | updated_by | The login of the user that updated the row. | text |
+ | severity | Check (rule) severity (0, 1, 2, 3) for none, warning, error and fatal severity failed data quality checks. | integer |
+ | incident_hash | The matching data quality incident hash. The value is used to map a failed data quality check to an incident. | long |
+ | reference_connection | The name of a connection to another data source that contains the reference data used as the expected values for accuracy checks. | text |
+ | reference_table | The table name in another data source that contains the reference data used as the expected values for accuracy checks. | text |
+ | reference_schema | The schema in another data source that contains the reference data used as the expected values for accuracy checks. | text |
+ | include_in_kpi | The boolean column that identifies data quality rule results that should be counted in the data quality KPI. | boolean |
+ | include_in_sla | The boolean column that identifies data quality rule results that should be counted in the data quality SLA. | boolean |
+ | fatal_lower_bound | The warning lower bound, returned by the fatal severity rule. | double |
+ | fatal_upper_bound | The fatal upper bound, returned by the fatal severity rule. | double |
+ | error_lower_bound | The error lower bound, returned by the error (medium) severity rule. | double |
+ | error_upper_bound | The error upper bound, returned by the error severity rule. | double |
+ | warning_lower_bound | The warning lower bound, returned by the warning severity rule. | double |
+ | warning_upper_bound | The warning upper bound, returned by the warning severity rule. | double |

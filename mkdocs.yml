@@ -325,11 +325,11 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
-      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
+      - check_results: 'reference/parquetfiles/check_results.md'
+      - errors: 'reference/parquetfiles/errors.md'
+      - incidents: 'reference/parquetfiles/incidents.md'
+      - sensor_readouts: 'reference/parquetfiles/sensor_readouts.md'
+      - statistics: 'reference/parquetfiles/statistics.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 extra_css:
   - stylesheets/extra.css

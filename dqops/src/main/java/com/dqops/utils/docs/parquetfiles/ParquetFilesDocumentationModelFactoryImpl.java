@@ -32,10 +32,7 @@ import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import tech.tablesaw.api.Table;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Parquet files documentation model factory that creates a parquet files documentation.
@@ -52,26 +49,26 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
     @Override
     public List<ParquetFileDocumentationModel> createDocumentationForParquetFiles() {
         List<ParquetFileDocumentationModel> parquetFileDocumentationModels = new ArrayList<>();
-        Map<Table, Class<?>> parquetFilesClasses = new HashMap<>();
+        Map<Table, Class<?>> parquetFilesClasses = new LinkedHashMap<>();
 
         CheckResultsTableFactoryImpl checkResultsTableFactory = new CheckResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
-        Table checkResultsTable = checkResultsTableFactory.createEmptyCheckResultsTable("CheckResultsTable");
+        Table checkResultsTable = checkResultsTableFactory.createEmptyCheckResultsTable("check_results");
         parquetFilesClasses.put(checkResultsTable, CheckResultsColumnNames.class);
 
         ErrorsTableFactoryImpl errorsTableFactory = new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
-        Table errorsTable = errorsTableFactory.createEmptyErrorsTable("ErrorsTable");
+        Table errorsTable = errorsTableFactory.createEmptyErrorsTable("errors");
         parquetFilesClasses.put(errorsTable, ErrorsColumnNames.class);
 
         IncidentsTableFactoryImpl incidentsTableFactory = new IncidentsTableFactoryImpl();
-        Table incidentsTable = incidentsTableFactory.createEmptyIncidentsTable("IncidentsTable");
+        Table incidentsTable = incidentsTableFactory.createEmptyIncidentsTable("incidents");
         parquetFilesClasses.put(incidentsTable, IncidentsColumnNames.class);
 
         SensorReadoutsTableFactoryImpl sensorReadoutsTableFactory = new SensorReadoutsTableFactoryImpl();
-        Table sensorReadoutsTable = sensorReadoutsTableFactory.createEmptySensorReadoutsTable("SensorReadoutsTable");
+        Table sensorReadoutsTable = sensorReadoutsTableFactory.createEmptySensorReadoutsTable("sensor_readouts");
         parquetFilesClasses.put(sensorReadoutsTable, SensorReadoutsColumnNames.class);
 
         StatisticsResultsTableFactoryImpl statisticsResultsTableFactory = new StatisticsResultsTableFactoryImpl();
-        Table statisticsResultsTable = statisticsResultsTableFactory.createEmptyStatisticsTable("StatisticsResultsTable");
+        Table statisticsResultsTable = statisticsResultsTableFactory.createEmptyStatisticsTable("statistics");
         parquetFilesClasses.put(statisticsResultsTable, StatisticsColumnNames.class);
 
         for (Map.Entry<Table, Class<?>> parquetFilesClass : parquetFilesClasses.entrySet()) {
@@ -120,8 +117,8 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
      * @return Map where key is column name and value is column description.
      */
     private Map<String, String> getFieldsDescriptions(ParquetFileDocumentationModel parquetFileDocumentationModel, Class<?> classWithDetails) {
-        Map<String, String> columnsDescriptions = new HashMap<>();
-        Map<String, String> columnsNameDictionary = new HashMap<>();
+        Map<String, String> columnsDescriptions = new LinkedHashMap<>();
+        Map<String, String> columnsNameDictionary = new LinkedHashMap<>();
 
         ClassJavadoc classJavadoc = RuntimeJavadoc.getJavadoc(classWithDetails);
         if (classJavadoc != null) {

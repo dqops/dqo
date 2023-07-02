@@ -123,8 +123,8 @@ When a table was already imported into DQO, changing the configuration on the co
 For more detailed information on setting up a data grouping, go to [Working with DQO section](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
 
 ## How DQO stores data grouping results
-DQO stores the data in Parquet files. The format of parquet files for the sensor readout ([.data/sensor_readouts/](../../reference/parquetfiles/SensorReadoutsTable.md))
-and the check results ([.data/check_results/](../../reference/parquetfiles/CheckResultsTable.md)) are documented in the reference.
+DQO stores the data in Parquet files. The format of parquet files for the sensor readout ([.data/sensor_readouts/](../../reference/parquetfiles/sensor_readouts.md))
+and the check results ([.data/check_results/](../../reference/parquetfiles/check_results.md)) are documented in the reference.
 
 The columns that identify the data groups are:
 - **data_grouping_configuration** - the name of the data grouping configuration that is configured on the table level

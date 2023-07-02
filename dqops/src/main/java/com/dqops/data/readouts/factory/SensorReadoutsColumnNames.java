@@ -18,7 +18,12 @@ package com.dqops.data.readouts.factory;
 import com.dqops.data.normalization.CommonColumnNames;
 
 /**
- * Constants with the column names in the sensor readout parquet tables.
+ * The data quality sensor readouts table that stores readouts (measures) captured by DQO sensors, before the value are evaluated by the data quality rules.
+ * The sensor readouts are stored in the sensor_readouts table is located in the $DQO_USER_HOME/.data/sensor_readouts folder that contains uncompressed parquet files.
+ * The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user's home folder).
+ *
+ * The folder partitioning structure for this table is:
+ * c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/, for example: c=myconnection/t=public.testedtable/m=2023-01-01/.
  */
 public class SensorReadoutsColumnNames {
     /**
@@ -47,8 +52,7 @@ public class SensorReadoutsColumnNames {
     public static final String TIME_PERIOD_UTC_COLUMN_NAME = "time_period_utc";
 
     /**
-     * The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a "milliseconds" for profiling checks.
-     * When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient.
+     * The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a "milliseconds" for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient.
      */
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
 
