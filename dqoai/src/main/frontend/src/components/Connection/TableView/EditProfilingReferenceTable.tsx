@@ -3,14 +3,21 @@ import TableActionGroup from "./TableActionGroup";
 import Input from "../../Input";
 import Button from "../../Button";
 import SvgIcon from "../../SvgIcon";
-import { ColumnApiClient, TableComparisonsApi } from "../../../services/apiClient";
-import { CheckTypes } from "../../../shared/routes";
-import { useParams } from "react-router-dom";
-import { ColumnComparisonModel, CompareThresholdsModel, TableComparisonModel } from "../../../api";
+import { ColumnApiClient, DataGroupingConfigurationsApi, TableComparisonsApi } from "../../../services/apiClient";
+import { CheckTypes, ROUTES } from "../../../shared/routes";
+import { useHistory, useParams } from "react-router-dom";
+import {
+  ColumnComparisonModel,
+  CompareThresholdsModel,
+  DataGroupingConfigurationBasicModel,
+  TableComparisonModel
+} from "../../../api";
 import SectionWrapper from "../../Dashboard/SectionWrapper";
 import Checkbox from "../../Checkbox";
 import Select, { Option } from "../../Select";
-import { AxiosPromise } from "axios";
+import { SelectDataGroupingForTable } from "./SelectDataGroupingForTable";
+import { addFirstLevelTab } from "../../../redux/actions/source.actions";
+import { useActionDispatch } from "../../../hooks/useActionDispatch";
 
 type EditProfilingReferenceTableProps = {
   onBack: () => void;
@@ -26,6 +33,12 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
+  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
+  const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
+  const [dataGroupingConfiguration, setDataGroupingConfiguration] = useState<DataGroupingConfigurationBasicModel>();
+  const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] = useState<DataGroupingConfigurationBasicModel>();
+  const history = useHistory();
+  const dispatch = useActionDispatch();
 
   useEffect(() => {
     if (selectedReference) {
@@ -61,10 +74,93 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
     }
   }, [selectedReference]);
 
+  useEffect(() => {
+    DataGroupingConfigurationsApi.getTableGroupingConfigurations(
+      connection,
+      schema,
+      table
+    ).then((res) => {
+      setDataGroupingConfigurations(res.data);
+      setDataGroupingConfiguration(res.data.find((item) => item.default_data_grouping_configuration))
+    });
+  }, [connection, schema, table]);
+
+  useEffect(() => {
+    if (reference ){
+      DataGroupingConfigurationsApi.getTableGroupingConfigurations(
+        reference.reference_connection ?? '',
+        reference.reference_table?.schema_name ?? '',
+        reference.reference_table?.table_name ?? '',
+      ).then((res) => {
+        setRefDataGroupingConfigurations(res.data);
+        setRefDataGroupingConfiguration(res.data.find((item) => item.default_data_grouping_configuration))
+      });
+    }
+  }, [reference]);
+
+  const goToCreateNew = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'data-streams'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+    );
+
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url: `${url}?isEditing=true`,
+        value,
+        label: reference?.reference_table?.table_name ?? '',
+        state: {}
+      })
+    );
+    history.push(`${url}?isEditing=true`);
+  }
+
+  const goToRefCreateNew = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      reference?.reference_connection ?? '',
+      reference?.reference_table?.schema_name ?? '',
+      reference?.reference_table?.table_name ?? '',
+      'data-streams'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      reference?.reference_connection ?? '',
+      reference?.reference_table?.schema_name ?? '',
+      reference?.reference_table?.table_name ?? '',
+    );
+
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url: `${url}?isEditing=true`,
+        value,
+        label: reference?.reference_table?.table_name ?? '',
+        state: {}
+      })
+    );
+
+    history.push(`${url}?isEditing=true`);
+  }
+
   const onUpdate = () => {
     setIsUpdating(true);
+    const data = {
+      ...reference,
+      compared_table_grouping_name: dataGroupingConfiguration?.data_grouping_configuration_name,
+      reference_table_grouping_name: refDataGroupingConfiguration?.data_grouping_configuration_name,
+    }
+
     if (checkTypes === CheckTypes.PROFILING) {
-      TableComparisonsApi.updateTableComparisonProfiling(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+      TableComparisonsApi.updateTableComparisonProfiling(connection, schema, table, reference?.reference_table_configuration_name ?? '', data).then((res) => {
         onBack();
       }).catch(err => {
         console.log(err);
@@ -73,7 +169,7 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
       });
     } else if (checkTypes === CheckTypes.RECURRING) {
       if (timePartitioned === 'daily') {
-        TableComparisonsApi.updateTableComparisonRecurringDaily(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+        TableComparisonsApi.updateTableComparisonRecurringDaily(connection, schema, table, reference?.reference_table_configuration_name ?? '', data).then((res) => {
           onBack();
         }).catch(err => {
           console.log(err);
@@ -81,7 +177,7 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
           setIsUpdating(false);
         });
       } else if (timePartitioned === 'monthly') {
-        TableComparisonsApi.updateTableComparisonRecurringMonthly(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+        TableComparisonsApi.updateTableComparisonRecurringMonthly(connection, schema, table, reference?.reference_table_configuration_name ?? '', data).then((res) => {
           onBack();
         }).catch(err => {
           console.log(err);
@@ -91,7 +187,7 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
       }
     } else if (checkTypes === CheckTypes.PARTITIONED) {
       if (timePartitioned === 'daily') {
-        TableComparisonsApi.updateTableComparisonPartitionedDaily(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+        TableComparisonsApi.updateTableComparisonPartitionedDaily(connection, schema, table, reference?.reference_table_configuration_name ?? '', data).then((res) => {
           onBack();
         }).catch(err => {
           console.log(err);
@@ -99,7 +195,7 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
           setIsUpdating(false);
         });
       } else if (timePartitioned === 'monthly') {
-        TableComparisonsApi.updateTableComparisonPartitionedMonthly(connection, schema, table, reference?.reference_table_configuration_name ?? '', reference).then((res) => {
+        TableComparisonsApi.updateTableComparisonPartitionedMonthly(connection, schema, table, reference?.reference_table_configuration_name ?? '', data).then((res) => {
           onBack();
         }).catch(err => {
           console.log(err);
@@ -187,6 +283,37 @@ export const EditProfilingReferenceTable = ({ checkTypes, timePartitioned, onBac
             <span>Reference table:</span>
             <Input value={reference?.reference_table_grouping_name} />
           </div>
+        </div>
+
+        <div className="flex gap-4 mb-8">
+          <div className="mt-26 mr-20">
+            {
+              [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                <div key={index} className="text-sm py-1.5">
+                  Grouping dimension level {item}
+                </div>
+              ))
+            }
+          </div>
+          <SelectDataGroupingForTable
+            className="flex-1"
+            title="Data grouping on compared table"
+            dataGroupingConfigurations={dataGroupingConfigurations}
+            dataGroupingConfiguration={dataGroupingConfiguration}
+            setDataGroupingConfiguration={setDataGroupingConfiguration}
+            goToCreateNew={goToCreateNew}
+          />
+          <div className="flex flex-col justify-center">
+            <SvgIcon name="not-equal" className="w-6 h-6 text-red-700" />
+          </div>
+          <SelectDataGroupingForTable
+            className="flex-1"
+            title="Data grouping on reference table"
+            dataGroupingConfigurations={refDataGroupingConfigurations}
+            dataGroupingConfiguration={refDataGroupingConfiguration}
+            setDataGroupingConfiguration={setRefDataGroupingConfiguration}
+            goToCreateNew={goToRefCreateNew}
+          />
         </div>
 
         <p>
