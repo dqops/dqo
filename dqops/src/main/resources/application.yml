@@ -33,6 +33,7 @@ springdoc:
   api-docs:
     path: /api-docs
   packagesToScan: com.dqops.rest
+
 logging:
   level:
     root: WARN
@@ -62,10 +63,11 @@ dfs:
 
 dqo:
   python:
-    interpreter: python3,python3.exe,python,python.exe
+    interpreter-name: python3,python3.exe,python,python.exe
     evaluate-templates-module: lib/evaluate_templates.py
     evaluate-rules-module: lib/evaluate_rules.py
     python-script-timeout-seconds: 120
+    use-host-python: false
   user:
     home: .
     has-local-home: true
@@ -99,6 +101,7 @@ dqo:
     file-synchronization-time-limit-seconds: 1200
     max-retries: 5
     retry-backoff-millis: 10
+    start-without-api-key: false
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}

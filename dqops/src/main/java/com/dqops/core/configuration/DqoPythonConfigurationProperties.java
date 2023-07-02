@@ -31,6 +31,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     private String evaluateRulesModule = "lib/evaluate_rules.py";
     private String venvPath = "venv";
     private String dqoHomeRequirements = "lib/requirements.txt";
+    private boolean useHostPython;
     private int pipTimeoutSeconds = 120;
     private int pythonScriptTimeoutSeconds = 120;
 
@@ -112,6 +113,22 @@ public class DqoPythonConfigurationProperties implements Cloneable {
      */
     public void setDqoHomeRequirements(String dqoHomeRequirements) {
         this.dqoHomeRequirements = dqoHomeRequirements;
+    }
+
+    /**
+     * When true, does not initialize a python virtual environment in DQO home. Instead, uses the hosts python.
+     * @return True when using the host python.
+     */
+    public boolean isUseHostPython() {
+        return useHostPython;
+    }
+
+    /**
+     * Sets the flag to use the host's python (the default python installation on the machine, not a DQO private virtual environment).
+     * @param useHostPython Use host python.
+     */
+    public void setUseHostPython(boolean useHostPython) {
+        this.useHostPython = useHostPython;
     }
 
     /**

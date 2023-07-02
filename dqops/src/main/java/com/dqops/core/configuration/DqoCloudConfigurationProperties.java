@@ -37,6 +37,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     private int fileSynchronizationTimeLimitSeconds = 1200;
     private int maxRetries = 5;
     private long retryBackoffMillis = 10;
+    private boolean startWithoutApiKey;
 
     /**
      * Returns the DQO Cloud API Key that was configured in an environment variable or in a configuration file.
@@ -213,6 +214,22 @@ public class DqoCloudConfigurationProperties implements Cloneable {
      */
     public void setRetryBackoffMillis(long retryBackoffMillis) {
         this.retryBackoffMillis = retryBackoffMillis;
+    }
+
+    /**
+     * True when it is allowed to start DQO without a DQO Cloud api key.
+     * @return True when dqo can start without an api key.
+     */
+    public boolean isStartWithoutApiKey() {
+        return startWithoutApiKey;
+    }
+
+    /**
+     * Sets a flag to enable starting DQO without an API key.
+     * @param startWithoutApiKey Start DQO without an api key.
+     */
+    public void setStartWithoutApiKey(boolean startWithoutApiKey) {
+        this.startWithoutApiKey = startWithoutApiKey;
     }
 
     /**

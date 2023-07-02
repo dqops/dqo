@@ -19,6 +19,7 @@ import com.dqops.cli.commands.cloud.impl.CloudLoginService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.jdbc.JdbcTypeColumnMapping;
+import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -31,6 +32,9 @@ import com.dqops.data.storage.TablesawParquetSupportFix;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import com.dqops.rest.server.LocalUrlAddresses;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.python.PythonExecutionException;
+import com.dqops.utils.python.PythonVirtualEnv;
+import com.dqops.utils.python.PythonVirtualEnvService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +52,7 @@ public class CliInitializerImpl implements CliInitializer {
     private TerminalReader terminalReader;
     private CloudLoginService cloudLoginService;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
+    private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private JobSchedulerService jobSchedulerService;
     private DqoJobQueueMonitoringService jobQueueMonitoringService;
     private DqoJobQueue dqoJobQueue;
@@ -56,6 +61,7 @@ public class CliInitializerImpl implements CliInitializer {
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private TerminalWriter terminalWriter;
     private LocalUrlAddresses localUrlAddresses;
+    private PythonVirtualEnvService pythonVirtualEnvService;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -64,6 +70,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param terminalReader Terminal reader - used to ask the user to log in.
      * @param cloudLoginService Cloud login service - used to log the user to dqo cloud.
      * @param dqoSchedulerConfigurationProperties Scheduler configuration parameters, decide if the scheduler should be started instantly.
+     * @param dqoCloudConfigurationProperties DQO Cloud configuration parameters.
      * @param jobSchedulerService Job scheduler service, may be started when the dqo.scheduler.start property is true.
      * @param jobQueueMonitoringService DQO job queue monitoring service that tracks the statuses of jobs.
      * @param dqoJobQueue Job queue service, used to start the job queue when the application starts.
@@ -72,6 +79,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
      * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
+     * @param pythonVirtualEnvService Python virtual environment service. Used to initialize a private python venv.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -79,6 +87,7 @@ public class CliInitializerImpl implements CliInitializer {
                               TerminalReader terminalReader,
                               CloudLoginService cloudLoginService,
                               DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
+                              DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
                               JobSchedulerService jobSchedulerService,
                               DqoJobQueueMonitoringService jobQueueMonitoringService,
                               DqoJobQueue dqoJobQueue,
@@ -86,12 +95,14 @@ public class CliInitializerImpl implements CliInitializer {
                               FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService,
                               DefaultTimeZoneProvider defaultTimeZoneProvider,
                               TerminalWriter terminalWriter,
-                              LocalUrlAddresses localUrlAddresses) {
+                              LocalUrlAddresses localUrlAddresses,
+                              PythonVirtualEnvService pythonVirtualEnvService) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
         this.cloudLoginService = cloudLoginService;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
+        this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.jobSchedulerService = jobSchedulerService;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
         this.dqoJobQueue = dqoJobQueue;
@@ -100,6 +111,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.terminalWriter = terminalWriter;
         this.localUrlAddresses = localUrlAddresses;
+        this.pythonVirtualEnvService = pythonVirtualEnvService;
     }
 
     /**
@@ -119,6 +131,10 @@ public class CliInitializerImpl implements CliInitializer {
 
         if (headless) {
             return; // we don't have the api key, and we can't ask for it, some commands will simply fail
+        }
+
+        if (this.dqoCloudConfigurationProperties.isStartWithoutApiKey()) {
+            return;
         }
 
         if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
@@ -148,6 +164,17 @@ public class CliInitializerImpl implements CliInitializer {
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
         this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
         this.defaultTimeZoneProvider.invalidate();
+
+        if (!this.pythonVirtualEnvService.isVirtualEnvInitialized()) {
+            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQO needs to initialize a Python virtual environment in DQO home directory.");
+            PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
+            if (virtualEnv == null) {
+                throw new PythonExecutionException("Cannot find any python executable instance. Make sure that Python is installed and could be found on the path (defined in PATH) or the --dqo.python.interpreter parameter points to a python executable.");
+            }
+            if (virtualEnv.getVirtualEnvPath() != null) {
+                this.terminalWriter.writeLine("Python virtual environment was configured at " + virtualEnv.getVirtualEnvPath().toAbsolutePath());
+            }
+        }
 
         try {
             this.tryLoginToDqoCloud(isHeadless);

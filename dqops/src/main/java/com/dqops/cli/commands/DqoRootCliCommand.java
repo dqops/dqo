@@ -48,7 +48,7 @@ import java.util.List;
 @CommandLine.Command(
         name = "",
         description = {
-                "DQO Interactive Shell",
+                "DQO Data Quality Operations Center Interactive Shell",
                 "Hit @|yellow <TAB>|@ to see available commands.",
                 "Hit @|yellow ALT-S|@ to toggle tailtips.",
                 ""},
@@ -138,9 +138,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Python script execution time limit in seconds for running jinja2 and rule evaluation scripts.", defaultValue = "120")
     private Integer dqoPythonPythonScriptTimeoutSeconds;
 
-    @CommandLine.Option(names = {"--dqo.python.interpreter"},
-            description = "Python interpreter command line name, like 'python' or 'python3'.", defaultValue = "python3")
+    @CommandLine.Option(names = {"--dqo.python.interpreter-name"},
+            description = "A list of python interpreter executable names, separated by a comma, containing possible python interpreter names such as 'python', 'python3', 'python3.exe' " +
+                    "or an absolute path to the python interpreter. DQO will try to find the first python interpreter executable in directories defined in the PATH when a list of python interpreter names (not an absolute path) is used.", defaultValue = "python3")
     private String dqoPythonInterpreter;
+
+    @CommandLine.Option(names = {"--dqo.python.use-host-python"},
+            description = "Disable creating a python virtual environment by DQO on startup. Instead, use the system python interpreter. DQO will not install any required python packages on startup and use packages from the user's python installation.", defaultValue = "false")
+    private String dqoPythonUseHostPython;
 
     @CommandLine.Option(names = {"--dqo.user.home"},
             description = "Overrides the path to the DQO user home. The default user home is created in the current folder (.).", defaultValue = ".")
@@ -202,6 +207,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.cloud.parallel-file-downloads"},
             description = "The number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
     private Integer dqoCloudParallelFileDownloads;
+
+    @CommandLine.Option(names = {"--dqo.cloud.start-without-api-key"},
+            description = "Allow starting DQO without a DQO Cloud API Key and without prompting to log in to DQO Cloud.", defaultValue = "false")
+    private Boolean dqoCloudStartWithoutApiKey;
 
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
             description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). The maximum number of threads is also limited by the DQO license.")

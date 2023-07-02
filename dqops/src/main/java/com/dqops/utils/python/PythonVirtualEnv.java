@@ -47,7 +47,7 @@ public class PythonVirtualEnv {
      * similar values as if a virtual environment was activated.
      * @return Environment variables required to start the python interpreter to use our virtual environment.
      */
-    public HashMap<String, String> getEnvironmentVariables() {
+    public HashMap<String, String>  getEnvironmentVariables() {
         return environmentVariables;
     }
 

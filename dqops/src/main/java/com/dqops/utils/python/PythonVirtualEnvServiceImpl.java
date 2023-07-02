@@ -18,9 +18,11 @@ package com.dqops.utils.python;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +44,7 @@ import java.util.stream.Stream;
  * A service that detects if a Python virtual environment was configured or sets up a venv.
  */
 @Component
+@Slf4j
 public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
     private final DqoConfigurationProperties dqoConfigurationProperties;
     private final DqoPythonConfigurationProperties pythonConfigurationProperties;
@@ -79,6 +82,10 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
      * @return true when the venv is initialized.
      */
     public boolean isVirtualEnvInitialized() {
+        if (this.pythonConfigurationProperties.isUseHostPython()) {
+            return true; // we assume that the host's python is initialized
+        }
+
         Path pathToVenv = getVEnvPath();
 
 		return Files.exists(pathToVenv) && Files.isDirectory(pathToVenv);
@@ -130,28 +137,36 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
 			initializePythonVirtualEnv();
         }
 
-        Path vEnvPath = getVEnvPath();
         PythonVirtualEnv pythonVirtualEnv = new PythonVirtualEnv();
-        pythonVirtualEnv.setVirtualEnvPath(vEnvPath);
-        HashMap<String, String> environmentVariables = pythonVirtualEnv.getEnvironmentVariables();
+        if (!this.pythonConfigurationProperties.isUseHostPython()) {
+            Path vEnvPath = getVEnvPath();
+            pythonVirtualEnv.setVirtualEnvPath(vEnvPath);
+            HashMap<String, String> environmentVariables = pythonVirtualEnv.getEnvironmentVariables();
 
-        if (SystemUtils.IS_OS_WINDOWS) {
-            environmentVariables.put("VIRTUAL_ENV", vEnvPath.toString());
-            Path binPath = vEnvPath.resolve("Scripts");
-            environmentVariables.put("PATH", binPath + ";" + System.getenv("PATH"));
-            Path interpreterPath = findInterpreterPath(binPath);
-            pythonVirtualEnv.setPythonInterpreterPath(interpreterPath.toString());
-        }
-        else {
-            environmentVariables.put("VIRTUAL_ENV", vEnvPath.toString());
-            Path binPath = vEnvPath.resolve("bin");
-            environmentVariables.put("PATH", binPath + ":" + System.getenv("PATH"));
-            Path interpreterPath = findInterpreterPath(binPath);
-            pythonVirtualEnv.setPythonInterpreterPath(interpreterPath.toString());
-        }
+            if (SystemUtils.IS_OS_WINDOWS) {
+                environmentVariables.put("VIRTUAL_ENV", vEnvPath.toString());
+                Path binPath = vEnvPath.resolve("Scripts");
+                environmentVariables.put("PATH", binPath + ";" + System.getenv("PATH"));
+                Path interpreterPath = findInterpreterPath(binPath);
+                pythonVirtualEnv.setPythonInterpreterPath(interpreterPath.toString());
+            } else {
+                environmentVariables.put("VIRTUAL_ENV", vEnvPath.toString());
+                Path binPath = vEnvPath.resolve("bin");
+                environmentVariables.put("PATH", binPath + ":" + System.getenv("PATH"));
+                Path interpreterPath = findInterpreterPath(binPath);
+                pythonVirtualEnv.setPythonInterpreterPath(interpreterPath.toString());
+            }
 
-		installDqoHomePipRequirements(pythonVirtualEnv);
-		installUserHomePipRequirements(pythonVirtualEnv);
+            installDqoHomePipRequirements(pythonVirtualEnv);
+            installUserHomePipRequirements(pythonVirtualEnv);
+        } else {
+            String absolutePythonPath = findAbsolutePythonPath();
+            if (absolutePythonPath == null) {
+                return null;
+            }
+            pythonVirtualEnv.setPythonInterpreterPath(absolutePythonPath);
+            pythonVirtualEnv.setEnvironmentVariables(new LinkedHashMap<>());
+        }
 
         this.pythonVirtualEnv = pythonVirtualEnv;
         return pythonVirtualEnv;
@@ -159,7 +174,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
 
     /**
      * Returns a python's directory path.
-     * @param directoryPath
+     * @param directoryPath Directory path where we are looking for the interpreter.
      * @return Python's directory path
      */
     public Path findInterpreterPath(Path directoryPath) {
@@ -200,9 +215,36 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
      * @return Python's interpreter absolute path
      */
     public String findAbsolutePythonPath() {
+        if (!Strings.isNullOrEmpty(this.pythonConfigurationProperties.getInterpreter()) &&
+                !this.pythonConfigurationProperties.getInterpreter().contains(",")) {
+            try {
+                Path pathToPythonInterpreter = Path.of(this.pythonConfigurationProperties.getInterpreter());
+                if (pathToPythonInterpreter.toFile().exists()) {
+                    return pathToPythonInterpreter.normalize().toAbsolutePath().toString();
+                }
+
+                Path pathToDirectoryWithPython = pathToPythonInterpreter.getParent();
+                if (pathToDirectoryWithPython.toFile().exists()) {
+                    Path interpreterPathInDir = findInterpreterPath(pathToDirectoryWithPython); // maybe somebody has given a path to the python in WinApps
+
+                    if (interpreterPathInDir != null) {
+                        return interpreterPathInDir.normalize().toAbsolutePath().toString();
+                    }
+                }
+            }
+            catch (Exception ex) {
+                log.error("Cannot find python on path configured in the dqo.python.interpreter configuration parameter: " +
+                        this.pythonConfigurationProperties.getInterpreter() + ", error: " + ex.getMessage(), ex);
+            }
+        }
+
         String pathEnv = System.getenv("PATH");
         String[] pathDirectories = StringUtils.split(pathEnv, File.pathSeparatorChar);
         for (String pathDirectory: pathDirectories) {
+            if (Strings.isNullOrEmpty(pathDirectory)) {
+                continue;
+            }
+
             Path dirPath = Path.of(pathDirectory);
             Path interpreterPath = findInterpreterPath(dirPath);
 
