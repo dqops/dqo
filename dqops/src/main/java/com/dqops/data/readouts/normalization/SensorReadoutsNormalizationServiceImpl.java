@@ -24,13 +24,20 @@ import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.tables.TableColumnUtility;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.primitives.Doubles;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
+import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
@@ -317,12 +324,13 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             for (int i = 0; i < stringColumn.size(); i++) {
                 String stringValue = stringColumn.get(i);
                 if (stringValue != null) {
-                    try {
-                        double parsedValue = Double.parseDouble(stringValue);
-                        parsedValues.set(i, parsedValue);
-                    }
-                    catch (NumberFormatException nfe) {
-                        // ignore errors
+                    Double parsedDoubleValue = Doubles.tryParse(stringValue);
+                    if (parsedDoubleValue != null) {
+                        parsedValues.set(i, parsedDoubleValue);
+                    } else {
+                        HashCode hashCode = Hashing.farmHashFingerprint64().hashString(stringValue, StandardCharsets.UTF_8);
+                        long hashFitInDoubleExponent = Math.abs(hashCode.asLong()) & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
+                        parsedValues.set(i, (double)hashFitInDoubleExponent);
                     }
                 }
             }
@@ -335,14 +343,13 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             DoubleColumn parsedValues = DoubleColumn.create(columnName, resultsTable.rowCount());
             for (int i = 0; i < stringColumn.size(); i++) {
                 String stringValue = stringColumn.get(i);
-                if (stringValue != null) {
-                    try {
-                        double parsedValue = Double.parseDouble(stringValue);
-                        parsedValues.set(i, parsedValue);
-                    }
-                    catch (NumberFormatException nfe) {
-                        // ignore errors
-                    }
+                Double parsedDoubleValue = Doubles.tryParse(stringValue);
+                if (parsedDoubleValue != null) {
+                    parsedValues.set(i, parsedDoubleValue);
+                } else {
+                    HashCode hashCode = Hashing.farmHashFingerprint64().hashString(stringValue, StandardCharsets.UTF_8);
+                    long hashFitInDoubleExponent = Math.abs(hashCode.asLong()) & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
+                    parsedValues.set(i, (double)hashFitInDoubleExponent);
                 }
             }
 
