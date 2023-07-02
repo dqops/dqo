@@ -15,12 +15,12 @@ Verifies that the number of invalid latitude values in a column does not exceed 
 |invalid_latitude_count|profiling| |[invalid_latitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=invalid_latitude_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=invalid_latitude_count
 ```
@@ -575,12 +575,12 @@ Verifies that the number of invalid latitude values in a column does not exceed 
 |daily_invalid_latitude_count|recurring|daily|[invalid_latitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_invalid_latitude_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_invalid_latitude_count
 ```
@@ -1138,12 +1138,12 @@ Verifies that the number of invalid latitude values in a column does not exceed 
 |monthly_invalid_latitude_count|recurring|monthly|[invalid_latitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_invalid_latitude_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_invalid_latitude_count
 ```
@@ -1701,12 +1701,12 @@ Verifies that the number of invalid latitude values in a column does not exceed 
 |daily_partition_invalid_latitude_count|partitioned|daily|[invalid_latitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_invalid_latitude_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_invalid_latitude_count
 ```
@@ -2266,12 +2266,12 @@ Verifies that the number of invalid latitude values in a column does not exceed 
 |monthly_partition_invalid_latitude_count|partitioned|monthly|[invalid_latitude_count](../../../../reference/sensors/Column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_invalid_latitude_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_invalid_latitude_count
 ```

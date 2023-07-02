@@ -15,12 +15,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |mean_change_yesterday|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=mean_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=mean_change_yesterday
 ```
@@ -464,12 +464,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |daily_mean_change_yesterday|recurring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_mean_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_mean_change_yesterday
 ```
@@ -916,12 +916,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |daily_partition_mean_change_yesterday|partitioned|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_mean_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_mean_change_yesterday
 ```

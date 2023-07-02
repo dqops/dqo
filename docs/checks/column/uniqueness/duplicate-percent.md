@@ -15,12 +15,12 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 |duplicate_percent|profiling| |[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=duplicate_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=duplicate_percent
 ```
@@ -575,12 +575,12 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 |daily_duplicate_percent|recurring|daily|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_duplicate_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_duplicate_percent
 ```
@@ -1138,12 +1138,12 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 |monthly_duplicate_percent|recurring|monthly|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_duplicate_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_duplicate_percent
 ```
@@ -1701,12 +1701,12 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
 |daily_partition_duplicate_percent|partitioned|daily|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_duplicate_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_duplicate_percent
 ```
@@ -2266,12 +2266,12 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
 |monthly_partition_duplicate_percent|partitioned|monthly|[duplicate_percent](../../../../reference/sensors/Column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_duplicate_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_duplicate_percent
 ```

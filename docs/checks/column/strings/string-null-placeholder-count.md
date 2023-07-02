@@ -15,12 +15,12 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |string_null_placeholder_count|profiling| |[string_null_placeholder_count](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_null_placeholder_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_null_placeholder_count
 ```
@@ -693,12 +693,12 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |daily_string_null_placeholder_count|recurring|daily|[string_null_placeholder_count](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_null_placeholder_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_null_placeholder_count
 ```
@@ -1374,12 +1374,12 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |monthly_string_null_placeholder_count|recurring|monthly|[string_null_placeholder_count](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_null_placeholder_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_null_placeholder_count
 ```
@@ -2055,12 +2055,12 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |daily_partition_string_null_placeholder_count|partitioned|daily|[string_null_placeholder_count](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_null_placeholder_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_null_placeholder_count
 ```
@@ -2738,12 +2738,12 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |monthly_partition_string_null_placeholder_count|partitioned|monthly|[string_null_placeholder_count](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_null_placeholder_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_null_placeholder_count
 ```

@@ -15,12 +15,12 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 |sql_condition_failed_count_on_column|profiling| |[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=sql_condition_failed_count_on_column
 ```
@@ -641,12 +641,12 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 |daily_sql_condition_failed_count_on_column|recurring|daily|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_sql_condition_failed_count_on_column
 ```
@@ -1270,12 +1270,12 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 |monthly_sql_condition_failed_count_on_column|recurring|monthly|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_sql_condition_failed_count_on_column
 ```
@@ -1899,12 +1899,12 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 |daily_partition_sql_condition_failed_count_on_column|partitioned|daily|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_sql_condition_failed_count_on_column
 ```
@@ -2530,12 +2530,12 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 |monthly_partition_sql_condition_failed_count_on_column|partitioned|monthly|[sql_condition_failed_count](../../../../reference/sensors/Column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_sql_condition_failed_count_on_column
 ```

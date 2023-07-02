@@ -15,12 +15,12 @@ Verifies that the number of distinct values in a column does not fall below the 
 |distinct_count|profiling| |[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=distinct_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=distinct_count
 ```
@@ -503,12 +503,12 @@ Verifies that the number of distinct values in a column does not fall below the 
 |daily_distinct_count|recurring|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_distinct_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_distinct_count
 ```
@@ -994,12 +994,12 @@ Verifies that the number of distinct values in a column does not fall below the 
 |monthly_distinct_count|recurring|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_distinct_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_distinct_count
 ```
@@ -1485,12 +1485,12 @@ Verifies that the number of distinct values in a column does not fall below the 
 |daily_partition_distinct_count|partitioned|daily|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_distinct_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_distinct_count
 ```
@@ -1978,12 +1978,12 @@ Verifies that the number of distinct values in a column does not fall below the 
 |monthly_partition_distinct_count|partitioned|monthly|[distinct_count](../../../../reference/sensors/Column/uniqueness-column-sensors/#distinct-count)|[min_count](../../../../reference/rules/Comparison/#min-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_distinct_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_distinct_count
 ```

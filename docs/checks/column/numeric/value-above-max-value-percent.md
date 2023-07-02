@@ -15,12 +15,12 @@ The check counts the percentage of values in the column that is above the value 
 |value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=value_above_max_value_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=value_above_max_value_percent
 ```
@@ -599,12 +599,12 @@ The check counts the percentage of values in the column that is above the value 
 |daily_value_above_max_value_percent|recurring|daily|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_value_above_max_value_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_value_above_max_value_percent
 ```
@@ -1186,12 +1186,12 @@ The check counts the percentage of values in the column that is above the value 
 |monthly_value_above_max_value_percent|recurring|monthly|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_value_above_max_value_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_value_above_max_value_percent
 ```
@@ -1773,12 +1773,12 @@ The check counts the percentage of values in the column that is above the value 
 |daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_value_above_max_value_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_value_above_max_value_percent
 ```
@@ -2362,12 +2362,12 @@ The check counts the percentage of values in the column that is above the value 
 |monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_value_above_max_value_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_value_above_max_value_percent
 ```

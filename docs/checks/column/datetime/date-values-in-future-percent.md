@@ -15,12 +15,12 @@ Verifies that the percentage of date values in future in a column does not excee
 |date_values_in_future_percent|profiling| |[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=date_values_in_future_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=date_values_in_future_percent
 ```
@@ -969,12 +969,12 @@ Verifies that the percentage of date values in future in a column does not excee
 |daily_date_values_in_future_percent|recurring|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_date_values_in_future_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_date_values_in_future_percent
 ```
@@ -1926,12 +1926,12 @@ Verifies that the percentage of date values in future in a column does not excee
 |monthly_date_values_in_future_percent|recurring|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_date_values_in_future_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_date_values_in_future_percent
 ```
@@ -2883,12 +2883,12 @@ Verifies that the percentage of date values in future in a column does not excee
 |daily_partition_date_values_in_future_percent|partitioned|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_date_values_in_future_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_date_values_in_future_percent
 ```
@@ -3842,12 +3842,12 @@ Verifies that the percentage of date values in future in a column does not excee
 |monthly_partition_date_values_in_future_percent|partitioned|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_date_values_in_future_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_date_values_in_future_percent
 ```

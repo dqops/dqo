@@ -15,12 +15,12 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |sql_condition_passed_percent_on_table|profiling| |[sql_condition_passed_percent](../../../../reference/sensors/Table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=sql_condition_passed_percent_on_table
 ```
@@ -659,12 +659,12 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |daily_sql_condition_passed_percent_on_table|recurring|daily|[sql_condition_passed_percent](../../../../reference/sensors/Table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_sql_condition_passed_percent_on_table
 ```
@@ -1333,12 +1333,12 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |monthly_sql_condition_passed_percent_on_table|recurring|monthly|[sql_condition_passed_percent](../../../../reference/sensors/Table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_sql_condition_passed_percent_on_table
 ```
@@ -2007,12 +2007,12 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |daily_partition_sql_condition_passed_percent_on_table|partitioned|daily|[sql_condition_passed_percent](../../../../reference/sensors/Table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
@@ -2683,12 +2683,12 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |monthly_partition_sql_condition_passed_percent_on_table|partitioned|monthly|[sql_condition_passed_percent](../../../../reference/sensors/Table/sql-table-sensors/#sql-condition-passed-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```

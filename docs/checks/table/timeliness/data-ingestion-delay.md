@@ -19,12 +19,12 @@ Calculates the time difference in days between the most recent event timestamp a
 |data_ingestion_delay|profiling| |[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=data_ingestion_delay
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=data_ingestion_delay
 ```
@@ -841,12 +841,12 @@ Daily  calculating the time difference in days between the most recent event tim
 |daily_data_ingestion_delay|recurring|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_data_ingestion_delay
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_data_ingestion_delay
 ```
@@ -1666,12 +1666,12 @@ Monthly recurring calculating the time difference in days between the most recen
 |monthly_data_ingestion_delay|recurring|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_data_ingestion_delay
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_data_ingestion_delay
 ```
@@ -2491,12 +2491,12 @@ Daily partitioned check calculating the time difference in days between the most
 |daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_data_ingestion_delay
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_data_ingestion_delay
 ```
@@ -3318,12 +3318,12 @@ Monthly partitioned check calculating the time difference in days between the mo
 |monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_data_ingestion_delay
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_data_ingestion_delay
 ```

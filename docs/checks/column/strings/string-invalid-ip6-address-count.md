@@ -15,12 +15,12 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |string_invalid_ip6_address_count|profiling| |[string_invalid_ip6_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip6-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_invalid_ip6_address_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_invalid_ip6_address_count
 ```
@@ -599,12 +599,12 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |daily_string_invalid_ip6_address_count|recurring|daily|[string_invalid_ip6_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip6-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_invalid_ip6_address_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_invalid_ip6_address_count
 ```
@@ -1186,12 +1186,12 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |monthly_string_invalid_ip6_address_count|recurring|monthly|[string_invalid_ip6_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip6-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_invalid_ip6_address_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_invalid_ip6_address_count
 ```
@@ -1773,12 +1773,12 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |daily_partition_string_invalid_ip6_address_count|partitioned|daily|[string_invalid_ip6_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip6-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_invalid_ip6_address_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_invalid_ip6_address_count
 ```
@@ -2362,12 +2362,12 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |monthly_partition_string_invalid_ip6_address_count|partitioned|monthly|[string_invalid_ip6_address_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-ip6-address-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_invalid_ip6_address_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_invalid_ip6_address_count
 ```

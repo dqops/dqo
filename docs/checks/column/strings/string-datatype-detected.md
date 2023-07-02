@@ -16,12 +16,12 @@ Detects the data type of text values stored in the column. The sensor returns th
 |string_datatype_detected|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_datatype_detected
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_datatype_detected
 ```
@@ -2016,12 +2016,12 @@ Detects the data type of text values stored in the column. The sensor returns th
 |daily_string_datatype_detected|recurring|daily|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_datatype_detected
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_datatype_detected
 ```
@@ -4019,12 +4019,12 @@ Detects the data type of text values stored in the column. The sensor returns th
 |monthly_string_datatype_detected|recurring|monthly|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_datatype_detected
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_datatype_detected
 ```
@@ -6022,12 +6022,12 @@ Detects the data type of text values stored in the column. The sensor returns th
 |daily_partition_string_datatype_detected|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_datatype_detected
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_datatype_detected
 ```
@@ -8025,12 +8025,12 @@ Detects the data type of text values stored in the column. The sensor returns th
 |monthly_partition_string_datatype_detected|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_datatype_detected
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_datatype_detected
 ```

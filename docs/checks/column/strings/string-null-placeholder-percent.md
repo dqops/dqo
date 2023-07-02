@@ -15,12 +15,12 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |string_null_placeholder_percent|profiling| |[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_null_placeholder_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_null_placeholder_percent
 ```
@@ -767,12 +767,12 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |daily_string_null_placeholder_percent|recurring|daily|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_null_placeholder_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_null_placeholder_percent
 ```
@@ -1522,12 +1522,12 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |monthly_string_null_placeholder_percent|recurring|monthly|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_null_placeholder_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_null_placeholder_percent
 ```
@@ -2277,12 +2277,12 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |daily_partition_string_null_placeholder_percent|partitioned|daily|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_null_placeholder_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_null_placeholder_percent
 ```
@@ -3034,12 +3034,12 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |monthly_partition_string_null_placeholder_percent|partitioned|monthly|[string_null_placeholder_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-null-placeholder-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_null_placeholder_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_null_placeholder_percent
 ```

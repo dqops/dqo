@@ -15,12 +15,12 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |string_max_length|profiling| |[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_max_length
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_max_length
 ```
@@ -591,12 +591,12 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |daily_string_max_length|recurring|daily|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_max_length
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_max_length
 ```
@@ -1170,12 +1170,12 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |monthly_string_max_length|recurring|monthly|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_max_length
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_max_length
 ```
@@ -1749,12 +1749,12 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |daily_partition_string_max_length|partitioned|daily|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_max_length
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_max_length
 ```
@@ -2330,12 +2330,12 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |monthly_partition_string_max_length|partitioned|monthly|[string_max_length](../../../../reference/sensors/Column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_max_length
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_max_length
 ```

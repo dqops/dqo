@@ -15,12 +15,12 @@ Verifies that the percentage of valid dates in a column does not fall below the 
 |string_valid_dates_percent|profiling| |[string_valid_date_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_valid_dates_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_valid_dates_percent
 ```
@@ -769,12 +769,12 @@ Verifies that the percentage of valid dates in a column does not fall below the 
 |daily_string_valid_dates_percent|recurring|daily|[string_valid_date_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_valid_dates_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_valid_dates_percent
 ```
@@ -1526,12 +1526,12 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |monthly_string_valid_dates_percent|recurring|monthly|[string_valid_date_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_valid_dates_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_valid_dates_percent
 ```
@@ -2283,12 +2283,12 @@ Verifies that the percentage of valid dates in a column does not fall below the 
 |daily_partition_string_valid_dates_percent|partitioned|daily|[string_valid_date_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_valid_dates_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_valid_dates_percent
 ```
@@ -3042,12 +3042,12 @@ Verifies that the percentage of valid dates in a column does not fall below the 
 |monthly_partition_string_valid_dates_percent|partitioned|monthly|[string_valid_date_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_valid_dates_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_valid_dates_percent
 ```

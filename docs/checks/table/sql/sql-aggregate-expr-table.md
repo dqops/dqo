@@ -15,12 +15,12 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |sql_aggregate_expr_table|profiling| |[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=sql_aggregate_expr_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=sql_aggregate_expr_table
 ```
@@ -467,12 +467,12 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |daily_sql_aggregate_expr_table|recurring|daily|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_sql_aggregate_expr_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_sql_aggregate_expr_table
 ```
@@ -922,12 +922,12 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |monthly_sql_aggregate_expr_table|recurring|monthly|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_sql_aggregate_expr_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_sql_aggregate_expr_table
 ```
@@ -1377,12 +1377,12 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_sql_aggregate_expr_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_sql_aggregate_expr_table
 ```
@@ -1834,12 +1834,12 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_sql_aggregate_expr_table
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_sql_aggregate_expr_table
 ```

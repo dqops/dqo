@@ -17,12 +17,12 @@ Verifies that the expected string values were found in the column. Raises a data
 |expected_strings_in_use_count|profiling| |[expected_strings_in_use_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=expected_strings_in_use_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=expected_strings_in_use_count
 ```
@@ -926,12 +926,12 @@ Verifies that the expected string values were found in the column. Raises a data
 |daily_expected_strings_in_use_count|recurring|daily|[expected_strings_in_use_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_expected_strings_in_use_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_expected_strings_in_use_count
 ```
@@ -1838,12 +1838,12 @@ Verifies that the expected string values were found in the column. Raises a data
 |monthly_expected_strings_in_use_count|recurring|monthly|[expected_strings_in_use_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_expected_strings_in_use_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_expected_strings_in_use_count
 ```
@@ -2750,12 +2750,12 @@ Verifies that the expected string values were found in the column. Raises a data
 |daily_partition_expected_strings_in_use_count|partitioned|daily|[expected_strings_in_use_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_expected_strings_in_use_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_expected_strings_in_use_count
 ```
@@ -3664,12 +3664,12 @@ Verifies that the expected string values were found in the column. Raises a data
 |monthly_partition_expected_strings_in_use_count|partitioned|monthly|[expected_strings_in_use_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_expected_strings_in_use_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_expected_strings_in_use_count
 ```
