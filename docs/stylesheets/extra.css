@@ -2,9 +2,7 @@
   width: 95%;
   max-width: 95%;
 }
-.md-sidebar__inner {
-  padding-right: calc(100% - 8rem);
-}
+
 .md-nav {
   font-size: 0.6rem;
 }
