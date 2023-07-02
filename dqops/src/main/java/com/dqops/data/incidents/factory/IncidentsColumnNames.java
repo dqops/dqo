@@ -68,7 +68,7 @@ public final class IncidentsColumnNames {
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
 
     /**
-     * The check type (adhoc, checkpoint, partitioned).
+     * The check type (profiling, checkpoint, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 

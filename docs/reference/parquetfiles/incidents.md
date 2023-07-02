@@ -19,7 +19,7 @@ The data quality incidents table that tracks open incidents. Incidents are group
  | data_group_name | The data group name, it is a concatenated name of the data group dimension values, created from [grouping_level_1] / [grouping_level_2] / ... | text |
  | quality_dimension | The data quality dimension. | text |
  | check_category | The check category. | text |
- | check_type | The check type (adhoc, checkpoint, partitioned). | text |
+ | check_type | The check type (profiling, checkpoint, partitioned). | text |
  | check_name | The check name. | text |
  | highest_severity | The highest data quality check result severity detected as part of this incident. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts. | integer |
  | minimum_severity | Minimum severity of data quality issues (data quality check results) that are included in the incident. It is copied from the incident configuration at a connection or table level at the time when the incident is first seen. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts. | integer |
