@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.nio.file.Path;
-import java.time.Instant;
+import java.util.Objects;
 
 /**
  * Virtual file tree node in the virtual file system.
@@ -137,6 +137,12 @@ public class FileTreeNode {
      * @param newContent New file content.
      */
     public void changeContent(FileContent newContent) {
+        if ((this.status == FileTreeNodeStatus.LOADED_NOT_MODIFIED || this.status ==FileTreeNodeStatus.MODIFIED) &&
+                Objects.equals(this.content, newContent)) {
+            this.status = FileTreeNodeStatus.LOADED_NOT_MODIFIED;
+            return; // ignore saving, no changes
+        }
+
 		this.content = newContent;
         switch (this.status) {
             case NOT_LOADED:  // consider as modified
