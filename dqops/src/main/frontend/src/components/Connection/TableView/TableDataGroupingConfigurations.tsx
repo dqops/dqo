@@ -38,7 +38,6 @@ const TableDataGroupingConfiguration = () => {
 
   useEffect(() => {
     getDataGroupingConfigurations();
-    sortAlphabetically();
   }, [connectionName, schemaName, tableName]);
 
   useEffect(() => {
@@ -54,7 +53,6 @@ const TableDataGroupingConfiguration = () => {
     ).then((res) => {
       setDataGroupingConfigurations(res.data);
       console.log(dataGroupingConfigurations);
-      sortAlphabetically();
     });
   };
 
@@ -81,19 +79,16 @@ const TableDataGroupingConfiguration = () => {
     history.replace(`${location.pathname}?isEditing=false`);
     setBackData();
   };
-  const sortAlphabetically = async () => {
-    const sortedArray = dataGroupingConfigurations
-      ? [...dataGroupingConfigurations]
-      : [];
-    sortedArray.sort((a, b) => {
-      const nameA = String(a.data_grouping_configuration_name);
-      const nameB = String(b.data_grouping_configuration_name);
 
-      return nameA.localeCompare(nameB);
-    });
-    console.log(sortedArray);
-    setDataGroupingConfigurations(sortedArray);
-    console.log(dataGroupingConfigurations);
+  const sortObjects = (
+    array: DataGroupingConfigurationBasicModel[]
+  ): DataGroupingConfigurationBasicModel[] => {
+    const sortedArray = array.sort((a, b) =>
+      (a.data_grouping_configuration_name ?? '').localeCompare(
+        b.data_grouping_configuration_name ?? ''
+      )
+    );
+    return sortedArray;
   };
 
   return (
@@ -113,7 +108,7 @@ const TableDataGroupingConfiguration = () => {
         />
       ) : (
         <DataGroupingConfigurationListView
-          dataGroupingConfigurations={dataGroupingConfigurations}
+          dataGroupingConfigurations={sortObjects(dataGroupingConfigurations)}
           getDataGroupingConfigurations={getDataGroupingConfigurations}
           onCreate={onCreate}
           onEdit={onEdit}
