@@ -71,24 +71,20 @@ export const getJobsChangesFailed = (error: unknown) => ({
   error
 });
 
-let timerId: any = 0;
-
 export const getJobsChanges =
   (sequenceNumber: number) => async (dispatch: Dispatch) => {
-    if (timerId) {
-      clearTimeout(timerId);
-    }
     dispatch(getJobsChangesRequest());
     JobApiClient.getJobChangesSince(sequenceNumber)
       .then((res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel>) => {
         dispatch(getJobsChangesSuccess(res.data));
       })
       .catch((err) => {
-        dispatch(getJobsChangesFailed(err));
-        timerId = setTimeout(() => {
-          dispatch(getJobsChanges(sequenceNumber) as any);
+        console.error(err);
+        setTimeout(() => {
+          dispatch(getJobsChangesFailed(err));
+          //dispatch(getJobsChanges(sequenceNumber) as any);
           return;
-        }, JOB_CHANGES_RETRY_INTERVAL);
+        }, 1000);
       });
   };
 
