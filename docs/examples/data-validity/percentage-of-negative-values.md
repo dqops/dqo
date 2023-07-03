@@ -20,7 +20,7 @@ We want to verify the percentage of negative values on `Migrants__net_` column.
 We will verify the data using profiling [negative_percent](../../checks/column/numeric/negative-percent.md) column check.
 Our goal is to verify that the percent of negative values in the `Migrants__net_` column does not exceed the set thresholds.
 
-In this example, we will set three maximum percentage thresholds levels for the check:
+In this example, we will set three maximum percSentage thresholds levels for the check:
 
 - warning: 45.0
 - error: 55.0
