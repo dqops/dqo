@@ -57,6 +57,11 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String REFERENCE_TABLE_COLUMN_NAME = "reference_table";
 
     /**
+     * The column name in another data source that contains the reference data used as the expected values for accuracy checks.
+     */
+    public static final String REFERENCE_COLUMN_COLUMN_NAME = "reference_column";
+
+    /**
      * The boolean column that identifies data quality rule results that should be counted in the data quality KPI.
      */
     public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";

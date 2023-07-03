@@ -37,6 +37,7 @@ public class RuleEvaluationResult {
     private final TextColumn referenceConnection;
     private final TextColumn referenceSchema;
     private final TextColumn referenceTable;
+    private final TextColumn referenceColumn;
     private final BooleanColumn includeInKpiColumn;
     private final BooleanColumn includeInSlaColumn;
 
@@ -60,6 +61,7 @@ public class RuleEvaluationResult {
         this.referenceConnection = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME);
         this.referenceSchema = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME);
         this.referenceTable = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME);
+        this.referenceColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME);
         this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
         this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
 		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
@@ -128,6 +130,14 @@ public class RuleEvaluationResult {
      */
     public TextColumn getReferenceTable() {
         return referenceTable;
+    }
+
+    /**
+     * Returns the column that stores the name of a reference column name for accuracy checks.
+     * @return Reference column name column.
+     */
+    public TextColumn getReferenceColumn() {
+        return referenceColumn;
     }
 
     /**
