@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { IRootState } from '../../../redux/reducers';
-import qs from "query-string";
+import qs from 'query-string';
 
 const TableDataGroupingConfiguration = () => {
   const {
@@ -38,6 +38,7 @@ const TableDataGroupingConfiguration = () => {
 
   useEffect(() => {
     getDataGroupingConfigurations();
+    sortAlphabetically();
   }, [connectionName, schemaName, tableName]);
 
   useEffect(() => {
@@ -52,6 +53,8 @@ const TableDataGroupingConfiguration = () => {
       tableName
     ).then((res) => {
       setDataGroupingConfigurations(res.data);
+      console.log(dataGroupingConfigurations);
+      sortAlphabetically();
     });
   };
 
@@ -76,7 +79,21 @@ const TableDataGroupingConfiguration = () => {
 
   const onBack = () => {
     history.replace(`${location.pathname}?isEditing=false`);
-    setBackData()
+    setBackData();
+  };
+  const sortAlphabetically = async () => {
+    const sortedArray = dataGroupingConfigurations
+      ? [...dataGroupingConfigurations]
+      : [];
+    sortedArray.sort((a, b) => {
+      const nameA = String(a.data_grouping_configuration_name);
+      const nameB = String(b.data_grouping_configuration_name);
+
+      return nameA.localeCompare(nameB);
+    });
+    console.log(sortedArray);
+    setDataGroupingConfigurations(sortedArray);
+    console.log(dataGroupingConfigurations);
   };
 
   return (
