@@ -12,7 +12,7 @@ To add BigQuery data source connection to DQO you need the following:
 
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
 - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](./#using-google-application-credentials-authentication).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../../../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).
 
 ## Adding BigQuery connection using the graphical interface
 
