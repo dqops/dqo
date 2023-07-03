@@ -5,18 +5,18 @@ import {
   SchemaApiClient,
   TableApiClient,
   TableComparisonsApi
-} from "../../../services/apiClient";
-import { DataGroupingConfigurationBasicModel } from "../../../api";
-import Button from "../../Button";
-import Input from "../../Input";
-import SvgIcon from "../../SvgIcon";
-import SectionWrapper from "../../Dashboard/SectionWrapper";
-import Select, { Option } from "../../Select";
-import { useHistory, useParams } from "react-router-dom";
-import { SelectDataGroupingForTable } from "./SelectDataGroupingForTable";
-import { CheckTypes, ROUTES } from "../../../shared/routes";
-import { useActionDispatch } from "../../../hooks/useActionDispatch";
-import { addFirstLevelTab } from "../../../redux/actions/source.actions";
+} from '../../../services/apiClient';
+import { DataGroupingConfigurationBasicModel } from '../../../api';
+import Button from '../../Button';
+import Input from '../../Input';
+import SvgIcon from '../../SvgIcon';
+import SectionWrapper from '../../Dashboard/SectionWrapper';
+import Select, { Option } from '../../Select';
+import { useHistory, useParams } from 'react-router-dom';
+import { SelectDataGroupingForTable } from './SelectDataGroupingForTable';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 
 type EditReferenceTableProps = {
@@ -24,7 +24,10 @@ type EditReferenceTableProps = {
   selectedReference?: string;
 };
 
-const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTableProps) => {
+const EditReferenceTable = ({
+  onBack,
+  selectedReference
+}: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
   const [schemaOptions, setSchemaOptions] = useState<Option[]>([]);
@@ -32,11 +35,26 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
   const [refConnection, setRefConnection] = useState('');
   const [refSchema, setRefSchema] = useState('');
   const [refTable, setRefTable] = useState('');
-  const { checkTypes, connection, schema, table }: { checkTypes: CheckTypes, connection: string; schema: string; table: string } = useParams();
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
-  const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] = useState<DataGroupingConfigurationBasicModel[]>([]);
-  const [dataGroupingConfiguration, setDataGroupingConfiguration] = useState<DataGroupingConfigurationBasicModel>();
-  const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] = useState<DataGroupingConfigurationBasicModel>();
+  const {
+    checkTypes,
+    connection,
+    schema,
+    table
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+  } = useParams();
+  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
+    DataGroupingConfigurationBasicModel[]
+  >([]);
+  const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] =
+    useState<DataGroupingConfigurationBasicModel[]>([]);
+  const [dataGroupingConfiguration, setDataGroupingConfiguration] =
+    useState<DataGroupingConfigurationBasicModel>();
+  const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] =
+    useState<DataGroupingConfigurationBasicModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const history = useHistory();
@@ -44,16 +62,23 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
 
   useEffect(() => {
     ConnectionApiClient.getAllConnections().then((res) => {
-      setConnectionOptions(res.data.map((item) => ({
-        label: item.connection_name ?? '',
-        value: item.connection_name ?? ''
-      })));
+      setConnectionOptions(
+        res.data.map((item) => ({
+          label: item.connection_name ?? '',
+          value: item.connection_name ?? ''
+        }))
+      );
     });
   }, []);
 
   useEffect(() => {
     if (selectedReference) {
-      TableComparisonsApi.getTableComparisonConfiguration(connection, schema, table, selectedReference).then(res => {
+      TableComparisonsApi.getTableComparisonConfiguration(
+        connection,
+        schema,
+        table,
+        selectedReference
+      ).then((res) => {
         setName(res.data?.reference_table_configuration_name ?? '');
         setRefConnection(res.data?.reference_connection ?? '');
         setRefSchema(res.data?.reference_table?.schema_name ?? '');
@@ -69,40 +94,48 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
       table
     ).then((res) => {
       setDataGroupingConfigurations(res.data);
-      setDataGroupingConfiguration(res.data.find((item) => item.default_data_grouping_configuration))
+      setDataGroupingConfiguration(
+        res.data.find((item) => item.default_data_grouping_configuration)
+      );
     });
   }, [connection, schema, table]);
 
   useEffect(() => {
-    if (refConnection && refSchema && refTable ){
+    if (refConnection && refSchema && refTable) {
       DataGroupingConfigurationsApi.getTableGroupingConfigurations(
         refConnection,
         refSchema,
         refTable
       ).then((res) => {
         setRefDataGroupingConfigurations(res.data);
-        setRefDataGroupingConfiguration(res.data.find((item) => item.default_data_grouping_configuration))
+        setRefDataGroupingConfiguration(
+          res.data.find((item) => item.default_data_grouping_configuration)
+        );
       });
     }
   }, [refConnection, refSchema, refTable]);
   useEffect(() => {
     if (refConnection) {
-      SchemaApiClient.getSchemas(refConnection).then(res => {
-        setSchemaOptions(res.data.map((item) => ({
-          label: item.schema_name ?? '',
-          value: item.schema_name ?? ''
-        })));
+      SchemaApiClient.getSchemas(refConnection).then((res) => {
+        setSchemaOptions(
+          res.data.map((item) => ({
+            label: item.schema_name ?? '',
+            value: item.schema_name ?? ''
+          }))
+        );
       });
     }
   }, [refConnection]);
 
   useEffect(() => {
     if (refConnection && refSchema) {
-      TableApiClient.getTables(refConnection, refSchema).then(res => {
-        setTableOptions(res.data.map((item) => ({
-          label: item.target?.table_name ?? '',
-          value: item.target?.table_name ?? ''
-        })));
+      TableApiClient.getTables(refConnection, refSchema).then((res) => {
+        setTableOptions(
+          res.data.map((item) => ({
+            label: item.target?.table_name ?? '',
+            value: item.target?.table_name ?? ''
+          }))
+        );
       });
     }
   }, [refConnection, refSchema]);
@@ -117,7 +150,7 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
     );
 
     history.push(`${url}?isEditing=true`);
-  }
+  };
 
   const goToRefCreateNew = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -131,7 +164,7 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
       checkTypes,
       refConnection,
       refSchema,
-      refTable,
+      refTable
     );
 
     dispatch(
@@ -144,7 +177,7 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
     );
 
     history.push(`${url}?isEditing=true`);
-  }
+  };
 
   const onUpdate = () => {
     setIsUpdating(true);
@@ -159,49 +192,52 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
           compared_connection: connection,
           compared_table: {
             schema_name: schema,
-            table_name: table,
+            table_name: table
           },
           reference_connection: refConnection,
           reference_table: {
             schema_name: refSchema,
-            table_name: refTable,
+            table_name: refTable
           },
-          compared_table_grouping_name: dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-          reference_table_grouping_name: refDataGroupingConfiguration?.data_grouping_configuration_name ?? '',
+          compared_table_grouping_name:
+            dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
+          reference_table_grouping_name:
+            refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
         }
-      ).then(() => {
-        onBack();
-      }).catch((err) => {
-        console.log('err', err)
-      }).finally(() => {
-        setIsUpdating(false);
-      });
-
+      )
+        .then(() => {
+          onBack();
+        })
+        .catch((err) => {
+          console.log('err', err);
+        })
+        .finally(() => {
+          setIsUpdating(false);
+        });
     } else {
-      TableComparisonsApi.createReferenceTable(
-        connection,
-        schema,
-        table,
-        {
-          reference_table_configuration_name: name,
-          compared_connection: connection,
-          compared_table: {
-            schema_name: schema,
-            table_name: table,
-          },
-          reference_connection: refConnection,
-          reference_table: {
-            schema_name: refSchema,
-            table_name: refTable,
-          },
-          compared_table_grouping_name: dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-          reference_table_grouping_name: refDataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-        }
-      ).then(() => {
-        onBack();
-      }).finally(() => {
-        setIsUpdating(false);
-      });
+      TableComparisonsApi.createReferenceTable(connection, schema, table, {
+        reference_table_configuration_name: name,
+        compared_connection: connection,
+        compared_table: {
+          schema_name: schema,
+          table_name: table
+        },
+        reference_connection: refConnection,
+        reference_table: {
+          schema_name: refSchema,
+          table_name: refTable
+        },
+        compared_table_grouping_name:
+          dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
+        reference_table_grouping_name:
+          refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
+      })
+        .then(() => {
+          onBack();
+        })
+        .finally(() => {
+          setIsUpdating(false);
+        });
     }
   };
 
@@ -235,8 +271,10 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
       </div>
 
       <div className="px-8 py-4">
-        <SectionWrapper title="Reference table(the source of truth)" className="py-8 mb-10">
-
+        <SectionWrapper
+          title="Reference table(the source of truth)"
+          className="py-8 mb-10"
+        >
           <div className="flex gap-2 items-center mb-3">
             <div className="w-60">Connection</div>
             <Select
@@ -268,13 +306,11 @@ const EditReferenceTable = ({ onBack, selectedReference }: EditReferenceTablePro
 
         <div className="flex gap-4">
           <div className="mt-26 mr-20">
-            {
-              [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-                <div key={index} className="text-sm py-1.5">
-                  Grouping dimension level {item}
-                </div>
-              ))
-            }
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+              <div key={index} className="text-sm py-1.5">
+                Grouping dimension level {item}
+              </div>
+            ))}
           </div>
           <SelectDataGroupingForTable
             className="flex-1"
