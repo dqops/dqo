@@ -177,95 +177,96 @@ const JobItem = ({
                     {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                   </div>
                 </div>
-                {job.jobType === 'run checks' && (
-                  <div
-                    className="hidden group-hover:block absolute px-5 gap-y-1 w-80 h-29 rounded-md border border-gray-400 z-50 bg-white"
-                    style={{
-                      transform: 'translate(50%, -50%)',
-                      top: '550%',
-                      right: '165%'
-                    }}
-                  >
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Highest severity:</div>
-                      <div
-                        style={{
-                          color: getColor(
+                {job.jobType === 'run checks' &&
+                  job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
+                    <div
+                      className="hidden group-hover:block absolute px-5 gap-y-1 w-80 h-29 rounded-md border border-gray-400 z-50 bg-white"
+                      style={{
+                        transform: 'translate(50%, -50%)',
+                        top: '550%',
+                        right: '165%'
+                      }}
+                    >
+                      <div className="flex gap-x-2">
+                        <div className="font-light">Highest severity:</div>
+                        <div
+                          style={{
+                            color: getColor(
+                              job.parameters?.runChecksParameters
+                                ?.runChecksResult?.highestSeverity
+                                ? job.parameters?.runChecksParameters
+                                    ?.runChecksResult?.highestSeverity
+                                : 'error'
+                            )
+                          }}
+                        >
+                          {
                             job.parameters?.runChecksParameters?.runChecksResult
                               ?.highestSeverity
-                              ? job.parameters?.runChecksParameters
-                                  ?.runChecksResult?.highestSeverity
-                              : 'error'
-                          )
-                        }}
-                      >
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.highestSeverity
-                        }
+                          }
+                        </div>
+                      </div>
+                      <div className="flex gap-x-2">
+                        <div className="font-light">Executed check:</div>
+                        <div>
+                          {
+                            job.parameters?.runChecksParameters?.runChecksResult
+                              ?.executedChecks
+                          }
+                        </div>
+                      </div>
+                      <div className="flex gap-x-2">
+                        <div className="font-light">Valid result:</div>
+                        <div>
+                          {job.parameters?.runChecksParameters?.runChecksResult
+                            ?.validResults === 0
+                            ? '-'
+                            : job.parameters?.runChecksParameters
+                                ?.runChecksResult?.validResults}
+                        </div>
+                      </div>
+                      <div className="flex gap-x-2">
+                        <div className="font-light">Warnings:</div>
+                        <div>
+                          {job.parameters?.runChecksParameters?.runChecksResult
+                            ?.warnings === 0
+                            ? '-'
+                            : job.parameters?.runChecksParameters
+                                ?.runChecksResult?.warnings}
+                        </div>
+                      </div>
+                      <div className="flex gap-x-2">
+                        <div className="font-light">Errors</div>
+                        <div>
+                          {job.parameters?.runChecksParameters?.runChecksResult
+                            ?.errors === 0
+                            ? '-'
+                            : job.parameters?.runChecksParameters
+                                ?.runChecksResult?.errors}
+                        </div>
+                      </div>
+                      <div className="flex gap-x-2">
+                        <div className="font-light">Fatals:</div>
+                        <div>
+                          {job.parameters?.runChecksParameters?.runChecksResult
+                            ?.fatals === 0
+                            ? '-'
+                            : job.parameters?.runChecksParameters
+                                ?.runChecksResult?.fatals}
+                        </div>
+                      </div>
+                      <div className="flex gap-x-2">
+                        <div className="font-light">Execution Fatals:</div>
+                        <div>
+                          {job.parameters?.runChecksParameters?.runChecksResult
+                            ?.executionErrors === 0
+                            ? '-'
+                            : job.parameters?.runChecksParameters
+                                ?.runChecksResult?.executionErrors}
+                        </div>
                       </div>
                     </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Executed check:</div>
-                      <div>
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.executedChecks
-                        }
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Valid result:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.validResults === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.validResults}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Warnings:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.warnings === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.warnings}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Errors</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.errors === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.errors}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Fatals:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.fatals === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.fatals}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Execution Fatals:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.executionErrors === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.executionErrors}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  )}
               </div>
             </div>
           </div>
