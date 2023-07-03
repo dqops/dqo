@@ -15,12 +15,12 @@ Verifies that the percentage of date values in the range defined by the user in 
 |datetime_value_in_range_date_percent|profiling| |[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=datetime_value_in_range_date_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=datetime_value_in_range_date_percent
 ```
@@ -820,12 +820,12 @@ Verifies that the percentage of date values in the range defined by the user in 
 |daily_datetime_value_in_range_date_percent|recurring|daily|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_datetime_value_in_range_date_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_datetime_value_in_range_date_percent
 ```
@@ -1628,12 +1628,12 @@ Verifies that the percentage of date values in the range defined by the user in 
 |monthly_datetime_value_in_range_date_percent|recurring|monthly|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_datetime_value_in_range_date_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_datetime_value_in_range_date_percent
 ```
@@ -2436,12 +2436,12 @@ Verifies that the percentage of date values in the range defined by the user in 
 |daily_partition_datetime_value_in_range_date_percent|partitioned|daily|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_datetime_value_in_range_date_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_datetime_value_in_range_date_percent
 ```
@@ -3243,12 +3243,12 @@ Verifies that the percentage of date values in the range defined by the user in 
 |monthly_partition_datetime_value_in_range_date_percent|partitioned|monthly|[value_in_range_date_percent](../../../../reference/sensors/Column/datetime-column-sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_datetime_value_in_range_date_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_datetime_value_in_range_date_percent
 ```

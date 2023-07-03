@@ -5,27 +5,27 @@ COPY --chmod=755 mvnw.sh ./
 COPY .mvn .mvn
 
 COPY pom.xml .
-COPY dqoai/pom.xml dqoai/
+COPY dqops/pom.xml dqops/
 COPY distribution/pom.xml distribution/
 COPY lib lib
 
 # resolve dependencies
 ENV USER_HOME="/user/mvn"
 RUN mkdir -p "${USER_HOME}/.m2" && ./mvnw.sh dependency:resolve -pl !distribution && ./mvnw.sh dependency:resolve-plugins -pl !distribution
-RUN ./mvnw.sh frontend:install-node-and-npm -pl dqoai
+RUN ./mvnw.sh frontend:install-node-and-npm -pl dqops
 
 # npm install
-COPY dqoai/src/main/frontend/package.json dqoai/src/main/frontend/
-ENV PATH="/workspace/app/dqoai/src/main/frontend/node:${PATH}"
-WORKDIR /workspace/app/dqoai/src/main/frontend
+COPY dqops/src/main/frontend/package.json dqops/src/main/frontend/
+ENV PATH="/workspace/app/dqops/src/main/frontend/node:${PATH}"
+WORKDIR /workspace/app/dqops/src/main/frontend
 RUN npm install --legacy-peer-deps
 
 WORKDIR /workspace/app
 
 # compile project
-COPY dqoai/src dqoai/src
+COPY dqops/src dqops/src
 RUN ./mvnw.sh install -DskipTests -pl !distribution
-RUN mkdir -p dqoai/target/dependency && (cd dqoai/target/dependency; jar -xf ../*.jar)
+RUN mkdir -p dqops/target/dependency && (cd dqops/target/dependency; jar -xf ../*.jar)
 
 FROM python:3.11.3-slim-bullseye AS dqo-home
 WORKDIR /dqo
@@ -62,9 +62,9 @@ RUN touch $DQO_USER_HOME/.DQO_USER_HOME_NOT_MOUNTED
 COPY --from=dqo-home /dqo/home home
 
 # copy spring dependencies
-ARG DEPENDENCY=/workspace/app/dqoai/target/dependency
+ARG DEPENDENCY=/workspace/app/dqops/target/dependency
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/lib /dqo/lib
 COPY --from=dqo-libs ${DEPENDENCY}/META-INF /dqo/META-INF
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/classes /dqo
 ENV JAVA_TOOL_OPTIONS="-Xmx1024m"
-ENTRYPOINT ["java", "-cp", "/dqo:/dqo/lib/*", "ai.dqo.cli.CliApplication"]
+ENTRYPOINT ["java", "-cp", "/dqo:/dqo/lib/*", "com.dqops.cli.CliApplication"]

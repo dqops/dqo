@@ -25,7 +25,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
@@ -144,7 +144,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -263,7 +263,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 7
@@ -382,7 +382,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 10
@@ -504,7 +504,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
@@ -613,7 +613,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
@@ -722,7 +722,7 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 7

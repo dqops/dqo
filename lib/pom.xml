@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<relativePath>../pom.xml</relativePath>
-		<groupId>ai.dqo</groupId>
+		<groupId>com.dqops</groupId>
 		<artifactId>dqo-data-quality-observer</artifactId>
 		<version>0.2.0-beta1</version>
 	</parent>
-	<groupId>ai.dqo</groupId>
+	<groupId>com.dqops</groupId>
 	<artifactId>dqo-lib</artifactId>
 	<version>0.2.0-beta1</version>
 	<name>lib</name>
@@ -39,7 +39,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>ai.dqo</groupId>
+				<groupId>com.dqops</groupId>
 				<artifactId>dqo-data-quality-observer</artifactId>
 				<version>${project.version}</version>
 				<type>pom</type>

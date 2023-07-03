@@ -15,12 +15,12 @@ Verifies that the total row count of the tested table matches the total row coun
 |row_count_match_percent|profiling| |[row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=row_count_match_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=row_count_match_percent
 ```
@@ -44,9 +44,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_m
         parameters:
           referenced_table: dim_customer
         warning:
-          max_diff_percent: 1.0
+          max_diff_percent: 0.0
         error:
-          max_diff_percent: 2.0
+          max_diff_percent: 1.0
         fatal:
           max_diff_percent: 5.0
 ```
@@ -68,9 +68,9 @@ spec:
         parameters:
           referenced_table: dim_customer
         warning:
-          max_diff_percent: 1.0
+          max_diff_percent: 0.0
         error:
-          max_diff_percent: 2.0
+          max_diff_percent: 1.0
         fatal:
           max_diff_percent: 5.0
   columns:
@@ -314,9 +314,9 @@ spec:
             parameters:
               referenced_table: dim_customer
             warning:
-              max_diff_percent: 1.0
+              max_diff_percent: 0.0
             error:
-              max_diff_percent: 2.0
+              max_diff_percent: 1.0
             fatal:
               max_diff_percent: 5.0
       columns:
@@ -549,12 +549,12 @@ Verifies the row count of a tested table and compares it to a row count of a ref
 |daily_row_count_match_percent|recurring|daily|[row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_row_count_match_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_row_count_match_percent
 ```
@@ -579,9 +579,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
 ```
@@ -604,9 +604,9 @@ spec:
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
   columns:
@@ -851,9 +851,9 @@ spec:
               parameters:
                 referenced_table: dim_customer
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       columns:
@@ -1086,12 +1086,12 @@ Verifies the row count of a tested table and compares it to a row count of a ref
 |monthly_row_count_match_percent|recurring|monthly|[row_count_match_percent](../../../../reference/sensors/Table/accuracy-table-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_row_count_match_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_row_count_match_percent
 ```
@@ -1116,9 +1116,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
 ```
@@ -1141,9 +1141,9 @@ spec:
           parameters:
             referenced_table: dim_customer
           warning:
-            max_diff_percent: 1.0
+            max_diff_percent: 0.0
           error:
-            max_diff_percent: 2.0
+            max_diff_percent: 1.0
           fatal:
             max_diff_percent: 5.0
   columns:
@@ -1388,9 +1388,9 @@ spec:
               parameters:
                 referenced_table: dim_customer
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       columns:

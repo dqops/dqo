@@ -19,12 +19,12 @@ The check measures the percentage of rows whose value in a tested column is one 
 |number_value_in_set_percent|profiling| |[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=number_value_in_set_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=number_value_in_set_percent
 ```
@@ -853,12 +853,12 @@ The check measures the percentage of rows whose value in a tested column is one 
 |daily_number_value_in_set_percent|recurring|daily|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_number_value_in_set_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_number_value_in_set_percent
 ```
@@ -1690,12 +1690,12 @@ The check measures the percentage of rows whose value in a tested column is one 
 |monthly_number_value_in_set_percent|recurring|monthly|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_number_value_in_set_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_number_value_in_set_percent
 ```
@@ -2527,12 +2527,12 @@ The check measures the percentage of rows whose value in a tested column is one 
 |daily_partition_number_value_in_set_percent|partitioned|daily|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_number_value_in_set_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_number_value_in_set_percent
 ```
@@ -3366,12 +3366,12 @@ The check measures the percentage of rows whose value in a tested column is one 
 |monthly_partition_number_value_in_set_percent|partitioned|monthly|[number_value_in_set_percent](../../../../reference/sensors/Column/numeric-column-sensors/#number-value-in-set-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_number_value_in_set_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_number_value_in_set_percent
 ```

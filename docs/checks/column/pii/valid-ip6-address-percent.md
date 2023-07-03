@@ -15,12 +15,12 @@ Verifies that the percentage of valid IP6 address values in a column does not fa
 |valid_ip6_address_percent|profiling| |[valid_ip6_address_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-ip6-address-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=valid_ip6_address_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=valid_ip6_address_percent
 ```
@@ -719,12 +719,12 @@ Verifies that the percentage of valid IP6 address values in a column does not fa
 |daily_valid_ip6_address_percent|recurring|daily|[valid_ip6_address_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-ip6-address-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_valid_ip6_address_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_valid_ip6_address_percent
 ```
@@ -1426,12 +1426,12 @@ Verifies that the percentage of valid IP6 address values in a column does not fa
 |monthly_valid_ip6_address_percent|recurring|monthly|[valid_ip6_address_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-ip6-address-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_valid_ip6_address_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_valid_ip6_address_percent
 ```
@@ -2133,12 +2133,12 @@ Verifies that the percentage of valid IP6 address values in a column does not fa
 |daily_partition_valid_ip6_address_percent|partitioned|daily|[valid_ip6_address_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-ip6-address-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_valid_ip6_address_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_valid_ip6_address_percent
 ```
@@ -2842,12 +2842,12 @@ Verifies that the percentage of valid IP6 address values in a column does not fa
 |monthly_partition_valid_ip6_address_percent|partitioned|monthly|[valid_ip6_address_percent](../../../../reference/sensors/Column/pii-column-sensors/#valid-ip6-address-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_valid_ip6_address_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_valid_ip6_address_percent
 ```

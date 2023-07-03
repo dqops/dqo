@@ -15,12 +15,12 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 |row_count_change_yesterday|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=row_count_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=row_count_change_yesterday
 ```
@@ -532,12 +532,12 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 |daily_row_count_change_yesterday|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_row_count_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_row_count_change_yesterday
 ```
@@ -1052,12 +1052,12 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 |daily_partition_row_count_change_yesterday|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_row_count_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_row_count_change_yesterday
 ```

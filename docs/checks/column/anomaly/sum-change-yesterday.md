@@ -15,12 +15,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
 |sum_change_yesterday|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=sum_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=sum_change_yesterday
 ```
@@ -464,12 +464,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
 |daily_sum_change_yesterday|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_sum_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_sum_change_yesterday
 ```
@@ -916,12 +916,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
 |daily_partition_sum_change_yesterday|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_sum_change_yesterday
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_sum_change_yesterday
 ```

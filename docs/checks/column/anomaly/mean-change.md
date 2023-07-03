@@ -15,12 +15,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |mean_change|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=mean_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=mean_change
 ```
@@ -455,12 +455,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |daily_mean_change|recurring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_mean_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_mean_change
 ```
@@ -898,12 +898,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |monthly_mean_change|recurring|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_mean_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_mean_change
 ```
@@ -1341,12 +1341,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |daily_partition_mean_change|partitioned|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_mean_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_mean_change
 ```
@@ -1786,12 +1786,12 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 |monthly_partition_mean_change|partitioned|monthly|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_mean_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_mean_change
 ```

@@ -15,12 +15,12 @@ Verifies that the number of strings not matching the date format regex in a colu
 |string_not_match_date_regex_count|profiling| |[string_not_match_date_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_not_match_date_regex_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_not_match_date_regex_count
 ```
@@ -851,12 +851,12 @@ Verifies that the number of strings not matching the date format regex in a colu
 |daily_string_not_match_date_regex_count|recurring|daily|[string_not_match_date_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_not_match_date_regex_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_not_match_date_regex_count
 ```
@@ -1690,12 +1690,12 @@ Verifies that the number of strings not matching the date format regex in a colu
 |monthly_string_not_match_date_regex_count|recurring|monthly|[string_not_match_date_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_not_match_date_regex_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_not_match_date_regex_count
 ```
@@ -2529,12 +2529,12 @@ Verifies that the number of strings not matching the date format regex in a colu
 |daily_partition_string_not_match_date_regex_count|partitioned|daily|[string_not_match_date_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_not_match_date_regex_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_not_match_date_regex_count
 ```
@@ -3370,12 +3370,12 @@ Verifies that the number of strings not matching the date format regex in a colu
 |monthly_partition_string_not_match_date_regex_count|partitioned|monthly|[string_not_match_date_regex_count](../../../../reference/sensors/Column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_not_match_date_regex_count
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_not_match_date_regex_count
 ```

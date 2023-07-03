@@ -12,7 +12,7 @@ mvnw -DskipTests clean package
 python -m venv venv
 venv\Scripts\activate.bat
 python -m pip install -r requirements.txt
-python -m openapi_python_client update --path ..\..\dqoai\target\swagger\dqo-ui-swagger-3-python-client.json --config client_generate_config.yaml
+python -m openapi_python_client update --path ..\..\dqops\target\swagger\dqo-ui-swagger-3-python-client.json --config client_generate_config.yaml
 py -m build
 
 

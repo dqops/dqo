@@ -1,6 +1,6 @@
 @echo off
 @REM
-@REM Copyright © 2021 DQO.ai (support@dqo.ai)
+@REM Copyright © 2021 DQOps (support@dqops.com)
 @REM
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
 @REM limitations under the License.
 @REM
 
-if exist "%~dp0dqoai\pom.xml" (
+if exist "%~dp0dqops\pom.xml" (
     "%JAVA_HOME%\bin\javac" --version > nul  2> nul
     if ERRORLEVEL 1 (
         echo Java JDK is not installed. Make sure that your JAVA_HOME points to a JDK 11 or never installation. Java JRE is not enough to compile DQO
         exit /b 1
     )
 
-    if not exist "%~dp0dqoai\target\dqo-dqoai-%DQO_VERSION%.jar" (
-        if exist "%~dp0dqoai" (
+    if not exist "%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar" (
+        if exist "%~dp0dqops" (
             pushd "%~dp0"
             call "%~dp0\mvnw.cmd" package -DskipTests -Pbuild-with-jdk-11 -Prun-npm -f "%~dp0\pom.xml"
             popd
@@ -38,9 +38,9 @@ if exist "%~dp0dqoai\pom.xml" (
     )
 
     if not "x%DQO_PREPEND_CLASSES%"=="x" (
-        set DQO_LAUNCH_CLASSPATH=%DQO_PREPEND_CLASSES%;%~dp0dqoai\target\dqo-dqoai-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*
+        set DQO_LAUNCH_CLASSPATH=%DQO_PREPEND_CLASSES%;%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*
     ) else (
-        set DQO_LAUNCH_CLASSPATH=%~dp0dqoai\target\dqo-dqoai-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*
+        set DQO_LAUNCH_CLASSPATH=%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*
     )
 ) else (
     if not exist "%DQO_HOME%\jars" (

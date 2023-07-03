@@ -15,12 +15,12 @@ Verifies that the percentage of valid country code in a column does not fall bel
 |string_valid_country_code_percent|profiling| |[string_valid_country_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-country-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_valid_country_code_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_valid_country_code_percent
 ```
@@ -671,12 +671,12 @@ Verifies that the percentage of valid country code in a column does not fall bel
 |daily_string_valid_country_code_percent|recurring|daily|[string_valid_country_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-country-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_valid_country_code_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_valid_country_code_percent
 ```
@@ -1330,12 +1330,12 @@ Verifies that the percentage of valid country code in a column does not exceed t
 |monthly_string_valid_country_code_percent|recurring|monthly|[string_valid_country_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-country-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_valid_country_code_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_valid_country_code_percent
 ```
@@ -1989,12 +1989,12 @@ Verifies that the percentage of valid country code in a column does not fall bel
 |daily_partition_string_valid_country_code_percent|partitioned|daily|[string_valid_country_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-country-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_valid_country_code_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_valid_country_code_percent
 ```
@@ -2650,12 +2650,12 @@ Verifies that the percentage of valid country code in a column does not fall bel
 |monthly_partition_string_valid_country_code_percent|partitioned|monthly|[string_valid_country_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-country-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_valid_country_code_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_valid_country_code_percent
 ```

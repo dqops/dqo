@@ -15,12 +15,12 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |string_whitespace_percent|profiling| |[string_whitespace_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=string_whitespace_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=string_whitespace_percent
 ```
@@ -809,12 +809,12 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |daily_string_whitespace_percent|recurring|daily|[string_whitespace_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_string_whitespace_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_string_whitespace_percent
 ```
@@ -1606,12 +1606,12 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |monthly_string_whitespace_percent|recurring|monthly|[string_whitespace_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_string_whitespace_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_string_whitespace_percent
 ```
@@ -2403,12 +2403,12 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |daily_partition_string_whitespace_percent|partitioned|daily|[string_whitespace_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_string_whitespace_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_string_whitespace_percent
 ```
@@ -3202,12 +3202,12 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |monthly_partition_string_whitespace_percent|partitioned|monthly|[string_whitespace_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-whitespace-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_string_whitespace_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_string_whitespace_percent
 ```

@@ -15,12 +15,12 @@ Verifies that the sample standard deviation of all values in a column is not out
 |sample_stddev_in_range|profiling| |[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=sample_stddev_in_range
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=sample_stddev_in_range
 ```
@@ -464,12 +464,12 @@ Verifies that the sample standard deviation of all values in a column is not out
 |daily_sample_stddev_in_range|recurring|daily|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_sample_stddev_in_range
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_sample_stddev_in_range
 ```
@@ -916,12 +916,12 @@ Verifies that the sample standard deviation of all values in a column is not out
 |monthly_sample_stddev_in_range|recurring|monthly|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_sample_stddev_in_range
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_sample_stddev_in_range
 ```
@@ -1368,12 +1368,12 @@ Verifies that the sample standard deviation of all values in a column is not out
 |daily_partition_sample_stddev_in_range|partitioned|daily|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_sample_stddev_in_range
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_sample_stddev_in_range
 ```
@@ -1822,12 +1822,12 @@ Verifies that the sample standard deviation of all values in a column is not out
 |monthly_partition_sample_stddev_in_range|partitioned|monthly|[sample_stddev](../../../../reference/sensors/Column/numeric-column-sensors/#sample-stddev)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_sample_stddev_in_range
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_sample_stddev_in_range
 ```

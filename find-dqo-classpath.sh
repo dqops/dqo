@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright © 2021 DQO.ai (support@dqo.ai)
+# Copyright © 2021 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-if [ -e $(dirname $0)/dqoai/pom.xml ]; then
+if [ -e $(dirname $0)/dqops/pom.xml ]; then
     "$JAVA_HOME/bin/javac" --version > /dev/null 2> /dev/null
 
     returnedValue=$?
@@ -24,8 +24,8 @@ if [ -e $(dirname $0)/dqoai/pom.xml ]; then
         exit $?
     fi
 
-    if [ ! -e $(dirname $0)/dqoai/target/dqo-dqoai-$DQO_VERSION.jar ]; then
-        if [ -d $(dirname $0)/dqoai ]; then
+    if [ ! -e $(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar ]; then
+        if [ -d $(dirname $0)/dqops ]; then
             . "$(dirname $0)/mvnw.sh" package -DskipTests -Pbuild-with-jdk-11 -Prun-npm -f "$(dirname $0)/pom.xml"
 
             returnedValue=$?
@@ -40,9 +40,9 @@ if [ -e $(dirname $0)/dqoai/pom.xml ]; then
     fi
 
     if [ -n "$DQO_PREPEND_CLASSES" ]; then
-        export DQO_LAUNCH_CLASSPATH=$DQO_PREPEND_CLASSES:$(dirname $0)/dqoai/target/dqo-dqoai-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
+        export DQO_LAUNCH_CLASSPATH=$DQO_PREPEND_CLASSES:$(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
     else
-        export DQO_LAUNCH_CLASSPATH=$(dirname $0)/dqoai/target/dqo-dqoai-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
+        export DQO_LAUNCH_CLASSPATH=$(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
     fi
 else
 

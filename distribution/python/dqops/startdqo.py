@@ -58,6 +58,7 @@ def main():
     dqo_envs["DQO_HOME"] = dqo_home
     dqo_envs["JAVA_HOME"] = java_home
     dqo_envs["DQO_PYTHON_INTERPRETER"] = sys.executable
+    dqo_envs["DQO_PYTHON_USE_HOST_PYTHON"] = "true"
 
     if os_platform == "win":
         # Windows

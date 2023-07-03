@@ -15,12 +15,12 @@ Verifies that the percentage of difference in min of a column in a table and min
 |min_match_percent|profiling| |[min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=min_match_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=min_match_percent
 ```
@@ -45,9 +45,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=min_match_p
               referenced_table: dim_customer
               referenced_column: customer_id
             warning:
-              max_diff_percent: 1.0
+              max_diff_percent: 0.0
             error:
-              max_diff_percent: 2.0
+              max_diff_percent: 1.0
             fatal:
               max_diff_percent: 5.0
 ```
@@ -72,9 +72,9 @@ spec:
               referenced_table: dim_customer
               referenced_column: customer_id
             warning:
-              max_diff_percent: 1.0
+              max_diff_percent: 0.0
             error:
-              max_diff_percent: 2.0
+              max_diff_percent: 1.0
             fatal:
               max_diff_percent: 5.0
       labels:
@@ -322,9 +322,9 @@ spec:
                   referenced_table: dim_customer
                   referenced_column: customer_id
                 warning:
-                  max_diff_percent: 1.0
+                  max_diff_percent: 0.0
                 error:
-                  max_diff_percent: 2.0
+                  max_diff_percent: 1.0
                 fatal:
                   max_diff_percent: 5.0
           labels:
@@ -558,12 +558,12 @@ Verifies that the percentage of difference in min of a column in a table and min
 |daily_min_match_percent|recurring|daily|[min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_min_match_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_min_match_percent
 ```
@@ -589,9 +589,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_min_m
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
 ```
@@ -617,9 +617,9 @@ spec:
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       labels:
@@ -868,9 +868,9 @@ spec:
                     referenced_table: dim_customer
                     referenced_column: customer_id
                   warning:
-                    max_diff_percent: 1.0
+                    max_diff_percent: 0.0
                   error:
-                    max_diff_percent: 2.0
+                    max_diff_percent: 1.0
                   fatal:
                     max_diff_percent: 5.0
           labels:
@@ -1104,12 +1104,12 @@ Verifies that the percentage of difference in min of a column in a table and min
 |monthly_min_match_percent|recurring|monthly|[min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_min_match_percent
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_min_match_percent
 ```
@@ -1135,9 +1135,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_min
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
 ```
@@ -1163,9 +1163,9 @@ spec:
                 referenced_table: dim_customer
                 referenced_column: customer_id
               warning:
-                max_diff_percent: 1.0
+                max_diff_percent: 0.0
               error:
-                max_diff_percent: 2.0
+                max_diff_percent: 1.0
               fatal:
                 max_diff_percent: 5.0
       labels:
@@ -1414,9 +1414,9 @@ spec:
                     referenced_table: dim_customer
                     referenced_column: customer_id
                   warning:
-                    max_diff_percent: 1.0
+                    max_diff_percent: 0.0
                   error:
-                    max_diff_percent: 2.0
+                    max_diff_percent: 1.0
                   fatal:
                     max_diff_percent: 5.0
           labels:

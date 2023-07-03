@@ -15,12 +15,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
 |sum_change|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=sum_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=sum_change
 ```
@@ -455,12 +455,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
 |daily_sum_change|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_sum_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_sum_change
 ```
@@ -898,12 +898,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
 |monthly_sum_change|recurring|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_sum_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_sum_change
 ```
@@ -1341,12 +1341,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
 |daily_partition_sum_change|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_partition_sum_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_partition_sum_change
 ```
@@ -1786,12 +1786,12 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
 |monthly_partition_sum_change|partitioned|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=monthly_partition_sum_change
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=monthly_partition_sum_change
 ```

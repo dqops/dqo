@@ -1,89 +1,89 @@
-site_name: Documentation
+site_name: DQOps Data Quality Operations Center Documentation
 site_url: https://dqops.com/docs/
 repo_url: https://github.com/dqops/dqo
 edit_uri: edit/main/docs/
 
 # Docs navigation
 nav:
-  - What is DQO?: 'index.md'
+  - What is DQO?: "index.md"
   - Getting started:
-    - 'getting-started/index.md'
-    - Installation: 'getting-started/installation/installation.md'
-    - Connect to a data source: 'getting-started/adding-data-source-connection/adding-data-source-connection.md'
-    - Run data quality checks: 'getting-started/run-data-quality-checks/run-data-quality-checks.md'
-    - Review results on the dashboards: 'getting-started/review-results-on-dashboards/review-results-on-dashboards.md'
+      - "getting-started/index.md"
+      - Installation: "getting-started/installation/installation.md"
+      - Connect to a data source: "getting-started/adding-data-source-connection/adding-data-source-connection.md"
+      - Run data quality checks: "getting-started/run-data-quality-checks/run-data-quality-checks.md"
+      - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
   - DQO concepts:
-    - 'dqo-concepts/index.md'
-    - Checks:
-      - 'dqo-concepts/checks/index.md'
-      - Advanced profiling: 'dqo-concepts/checks/advanced-profiling/advanced-profiling.md'
-      - Recurring checks: 'dqo-concepts/checks/recurring-checks/recurring-checks.md'
-      - Partition checks: 'dqo-concepts/checks/partition-checks/partition-checks.md'
-    - Sensors: 'dqo-concepts/sensors/sensors.md'
-    - Rules: 'dqo-concepts/rules/rules.md'
-    - Data quality KPIs: 'dqo-concepts/data-quality-kpis/data-quality-kpis.md'
-    - Dashboards: 'dqo-concepts/data-quality-dashboards/data-quality-dashboards.md'
-    - Data quality dimensions: 'dqo-concepts/data-quality-dimensions/data-quality-dimensions.md'
-    - Data grouping: 'dqo-concepts/data-grouping/data-grouping.md'
-    - Data storage: 'dqo-concepts/data-storage/data-storage.md'
-    - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
-    - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
+      - "dqo-concepts/index.md"
+      - Checks:
+          - "dqo-concepts/checks/index.md"
+          - Advanced profiling: "dqo-concepts/checks/advanced-profiling/advanced-profiling.md"
+          - Recurring checks: "dqo-concepts/checks/recurring-checks/recurring-checks.md"
+          - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
+      - Sensors: "dqo-concepts/sensors/sensors.md"
+      - Rules: "dqo-concepts/rules/rules.md"
+      - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
+      - Dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
+      - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
+      - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
+      - Data storage: "dqo-concepts/data-storage/data-storage.md"
+      - Working with YAML files: "dqo-concepts/working-with-yaml-files/working-with-yaml-files.md"
+      - Working with CLI: "dqo-concepts/working-with-cli/working-with-cli.md"
   - Use cases:
-    - 'examples/index.md'
-    - Data accuracy:
-        - Integrity check between columns in different tables: 'examples/data-accuracy/integrity-check-between-columns-in-different-tables.md'
-    - Data completeness:
-        - Number of rows in the table: 'examples/data-completeness/number-of-rows-in-the-table.md'
-        - Number of null values: 'examples/data-completeness/number-of-null-values.md'
-    - Data uniqueness:
-        - Percentage of duplicates: 'examples/data-uniqueness/percentage-of-duplicates.md'
-    - Data validity:
-        - Percentage of valid USA zipcodes: 'examples/data-validity/percentage-of-valid-usa-zipcodes.md'
-        - Percentage of valid emails: 'examples/data-validity/percentage-of-valid-emails.md'
-        - Percentage of valid latitude and longitude: 'examples/data-validity/percentage-of-valid-latitude-and-longitude.md'
-        - Percentage of valid IP4 address: 'examples/data-validity/percentage-of-valid-IP4-address.md'
-        - Percentage of strings matching date regex: 'examples/data-validity/percentage-of-strings-matching-date-regex.md'
-        - Percentage of rows passing SQL condition: 'examples/data-validity/percentage-of-rows-passing-sql-condition.md'
-        - Percentage of valid currency codes: 'examples/data-validity/percentage-of-valid-currency-codes.md'
-        - Percentage of negative values: 'examples/data-validity/percentage-of-negative-values.md'
-        - Percentage of valid UUID: 'examples/data-validity/percentage-of-valid-uuid.md'
-    - Data consistency:
-        - Percent of rows with string values in set: 'examples/data-consistency/percent-of-string-in-set.md'
-    - Data reasonability:
-        - Percentage of values in range: 'examples/data-reasonability/percentage-of-integer-values-in-range.md'
-        - A string not exceeding a set length: 'examples/data-reasonability/string-not-exceeding-a-set-length.md'
-        - Percentage of false values: 'examples/data-reasonability/percentage-of-false-values.md'
-    - Stability:
-       - Table availability: 'examples/stability/table-availability.md'
-    - Data quality monitoring:
-      - Running checks with a scheduler: 'examples/data-quality-monitoring/running-checks-with-a-scheduler.md'
+      - "examples/index.md"
+      - Data accuracy:
+          - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"
+      - Data completeness:
+          - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
+          - Number of null values: "examples/data-completeness/number-of-null-values.md"
+      - Data uniqueness:
+          - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
+      - Data validity:
+          - Percentage of valid USA zipcodes: "examples/data-validity/percentage-of-valid-usa-zipcodes.md"
+          - Percentage of valid emails: "examples/data-validity/percentage-of-valid-emails.md"
+          - Percentage of valid latitude and longitude: "examples/data-validity/percentage-of-valid-latitude-and-longitude.md"
+          - Percentage of valid IP4 address: "examples/data-validity/percentage-of-valid-IP4-address.md"
+          - Percentage of strings matching date regex: "examples/data-validity/percentage-of-strings-matching-date-regex.md"
+          - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
+          - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
+          - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
+          - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
+      - Data consistency:
+          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
+      - Data reasonability:
+          - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
+          - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
+          - Percentage of false values: "examples/data-reasonability/percentage-of-false-values.md"
+      - Stability:
+          - Table availability: "examples/stability/table-availability.md"
+      - Data quality monitoring:
+          - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQO:
-    - Installation:
-      - Install DQO using PIP: 'working-with-dqo/installation/install-dqo-using-pip.md'
-      - Install DQO from Git: 'working-with-dqo/installation/install-dqo-from-git.md'
-      - Install DQO from release package: 'working-with-dqo/installation/install-dqo-from-release-package.md'
-      - Run DQO as Docker container: 'working-with-dqo/installation/run-dqo-as-docker-container.md'
-    - Navigating the graphical interface: 'working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md'
-    - Adding connections:
-      - 'working-with-dqo/adding-data-source-connection/index.md'
-      - BigQuery: 'working-with-dqo/adding-data-source-connection/bigquery.md'
-      - Snowflake: 'working-with-dqo/adding-data-source-connection/snowflake.md'
-      - Redshift: 'working-with-dqo/adding-data-source-connection/redshift.md'
-      - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
-      - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
-      - MySQL: 'working-with-dqo/adding-data-source-connection/mysql.md'
-    - Basic data statistics: 'working-with-dqo/basic-data-statistics/basic-data-statistics.md'
-    - Run data quality checks: 'working-with-dqo/run-data-quality-checks/run-data-quality-checks.md'
-    - Review the results of data quality monitoring on dashboards: 'working-with-dqo/data-quality-dashboards/data-quality-dashboards.md'
-    - Delete data quality results: 'working-with-dqo/delete-data-quality-results/delete-data-quality-results.md'
-    - Schedules:
-      - 'working-with-dqo/schedules/index.md'
-      - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md'
-      - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
-      - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
-    - Incidents and notifications: 'working-with-dqo/incidents-and-notifications/incidents-and-notifications.md'
-    - Set up data grouping: 'working-with-dqo/set-up-data-grouping/set-up-data-grouping.md'
-    - Working with DQO Shell: 'working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md'
+      - Installation:
+          - Install DQO using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
+          - Install DQO from Git: "working-with-dqo/installation/install-dqo-from-git.md"
+          - Install DQO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
+          - Run DQO as Docker container: "working-with-dqo/installation/run-dqo-as-docker-container.md"
+      - Navigating the graphical interface: "working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md"
+      - Adding connections:
+          - "working-with-dqo/adding-data-source-connection/index.md"
+          - BigQuery: "working-with-dqo/adding-data-source-connection/bigquery.md"
+          - Snowflake: "working-with-dqo/adding-data-source-connection/snowflake.md"
+          - Redshift: "working-with-dqo/adding-data-source-connection/redshift.md"
+          - PostgreSQL: "working-with-dqo/adding-data-source-connection/postgresql.md"
+          - SQL Server: "working-with-dqo/adding-data-source-connection/sql-server.md"
+          - MySQL: "working-with-dqo/adding-data-source-connection/mysql.md"
+      - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
+      - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
+      - Review the results of data quality monitoring on dashboards: "working-with-dqo/data-quality-dashboards/data-quality-dashboards.md"
+      - Delete data quality results: "working-with-dqo/delete-data-quality-results/delete-data-quality-results.md"
+      - Schedules:
+          - "working-with-dqo/schedules/index.md"
+          - Configuring the schedules by modifying the YAML files: "working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md"
+          - Time zone configuration: "working-with-dqo/schedules/timezone-configuration.md"
+          - Cron formatting: "working-with-dqo/schedules/cron-formatting.md"
+      - Incidents and notifications: "working-with-dqo/incidents-and-notifications/incidents-and-notifications.md"
+      - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
+      - Working with DQO Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - index: 'command-line-interface/index.md'
@@ -325,13 +325,14 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
-      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
+      - check_results: 'reference/parquetfiles/check_results.md'
+      - errors: 'reference/parquetfiles/errors.md'
+      - incidents: 'reference/parquetfiles/incidents.md'
+      - sensor_readouts: 'reference/parquetfiles/sensor_readouts.md'
+      - statistics: 'reference/parquetfiles/statistics.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
-
+extra_css:
+  - stylesheets/extra.css
 # Visual settings
 theme:
   name: material
@@ -346,7 +347,6 @@ theme:
   favicon: images/favicon.ico
   icon:
     repo: fontawesome/brands/github
-
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -363,7 +363,6 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
   font: false
-
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets
@@ -396,6 +395,5 @@ extra:
       as to measure the effectiveness of our documentation and whether users
       find what they are looking for. With your consent, you help us improve our documentation.
   homepage: https://dqops.com/
-
 # TODO Tags
 # TODO Footer

@@ -15,12 +15,12 @@ Verifies that the mean value in a column changes in a rate within a percentile b
 |mean_anomaly_30_days|profiling| |[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percentile_moving_within_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=mean_anomaly_30_days
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=mean_anomaly_30_days
 ```
@@ -455,12 +455,12 @@ Verifies that the mean value in a column changes in a rate within a percentile b
 |daily_mean_anomaly_30_days|recurring|daily|[mean](../../../../reference/sensors/Column/numeric-column-sensors/#mean)|[change_percentile_moving_within_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
 dqo> check enable -c=connection_name -ch=daily_mean_anomaly_30_days
 ```
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
 dqo> check run -ch=daily_mean_anomaly_30_days
 ```
