@@ -11,10 +11,10 @@ import { useSelector } from 'react-redux';
 import { IRootState } from './redux/reducers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { LogErrorsApi } from "./services/apiClient";
+import { LogErrorsApi } from './services/apiClient';
 
-import Chart from "chart.js/auto";
-import { CategoryScale } from "chart.js";
+import Chart from 'chart.js/auto';
+import { CategoryScale } from 'chart.js';
 
 Chart.register(CategoryScale);
 // import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, TimeScale } from "chart.js";
@@ -23,33 +23,35 @@ import 'chartjs-adapter-moment';
 
 const App = () => {
   const dispatch = useActionDispatch();
-  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job || {});
+  const { lastSequenceNumber, loading } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   useEffect(() => {
     dispatch(getAllJobs());
 
-    window.onunhandledrejection = event => {
-      if (event?.reason?.request?.responseURL?.indexOf("api/logs/error") < 0) {
+    window.onunhandledrejection = (event) => {
+      if (event?.reason?.request?.responseURL?.indexOf('api/logs/error') < 0) {
         LogErrorsApi.logError({
           window_location: window.location.href,
           message: event.reason
-        })
+        });
       }
     };
 
-    window.onerror = function(message) {
+    window.onerror = function (message) {
       LogErrorsApi.logError({
         window_location: window.location.href,
         message: message.toString()
-      })
+      });
     };
   }, []);
 
   useEffect(() => {
-    if (!lastSequenceNumber || loading) return;
+    if (!lastSequenceNumber || loading === true) return;
 
-    dispatch(getJobsChanges(lastSequenceNumber));
-  }, [lastSequenceNumber]);
+    dispatch(getJobsChanges(lastSequenceNumber ?? 0));
+  }, [lastSequenceNumber, loading]);
 
   return (
     <Router>
