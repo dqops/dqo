@@ -52,7 +52,6 @@ const TableDataGroupingConfiguration = () => {
       tableName
     ).then((res) => {
       setDataGroupingConfigurations(res.data);
-      console.log(dataGroupingConfigurations);
     });
   };
 
