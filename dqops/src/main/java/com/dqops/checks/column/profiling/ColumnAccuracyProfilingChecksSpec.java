@@ -37,27 +37,27 @@ public class ColumnAccuracyProfilingChecksSpec extends AbstractCheckCategorySpec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("total_sum_match_percent", o -> o.totalSumMatchPercent);
-            put("min_match_percent", o -> o.minMatchPercent);
-            put("max_match_percent", o -> o.maxMatchPercent);
-            put("average_match_percent", o -> o.averageMatchPercent);
-            put("not_null_count_match_percent", o -> o.notNullCountMatchPercent);
+            put("total_min_match_percent", o -> o.totalMinMatchPercent);
+            put("total_max_match_percent", o -> o.totalMaxMatchPercent);
+            put("total_average_match_percent", o -> o.totalAverageMatchPercent);
+            put("total_not_null_count_match_percent", o -> o.totalNotNullCountMatchPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that percentage of the difference in sum of a column in a table and sum of a column of another table does not exceed the set number.")
+    @JsonPropertyDescription("Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.")
     private ColumnAccuracyTotalSumMatchPercentCheckSpec totalSumMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number.")
-    private ColumnAccuracyMinMatchPercentCheckSpec minMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number.")
+    private ColumnAccuracyTotalMinMatchPercentCheckSpec totalMinMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number.")
-    private ColumnAccuracyMaxMatchPercentCheckSpec maxMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number.")
+    private ColumnAccuracyTotalMaxMatchPercentCheckSpec totalMaxMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number.")
-    private ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number.")
+    private ColumnAccuracyTotalAverageMatchPercentCheckSpec totalAverageMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnAccuracyNotNullCountMatchPercentCheckSpec notNullCountMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec totalNotNullCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -81,72 +81,72 @@ public class ColumnAccuracyProfilingChecksSpec extends AbstractCheckCategorySpec
      * Returns an accuracy min percent check specification.
      * @return Accuracy min percent check specification.
      */
-    public ColumnAccuracyMinMatchPercentCheckSpec getMinMatchPercent() {
-        return minMatchPercent;
+    public ColumnAccuracyTotalMinMatchPercentCheckSpec getTotalMinMatchPercent() {
+        return totalMinMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy min percent check.
-     * @param minMatchPercent Accuracy min percent check specification.
+     * @param totalMinMatchPercent Accuracy min percent check specification.
      */
-    public void setMinMatchPercent(ColumnAccuracyMinMatchPercentCheckSpec minMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.minMatchPercent, minMatchPercent));
-        this.minMatchPercent = minMatchPercent;
-        propagateHierarchyIdToField(minMatchPercent, "min_match_percent");
+    public void setTotalMinMatchPercent(ColumnAccuracyTotalMinMatchPercentCheckSpec totalMinMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.totalMinMatchPercent, totalMinMatchPercent));
+        this.totalMinMatchPercent = totalMinMatchPercent;
+        propagateHierarchyIdToField(totalMinMatchPercent, "total_min_match_percent");
     }
 
     /**
      * Returns an accuracy max percent check specification.
      * @return Accuracy max percent check specification.
      */
-    public ColumnAccuracyMaxMatchPercentCheckSpec getMaxMatchPercent() {
-        return maxMatchPercent;
+    public ColumnAccuracyTotalMaxMatchPercentCheckSpec getTotalMaxMatchPercent() {
+        return totalMaxMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy max percent check.
-     * @param maxMatchPercent Accuracy max percent check specification.
+     * @param totalMaxMatchPercent Accuracy max percent check specification.
      */
-    public void setMaxMatchPercent(ColumnAccuracyMaxMatchPercentCheckSpec maxMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.maxMatchPercent, maxMatchPercent));
-        this.maxMatchPercent = maxMatchPercent;
-        propagateHierarchyIdToField(maxMatchPercent, "max_match_percent");
+    public void setTotalMaxMatchPercent(ColumnAccuracyTotalMaxMatchPercentCheckSpec totalMaxMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.totalMaxMatchPercent, totalMaxMatchPercent));
+        this.totalMaxMatchPercent = totalMaxMatchPercent;
+        propagateHierarchyIdToField(totalMaxMatchPercent, "total_max_match_percent");
     }
 
     /**
      * Returns an accuracy average percent check specification.
      * @return Accuracy average percent check specification.
      */
-    public ColumnAccuracyAverageMatchPercentCheckSpec getAverageMatchPercent() {
-        return averageMatchPercent;
+    public ColumnAccuracyTotalAverageMatchPercentCheckSpec getTotalAverageMatchPercent() {
+        return totalAverageMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy average percent check.
-     * @param averageMatchPercent Accuracy average percent check specification.
+     * @param totalAverageMatchPercent Accuracy average percent check specification.
      */
-    public void setAverageMatchPercent(ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.averageMatchPercent, averageMatchPercent));
-        this.averageMatchPercent = averageMatchPercent;
-        propagateHierarchyIdToField(averageMatchPercent, "average_match_percent");
+    public void setTotalAverageMatchPercent(ColumnAccuracyTotalAverageMatchPercentCheckSpec totalAverageMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.totalAverageMatchPercent, totalAverageMatchPercent));
+        this.totalAverageMatchPercent = totalAverageMatchPercent;
+        propagateHierarchyIdToField(totalAverageMatchPercent, "total_average_match_percent");
     }
 
     /**
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getNotNullCountMatchPercent() {
-        return notNullCountMatchPercent;
+    public ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec getTotalNotNullCountMatchPercent() {
+        return totalNotNullCountMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy row count percent check.
-     * @param notNullCountMatchPercent Accuracy row count percent check specification.
+     * @param totalNotNullCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setNotNullCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec notNullCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.notNullCountMatchPercent, notNullCountMatchPercent));
-        this.notNullCountMatchPercent = notNullCountMatchPercent;
-        propagateHierarchyIdToField(notNullCountMatchPercent, "not_null_count_match_percent");
+    public void setTotalNotNullCountMatchPercent(ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec totalNotNullCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.totalNotNullCountMatchPercent, totalNotNullCountMatchPercent));
+        this.totalNotNullCountMatchPercent = totalNotNullCountMatchPercent;
+        propagateHierarchyIdToField(totalNotNullCountMatchPercent, "total_not_null_count_match_percent");
     }
 
     /**

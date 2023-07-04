@@ -103,11 +103,11 @@ from .collect_statistics_queue_job_parameters_data_scope import (
     CollectStatisticsQueueJobParametersDataScope,
 )
 from .collect_statistics_queue_job_result import CollectStatisticsQueueJobResult
-from .column_accuracy_average_match_percent_check_spec import (
-    ColumnAccuracyAverageMatchPercentCheckSpec,
+from .column_accuracy_total_average_match_percent_check_spec import (
+    ColumnAccuracyTotalAverageMatchPercentCheckSpec,
 )
-from .column_accuracy_average_match_percent_sensor_parameters_spec import (
-    ColumnAccuracyAverageMatchPercentSensorParametersSpec,
+from .column_accuracy_total_average_match_percent_sensor_parameters_spec import (
+    ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec,
 )
 from .column_accuracy_daily_partitioned_checks_spec import (
     ColumnAccuracyDailyPartitionedChecksSpec,
@@ -115,17 +115,17 @@ from .column_accuracy_daily_partitioned_checks_spec import (
 from .column_accuracy_daily_recurring_checks_spec import (
     ColumnAccuracyDailyRecurringChecksSpec,
 )
-from .column_accuracy_max_match_percent_check_spec import (
-    ColumnAccuracyMaxMatchPercentCheckSpec,
+from .column_accuracy_total_max_match_percent_check_spec import (
+    ColumnAccuracyTotalMaxMatchPercentCheckSpec,
 )
-from .column_accuracy_max_match_percent_sensor_parameters_spec import (
-    ColumnAccuracyMaxMatchPercentSensorParametersSpec,
+from .column_accuracy_total_max_match_percent_sensor_parameters_spec import (
+    ColumnAccuracyTotalMaxMatchPercentSensorParametersSpec,
 )
-from .column_accuracy_min_match_percent_check_spec import (
-    ColumnAccuracyMinMatchPercentCheckSpec,
+from .column_accuracy_total_min_match_percent_check_spec import (
+    ColumnAccuracyTotalMinMatchPercentCheckSpec,
 )
-from .column_accuracy_min_match_percent_sensor_parameters_spec import (
-    ColumnAccuracyMinMatchPercentSensorParametersSpec,
+from .column_accuracy_total_min_match_percent_sensor_parameters_spec import (
+    ColumnAccuracyTotalMinMatchPercentSensorParametersSpec,
 )
 from .column_accuracy_monthly_partitioned_checks_spec import (
     ColumnAccuracyMonthlyPartitionedChecksSpec,
@@ -133,11 +133,11 @@ from .column_accuracy_monthly_partitioned_checks_spec import (
 from .column_accuracy_monthly_recurring_checks_spec import (
     ColumnAccuracyMonthlyRecurringChecksSpec,
 )
-from .column_accuracy_not_null_count_match_percent_check_spec import (
-    ColumnAccuracyNotNullCountMatchPercentCheckSpec,
+from .column_accuracy_total_not_null_count_match_percent_check_spec import (
+    ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec,
 )
-from .column_accuracy_not_null_count_match_percent_sensor_parameters_spec import (
-    ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec,
+from .column_accuracy_total_not_null_count_match_percent_sensor_parameters_spec import (
+    ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec,
 )
 from .column_accuracy_profiling_checks_spec import ColumnAccuracyProfilingChecksSpec
 from .column_accuracy_total_sum_match_percent_check_spec import (
@@ -1379,11 +1379,11 @@ from .table_accuracy_monthly_recurring_checks_spec import (
     TableAccuracyMonthlyRecurringChecksSpec,
 )
 from .table_accuracy_profiling_checks_spec import TableAccuracyProfilingChecksSpec
-from .table_accuracy_row_count_match_percent_check_spec import (
-    TableAccuracyRowCountMatchPercentCheckSpec,
+from .table_accuracy_total_row_count_match_percent_check_spec import (
+    TableAccuracyTotalRowCountMatchPercentCheckSpec,
 )
-from .table_accuracy_row_count_match_percent_sensor_parameters_spec import (
-    TableAccuracyRowCountMatchPercentSensorParametersSpec,
+from .table_accuracy_total_row_count_match_percent_sensor_parameters_spec import (
+    TableAccuracyTotalRowCountMatchPercentSensorParametersSpec,
 )
 from .table_anomaly_row_count_7_days_check_spec import (
     TableAnomalyRowCount7DaysCheckSpec,
@@ -1666,18 +1666,18 @@ __all__ = (
     "CollectStatisticsQueueJobParameters",
     "CollectStatisticsQueueJobParametersDataScope",
     "CollectStatisticsQueueJobResult",
-    "ColumnAccuracyAverageMatchPercentCheckSpec",
-    "ColumnAccuracyAverageMatchPercentSensorParametersSpec",
+    "ColumnAccuracyTotalAverageMatchPercentCheckSpec",
+    "ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec",
     "ColumnAccuracyDailyPartitionedChecksSpec",
     "ColumnAccuracyDailyRecurringChecksSpec",
-    "ColumnAccuracyMaxMatchPercentCheckSpec",
-    "ColumnAccuracyMaxMatchPercentSensorParametersSpec",
-    "ColumnAccuracyMinMatchPercentCheckSpec",
-    "ColumnAccuracyMinMatchPercentSensorParametersSpec",
+    "ColumnAccuracyTotalMaxMatchPercentCheckSpec",
+    "ColumnAccuracyTotalMaxMatchPercentSensorParametersSpec",
+    "ColumnAccuracyTotalMinMatchPercentCheckSpec",
+    "ColumnAccuracyTotalMinMatchPercentSensorParametersSpec",
     "ColumnAccuracyMonthlyPartitionedChecksSpec",
     "ColumnAccuracyMonthlyRecurringChecksSpec",
-    "ColumnAccuracyNotNullCountMatchPercentCheckSpec",
-    "ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec",
+    "ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec",
+    "ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec",
     "ColumnAccuracyProfilingChecksSpec",
     "ColumnAccuracyTotalSumMatchPercentCheckSpec",
     "ColumnAccuracyTotalSumMatchPercentSensorParametersSpec",
@@ -2248,8 +2248,8 @@ __all__ = (
     "TableAccuracyDailyRecurringChecksSpec",
     "TableAccuracyMonthlyRecurringChecksSpec",
     "TableAccuracyProfilingChecksSpec",
-    "TableAccuracyRowCountMatchPercentCheckSpec",
-    "TableAccuracyRowCountMatchPercentSensorParametersSpec",
+    "TableAccuracyTotalRowCountMatchPercentCheckSpec",
+    "TableAccuracyTotalRowCountMatchPercentSensorParametersSpec",
     "TableAnomalyRowCount30DaysCheckSpec",
     "TableAnomalyRowCount60DaysCheckSpec",
     "TableAnomalyRowCount7DaysCheckSpec",

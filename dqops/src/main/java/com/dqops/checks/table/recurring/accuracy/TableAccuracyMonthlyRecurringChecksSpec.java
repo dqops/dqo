@@ -16,7 +16,7 @@
 package com.dqops.checks.table.recurring.accuracy;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.table.checkspecs.accuracy.TableAccuracyRowCountMatchPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.accuracy.TableAccuracyTotalRowCountMatchPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAccuracyMonthlyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAccuracyMonthlyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_row_count_match_percent", o -> o.monthlyRowCountMatchPercent);
+            put("monthly_total_row_count_match_percent", o -> o.monthlyTotalRowCountMatchPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private TableAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent;
+    @JsonPropertyDescription("Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private TableAccuracyTotalRowCountMatchPercentCheckSpec monthlyTotalRowCountMatchPercent;
 
     /**
-     * Returns a row count match percent check.
-     * @return Row count match percent check.
+     * Returns a total row count match percent check.
+     * @return Total row count match percent check.
      */
-    public TableAccuracyRowCountMatchPercentCheckSpec getMonthlyRowCountMatchPercent() {
-        return monthlyRowCountMatchPercent;
+    public TableAccuracyTotalRowCountMatchPercentCheckSpec getMonthlyTotalRowCountMatchPercent() {
+        return monthlyTotalRowCountMatchPercent;
     }
 
     /**
-     * Sets the reference to a row count match percent check.
-     * @param monthlyRowCountMatchPercent Row count match percent check.
+     * Sets the reference to a total row count match percent check.
+     * @param monthlyTotalRowCountMatchPercent Total row count match percent check.
      */
-    public void setMonthlyRowCountMatchPercent(TableAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyRowCountMatchPercent, monthlyRowCountMatchPercent));
-        this.monthlyRowCountMatchPercent = monthlyRowCountMatchPercent;
-        propagateHierarchyIdToField(monthlyRowCountMatchPercent, "monthly_row_count_match_percent");
+    public void setMonthlyTotalRowCountMatchPercent(TableAccuracyTotalRowCountMatchPercentCheckSpec monthlyTotalRowCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTotalRowCountMatchPercent, monthlyTotalRowCountMatchPercent));
+        this.monthlyTotalRowCountMatchPercent = monthlyTotalRowCountMatchPercent;
+        propagateHierarchyIdToField(monthlyTotalRowCountMatchPercent, "monthly_total_row_count_match_percent");
     }
 
     /**

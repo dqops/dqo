@@ -1,8 +1,8 @@
 
-## **average match percent**
+## **total average match percent**
 **Full sensor name**
 ```
-column/accuracy/average_match_percent
+column/accuracy/total_average_match_percent
 ```
 **Description**  
 Column level sensor that calculates percentage of the difference in average of a column in a table and average of a column of another table.
@@ -155,10 +155,10 @@ Column level sensor that calculates percentage of the difference in average of a
     ```
 ___
 
-## **max match percent**
+## **total max match percent**
 **Full sensor name**
 ```
-column/accuracy/max_match_percent
+column/accuracy/total_max_match_percent
 ```
 **Description**  
 Column level sensor that calculates percentage of the difference in max of a column in a table and max of a column of another table.
@@ -308,10 +308,10 @@ Column level sensor that calculates percentage of the difference in max of a col
     ```
 ___
 
-## **min match percent**
+## **total min match percent**
 **Full sensor name**
 ```
-column/accuracy/min_match_percent
+column/accuracy/total_min_match_percent
 ```
 **Description**  
 Column level sensor that calculates percentage of the difference in min of a column in a table and min of a column of another table.
@@ -461,10 +461,10 @@ Column level sensor that calculates percentage of the difference in min of a col
     ```
 ___
 
-## **not null count match percent**
+## **total not null count match percent**
 **Full sensor name**
 ```
-column/accuracy/not_null_count_match_percent
+column/accuracy/total_not_null_count_match_percent
 ```
 **Description**  
 Column level sensor that calculates percentage of the difference in row count of a column in a table and row count of a column of another table.

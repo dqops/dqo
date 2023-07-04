@@ -16,7 +16,7 @@
 package com.dqops.checks.table.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.table.checkspecs.accuracy.TableAccuracyRowCountMatchPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.accuracy.TableAccuracyTotalRowCountMatchPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAccuracyProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAccuracyProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("row_count_match_percent", o -> o.rowCountMatchPercent);
+            put("total_row_count_match_percent", o -> o.totalRowCountMatchPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table matches the total row count of another (reference) table.")
-    private TableAccuracyRowCountMatchPercentCheckSpec rowCountMatchPercent;
+    private TableAccuracyTotalRowCountMatchPercentCheckSpec totalRowCountMatchPercent;
 
     /**
-     * Returns the row count match check.
-     * @return Row count match check.
+     * Returns the total row count match check.
+     * @return Total row count match check.
      */
-    public TableAccuracyRowCountMatchPercentCheckSpec getRowCountMatchPercent() {
-        return rowCountMatchPercent;
+    public TableAccuracyTotalRowCountMatchPercentCheckSpec getTotalRowCountMatchPercent() {
+        return totalRowCountMatchPercent;
     }
 
     /**
-     * Sets a new row count match check.
-     * @param rowCountMatchPercent Row count match check.
+     * Sets a new total row count match check.
+     * @param totalRowCountMatchPercent Total row count match check.
      */
-    public void setRowCountMatchPercent(TableAccuracyRowCountMatchPercentCheckSpec rowCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.rowCountMatchPercent, rowCountMatchPercent));
-        this.rowCountMatchPercent = rowCountMatchPercent;
-        propagateHierarchyIdToField(rowCountMatchPercent, "row_count_match_percent");
+    public void setTotalRowCountMatchPercent(TableAccuracyTotalRowCountMatchPercentCheckSpec totalRowCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.totalRowCountMatchPercent, totalRowCountMatchPercent));
+        this.totalRowCountMatchPercent = totalRowCountMatchPercent;
+        propagateHierarchyIdToField(totalRowCountMatchPercent, "total_row_count_match_percent");
     }
 
     /**
