@@ -9,18 +9,35 @@ import {
   setUpdatedTableBasic,
   updateTableBasic
 } from '../../../redux/actions/table.actions';
-import { useParams } from "react-router-dom";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
-import { CheckTypes } from "../../../shared/routes";
+import { useParams } from 'react-router-dom';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../../redux/selectors';
+import { CheckTypes } from '../../../shared/routes';
 
 const TableDetails = () => {
-  const { checkTypes, connection, schema, table }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(getFirstLevelState(checkTypes));
+  const {
+    checkTypes,
+    connection,
+    schema,
+    table
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+  } = useParams();
+  const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
+    getFirstLevelState(checkTypes)
+  );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    dispatch(getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table));
+    dispatch(
+      getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
+    );
   }, [checkTypes, firstLevelActiveTab, connection, schema, table]);
 
   const handleChange = (obj: any) => {
@@ -37,9 +54,18 @@ const TableDetails = () => {
       return;
     }
     await dispatch(
-      updateTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table, tableBasic)
+      updateTableBasic(
+        checkTypes,
+        firstLevelActiveTab,
+        connection,
+        schema,
+        table,
+        tableBasic
+      )
     );
-    await dispatch(getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table));
+    await dispatch(
+      getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
+    );
   };
 
   return (
@@ -50,7 +76,7 @@ const TableDetails = () => {
         isUpdating={isUpdating}
       />
 
-      <table className="mb-6 w-160">
+      <table className="mb-6 w-160 text-sm">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>

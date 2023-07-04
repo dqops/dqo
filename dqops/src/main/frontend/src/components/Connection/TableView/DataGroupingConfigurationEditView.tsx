@@ -134,7 +134,7 @@ const DataGroupingConfigurationEditView = ({
   };
 
   return (
-    <div className="px-4">
+    <div className="px-4 text-sm">
       <ActionGroup
         onUpdate={onUpdate}
         isUpdated={name === '' ? false : true}
