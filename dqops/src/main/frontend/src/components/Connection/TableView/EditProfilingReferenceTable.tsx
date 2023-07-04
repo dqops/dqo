@@ -24,7 +24,7 @@ import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 type EditProfilingReferenceTableProps = {
-  onBack: () => void;
+  onBack: (stayOnSamePage?: boolean | undefined) => void;
   selectedReference?: string;
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
@@ -331,6 +331,7 @@ export const EditProfilingReferenceTable = ({
           });
       }
     }
+    setIsUpdated(false);
   };
 
   const onChange = (obj: Partial<TableComparisonModel>) => {
@@ -396,7 +397,7 @@ export const EditProfilingReferenceTable = ({
           variant="text"
           className="px-0 text-sm"
           leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-          onClick={onBack}
+          onClick={() => onBack(false)}
         />
       </div>
 
