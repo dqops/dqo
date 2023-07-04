@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/accuracy/average_match_percent
-  rule_name: comparison/diff_percent
-  help_text: Verifies that the percentage of difference in average of a column in
-    a table and average of a column of another table does not exceed the set number.

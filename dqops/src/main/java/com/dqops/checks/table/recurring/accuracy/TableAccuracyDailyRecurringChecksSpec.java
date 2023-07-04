@@ -16,7 +16,7 @@
 package com.dqops.checks.table.recurring.accuracy;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.table.checkspecs.accuracy.TableAccuracyRowCountMatchPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.accuracy.TableAccuracyTotalRowCountMatchPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAccuracyDailyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAccuracyDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_row_count_match_percent", o -> o.dailyRowCountMatchPercent);
+            put("daily_total_row_count_match_percent", o -> o.dailyTotalRowCountMatchPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private TableAccuracyRowCountMatchPercentCheckSpec dailyRowCountMatchPercent;
+    @JsonPropertyDescription("Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private TableAccuracyTotalRowCountMatchPercentCheckSpec dailyTotalRowCountMatchPercent;
 
     /**
-     * Returns a row count match percent check.
-     * @return Row count match percent check.
+     * Returns a total row count match percent check.
+     * @return Total row count match percent check.
      */
-    public TableAccuracyRowCountMatchPercentCheckSpec getDailyRowCountMatchPercent() {
-        return dailyRowCountMatchPercent;
+    public TableAccuracyTotalRowCountMatchPercentCheckSpec getDailyTotalRowCountMatchPercent() {
+        return dailyTotalRowCountMatchPercent;
     }
 
     /**
-     * Sets the reference to a row count match percent check.
-     * @param dailyRowCountMatchPercent Row count match percent check.
+     * Sets the reference to a total row count match percent check.
+     * @param dailyTotalRowCountMatchPercent Total row count match percent check.
      */
-    public void setDailyRowCountMatchPercent(TableAccuracyRowCountMatchPercentCheckSpec dailyRowCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountMatchPercent, dailyRowCountMatchPercent));
-        this.dailyRowCountMatchPercent = dailyRowCountMatchPercent;
-        propagateHierarchyIdToField(dailyRowCountMatchPercent, "daily_row_count_match_percent");
+    public void setDailyTotalRowCountMatchPercent(TableAccuracyTotalRowCountMatchPercentCheckSpec dailyTotalRowCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTotalRowCountMatchPercent, dailyTotalRowCountMatchPercent));
+        this.dailyTotalRowCountMatchPercent = dailyTotalRowCountMatchPercent;
+        propagateHierarchyIdToField(dailyTotalRowCountMatchPercent, "daily_total_row_count_match_percent");
     }
 
     /**

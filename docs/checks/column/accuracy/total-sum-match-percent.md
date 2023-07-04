@@ -8,7 +8,7 @@ ___
 ## **total sum match percent**  
   
 **Check description**  
-Verifies that percentage of the difference in sum of a column in a table and sum of a column of another table does not exceed the set number.  
+Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -551,7 +551,7 @@ ___
 ## **daily total sum match percent**  
   
 **Check description**  
-Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.  
+Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1097,7 +1097,7 @@ ___
 ## **monthly total sum match percent**  
   
 **Check description**  
-Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

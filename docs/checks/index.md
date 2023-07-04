@@ -10,9 +10,9 @@ Compares the tested table with another (reference) table.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[row_count_match_percent](./table/accuracy/row-count-match-percent/#row-count-match-percent)|profiling|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|
-|[daily_row_count_match_percent](./table/accuracy/row-count-match-percent/#daily-row-count-match-percent)|recurring|Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_row_count_match_percent](./table/accuracy/row-count-match-percent/#monthly-row-count-match-percent)|recurring|Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[total_row_count_match_percent](./table/accuracy/total-row-count-match-percent/#total-row-count-match-percent)|profiling|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|
+|[daily_total_row_count_match_percent](./table/accuracy/total-row-count-match-percent/#daily-total-row-count-match-percent)|recurring|Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_total_row_count_match_percent](./table/accuracy/total-row-count-match-percent/#monthly-total-row-count-match-percent)|recurring|Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 
@@ -287,37 +287,37 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[total_sum_match_percent](./column/accuracy/total-sum-match-percent/#total-sum-match-percent)|profiling|Verifies that percentage of the difference in sum of a column in a table and sum of a column of another table does not exceed the set number.|
-|[daily_total_sum_match_percent](./column/accuracy/total-sum-match-percent/#daily-total-sum-match-percent)|recurring|Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_total_sum_match_percent](./column/accuracy/total-sum-match-percent/#monthly-total-sum-match-percent)|recurring|Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[total_sum_match_percent](./column/accuracy/total-sum-match-percent/#total-sum-match-percent)|profiling|Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.|
+|[daily_total_sum_match_percent](./column/accuracy/total-sum-match-percent/#daily-total-sum-match-percent)|recurring|Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_total_sum_match_percent](./column/accuracy/total-sum-match-percent/#monthly-total-sum-match-percent)|recurring|Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[min_match_percent](./column/accuracy/min-match-percent/#min-match-percent)|profiling|Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number.|
-|[daily_min_match_percent](./column/accuracy/min-match-percent/#daily-min-match-percent)|recurring|Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_min_match_percent](./column/accuracy/min-match-percent/#monthly-min-match-percent)|recurring|Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[total_min_match_percent](./column/accuracy/total-min-match-percent/#total-min-match-percent)|profiling|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number.|
+|[daily_total_min_match_percent](./column/accuracy/total-min-match-percent/#daily-total-min-match-percent)|recurring|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_total_min_match_percent](./column/accuracy/total-min-match-percent/#monthly-total-min-match-percent)|recurring|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[max_match_percent](./column/accuracy/max-match-percent/#max-match-percent)|profiling|Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number.|
-|[daily_max_match_percent](./column/accuracy/max-match-percent/#daily-max-match-percent)|recurring|Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_max_match_percent](./column/accuracy/max-match-percent/#monthly-max-match-percent)|recurring|Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[total_max_match_percent](./column/accuracy/total-max-match-percent/#total-max-match-percent)|profiling|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number.|
+|[daily_total_max_match_percent](./column/accuracy/total-max-match-percent/#daily-total-max-match-percent)|recurring|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_total_max_match_percent](./column/accuracy/total-max-match-percent/#monthly-total-max-match-percent)|recurring|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[average_match_percent](./column/accuracy/average-match-percent/#average-match-percent)|profiling|Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number.|
-|[daily_average_match_percent](./column/accuracy/average-match-percent/#daily-average-match-percent)|recurring|Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_average_match_percent](./column/accuracy/average-match-percent/#monthly-average-match-percent)|recurring|Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[total_average_match_percent](./column/accuracy/total-average-match-percent/#total-average-match-percent)|profiling|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number.|
+|[daily_total_average_match_percent](./column/accuracy/total-average-match-percent/#daily-total-average-match-percent)|recurring|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_total_average_match_percent](./column/accuracy/total-average-match-percent/#monthly-total-average-match-percent)|recurring|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[not_null_count_match_percent](./column/accuracy/not-null-count-match-percent/#not-null-count-match-percent)|profiling|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[daily_not_null_count_match_percent](./column/accuracy/not-null-count-match-percent/#daily-not-null-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_not_null_count_match_percent](./column/accuracy/not-null-count-match-percent/#monthly-not-null-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[total_not_null_count_match_percent](./column/accuracy/total-not-null-count-match-percent/#total-not-null-count-match-percent)|profiling|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[daily_total_not_null_count_match_percent](./column/accuracy/total-not-null-count-match-percent/#daily-total-not-null-count-match-percent)|recurring|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_total_not_null_count_match_percent](./column/accuracy/total-not-null-count-match-percent/#monthly-total-not-null-count-match-percent)|recurring|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 
