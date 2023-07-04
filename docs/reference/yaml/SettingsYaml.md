@@ -1,6 +1,8 @@
 
 ## SettingsYaml  
-Settings yaml class.  
+DQO local settings that are stored in the .localsettings.dqosettings.yaml file in the user&#x27;s DQO home folder.
+ The local settings contain the current DQO Cloud API Key and other settings. The local settings take precedence over parameters
+ passed when starting DQO.  
   
 
 
