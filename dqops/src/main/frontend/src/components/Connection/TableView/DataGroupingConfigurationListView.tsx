@@ -64,10 +64,10 @@ const DataGroupingConfigurationListView = ({
   };
 
   return (
-    <div className="px-8 py-4">
+    <div className="px-8 py-4 text-sm">
       <table className="mb-4">
         <thead>
-          <tr className="flex px-2">
+          <tr className="flex px-2 py-2">
             <th className="w-5 h-5"></th>
             <th>Data grouping configuration name</th>
           </tr>

@@ -45,7 +45,7 @@ const DataGroupingConfigurationView = ({
   };
 
   return (
-    <div className="py-4 px-4">
+    <div className="py-4 px-4 text-sm">
       {Array(9)
         .fill(0)
         .map((item, index) => (
