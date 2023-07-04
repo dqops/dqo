@@ -1,8 +1,8 @@
 import React, { KeyboardEvent } from 'react';
 import LabelItem from './LabelItem';
-import Input from "../../Input";
-import { IconButton } from "@material-tailwind/react";
-import SvgIcon from "../../SvgIcon";
+import Input from '../../Input';
+import { IconButton } from '@material-tailwind/react';
+import SvgIcon from '../../SvgIcon';
 
 interface ILabelsViewProps {
   labels: string[];
@@ -23,7 +23,7 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
     if (e.key === 'Enter') {
       onChange([...labels, '']);
     }
-  }
+  };
 
   const onAdd = () => {
     onChange([...labels, '']);
@@ -33,12 +33,16 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
     if (!labels.length) {
       onChange([value]);
     } else {
-      onChange(labels.map((label, index) => index < labels.length - 1 ? label : value));
+      onChange(
+        labels.map((label, index) =>
+          index < labels.length - 1 ? label : value
+        )
+      );
     }
-  }
+  };
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-sm">
       <table className="w-full">
         <thead>
           <tr>
@@ -60,7 +64,7 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
             <td className="pr-4 min-w-40 py-2">
               <Input
                 className="focus:!ring-0 focus:!border"
-                value={labels.length ? labels[labels.length - 1] : ""}
+                value={labels.length ? labels[labels.length - 1] : ''}
                 onChange={(e) => onChangeText(e.target.value)}
                 onKeyDown={onKeyDown}
               />
@@ -68,11 +72,7 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
             {hasAdd && (
               <td className="px-8 max-w-34 min-w-34 py-2">
                 <div className="flex justify-center">
-                  <IconButton
-                    size="sm"
-                    className="bg-teal-500"
-                    onClick={onAdd}
-                  >
+                  <IconButton size="sm" className="bg-teal-500" onClick={onAdd}>
                     <SvgIcon name="add" className="w-4" />
                   </IconButton>
                 </div>

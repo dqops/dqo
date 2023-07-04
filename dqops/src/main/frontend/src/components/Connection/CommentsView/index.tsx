@@ -62,35 +62,47 @@ const CommentsView = ({
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-sm">
       <table className={clsx('w-full', className)}>
         <thead>
           <tr>
             <th className="text-left w-full pr-4 py-2">Comment</th>
             <th className="text-left px-8 py-2">Author</th>
             <th className="text-left px-8 py-2">Date</th>
-            <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">Action</th>
+            <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
-          {comments ?
-            comments.map((comment, index) => (
-              <CommentItem
-                comment={comment}
-                key={index}
-                idx={index}
-                onChange={onChangeComment}
-                onRemove={onRemoveComment}
-              />
-            )) : ''}
+          {comments
+            ? comments.map((comment, index) => (
+                <CommentItem
+                  comment={comment}
+                  key={index}
+                  idx={index}
+                  onChange={onChangeComment}
+                  onRemove={onRemoveComment}
+                />
+              ))
+            : ''}
         </tbody>
       </table>
       <div className="flex items-center py-2">
         <div className="flex-1 pr-4">
-          <Input className="h-10 focus:!ring-0 focus:!border" value={text} onChange={onChangeText} />
+          <Input
+            className="h-10 focus:!ring-0 focus:!border"
+            value={text}
+            onChange={onChangeText}
+          />
         </div>
         <div className="max-w-34 min-w-34 flex px-8">
-          <IconButton size="sm" className="w-10 h-10 !shadow-none" color="teal" onClick={onAdd}>
+          <IconButton
+            size="sm"
+            className="w-10 h-10 !shadow-none"
+            color="teal"
+            onClick={onAdd}
+          >
             <SvgIcon name="add" className="w-5 text-white" />
           </IconButton>
         </div>
