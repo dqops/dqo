@@ -361,7 +361,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         }
 
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(sensorRunParameters.getConnection().getProviderType());
-        DataTypeCategory targetColumnTypeCategory = connectionProvider.detectColumnType(typeSnapshot);
+        ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(sensorRunParameters.getConnection());
+        DataTypeCategory targetColumnTypeCategory = dialectSettings.detectColumnType(typeSnapshot);
 
         for (DataTypeCategory supportedDataType : supportedDataTypes) {
             if (targetColumnTypeCategory == supportedDataType) {

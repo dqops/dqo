@@ -40,15 +40,18 @@ import java.util.NoSuchElementException;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
-    public final static ProviderDialectSettings DIALECT_SETTINGS = new ProviderDialectSettings("\"", "\"", "\"\"", false);
+    private final RedshiftProviderDialectSettings dialectSettings;
 
     /**
      * Injection constructor.
      * @param beanFactory Bean factory used to create the connection.
+     * @param dialectSettings Redshift dialect settings.
      */
     @Autowired
-    public RedshiftConnectionProvider(BeanFactory beanFactory) {
+    public RedshiftConnectionProvider(BeanFactory beanFactory,
+                                      RedshiftProviderDialectSettings dialectSettings) {
         this.beanFactory = beanFactory;
+        this.dialectSettings = dialectSettings;
     }
 
     /**
@@ -77,7 +80,7 @@ public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public ProviderDialectSettings getDialectSettings(ConnectionSpec connectionSpec) {
-        return this.DIALECT_SETTINGS;
+        return this.dialectSettings;
     }
 
     /**

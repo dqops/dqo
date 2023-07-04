@@ -40,15 +40,18 @@ import java.util.NoSuchElementException;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SnowflakeConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
-    public final static ProviderDialectSettings DIALECT_SETTINGS = new ProviderDialectSettings("\"", "\"", "\"\"", true);
+    private final SnowflakeProviderDialectSettings dialectSettings;
 
     /**
      * Injection constructor.
      * @param beanFactory Bean factory used to create the connection.
+     * @param dialectSettings Snowflake dialect settings.
      */
     @Autowired
-    public SnowflakeConnectionProvider(BeanFactory beanFactory) {
+    public SnowflakeConnectionProvider(BeanFactory beanFactory,
+                                       SnowflakeProviderDialectSettings dialectSettings) {
         this.beanFactory = beanFactory;
+        this.dialectSettings = dialectSettings;
     }
 
     /**
@@ -77,7 +80,7 @@ public class SnowflakeConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public ProviderDialectSettings getDialectSettings(ConnectionSpec connectionSpec) {
-        return this.DIALECT_SETTINGS;
+        return this.dialectSettings;
     }
 
     /**

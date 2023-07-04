@@ -66,11 +66,4 @@ public interface ConnectionProvider {
      * @return Formatted constant.
      */
     String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType);
-
-    /**
-     * Returns the best matching column type for the type snapshot (real column type returned by the database).
-     * @param columnTypeSnapshot Column type snapshot.
-     * @return Data type category.
-     */
-    DataTypeCategory detectColumnType(ColumnTypeSnapshotSpec columnTypeSnapshot);
 }
