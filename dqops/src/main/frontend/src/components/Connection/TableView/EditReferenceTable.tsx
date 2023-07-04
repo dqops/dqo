@@ -246,6 +246,33 @@ const EditReferenceTable = ({
     setIsUpdated(true);
   };
 
+  const changePropsTable = (value: string) => {
+    setRefTable(value);
+    setIsUpdated(true);
+  };
+  const changePropsSchema = (value: string) => {
+    setRefSchema(value);
+    setIsUpdated(true);
+  };
+  const changePropsConnection = (value: string) => {
+    setRefConnection(value);
+    setIsUpdated(true);
+  };
+
+  const changeDataGroupingProps = (
+    value?: DataGroupingConfigurationBasicModel | undefined
+  ) => {
+    setDataGroupingConfiguration(value);
+    setIsUpdated(true);
+  };
+
+  const changeRefDataGroupingProps = (
+    value?: DataGroupingConfigurationBasicModel | undefined
+  ) => {
+    setRefDataGroupingConfiguration(value);
+    setIsUpdated(true);
+  };
+
   return (
     <div>
       <TableActionGroup
@@ -281,7 +308,7 @@ const EditReferenceTable = ({
               className="flex-1"
               options={connectionOptions}
               value={refConnection}
-              onChange={setRefConnection}
+              onChange={changePropsConnection}
             />
           </div>
           <div className="flex gap-2 items-center mb-3">
@@ -290,7 +317,7 @@ const EditReferenceTable = ({
               className="flex-1"
               options={schemaOptions}
               value={refSchema}
-              onChange={setRefSchema}
+              onChange={changePropsSchema}
             />
           </div>
           <div className="flex gap-2 items-center">
@@ -299,7 +326,7 @@ const EditReferenceTable = ({
               className="flex-1"
               options={tableOptions}
               value={refTable}
-              onChange={setRefTable}
+              onChange={changePropsTable}
             />
           </div>
         </SectionWrapper>
@@ -317,7 +344,7 @@ const EditReferenceTable = ({
             title="Data grouping on compared table"
             dataGroupingConfigurations={dataGroupingConfigurations}
             dataGroupingConfiguration={dataGroupingConfiguration}
-            setDataGroupingConfiguration={setDataGroupingConfiguration}
+            setDataGroupingConfiguration={changeDataGroupingProps}
             goToCreateNew={goToCreateNew}
           />
           <div className="flex flex-col justify-center">
@@ -328,7 +355,7 @@ const EditReferenceTable = ({
             title="Data grouping on reference table"
             dataGroupingConfigurations={refDataGroupingConfigurations}
             dataGroupingConfiguration={refDataGroupingConfiguration}
-            setDataGroupingConfiguration={setRefDataGroupingConfiguration}
+            setDataGroupingConfiguration={changeRefDataGroupingProps}
             goToCreateNew={goToRefCreateNew}
           />
         </div>
