@@ -183,16 +183,26 @@ public class CheckFlatConfigurationFactoryImpl implements CheckFlatConfiguration
                         model.setCheckName(checkModel.getCheckName());
                         model.setConfigured(checkModel.isConfigured());
                         model.setDisabled(checkModel.isDisabled());
-                        model.setCheckSpec(checkModel.getCheckSpec());
-                        model.setSensorLevelFilter(checkModel.getFilter());
-                        model.setSensorParametersSpec(checkModel.getSensorParametersSpec());
-                        model.setSensorParameters(checkModel.getSensorParameters());
+                        if (checkModel.isConfigured()) {
+                            model.setCheckSpec(checkModel.getCheckSpec());
+                            model.setSensorLevelFilter(checkModel.getFilter());
+                            model.setSensorParametersSpec(checkModel.getSensorParametersSpec());
+                            model.setSensorParameters(checkModel.getSensorParameters());
+                        }
 
                         RuleThresholdsModel ruleThresholdsModel = checkModel.getRule();
                         if (ruleThresholdsModel != null) {
-                            model.setWarning(ruleThresholdsModel.getWarning());
-                            model.setError(ruleThresholdsModel.getError());
-                            model.setFatal(ruleThresholdsModel.getFatal());
+                            if (ruleThresholdsModel.getWarning() != null && ruleThresholdsModel.getWarning().isConfigured()) {
+                                model.setWarning(ruleThresholdsModel.getWarning());
+                            }
+
+                            if (ruleThresholdsModel.getError() != null && ruleThresholdsModel.getError().isConfigured()) {
+                                model.setError(ruleThresholdsModel.getError());
+                            }
+
+                            if (ruleThresholdsModel.getFatal() != null && ruleThresholdsModel.getFatal().isConfigured()) {
+                                model.setFatal(ruleThresholdsModel.getFatal());
+                            }
                         }
 
                         return model;
