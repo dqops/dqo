@@ -59,8 +59,9 @@ The data quality check results table that stores check results - a copy of senso
  | severity | Check (rule) severity (0, 1, 2, 3) for none, warning, error and fatal severity failed data quality checks. | integer |
  | incident_hash | The matching data quality incident hash. The value is used to map a failed data quality check to an incident. | long |
  | reference_connection | The name of a connection to another data source that contains the reference data used as the expected values for accuracy checks. | text |
- | reference_table | The table name in another data source that contains the reference data used as the expected values for accuracy checks. | text |
  | reference_schema | The schema in another data source that contains the reference data used as the expected values for accuracy checks. | text |
+ | reference_table | The table name in another data source that contains the reference data used as the expected values for accuracy checks. | text |
+ | reference_column | The column name in another data source that contains the reference data used as the expected values for accuracy checks. | text |
  | include_in_kpi | The boolean column that identifies data quality rule results that should be counted in the data quality KPI. | boolean |
  | include_in_sla | The boolean column that identifies data quality rule results that should be counted in the data quality SLA. | boolean |
  | fatal_lower_bound | The warning lower bound, returned by the fatal severity rule. | double |

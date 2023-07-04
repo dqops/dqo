@@ -30,6 +30,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
     private final TextColumn referenceConnectionColumn;
     private final TextColumn referenceSchemaColumn;
     private final TextColumn referenceTableColumn;
+    private final TextColumn referenceColumnColumn;
     private final BooleanColumn includeInKpiColumn;
     private final BooleanColumn includeInSlaColumn;
     private final DoubleColumn fatalLowerBoundColumn;
@@ -51,6 +52,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
         this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME);
         this.referenceSchemaColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME);
         this.referenceTableColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME);
+        this.referenceColumnColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME);
         this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
         this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
         this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
@@ -99,6 +101,14 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      */
     public TextColumn getReferenceTableColumn() {
         return referenceTableColumn;
+    }
+
+    /**
+     * Returns the column that contains the name of a column that contains the reference data that are compared.
+     * @return The name of a reference column.
+     */
+    public TextColumn getReferenceColumnColumn() {
+        return referenceColumnColumn;
     }
 
     /**

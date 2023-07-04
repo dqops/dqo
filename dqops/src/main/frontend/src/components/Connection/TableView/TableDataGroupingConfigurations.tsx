@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { IRootState } from '../../../redux/reducers';
-import qs from "query-string";
+import qs from 'query-string';
 
 const TableDataGroupingConfiguration = () => {
   const {
@@ -52,6 +52,7 @@ const TableDataGroupingConfiguration = () => {
       tableName
     ).then((res) => {
       setDataGroupingConfigurations(res.data);
+      console.log(dataGroupingConfigurations);
     });
   };
 
@@ -76,7 +77,18 @@ const TableDataGroupingConfiguration = () => {
 
   const onBack = () => {
     history.replace(`${location.pathname}?isEditing=false`);
-    setBackData()
+    setBackData();
+  };
+
+  const sortObjects = (
+    array: DataGroupingConfigurationBasicModel[]
+  ): DataGroupingConfigurationBasicModel[] => {
+    const sortedArray = array.sort((a, b) =>
+      (a.data_grouping_configuration_name ?? '').localeCompare(
+        b.data_grouping_configuration_name ?? ''
+      )
+    );
+    return sortedArray;
   };
 
   return (
@@ -96,7 +108,7 @@ const TableDataGroupingConfiguration = () => {
         />
       ) : (
         <DataGroupingConfigurationListView
-          dataGroupingConfigurations={dataGroupingConfigurations}
+          dataGroupingConfigurations={sortObjects(dataGroupingConfigurations)}
           getDataGroupingConfigurations={getDataGroupingConfigurations}
           onCreate={onCreate}
           onEdit={onEdit}
