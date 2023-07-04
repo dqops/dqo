@@ -281,12 +281,17 @@ const EditReferenceTable = ({
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
-        <Input
-          className="min-w-80"
-          value={name}
-          onChange={onChangeName}
-          placeholder="Ref table name"
-        />
+        <div className="flex items-center justify-center gap-x-5">
+          <div className="font-bold text-center">
+            Referance table configuration name:{' '}
+          </div>
+          <Input
+            className="min-w-80"
+            value={name}
+            onChange={onChangeName}
+            placeholder="Ref table name"
+          />
+        </div>
         <Button
           label="Back"
           color="primary"
@@ -347,9 +352,7 @@ const EditReferenceTable = ({
             setDataGroupingConfiguration={changeDataGroupingProps}
             goToCreateNew={goToCreateNew}
           />
-          <div className="flex flex-col justify-center">
-            <SvgIcon name="not-equal" className="w-6 h-6 text-red-700" />
-          </div>
+
           <SelectDataGroupingForTable
             className="flex-1"
             title="Data grouping on reference table"
