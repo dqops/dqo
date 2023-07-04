@@ -16,12 +16,17 @@
 
 package com.dqops.connectors.mysql;
 
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.utils.string.StringCheckUtility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 /**
  * Provider dialect settings that are specific to MySQL.
@@ -33,5 +38,25 @@ import org.springframework.stereotype.Component;
 public class MysqlProviderDialectSettings extends ProviderDialectSettings {
     public MysqlProviderDialectSettings() {
         super("`", "`", "\"\"", false);
+    }
+
+    /**
+     * Returns the best matching column type for the type snapshot (real column type returned by the database).
+     *
+     * @param columnTypeSnapshot Column type snapshot.
+     * @return Data type category.
+     */
+    @Override
+    public DataTypeCategory detectColumnType(ColumnTypeSnapshotSpec columnTypeSnapshot) {
+        if (columnTypeSnapshot == null || columnTypeSnapshot.getColumnType() == null) {
+            return null;
+        }
+
+        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
+        if (StringCheckUtility.containsAny(columnType, "text")) {
+            return DataTypeCategory.string;
+        }
+
+        return super.detectColumnType(columnTypeSnapshot);
     }
 }

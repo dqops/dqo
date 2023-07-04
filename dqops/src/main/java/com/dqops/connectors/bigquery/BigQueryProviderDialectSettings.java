@@ -57,54 +57,14 @@ public class BigQueryProviderDialectSettings extends ProviderDialectSettings {
             return DataTypeCategory.array;
         }
 
-        if (StringCheckUtility.containsAny(columnType, "struct", "record", "table")) {
-            return DataTypeCategory.other;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "int", "integer", "byte", "short", "long", "bigint", "smallint", "tinyint", "byteint")) {
-            return DataTypeCategory.numeric_integer;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "numeric", "decimal", "number")) {
-            return DataTypeCategory.numeric_decimal;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "float", "double", "real")) {
-            return DataTypeCategory.numeric_float;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "bool", "boolean", "bit")) {
-            return DataTypeCategory.bool;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "datetime", "timestamp_ntz")) {
-            return DataTypeCategory.datetime_datetime;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "date")) {
-            return DataTypeCategory.datetime_date;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "timestamp")) {
-            return DataTypeCategory.datetime_instant;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "varchar", "string", "nvarchar", "char", "nchar", "character")) {
+        if (StringCheckUtility.containsAny(columnType, "text")) {
             return DataTypeCategory.string;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "text", "clob")) {
-            return DataTypeCategory.text;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "varbinary", "binary")) {
-            return DataTypeCategory.binary;
         }
 
         if (StringCheckUtility.containsAny(columnType, "json")) {
             return DataTypeCategory.json;
         }
 
-        return DataTypeCategory.other;
+        return super.detectColumnType(columnTypeSnapshot);
     }
 }
