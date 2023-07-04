@@ -500,7 +500,9 @@ export const EditProfilingReferenceTable = ({
         <SectionWrapper title="Table level comparison" className="mb-10">
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-4">
-              <span>row_count:</span>
+              <span>
+                Compare row count between target and reference column:
+              </span>
               <Checkbox
                 checked={showRowCount}
                 onChange={(checked) => setShowRowCount(checked)}
