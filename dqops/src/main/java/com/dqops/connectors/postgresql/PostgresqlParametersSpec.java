@@ -48,7 +48,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--postgresql-port"}, description = "PostgreSQL port number", defaultValue = "5432")
+    @CommandLine.Option(names = {"--postgresql-port"}, description = "PostgreSQL port number")
     @JsonPropertyDescription("PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.")
     private String port;
 
@@ -68,7 +68,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--postgresql-ssl"}, description = "Connect to PostgreSQL using SSL", defaultValue = "false")
+    @CommandLine.Option(names = {"--postgresql-ssl"}, description = "Connect to PostgreSQL using SSL")
     @JsonPropertyDescription("Connect to PostgreSQL using SSL. The default value is false.")
     private Boolean ssl;
 

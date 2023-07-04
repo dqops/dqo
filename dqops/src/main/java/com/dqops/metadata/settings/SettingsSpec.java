@@ -20,11 +20,15 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 
@@ -37,6 +41,7 @@ import java.util.Objects;
 public class SettingsSpec extends AbstractSpec {
 	private static final ChildHierarchyNodeFieldMapImpl<SettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
 		{
+			put("default_schedules", o -> o.defaultSchedules);
 		}
 	};
 
@@ -51,6 +56,11 @@ public class SettingsSpec extends AbstractSpec {
 
 	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQO server instance.")
 	private String timeZone;
+
+	@JsonPropertyDescription("Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+	private RecurringSchedulesSpec defaultSchedules;
 
 	/**
 	 * Default constructor.
@@ -134,6 +144,24 @@ public class SettingsSpec extends AbstractSpec {
 	}
 
 	/**
+	 * Returns the default configuration of schedules.
+	 * @return The default configuration of schedules.
+	 */
+	public RecurringSchedulesSpec getDefaultSchedules() {
+		return defaultSchedules;
+	}
+
+	/**
+	 * Sets the default configuration of schedules for new connections.
+	 * @param defaultSchedules The default configuration of schedules for new connections.
+	 */
+	public void setDefaultSchedules(RecurringSchedulesSpec defaultSchedules) {
+		setDirtyIf(!Objects.equals(this.defaultSchedules, defaultSchedules));
+		this.defaultSchedules = defaultSchedules;
+		propagateHierarchyIdToField(defaultSchedules, "default_schedules");
+	}
+
+	/**
 	 * Returns the child map on the spec class with all fields.
 	 *
 	 * @return Return the field map.
@@ -149,6 +177,9 @@ public class SettingsSpec extends AbstractSpec {
 	@Override
 	public SettingsSpec deepClone() {
 		SettingsSpec cloned = (SettingsSpec) super.deepClone();
+		if (this.defaultSchedules != null) {
+			cloned.setDefaultSchedules(this.defaultSchedules.deepClone());
+		}
 		return cloned;
 	}
 
@@ -162,6 +193,9 @@ public class SettingsSpec extends AbstractSpec {
 		cloned.editorPath = secretValueProvider.expandValue(this.editorPath);
 		cloned.editorName = secretValueProvider.expandValue(this.editorName);
 		cloned.timeZone = secretValueProvider.expandValue(this.timeZone);
+		if (cloned.defaultSchedules != null) {
+			cloned.defaultSchedules = cloned.defaultSchedules.expandAndTrim(secretValueProvider);
+		}
         return cloned;
 	}
 

@@ -48,7 +48,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--sqlserver-port"}, description = "SQL Server port number", defaultValue = "1433")
+    @CommandLine.Option(names = {"--sqlserver-port"}, description = "SQL Server port number")
     @JsonPropertyDescription("SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.")
     private String port;
 
@@ -68,7 +68,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--sqlserver-ssl"}, description = "Connecting to SQL Server with SSL disabled", defaultValue = "false")
+    @CommandLine.Option(names = {"--sqlserver-ssl"}, description = "Connecting to SQL Server with SSL disabled")
     @JsonPropertyDescription("Connecting to SQL Server with SSL disabled. The default value is false.")
     private Boolean ssl;
 

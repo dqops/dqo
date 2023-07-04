@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * Dqo configuration when run in docker related to user-home.
  */
 @Configuration
-@ConfigurationProperties(prefix = "dqo.docker.userhome")
+@ConfigurationProperties(prefix = "dqo.docker.user-home")
 @EqualsAndHashCode(callSuper = false)
 public class DqoDockerUserhomeConfigurationProperties implements Cloneable {
 

@@ -48,7 +48,7 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--redshift-port"}, description = "Redshift port number", defaultValue = "5432")
+    @CommandLine.Option(names = {"--redshift-port"}, description = "Redshift port number")
     @JsonPropertyDescription("Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.")
     private String port;
 
@@ -68,7 +68,7 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--redshift-ssl"}, description = "Connect to Redshift using SSL", defaultValue = "false")
+    @CommandLine.Option(names = {"--redshift-ssl"}, description = "Connect to Redshift using SSL")
     @JsonPropertyDescription("Connect to Redshift using SSL. The default value is false.")
     private Boolean ssl;
 

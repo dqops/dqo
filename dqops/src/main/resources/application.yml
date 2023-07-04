@@ -132,9 +132,15 @@ dqo:
     synchronize-cron-schedule: "*/10 * * * *"   # every 10 minutes
     synchronized-folders: locally_changed
     enable-cloud-sync: true
+    default-schedules:
+      profiling: "0 12 * * *"  # 12PM every day (noon)
+      recurring-daily: "0 12 * * *"  # 12PM every day (noon)
+      recurring-monthly: "0 12 * * *"  # 12PM every day (noon)
+      partitioned-daily: "0 12 * * *"  # 12PM every day (noon)
+      partitioned-monthly: "0 12 * * *"  # 12PM every day (noon)
   cli:
     oneshot:
       terminal-width: 150
   docker:
-    userhome:
+    user-home:
       allow-unmounted: false
