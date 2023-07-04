@@ -299,7 +299,7 @@ const EditReferenceTable = ({
 
       <div className="px-8 py-4">
         <SectionWrapper
-          title="Reference table(the source of truth)"
+          title="Reference table (the source of truth)"
           className="py-8 mb-10"
         >
           <div className="flex gap-2 items-center mb-3">
