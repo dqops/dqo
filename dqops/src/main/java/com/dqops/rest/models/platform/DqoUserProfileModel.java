@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.time.Instant;
+
 /**
  * The model that describes the current user and his access rights.
  */
@@ -49,6 +51,12 @@ public class DqoUserProfileModel {
      */
     @JsonPropertyDescription("DQO Cloud license type.")
     private String licenseType;
+
+    /**
+     * The date and time when the trial period of a PERSONAL DQO license expires and the account is downgraded to a FREE license.
+     */
+    @JsonPropertyDescription("The date and time when the trial period of a PERSONAL DQO license expires and the account is downgraded to a FREE license.")
+    private Instant trialPeriodExpiresAt;
 
     /**
      * Limit of the number of connections that could be synchronized to the DQO Cloud data quality warehouse.
@@ -96,6 +104,7 @@ public class DqoUserProfileModel {
             setUser(dqoCloudApiKey.getApiKeyPayload().getSubject());
             setTenant(dqoCloudApiKey.getApiKeyPayload().getTenantId() + "/" + dqoCloudApiKey.getApiKeyPayload().getTenantGroup());
             setLicenseType(dqoCloudApiKey.getApiKeyPayload().getLicenseType());
+            setTrialPeriodExpiresAt(dqoCloudApiKey.getApiKeyPayload().getExpiresAt());
             setConnectionsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTIONS_LIMIT));
             setUsersLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.USERS_LIMIT));
             setMonthsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.MONTHS_LIMIT));
