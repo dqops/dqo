@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactoryImpl;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalFactoryObjectMother;
 import com.dqops.core.configuration.*;
@@ -43,7 +44,7 @@ public class LocalUserHomeCreatorObjectMother {
         DefaultSchedulesProviderImpl defaultSchedulesProvider = new DefaultSchedulesProviderImpl(defaultSchedulesConfigurationProperties, UserHomeContextFactoryObjectMother.createWithInMemoryContext());
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
                 homeLocationFindService, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration,
-                YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider);
+                YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider, new DefaultObservabilityCheckSettingsFactoryImpl());
         return localUserHomeCreator;
     }
 

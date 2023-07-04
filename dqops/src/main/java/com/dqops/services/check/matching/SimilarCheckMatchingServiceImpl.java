@@ -25,7 +25,7 @@ import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -70,7 +70,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
                 checkSearchFilters, null, tableSpec, null, null),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
-        TableDailyRecurringCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getDaily(), TableDailyRecurringCategoriesSpec::new);
+        TableDailyRecurringCheckCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getDaily(), TableDailyRecurringCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
                 dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());

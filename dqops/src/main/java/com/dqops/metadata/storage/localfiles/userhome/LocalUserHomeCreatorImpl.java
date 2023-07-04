@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactory;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoDockerUserhomeConfigurationProperties;
@@ -24,6 +25,7 @@ import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
+import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -56,6 +58,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties;
     private YamlSerializer yamlSerializer;
     private DefaultSchedulesProvider defaultSchedulesProvider;
+    private DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory;
 
     /**
      * Default constructor called by the IoC container.
@@ -67,6 +70,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
      * @param yamlSerializer Yaml serializer.
      * @param defaultSchedulesProvider Default cron schedules provider.
+     * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
@@ -75,7 +79,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                                     DqoUserConfigurationProperties userConfigurationProperties,
                                     DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties,
                                     YamlSerializer yamlSerializer,
-                                    DefaultSchedulesProvider defaultSchedulesProvider) {
+                                    DefaultSchedulesProvider defaultSchedulesProvider,
+                                    DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory) {
         this.homeLocationFindService = homeLocationFindService;
         this.terminalFactory = terminalFactory;
         this.loggingConfigurationProperties = loggingConfigurationProperties;
@@ -83,6 +88,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         this.dockerUserhomeConfigurationProperties = dockerUserhomeConfigurationProperties;
         this.yamlSerializer = yamlSerializer;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
+        this.defaultObservabilityCheckSettingsFactory = defaultObservabilityCheckSettingsFactory;
     }
 
     /**
@@ -201,7 +207,10 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             Path localSettingsPath = userHomePath.resolve(SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(localSettingsPath)) {
                 SettingsYaml settingsYaml = new SettingsYaml();
-                settingsYaml.getSpec().setDefaultSchedules(this.defaultSchedulesProvider.createDefaultRecurringSchedules());
+                SettingsSpec settingsSpec = settingsYaml.getSpec();
+                settingsSpec.setDefaultSchedules(this.defaultSchedulesProvider.createDefaultRecurringSchedules());
+                settingsSpec.setDefaultDataObservabilityChecks(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
+
                 String emptyLocalSettings = this.yamlSerializer.serialize(settingsYaml);
                 Files.writeString(localSettingsPath, emptyLocalSettings);
             }

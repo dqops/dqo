@@ -23,7 +23,7 @@ import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
@@ -98,7 +98,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         tableSpec.getProfilingChecks().getVolume().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
         tableSpec.setRecurringChecks(new TableRecurringChecksSpec());
-        tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCategoriesSpec());
+        tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCheckCategoriesSpec());
         tableSpec.getRecurringChecks().getDaily().setSql(new TableSqlDailyRecurringChecksSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
         sqlCheckSpec.setError(new MinPercentRule99ParametersSpec(99.5));

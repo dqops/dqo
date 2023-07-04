@@ -17,6 +17,7 @@ package com.dqops.checks.table.recurring.availability;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -69,5 +70,13 @@ public class TableAvailabilityDailyRecurringChecksSpec extends AbstractCheckCate
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public TableAvailabilityDailyRecurringChecksSpec deepClone() {
+        return (TableAvailabilityDailyRecurringChecksSpec)super.deepClone();
     }
 }

@@ -23,7 +23,7 @@ import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import com.dqops.connectors.ProviderType;
@@ -197,19 +197,19 @@ public class TablesControllerUTTests extends BaseTest {
         
         TableVolumeDailyRecurringChecksSpec volumeDailyRecurringSpec = new TableVolumeDailyRecurringChecksSpec();
         volumeDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
-        TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
+        TableDailyRecurringCheckCategoriesSpec dailyRecurring = new TableDailyRecurringCheckCategoriesSpec();
         dailyRecurring.setVolume(volumeDailyRecurringSpec);
         TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
         sampleRecurring.setDaily(dailyRecurring);
         
         this.sampleTable.getTableSpec().setRecurringChecks(sampleRecurring);
 
-        ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableDailyRecurringChecks(
+        ResponseEntity<Mono<TableDailyRecurringCheckCategoriesSpec>> responseEntity = this.sut.getTableDailyRecurringChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
-        TableDailyRecurringCategoriesSpec result = responseEntity.getBody().block();
+        TableDailyRecurringCheckCategoriesSpec result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
     }
 
@@ -397,7 +397,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         TableVolumeDailyRecurringChecksSpec volumeDailyRecurringSpec = new TableVolumeDailyRecurringChecksSpec();
         volumeDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
-        TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
+        TableDailyRecurringCheckCategoriesSpec dailyRecurring = new TableDailyRecurringCheckCategoriesSpec();
         dailyRecurring.setVolume(volumeDailyRecurringSpec);
         TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
         sampleRecurring.setDaily(dailyRecurring);

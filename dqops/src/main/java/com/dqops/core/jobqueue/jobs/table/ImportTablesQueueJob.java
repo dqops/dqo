@@ -15,6 +15,7 @@
  */
 package com.dqops.core.jobqueue.jobs.table;
 
+import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderType;
@@ -47,15 +48,18 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
+    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private ImportTablesQueueJobParameters importParameters;
 
     @Autowired
     public ImportTablesQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
-                                SecretValueProvider secretValueProvider) {
+                                SecretValueProvider secretValueProvider,
+                                DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -122,6 +126,9 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
             List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
                     this.importParameters.getSchemaName(),
                     this.importParameters.getTableNames());
+
+            this.defaultObservabilityConfigurationService.applyDefaultChecks(sourceTableSpecs,
+                    connectionProvider.getDialectSettings(expandedConnectionSpec), userHome);
 
             TableList currentTablesColl = connectionWrapper.getTables();
             currentTablesColl.importTables(sourceTableSpecs, connectionSpec.getDefaultGroupingConfiguration());

@@ -45,7 +45,7 @@ public class TableRecurringChecksSpec extends AbstractSpec {
     @JsonPropertyDescription("Configuration of daily recurring evaluated at a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDailyRecurringCategoriesSpec daily;
+    private TableDailyRecurringCheckCategoriesSpec daily;
 
     @JsonPropertyDescription("Configuration of monthly recurring evaluated at a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -58,7 +58,7 @@ public class TableRecurringChecksSpec extends AbstractSpec {
      * Returns daily recurring.
      * @return Daily recurring.
      */
-    public TableDailyRecurringCategoriesSpec getDaily() {
+    public TableDailyRecurringCheckCategoriesSpec getDaily() {
         return daily;
     }
 
@@ -66,7 +66,7 @@ public class TableRecurringChecksSpec extends AbstractSpec {
      * Sets the daily recurring checks container.
      * @param daily New daily recurring checks container.
      */
-    public void setDaily(TableDailyRecurringCategoriesSpec daily) {
+    public void setDaily(TableDailyRecurringCheckCategoriesSpec daily) {
 		this.setDirtyIf(!Objects.equals(this.daily, daily));
         this.daily = daily;
 		this.propagateHierarchyIdToField(daily, "daily");

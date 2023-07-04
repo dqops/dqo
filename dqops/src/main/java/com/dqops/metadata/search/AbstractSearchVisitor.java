@@ -22,6 +22,10 @@ import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.metadata.comparisons.ReferenceTableSpec;
 import com.dqops.metadata.comparisons.ReferenceTableSpecMap;
@@ -867,6 +871,54 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     *
+     * @param defaultObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter                             Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     *
+     * @param defaultProfilingObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter                                      Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingObservabilityCheckSettingsSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     *
+     * @param defaultDailyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter                                           Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultDailyRecurringObservabilityCheckSettingsSpec defaultDailyRecurringObservabilityCheckSettingsSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     *
+     * @param defaultMonthlyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter                                             Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultMonthlyRecurringObservabilityCheckSettingsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

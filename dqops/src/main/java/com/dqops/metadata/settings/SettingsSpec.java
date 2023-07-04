@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.settings;
 
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -28,7 +29,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.Objects;
 
@@ -42,6 +42,7 @@ public class SettingsSpec extends AbstractSpec {
 	private static final ChildHierarchyNodeFieldMapImpl<SettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
 		{
 			put("default_schedules", o -> o.defaultSchedules);
+			put("default_data_observability_checks", o -> o.defaultDataObservabilityChecks);
 		}
 	};
 
@@ -61,6 +62,11 @@ public class SettingsSpec extends AbstractSpec {
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
 	private RecurringSchedulesSpec defaultSchedules;
+
+	@JsonPropertyDescription("The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+	private DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks;
 
 	/**
 	 * Default constructor.
@@ -162,6 +168,24 @@ public class SettingsSpec extends AbstractSpec {
 	}
 
 	/**
+	 * Returns the default configuration of Data Observability checks to be applied on new tables and columns.
+	 * @return Data observability checks configuration.
+	 */
+	public DefaultObservabilityCheckSettingsSpec getDefaultDataObservabilityChecks() {
+		return defaultDataObservabilityChecks;
+	}
+
+	/**
+	 * Sets the default configuration of data observability checks.
+	 * @param defaultDataObservabilityChecks The default configuration of data observability checks.
+	 */
+	public void setDefaultDataObservabilityChecks(DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks) {
+		setDirtyIf(!Objects.equals(this.defaultDataObservabilityChecks, defaultDataObservabilityChecks));
+		this.defaultDataObservabilityChecks = defaultDataObservabilityChecks;
+		propagateHierarchyIdToField(defaultDataObservabilityChecks, "default_data_observability_checks");
+	}
+
+	/**
 	 * Returns the child map on the spec class with all fields.
 	 *
 	 * @return Return the field map.
@@ -180,6 +204,9 @@ public class SettingsSpec extends AbstractSpec {
 		if (this.defaultSchedules != null) {
 			cloned.setDefaultSchedules(this.defaultSchedules.deepClone());
 		}
+		if (this.defaultDataObservabilityChecks != null) {
+			cloned.setDefaultDataObservabilityChecks((DefaultObservabilityCheckSettingsSpec) this.defaultDataObservabilityChecks.deepClone());
+		}
 		return cloned;
 	}
 
@@ -196,6 +223,7 @@ public class SettingsSpec extends AbstractSpec {
 		if (cloned.defaultSchedules != null) {
 			cloned.defaultSchedules = cloned.defaultSchedules.expandAndTrim(secretValueProvider);
 		}
+		cloned.defaultDataObservabilityChecks = null;
         return cloned;
 	}
 
