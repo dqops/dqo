@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import { TableComparisonsApi } from "../../../services/apiClient";
-import { ReferenceTableModel } from "../../../api";
-import Button from "../../Button";
-import { useActionDispatch } from "../../../hooks/useActionDispatch";
-import { addFirstLevelTab } from "../../../redux/actions/source.actions";
-import { CheckTypes, ROUTES } from "../../../shared/routes";
-import { ProfilingReferenceTableList } from "./ProfilingReferenceTableList";
-import { EditProfilingReferenceTable } from "./EditProfilingReferenceTable";
-import qs from "query-string";
+import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { TableComparisonsApi } from '../../../services/apiClient';
+import { ReferenceTableModel } from '../../../api';
+import Button from '../../Button';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
+import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
+import qs from 'query-string';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
 };
 
-export const TableReferenceComparisons = ({ checkTypes, timePartitioned }: TableReferenceComparisonsProps) => {
+export const TableReferenceComparisons = ({
+  checkTypes,
+  timePartitioned
+}: TableReferenceComparisonsProps) => {
   const {
     connection,
     schema,
@@ -39,32 +42,62 @@ export const TableReferenceComparisons = ({ checkTypes, timePartitioned }: Table
   }, []);
 
   const getReferenceComparisons = () => {
-    TableComparisonsApi.getReferenceTables(connection, schema, table).then((res) => {
-      setReferences(res.data);
-    });
+    TableComparisonsApi.getReferenceTables(connection, schema, table).then(
+      (res) => {
+        setReferences(res.data);
+      }
+    );
   };
 
   const onCreateNewReference = () => {
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'reference-tables')}?isEditing=true`;
-    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
-      url,
-      value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
-      state: {},
-      label: table
-    }));
+    const url = `${ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'reference-tables'
+    )}?isEditing=true`;
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        state: {},
+        label: table
+      })
+    );
 
     history.push(url);
   };
 
   const onEditReference = (reference: ReferenceTableModel) => {
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'reference-tables')}?isEditing=true&reference=${reference.reference_table_configuration_name}`;
+    const url = `${ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'reference-tables'
+    )}?isEditing=true&reference=${
+      reference.reference_table_configuration_name
+    }`;
 
-    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
-      url,
-      value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
-      state: {},
-      label: table
-    }));
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        state: {},
+        label: table
+      })
+    );
 
     history.push(url);
   };
@@ -85,9 +118,11 @@ export const TableReferenceComparisons = ({ checkTypes, timePartitioned }: Table
     onChangeEditing(true, reference.reference_table_configuration_name);
   };
 
-  const onBack = () => {
-    onChangeEditing(false);
+  const onBack = (stayOnSamePage?: boolean | undefined) => {
     getReferenceComparisons();
+    if (stayOnSamePage === false) {
+      setIsEditing(false);
+    }
   };
 
   return (
@@ -108,5 +143,5 @@ export const TableReferenceComparisons = ({ checkTypes, timePartitioned }: Table
         />
       )}
     </>
-  )
-}
+  );
+};
