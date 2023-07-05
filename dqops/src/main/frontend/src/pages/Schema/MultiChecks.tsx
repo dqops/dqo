@@ -94,9 +94,6 @@ export const MultiChecks = () => {
           value: item ?? ''
         }))
       );
-
-      console.log(checkCategoryOptions);
-      console.log(checkNameOptions);
     };
 
     if (checkTypes === CheckTypes.PROFILING) {
@@ -259,7 +256,6 @@ export const MultiChecks = () => {
       setSelectedData(selectedData.filter((item) => !isEqual(item, check)));
     } else {
       setSelectedCheck(check);
-      setOpen(true);
       setSelectedData([...selectedData, check]);
     }
   };
@@ -277,8 +273,6 @@ export const MultiChecks = () => {
 
     return uniqueOptions;
   };
-
-  console.log(checkName);
 
   const setNewArray = (oldArray: Option[]): Option[] => {
     const newArray: Option[] = oldArray.map((option) => ({

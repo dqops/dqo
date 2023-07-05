@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
-import Button from "../../components/Button";
-import { CheckConfigurationModel, FieldModel } from "../../api";
-import SensorParameters from "../../components/DataQualityChecks/SensorParameters";
-import Checkbox from "../../components/Checkbox";
-import CheckRuleItem from "../../components/DataQualityChecks/CheckRuleItem";
+import React, { useEffect, useState } from 'react';
+import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
+import Button from '../../components/Button';
+import { CheckConfigurationModel, FieldModel } from '../../api';
+import SensorParameters from '../../components/DataQualityChecks/SensorParameters';
+import Checkbox from '../../components/Checkbox';
+import CheckRuleItem from '../../components/DataQualityChecks/CheckRuleItem';
 
 interface UpdateCheckModelProps {
   open: boolean;
@@ -14,7 +14,12 @@ interface UpdateCheckModelProps {
   check?: CheckConfigurationModel;
 }
 
-export const UpdateCheckModel = ({ open, onClose, onSubmit, check }: UpdateCheckModelProps) => {
+export const UpdateCheckModel = ({
+  open,
+  onClose,
+  onSubmit,
+  check
+}: UpdateCheckModelProps) => {
   const [updatedCheck, setUpdatedCheck] = useState<CheckConfigurationModel>();
 
   useEffect(() => {
@@ -29,7 +34,7 @@ export const UpdateCheckModel = ({ open, onClose, onSubmit, check }: UpdateCheck
   };
 
   const handleChange = (obj: any) => {
-    setUpdatedCheck(prev => ({
+    setUpdatedCheck((prev) => ({
       ...prev,
       ...obj
     }));
@@ -120,10 +125,10 @@ export const UpdateCheckModel = ({ open, onClose, onSubmit, check }: UpdateCheck
             color="primary"
             className="px-8"
             onClick={handleSubmit}
-            label="Save"
+            label="Update all selected checks"
           />
         </DialogFooter>
       </Dialog>
     </div>
   );
-}
+};
