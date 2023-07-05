@@ -498,8 +498,8 @@ export const EditProfilingReferenceTable = ({
         </div>
 
         <SectionWrapper title="Table level comparison" className="mb-10">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-8">
+            <div className="flex gap-4">
               <span>
                 Compare row count between target and reference column:
               </span>
@@ -510,7 +510,7 @@ export const EditProfilingReferenceTable = ({
             </div>
 
             {showRowCount && (
-              <div className="grid grid-cols-3">
+              <div className="grid grid-cols-3 w-full">
                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
                   <span className="flex-1">
                     Warning when the difference above:
