@@ -16,11 +16,8 @@
 package com.dqops.checks.column.recurring.accuracy;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyAverageMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyMaxMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyMinMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyTotalSumMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyNotNullCountMatchPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.accuracy.*;
+import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyTotalAverageMatchPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,28 +38,28 @@ public class ColumnAccuracyDailyRecurringChecksSpec extends AbstractCheckCategor
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_total_sum_match_percent", o -> o.dailyTotalSumMatchPercent);
-            put("daily_min_match_percent", o -> o.dailyMinMatchPercent);
-            put("daily_max_match_percent", o -> o.dailyMaxMatchPercent);
-            put("daily_average_match_percent", o -> o.dailyAverageMatchPercent);
-            put("daily_not_null_count_match_percent", o -> o.dailyNotNullCountMatchPercent);
+            put("daily_total_min_match_percent", o -> o.dailyTotalMinMatchPercent);
+            put("daily_total_max_match_percent", o -> o.dailyTotalMaxMatchPercent);
+            put("daily_total_average_match_percent", o -> o.dailyTotalAverageMatchPercent);
+            put("daily_total_not_null_count_match_percent", o -> o.dailyTotalNotNullCountMatchPercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnAccuracyTotalSumMatchPercentCheckSpec dailyTotalSumMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnAccuracyMinMatchPercentCheckSpec dailyMinMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalMinMatchPercentCheckSpec dailyTotalMinMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnAccuracyMaxMatchPercentCheckSpec dailyMaxMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalMaxMatchPercentCheckSpec dailyTotalMaxMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnAccuracyAverageMatchPercentCheckSpec dailyAverageMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalAverageMatchPercentCheckSpec dailyTotalAverageMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnAccuracyNotNullCountMatchPercentCheckSpec dailyNotNullCountMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec dailyTotalNotNullCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -87,72 +84,72 @@ public class ColumnAccuracyDailyRecurringChecksSpec extends AbstractCheckCategor
      * Returns an accuracy min percent check specification.
      * @return Accuracy min percent check specification.
      */
-    public ColumnAccuracyMinMatchPercentCheckSpec getDailyMinMatchPercent() {
-        return dailyMinMatchPercent;
+    public ColumnAccuracyTotalMinMatchPercentCheckSpec getDailyTotalMinMatchPercent() {
+        return dailyTotalMinMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy min percent check.
-     * @param dailyMinMatchPercent Accuracy min percent check specification.
+     * @param dailyTotalMinMatchPercent Accuracy min percent check specification.
      */
-    public void setDailyMinMatchPercent(ColumnAccuracyMinMatchPercentCheckSpec dailyMinMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyMinMatchPercent, dailyMinMatchPercent));
-        this.dailyMinMatchPercent = dailyMinMatchPercent;
-        propagateHierarchyIdToField(dailyMinMatchPercent, "daily_min_match_percent");
+    public void setDailyTotalMinMatchPercent(ColumnAccuracyTotalMinMatchPercentCheckSpec dailyTotalMinMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTotalMinMatchPercent, dailyTotalMinMatchPercent));
+        this.dailyTotalMinMatchPercent = dailyTotalMinMatchPercent;
+        propagateHierarchyIdToField(dailyTotalMinMatchPercent, "daily_total_min_match_percent");
     }
 
     /**
      * Returns an accuracy max percent check specification.
      * @return Accuracy max percent check specification.
      */
-    public ColumnAccuracyMaxMatchPercentCheckSpec getDailyMaxMatchPercent() {
-        return dailyMaxMatchPercent;
+    public ColumnAccuracyTotalMaxMatchPercentCheckSpec getDailyTotalMaxMatchPercent() {
+        return dailyTotalMaxMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy max percent check.
-     * @param dailyMaxMatchPercent Accuracy max percent check specification.
+     * @param dailyTotalMaxMatchPercent Accuracy max percent check specification.
      */
-    public void setDailyMaxMatchPercent(ColumnAccuracyMaxMatchPercentCheckSpec dailyMaxMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyMaxMatchPercent, dailyMaxMatchPercent));
-        this.dailyMaxMatchPercent = dailyMaxMatchPercent;
-        propagateHierarchyIdToField(dailyMaxMatchPercent, "daily_max_match_percent");
+    public void setDailyTotalMaxMatchPercent(ColumnAccuracyTotalMaxMatchPercentCheckSpec dailyTotalMaxMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTotalMaxMatchPercent, dailyTotalMaxMatchPercent));
+        this.dailyTotalMaxMatchPercent = dailyTotalMaxMatchPercent;
+        propagateHierarchyIdToField(dailyTotalMaxMatchPercent, "daily_total_max_match_percent");
     }
 
     /**
      * Returns an accuracy average percent check specification.
      * @return Accuracy average percent check specification.
      */
-    public ColumnAccuracyAverageMatchPercentCheckSpec getDailyAverageMatchPercent() {
-        return dailyAverageMatchPercent;
+    public ColumnAccuracyTotalAverageMatchPercentCheckSpec getDailyTotalAverageMatchPercent() {
+        return dailyTotalAverageMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy average percent check.
-     * @param dailyAverageMatchPercent Accuracy average percent check specification.
+     * @param dailyTotalAverageMatchPercent Accuracy average percent check specification.
      */
-    public void setDailyAverageMatchPercent(ColumnAccuracyAverageMatchPercentCheckSpec dailyAverageMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyAverageMatchPercent, dailyAverageMatchPercent));
-        this.dailyAverageMatchPercent = dailyAverageMatchPercent;
-        propagateHierarchyIdToField(dailyAverageMatchPercent, "daily_average_match_percent");
+    public void setDailyTotalAverageMatchPercent(ColumnAccuracyTotalAverageMatchPercentCheckSpec dailyTotalAverageMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTotalAverageMatchPercent, dailyTotalAverageMatchPercent));
+        this.dailyTotalAverageMatchPercent = dailyTotalAverageMatchPercent;
+        propagateHierarchyIdToField(dailyTotalAverageMatchPercent, "daily_total_average_match_percent");
     }
 
     /**
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getDailyNotNullCountMatchPercent() {
-        return dailyNotNullCountMatchPercent;
+    public ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec getDailyTotalNotNullCountMatchPercent() {
+        return dailyTotalNotNullCountMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy row count percent check.
-     * @param dailyNotNullCountMatchPercent Accuracy row count percent check specification.
+     * @param dailyTotalNotNullCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setDailyNotNullCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec dailyNotNullCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNotNullCountMatchPercent, dailyNotNullCountMatchPercent));
-        this.dailyNotNullCountMatchPercent = dailyNotNullCountMatchPercent;
-        propagateHierarchyIdToField(dailyNotNullCountMatchPercent, "daily_not_null_count_match_percent");
+    public void setDailyTotalNotNullCountMatchPercent(ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec dailyTotalNotNullCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTotalNotNullCountMatchPercent, dailyTotalNotNullCountMatchPercent));
+        this.dailyTotalNotNullCountMatchPercent = dailyTotalNotNullCountMatchPercent;
+        propagateHierarchyIdToField(dailyTotalNotNullCountMatchPercent, "daily_total_not_null_count_match_percent");
     }
 
     /**

@@ -40,15 +40,18 @@ import java.util.NoSuchElementException;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
-    public final static ProviderDialectSettings DIALECT_SETTINGS = new ProviderDialectSettings("\"", "\"", "\"\"", false);
+    private final PostgresqlProviderDialectSettings dialectSettings;
 
     /**
      * Injection constructor.
      * @param beanFactory Bean factory used to create the connection.
+     * @param dialectSettings Postgresql dialect settings.
      */
     @Autowired
-    public PostgresqlConnectionProvider(BeanFactory beanFactory) {
+    public PostgresqlConnectionProvider(BeanFactory beanFactory,
+                                        PostgresqlProviderDialectSettings dialectSettings) {
         this.beanFactory = beanFactory;
+        this.dialectSettings = dialectSettings;
     }
 
     /**
@@ -77,7 +80,7 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      */
     @Override
     public ProviderDialectSettings getDialectSettings(ConnectionSpec connectionSpec) {
-        return this.DIALECT_SETTINGS;
+        return this.dialectSettings;
     }
 
     /**

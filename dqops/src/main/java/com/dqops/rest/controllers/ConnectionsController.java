@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
@@ -59,15 +60,18 @@ import java.util.stream.Stream;
 public class ConnectionsController {
     private final ConnectionService connectionService;
     private final UserHomeContextFactory userHomeContextFactory;
+    private final DefaultSchedulesProvider defaultSchedulesProvider;
     private final CheckService checkService;
 
     @Autowired
     public ConnectionsController(ConnectionService connectionService,
                                  CheckService checkService,
-                                 UserHomeContextFactory userHomeContextFactory) {
+                                 UserHomeContextFactory userHomeContextFactory,
+                                 DefaultSchedulesProvider defaultSchedulesProvider) {
         this.connectionService = connectionService;
         this.checkService = checkService;
         this.userHomeContextFactory = userHomeContextFactory;
+        this.defaultSchedulesProvider = defaultSchedulesProvider;
     }
 
     /**
@@ -395,6 +399,10 @@ public class ConnectionsController {
 
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         connectionWrapper.setSpec(connectionSpec);
+        if (connectionSpec.getSchedules() == null) {
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+        }
+
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
@@ -435,6 +443,9 @@ public class ConnectionsController {
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         ConnectionSpec connectionSpec = new ConnectionSpec();
         connectionBasicModel.copyToConnectionSpecification(connectionSpec);
+        if (connectionSpec.getSchedules() == null) {
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+        }
         connectionWrapper.setSpec(connectionSpec);
         userHomeContext.flush();
 

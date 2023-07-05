@@ -22,7 +22,7 @@ import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSp
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -559,7 +559,7 @@ public class TableSpec extends AbstractSpec {
                             return recurringSpec.getDaily();
                         }
 
-                        TableDailyRecurringCategoriesSpec dailyRecurringCategoriesSpec = new TableDailyRecurringCategoriesSpec();
+                        TableDailyRecurringCheckCategoriesSpec dailyRecurringCategoriesSpec = new TableDailyRecurringCheckCategoriesSpec();
                         dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
                             recurringSpec.setDaily(dailyRecurringCategoriesSpec);
@@ -643,12 +643,12 @@ public class TableSpec extends AbstractSpec {
         if (checkRootContainer instanceof TableProfilingCheckCategoriesSpec) {
             this.setProfilingChecks((TableProfilingCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof TableDailyRecurringCategoriesSpec) {
+        else if (checkRootContainer instanceof TableDailyRecurringCheckCategoriesSpec) {
             if (this.recurringChecks == null) {
                 this.setRecurringChecks(new TableRecurringChecksSpec());
             }
 
-            this.getRecurringChecks().setDaily((TableDailyRecurringCategoriesSpec)checkRootContainer);
+            this.getRecurringChecks().setDaily((TableDailyRecurringCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof TableMonthlyRecurringCheckCategoriesSpec) {
             if (this.recurringChecks == null) {

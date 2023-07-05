@@ -40,15 +40,18 @@ import java.util.NoSuchElementException;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
-    public final static ProviderDialectSettings DIALECT_SETTINGS = new ProviderDialectSettings("[", "]", "\"\"", false);
+    private final SqlServerProviderDialectSettings dialectSettings;
 
     /**
      * Injection constructor.
      * @param beanFactory Bean factory used to create the connection.
+     * @param dialectSettings SQL Server dialect settings.
      */
     @Autowired
-    public SqlServerConnectionProvider(BeanFactory beanFactory) {
+    public SqlServerConnectionProvider(BeanFactory beanFactory,
+                                       SqlServerProviderDialectSettings dialectSettings) {
         this.beanFactory = beanFactory;
+        this.dialectSettings = dialectSettings;
     }
 
     /**
@@ -77,7 +80,7 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public ProviderDialectSettings getDialectSettings(ConnectionSpec connectionSpec) {
-        return this.DIALECT_SETTINGS;
+        return this.dialectSettings;
     }
 
     /**

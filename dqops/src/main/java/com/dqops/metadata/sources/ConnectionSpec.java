@@ -75,30 +75,44 @@ public class ConnectionSpec extends AbstractSpec {
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("BigQuery connection parameters. Specify parameters in the bigquery section.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BigQueryParametersSpec bigquery;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private SnowflakeParametersSpec snowflake;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PostgresqlParametersSpec postgresql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RedshiftParametersSpec redshift;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private SqlServerParametersSpec sqlserver;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MysqlParametersSpec mysql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private OracleParametersSpec oracle;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")

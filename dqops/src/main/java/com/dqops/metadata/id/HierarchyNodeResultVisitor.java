@@ -22,6 +22,10 @@ import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.metadata.comparisons.ReferenceTableSpec;
 import com.dqops.metadata.comparisons.ReferenceTableSpecMap;
@@ -603,4 +607,37 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, P parameter);
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     * @param defaultObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec, P parameter);
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     * @param defaultProfilingObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingObservabilityCheckSettingsSpec, P parameter);
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     * @param defaultDailyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+
+    R accept(DefaultDailyRecurringObservabilityCheckSettingsSpec defaultDailyRecurringObservabilityCheckSettingsSpec, P parameter);
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     * @param defaultMonthlyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultMonthlyRecurringObservabilityCheckSettingsSpec, P parameter);
 }

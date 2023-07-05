@@ -23,7 +23,7 @@ import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSp
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
@@ -545,14 +545,14 @@ public class TablesController {
      * @return Daily data quality recurring on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksDaily", notes = "Return the configuration of daily table level data quality recurring on a table", response = TableDailyRecurringCategoriesSpec.class)
+    @ApiOperation(value = "getTableRecurringChecksDaily", notes = "Return the configuration of daily table level data quality recurring on a table", response = TableDailyRecurringCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of daily table level data quality recurring on a table returned", response = TableDailyRecurringCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of daily table level data quality recurring on a table returned", response = TableDailyRecurringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> getTableDailyRecurringChecks(
+    public ResponseEntity<Mono<TableDailyRecurringCheckCategoriesSpec>> getTableDailyRecurringChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -576,7 +576,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableDailyRecurringCategoriesSpec dailyRecurring = tableSpec.getRecurringChecks().getDaily();
+        TableDailyRecurringCheckCategoriesSpec dailyRecurring = tableSpec.getRecurringChecks().getDaily();
         return new ResponseEntity<>(Mono.justOrEmpty(dailyRecurring), HttpStatus.OK); // 200
     }
 
@@ -2240,7 +2240,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of daily table level data quality recurring to store or an empty object to remove all data quality recurring on the table level (column level recurring are preserved).")
-            @RequestBody Optional<TableDailyRecurringCategoriesSpec> tableDailyRecurringSpec) {
+            @RequestBody Optional<TableDailyRecurringCheckCategoriesSpec> tableDailyRecurringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {

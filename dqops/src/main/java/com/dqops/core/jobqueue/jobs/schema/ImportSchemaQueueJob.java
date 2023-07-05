@@ -15,6 +15,7 @@
  */
 package com.dqops.core.jobqueue.jobs.schema;
 
+import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
@@ -49,15 +50,18 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
+    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private ImportSchemaQueueJobParameters importParameters;
 
     @Autowired
     public ImportSchemaQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
-                                SecretValueProvider secretValueProvider) {
+                                SecretValueProvider secretValueProvider,
+                                DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -171,13 +175,15 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
                     .collect(Collectors.toList());
 
             List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames);
-            sourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
+            List<TableSpec> filteredSourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
+            this.defaultObservabilityConfigurationService.applyDefaultChecks(filteredSourceTableSpecs,
+                    connectionProvider.getDialectSettings(expandedConnectionSpec), userHome);
 
             TableList currentTablesColl = connectionWrapper.getTables();
-            currentTablesColl.importTables(sourceTableSpecs, connectionSpec.getDefaultGroupingConfiguration());
+            currentTablesColl.importTables(filteredSourceTableSpecs, connectionSpec.getDefaultGroupingConfiguration());
             userHomeContext.flush();
 
-            Table resultTable = createDatasetTableFromTableSpecs(sourceTableSpecs);
+            Table resultTable = createDatasetTableFromTableSpecs(filteredSourceTableSpecs);
 
             return new ImportSchemaQueueJobResult(resultTable);
         }

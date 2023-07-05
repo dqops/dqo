@@ -22,18 +22,25 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionProvider;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
 import com.dqops.connectors.mysql.MysqlConnectionProvider;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
+import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
 import com.dqops.connectors.oracle.OracleConnectionProvider;
 import com.dqops.connectors.oracle.OracleParametersSpec;
+import com.dqops.connectors.oracle.OracleProviderDialectSettings;
 import com.dqops.connectors.postgresql.PostgresqlConnectionProvider;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.connectors.postgresql.PostgresqlProviderDialectSettings;
 import com.dqops.connectors.redshift.RedshiftConnectionProvider;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
+import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
 import com.dqops.connectors.snowflake.SnowflakeConnectionProvider;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
+import com.dqops.connectors.snowflake.SnowflakeProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerConnectionProvider;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
@@ -549,19 +556,19 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     protected ProviderDialectSettings getProviderDialectSettings(ProviderType providerType) {
         switch (providerType) {
             case bigquery:
-                return BigQueryConnectionProvider.DIALECT_SETTINGS;
+                return new BigQueryProviderDialectSettings();
             case snowflake:
-                return SnowflakeConnectionProvider.DIALECT_SETTINGS;
+                return new SnowflakeProviderDialectSettings();
             case postgresql:
-                return PostgresqlConnectionProvider.DIALECT_SETTINGS;
+                return new PostgresqlProviderDialectSettings();
             case redshift:
-                return RedshiftConnectionProvider.DIALECT_SETTINGS;
+                return new RedshiftProviderDialectSettings();
             case sqlserver:
-                return SqlServerConnectionProvider.DIALECT_SETTINGS;
+                return new SqlServerProviderDialectSettings();
             case mysql:
-                return MysqlConnectionProvider.DIALECT_SETTINGS;
+                return new MysqlProviderDialectSettings();
             case oracle:
-                return OracleConnectionProvider.DIALECT_SETTINGS;
+                return new OracleProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

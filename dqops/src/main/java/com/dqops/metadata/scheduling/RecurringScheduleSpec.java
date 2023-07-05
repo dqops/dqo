@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.scheduling;
 
+import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -141,5 +142,15 @@ public class RecurringScheduleSpec extends AbstractSpec {
         }
 
         return true;
+    }
+
+    /**
+     * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @return Trimmed and expanded version of this object.
+     */
+    public RecurringScheduleSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+        RecurringScheduleSpec cloned = this.deepClone();
+        cloned.cronExpression = secretValueProvider.expandValue(cloned.cronExpression);
+        return cloned;
     }
 }

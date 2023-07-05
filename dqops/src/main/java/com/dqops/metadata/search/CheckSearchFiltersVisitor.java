@@ -17,6 +17,7 @@ package com.dqops.metadata.search;
 
 import com.dqops.checks.*;
 import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.*;
@@ -385,5 +386,17 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         }
 
         return super.accept(abstractCheckCategorySpec, parameter);
+    }
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     *
+     * @param defaultObservabilityCheckSettingsSpec Default configuration of observability checks.
+     * @param parameter                             Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;  // we don't want to look for checks here, because there are checks.. but only templates, they cannot be run
     }
 }

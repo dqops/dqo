@@ -40,15 +40,18 @@ import java.util.NoSuchElementException;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
-    public final static ProviderDialectSettings DIALECT_SETTINGS = new ProviderDialectSettings("`", "`", "\"\"", false);
+    private final MysqlProviderDialectSettings dialectSettings;
 
     /**
      * Injection constructor.
      * @param beanFactory Bean factory used to create the connection.
+     * @param dialectSettings Mysql dialect settings.
      */
     @Autowired
-    public MysqlConnectionProvider(BeanFactory beanFactory) {
+    public MysqlConnectionProvider(BeanFactory beanFactory,
+                                   MysqlProviderDialectSettings dialectSettings) {
         this.beanFactory = beanFactory;
+        this.dialectSettings = dialectSettings;
     }
 
     /**
@@ -77,7 +80,7 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public ProviderDialectSettings getDialectSettings(ConnectionSpec connectionSpec) {
-        return this.DIALECT_SETTINGS;
+        return this.dialectSettings;
     }
 
     /**

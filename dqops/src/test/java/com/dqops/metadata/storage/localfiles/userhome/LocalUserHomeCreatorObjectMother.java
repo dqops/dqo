@@ -15,11 +15,14 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactoryImpl;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalFactoryObjectMother;
 import com.dqops.core.configuration.*;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
+import com.dqops.core.scheduler.defaults.DefaultSchedulesProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
+import com.dqops.utils.serialization.YamlSerializerObjectMother;
 
 /**
  * Object mother for {@link LocalUserHomeCreator}
@@ -36,9 +39,12 @@ public class LocalUserHomeCreatorObjectMother {
         DqoLoggingConfigurationProperties noLoggingConfiguration = DqoLoggingConfigurationPropertiesObjectMother.getNoLoggingConfiguration();
         DqoUserConfigurationProperties defaultUserConfiguration = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
         DqoDockerUserhomeConfigurationProperties defaultDockerUserhomeConfiguration = DqoDockerUserhomeConfigurationPropertiesObjectMother.createDefaultDockerUserhomeConfiguration();
+        DqoSchedulerDefaultSchedulesConfigurationProperties defaultSchedulesConfigurationProperties = DqoSchedulerDefaultSchedulesConfigurationPropertiesObjectMother.getDefault();
         TerminalFactory terminalFactory = TerminalFactoryObjectMother.getDefault();
+        DefaultSchedulesProviderImpl defaultSchedulesProvider = new DefaultSchedulesProviderImpl(defaultSchedulesConfigurationProperties, UserHomeContextFactoryObjectMother.createWithInMemoryContext());
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
-                homeLocationFindService, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration);
+                homeLocationFindService, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration,
+                YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider, new DefaultObservabilityCheckSettingsFactoryImpl());
         return localUserHomeCreator;
     }
 

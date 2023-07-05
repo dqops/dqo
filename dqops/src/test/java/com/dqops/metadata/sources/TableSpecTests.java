@@ -19,7 +19,7 @@ import com.dqops.BaseTest;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
@@ -157,7 +157,7 @@ public class TableSpecTests extends BaseTest {
     @Test
     void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
         TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
-        TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
+        TableDailyRecurringCheckCategoriesSpec daily = new TableDailyRecurringCheckCategoriesSpec();
         TableVolumeDailyRecurringChecksSpec volume = new TableVolumeDailyRecurringChecksSpec();
         volume.setDailyRowCount(new TableRowCountCheckSpec());
         daily.setVolume(volume);

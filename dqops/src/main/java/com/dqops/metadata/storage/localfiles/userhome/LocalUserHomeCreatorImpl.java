@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactory;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoDockerUserhomeConfigurationProperties;
@@ -23,6 +24,8 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
+import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
+import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -30,6 +33,8 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
+import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
+import com.dqops.utils.serialization.YamlSerializer;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +56,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
     private DqoUserConfigurationProperties userConfigurationProperties;
     private DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties;
+    private YamlSerializer yamlSerializer;
+    private DefaultSchedulesProvider defaultSchedulesProvider;
+    private DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory;
 
     /**
      * Default constructor called by the IoC container.
@@ -60,18 +68,27 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
      * @param userConfigurationProperties DQO user home configuration parameters.
      * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
+     * @param yamlSerializer Yaml serializer.
+     * @param defaultSchedulesProvider Default cron schedules provider.
+     * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
                                     TerminalFactory terminalFactory,
                                     DqoLoggingConfigurationProperties loggingConfigurationProperties,
                                     DqoUserConfigurationProperties userConfigurationProperties,
-                                    DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties) {
+                                    DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties,
+                                    YamlSerializer yamlSerializer,
+                                    DefaultSchedulesProvider defaultSchedulesProvider,
+                                    DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory) {
         this.homeLocationFindService = homeLocationFindService;
         this.terminalFactory = terminalFactory;
         this.loggingConfigurationProperties = loggingConfigurationProperties;
         this.userConfigurationProperties = userConfigurationProperties;
         this.dockerUserhomeConfigurationProperties = dockerUserhomeConfigurationProperties;
+        this.yamlSerializer = yamlSerializer;
+        this.defaultSchedulesProvider = defaultSchedulesProvider;
+        this.defaultObservabilityCheckSettingsFactory = defaultObservabilityCheckSettingsFactory;
     }
 
     /**
@@ -186,6 +203,17 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
                 Files.writeString(userHomeMarkerPath, userHomeMarkerContent);
             }
+
+            Path localSettingsPath = userHomePath.resolve(SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML);
+            if (!Files.exists(localSettingsPath)) {
+                SettingsYaml settingsYaml = new SettingsYaml();
+                SettingsSpec settingsSpec = settingsYaml.getSpec();
+                settingsSpec.setDefaultSchedules(this.defaultSchedulesProvider.createDefaultRecurringSchedules());
+                settingsSpec.setDefaultDataObservabilityChecks(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
+
+                String emptyLocalSettings = this.yamlSerializer.serialize(settingsYaml);
+                Files.writeString(localSettingsPath, emptyLocalSettings);
+            }
         }
         catch (Exception ex) {
             throw new LocalFileSystemException("Cannot initialize a DQO User home at " + userHomePathString, ex);
@@ -233,8 +261,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             terminalWriter.writeLine("\tdocker run -it -v $DQO_USER_HOME:" + userHomePathString + " -p 8888:8888 dqops/dqo");
             terminalWriter.writeLine("To run DQO in docker using a User Home folder inside the docker image (not advised),"
                     + " do one of the following:");
-            terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.userhome.allow-unmounted=true");
-            terminalWriter.writeLine("\t- Or set the environment variable DQO_DOCKER_USERHOME_ALLOW_UNMOUNTED=true");
+            terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.user-home.allow-unmounted=true");
+            terminalWriter.writeLine("\t- Or set the environment variable DQO_DOCKER_USER_HOME_ALLOW_UNMOUNTED=true");
             terminalWriter.writeLine("DQO will quit.");
             System.exit(101);
         }

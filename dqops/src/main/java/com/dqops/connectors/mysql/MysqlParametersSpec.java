@@ -48,7 +48,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--mysql-port"}, description = "MySQL port number", defaultValue = "3306")
+    @CommandLine.Option(names = {"--mysql-port"}, description = "MySQL port number")
     @JsonPropertyDescription("MySQL port name. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.")
     private String port;
 
@@ -68,7 +68,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--mysql-ssl"}, description = "Connect to MySQL using SSL", defaultValue = "false")
+    @CommandLine.Option(names = {"--mysql-ssl"}, description = "Connect to MySQL using SSL")
     @JsonPropertyDescription("Connect to MySQL using SSL. The default value is false.")
     private Boolean ssl;
 

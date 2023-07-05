@@ -32,7 +32,7 @@ public class BigQuerySourceConnectionProviderTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-		this.sut = new BigQueryConnectionProvider(BeanFactoryObjectMother.getBeanFactory());
+		this.sut = new BigQueryConnectionProvider(BeanFactoryObjectMother.getBeanFactory(), new BigQueryProviderDialectSettings());
     }
 
     @Test

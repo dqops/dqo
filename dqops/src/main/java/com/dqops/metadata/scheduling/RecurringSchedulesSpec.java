@@ -15,10 +15,12 @@
  */
 package com.dqops.metadata.scheduling;
 
+import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -196,5 +198,37 @@ public class RecurringSchedulesSpec extends AbstractSpec {
      */
     public RecurringScheduleSpec getScheduleForCheckSchedulingGroup(CheckRunRecurringScheduleGroup checkSchedulingGroup) {
         return (RecurringScheduleSpec)this.getChild(checkSchedulingGroup.name());
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public RecurringSchedulesSpec deepClone() {
+        return (RecurringSchedulesSpec)super.deepClone();
+    }
+
+    /**
+     * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @return Trimmed and expanded version of this object.
+     */
+    public RecurringSchedulesSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+        RecurringSchedulesSpec cloned = (RecurringSchedulesSpec) super.deepClone();
+        if (cloned.profiling != null) {
+            cloned.setProfiling(cloned.profiling.expandAndTrim(secretValueProvider));
+        }
+        if (cloned.recurringDaily != null) {
+            cloned.setRecurringDaily(cloned.recurringDaily.expandAndTrim(secretValueProvider));
+        }
+        if (cloned.recurringMonthly != null) {
+            cloned.setRecurringMonthly(cloned.recurringMonthly.expandAndTrim(secretValueProvider));
+        }
+        if (cloned.partitionedDaily != null) {
+            cloned.setPartitionedDaily(cloned.partitionedDaily.expandAndTrim(secretValueProvider));
+        }
+        if (cloned.partitionedMonthly != null) {
+            cloned.setPartitionedMonthly(cloned.partitionedMonthly.expandAndTrim(secretValueProvider));
+        }
+        return cloned;
     }
 }

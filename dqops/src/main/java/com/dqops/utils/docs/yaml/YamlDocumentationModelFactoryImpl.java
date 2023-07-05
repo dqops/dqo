@@ -64,6 +64,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
         yamlClasses.add(SensorDefinitionYaml.class);
         yamlClasses.add(SettingsYaml.class);
         yamlClasses.add(TableYaml.class);
+        yamlClasses.add(SettingsYaml.class);
         yamlClasses.add(IncidentNotificationMessage.class); // the incident notification message format
 
         for (Class<?> yamlClass : yamlClasses) {

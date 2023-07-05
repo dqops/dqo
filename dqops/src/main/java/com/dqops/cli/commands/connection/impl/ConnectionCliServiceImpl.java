@@ -25,6 +25,7 @@ import com.dqops.cli.terminal.*;
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.search.ConnectionSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
@@ -61,6 +62,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     private final SecretValueProvider secretValueProvider;
     private final OutputFormatService outputFormatService;
     private final EditorLaunchService editorLaunchService;
+    private final DefaultSchedulesProvider defaultSchedulesProvider;
 
     @Autowired
     public ConnectionCliServiceImpl(ConnectionService connectionService,
@@ -70,7 +72,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                                     TerminalTableWritter terminalTableWritter,
                                     SecretValueProvider secretValueProvider,
                                     OutputFormatService outputFormatService,
-                                    EditorLaunchService editorLaunchService) {
+                                    EditorLaunchService editorLaunchService,
+                                    DefaultSchedulesProvider defaultSchedulesProvider) {
         this.connectionService = connectionService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -79,6 +82,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         this.secretValueProvider = secretValueProvider;
         this.outputFormatService = outputFormatService;
         this.editorLaunchService = editorLaunchService;
+        this.defaultSchedulesProvider = defaultSchedulesProvider;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -401,6 +405,10 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
 
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         connectionWrapper.setSpec(connectionSpec);
+        if (connectionSpec.getSchedules() == null) {
+            // no configuration, apply the defaults
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+        }
         userHomeContext.flush();
         cliOperationStatus.setSuccessMessage(String.format(
                 "Connection %s was successfully added.\nRun 'table import -c=%s' to import tables.", connectionName, connectionName));

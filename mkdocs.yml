@@ -105,7 +105,7 @@ nav:
   - Checks:
     - table:
       - accuracy:
-        - row count match percent: 'checks/table/accuracy/row-count-match-percent.md'
+        - total row count match percent: 'checks/table/accuracy/total-row-count-match-percent.md'
       - availability:
         - table availability: 'checks/table/availability/table-availability.md'
       - schema:
@@ -138,10 +138,10 @@ nav:
     - column:
       - accuracy:
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
-        - min match percent: 'checks/column/accuracy/min-match-percent.md'
-        - max match percent: 'checks/column/accuracy/max-match-percent.md'
-        - average match percent: 'checks/column/accuracy/average-match-percent.md'
-        - not null count match percent: 'checks/column/accuracy/not-null-count-match-percent.md'
+        - total min match percent: 'checks/column/accuracy/total-min-match-percent.md'
+        - total max match percent: 'checks/column/accuracy/total-max-match-percent.md'
+        - total average match percent: 'checks/column/accuracy/total-average-match-percent.md'
+        - total not null count match percent: 'checks/column/accuracy/total-not-null-count-match-percent.md'
       - anomaly:
         - mean anomaly 7 days: 'checks/column/anomaly/mean-anomaly-7-days.md'
         - mean anomaly 30 days: 'checks/column/anomaly/mean-anomaly-30-days.md'
@@ -321,6 +321,7 @@ nav:
       - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
       - SettingsYaml: 'reference/yaml/SettingsYaml.md'
       - TableYaml: 'reference/yaml/TableYaml.md'
+      - SettingsYaml: 'reference/yaml/SettingsYaml.md'
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY

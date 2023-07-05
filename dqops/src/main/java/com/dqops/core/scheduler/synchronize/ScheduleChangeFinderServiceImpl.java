@@ -16,6 +16,7 @@
 package com.dqops.core.scheduler.synchronize;
 
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
+import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.scheduling.RecurringScheduleSpec;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.RecurringScheduleSearchFilters;
@@ -37,13 +38,16 @@ import java.util.Collection;
 public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderService {
     private HierarchyNodeTreeSearcher nodeTreeSearcher;
     private UserHomeContextFactory userHomeContextFactory;
+    private SecretValueProvider secretValueProvider;
 
     @Autowired
     public ScheduleChangeFinderServiceImpl(
             HierarchyNodeTreeSearcher nodeTreeSearcher,
-            UserHomeContextFactory userHomeContextFactory) {
+            UserHomeContextFactory userHomeContextFactory,
+            SecretValueProvider secretValueProvider) {
         this.nodeTreeSearcher = nodeTreeSearcher;
         this.userHomeContextFactory = userHomeContextFactory;
+        this.secretValueProvider = secretValueProvider;
     }
 
     /**
@@ -68,7 +72,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
             ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(recurringSchedule.getHierarchyId());
             assert parentConnectionWrapper != null;
 
-            RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.deepClone();
+            RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.expandAndTrim(this.secretValueProvider);
             clonedRecurringSchedule.setHierarchyId(null);
 
             uniqueSchedulesCollection.add(clonedRecurringSchedule);

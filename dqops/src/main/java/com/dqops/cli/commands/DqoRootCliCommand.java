@@ -248,9 +248,34 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Configures the console logging mode for the '\"check run\" jobs performed by the job scheduler in the background.", defaultValue = "silent")
     private CheckRunReportingMode dqoSchedulerCheckRunMode;
 
-    @CommandLine.Option(names = {"--dqo.docker.userhome.allow-unmounted"},
+    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.profiling"},
+            description = "Sets the default schedule for running advanced profiling checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+                    "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
+    private String dqoSchedulerDefaultSchedulesProfiling;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.recurring-daily"},
+            description = "Sets the default schedule for running daily recurring checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+                    "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
+    private String dqoSchedulerDefaultSchedulesRecurringDaily;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.recurring-monthly"},
+            description = "Sets the default schedule for running monthly recurring checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+                    "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
+    private String dqoSchedulerDefaultSchedulesRecurringMonthly;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.partitioned-daily"},
+            description = "Sets the default schedule for running daily partitioned checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+                    "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
+    private String dqoSchedulerDefaultSchedulesDailyPartitioned;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.default-schedules.partitioned-monthly"},
+            description = "Sets the default schedule for running monthly partitioned checks that is copied to the configuration of new data source connections that are registered in DQO. The default schedule runs checks once a day at 12 PM (noon). " +
+                    "This parameter is used only once, during the first initialization of DQO user home. The value is copied to the .localsettings.dqosettings.yaml settings file.", defaultValue = "0 12 * * *")
+    private String dqoSchedulerDefaultSchedulesMonthlyPartitioned;
+
+    @CommandLine.Option(names = {"--dqo.docker.user-home.allow-unmounted"},
             description = "When running DQO in a docker container, allow DQO user home folder to be initialized inside the container's filesystem if the folder hasn't been mounted to an external volume.", defaultValue = "false")
-    private Boolean dqoDockerUserhomeAllowUnmounted;
+    private Boolean dqoDockerUserHomeAllowUnmounted;
 
     @CommandLine.Option(names = {"--spring.config.location"},
             description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +

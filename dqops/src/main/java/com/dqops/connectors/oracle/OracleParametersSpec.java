@@ -48,7 +48,7 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--oracle-port"}, description = "Oracle port number", defaultValue = "1521")
+    @CommandLine.Option(names = {"--oracle-port"}, description = "Oracle port number")
     @JsonPropertyDescription("Oracle port name. The default port is 1521. Supports also a ${ORACLE_PORT} configuration with a custom environment variable.")
     private String port;
 
@@ -68,7 +68,7 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--oracle-ssl"}, description = "Connect to Oracle using SSL", defaultValue = "false")
+    @CommandLine.Option(names = {"--oracle-ssl"}, description = "Connect to Oracle using SSL")
     @JsonPropertyDescription("Connect to Oracle using SSL. The default value is false.")
     private Boolean ssl;
 
