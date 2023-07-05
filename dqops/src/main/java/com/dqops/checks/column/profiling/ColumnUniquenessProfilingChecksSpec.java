@@ -20,6 +20,7 @@ import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpe
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -138,5 +139,13 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnUniquenessProfilingChecksSpec deepClone() {
+        return (ColumnUniquenessProfilingChecksSpec)super.deepClone();
     }
 }

@@ -20,6 +20,7 @@ import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -95,5 +96,13 @@ public class ColumnSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnSchemaProfilingChecksSpec deepClone() {
+        return (ColumnSchemaProfilingChecksSpec)super.deepClone();
     }
 }

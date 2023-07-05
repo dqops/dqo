@@ -18,6 +18,7 @@ package com.dqops.checks.column.recurring.datetime;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +40,6 @@ public class ColumnDatetimeDailyRecurringChecksSpec extends AbstractCheckCategor
         {
             put("daily_date_values_in_future_percent", o -> o.dailyDateValuesInFuturePercent);
             put("daily_datetime_value_in_range_date_percent", o -> o.dailyDatetimeValueInRangeDatePercent);
-
         }
     };
 
@@ -93,5 +93,13 @@ public class ColumnDatetimeDailyRecurringChecksSpec extends AbstractCheckCategor
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnDatetimeDailyRecurringChecksSpec deepClone() {
+        return (ColumnDatetimeDailyRecurringChecksSpec)super.deepClone();
     }
 }

@@ -20,6 +20,7 @@ import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -140,5 +141,13 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnNullsProfilingChecksSpec deepClone() {
+        return (ColumnNullsProfilingChecksSpec)super.deepClone();
     }
 }

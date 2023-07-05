@@ -16,6 +16,9 @@
 
 package com.dqops.checks.defaults;
 
+import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
+import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.bool.ColumnBoolDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringChecksSpec;
@@ -26,15 +29,19 @@ import com.dqops.checks.column.recurring.pii.ColumnPiiDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.strings.ColumnStringsDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringChecksSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
+import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.schema.TableSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -395,30 +402,116 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
     }
 
     /**
+     * Retrieves or creates and retrieves the check categories class on a table.
+     * @param targetTable Target table.
+     * @return Check categories.
+     */
+    protected TableDailyRecurringCheckCategoriesSpec getTableCheckCategories(TableSpec targetTable) {
+        TableRecurringChecksSpec recurringChecksSpec = targetTable.getRecurringChecks();
+        if (recurringChecksSpec == null) {
+            recurringChecksSpec = new TableRecurringChecksSpec();
+            targetTable.setRecurringChecks(recurringChecksSpec);
+        }
+
+        TableDailyRecurringCheckCategoriesSpec checkCategoriesSpec = recurringChecksSpec.getDaily();
+        if (checkCategoriesSpec == null) {
+            checkCategoriesSpec = new TableDailyRecurringCheckCategoriesSpec();
+            recurringChecksSpec.setDaily(checkCategoriesSpec);
+        }
+
+        return checkCategoriesSpec;
+    }
+    /**
      * Applies the checks on a target table.
      * @param targetTable Target table.
      * @param dialectSettings Dialect settings, to decide if the checks are applicable.
      */
     public void applyOnTable(TableSpec targetTable, ProviderDialectSettings dialectSettings) {
-        if (this.tableVolume != null) {
-            if (targetTable.getRecurringChecks().getDaily() == null) {
-                targetTable.getRecurringChecks().setDaily(new TableDailyRecurringCheckCategoriesSpec());
-            }
-            targetTable.getRecurringChecks().getDaily().setVolume(this.tableVolume.deepClone());
+        if (this.tableVolume != null && !this.tableVolume.isDefault()) {
+            this.getTableCheckCategories(targetTable).setVolume(this.tableVolume.deepClone());
         }
 
-        if (this.tableAvailability != null) {
-            if (targetTable.getRecurringChecks().getDaily() == null) {
-                targetTable.getRecurringChecks().setDaily(new TableDailyRecurringCheckCategoriesSpec());
-            }
-            targetTable.getRecurringChecks().getDaily().setAvailability(this.tableAvailability.deepClone());
+        if (this.tableAvailability != null && !this.tableAvailability.isDefault()) {
+            this.getTableCheckCategories(targetTable).setAvailability(this.tableAvailability.deepClone());
         }
 
-        if (this.tableSchema != null) {
-            if (targetTable.getRecurringChecks().getDaily() == null) {
-                targetTable.getRecurringChecks().setDaily(new TableDailyRecurringCheckCategoriesSpec());
-            }
-            targetTable.getRecurringChecks().getDaily().setSchema(this.tableSchema.deepClone());
+        if (this.tableSchema != null && !this.tableSchema.isDefault()) {
+            this.getTableCheckCategories(targetTable).setSchema(this.tableSchema.deepClone());
+        }
+
+        for (ColumnSpec columnSpec : targetTable.getColumns().values()) {
+            applyOnColumn(columnSpec, dialectSettings);
+        }
+    }
+
+    /**
+     * Retrieves or creates and retrieves the check categories class on a column.
+     * @param targetColumn Target column.
+     * @return Check categories.
+     */
+    protected ColumnDailyRecurringCheckCategoriesSpec getColumnCheckCategories(ColumnSpec targetColumn) {
+        ColumnRecurringChecksRootSpec recurringChecksSpec = targetColumn.getRecurringChecks();
+        if (recurringChecksSpec == null) {
+            recurringChecksSpec = new ColumnRecurringChecksRootSpec();
+            targetColumn.setRecurringChecks(recurringChecksSpec);
+        }
+
+        ColumnDailyRecurringCheckCategoriesSpec checkCategoriesSpec = recurringChecksSpec.getDaily();
+        if (checkCategoriesSpec == null) {
+            checkCategoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
+            recurringChecksSpec.setDaily(checkCategoriesSpec);
+        }
+
+        return checkCategoriesSpec;
+    }
+
+    /**
+     * Applies the checks on a target column, but only if the target column support that category of checks.
+     * Non-numeric column data types (detected by the dialect settings) will not have numeric sensors applied.
+     * @param targetColumn Target column.
+     * @param dialectSettings Dialect settings, to decide if the checks are applicable.
+     */
+    public void applyOnColumn(ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
+        DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
+
+        if (this.columnNulls != null && !this.columnNulls.isDefault()) {
+            this.getColumnCheckCategories(targetColumn).setNulls(this.columnNulls.deepClone());
+        }
+
+        if (this.columnNumeric != null && !this.columnNumeric.isDefault() && DataTypeCategory.isNumericType(dataTypeCategory)) {
+            this.getColumnCheckCategories(targetColumn).setNumeric(this.columnNumeric.deepClone());
+        }
+
+        if (this.columnStrings != null && !this.columnStrings.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setStrings(this.columnStrings.deepClone());
+        }
+
+        if (this.columnUniqueness != null && !this.columnUniqueness.isDefault()) {
+            this.getColumnCheckCategories(targetColumn).setUniqueness(this.columnUniqueness.deepClone());
+        }
+
+        if (this.columnDatetime != null && !this.columnDatetime.isDefault() && DataTypeCategory.hasDate(dataTypeCategory)) {
+            this.getColumnCheckCategories(targetColumn).setDatetime(this.columnDatetime.deepClone());
+        }
+
+        if (this.columnPii != null && !this.columnPii.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setPii(this.columnPii.deepClone());
+        }
+
+        if (this.columnBool != null && !this.columnBool.isDefault() && dataTypeCategory == DataTypeCategory.bool) {
+            this.getColumnCheckCategories(targetColumn).setBool(this.columnBool.deepClone());
+        }
+
+        if (this.columnConsistency != null && !this.columnConsistency.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setConsistency(this.columnConsistency.deepClone());
+        }
+
+        if (this.columnAnomaly != null && !this.columnAnomaly.isDefault() && DataTypeCategory.isNumericType(dataTypeCategory)) {
+            this.getColumnCheckCategories(targetColumn).setAnomaly(this.columnAnomaly.deepClone());
+        }
+
+        if (this.columnSchema != null && !this.columnSchema.isDefault()) {
+            this.getColumnCheckCategories(targetColumn).setSchema(this.columnSchema.deepClone());
         }
     }
 }

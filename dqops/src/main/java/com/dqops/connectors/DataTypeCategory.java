@@ -176,4 +176,22 @@ public enum DataTypeCategory {
             datetime_datetime,
             datetime_date,
     };
+
+    /**
+     * Checks if this data type is one of numeric data types.
+     * @param dataTypeCategory Data type category to test.
+     * @return True when it is a numeric data type.
+     */
+    public static boolean isNumericType(DataTypeCategory dataTypeCategory) {
+        return dataTypeCategory == numeric_integer || dataTypeCategory == numeric_decimal || dataTypeCategory == numeric_float;
+    }
+
+    /**
+     * Checks if this data type is one of date(time) types that has a date. For {@link DataTypeCategory#datetime_time} this method returns false, because it has no tme.
+     * @param dataTypeCategory Data type category to test.
+     * @return True when it is a date(time) data type with a date part.
+     */
+    public static boolean hasDate(DataTypeCategory dataTypeCategory) {
+        return dataTypeCategory == datetime_date || dataTypeCategory == datetime_datetime || dataTypeCategory == datetime_instant;
+    }
 }

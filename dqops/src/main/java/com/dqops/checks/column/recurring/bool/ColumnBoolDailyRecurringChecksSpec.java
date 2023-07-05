@@ -18,6 +18,7 @@ package com.dqops.checks.column.recurring.bool;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +40,6 @@ public class ColumnBoolDailyRecurringChecksSpec extends AbstractCheckCategorySpe
         {
             put("daily_true_percent", o -> o.dailyTruePercent);
             put("daily_false_percent", o -> o.dailyFalsePercent);
-
         }
     };
 
@@ -93,5 +93,13 @@ public class ColumnBoolDailyRecurringChecksSpec extends AbstractCheckCategorySpe
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnBoolDailyRecurringChecksSpec deepClone() {
+        return (ColumnBoolDailyRecurringChecksSpec)super.deepClone();
     }
 }

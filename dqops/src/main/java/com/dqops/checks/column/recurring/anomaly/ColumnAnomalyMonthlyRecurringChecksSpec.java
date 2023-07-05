@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeMeanCheckSpec;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeMedianCheckSpec;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeSumCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -115,5 +116,13 @@ public class ColumnAnomalyMonthlyRecurringChecksSpec extends AbstractCheckCatego
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnAnomalyMonthlyRecurringChecksSpec deepClone() {
+        return (ColumnAnomalyMonthlyRecurringChecksSpec)super.deepClone();
     }
 }

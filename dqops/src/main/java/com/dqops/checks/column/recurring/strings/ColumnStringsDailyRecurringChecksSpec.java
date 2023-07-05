@@ -17,6 +17,7 @@ package com.dqops.checks.column.recurring.strings;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.strings.*;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -847,5 +848,13 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnStringsDailyRecurringChecksSpec deepClone() {
+        return (ColumnStringsDailyRecurringChecksSpec)super.deepClone();
     }
 }

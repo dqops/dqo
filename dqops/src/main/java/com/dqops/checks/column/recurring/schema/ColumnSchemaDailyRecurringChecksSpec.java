@@ -18,6 +18,7 @@ package com.dqops.checks.column.recurring.schema;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -92,5 +93,13 @@ public class ColumnSchemaDailyRecurringChecksSpec extends AbstractCheckCategoryS
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ColumnSchemaDailyRecurringChecksSpec deepClone() {
+        return (ColumnSchemaDailyRecurringChecksSpec)super.deepClone();
     }
 }
