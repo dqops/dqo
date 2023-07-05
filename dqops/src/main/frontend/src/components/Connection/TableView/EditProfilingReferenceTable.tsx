@@ -456,48 +456,51 @@ export const EditProfilingReferenceTable = ({
             goToCreateNew={goToRefCreateNew}
           />
         </div>
-
-        <p>Default thresholds for differences(percent):</p>
-        <div className="grid grid-cols-3 mb-5">
-          <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
-            <span className="flex-1">Warning when the difference above:</span>
-            <Input
-              className="max-w-30 !min-w-initial"
-              type="number"
-              value={
-                reference?.default_compare_thresholds
-                  ?.warning_difference_percent
-              }
-            />
-            %
-          </div>
-          <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
-            <span className="flex-1">Error when the difference above:</span>
-            <Input
-              className="max-w-30 !min-w-initial"
-              type="number"
-              value={
-                reference?.default_compare_thresholds?.error_difference_percent
-              }
-            />
-            %
-          </div>
-          <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
-            <span className="flex-1">
-              Fatal Error when the difference above:
-            </span>
-            <Input
-              className="max-w-30 !min-w-initial"
-              type="number"
-              value={
-                reference?.default_compare_thresholds?.fatal_difference_percent
-              }
-            />
-            %
+        <div className="px-4">
+          <p>Default thresholds for differences(percent):</p>
+          <div className="grid grid-cols-3 mb-5 mt-3">
+            <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
+              <span className="flex-1">Warning when the difference above:</span>
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={
+                  reference?.default_compare_thresholds
+                    ?.warning_difference_percent
+                }
+              />
+              %
+            </div>
+            <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
+              <span className="flex-1">Error when the difference above:</span>
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={
+                  reference?.default_compare_thresholds
+                    ?.error_difference_percent
+                }
+              />
+              %
+            </div>
+            <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
+              <span className="flex-1">
+                Fatal Error when the difference above:
+              </span>
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={
+                  reference?.default_compare_thresholds
+                    ?.fatal_difference_percent
+                }
+              />
+              %
+            </div>
           </div>
         </div>
 
-        <SectionWrapper title="Table level comparison" className="mb-10">
+        <SectionWrapper title="Table level comparison" className="mb-10 px-0">
           <div className="flex flex-col gap-8">
             <div className="flex gap-4">
               <span>
