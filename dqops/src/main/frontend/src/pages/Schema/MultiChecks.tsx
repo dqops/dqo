@@ -243,66 +243,82 @@ export const MultiChecks = () => {
         </div>
       )}
       <div className="px-8">
-        <div className="flex gap-8 mb-6">
-          <div className="flex flex-col gap-3">
-            <p>Check target</p>
-            <RadioButton
-              label="Table"
-              onClick={() => setCheckTarget(checkTarget ? 'table' : undefined)}
-              checked={checkTarget === 'table'}
-            />
-            <RadioButton
-              label="Column"
-              onClick={() => setCheckTarget(checkTarget ? 'column' : undefined)}
-              checked={checkTarget === 'column'}
-            />
+        <div className="flex w-full">
+          <div className="flex w-1/4">
+            <div className="flex flex-col gap-3 w-45">
+              <p>Check target</p>
+              <div className="flex gap-x-3 mr-2">
+                <RadioButton
+                  label="Table"
+                  onClick={() =>
+                    setCheckTarget(checkTarget ? 'table' : undefined)
+                  }
+                  checked={checkTarget === 'table'}
+                />
+                <RadioButton
+                  label="Column"
+                  onClick={() =>
+                    setCheckTarget(checkTarget ? 'column' : undefined)
+                  }
+                  checked={checkTarget === 'column'}
+                />
+              </div>
+            </div>
+            <div className="max-w-75 w-75">
+              <Select
+                label="Check category"
+                options={checkCategoryOptions}
+                value={checkCategory}
+                onChange={setCheckCategory}
+              ></Select>
+            </div>
           </div>
-          <div className="w-80  ">
-            <Select
-              label="Check category"
-              options={checkCategoryOptions}
-              value={checkCategory}
-              onChange={setCheckCategory}
-            ></Select>
+          <div className="flex w-1/4 px-10">
+            <div className="max-w-120 w-120">
+              <Select
+                options={checkNameOptions}
+                label="Check name"
+                value={checkName}
+                onChange={setCheckName}
+              />
+            </div>
           </div>
         </div>
-        <div className="max-w-120">
-          <Select
-            options={checkNameOptions}
-            label="Check name"
-            value={checkName}
-            onChange={setCheckName}
-          />
-        </div>
-        <hr className="my-4 border-gray-300" />
-
-        <div className="max-w-120 mb-4">
-          <Input
-            value={tableNamePattern}
-            label="Table name"
-            placeholder="Enter table name pattern"
-            onChange={(e) => setTableNamePattern(e.target.value)}
-          />
-        </div>
-        <div className="max-w-120 mb-4">
-          <Input
-            value={columnNamePattern}
-            label="Column name"
-            placeholder="Enter column name pattern"
-            onChange={(e) => setColumnNamePattern(e.target.value)}
-          />
-        </div>
-        <div className="flex items-end justify-between">
-          <div className="max-w-120">
-            <Input
-              value={columnDataType}
-              label="Column type"
-              placeholder="Enter column type"
-              onChange={(e) => setColumnDataType(e.target.value)}
-            />
+        <hr className="my-8 border-gray-300" />
+        <div className="flex w-full ">
+          <div className="w-1/4">
+            <div className="max-w-120">
+              <Input
+                value={tableNamePattern}
+                label="Table name"
+                placeholder="Enter table name pattern"
+                onChange={(e) => setTableNamePattern(e.target.value)}
+              />
+            </div>
           </div>
-
-          <Button label="Search" color="primary" onClick={searchChecks} />
+          <div className="w-1/4 px-10">
+            <div className="max-w-120">
+              <Input
+                value={columnNamePattern}
+                label="Column name"
+                placeholder="Enter column name pattern"
+                onChange={(e) => setColumnNamePattern(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="w-1/4 px-10">
+            <div className="max-w-120">
+              <Input
+                value={columnDataType}
+                label="Column type"
+                placeholder="Enter column type"
+                onChange={(e) => setColumnDataType(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="w-1/4 flex items-end justify-end">
+            <Button label="Search" color="primary" onClick={searchChecks} />
+          </div>
         </div>
 
         <div className="border border-gray-300 rounded-lg p-4 my-4">
