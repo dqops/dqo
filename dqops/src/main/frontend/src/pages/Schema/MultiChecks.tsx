@@ -26,6 +26,12 @@ const tabs = [
   }
 ];
 
+interface newCheckTemplate {
+  check_category?: string;
+  check_name?: string;
+  check_target?: string;
+}
+
 export const MultiChecks = () => {
   const {
     checkTypes,
@@ -37,6 +43,7 @@ export const MultiChecks = () => {
     []
   );
   const [checkNameOptions, setCheckNameOptions] = useState<Option[]>([]);
+  const [finalOptions, setFinalOptions] = useState<Option[]>([]);
   const [checkTarget, setCheckTarget] = useState<
     'table' | 'column' | undefined
   >('table');
@@ -62,6 +69,19 @@ export const MultiChecks = () => {
         new Set(res.data.map((item) => item.check_name))
       );
 
+      const checkTemplates: newCheckTemplate[] = res.data.map((data) => ({
+        check_category: data.check_category,
+        check_name: data.check_name,
+        check_target: data.check_target
+      }));
+
+      setFinalOptions(
+        checkTemplates.map((x) => ({
+          label: x.check_name ?? '',
+          value: x.check_category
+        }))
+      );
+
       setCheckCategoryOptions(
         possibleCategories.map((item) => ({
           label: item ?? '',
@@ -74,6 +94,9 @@ export const MultiChecks = () => {
           value: item ?? ''
         }))
       );
+
+      console.log(checkCategoryOptions);
+      console.log(checkNameOptions);
     };
 
     if (checkTypes === CheckTypes.PROFILING) {
@@ -241,6 +264,31 @@ export const MultiChecks = () => {
     }
   };
 
+  const removeDuplicateOptions = (options: Option[]): Option[] => {
+    const uniqueOptions: Option[] = [];
+    const uniqueValues = new Set<string | number>();
+
+    for (const option of options) {
+      if (!uniqueValues.has(option.label as string)) {
+        uniqueValues.add(option.label as string);
+        uniqueOptions.push(option);
+      }
+    }
+
+    return uniqueOptions;
+  };
+
+  console.log(checkName);
+
+  const setNewArray = (oldArray: Option[]): Option[] => {
+    const newArray: Option[] = oldArray.map((option) => ({
+      ...option,
+      value: option.label ?? ''
+    }));
+
+    return newArray;
+  };
+
   return (
     <div className="text-sm py-4">
       {checkTypes !== CheckTypes.PROFILING && (
@@ -282,7 +330,13 @@ export const MultiChecks = () => {
           <div className="flex w-1/4 px-10">
             <div className="max-w-120 w-120">
               <Select
-                options={sortObjects(checkNameOptions)}
+                options={setNewArray(
+                  sortObjects(
+                    removeDuplicateOptions(
+                      finalOptions.filter((x) => x.value === checkCategory)
+                    )
+                  )
+                )}
                 label="Check name"
                 value={checkName}
                 onChange={setCheckName}
@@ -322,8 +376,17 @@ export const MultiChecks = () => {
               />
             </div>
           </div>
+
           <div className="w-1/4 flex items-end justify-end">
-            <Button label="Search" color="primary" onClick={searchChecks} />
+            <Button
+              label="Search"
+              color={checkName ? 'primary' : 'secondary'}
+              onClick={() => {
+                if (checkName !== undefined) {
+                  searchChecks();
+                }
+              }}
+            />
           </div>
         </div>
 
