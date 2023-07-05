@@ -212,6 +212,12 @@ export const MultiChecks = () => {
       )
     );
   };
+  const sortObjects = (array: Option[]): Option[] => {
+    const sortedArray = array.sort((a, b) =>
+      (a.label.toString() ?? '').localeCompare(b.label.toString() ?? '')
+    );
+    return sortedArray;
+  };
 
   const openDialog = () => {
     setOpen(true);
@@ -267,7 +273,7 @@ export const MultiChecks = () => {
             <div className="max-w-75 w-75">
               <Select
                 label="Check category"
-                options={checkCategoryOptions}
+                options={sortObjects(checkCategoryOptions)}
                 value={checkCategory}
                 onChange={setCheckCategory}
               ></Select>
@@ -276,7 +282,7 @@ export const MultiChecks = () => {
           <div className="flex w-1/4 px-10">
             <div className="max-w-120 w-120">
               <Select
-                options={checkNameOptions}
+                options={sortObjects(checkNameOptions)}
                 label="Check name"
                 value={checkName}
                 onChange={setCheckName}
