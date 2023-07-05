@@ -13,26 +13,27 @@ class WithinChange7DaysRuleParametersSpec:
     Attributes:
         max_within (Union[Unset, float]): Maximal accepted absolute change with regards to the previous readout
             (inclusive).
-        exact (Union[Unset, bool]): Whether to compare the actual value to the readout exactly 7 days in the past. If
-            the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts
-            for the last 7 days.
+        exact_day (Union[Unset, bool]): When the exact_day parameter is unchecked (exact_day: false), the rule
+        search for the most recent sensor readouts from the past 60 days and compare them. If the parameter is
+        selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results
+        are found from that time, no results or errors will be generated..
     """
 
     max_within: Union[Unset, float] = UNSET
-    exact: Union[Unset, bool] = UNSET
+    exact_day: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         max_within = self.max_within
-        exact = self.exact
+        exact_day = self.exact_day
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if max_within is not UNSET:
             field_dict["max_within"] = max_within
-        if exact is not UNSET:
-            field_dict["exact"] = exact
+        if exact_day is not UNSET:
+            field_dict["exact_day"] = exact_day
 
         return field_dict
 
@@ -41,11 +42,11 @@ class WithinChange7DaysRuleParametersSpec:
         d = src_dict.copy()
         max_within = d.pop("max_within", UNSET)
 
-        exact = d.pop("exact", UNSET)
+        exact_day = d.pop("exact_day", UNSET)
 
         within_change_7_days_rule_parameters_spec = cls(
             max_within=max_within,
-            exact=exact,
+            exact_day=exact_day,
         )
 
         within_change_7_days_rule_parameters_spec.additional_properties = d

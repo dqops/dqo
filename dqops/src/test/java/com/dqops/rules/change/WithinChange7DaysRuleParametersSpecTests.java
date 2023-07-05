@@ -59,7 +59,7 @@ public class WithinChange7DaysRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsBetweenRangeFromPreviousReadout_thenReturnsPassed() {
         this.sut.setMaxWithin(2.0);
-        this.sut.setExact(false);
+        this.sut.setExactDay(false);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 10] = 20.0;
@@ -82,7 +82,7 @@ public class WithinChange7DaysRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsEqualToPreviousReadoutAndRangeIsZero_thenReturnsPassed() {
         this.sut.setMaxWithin(0.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 10] = 23.0;
@@ -106,7 +106,7 @@ public class WithinChange7DaysRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsGreaterThanAllowed_thenReturnsFailed() {
         this.sut.setMaxWithin(10.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 7] = 20.0;
@@ -129,7 +129,7 @@ public class WithinChange7DaysRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenExactReadoutIsNull_thenReturnsPassed() {
         this.sut.setMaxWithin(10.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 8] = 12.0;

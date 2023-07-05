@@ -50,10 +50,10 @@ public class WithinChange1DayRuleParametersSpec extends AbstractRuleParametersSp
     @SampleValues(values = "10")
     private Double maxWithin;
 
-    @JsonPropertyDescription("Whether to compare the actual value to the readout exactly 1 day in the past. " +
-            "If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts from the current day.")
+    @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. " +
+            "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
     @SampleValues(values = "false")
-    private Boolean exact = false;
+    private Boolean exactDay = false;
 
     /**
      * Gets the maximal accepted absolute change for a data quality check readout.
@@ -74,18 +74,18 @@ public class WithinChange1DayRuleParametersSpec extends AbstractRuleParametersSp
 
     /**
      * Gets the flag that makes the rule abstain from searching for the latest readout if there was no readout on the previous day.
-     * @return Flag <code>exact</code>'s value.
+     * @return Flag <code>exactDay</code>'s value.
      */
-    public Boolean getExact() {
-        return exact;
+    public Boolean getExactDay() {
+        return exactDay;
     }
 
     /**
      * Set the flag that makes the rule abstain from searching for the latest readout if there was no readout on the previous day.
-     * @param exact New flag <code>exact</code>'s value.
+     * @param exactDay New flag <code>exactDay</code>'s value.
      */
-    public void setExact(Boolean exact) {
-        this.exact = exact;
+    public void setExactDay(Boolean exactDay) {
+        this.exactDay = exactDay;
     }
 
     /**

@@ -17,11 +17,13 @@ spec:
     data_type: double
     sample_values:
     - 5
-  - field_name: exact
-    display_name: exact
-    help_text: "Whether to compare the actual value to the readout exactly 7 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 7 days."
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
+      \ searches for the most recent sensor readouts from the past 60 days and compares\
+      \ them. If the parameter is selected (exact_day: true), the rule compares only\
+      \ with the results from the past 7 days. If no results are found from that time,\
+      \ no results or errors will be generated."
     data_type: boolean
     sample_values:
     - "false"

@@ -43,13 +43,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_c
       row_count_change_7_days:
         warning:
           max_within: 10.0
-          exact: false
+          exact_day: false
         error:
           max_within: 10.0
-          exact: false
+          exact_day: false
         fatal:
           max_within: 10.0
-          exact: false
+          exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-22"
@@ -68,13 +68,13 @@ spec:
       row_count_change_7_days:
         warning:
           max_within: 10.0
-          exact: false
+          exact_day: false
         error:
           max_within: 10.0
-          exact: false
+          exact_day: false
         fatal:
           max_within: 10.0
-          exact: false
+          exact_day: false
   columns:
     col_event_timestamp:
       labels:
@@ -293,13 +293,13 @@ spec:
           row_count_change_7_days:
             warning:
               max_within: 10.0
-              exact: false
+              exact_day: false
             error:
               max_within: 10.0
-              exact: false
+              exact_day: false
             fatal:
               max_within: 10.0
-              exact: false
+              exact_day: false
       columns:
         col_event_timestamp:
           labels:
@@ -561,13 +561,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
         daily_row_count_change_7_days:
           warning:
             max_within: 10.0
-            exact: false
+            exact_day: false
           error:
             max_within: 10.0
-            exact: false
+            exact_day: false
           fatal:
             max_within: 10.0
-            exact: false
+            exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-23"
@@ -587,13 +587,13 @@ spec:
         daily_row_count_change_7_days:
           warning:
             max_within: 10.0
-            exact: false
+            exact_day: false
           error:
             max_within: 10.0
-            exact: false
+            exact_day: false
           fatal:
             max_within: 10.0
-            exact: false
+            exact_day: false
   columns:
     col_event_timestamp:
       labels:
@@ -813,13 +813,13 @@ spec:
             daily_row_count_change_7_days:
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
       columns:
         col_event_timestamp:
           labels:
@@ -1081,13 +1081,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
         daily_partition_row_count_change_7_days:
           warning:
             max_within: 10.0
-            exact: false
+            exact_day: false
           error:
             max_within: 10.0
-            exact: false
+            exact_day: false
           fatal:
             max_within: 10.0
-            exact: false
+            exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-23"
@@ -1107,13 +1107,13 @@ spec:
         daily_partition_row_count_change_7_days:
           warning:
             max_within: 10.0
-            exact: false
+            exact_day: false
           error:
             max_within: 10.0
-            exact: false
+            exact_day: false
           fatal:
             max_within: 10.0
-            exact: false
+            exact_day: false
   columns:
     col_event_timestamp:
       labels:
@@ -1337,13 +1337,13 @@ spec:
             daily_partition_row_count_change_7_days:
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
       columns:
         col_event_timestamp:
           labels:

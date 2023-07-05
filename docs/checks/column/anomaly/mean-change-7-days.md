@@ -43,13 +43,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=mean_change
           mean_change_7_days:
             warning:
               max_within: 10.0
-              exact: false
+              exact_day: false
             error:
               max_within: 10.0
-              exact: false
+              exact_day: false
             fatal:
               max_within: 10.0
-              exact: false
+              exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -70,13 +70,13 @@ spec:
           mean_change_7_days:
             warning:
               max_within: 10.0
-              exact: false
+              exact_day: false
             error:
               max_within: 10.0
-              exact: false
+              exact_day: false
             fatal:
               max_within: 10.0
-              exact: false
+              exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -264,13 +264,13 @@ spec:
               mean_change_7_days:
                 warning:
                   max_within: 10.0
-                  exact: false
+                  exact_day: false
                 error:
                   max_within: 10.0
-                  exact: false
+                  exact_day: false
                 fatal:
                   max_within: 10.0
-                  exact: false
+                  exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -493,13 +493,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_mean_
             daily_mean_change_7_days:
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
@@ -521,13 +521,13 @@ spec:
             daily_mean_change_7_days:
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -716,13 +716,13 @@ spec:
                 daily_mean_change_7_days:
                   warning:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   error:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   fatal:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -945,13 +945,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
             daily_partition_mean_change_7_days:
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
@@ -973,13 +973,13 @@ spec:
             daily_partition_mean_change_7_days:
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1172,13 +1172,13 @@ spec:
                 daily_partition_mean_change_7_days:
                   warning:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   error:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   fatal:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

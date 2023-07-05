@@ -150,7 +150,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
 |to|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 1 day in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts from the current day.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -180,11 +180,13 @@ spec:
     data_type: double
     sample_values:
     - 20
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
-      \ the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts from the current day.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 1 day. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -219,7 +221,7 @@ import numpy as np
 class BetweenChange1DayRuleParametersSpec:
     from_: float
     to: float
-    exact: bool = False
+    exact_day: bool = False
 
     def __getattr__(self, name):
         if name == "from":
@@ -269,7 +271,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -304,7 +306,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
 |to|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 30 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 30 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -334,11 +336,13 @@ spec:
     data_type: double
     sample_values:
     - 20
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 30 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 30 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 30 days. If no results are found from\
+      \ that time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -373,7 +377,7 @@ import numpy as np
 class BetweenChange30DaysRuleParametersSpec:
     from_: float
     to: float
-    exact: bool = False
+    exact_day: bool = False
 
     def __getattr__(self, name):
         if name == "from":
@@ -423,7 +427,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-29]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -460,7 +464,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
 |to|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 7 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 7 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -490,11 +494,13 @@ spec:
     data_type: double
     sample_values:
     - 20
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 7 days. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -529,7 +535,7 @@ import numpy as np
 class BetweenChange7DaysRuleParametersSpec:
     from_: float
     to: float
-    exact: bool = False
+    exact_day: bool = False
 
     def __getattr__(self, name):
         if name == "from":
@@ -579,7 +585,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-6]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -746,7 +752,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
 |to_percent|Maximal accepted change relative to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 1 day in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts from the current day.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -776,11 +782,13 @@ spec:
     data_type: double
     sample_values:
     - 20
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
-      \ the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts from the current day.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 1 day. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -814,7 +822,7 @@ from typing import Sequence
 class BetweenPercentChange1DayRuleParametersSpec:
     from_percent: float
     to_percent: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -859,7 +867,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -894,7 +902,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
 |to_percent|Maximal accepted change relative to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 30 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 30 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -924,11 +932,13 @@ spec:
     data_type: double
     sample_values:
     - 20
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 30 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 30 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 30 days. If no results are found from\
+      \ that time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -962,7 +972,7 @@ from typing import Sequence
 class BetweenPercentChange30DaysRuleParametersSpec:
     from_percent: float
     to_percent: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -1007,7 +1017,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-29]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -1044,7 +1054,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
 |to_percent|Maximal accepted change relative to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 7 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 7 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -1074,11 +1084,13 @@ spec:
     data_type: double
     sample_values:
     - 20
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 7 days. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -1112,7 +1124,7 @@ from typing import Sequence
 class BetweenPercentChange7DaysRuleParametersSpec:
     from_percent: float
     to_percent: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -1157,7 +1169,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-6]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -1316,7 +1328,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 1 day in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts from the current day.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -1341,11 +1353,13 @@ spec:
     data_type: double
     sample_values:
     - 10
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
-      \ the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts from the current day.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 1 day. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -1378,7 +1392,7 @@ from typing import Sequence
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinChange1DayRuleParametersSpec:
     max_within: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -1423,7 +1437,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -1457,7 +1471,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 30 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 30 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -1482,11 +1496,13 @@ spec:
     data_type: double
     sample_values:
     - 10
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 30 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 30 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 30 days. If no results are found from\
+      \ that time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -1519,7 +1535,7 @@ from typing import Sequence
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinChange30DaysRuleParametersSpec:
     max_within: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -1564,7 +1580,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-29]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -1600,7 +1616,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 7 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 7 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -1625,11 +1641,13 @@ spec:
     data_type: double
     sample_values:
     - 10
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 7 days. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -1662,7 +1680,7 @@ from typing import Sequence
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinChange7DaysRuleParametersSpec:
     max_within: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -1707,7 +1725,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-6]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -1866,7 +1884,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_within|Absolute value of the maximal accepted change relative to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 1 day in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts from the current day.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -1891,11 +1909,13 @@ spec:
     data_type: double
     sample_values:
     - 5
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
-      \ the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts from the current day.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 1 day. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -1928,7 +1948,7 @@ from typing import Sequence
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinPercentChange1DayRuleParametersSpec:
     max_percent_within: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -1973,7 +1993,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -2007,7 +2027,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_within|Absolute value of the maximal accepted change relative to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 7 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 7 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -2032,11 +2052,13 @@ spec:
     data_type: double
     sample_values:
     - 5
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 30 days. If no results are found from\
+      \ that time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -2069,7 +2091,7 @@ from typing import Sequence
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinPercentChange30DaysRuleParametersSpec:
     max_percent_within: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -2114,7 +2136,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-29]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
@@ -2150,7 +2172,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_within|Absolute value of the maximal accepted change relative to the previous readout (inclusive).|double| ||
-|exact|Whether to compare the actual value to the readout exactly 7 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 7 days.|boolean| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
 
@@ -2175,11 +2197,13 @@ spec:
     data_type: double
     sample_values:
     - 5
-  - field_name: exact
-    display_name: exact
-    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
-      \ in the past. If the flag is false, the rule searches for the newest readout,\
-      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), the\
+      \ rule search for the most recent sensor readouts from the past 60 days and\
+      \ compares them.  If the parameter is selected (exact_day: true), the rule compares\
+      \ only with the results from the past 7 days. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
     data_type: boolean
     sample_values:
     - &quot;false&quot;
@@ -2212,7 +2236,7 @@ from typing import Sequence
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinPercentChange7DaysRuleParametersSpec:
     max_percent_within: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -2257,7 +2281,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-6]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)

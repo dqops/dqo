@@ -45,13 +45,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=median_chan
               percentile_value: 0.5
             warning:
               max_within: 10.0
-              exact: false
+              exact_day: false
             error:
               max_within: 10.0
-              exact: false
+              exact_day: false
             fatal:
               max_within: 10.0
-              exact: false
+              exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-26"
@@ -74,13 +74,13 @@ spec:
               percentile_value: 0.5
             warning:
               max_within: 10.0
-              exact: false
+              exact_day: false
             error:
               max_within: 10.0
-              exact: false
+              exact_day: false
             fatal:
               max_within: 10.0
-              exact: false
+              exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -348,13 +348,13 @@ spec:
                   percentile_value: 0.5
                 warning:
                   max_within: 10.0
-                  exact: false
+                  exact_day: false
                 error:
                   max_within: 10.0
-                  exact: false
+                  exact_day: false
                 fatal:
                   max_within: 10.0
-                  exact: false
+                  exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -656,13 +656,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
                 percentile_value: 0.5
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-27"
@@ -686,13 +686,13 @@ spec:
                 percentile_value: 0.5
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -961,13 +961,13 @@ spec:
                     percentile_value: 0.5
                   warning:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   error:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   fatal:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1269,13 +1269,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                 percentile_value: 0.5
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-27"
@@ -1299,13 +1299,13 @@ spec:
                 percentile_value: 0.5
               warning:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               error:
                 max_within: 10.0
-                exact: false
+                exact_day: false
               fatal:
                 max_within: 10.0
-                exact: false
+                exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1574,13 +1574,13 @@ spec:
                     percentile_value: 0.5
                   warning:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   error:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
                   fatal:
                     max_within: 10.0
-                    exact: false
+                    exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

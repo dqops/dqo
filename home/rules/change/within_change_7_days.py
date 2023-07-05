@@ -21,7 +21,7 @@ from typing import Sequence
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinChange7DaysRuleParametersSpec:
     max_within: float
-    exact: bool = False
+    exact_day: bool = False
 
 
 class HistoricDataPoint:
@@ -66,7 +66,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts[:-6]
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)
