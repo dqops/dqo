@@ -60,6 +60,7 @@ export const EditProfilingReferenceTable = ({
     useState<DataGroupingConfigurationBasicModel>();
   const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] =
     useState<DataGroupingConfigurationBasicModel>();
+
   const history = useHistory();
   const dispatch = useActionDispatch();
 

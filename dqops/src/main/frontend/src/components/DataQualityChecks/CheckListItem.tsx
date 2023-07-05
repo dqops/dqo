@@ -83,30 +83,36 @@ const CheckListItem = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    const localState = localStorage.getItem(`${checkTypes}_${check.check_name}`);
+    const localState = localStorage.getItem(
+      `${checkTypes}_${check.check_name}`
+    );
 
     if (localState === 'true') {
       openCheckSettings();
     }
 
-    const detailsLocalState = localStorage.getItem(`${checkTypes}_${check.check_name}_details`);
+    const detailsLocalState = localStorage.getItem(
+      `${checkTypes}_${check.check_name}_details`
+    );
 
     if (detailsLocalState === 'true') {
       toggleCheckDetails();
     }
-
   }, [checkTypes, check.check_name]);
 
   const toggleExpand = () => {
     const newValue = !expanded;
-    setExpanded(newValue)
-    localStorage.setItem(`${checkTypes}_${check.check_name}`, newValue.toString());
-  }
+    setExpanded(newValue);
+    localStorage.setItem(
+      `${checkTypes}_${check.check_name}`,
+      newValue.toString()
+    );
+  };
 
   const closeExpand = () => {
-    setExpanded(false)
-    localStorage.setItem(`${checkTypes}_${check.check_name}`, "false");
-  }
+    setExpanded(false);
+    localStorage.setItem(`${checkTypes}_${check.check_name}`, 'false');
+  };
 
   const openCheckSettings = () => {
     if (showDetails) {
@@ -232,7 +238,7 @@ const CheckListItem = ({
 
   const closeCheckDetails = () => {
     setShowDetails(false);
-    localStorage.setItem(`${checkTypes}_${check.check_name}_details`, "false");
+    localStorage.setItem(`${checkTypes}_${check.check_name}_details`, 'false');
   };
 
   const toggleCheckDetails = () => {
@@ -241,7 +247,10 @@ const CheckListItem = ({
     }
     const newValue = !showDetails;
 
-    localStorage.setItem(`${checkTypes}_${check.check_name}_details`, newValue.toString());
+    localStorage.setItem(
+      `${checkTypes}_${check.check_name}_details`,
+      newValue.toString()
+    );
     setShowDetails(newValue);
   };
   const getLocalDateInUserTimeZone = (date: Date): string => {

@@ -24,7 +24,7 @@ import { DataGroupingConfigurationSpec } from '../../../api';
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
-import { TableReferenceComparisons } from "./TableReferenceComparisons";
+import { TableReferenceComparisons } from './TableReferenceComparisons';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -43,7 +43,7 @@ const tabs = [
   {
     label: 'Reference Table Comparisons',
     value: 'reference-comparisons'
-  },
+  }
 ];
 
 const ProfilingView = () => {
@@ -124,8 +124,6 @@ const ProfilingView = () => {
   const setNumberOfSelected2 = (param: number): void => {
     setSelected(param);
   };
-
-  console.log(selected);
 
   const doNothing = (): void => {};
   const postDataStream = async () => {
@@ -212,9 +210,7 @@ const ProfilingView = () => {
       )}
       {activeTab === 'advanced' && <TableAdvancedProfiling />}
       {activeTab === 'reference-comparisons' && (
-        <TableReferenceComparisons
-          checkTypes={checkTypes}
-        />
+        <TableReferenceComparisons checkTypes={checkTypes} />
       )}
     </div>
   );
