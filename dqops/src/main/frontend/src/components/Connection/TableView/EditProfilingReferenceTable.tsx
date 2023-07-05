@@ -573,18 +573,13 @@ export const EditProfilingReferenceTable = ({
             <thead>
               <tr>
                 <th className="text-left pr-4 py-1.5">Compared column</th>
-                <th className="text-left px-4 py-1.5">
-                  <div className="flex items-center justify-between">
-                    <span>Reference column</span>
-                    <span className="font-medium">Compare</span>
-                  </div>
-                </th>
-                <th className="text-left px-4 py-1.5">Min</th>
-                <th className="text-left px-4 py-1.5">Max</th>
-                <th className="text-left px-4 py-1.5">Sum</th>
-                <th className="text-left px-4 py-1.5">Mean</th>
-                <th className="text-left px-4 py-1.5">Null count</th>
-                <th className="text-left px-4 py-1.5">Not null count</th>
+                <th className="text-left px-4 py-1.5"></th>
+                <th className="text-center px-4 py-1.5 pr-1">Min</th>
+                <th className="text-center px-4 py-1.5 pr-1">Max</th>
+                <th className="text-center px-4 py-1.5 pr-1">Sum</th>
+                <th className="text-center px-4 py-1.5 pr-1">Mean</th>
+                <th className="text-center px-4 py-1.5 pr-1">Null count</th>
+                <th className="text-center px-4 py-1.5 pr-1">Not null count</th>
               </tr>
             </thead>
             <tbody>
@@ -602,7 +597,7 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-left px-4 py-1.5">
+                  <td className="text-center px-4 py-1.5">
                     <Checkbox
                       checked={!!item.compare_min}
                       onChange={(checked) =>
@@ -617,7 +612,7 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-left px-4 py-1.5">
+                  <td className="text-center px-4 py-1.5">
                     <Checkbox
                       checked={!!item.compare_max}
                       onChange={(checked) =>
@@ -632,7 +627,7 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-left px-4 py-1.5">
+                  <td className="text-center px-4 py-1.5">
                     <Checkbox
                       checked={!!item.compare_sum}
                       onChange={(checked) =>
@@ -647,7 +642,7 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-left px-4 py-1.5">
+                  <td className="text-center px-4 py-1.5">
                     <Checkbox
                       checked={!!item.compare_mean}
                       onChange={(checked) =>
@@ -662,7 +657,7 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-left px-4 py-1.5">
+                  <td className="text-center px-4 py-1.5">
                     <Checkbox
                       checked={!!item.compare_null_count}
                       onChange={(checked) =>
@@ -677,7 +672,7 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-left px-4 py-1.5">
+                  <td className="text-center px-4 py-1.5">
                     <Checkbox
                       checked={!!item.compare_not_null_count}
                       onChange={(checked) =>
