@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import SvgIcon from '../SvgIcon';
 import CheckListItem from './CheckListItem';
 import {
@@ -56,6 +56,13 @@ const CheckCategoriesView = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { currentJobId } = useSelector(getFirstLevelState(checkTypes));
   const job = currentJobId ? job_dictionary_state[currentJobId] : undefined;
+  const [isExtended, setIsExtended] = useState(false);
+
+  const shouldExtend = () => {
+    if (category.checks?.some((x) => x.configured === true)) {
+      setIsExtended(true);
+    }
+  };
 
   const onRunChecks = async () => {
     await onUpdate();
@@ -78,44 +85,63 @@ const CheckCategoriesView = ({
     }
   };
 
+  useEffect(() => {
+    shouldExtend();
+  }, []);
+
   return (
     <Fragment>
       <tr>
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
-          <div className="flex items-center gap-2">
-            <div className="font-semibold text-gray-700 capitalize">
-              {category.category}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="font-semibold text-gray-700 capitalize">
+                {category.category}
+              </div>
+              <div className="flex items-center">
+                {(!job ||
+                  job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+                  job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
+                  <CheckMenu
+                    onRunChecks={onRunChecks}
+                    onDeleteChecks={() => setDeleteDataDialogOpened(true)}
+                  />
+                )}
+                {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
+                  <SvgIcon
+                    name="hourglass"
+                    className="text-gray-700 h-5 cursor-pointer"
+                  />
+                )}
+                {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
+                  job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
+                  <SvgIcon
+                    name="hourglass"
+                    className="text-gray-700 h-5 cursor-pointer"
+                  />
+                )}
+              </div>
             </div>
-            <div className="flex items-center">
-              {(!job ||
-                job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-                job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-                <CheckMenu
-                  onRunChecks={onRunChecks}
-                  onDeleteChecks={() => setDeleteDataDialogOpened(true)}
-                />
-              )}
-              {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
-                <SvgIcon
-                  name="hourglass"
-                  className="text-gray-700 h-5 cursor-pointer"
-                />
-              )}
-              {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
-                job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
-                <SvgIcon
-                  name="hourglass"
-                  className="text-gray-700 h-5 cursor-pointer"
-                />
-              )}
-            </div>
+            <div> </div>
           </div>
         </td>
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
-        <td className="py-2 px-4 bg-gray-50 border-b border-t" />
+        <td className="py-2 px-4 bg-gray-50 border-b border-t">
+          <div
+            className="flex justify-end"
+            onClick={() => setIsExtended(!isExtended)}
+          >
+            {isExtended === false ? (
+              <SvgIcon name="chevron-down" className="w-5 h-5 text-gray-700" />
+            ) : (
+              <SvgIcon name="chevron-up" className="w-5 h-5 text-gray-700" />
+            )}
+          </div>
+        </td>
       </tr>
       {category.checks &&
+        isExtended &&
         category.checks.map((check, index) => (
           <CheckListItem
             check={check}
