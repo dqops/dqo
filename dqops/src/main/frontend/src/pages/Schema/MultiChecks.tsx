@@ -26,6 +26,12 @@ const tabs = [
   }
 ];
 
+interface newCheckTemplate {
+  check_category?: string;
+  check_name?: string;
+  check_target?: string;
+}
+
 export const MultiChecks = () => {
   const {
     checkTypes,
@@ -37,6 +43,7 @@ export const MultiChecks = () => {
     []
   );
   const [checkNameOptions, setCheckNameOptions] = useState<Option[]>([]);
+  const [finalOptions, setFinalOptions] = useState<Option[]>([]);
   const [checkTarget, setCheckTarget] = useState<
     'table' | 'column' | undefined
   >('table');
@@ -60,6 +67,19 @@ export const MultiChecks = () => {
       );
       const possibleCheckNames = Array.from(
         new Set(res.data.map((item) => item.check_name))
+      );
+
+      const checkTemplates: newCheckTemplate[] = res.data.map((data) => ({
+        check_category: data.check_category,
+        check_name: data.check_name,
+        check_target: data.check_target
+      }));
+
+      setFinalOptions(
+        checkTemplates.map((x) => ({
+          label: x.check_name ?? '',
+          value: x.check_category
+        }))
       );
 
       setCheckCategoryOptions(
@@ -212,6 +232,12 @@ export const MultiChecks = () => {
       )
     );
   };
+  const sortObjects = (array: Option[]): Option[] => {
+    const sortedArray = array.sort((a, b) =>
+      (a.label.toString() ?? '').localeCompare(b.label.toString() ?? '')
+    );
+    return sortedArray;
+  };
 
   const openDialog = () => {
     setOpen(true);
@@ -230,9 +256,31 @@ export const MultiChecks = () => {
       setSelectedData(selectedData.filter((item) => !isEqual(item, check)));
     } else {
       setSelectedCheck(check);
-      setOpen(true);
       setSelectedData([...selectedData, check]);
     }
+  };
+
+  const removeDuplicateOptions = (options: Option[]): Option[] => {
+    const uniqueOptions: Option[] = [];
+    const uniqueValues = new Set<string | number>();
+
+    for (const option of options) {
+      if (!uniqueValues.has(option.label as string)) {
+        uniqueValues.add(option.label as string);
+        uniqueOptions.push(option);
+      }
+    }
+
+    return uniqueOptions;
+  };
+
+  const setNewArray = (oldArray: Option[]): Option[] => {
+    const newArray: Option[] = oldArray.map((option) => ({
+      ...option,
+      value: option.label ?? ''
+    }));
+
+    return newArray;
   };
 
   return (
@@ -243,66 +291,97 @@ export const MultiChecks = () => {
         </div>
       )}
       <div className="px-8">
-        <div className="flex gap-8 mb-6">
-          <div className="flex flex-col gap-3">
-            <p>Check target</p>
-            <RadioButton
-              label="Table"
-              onClick={() => setCheckTarget(checkTarget ? 'table' : undefined)}
-              checked={checkTarget === 'table'}
-            />
-            <RadioButton
-              label="Column"
-              onClick={() => setCheckTarget(checkTarget ? 'column' : undefined)}
-              checked={checkTarget === 'column'}
-            />
+        <div className="flex w-full">
+          <div className="flex w-1/4">
+            <div className="flex flex-col gap-3 w-45">
+              <p>Check target</p>
+              <div className="flex gap-x-3 mr-2">
+                <RadioButton
+                  label="Table"
+                  onClick={() =>
+                    setCheckTarget(checkTarget ? 'table' : undefined)
+                  }
+                  checked={checkTarget === 'table'}
+                />
+                <RadioButton
+                  label="Column"
+                  onClick={() =>
+                    setCheckTarget(checkTarget ? 'column' : undefined)
+                  }
+                  checked={checkTarget === 'column'}
+                />
+              </div>
+            </div>
+            <div className="max-w-75 w-75">
+              <Select
+                label="Check category"
+                options={sortObjects(checkCategoryOptions)}
+                value={checkCategory}
+                onChange={setCheckCategory}
+              ></Select>
+            </div>
           </div>
-          <div className="w-80  ">
-            <Select
-              label="Check category"
-              options={checkCategoryOptions}
-              value={checkCategory}
-              onChange={setCheckCategory}
-            ></Select>
+          <div className="flex w-1/4 px-10">
+            <div className="max-w-120 w-120">
+              <Select
+                options={setNewArray(
+                  sortObjects(
+                    removeDuplicateOptions(
+                      finalOptions.filter((x) => x.value === checkCategory)
+                    )
+                  )
+                )}
+                label="Check name"
+                value={checkName}
+                onChange={setCheckName}
+              />
+            </div>
           </div>
         </div>
-        <div className="max-w-120">
-          <Select
-            options={checkNameOptions}
-            label="Check name"
-            value={checkName}
-            onChange={setCheckName}
-          />
-        </div>
-        <hr className="my-4 border-gray-300" />
+        <hr className="my-8 border-gray-300" />
+        <div className="flex w-full ">
+          <div className="w-1/4">
+            <div className="max-w-120">
+              <Input
+                value={tableNamePattern}
+                label="Table name"
+                placeholder="Enter table name pattern"
+                onChange={(e) => setTableNamePattern(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="w-1/4 px-10">
+            <div className="max-w-120">
+              <Input
+                value={columnNamePattern}
+                label="Column name"
+                placeholder="Enter column name pattern"
+                onChange={(e) => setColumnNamePattern(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="w-1/4 px-10">
+            <div className="max-w-120">
+              <Input
+                value={columnDataType}
+                label="Column type"
+                placeholder="Enter column type"
+                onChange={(e) => setColumnDataType(e.target.value)}
+              />
+            </div>
+          </div>
 
-        <div className="max-w-120 mb-4">
-          <Input
-            value={tableNamePattern}
-            label="Table name"
-            placeholder="Enter table name pattern"
-            onChange={(e) => setTableNamePattern(e.target.value)}
-          />
-        </div>
-        <div className="max-w-120 mb-4">
-          <Input
-            value={columnNamePattern}
-            label="Column name"
-            placeholder="Enter column name pattern"
-            onChange={(e) => setColumnNamePattern(e.target.value)}
-          />
-        </div>
-        <div className="flex items-end justify-between">
-          <div className="max-w-120">
-            <Input
-              value={columnDataType}
-              label="Column type"
-              placeholder="Enter column type"
-              onChange={(e) => setColumnDataType(e.target.value)}
+          <div className="w-1/4 flex items-end justify-end">
+            <Button
+              label="Search"
+              color={checkName ? 'primary' : 'secondary'}
+              onClick={() => {
+                if (checkName !== undefined) {
+                  searchChecks();
+                }
+              }}
             />
           </div>
-
-          <Button label="Search" color="primary" onClick={searchChecks} />
         </div>
 
         <div className="border border-gray-300 rounded-lg p-4 my-4">
