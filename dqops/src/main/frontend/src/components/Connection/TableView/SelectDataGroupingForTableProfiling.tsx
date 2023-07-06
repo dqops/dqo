@@ -20,7 +20,6 @@ type SelectDataGroupingForTableProps = {
 };
 
 export const SelectDataGroupingForTableProfiling = ({
-  className,
   dataGroupingConfiguration,
   title,
   isExtended

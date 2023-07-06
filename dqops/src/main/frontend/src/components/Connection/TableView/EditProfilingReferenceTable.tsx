@@ -250,7 +250,7 @@ export const EditProfilingReferenceTable = ({
         reference?.reference_table_configuration_name ?? '',
         data
       )
-        .then((res) => {
+        .then(() => {
           onBack();
         })
         .catch((err) => {
@@ -268,7 +268,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -285,7 +285,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -304,7 +304,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -321,7 +321,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -417,32 +417,6 @@ export const EditProfilingReferenceTable = ({
         <p className="text-center mb-7">
           Table comparison will use these data grouping configurations:
         </p>
-
-        {/* <div className="grid grid-cols-2 gap-4 mb-5">
-          <div className="flex gap-3 items-center">
-            <span>Compared table:</span>
-            <Input value={reference?.compared_table_grouping_name} />
-          </div>
-          <div className="flex gap-3 items-center">
-            <span>Reference table:</span>
-            <Input value={reference?.reference_table_grouping_name} />
-          </div>
-        </div> */}
-
-        {/* <div className="grid grid-cols-2 gap-4">
-          <div className="flex gap-3 items-center justify-center">
-            <div className="flex flex-col gap-y-3">
-              <span>Data grouping on compared table</span>
-              <span className="ml-2">id </span>
-            </div>
-          </div>
-          <div className="flex gap-3 items-center justify-center">
-            <div className="flex flex-col gap-y-3">
-              <span>Data grouping on reference table</span>
-              <span className="ml-2">id </span>
-            </div>
-          </div>
-        </div> */}
 
         <div className="flex gap-4 mb-8">
           <div>
