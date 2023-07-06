@@ -40,7 +40,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     connection,
     schema,
     table,
-    tab: activeTab,
     checkTypes
   }: {
     connection: string;
@@ -64,9 +63,8 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
       connection,
       schema,
       table,
-      'statistics'
+      'detail'
     );
-    console.log(url);
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
     console.log(url);
     if (defaultTab) {
@@ -120,7 +118,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
           : 'detail';
       url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
     }
-    console.log(url);
     dispatch(
       addFirstLevelTab(item.value, {
         url,
@@ -129,7 +126,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         label: table
       })
     );
-    console.log(url);
     history.push(url);
   };
 
