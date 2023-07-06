@@ -19,9 +19,9 @@ import {
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
 import Select, { Option } from '../../Select';
-import { SelectDataGroupingForTable } from './SelectDataGroupingForTable';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { SelectDataGroupingForTableProfiling } from './SelectDataGroupingForTableProfiling';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -429,7 +429,7 @@ export const EditProfilingReferenceTable = ({
           </div>
         </div> */}
 
-        <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-2 gap-4 mb-5">
           <div className="flex gap-3 items-center justify-center">
             <span>Data grouping on compared table</span>
           </div>
@@ -438,37 +438,41 @@ export const EditProfilingReferenceTable = ({
           </div>
         </div>
         <div
-          className="flex items-center gap-x-2"
+          className="flex items-center  mb-5   "
           onClick={() => setIsExtended(!isExtended)}
         >
           {isExtended === false ? (
-            <SvgIcon name="chevron-right" className="w-5 h-5 text-gray-700" />
+            <SvgIcon
+              name="chevron-right"
+              className="w-5 h-5 text-gray-700 cursor-pointer"
+            />
           ) : (
-            <SvgIcon name="chevron-down" className="w-5 h-5 text-gray-700" />
+            <SvgIcon
+              name="chevron-down"
+              className="w-5 h-5 text-gray-700 cursor-pointer"
+            />
           )}
-          Data grouping name
+          <span className="cursor-pointer">Data grouping name</span>
         </div>
         {isExtended === true && (
           <div className="flex gap-4 mb-8">
-            <div className="mt-26 mr-20">
+            <div className="mt-10">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
                 <div key={index} className="text-sm py-1.5">
                   Grouping dimension level {item}
                 </div>
               ))}
             </div>
-            <SelectDataGroupingForTable
+            <SelectDataGroupingForTableProfiling
               className="flex-1"
-              title="Data grouping on compared table"
+              title=""
               dataGroupingConfigurations={dataGroupingConfigurations}
               dataGroupingConfiguration={dataGroupingConfiguration}
               setDataGroupingConfiguration={setDataGroupingConfiguration}
               goToCreateNew={goToCreateNew}
             />
-            <div className="flex flex-col justify-center">
-              <SvgIcon name="not-equal" className="w-6 h-6 text-red-700" />
-            </div>
-            <SelectDataGroupingForTable
+
+            <SelectDataGroupingForTableProfiling
               className="flex-1"
               title="Data grouping on reference table"
               dataGroupingConfigurations={refDataGroupingConfigurations}
@@ -478,53 +482,51 @@ export const EditProfilingReferenceTable = ({
             />
           </div>
         )}
-        {isExtended === true && (
-          <div className="px-4">
-            <p>Default thresholds for differences(percent):</p>
-            <div className="grid grid-cols-3 mb-5 mt-3">
-              <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
-                <span className="flex-1">
-                  Warning when the difference above:
-                </span>
-                <Input
-                  className="max-w-30 !min-w-initial"
-                  type="number"
-                  value={
-                    reference?.default_compare_thresholds
-                      ?.warning_difference_percent
-                  }
-                />
-                %
-              </div>
-              <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
-                <span className="flex-1">Error when the difference above:</span>
-                <Input
-                  className="max-w-30 !min-w-initial"
-                  type="number"
-                  value={
-                    reference?.default_compare_thresholds
-                      ?.error_difference_percent
-                  }
-                />
-                %
-              </div>
-              <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
-                <span className="flex-1">
-                  Fatal Error when the difference above:
-                </span>
-                <Input
-                  className="max-w-30 !min-w-initial"
-                  type="number"
-                  value={
-                    reference?.default_compare_thresholds
-                      ?.fatal_difference_percent
-                  }
-                />
-                %
-              </div>
+
+        <div className="px-4">
+          <p>Default thresholds for differences(percent):</p>
+          <div className="grid grid-cols-3 mb-5 mt-3">
+            <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
+              <span className="flex-1">Warning when the difference above:</span>
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={
+                  reference?.default_compare_thresholds
+                    ?.warning_difference_percent
+                }
+              />
+              %
+            </div>
+            <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
+              <span className="flex-1">Error when the difference above:</span>
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={
+                  reference?.default_compare_thresholds
+                    ?.error_difference_percent
+                }
+              />
+              %
+            </div>
+            <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
+              <span className="flex-1">
+                Fatal Error when the difference above:
+              </span>
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={
+                  reference?.default_compare_thresholds
+                    ?.fatal_difference_percent
+                }
+              />
+              %
             </div>
           </div>
-        )}
+        </div>
+
         <SectionWrapper
           title="Table level comparison"
           className="mb-10 px-0 mt-10"
