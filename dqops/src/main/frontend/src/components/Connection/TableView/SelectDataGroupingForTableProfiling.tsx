@@ -4,11 +4,8 @@ import {
   DataGroupingConfigurationSpec,
   DataGroupingDimensionSpecSourceEnum
 } from '../../../api';
-import Select from '../../Select';
-import Button from '../../Button';
+
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
-import clsx from 'clsx';
-import { useHistory } from 'react-router-dom';
 
 type SelectDataGroupingForTableProps = {
   title: string;
@@ -19,24 +16,17 @@ type SelectDataGroupingForTableProps = {
     value?: DataGroupingConfigurationBasicModel
   ) => void;
   goToCreateNew: () => void;
+  isExtended: boolean;
 };
 
 export const SelectDataGroupingForTableProfiling = ({
-  title,
   className,
-  dataGroupingConfigurations,
   dataGroupingConfiguration,
-  setDataGroupingConfiguration,
-  goToCreateNew
+  title,
+  isExtended
 }: SelectDataGroupingForTableProps) => {
   const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
     useState<DataGroupingConfigurationSpec>();
-  const history = useHistory();
-
-  const dataGroupOptions = dataGroupingConfigurations.map((item) => ({
-    label: item.data_grouping_configuration_name ?? '',
-    value: item.data_grouping_configuration_name ?? ''
-  }));
 
   useEffect(() => {
     if (dataGroupingConfiguration) {
@@ -50,14 +40,6 @@ export const SelectDataGroupingForTableProfiling = ({
       });
     }
   }, [dataGroupingConfiguration]);
-
-  const handleChange = (value: string) => {
-    const newDataGrouping = dataGroupingConfigurations.find(
-      (item) => item.data_grouping_configuration_name === value
-    );
-
-    setDataGroupingConfiguration(newDataGrouping);
-  };
 
   const values = {
     [DataGroupingDimensionSpecSourceEnum.tag]: 'Tag',
@@ -77,36 +59,46 @@ export const SelectDataGroupingForTableProfiling = ({
   };
 
   return (
-    <table className="w-full">
-      <thead>
-        <tr>
-          <th className="text-left py-1.5">Type</th>
-          <th className="text-left py-1.5">Column / Static value(tag)</th>
-        </tr>
+    <table className="w-full ml-44">
+      <thead className="h-25">
+        <div className="flex">
+          <div className="flex flex-col gap-y-3 mb-5">
+            <span>{title}</span>
+            <span className="ml-2">id </span>
+          </div>
+        </div>
+        {isExtended === true && (
+          <tr>
+            <th className="text-left py-1.5 ">Type</th>
+            <th className="text-left py-1.5">Column / Static value(tag)</th>
+          </tr>
+        )}
       </thead>
-      <tbody>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
-          const level = getDataGroupingDimensionLevel(index);
-          return (
-            <tr key={index}>
-              <td className="py-1.5">
-                {level?.source ? values[level?.source] : 'None'}
-              </td>
-              <td className="py-1.5">
-                <div>
-                  {level?.source === DataGroupingDimensionSpecSourceEnum.tag &&
-                    level?.tag}
-                </div>
-                <div>
-                  {level?.source ===
-                    DataGroupingDimensionSpecSourceEnum.column_value &&
-                    level?.column}
-                </div>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
+      {isExtended && (
+        <tbody>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
+            const level = getDataGroupingDimensionLevel(index);
+            return (
+              <tr key={index}>
+                <td className="py-1.5">
+                  {level?.source ? values[level?.source] : 'None'}
+                </td>
+                <td className="py-1.5">
+                  <div>
+                    {level?.source ===
+                      DataGroupingDimensionSpecSourceEnum.tag && level?.tag}
+                  </div>
+                  <div>
+                    {level?.source ===
+                      DataGroupingDimensionSpecSourceEnum.column_value &&
+                      level?.column}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      )}
     </table>
   );
 };

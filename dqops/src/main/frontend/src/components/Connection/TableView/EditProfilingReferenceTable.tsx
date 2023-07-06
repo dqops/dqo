@@ -429,59 +429,71 @@ export const EditProfilingReferenceTable = ({
           </div>
         </div> */}
 
-        <div className="grid grid-cols-2 gap-4 mb-5">
+        {/* <div className="grid grid-cols-2 gap-4">
           <div className="flex gap-3 items-center justify-center">
-            <span>Data grouping on compared table</span>
-          </div>
-          <div className="flex gap-3 items-center justify-center">
-            <span>Data grouping on reference table</span>
-          </div>
-        </div>
-        <div
-          className="flex items-center  mb-5   "
-          onClick={() => setIsExtended(!isExtended)}
-        >
-          {isExtended === false ? (
-            <SvgIcon
-              name="chevron-right"
-              className="w-5 h-5 text-gray-700 cursor-pointer"
-            />
-          ) : (
-            <SvgIcon
-              name="chevron-down"
-              className="w-5 h-5 text-gray-700 cursor-pointer"
-            />
-          )}
-          <span className="cursor-pointer">Data grouping name</span>
-        </div>
-        {isExtended === true && (
-          <div className="flex gap-4 mb-8">
-            <div className="mt-10">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-                <div key={index} className="text-sm py-1.5">
-                  Grouping dimension level {item}
-                </div>
-              ))}
+            <div className="flex flex-col gap-y-3">
+              <span>Data grouping on compared table</span>
+              <span className="ml-2">id </span>
             </div>
-            <SelectDataGroupingForTableProfiling
-              className="flex-1"
-              title=""
-              dataGroupingConfigurations={dataGroupingConfigurations}
-              dataGroupingConfiguration={dataGroupingConfiguration}
-              setDataGroupingConfiguration={setDataGroupingConfiguration}
-              goToCreateNew={goToCreateNew}
-            />
-
-            <SelectDataGroupingForTableProfiling
-              className="flex-1"
-              title="Data grouping on reference table"
-              dataGroupingConfigurations={refDataGroupingConfigurations}
-              dataGroupingConfiguration={refDataGroupingConfiguration}
-              setDataGroupingConfiguration={setRefDataGroupingConfiguration}
-              goToCreateNew={goToRefCreateNew}
-            />
           </div>
-        )}
+          <div className="flex gap-3 items-center justify-center">
+            <div className="flex flex-col gap-y-3">
+              <span>Data grouping on reference table</span>
+              <span className="ml-2">id </span>
+            </div>
+          </div>
+        </div> */}
+
+        <div className="flex gap-4 mb-8">
+          <div>
+            <div
+              className="flex h-25 w-40"
+              onClick={() => setIsExtended(!isExtended)}
+            >
+              {isExtended === false ? (
+                <SvgIcon
+                  name="chevron-right"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
+                />
+              ) : (
+                <SvgIcon
+                  name="chevron-down"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
+                />
+              )}
+              <span className="cursor-pointer">Data grouping name</span>
+            </div>
+            {isExtended === true && (
+              <div>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                  <div key={index} className="text-sm py-1.5 w-44">
+                    Grouping dimension level {item}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <SelectDataGroupingForTableProfiling
+            className="flex-1"
+            title="Data grouping on compared table"
+            dataGroupingConfigurations={dataGroupingConfigurations}
+            dataGroupingConfiguration={dataGroupingConfiguration}
+            setDataGroupingConfiguration={setDataGroupingConfiguration}
+            goToCreateNew={goToCreateNew}
+            isExtended={isExtended}
+          />
+
+          <SelectDataGroupingForTableProfiling
+            className="flex-1"
+            title="Data grouping on reference table"
+            dataGroupingConfigurations={refDataGroupingConfigurations}
+            dataGroupingConfiguration={refDataGroupingConfiguration}
+            setDataGroupingConfiguration={setRefDataGroupingConfiguration}
+            goToCreateNew={goToRefCreateNew}
+            isExtended={isExtended}
+          />
+        </div>
 
         <div className="px-4">
           <p>Default thresholds for differences(percent):</p>
