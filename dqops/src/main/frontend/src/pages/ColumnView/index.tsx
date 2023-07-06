@@ -3,19 +3,21 @@ import { useHistory, useParams } from 'react-router-dom';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import ColumnDetails from './ColumnDetails';
-import { useTree } from '../../contexts/treeContext';
 import ColumnCommentsView from './ColumnCommentsView';
 import ColumnLabelsView from './ColumnLabelsView';
 import ColumnRecurringChecksView from './ColumnRecurringChecksView';
 import ColumnProfilingView from './ColumnProfilingChecksView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import ConnectionLayout from "../../components/ConnectionLayout";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
-import ColumnNavigation from "../../components/ColumnNavigation";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { setActiveFirstLevelUrl } from "../../redux/actions/source.actions";
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import ConnectionLayout from '../../components/ConnectionLayout';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
+import ColumnNavigation from '../../components/ColumnNavigation';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 
 const initTabs = [
   {
@@ -33,11 +35,24 @@ const initTabs = [
 ];
 
 const ColumnView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, column: string, tab: string, checkTypes: CheckTypes } = useParams();
+  const {
+    connection: connectionName,
+    schema: schemaName,
+    table: tableName,
+    column: columnName,
+    tab: activeTab,
+    checkTypes
+  }: {
+    connection: string;
+    schema: string;
+    table: string;
+    column: string;
+    tab: string;
+    checkTypes: CheckTypes;
+  } = useParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();
-  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const {
     isUpdatedColumnBasic,
     isUpdatedComments,
@@ -48,12 +63,20 @@ const ColumnView = () => {
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks
   } = useSelector(getFirstLevelState(checkTypes));
-  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.RECURRING, [checkTypes]);
-  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.PARTITIONED, [checkTypes]);
-  const isProfilingCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
-  const showAllSubTabs =(
-    () => !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly
+  const isRecurringOnly = useMemo(
+    () => checkTypes === CheckTypes.RECURRING,
+    [checkTypes]
   );
+  const isPartitionCheckOnly = useMemo(
+    () => checkTypes === CheckTypes.PARTITIONED,
+    [checkTypes]
+  );
+  const isProfilingCheckOnly = useMemo(
+    () => checkTypes === CheckTypes.PROFILING,
+    [checkTypes]
+  );
+  const showAllSubTabs = () =>
+    !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly;
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
@@ -63,10 +86,26 @@ const ColumnView = () => {
       setActiveFirstLevelUrl(
         checkTypes,
         firstLevelActiveTab,
-        ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, columnName, tab)
+        ROUTES.COLUMN_LEVEL_PAGE(
+          checkTypes,
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          tab
+        )
       )
     );
-    history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, columnName, tab));
+    history.push(
+      ROUTES.COLUMN_LEVEL_PAGE(
+        checkTypes,
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        tab
+      )
+    );
   };
 
   useEffect(() => {
@@ -113,8 +152,7 @@ const ColumnView = () => {
         item.value === 'recurring'
           ? {
               ...item,
-              isUpdated:
-                isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
+              isUpdated: isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
             }
           : item
       )
@@ -158,7 +196,7 @@ const ColumnView = () => {
     if (activeTab === 'detail') {
       return 'Data source configuration for ';
     }
-    return ''
+    return '';
   }, [isProfilingCheckOnly, isRecurringOnly, isPartitionCheckOnly, activeTab]);
 
   return (
@@ -171,12 +209,8 @@ const ColumnView = () => {
           </div>
         </div>
         <ColumnNavigation />
-        {isRecurringOnly && (
-          <ColumnRecurringChecksView />
-        )}
-        {isPartitionCheckOnly && (
-          <ColumnPartitionedChecksView />
-        )}
+        {isRecurringOnly && <ColumnRecurringChecksView />}
+        {isPartitionCheckOnly && <ColumnPartitionedChecksView />}
         {isProfilingCheckOnly && (
           <ColumnProfilingView
             connectionName={connectionName}
