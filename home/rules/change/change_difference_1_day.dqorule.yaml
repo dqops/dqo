@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 1
+    historic_data_point_grouping: day
+  fields:
+  - field_name: max_difference
+    display_name: max_difference
+    help_text: Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
+      \ searches for the most recent sensor readouts from the past 60 days and compares\
+      \ them. If the parameter is selected (exact_day: true), the rule compares only\
+      \ with the results from the past 1 day. If no results are found from that time,\
+      \ no results or errors will be generated."
+    data_type: boolean
+    sample_values:
+    - "false"

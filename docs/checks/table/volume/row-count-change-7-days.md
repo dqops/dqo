@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_change_7_days|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change_7_days](../../../../reference/rules/Change/#within-change-7-days)|
+|row_count_change_7_days|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -42,14 +42,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_c
     volume:
       row_count_change_7_days:
         warning:
-          max_within: 10.0
-          exact: false
+          max_percent: 5.0
+          exact_day: false
         error:
-          max_within: 10.0
-          exact: false
+          max_percent: 5.0
+          exact_day: false
         fatal:
-          max_within: 10.0
-          exact: false
+          max_percent: 5.0
+          exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-22"
@@ -67,14 +67,14 @@ spec:
     volume:
       row_count_change_7_days:
         warning:
-          max_within: 10.0
-          exact: false
+          max_percent: 5.0
+          exact_day: false
         error:
-          max_within: 10.0
-          exact: false
+          max_percent: 5.0
+          exact_day: false
         fatal:
-          max_within: 10.0
-          exact: false
+          max_percent: 5.0
+          exact_day: false
   columns:
     col_event_timestamp:
       labels:
@@ -292,14 +292,14 @@ spec:
         volume:
           row_count_change_7_days:
             warning:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
             error:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
             fatal:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
       columns:
         col_event_timestamp:
           labels:
@@ -529,7 +529,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_change_7_days|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change_7_days](../../../../reference/rules/Change/#within-change-7-days)|
+|daily_row_count_change_7_days|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -560,14 +560,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
       volume:
         daily_row_count_change_7_days:
           warning:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           error:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           fatal:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-23"
@@ -586,14 +586,14 @@ spec:
       volume:
         daily_row_count_change_7_days:
           warning:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           error:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           fatal:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
   columns:
     col_event_timestamp:
       labels:
@@ -812,14 +812,14 @@ spec:
           volume:
             daily_row_count_change_7_days:
               warning:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               error:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               fatal:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
       columns:
         col_event_timestamp:
           labels:
@@ -1049,7 +1049,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_change_7_days|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change_7_days](../../../../reference/rules/Change/#within-change-7-days)|
+|daily_partition_row_count_change_7_days|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1080,14 +1080,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
       volume:
         daily_partition_row_count_change_7_days:
           warning:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           error:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           fatal:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-23"
@@ -1106,14 +1106,14 @@ spec:
       volume:
         daily_partition_row_count_change_7_days:
           warning:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           error:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
           fatal:
-            max_within: 10.0
-            exact: false
+            max_percent: 5.0
+            exact_day: false
   columns:
     col_event_timestamp:
       labels:
@@ -1336,14 +1336,14 @@ spec:
           volume:
             daily_partition_row_count_change_7_days:
               warning:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               error:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               fatal:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
       columns:
         col_event_timestamp:
           labels:

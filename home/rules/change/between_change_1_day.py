@@ -23,7 +23,7 @@ import numpy as np
 class BetweenChange1DayRuleParametersSpec:
     from_: float
     to: float
-    exact: bool = False
+    exact_day: bool = False
 
     def __getattr__(self, name):
         if name == "from":
@@ -73,7 +73,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     past_readouts = rule_parameters.previous_readouts
-    if rule_parameters.parameters.exact:
+    if rule_parameters.parameters.exact_day:
         last_readout = past_readouts[-1]
         if last_readout is None:
             return RuleExecutionResult(True, None, None, None)

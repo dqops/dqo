@@ -165,6 +165,6 @@ public class ColumnAnomalySum30DaysCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Validity;
+        return DefaultDataQualityDimensions.Consistency;
     }
 }

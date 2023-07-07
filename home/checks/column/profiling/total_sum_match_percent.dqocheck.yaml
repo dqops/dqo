@@ -4,5 +4,5 @@ kind: check
 spec:
   sensor_name: column/accuracy/total_sum_match_percent
   rule_name: comparison/diff_percent
-  help_text: Verifies that percentage of the difference in sum of a column in a table
-    and sum of a column of another table does not exceed the set number.
+  help_text: Verifies that percentage of the difference in total sum of a column in
+    a table and total sum of a column of another table does not exceed the set number.
