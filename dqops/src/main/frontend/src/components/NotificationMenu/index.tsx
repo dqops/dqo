@@ -17,6 +17,20 @@ import ErrorItem from './ErrorItem';
 import moment from 'moment';
 import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
+import {
+  DqoJobChangeModel,
+  DqoJobChangeModelStatusEnum,
+  DqoJobEntryParametersModel
+} from '../../api';
+
+interface jobInterface {
+  id: string;
+  jobType: string;
+  parameters: DqoJobEntryParametersModel;
+  status: DqoJobChangeModelStatusEnum;
+  stasusChangedAt: string;
+  childs: DqoJobChangeModel[];
+}
 
 const NotificationMenu = () => {
   const { job_dictionary_state, isOpen, isCronScheduled } = useSelector(
@@ -94,6 +108,8 @@ const NotificationMenu = () => {
       scheduleCron(true);
     }
   };
+
+  console.log(typeof job_dictionary_state);
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
