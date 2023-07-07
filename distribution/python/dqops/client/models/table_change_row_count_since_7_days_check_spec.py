@@ -10,9 +10,9 @@ if TYPE_CHECKING:
     from ..models.table_volume_row_count_sensor_parameters_spec import (
         TableVolumeRowCountSensorParametersSpec,
     )
-    from ..models.within_change_7_days_rule_parameters_spec import (
-        WithinChange7DaysRuleParametersSpec,
-    )
+    from ..models.change_percent_7_days_rule_10_parameters_spec import ChangePercent7DaysRule10ParametersSpec
+    from ..models.change_percent_7_days_rule_20_parameters_spec import ChangePercent7DaysRule20ParametersSpec
+    from ..models.change_percent_7_days_rule_50_parameters_spec import ChangePercent7DaysRule50ParametersSpec
 
 
 T = TypeVar("T", bound="TableChangeRowCountSince7DaysCheckSpec")
@@ -44,9 +44,9 @@ class TableChangeRowCountSince7DaysCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
-        warning (Union[Unset, WithinChange7DaysRuleParametersSpec]):
-        error (Union[Unset, WithinChange7DaysRuleParametersSpec]):
-        fatal (Union[Unset, WithinChange7DaysRuleParametersSpec]):
+        warning (Union[Unset, ChangePercent7DaysRule10ParametersSpec]):
+        error (Union[Unset, ChangePercent7DaysRule20ParametersSpec]):
+        fatal (Union[Unset, ChangePercent7DaysRule50ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -58,9 +58,9 @@ class TableChangeRowCountSince7DaysCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "WithinChange7DaysRuleParametersSpec"] = UNSET
-    error: Union[Unset, "WithinChange7DaysRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "WithinChange7DaysRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "ChangePercent7DaysRule10ParametersSpec"] = UNSET
+    error: Union[Unset, "ChangePercent7DaysRule20ParametersSpec"] = UNSET
+    fatal: Union[Unset, "ChangePercent7DaysRule50ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -135,9 +135,9 @@ class TableChangeRowCountSince7DaysCheckSpec:
         from ..models.table_volume_row_count_sensor_parameters_spec import (
             TableVolumeRowCountSensorParametersSpec,
         )
-        from ..models.within_change_7_days_rule_parameters_spec import (
-            WithinChange7DaysRuleParametersSpec,
-        )
+        from ..models.change_percent_7_days_rule_10_parameters_spec import ChangePercent7DaysRule10ParametersSpec
+        from ..models.change_percent_7_days_rule_20_parameters_spec import ChangePercent7DaysRule20ParametersSpec
+        from ..models.change_percent_7_days_rule_50_parameters_spec import ChangePercent7DaysRule50ParametersSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
@@ -174,25 +174,25 @@ class TableChangeRowCountSince7DaysCheckSpec:
             parameters = TableVolumeRowCountSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, WithinChange7DaysRuleParametersSpec]
+        warning: Union[Unset, ChangePercent7DaysRule10ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = WithinChange7DaysRuleParametersSpec.from_dict(_warning)
+            warning = ChangePercent7DaysRule10ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, WithinChange7DaysRuleParametersSpec]
+        error: Union[Unset, ChangePercent7DaysRule20ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = WithinChange7DaysRuleParametersSpec.from_dict(_error)
+            error = ChangePercent7DaysRule20ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, WithinChange7DaysRuleParametersSpec]
+        fatal: Union[Unset, ChangePercent7DaysRule50ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = WithinChange7DaysRuleParametersSpec.from_dict(_fatal)
+            fatal = ChangePercent7DaysRule50ParametersSpec.from_dict(_fatal)
 
         table_change_row_count_since_7_days_check_spec = cls(
             schedule_override=schedule_override,

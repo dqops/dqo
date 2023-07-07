@@ -20,7 +20,7 @@ from typing import Sequence
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinPercentChange30DaysRuleParametersSpec:
-    max_percent_within: float
+    max_percent: float
     exact_day: bool = False
 
 
@@ -78,8 +78,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
             return RuleExecutionResult(True, None, None, None)
         previous_readout = filtered_readouts[-1]
 
-    lower_bound = previous_readout - abs(previous_readout) * (rule_parameters.parameters.max_percent_within / 100.0)
-    upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = previous_readout - abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
+    upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
 
     passed = lower_bound <= rule_parameters.actual_value <= upper_bound
     expected_value = previous_readout

@@ -28,13 +28,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last week.
+ * Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to yesterday.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class WithinPercentChange7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<WithinPercentChange7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class ChangePercent1DayRule20ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ChangePercent1DayRule20ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -43,15 +43,15 @@ public class WithinPercentChange7DaysRuleParametersSpec extends AbstractRulePara
     /**
      * Default constructor.
      */
-    public WithinPercentChange7DaysRuleParametersSpec() {
+    public ChangePercent1DayRule20ParametersSpec() {
     }
 
-    @JsonPropertyDescription("Absolute value of the maximal accepted change relative to the previous readout (inclusive).")
+    @JsonPropertyDescription("Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).")
     @SampleValues(values = "5")
-    private Double maxPercentWithin;
+    private Double maxPercent = 20.0;
 
-    @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. " +
-            "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.")
+    @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. " +
+            "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
     @SampleValues(values = "false")
     private Boolean exactDay = false;
 
@@ -59,21 +59,21 @@ public class WithinPercentChange7DaysRuleParametersSpec extends AbstractRulePara
      * Gets the maximal accepted absolute value of the change of data quality check readout, relative to the previous readout.
      * @return Maximal accepted absolute value of data quality check readout's change, relative to the previous readout.
      */
-    public Double getMaxPercentWithin() {
-        return maxPercentWithin;
+    public Double getMaxPercent() {
+        return maxPercent;
     }
 
     /**
      * Changes the relative accepted bound for a data quality readout's change.
-     * @param maxPercentWithin New relative accepted bound percent.
+     * @param maxPercent New relative accepted bound percent.
      */
-    public void setMaxPercentWithin(Double maxPercentWithin) {
-        this.setDirtyIf(!Objects.equals(this.maxPercentWithin, maxPercentWithin));
-        this.maxPercentWithin = maxPercentWithin;
+    public void setMaxPercent(Double maxPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxPercent, maxPercent));
+        this.maxPercent = maxPercent;
     }
 
     /**
-     * Gets the flag that makes the rule abstain from searching for the latest readout if there was no readout on the same day last week.
+     * Gets the flag that makes the rule abstain from searching for the latest readout if there was no readout on the previous day.
      * @return Flag <code>exactDay</code>'s value.
      */
     public Boolean getExactDay() {
@@ -81,7 +81,7 @@ public class WithinPercentChange7DaysRuleParametersSpec extends AbstractRulePara
     }
 
     /**
-     * Set the flag that makes the rule abstain from searching for the latest readout if there was no readout on the same day last week.
+     * Set the flag that makes the rule abstain from searching for the latest readout if there was no readout on the previous day.
      * @param exactDay New flag <code>exactDay</code>'s value.
      */
     public void setExactDay(Boolean exactDay) {
@@ -105,6 +105,6 @@ public class WithinPercentChange7DaysRuleParametersSpec extends AbstractRulePara
      */
     @Override
     public String getRuleDefinitionName() {
-        return "change/within_percent_change_7_days";
+        return "change/change_percent_1_day";
     }
 }

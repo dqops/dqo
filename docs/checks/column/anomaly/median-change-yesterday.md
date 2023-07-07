@@ -12,7 +12,7 @@ Verifies that the median in a column changed in a fixed rate since last readout 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|median_change_yesterday|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
+|median_change_yesterday|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -44,13 +44,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=median_chan
             parameters:
               percentile_value: 0.5
             warning:
-              max_within: 10.0
+              max_percent: 5.0
               exact_day: false
             error:
-              max_within: 10.0
+              max_percent: 5.0
               exact_day: false
             fatal:
-              max_within: 10.0
+              max_percent: 5.0
               exact_day: false
 ```
 **Sample configuration (Yaml)**  
@@ -73,13 +73,13 @@ spec:
             parameters:
               percentile_value: 0.5
             warning:
-              max_within: 10.0
+              max_percent: 5.0
               exact_day: false
             error:
-              max_within: 10.0
+              max_percent: 5.0
               exact_day: false
             fatal:
-              max_within: 10.0
+              max_percent: 5.0
               exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
@@ -347,13 +347,13 @@ spec:
                 parameters:
                   percentile_value: 0.5
                 warning:
-                  max_within: 10.0
+                  max_percent: 5.0
                   exact_day: false
                 error:
-                  max_within: 10.0
+                  max_percent: 5.0
                   exact_day: false
                 fatal:
-                  max_within: 10.0
+                  max_percent: 5.0
                   exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
@@ -622,7 +622,7 @@ Verifies that the median in a column changed in a fixed rate since last readout 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_change_yesterday|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
+|daily_median_change_yesterday|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -655,13 +655,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               error:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
 ```
 **Sample configuration (Yaml)**  
@@ -685,13 +685,13 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               error:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
@@ -960,13 +960,13 @@ spec:
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                     exact_day: false
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                     exact_day: false
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
                     exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
@@ -1235,7 +1235,7 @@ Verifies that the median in a column changed in a fixed rate since last readout 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_median_change_yesterday|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change_1_day](../../../../reference/rules/Change/#within-change-1-day)|
+|daily_partition_median_change_yesterday|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1268,13 +1268,13 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               error:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
 ```
 **Sample configuration (Yaml)**  
@@ -1298,13 +1298,13 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               error:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
                 exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
@@ -1573,13 +1573,13 @@ spec:
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                     exact_day: false
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                     exact_day: false
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
                     exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues

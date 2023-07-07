@@ -33,8 +33,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class WithinPercentChange1DayRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<WithinPercentChange1DayRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class ChangePercent1DayRule50ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ChangePercent1DayRule50ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -43,12 +43,12 @@ public class WithinPercentChange1DayRuleParametersSpec extends AbstractRuleParam
     /**
      * Default constructor.
      */
-    public WithinPercentChange1DayRuleParametersSpec() {
+    public ChangePercent1DayRule50ParametersSpec() {
     }
 
-    @JsonPropertyDescription("Absolute value of the maximal accepted change relative to the previous readout (inclusive).")
+    @JsonPropertyDescription("Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).")
     @SampleValues(values = "5")
-    private Double maxPercentWithin;
+    private Double maxPercent = 50.0;
 
     @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. " +
             "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
@@ -59,17 +59,17 @@ public class WithinPercentChange1DayRuleParametersSpec extends AbstractRuleParam
      * Gets the maximal accepted absolute value of the change of data quality check readout, relative to the previous readout.
      * @return Maximal accepted absolute value of data quality check readout's change, relative to the previous readout.
      */
-    public Double getMaxPercentWithin() {
-        return maxPercentWithin;
+    public Double getMaxPercent() {
+        return maxPercent;
     }
 
     /**
      * Changes the relative accepted bound for a data quality readout's change.
-     * @param maxPercentWithin New relative accepted bound percent.
+     * @param maxPercent New relative accepted bound percent.
      */
-    public void setMaxPercentWithin(Double maxPercentWithin) {
-        this.setDirtyIf(!Objects.equals(this.maxPercentWithin, maxPercentWithin));
-        this.maxPercentWithin = maxPercentWithin;
+    public void setMaxPercent(Double maxPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxPercent, maxPercent));
+        this.maxPercent = maxPercent;
     }
 
     /**
@@ -105,6 +105,6 @@ public class WithinPercentChange1DayRuleParametersSpec extends AbstractRuleParam
      */
     @Override
     public String getRuleDefinitionName() {
-        return "change/within_percent_change_1_day";
+        return "change/change_percent_1_day";
     }
 }

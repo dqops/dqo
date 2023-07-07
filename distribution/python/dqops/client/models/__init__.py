@@ -1601,14 +1601,18 @@ from .update_table_scheduling_group_override_scheduling_group import (
     UpdateTableSchedulingGroupOverrideSchedulingGroup,
 )
 from .value_changed_parameters_spec import ValueChangedParametersSpec
-from .within_change_1_day_rule_parameters_spec import WithinChange1DayRuleParametersSpec
-from .within_change_7_days_rule_parameters_spec import (
-    WithinChange7DaysRuleParametersSpec,
-)
-from .within_change_30_days_rule_parameters_spec import (
-    WithinChange30DaysRuleParametersSpec,
-)
-from .within_change_rule_parameters_spec import WithinChangeRuleParametersSpec
+from .change_percent_1_day_rule_10_parameters_spec import ChangePercent1DayRule10ParametersSpec
+from .change_percent_1_day_rule_20_parameters_spec import ChangePercent1DayRule20ParametersSpec
+from .change_percent_1_day_rule_50_parameters_spec import ChangePercent1DayRule50ParametersSpec
+from .change_percent_7_days_rule_10_parameters_spec import ChangePercent7DaysRule10ParametersSpec
+from .change_percent_7_days_rule_20_parameters_spec import ChangePercent7DaysRule20ParametersSpec
+from .change_percent_7_days_rule_50_parameters_spec import ChangePercent7DaysRule50ParametersSpec
+from .change_percent_30_days_rule_10_parameters_spec import ChangePercent30DaysRule10ParametersSpec
+from .change_percent_30_days_rule_20_parameters_spec import ChangePercent30DaysRule20ParametersSpec
+from .change_percent_30_days_rule_50_parameters_spec import ChangePercent30DaysRule50ParametersSpec
+from .change_percent_rule_10_parameters_spec import ChangePercentRule10ParametersSpec
+from .change_percent_rule_20_parameters_spec import ChangePercentRule20ParametersSpec
+from .change_percent_rule_50_parameters_spec import ChangePercentRule50ParametersSpec
 
 __all__ = (
     "AllChecksPatchParameters",
@@ -2346,8 +2350,16 @@ __all__ = (
     "UpdateTableRecurringChecksModelTimeScale",
     "UpdateTableSchedulingGroupOverrideSchedulingGroup",
     "ValueChangedParametersSpec",
-    "WithinChange1DayRuleParametersSpec",
-    "WithinChange30DaysRuleParametersSpec",
-    "WithinChange7DaysRuleParametersSpec",
-    "WithinChangeRuleParametersSpec",
+    "ChangePercent1DayRule10ParametersSpec",
+    "ChangePercent1DayRule20ParametersSpec",
+    "ChangePercent1DayRule50ParametersSpec",
+    "ChangePercent30DaysRule10ParametersSpec",
+    "ChangePercent30DaysRule20ParametersSpec",
+    "ChangePercent30DaysRule50ParametersSpec",
+    "ChangePercent7DaysRule10ParametersSpec",
+    "ChangePercent7DaysRule20ParametersSpec",
+    "ChangePercent7DaysRule50ParametersSpec",
+    "ChangePercentRule10ParametersSpec",
+    "ChangePercentRule20ParametersSpec",
+    "ChangePercentRule50ParametersSpec",
 )

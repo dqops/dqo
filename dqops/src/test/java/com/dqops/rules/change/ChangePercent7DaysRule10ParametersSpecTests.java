@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class WithinPercentChange7DaysRuleParametersSpecTests extends BaseTest {
-    private WithinPercentChange7DaysRuleParametersSpec sut;
+public class ChangePercent7DaysRule10ParametersSpecTests extends BaseTest {
+    private ChangePercent7DaysRule10ParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -48,7 +48,7 @@ public class WithinPercentChange7DaysRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new WithinPercentChange7DaysRuleParametersSpec();
+        this.sut = new ChangePercent7DaysRule10ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -58,7 +58,7 @@ public class WithinPercentChange7DaysRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBetweenRangeFromPreviousReadout_thenReturnsPassed() {
-        this.sut.setMaxPercentWithin(10.0);
+        this.sut.setMaxPercent(10.0);
         this.sut.setExactDay(false);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
@@ -81,7 +81,7 @@ public class WithinPercentChange7DaysRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsEqualToPreviousReadoutAndRangeIsZero_thenReturnsPassed() {
-        this.sut.setMaxPercentWithin(0.0);
+        this.sut.setMaxPercent(0.0);
         this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
@@ -105,7 +105,7 @@ public class WithinPercentChange7DaysRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsGreaterThanAllowed_thenReturnsFailed() {
-        this.sut.setMaxPercentWithin(100.0);
+        this.sut.setMaxPercent(100.0);
         this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
@@ -128,7 +128,7 @@ public class WithinPercentChange7DaysRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenExactReadoutIsNull_thenReturnsPassed() {
-        this.sut.setMaxPercentWithin(10.0);
+        this.sut.setMaxPercent(10.0);
         this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();

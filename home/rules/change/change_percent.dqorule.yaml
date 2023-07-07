@@ -10,10 +10,10 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: last_n_readouts
   fields:
-  - field_name: max_percent_within
-    display_name: max_percent_within
-    help_text: Absolute value of the maximal accepted change relative to the previous
-      readout (inclusive).
+  - field_name: max_percent
+    display_name: max_percent
+    help_text: Percentage of maximum accepted change compared to previous readout
+      (inclusive).
     data_type: double
     sample_values:
     - 5

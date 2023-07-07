@@ -4,34 +4,34 @@ import attr
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="WithinChange30DaysRuleParametersSpec")
+T = TypeVar("T", bound="ChangePercent1DayRule20ParametersSpec")
 
 
 @attr.s(auto_attribs=True)
-class WithinChange30DaysRuleParametersSpec:
+class ChangePercent1DayRule20ParametersSpec:
     """
     Attributes:
-        max_within (Union[Unset, float]): Maximal accepted absolute change with regards to the previous readout
+        max_percent (Union[Unset, float]): Maximal accepted absolute change with regards to the previous readout
             (inclusive).
         exact_day (Union[Unset, bool]): When the exact_day parameter is unchecked (exact_day: false), the rule
         search for the most recent sensor readouts from the past 60 days and compare them. If the parameter is
-        selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results
+        selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results
         are found from that time, no results or errors will be generated.
     """
 
-    max_within: Union[Unset, float] = UNSET
+    max_percent: Union[Unset, float] = UNSET
     exact_day: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        max_within = self.max_within
+        max_percent = self.max_percent
         exact_day = self.exact_day
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if max_within is not UNSET:
-            field_dict["max_within"] = max_within
+        if max_percent is not UNSET:
+            field_dict["max_percent"] = max_percent
         if exact_day is not UNSET:
             field_dict["exact_day"] = exact_day
 
@@ -40,17 +40,17 @@ class WithinChange30DaysRuleParametersSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        max_within = d.pop("max_within", UNSET)
+        max_percent = d.pop("max_percent", UNSET)
 
         exact_day = d.pop("exact_day", UNSET)
 
-        within_change_30_days_rule_parameters_spec = cls(
-            max_within=max_within,
+        change_percent_1_day_rule_20_parameters_spec = cls(
+            max_percent=max_percent,
             exact_day=exact_day,
         )
 
-        within_change_30_days_rule_parameters_spec.additional_properties = d
-        return within_change_30_days_rule_parameters_spec
+        change_percent_1_day_rule_20_parameters_spec.additional_properties = d
+        return change_percent_1_day_rule_20_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

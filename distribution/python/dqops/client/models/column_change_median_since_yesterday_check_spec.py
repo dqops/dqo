@@ -10,9 +10,9 @@ if TYPE_CHECKING:
     )
     from ..models.comment_spec import CommentSpec
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
-    from ..models.within_change_1_day_rule_parameters_spec import (
-        WithinChange1DayRuleParametersSpec,
-    )
+    from ..models.change_percent_1_day_rule_10_parameters_spec import ChangePercent1DayRule10ParametersSpec
+    from ..models.change_percent_1_day_rule_20_parameters_spec import ChangePercent1DayRule20ParametersSpec
+    from ..models.change_percent_1_day_rule_50_parameters_spec import ChangePercent1DayRule50ParametersSpec
 
 
 T = TypeVar("T", bound="ColumnChangeMedianSinceYesterdayCheckSpec")
@@ -44,9 +44,9 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, ColumnNumericMedianSensorParametersSpec]):
-        warning (Union[Unset, WithinChange1DayRuleParametersSpec]):
-        error (Union[Unset, WithinChange1DayRuleParametersSpec]):
-        fatal (Union[Unset, WithinChange1DayRuleParametersSpec]):
+        warning (Union[Unset, ChangePercent1DayRule10ParametersSpec]):
+        error (Union[Unset, ChangePercent1DayRule20ParametersSpec]):
+        fatal (Union[Unset, ChangePercent1DayRule50ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -58,9 +58,9 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnNumericMedianSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "WithinChange1DayRuleParametersSpec"] = UNSET
-    error: Union[Unset, "WithinChange1DayRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "WithinChange1DayRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "ChangePercent1DayRule10ParametersSpec"] = UNSET
+    error: Union[Unset, "ChangePercent1DayRule20ParametersSpec"] = UNSET
+    fatal: Union[Unset, "ChangePercent1DayRule50ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -135,9 +135,9 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
         )
         from ..models.comment_spec import CommentSpec
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
-        from ..models.within_change_1_day_rule_parameters_spec import (
-            WithinChange1DayRuleParametersSpec,
-        )
+        from ..models.change_percent_1_day_rule_10_parameters_spec import ChangePercent1DayRule10ParametersSpec
+        from ..models.change_percent_1_day_rule_20_parameters_spec import ChangePercent1DayRule20ParametersSpec
+        from ..models.change_percent_1_day_rule_50_parameters_spec import ChangePercent1DayRule50ParametersSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
@@ -174,25 +174,25 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
             parameters = ColumnNumericMedianSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, WithinChange1DayRuleParametersSpec]
+        warning: Union[Unset, ChangePercent1DayRule10ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = WithinChange1DayRuleParametersSpec.from_dict(_warning)
+            warning = ChangePercent1DayRule10ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, WithinChange1DayRuleParametersSpec]
+        error: Union[Unset, ChangePercent1DayRule20ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = WithinChange1DayRuleParametersSpec.from_dict(_error)
+            error = ChangePercent1DayRule20ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, WithinChange1DayRuleParametersSpec]
+        fatal: Union[Unset, ChangePercent1DayRule50ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = WithinChange1DayRuleParametersSpec.from_dict(_fatal)
+            fatal = ChangePercent1DayRule50ParametersSpec.from_dict(_fatal)
 
         column_change_median_since_yesterday_check_spec = cls(
             schedule_override=schedule_override,

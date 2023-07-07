@@ -12,7 +12,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sum_change|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
+|sum_change|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=sum_change
         anomaly:
           sum_change:
             warning:
-              max_within: 10.0
+              max_percent: 5.0
             error:
-              max_within: 10.0
+              max_percent: 5.0
             fatal:
-              max_within: 10.0
+              max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         anomaly:
           sum_change:
             warning:
-              max_within: 10.0
+              max_percent: 5.0
             error:
-              max_within: 10.0
+              max_percent: 5.0
             fatal:
-              max_within: 10.0
+              max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -257,11 +257,11 @@ spec:
             anomaly:
               sum_change:
                 warning:
-                  max_within: 10.0
+                  max_percent: 5.0
                 error:
-                  max_within: 10.0
+                  max_percent: 5.0
                 fatal:
-                  max_within: 10.0
+                  max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -452,7 +452,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_change|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
+|daily_sum_change|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -483,11 +483,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_c
           anomaly:
             daily_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -508,11 +508,11 @@ spec:
           anomaly:
             daily_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -700,11 +700,11 @@ spec:
               anomaly:
                 daily_sum_change:
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -895,7 +895,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sum_change|recurring|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
+|monthly_sum_change|recurring|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -926,11 +926,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sum
           anomaly:
             monthly_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -951,11 +951,11 @@ spec:
           anomaly:
             monthly_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1143,11 +1143,11 @@ spec:
               anomaly:
                 monthly_sum_change:
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1338,7 +1338,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_change|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
+|daily_partition_sum_change|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1369,11 +1369,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           anomaly:
             daily_partition_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1394,11 +1394,11 @@ spec:
           anomaly:
             daily_partition_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1590,11 +1590,11 @@ spec:
               anomaly:
                 daily_partition_sum_change:
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1783,7 +1783,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sum_change|partitioned|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change](../../../../reference/rules/Change/#within-change)|
+|monthly_partition_sum_change|partitioned|monthly|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1814,11 +1814,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           anomaly:
             monthly_partition_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1839,11 +1839,11 @@ spec:
           anomaly:
             monthly_partition_sum_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2035,11 +2035,11 @@ spec:
               anomaly:
                 monthly_partition_sum_change:
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

@@ -165,6 +165,6 @@ public class ColumnAnomalyMedian60DaysCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Validity;
+        return DefaultDataQualityDimensions.Consistency;
     }
 }

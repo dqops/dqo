@@ -10,10 +10,9 @@ if TYPE_CHECKING:
     )
     from ..models.comment_spec import CommentSpec
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
-    from ..models.within_change_rule_parameters_spec import (
-        WithinChangeRuleParametersSpec,
-    )
-
+    from ..models.change_percent_rule_10_parameters_spec import ChangePercentRule10ParametersSpec
+    from ..models.change_percent_rule_20_parameters_spec import ChangePercentRule20ParametersSpec
+    from ..models.change_percent_rule_50_parameters_spec import ChangePercentRule50ParametersSpec
 
 T = TypeVar("T", bound="ColumnChangeMeanCheckSpec")
 
@@ -44,9 +43,9 @@ class ColumnChangeMeanCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, ColumnNumericMeanSensorParametersSpec]):
-        warning (Union[Unset, WithinChangeRuleParametersSpec]):
-        error (Union[Unset, WithinChangeRuleParametersSpec]):
-        fatal (Union[Unset, WithinChangeRuleParametersSpec]):
+        warning (Union[Unset, ChangePercentRule10ParametersSpec]):
+        error (Union[Unset, ChangePercentRule20ParametersSpec]):
+        fatal (Union[Unset, ChangePercentRule50ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -58,9 +57,9 @@ class ColumnChangeMeanCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnNumericMeanSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "WithinChangeRuleParametersSpec"] = UNSET
-    error: Union[Unset, "WithinChangeRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "WithinChangeRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "ChangePercentRule10ParametersSpec"] = UNSET
+    error: Union[Unset, "ChangePercentRule20ParametersSpec"] = UNSET
+    fatal: Union[Unset, "ChangePercentRule50ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -135,9 +134,9 @@ class ColumnChangeMeanCheckSpec:
         )
         from ..models.comment_spec import CommentSpec
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
-        from ..models.within_change_rule_parameters_spec import (
-            WithinChangeRuleParametersSpec,
-        )
+        from ..models.change_percent_rule_10_parameters_spec import ChangePercentRule10ParametersSpec
+        from ..models.change_percent_rule_20_parameters_spec import ChangePercentRule20ParametersSpec
+        from ..models.change_percent_rule_50_parameters_spec import ChangePercentRule50ParametersSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
@@ -174,25 +173,25 @@ class ColumnChangeMeanCheckSpec:
             parameters = ColumnNumericMeanSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, WithinChangeRuleParametersSpec]
+        warning: Union[Unset, ChangePercentRule10ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = WithinChangeRuleParametersSpec.from_dict(_warning)
+            warning = ChangePercentRule10ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, WithinChangeRuleParametersSpec]
+        error: Union[Unset, ChangePercentRule20ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = WithinChangeRuleParametersSpec.from_dict(_error)
+            error = ChangePercentRule20ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, WithinChangeRuleParametersSpec]
+        fatal: Union[Unset, ChangePercentRule50ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = WithinChangeRuleParametersSpec.from_dict(_fatal)
+            fatal = ChangePercentRule50ParametersSpec.from_dict(_fatal)
 
         column_change_mean_check_spec = cls(
             schedule_override=schedule_override,
