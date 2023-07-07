@@ -63,7 +63,9 @@ export const SelectDataGroupingForTableProfiling = ({
         <div className="flex">
           <div className="flex flex-col gap-y-3 mb-5">
             <span>{title}</span>
-            <span className="ml-2">id </span>
+            <span className="ml-2">
+              {dataGroupingConfiguration?.data_grouping_configuration_name}
+            </span>
           </div>
         </div>
         {isExtended === true && (
