@@ -47,7 +47,6 @@ const NotificationMenu = () => {
 
   useEffect(() => {
     getData();
-    setNewJobArray();
   }, []);
 
   const data = useMemo(() => {
@@ -119,6 +118,12 @@ const NotificationMenu = () => {
         .filter((y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId)
         .map((y) => y.item)
     }));
+
+    useEffect(() => {
+      newArray2.map(() => ({
+        ...newArray2
+      }));
+    }, []);
 
     return newArray2;
   };

@@ -141,8 +141,6 @@ const JobItem = ({
   //   return false;
   // };
 
-  console.log(job);
-
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
       <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
@@ -161,7 +159,7 @@ const JobItem = ({
                 <SvgIcon name="canceljobs" />
               </div>
             ) : (
-              <div></div>
+              <></>
             )}
             <div className=" relative">
               <div className="flex items-center gap-x-3">
