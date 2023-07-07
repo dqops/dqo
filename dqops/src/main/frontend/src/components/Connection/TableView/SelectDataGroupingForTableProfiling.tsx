@@ -1,0 +1,104 @@
+import React, { useEffect, useState } from 'react';
+import {
+  DataGroupingConfigurationBasicModel,
+  DataGroupingConfigurationSpec,
+  DataGroupingDimensionSpecSourceEnum
+} from '../../../api';
+
+import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+
+type SelectDataGroupingForTableProps = {
+  title: string;
+  className?: string;
+  dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
+  dataGroupingConfiguration?: DataGroupingConfigurationBasicModel;
+  setDataGroupingConfiguration: (
+    value?: DataGroupingConfigurationBasicModel
+  ) => void;
+  goToCreateNew: () => void;
+  isExtended: boolean;
+};
+
+export const SelectDataGroupingForTableProfiling = ({
+  dataGroupingConfiguration,
+  title,
+  isExtended
+}: SelectDataGroupingForTableProps) => {
+  const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
+    useState<DataGroupingConfigurationSpec>();
+
+  useEffect(() => {
+    if (dataGroupingConfiguration) {
+      DataGroupingConfigurationsApi.getTableGroupingConfiguration(
+        dataGroupingConfiguration.connection_name ?? '',
+        dataGroupingConfiguration.schema_name ?? '',
+        dataGroupingConfiguration.table_name ?? '',
+        dataGroupingConfiguration.data_grouping_configuration_name || ''
+      ).then((res) => {
+        setDataGroupingConfigurationSpec(res.data.spec);
+      });
+    }
+  }, [dataGroupingConfiguration]);
+
+  const getDataGroupingDimensionLevel = (index: number) => {
+    if (index === 0) return dataGroupingConfigurationSpec?.level_1;
+    if (index === 1) return dataGroupingConfigurationSpec?.level_2;
+    if (index === 2) return dataGroupingConfigurationSpec?.level_3;
+    if (index === 3) return dataGroupingConfigurationSpec?.level_4;
+    if (index === 4) return dataGroupingConfigurationSpec?.level_5;
+    if (index === 5) return dataGroupingConfigurationSpec?.level_6;
+    if (index === 6) return dataGroupingConfigurationSpec?.level_7;
+    if (index === 7) return dataGroupingConfigurationSpec?.level_8;
+    if (index === 8) return dataGroupingConfigurationSpec?.level_9;
+  };
+
+  return (
+    <table className="w-full ml-30">
+      <thead className="h-25">
+        <div className="flex">
+          <div className="flex flex-col gap-y-3">
+            <span className="font-bold h-4.5">{title}</span>
+            <span>
+              {dataGroupingConfiguration?.data_grouping_configuration_name}
+            </span>
+          </div>
+        </div>
+        {isExtended === true && (
+          <tr>
+            <th className="text-left py-2 w-100">Group by column</th>
+            <th className="text-left py-1.5">Static value(tag)</th>
+          </tr>
+        )}
+      </thead>
+      {isExtended && (
+        <tbody>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
+            const level = getDataGroupingDimensionLevel(index);
+            return (
+              <tr key={index}>
+                <td className="py-1.5">
+                  {level?.source ===
+                  DataGroupingDimensionSpecSourceEnum.column_value ? (
+                    level?.column
+                  ) : (
+                    <></>
+                  )}
+                </td>
+                <td className="py-1.5">
+                  <div>
+                    {level?.source ===
+                    DataGroupingDimensionSpecSourceEnum.tag ? (
+                      level?.tag
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      )}
+    </table>
+  );
+};

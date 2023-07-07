@@ -174,6 +174,19 @@ const ProfilingView = () => {
     setCreatedDataStream(false, '', {});
   };
 
+  const onChangeTab = (tab: string) => {
+    history.push(
+      ROUTES.TABLE_LEVEL_PAGE(
+        checkTypes,
+        connectionName,
+        schemaName,
+        tableName,
+        tab
+      )
+    );
+    setActiveTab(tab);
+  };
+
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       {activeTab === 'statistics' && (
@@ -197,7 +210,7 @@ const ProfilingView = () => {
           isUpdating={isUpdating}
         />
       )}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       {activeTab === 'statistics' && (
         <TableStatisticsView
           connectionName={connectionName}
