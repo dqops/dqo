@@ -40,11 +40,6 @@ export const SelectDataGroupingForTableProfiling = ({
     }
   }, [dataGroupingConfiguration]);
 
-  const values = {
-    [DataGroupingDimensionSpecSourceEnum.tag]: 'Tag',
-    [DataGroupingDimensionSpecSourceEnum.column_value]: 'Group by column'
-  };
-
   const getDataGroupingDimensionLevel = (index: number) => {
     if (index === 0) return dataGroupingConfigurationSpec?.level_1;
     if (index === 1) return dataGroupingConfigurationSpec?.level_2;
@@ -70,8 +65,8 @@ export const SelectDataGroupingForTableProfiling = ({
         </div>
         {isExtended === true && (
           <tr>
-            <th className="text-left py-2">Type</th>
-            <th className="text-left py-1.5">Column / Static value(tag)</th>
+            <th className="text-left py-2 w-100">Group by column</th>
+            <th className="text-left py-1.5">Static value(tag)</th>
           </tr>
         )}
       </thead>
@@ -82,17 +77,21 @@ export const SelectDataGroupingForTableProfiling = ({
             return (
               <tr key={index}>
                 <td className="py-1.5">
-                  {level?.source ? values[level?.source] : 'None'}
+                  {level?.source ===
+                  DataGroupingDimensionSpecSourceEnum.column_value ? (
+                    level?.column
+                  ) : (
+                    <></>
+                  )}
                 </td>
                 <td className="py-1.5">
                   <div>
                     {level?.source ===
-                      DataGroupingDimensionSpecSourceEnum.tag && level?.tag}
-                  </div>
-                  <div>
-                    {level?.source ===
-                      DataGroupingDimensionSpecSourceEnum.column_value &&
-                      level?.column}
+                    DataGroupingDimensionSpecSourceEnum.tag ? (
+                      level?.tag
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </td>
               </tr>
