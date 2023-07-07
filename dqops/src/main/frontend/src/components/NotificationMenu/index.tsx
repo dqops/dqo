@@ -118,12 +118,13 @@ const NotificationMenu = () => {
         .filter((y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId)
         .map((y) => y.item)
     }));
-
     useEffect(() => {
-      newArray2.map(() => ({
-        ...newArray2
-      }));
-    }, []);
+      if (newArray2.some((x) => x.jobType === undefined)) {
+        newArray2.map(() => ({
+          ...newArray2
+        }));
+      }
+    }, [newArray2]);
 
     return newArray2;
   };
