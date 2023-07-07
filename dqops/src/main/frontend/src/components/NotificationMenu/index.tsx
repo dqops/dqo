@@ -95,6 +95,8 @@ const NotificationMenu = () => {
     }
   };
 
+  console.log(job_dictionary_state);
+
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler style={{ position: 'relative' }}>

@@ -19,9 +19,9 @@ import {
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
 import Select, { Option } from '../../Select';
-import { SelectDataGroupingForTable } from './SelectDataGroupingForTable';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { SelectDataGroupingForTableProfiling } from './SelectDataGroupingForTableProfiling';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -60,7 +60,7 @@ export const EditProfilingReferenceTable = ({
     useState<DataGroupingConfigurationBasicModel>();
   const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] =
     useState<DataGroupingConfigurationBasicModel>();
-
+  const [isExtended, setIsExtended] = useState(false);
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -250,7 +250,7 @@ export const EditProfilingReferenceTable = ({
         reference?.reference_table_configuration_name ?? '',
         data
       )
-        .then((res) => {
+        .then(() => {
           onBack();
         })
         .catch((err) => {
@@ -268,7 +268,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -285,7 +285,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -304,7 +304,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -321,7 +321,7 @@ export const EditProfilingReferenceTable = ({
           reference?.reference_table_configuration_name ?? '',
           data
         )
-          .then((res) => {
+          .then(() => {
             onBack();
           })
           .catch((err) => {
@@ -414,49 +414,61 @@ export const EditProfilingReferenceTable = ({
       </div>
 
       <div className="px-8 py-4">
-        <p className="mb-5">
+        <p className="text-center mb-7">
           Table comparison will use these data grouping configurations:
         </p>
 
-        <div className="grid grid-cols-2 gap-4 mb-5">
-          <div className="flex gap-3 items-center">
-            <span>Compared table:</span>
-            <Input value={reference?.compared_table_grouping_name} />
-          </div>
-          <div className="flex gap-3 items-center">
-            <span>Reference table:</span>
-            <Input value={reference?.reference_table_grouping_name} />
-          </div>
-        </div>
-
         <div className="flex gap-4 mb-8">
-          <div className="mt-26 mr-20">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-              <div key={index} className="text-sm py-1.5">
-                Grouping dimension level {item}
+          <div>
+            <div
+              className="flex h-18 w-40 mt-8"
+              onClick={() => setIsExtended(!isExtended)}
+            >
+              {isExtended === false ? (
+                <SvgIcon
+                  name="chevron-right"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
+                />
+              ) : (
+                <SvgIcon
+                  name="chevron-down"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
+                />
+              )}
+              <span className="cursor-pointer">Data grouping name</span>
+            </div>
+            {isExtended === true && (
+              <div>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                  <div key={index} className="text-sm py-1.5 w-44">
+                    Grouping dimension level {item}
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-          <SelectDataGroupingForTable
+
+          <SelectDataGroupingForTableProfiling
             className="flex-1"
             title="Data grouping on compared table"
             dataGroupingConfigurations={dataGroupingConfigurations}
             dataGroupingConfiguration={dataGroupingConfiguration}
             setDataGroupingConfiguration={setDataGroupingConfiguration}
             goToCreateNew={goToCreateNew}
+            isExtended={isExtended}
           />
-          <div className="flex flex-col justify-center">
-            <SvgIcon name="not-equal" className="w-6 h-6 text-red-700" />
-          </div>
-          <SelectDataGroupingForTable
+
+          <SelectDataGroupingForTableProfiling
             className="flex-1"
             title="Data grouping on reference table"
             dataGroupingConfigurations={refDataGroupingConfigurations}
             dataGroupingConfiguration={refDataGroupingConfiguration}
             setDataGroupingConfiguration={setRefDataGroupingConfiguration}
             goToCreateNew={goToRefCreateNew}
+            isExtended={isExtended}
           />
         </div>
+
         <div className="px-4">
           <p>Default thresholds for differences(percent):</p>
           <div className="grid grid-cols-3 mb-5 mt-3">
@@ -501,7 +513,10 @@ export const EditProfilingReferenceTable = ({
           </div>
         </div>
 
-        <SectionWrapper title="Table level comparison" className="mb-10 px-0">
+        <SectionWrapper
+          title="Table level comparison"
+          className="mb-10 px-0 mt-10"
+        >
           <div className="flex flex-col gap-8">
             <div className="flex gap-4">
               <span>

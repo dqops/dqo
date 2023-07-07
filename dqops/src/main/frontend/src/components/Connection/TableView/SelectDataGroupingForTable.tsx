@@ -1,22 +1,24 @@
-import SectionWrapper from "../../Dashboard/SectionWrapper";
-import React, { useEffect, useState } from "react";
+import SectionWrapper from '../../Dashboard/SectionWrapper';
+import React, { useEffect, useState } from 'react';
 import {
   DataGroupingConfigurationBasicModel,
   DataGroupingConfigurationSpec,
   DataGroupingDimensionSpecSourceEnum
-} from "../../../api";
-import Select from "../../Select";
-import Button from "../../Button";
-import { DataGroupingConfigurationsApi } from "../../../services/apiClient";
-import clsx from "clsx";
-import { useHistory } from "react-router-dom";
+} from '../../../api';
+import Select from '../../Select';
+import Button from '../../Button';
+import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 
 type SelectDataGroupingForTableProps = {
   title: string;
   className?: string;
   dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
   dataGroupingConfiguration?: DataGroupingConfigurationBasicModel;
-  setDataGroupingConfiguration: (value?: DataGroupingConfigurationBasicModel) => void;
+  setDataGroupingConfiguration: (
+    value?: DataGroupingConfigurationBasicModel
+  ) => void;
   goToCreateNew: () => void;
 };
 
@@ -28,7 +30,8 @@ export const SelectDataGroupingForTable = ({
   setDataGroupingConfiguration,
   goToCreateNew
 }: SelectDataGroupingForTableProps) => {
-  const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] = useState<DataGroupingConfigurationSpec>();
+  const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
+    useState<DataGroupingConfigurationSpec>();
   const history = useHistory();
 
   const dataGroupOptions = dataGroupingConfigurations.map((item) => ({
@@ -43,22 +46,24 @@ export const SelectDataGroupingForTable = ({
         dataGroupingConfiguration.schema_name ?? '',
         dataGroupingConfiguration.table_name ?? '',
         dataGroupingConfiguration.data_grouping_configuration_name || ''
-      ).then(res => {
+      ).then((res) => {
         setDataGroupingConfigurationSpec(res.data.spec);
       });
     }
   }, [dataGroupingConfiguration]);
 
   const handleChange = (value: string) => {
-    const newDataGrouping = dataGroupingConfigurations.find((item) => item.data_grouping_configuration_name === value);
+    const newDataGrouping = dataGroupingConfigurations.find(
+      (item) => item.data_grouping_configuration_name === value
+    );
 
     setDataGroupingConfiguration(newDataGrouping);
   };
 
   const values = {
     [DataGroupingDimensionSpecSourceEnum.tag]: 'Tag',
-    [DataGroupingDimensionSpecSourceEnum.column_value]: 'Group by column',
-  }
+    [DataGroupingDimensionSpecSourceEnum.column_value]: 'Group by column'
+  };
 
   const getDataGroupingDimensionLevel = (index: number) => {
     if (index === 0) return dataGroupingConfigurationSpec?.level_1;
@@ -74,7 +79,6 @@ export const SelectDataGroupingForTable = ({
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
-
       <div className="flex gap-4 mb-4">
         <Select
           className="flex-1"
@@ -99,25 +103,29 @@ export const SelectDataGroupingForTable = ({
           </tr>
         </thead>
         <tbody>
-        {
-          [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
             const level = getDataGroupingDimensionLevel(index);
             return (
               <tr key={index}>
-                <td className="py-1.5">{level?.source ? values[level?.source] : 'None'}</td>
+                <td className="py-1.5">
+                  {level?.source ? values[level?.source] : 'None'}
+                </td>
                 <td className="py-1.5">
                   <div>
-                    {level?.source === DataGroupingDimensionSpecSourceEnum.tag && level?.tag}
+                    {level?.source ===
+                      DataGroupingDimensionSpecSourceEnum.tag && level?.tag}
                   </div>
                   <div>
-                    {level?.source === DataGroupingDimensionSpecSourceEnum.column_value && level?.column}
+                    {level?.source ===
+                      DataGroupingDimensionSpecSourceEnum.column_value &&
+                      level?.column}
                   </div>
                 </td>
               </tr>
-            )
+            );
           })}
-          </tbody>
+        </tbody>
       </table>
     </SectionWrapper>
-  )
-}
+  );
+};
