@@ -12,13 +12,7 @@ import {
 import moment from 'moment';
 import { JobApiClient } from '../../../services/apiClient';
 
-const JobChild = ({
-  job,
-  parentId
-}: {
-  job: DqoJobHistoryEntryModel;
-  parentId: number;
-}) => {
+const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   const [open, setOpen] = useState(false);
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -53,37 +47,33 @@ const JobChild = ({
 
   return (
     <Accordion open={open}>
-      {job.jobId?.parentJobId?.jobId === parentId ? (
-        <AccordionHeader onClick={() => setOpen(!open)}>
-          <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
-            <div className="flex flex-wrap space-x-1 items-center">
-              <div className="px-2">{job.jobType} </div>
-
-              {renderStatus()}
-            </div>
-            <div className="flex items-center gap-x-2">
-              {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
-                <div
-                  onClick={() =>
-                    cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
-                  }
-                >
-                  <SvgIcon name="canceljobs" />
-                </div>
-              ) : (
-                <div></div>
-              )}
-              <div className="group relative">
-                <div className="flex items-center gap-x-2">
-                  {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
-                </div>
+      <AccordionHeader onClick={() => setOpen(!open)}>
+        <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
+          <div className="flex flex-wrap space-x-1 items-center">
+            <div className="px-2">{job.jobType} </div>
+            {renderStatus()}
+          </div>
+          <div className="flex items-center gap-x-2">
+            {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
+              <div
+                onClick={() =>
+                  cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
+                }
+              >
+                <SvgIcon name="canceljobs" />
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <div className="group relative">
+              <div className="flex items-center gap-x-2">
+                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </div>
             </div>
           </div>
-        </AccordionHeader>
-      ) : (
-        <div></div>
-      )}
+        </div>
+      </AccordionHeader>
+
       <AccordionBody>
         <table className="text-gray-700 w-full">
           <tbody>
