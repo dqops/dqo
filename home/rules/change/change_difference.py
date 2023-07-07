@@ -19,9 +19,8 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class WithinChange30DaysRuleParametersSpec:
-    max_within: float
-    exact_day: bool = False
+class WithinChangeRuleParametersSpec:
+    max_difference: float
 
 
 class HistoricDataPoint:
@@ -39,7 +38,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: WithinChange30DaysRuleParametersSpec
+    parameters: WithinChangeRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -65,21 +64,11 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult(True, None, None, None)
 
-    past_readouts = rule_parameters.previous_readouts[:-29]
-    if rule_parameters.parameters.exact_day:
-        last_readout = past_readouts[-1]
-        if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    previous_readout = filtered[0]
 
-        previous_readout = last_readout.sensor_readout
-    else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
-
-    lower_bound = previous_readout - rule_parameters.parameters.max_within
-    upper_bound = previous_readout + rule_parameters.parameters.max_within
+    lower_bound = previous_readout - rule_parameters.parameters.max_difference
+    upper_bound = previous_readout + rule_parameters.parameters.max_difference
 
     passed = lower_bound <= rule_parameters.actual_value <= upper_bound
     expected_value = previous_readout

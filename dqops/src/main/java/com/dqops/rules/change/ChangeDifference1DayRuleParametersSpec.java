@@ -28,13 +28,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound.
+ * Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to yesterday.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class WithinChangeRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<WithinChangeRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class ChangeDifference1DayRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ChangeDifference1DayRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -43,28 +43,49 @@ public class WithinChangeRuleParametersSpec extends AbstractRuleParametersSpec {
     /**
      * Default constructor.
      */
-    public WithinChangeRuleParametersSpec() {
+    public ChangeDifference1DayRuleParametersSpec() {
     }
 
-    @JsonPropertyDescription("Maximal accepted absolute change with regards to the previous readout (inclusive).")
+    @JsonPropertyDescription("Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).")
     @SampleValues(values = "10")
-    private Double maxWithin;
+    private Double maxDifference;
+
+    @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. " +
+            "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
+    @SampleValues(values = "false")
+    private Boolean exactDay = false;
 
     /**
      * Gets the maximal accepted absolute change for a data quality check readout.
      * @return Maximal accepted absolute change for a data quality check readout.
      */
-    public Double getMaxWithin() {
-        return maxWithin;
+    public Double getMaxDifference() {
+        return maxDifference;
     }
 
     /**
      * Changes the maximal accepted absolute value for a data quality readout's change.
-     * @param maxWithin New accepted absolute change.
+     * @param maxDifference New accepted absolute change.
      */
-    public void setMaxWithin(Double maxWithin) {
-        this.setDirtyIf(!Objects.equals(this.maxWithin, maxWithin));
-        this.maxWithin = maxWithin;
+    public void setMaxDifference(Double maxDifference) {
+        this.setDirtyIf(!Objects.equals(this.maxDifference, maxDifference));
+        this.maxDifference = maxDifference;
+    }
+
+    /**
+     * Gets the flag that makes the rule abstain from searching for the latest readout if there was no readout on the previous day.
+     * @return Flag <code>exactDay</code>'s value.
+     */
+    public Boolean getExactDay() {
+        return exactDay;
+    }
+
+    /**
+     * Set the flag that makes the rule abstain from searching for the latest readout if there was no readout on the previous day.
+     * @param exactDay New flag <code>exactDay</code>'s value.
+     */
+    public void setExactDay(Boolean exactDay) {
+        this.exactDay = exactDay;
     }
 
     /**
@@ -84,6 +105,6 @@ public class WithinChangeRuleParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "change/within_change";
+        return "change/change_difference_1_day";
     }
 }

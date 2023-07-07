@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class WithinChangeRuleParametersSpecTests extends BaseTest {
-    private WithinChangeRuleParametersSpec sut;
+public class ChangeDifference30DaysRuleParametersSpecTests extends BaseTest {
+    private ChangeDifference30DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -48,7 +48,7 @@ public class WithinChangeRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new WithinChangeRuleParametersSpec();
+        this.sut = new ChangeDifference30DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -58,24 +58,39 @@ public class WithinChangeRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBetweenRangeFromPreviousReadout_thenReturnsPassed() {
-        this.sut.setMaxWithin(1.0);
-        this.sensorReadouts[0] = 20.0;
+        this.sut.setMaxDifference(2.0);
+        this.sut.setExactDay(false);
+
+        int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
+        this.sensorReadouts[readoutsCount - 42] = 20.0;
+        this.sensorReadouts[readoutsCount - 16] = 1219.2;
+        this.sensorReadouts[readoutsCount - 5] = 1010008.2;
+        this.sensorReadouts[readoutsCount - 8] = 0.0;
+        this.sensorReadouts[readoutsCount - 3] = 1006.8;
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19.2,
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19.1,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
+        Assertions.assertEquals(18.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(22.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRule_whenActualValueIsEqualToPreviousReadoutAndRangeIsZero_thenReturnsPassed() {
-        this.sut.setMaxWithin(0.0);
-        this.sensorReadouts[0] = 20.0;
+        this.sut.setMaxDifference(0.0);
+        this.sut.setExactDay(true);
+
+        int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
+        this.sensorReadouts[readoutsCount - 42] = 23.0;
+        this.sensorReadouts[readoutsCount - 30] = 20.0;
+        this.sensorReadouts[readoutsCount - 6] = 1219.2;
+        this.sensorReadouts[readoutsCount - 5] = 1010008.2;
+        this.sensorReadouts[readoutsCount - 4] = 0.0;
+        this.sensorReadouts[readoutsCount - 2] = 1006.8;
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
@@ -90,19 +105,50 @@ public class WithinChangeRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsGreaterThanAllowed_thenReturnsFailed() {
-        this.sut.setMaxWithin(100.0);
-        this.sensorReadouts[0] = -50.0;
+        this.sut.setMaxDifference(10.0);
+        this.sut.setExactDay(true);
+
+        int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
+        this.sensorReadouts[readoutsCount - 30] = 20.0;
+        this.sensorReadouts[readoutsCount - 16] = 1219.2;
+        this.sensorReadouts[readoutsCount - 15] = 1010008.2;
+        this.sensorReadouts[readoutsCount - 8] = 0.0;
+        this.sensorReadouts[readoutsCount - 4] = 1006.8;
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(51.0,
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1012.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(-50.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(-150.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(50.0, ruleExecutionResult.getUpperBound());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(30.0, ruleExecutionResult.getUpperBound());
     }
+
+    @Test
+    void executeRule_whenExactReadoutIsNull_thenReturnsPassed() {
+        this.sut.setMaxDifference(10.0);
+        this.sut.setExactDay(true);
+
+        int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
+        this.sensorReadouts[readoutsCount - 31] = 12.0;
+        this.sensorReadouts[readoutsCount - 30] = null;
+        this.sensorReadouts[readoutsCount - 16] = 30.2;
+        this.sensorReadouts[readoutsCount - 8] = 50.2;
+        this.sensorReadouts[readoutsCount - 3] = 80.6;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(-142.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
 
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {

@@ -1192,6 +1192,558 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
+## **change difference**
+**Full rule name**
+```
+change/change_difference
+```
+**Description**  
+Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_difference|Maximum accepted absolute difference compared to previous readout (inclusive).|double| ||
+
+
+
+**Example**
+```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 1
+    min_periods_with_readouts: 1
+    historic_data_point_grouping: last_n_readouts
+  fields:
+  - field_name: max_difference
+    display_name: max_difference
+    help_text: Maximum accepted absolute difference compared to previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+```
+
+
+
+**Rule implementation (Python)**
+```python
+#
+# Copyright © 2023 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinChangeRuleParametersSpec:
+    max_difference: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinChangeRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    previous_readout = filtered[0]
+
+    lower_bound = previous_readout - rule_parameters.parameters.max_difference
+    upper_bound = previous_readout + rule_parameters.parameters.max_difference
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = previous_readout
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **change difference 1 day**
+**Full rule name**
+```
+change/change_difference_1_day
+```
+**Description**  
+Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to yesterday.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_difference|Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).|double| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
+
+
+
+**Example**
+```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 1
+    historic_data_point_grouping: day
+  fields:
+  - field_name: max_difference
+    display_name: max_difference
+    help_text: Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), rule\
+      \ searches for the most recent sensor readouts from the past 60 days and compares\
+      \ them. If the parameter is selected (exact_day: true), the rule compares only\
+      \ with the results from the past 1 day. If no results are found from that time,\
+      \ no results or errors will be generated.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
+```
+
+
+
+**Rule implementation (Python)**
+```python
+#
+# Copyright © 2023 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinChange1DayRuleParametersSpec:
+    max_difference: float
+    exact_day: bool = False
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinChange1DayRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    past_readouts = rule_parameters.previous_readouts
+    if rule_parameters.parameters.exact_day:
+        last_readout = past_readouts[-1]
+        if last_readout is None:
+            return RuleExecutionResult(True, None, None, None)
+
+        previous_readout = last_readout.sensor_readout
+    else:
+        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
+        previous_readout = filtered_readouts[-1]
+
+    lower_bound = previous_readout - rule_parameters.parameters.max_difference
+    upper_bound = previous_readout + rule_parameters.parameters.max_difference
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = previous_readout
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **change difference 30 days**
+**Full rule name**
+```
+change/change_difference_30_days
+```
+**Description**  
+Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last month.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_difference|Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).|double| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+
+
+
+**Example**
+```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 1
+    historic_data_point_grouping: day
+  fields:
+  - field_name: max_difference
+    display_name: max_difference
+    help_text: Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), rule\
+      \ searches for the most recent sensor readouts from the past 60 days and compares\
+      \ them. If the parameter is selected (exact_day: true), the rule compares only\
+      \ with the results from the past 30 days. If no results are found from that\
+      \ time, no results or errors will be generated.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
+```
+
+
+
+**Rule implementation (Python)**
+```python
+#
+# Copyright © 2023 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinChange30DaysRuleParametersSpec:
+    max_difference: float
+    exact_day: bool = False
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinChange30DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    past_readouts = rule_parameters.previous_readouts[:-29]
+    if rule_parameters.parameters.exact_day:
+        last_readout = past_readouts[-1]
+        if last_readout is None:
+            return RuleExecutionResult(True, None, None, None)
+
+        previous_readout = last_readout.sensor_readout
+    else:
+        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
+        if not filtered_readouts:
+            return RuleExecutionResult(True, None, None, None)
+        previous_readout = filtered_readouts[-1]
+
+    lower_bound = previous_readout - rule_parameters.parameters.max_difference
+    upper_bound = previous_readout + rule_parameters.parameters.max_difference
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = previous_readout
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **change difference 7 days**
+**Full rule name**
+```
+change/change_difference_7_days
+```
+**Description**  
+Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last week.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_difference|Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).|double| ||
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+
+
+
+**Example**
+```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 1
+    historic_data_point_grouping: day
+  fields:
+  - field_name: max_difference
+    display_name: max_difference
+    help_text: Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: exact_day
+    display_name: exact_day
+    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), rule\
+      \ searches for the most recent sensor readouts from the past 60 days and compares\
+      \ them. If the parameter is selected (exact_day: true), the rule compares only\
+      \ with the results from the past 7 days. If no results are found from that time,\
+      \ no results or errors will be generated.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
+```
+
+
+
+**Rule implementation (Python)**
+```python
+#
+# Copyright © 2023 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinChange7DaysRuleParametersSpec:
+    max_difference: float
+    exact_day: bool = False
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinChange7DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    past_readouts = rule_parameters.previous_readouts[:-6]
+    if rule_parameters.parameters.exact_day:
+        last_readout = past_readouts[-1]
+        if last_readout is None:
+            return RuleExecutionResult(True, None, None, None)
+
+        previous_readout = last_readout.sensor_readout
+    else:
+        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
+        if not filtered_readouts:
+            return RuleExecutionResult(True, None, None, None)
+        previous_readout = filtered_readouts[-1]
+
+    lower_bound = previous_readout - rule_parameters.parameters.max_difference
+    upper_bound = previous_readout + rule_parameters.parameters.max_difference
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = previous_readout
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
 ## **change percent**
 **Full rule name**
 ```
@@ -1736,562 +2288,6 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     lower_bound = previous_readout - abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
     upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.max_percent / 100.0)
-
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
-    expected_value = previous_readout
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **within change**
-**Full rule name**
-```
-change/within_change
-```
-**Description**  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
-  mode: previous_readouts
-  time_window:
-    prediction_time_window: 1
-    min_periods_with_readouts: 1
-    historic_data_point_grouping: last_n_readouts
-  fields:
-  - field_name: max_within
-    display_name: max_within
-    help_text: Maximal accepted absolute change with regards to the previous readout
-      (inclusive).
-    data_type: double
-    sample_values:
-    - 10
-```
-
-
-
-**Rule implementation (Python)**
-```python
-#
-# Copyright © 2023 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class WithinChangeRuleParametersSpec:
-    max_within: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readout: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: WithinChangeRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    previous_readout = filtered[0]
-
-    lower_bound = previous_readout - rule_parameters.parameters.max_within
-    upper_bound = previous_readout + rule_parameters.parameters.max_within
-
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
-    expected_value = previous_readout
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **within change 1 day**
-**Full rule name**
-```
-change/within_change_1_day
-```
-**Description**  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to yesterday.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| ||
-|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
-
-
-
-**Example**
-```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
-  mode: previous_readouts
-  time_window:
-    prediction_time_window: 60
-    min_periods_with_readouts: 1
-    historic_data_point_grouping: day
-  fields:
-  - field_name: max_within
-    display_name: max_within
-    help_text: Maximal accepted absolute change with regards to the previous readout
-      (inclusive).
-    data_type: double
-    sample_values:
-    - 10
-  - field_name: exact_day
-    display_name: exact_day
-    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), rule\
-      \ searches for the most recent sensor readouts from the past 60 days and compares\
-      \ them. If the parameter is selected (exact_day: true), the rule compares only\
-      \ with the results from the past 1 day. If no results are found from that time,\
-      \ no results or errors will be generated.&quot;
-    data_type: boolean
-    sample_values:
-    - &quot;false&quot;
-```
-
-
-
-**Rule implementation (Python)**
-```python
-#
-# Copyright © 2023 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class WithinChange1DayRuleParametersSpec:
-    max_within: float
-    exact_day: bool = False
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readout: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: WithinChange1DayRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-
-    past_readouts = rule_parameters.previous_readouts
-    if rule_parameters.parameters.exact_day:
-        last_readout = past_readouts[-1]
-        if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
-
-        previous_readout = last_readout.sensor_readout
-    else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        previous_readout = filtered_readouts[-1]
-
-    lower_bound = previous_readout - rule_parameters.parameters.max_within
-    upper_bound = previous_readout + rule_parameters.parameters.max_within
-
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
-    expected_value = previous_readout
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **within change 30 days**
-**Full rule name**
-```
-change/within_change_30_days
-```
-**Description**  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last month.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| ||
-|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
-
-
-
-**Example**
-```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
-  mode: previous_readouts
-  time_window:
-    prediction_time_window: 60
-    min_periods_with_readouts: 1
-    historic_data_point_grouping: day
-  fields:
-  - field_name: max_within
-    display_name: max_within
-    help_text: Maximal accepted absolute change with regards to the previous readout
-      (inclusive).
-    data_type: double
-    sample_values:
-    - 10
-  - field_name: exact_day
-    display_name: exact_day
-    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), rule\
-      \ searches for the most recent sensor readouts from the past 60 days and compares\
-      \ them. If the parameter is selected (exact_day: true), the rule compares only\
-      \ with the results from the past 30 days. If no results are found from that\
-      \ time, no results or errors will be generated.&quot;
-    data_type: boolean
-    sample_values:
-    - &quot;false&quot;
-```
-
-
-
-**Rule implementation (Python)**
-```python
-#
-# Copyright © 2023 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class WithinChange30DaysRuleParametersSpec:
-    max_within: float
-    exact_day: bool = False
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readout: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: WithinChange30DaysRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-
-    past_readouts = rule_parameters.previous_readouts[:-29]
-    if rule_parameters.parameters.exact_day:
-        last_readout = past_readouts[-1]
-        if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
-
-        previous_readout = last_readout.sensor_readout
-    else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
-
-    lower_bound = previous_readout - rule_parameters.parameters.max_within
-    upper_bound = previous_readout + rule_parameters.parameters.max_within
-
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
-    expected_value = previous_readout
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **within change 7 days**
-**Full rule name**
-```
-change/within_change_7_days
-```
-**Description**  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last week.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| ||
-|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
-
-
-
-**Example**
-```yaml
-# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
-  mode: previous_readouts
-  time_window:
-    prediction_time_window: 60
-    min_periods_with_readouts: 1
-    historic_data_point_grouping: day
-  fields:
-  - field_name: max_within
-    display_name: max_within
-    help_text: Maximal accepted absolute change with regards to the previous readout
-      (inclusive).
-    data_type: double
-    sample_values:
-    - 10
-  - field_name: exact_day
-    display_name: exact_day
-    help_text: &quot;When the exact_day parameter is unchecked (exact_day: false), rule\
-      \ searches for the most recent sensor readouts from the past 60 days and compares\
-      \ them. If the parameter is selected (exact_day: true), the rule compares only\
-      \ with the results from the past 7 days. If no results are found from that time,\
-      \ no results or errors will be generated.&quot;
-    data_type: boolean
-    sample_values:
-    - &quot;false&quot;
-```
-
-
-
-**Rule implementation (Python)**
-```python
-#
-# Copyright © 2023 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class WithinChange7DaysRuleParametersSpec:
-    max_within: float
-    exact_day: bool = False
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readout: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: WithinChange7DaysRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-
-    past_readouts = rule_parameters.previous_readouts[:-6]
-    if rule_parameters.parameters.exact_day:
-        last_readout = past_readouts[-1]
-        if last_readout is None:
-            return RuleExecutionResult(True, None, None, None)
-
-        previous_readout = last_readout.sensor_readout
-    else:
-        filtered_readouts = [readouts.sensor_readout for readouts in past_readouts if readouts is not None]
-        if not filtered_readouts:
-            return RuleExecutionResult(True, None, None, None)
-        previous_readout = filtered_readouts[-1]
-
-    lower_bound = previous_readout - rule_parameters.parameters.max_within
-    upper_bound = previous_readout + rule_parameters.parameters.max_within
 
     passed = lower_bound <= rule_parameters.actual_value <= upper_bound
     expected_value = previous_readout
