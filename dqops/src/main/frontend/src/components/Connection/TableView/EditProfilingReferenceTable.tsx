@@ -421,7 +421,7 @@ export const EditProfilingReferenceTable = ({
         <div className="flex gap-4 mb-8">
           <div>
             <div
-              className="flex h-25 w-40"
+              className="flex h-18 w-40 mt-8"
               onClick={() => setIsExtended(!isExtended)}
             >
               {isExtended === false ? (

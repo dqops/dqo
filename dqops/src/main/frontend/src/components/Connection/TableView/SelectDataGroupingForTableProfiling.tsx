@@ -58,19 +58,19 @@ export const SelectDataGroupingForTableProfiling = ({
   };
 
   return (
-    <table className="w-full ml-44">
+    <table className="w-full ml-30">
       <thead className="h-25">
         <div className="flex">
-          <div className="flex flex-col gap-y-3 mb-5">
-            <span>{title}</span>
-            <span className="ml-2">
+          <div className="flex flex-col gap-y-3">
+            <span className="font-bold h-4.5">{title}</span>
+            <span>
               {dataGroupingConfiguration?.data_grouping_configuration_name}
             </span>
           </div>
         </div>
         {isExtended === true && (
           <tr>
-            <th className="text-left py-1.5 ">Type</th>
+            <th className="text-left py-2">Type</th>
             <th className="text-left py-1.5">Column / Static value(tag)</th>
           </tr>
         )}

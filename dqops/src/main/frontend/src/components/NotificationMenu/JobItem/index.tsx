@@ -133,6 +133,8 @@ const JobItem = ({
     return false;
   };
 
+  console.log(job);
+
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
       {job.jobId?.parentJobId?.jobId === undefined ? (
