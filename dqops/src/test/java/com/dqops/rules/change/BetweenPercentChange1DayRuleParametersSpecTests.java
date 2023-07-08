@@ -60,7 +60,7 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsBetweenRangeFromPreviousReadout_thenReturnsPassed() {
         this.sut.setFromPercent(-10.0);
         this.sut.setToPercent(0.0);
-        this.sut.setExact(false);
+        this.sut.setExactDay(false);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 7] = 20.0;
@@ -84,7 +84,7 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsEqualToPreviousReadoutAndRangeIsZero_thenReturnsPassed() {
         this.sut.setFromPercent(0.0);
         this.sut.setToPercent(0.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 7] = 20.0;
@@ -108,7 +108,7 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsGreaterThanAllowed_thenReturnsFailed() {
         this.sut.setFromPercent(10.0);
         this.sut.setToPercent(300.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 7] = 20.0;
@@ -132,7 +132,7 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
     void executeRule_whenExactReadoutIsNull_thenReturnsPassed() {
         this.sut.setFromPercent(10.0);
         this.sut.setToPercent(300.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 7] = 20.0;

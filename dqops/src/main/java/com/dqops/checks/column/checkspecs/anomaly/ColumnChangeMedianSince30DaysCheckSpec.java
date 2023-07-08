@@ -19,7 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.change.WithinChange30DaysRuleParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule10ParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule20ParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule50ParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericMedianSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnChangeMedianSince30DaysCheckSpec
-        extends AbstractCheckSpec<ColumnNumericMedianSensorParametersSpec, WithinChange30DaysRuleParametersSpec, WithinChange30DaysRuleParametersSpec, WithinChange30DaysRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericMedianSensorParametersSpec, ChangePercent30DaysRule10ParametersSpec, ChangePercent30DaysRule20ParametersSpec, ChangePercent30DaysRule50ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeMedianSince30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -52,17 +54,17 @@ public class ColumnChangeMedianSince30DaysCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private WithinChange30DaysRuleParametersSpec warning;
+    private ChangePercent30DaysRule10ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private WithinChange30DaysRuleParametersSpec error;
+    private ChangePercent30DaysRule20ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private WithinChange30DaysRuleParametersSpec fatal;
+    private ChangePercent30DaysRule50ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +93,7 @@ public class ColumnChangeMedianSince30DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public WithinChange30DaysRuleParametersSpec getWarning() {
+    public ChangePercent30DaysRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +102,7 @@ public class ColumnChangeMedianSince30DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(WithinChange30DaysRuleParametersSpec warning) {
+    public void setWarning(ChangePercent30DaysRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -112,7 +114,7 @@ public class ColumnChangeMedianSince30DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public WithinChange30DaysRuleParametersSpec getError() {
+    public ChangePercent30DaysRule20ParametersSpec getError() {
         return this.error;
     }
 
@@ -121,7 +123,7 @@ public class ColumnChangeMedianSince30DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(WithinChange30DaysRuleParametersSpec error) {
+    public void setError(ChangePercent30DaysRule20ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -133,7 +135,7 @@ public class ColumnChangeMedianSince30DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public WithinChange30DaysRuleParametersSpec getFatal() {
+    public ChangePercent30DaysRule50ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -142,7 +144,7 @@ public class ColumnChangeMedianSince30DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(WithinChange30DaysRuleParametersSpec fatal) {
+    public void setFatal(ChangePercent30DaysRule50ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -165,6 +167,6 @@ public class ColumnChangeMedianSince30DaysCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Validity;
+        return DefaultDataQualityDimensions.Consistency;
     }
 }

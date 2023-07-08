@@ -12,7 +12,7 @@ Verifies that the median in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|median_change|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change](../../../../reference/rules/Change/#within-change)|
+|median_change|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -44,11 +44,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=median_chan
             parameters:
               percentile_value: 0.5
             warning:
-              max_within: 10.0
+              max_percent: 5.0
             error:
-              max_within: 10.0
+              max_percent: 5.0
             fatal:
-              max_within: 10.0
+              max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-23"
@@ -70,11 +70,11 @@ spec:
             parameters:
               percentile_value: 0.5
             warning:
-              max_within: 10.0
+              max_percent: 5.0
             error:
-              max_within: 10.0
+              max_percent: 5.0
             fatal:
-              max_within: 10.0
+              max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -341,11 +341,11 @@ spec:
                 parameters:
                   percentile_value: 0.5
                 warning:
-                  max_within: 10.0
+                  max_percent: 5.0
                 error:
-                  max_within: 10.0
+                  max_percent: 5.0
                 fatal:
-                  max_within: 10.0
+                  max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -613,7 +613,7 @@ Verifies that the median in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_change|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change](../../../../reference/rules/Change/#within-change)|
+|daily_median_change|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -646,11 +646,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -673,11 +673,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -945,11 +945,11 @@ spec:
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1217,7 +1217,7 @@ Verifies that the median in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_median_change|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change](../../../../reference/rules/Change/#within-change)|
+|monthly_median_change|recurring|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1250,11 +1250,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_med
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -1277,11 +1277,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1549,11 +1549,11 @@ spec:
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1821,7 +1821,7 @@ Verifies that the median in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_median_change|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change](../../../../reference/rules/Change/#within-change)|
+|daily_partition_median_change|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1854,11 +1854,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -1881,11 +1881,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2153,11 +2153,11 @@ spec:
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2425,7 +2425,7 @@ Verifies that the median in a column changed in a fixed rate since last readout.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_median_change|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[within_change](../../../../reference/rules/Change/#within-change)|
+|monthly_partition_median_change|partitioned|monthly|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2458,11 +2458,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -2485,11 +2485,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2757,11 +2757,11 @@ spec:
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_within: 10.0
+                    max_percent: 5.0
                   error:
-                    max_within: 10.0
+                    max_percent: 5.0
                   fatal:
-                    max_within: 10.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

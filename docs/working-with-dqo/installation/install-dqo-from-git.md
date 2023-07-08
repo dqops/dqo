@@ -10,7 +10,7 @@ To use DQO you need:
   ```
   python --version
   ```
-  To view the Python 3 version, run `Python3 --version` instead.
+  To view the Python 3 version, run `python3 --version` instead.
 
 
 

@@ -12,7 +12,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sum_change_30_days|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change_30_days](../../../../reference/rules/Change/#within-change-30-days)|
+|sum_change_30_days|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -42,14 +42,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=sum_change_
         anomaly:
           sum_change_30_days:
             warning:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
             error:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
             fatal:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -69,14 +69,14 @@ spec:
         anomaly:
           sum_change_30_days:
             warning:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
             error:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
             fatal:
-              max_within: 10.0
-              exact: false
+              max_percent: 5.0
+              exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -263,14 +263,14 @@ spec:
             anomaly:
               sum_change_30_days:
                 warning:
-                  max_within: 10.0
-                  exact: false
+                  max_percent: 5.0
+                  exact_day: false
                 error:
-                  max_within: 10.0
-                  exact: false
+                  max_percent: 5.0
+                  exact_day: false
                 fatal:
-                  max_within: 10.0
-                  exact: false
+                  max_percent: 5.0
+                  exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -461,7 +461,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_change_30_days|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change_30_days](../../../../reference/rules/Change/#within-change-30-days)|
+|daily_sum_change_30_days|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -492,14 +492,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_c
           anomaly:
             daily_sum_change_30_days:
               warning:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               error:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               fatal:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
@@ -520,14 +520,14 @@ spec:
           anomaly:
             daily_sum_change_30_days:
               warning:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               error:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               fatal:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -715,14 +715,14 @@ spec:
               anomaly:
                 daily_sum_change_30_days:
                   warning:
-                    max_within: 10.0
-                    exact: false
+                    max_percent: 5.0
+                    exact_day: false
                   error:
-                    max_within: 10.0
-                    exact: false
+                    max_percent: 5.0
+                    exact_day: false
                   fatal:
-                    max_within: 10.0
-                    exact: false
+                    max_percent: 5.0
+                    exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -913,7 +913,7 @@ Verifies that the sum in a column changed in a fixed rate since last readout fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_change_30_days|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[within_change_30_days](../../../../reference/rules/Change/#within-change-30-days)|
+|daily_partition_sum_change_30_days|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percent_30_days](../../../../reference/rules/Change/#change-percent-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -944,14 +944,14 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           anomaly:
             daily_partition_sum_change_30_days:
               warning:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               error:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               fatal:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
@@ -972,14 +972,14 @@ spec:
           anomaly:
             daily_partition_sum_change_30_days:
               warning:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               error:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
               fatal:
-                max_within: 10.0
-                exact: false
+                max_percent: 5.0
+                exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1171,14 +1171,14 @@ spec:
               anomaly:
                 daily_partition_sum_change_30_days:
                   warning:
-                    max_within: 10.0
-                    exact: false
+                    max_percent: 5.0
+                    exact_day: false
                   error:
-                    max_within: 10.0
-                    exact: false
+                    max_percent: 5.0
+                    exact_day: false
                   fatal:
-                    max_within: 10.0
-                    exact: false
+                    max_percent: 5.0
+                    exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

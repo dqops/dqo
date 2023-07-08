@@ -60,7 +60,7 @@ public class BetweenChange30DaysRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsBetweenRangeFromPreviousReadout_thenReturnsPassed() {
         this.sut.setFrom(-1.0);
         this.sut.setTo(0.0);
-        this.sut.setExact(false);
+        this.sut.setExactDay(false);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 42] = 20.0;
@@ -84,7 +84,7 @@ public class BetweenChange30DaysRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsEqualToPreviousReadoutAndRangeIsZero_thenReturnsPassed() {
         this.sut.setFrom(0.0);
         this.sut.setTo(0.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 42] = 23.0;
@@ -109,7 +109,7 @@ public class BetweenChange30DaysRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsGreaterThanAllowed_thenReturnsFailed() {
         this.sut.setFrom(10.0);
         this.sut.setTo(300.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 30] = 20.0;
@@ -133,7 +133,7 @@ public class BetweenChange30DaysRuleParametersSpecTests extends BaseTest {
     void executeRule_whenExactReadoutIsNull_thenReturnsPassed() {
         this.sut.setFrom(10.0);
         this.sut.setTo(300.0);
-        this.sut.setExact(true);
+        this.sut.setExactDay(true);
 
         int readoutsCount = this.timeWindowSettings.getPredictionTimeWindow();
         this.sensorReadouts[readoutsCount - 31] = 12.0;

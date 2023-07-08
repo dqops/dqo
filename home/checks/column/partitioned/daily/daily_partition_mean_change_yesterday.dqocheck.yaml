@@ -3,6 +3,6 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/numeric/mean
-  rule_name: change/within_change_1_day
+  rule_name: change/change_percent_1_day
   help_text: Verifies that the mean value in a column changed in a fixed rate since
     last readout from yesterday.

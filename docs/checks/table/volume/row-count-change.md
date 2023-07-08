@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_change|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change](../../../../reference/rules/Change/#within-change)|
+|row_count_change|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_c
     volume:
       row_count_change:
         warning:
-          max_within: 10.0
+          max_percent: 5.0
         error:
-          max_within: 10.0
+          max_percent: 5.0
         fatal:
-          max_within: 10.0
+          max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-19"
@@ -64,11 +64,11 @@ spec:
     volume:
       row_count_change:
         warning:
-          max_within: 10.0
+          max_percent: 5.0
         error:
-          max_within: 10.0
+          max_percent: 5.0
         fatal:
-          max_within: 10.0
+          max_percent: 5.0
   columns:
     col_event_timestamp:
       labels:
@@ -286,11 +286,11 @@ spec:
         volume:
           row_count_change:
             warning:
-              max_within: 10.0
+              max_percent: 5.0
             error:
-              max_within: 10.0
+              max_percent: 5.0
             fatal:
-              max_within: 10.0
+              max_percent: 5.0
       columns:
         col_event_timestamp:
           labels:
@@ -520,7 +520,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_change|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change](../../../../reference/rules/Change/#within-change)|
+|daily_row_count_change|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -551,11 +551,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
       volume:
         daily_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
@@ -574,11 +574,11 @@ spec:
       volume:
         daily_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
   columns:
     col_event_timestamp:
       labels:
@@ -797,11 +797,11 @@ spec:
           volume:
             daily_row_count_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       columns:
         col_event_timestamp:
           labels:
@@ -1031,7 +1031,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_row_count_change|recurring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change](../../../../reference/rules/Change/#within-change)|
+|monthly_row_count_change|recurring|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1062,11 +1062,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
       volume:
         monthly_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
@@ -1085,11 +1085,11 @@ spec:
       volume:
         monthly_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
   columns:
     col_event_timestamp:
       labels:
@@ -1308,11 +1308,11 @@ spec:
           volume:
             monthly_row_count_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       columns:
         col_event_timestamp:
           labels:
@@ -1542,7 +1542,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_change|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change](../../../../reference/rules/Change/#within-change)|
+|daily_partition_row_count_change|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1573,11 +1573,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
       volume:
         daily_partition_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
@@ -1596,11 +1596,11 @@ spec:
       volume:
         daily_partition_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
   columns:
     col_event_timestamp:
       labels:
@@ -1823,11 +1823,11 @@ spec:
           volume:
             daily_partition_row_count_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       columns:
         col_event_timestamp:
           labels:
@@ -2055,7 +2055,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_row_count_change|partitioned|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[within_change](../../../../reference/rules/Change/#within-change)|
+|monthly_partition_row_count_change|partitioned|monthly|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -2086,11 +2086,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
       volume:
         monthly_partition_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
@@ -2109,11 +2109,11 @@ spec:
       volume:
         monthly_partition_row_count_change:
           warning:
-            max_within: 10.0
+            max_percent: 5.0
           error:
-            max_within: 10.0
+            max_percent: 5.0
           fatal:
-            max_within: 10.0
+            max_percent: 5.0
   columns:
     col_event_timestamp:
       labels:
@@ -2336,11 +2336,11 @@ spec:
           volume:
             monthly_partition_row_count_change:
               warning:
-                max_within: 10.0
+                max_percent: 5.0
               error:
-                max_within: 10.0
+                max_percent: 5.0
               fatal:
-                max_within: 10.0
+                max_percent: 5.0
       columns:
         col_event_timestamp:
           labels:

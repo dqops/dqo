@@ -10,9 +10,9 @@ if TYPE_CHECKING:
     )
     from ..models.comment_spec import CommentSpec
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
-    from ..models.within_change_30_days_rule_parameters_spec import (
-        WithinChange30DaysRuleParametersSpec,
-    )
+    from ..models.change_percent_30_days_rule_10_parameters_spec import ChangePercent30DaysRule10ParametersSpec
+    from ..models.change_percent_30_days_rule_20_parameters_spec import ChangePercent30DaysRule20ParametersSpec
+    from ..models.change_percent_30_days_rule_50_parameters_spec import ChangePercent30DaysRule50ParametersSpec
 
 
 T = TypeVar("T", bound="ColumnChangeSumSince30DaysCheckSpec")
@@ -44,9 +44,9 @@ class ColumnChangeSumSince30DaysCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, ColumnNumericSumSensorParametersSpec]):
-        warning (Union[Unset, WithinChange30DaysRuleParametersSpec]):
-        error (Union[Unset, WithinChange30DaysRuleParametersSpec]):
-        fatal (Union[Unset, WithinChange30DaysRuleParametersSpec]):
+        warning (Union[Unset, ChangePercent30DaysRule10ParametersSpec]):
+        error (Union[Unset, ChangePercent30DaysRule20ParametersSpec]):
+        fatal (Union[Unset, ChangePercent30DaysRule50ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -58,9 +58,9 @@ class ColumnChangeSumSince30DaysCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnNumericSumSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "WithinChange30DaysRuleParametersSpec"] = UNSET
-    error: Union[Unset, "WithinChange30DaysRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "WithinChange30DaysRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "ChangePercent30DaysRule10ParametersSpec"] = UNSET
+    error: Union[Unset, "ChangePercent30DaysRule20ParametersSpec"] = UNSET
+    fatal: Union[Unset, "ChangePercent30DaysRule50ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -135,9 +135,9 @@ class ColumnChangeSumSince30DaysCheckSpec:
         )
         from ..models.comment_spec import CommentSpec
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
-        from ..models.within_change_30_days_rule_parameters_spec import (
-            WithinChange30DaysRuleParametersSpec,
-        )
+        from ..models.change_percent_30_days_rule_10_parameters_spec import ChangePercent30DaysRule10ParametersSpec
+        from ..models.change_percent_30_days_rule_20_parameters_spec import ChangePercent30DaysRule20ParametersSpec
+        from ..models.change_percent_30_days_rule_50_parameters_spec import ChangePercent30DaysRule50ParametersSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
@@ -174,25 +174,25 @@ class ColumnChangeSumSince30DaysCheckSpec:
             parameters = ColumnNumericSumSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, WithinChange30DaysRuleParametersSpec]
+        warning: Union[Unset, ChangePercent30DaysRule10ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = WithinChange30DaysRuleParametersSpec.from_dict(_warning)
+            warning = ChangePercent30DaysRule10ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, WithinChange30DaysRuleParametersSpec]
+        error: Union[Unset, ChangePercent30DaysRule20ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = WithinChange30DaysRuleParametersSpec.from_dict(_error)
+            error = ChangePercent30DaysRule20ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, WithinChange30DaysRuleParametersSpec]
+        fatal: Union[Unset, ChangePercent30DaysRule50ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = WithinChange30DaysRuleParametersSpec.from_dict(_fatal)
+            fatal = ChangePercent30DaysRule50ParametersSpec.from_dict(_fatal)
 
         column_change_sum_since_30_days_check_spec = cls(
             schedule_override=schedule_override,
