@@ -17,6 +17,11 @@ import ErrorItem from './ErrorItem';
 import moment from 'moment';
 import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
+import { DqoJobHistoryEntryModel } from '../../api';
+
+interface jobInterface extends Omit<DqoJobHistoryEntryModel, 'childs'> {
+  childs?: DqoJobHistoryEntryModel[];
+}
 
 const NotificationMenu = () => {
   const { job_dictionary_state, isOpen, isCronScheduled } = useSelector(
@@ -95,7 +100,34 @@ const NotificationMenu = () => {
     }
   };
 
-  console.log(job_dictionary_state);
+  const setNewJobArray = (): jobInterface[] => {
+    const newArray = data.filter(
+      (x) => x.item.jobId?.parentJobId?.jobId === undefined
+    );
+    const newArray2: jobInterface[] = newArray.map((x) => ({
+      errorMessage: x.item.errorMessage,
+      jobId: {
+        jobId: x.item.jobId?.jobId,
+        createdAt: x.item.jobId?.createdAt
+      },
+      jobType: x.item.jobType,
+      parameters: x.item.parameters,
+      status: x.item.status,
+      statusChangedAt: x.item.statusChangedAt,
+      childs: data
+        .filter((y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId)
+        .map((y) => y.item)
+    }));
+    useEffect(() => {
+      if (newArray2.some((x) => x.jobType === undefined)) {
+        newArray2.map(() => ({
+          ...newArray2
+        }));
+      }
+    }, [newArray2]);
+
+    return newArray2;
+  };
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
@@ -124,7 +156,9 @@ const NotificationMenu = () => {
         style={{ position: 'relative' }}
       >
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
-          <div>Notifications ({data.length})</div>
+          <div onClick={() => setNewJobArray()}>
+            Notifications ({data.length})
+          </div>
           <div className="flex items-center gap-x-3 text-sm">
             <div className="whitespace-no-wrap">Jobs scheduler </div>
             <div>
@@ -141,12 +175,12 @@ const NotificationMenu = () => {
           </div>
         </div>
         <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
-          {data.map((notification: any, index) =>
+          {setNewJobArray().map((notification: any, index) =>
             notification.type === 'error' ? (
-              <ErrorItem error={notification.item} key={index} />
+              <ErrorItem error={notification} key={index} />
             ) : (
               <JobItem
-                job={notification.item}
+                job={notification}
                 key={index}
                 notifnumber={data.length}
               />
