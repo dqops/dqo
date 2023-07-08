@@ -10,7 +10,7 @@ import {
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
-import { TabOption } from "../PageTabs/tab";
+import { TabOption } from '../PageTabs/tab';
 
 interface LayoutProps {
   children?: any;
@@ -49,10 +49,16 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
   }, [activeTab]);
 
   return (
-    <div className="flex min-h-screen overflow-hidden">
+    <div
+      className="flex min-h-screen overflow-hidden"
+      style={{ height: '100%', overflowY: 'hidden' }}
+    >
       <Header />
       <IncidentsTree />
-      <div className="flex flex-1">
+      <div
+        className="flex flex-1 h-full"
+        style={{ height: '100%', overflowY: 'hidden' }}
+      >
         <div
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
@@ -68,10 +74,7 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
               onRemoveTab={closeTab}
               limit={10}
             />
-            <div
-              className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
-              style={{ maxHeight: 'calc(100vh - 80px)' }}
-            >
+            <div className="bg-white border border-gray-300 flex-auto min-h-0 overflow-auto">
               {!!activeTab && <div>{children}</div>}
             </div>
           </div>
