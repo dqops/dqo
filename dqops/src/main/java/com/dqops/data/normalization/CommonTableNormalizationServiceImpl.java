@@ -53,9 +53,6 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
             String dataGroupingLevelColumnName = CommonColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + levelIndex;
             Column<?> existingDataGroupingLevelColumn = resultsTable != null ? TableColumnUtility.findColumn(resultsTable, dataGroupingLevelColumnName) : null;
             if (existingDataGroupingLevelColumn == null) {
-                continue; // no data stream level
-            }
-            else {
                 if (dataGroupingConfigurationSpec != null && dataGroupingConfigurationSpec.getLevel(levelIndex) != null) {
                     DataGroupingDimensionSpec dataGroupingDimensionSpec = dataGroupingConfigurationSpec.getLevel(levelIndex);
                     if (dataGroupingDimensionSpec.getSource() == DataGroupingDimensionSource.tag && !Strings.isNullOrEmpty(dataGroupingDimensionSpec.getTag())) {
@@ -64,6 +61,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                         dataGroupingLevelColumns[levelIndex - 1] = tagColumn;
                     }
                 }
+                continue;
             }
 
             if (existingDataGroupingLevelColumn instanceof TextColumn) {
