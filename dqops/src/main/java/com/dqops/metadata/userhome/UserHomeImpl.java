@@ -376,6 +376,23 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Finds a node identified by the hierarchy id.
+     *
+     * @param hierarchyId Hierarchy id path to the node.
+     * @return Node that was found.
+     */
+    @Override
+    public HierarchyNode findNode(HierarchyId hierarchyId) {
+        HierarchyNode currentNode = this;
+        for (int i = 0; i < hierarchyId.size() && currentNode != null; i++) {
+            Object nodeId = hierarchyId.get(i);
+            currentNode = currentNode.getChild(nodeId);
+        }
+
+        return currentNode;
+    }
+
+    /**
      * Finds a column wrapper on the given hierarchy path.
      *
      * @param nestedHierarchyId Hierarchy id path to a check or any other element inside a connection / table / column.

@@ -91,4 +91,11 @@ public interface UserHome extends Flushable, HierarchyNode {
      * (it is for example a hierarchy id of a check defined at a whole table level, not a column level).
      */
     ColumnSpec findColumnFor(HierarchyId nestedHierarchyId);
+
+    /**
+     * Finds a node identified by the hierarchy id.
+     * @param hierarchyId Hierarchy id path to the node.
+     * @return Node that was found.
+     */
+    HierarchyNode findNode(HierarchyId hierarchyId);
 }

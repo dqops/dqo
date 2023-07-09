@@ -24,6 +24,12 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
  */
 public abstract class AbstractComparisonCheckCategorySpecMap<V extends AbstractComparisonCheckCategorySpec> extends AbstractDirtyTrackingSpecMap<V> {
     /**
+     * The name of the category for comparisons.
+     */
+    public static final String COMPARISONS_CATEGORY_NAME = "comparisons";
+
+
+    /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.

@@ -861,4 +861,17 @@ public class TableSpec extends AbstractSpec {
         HierarchyId hierarchyId = HierarchyId.makeHierarchyIdForTable("unknown", physicalTableName);
         this.setHierarchyId(hierarchyId);
     }
+
+    /**
+     * Returns a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return super.toString();
+        }
+
+        return hierarchyId.getConnectionName() + "." + hierarchyId.getPhysicalTableName().toString();
+    }
 }

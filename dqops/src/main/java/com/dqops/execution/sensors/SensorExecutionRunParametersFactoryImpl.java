@@ -63,6 +63,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param check Check specification.
      * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
      * @param checkType Check type (profiling, recurring, partitioned).
+     * @param dataGroupingConfigurationOverride Data grouping configuration override. Used when not null. We need to assign a custom data grouping configuration for table comparison checks.
      * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, recurring, partitioned).
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
      *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
@@ -76,6 +77,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                                                                AbstractCheckSpec<?,?,?,?> check,
                                                                CheckDefinitionSpec customCheckDefinition,
                                                                CheckType checkType,
+                                                               DataGroupingConfigurationSpec dataGroupingConfigurationOverride,
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                TimeWindowFilterParameters userTimeWindowFilters,
                                                                ProviderDialectSettings dialectSettings) {
@@ -85,8 +87,10 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
-        DataGroupingConfigurationSpec dataGroupingConfiguration = check.getDataGrouping() != null ?
-                expandedTable.getGroupings().get(check.getDataGrouping()) : expandedTable.getGroupings().getFirstDataGroupingConfiguration();
+        DataGroupingConfigurationSpec dataGroupingConfiguration =
+                dataGroupingConfigurationOverride != null ? dataGroupingConfigurationOverride :
+                        (check.getDataGrouping() != null ?
+                         expandedTable.getGroupings().get(check.getDataGrouping()) : expandedTable.getGroupings().getFirstDataGroupingConfiguration());
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
         EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames();

@@ -15,6 +15,7 @@
  */
 package com.dqops.checks;
 
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
@@ -366,6 +367,11 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
         if (hierarchyId == null) {
             return null;
         }
+
+        if (Objects.equals(hierarchyId.get(hierarchyId.size() - 3), AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME)) {
+            return AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME;
+        }
+
         return hierarchyId.get(hierarchyId.size() - 2).toString();
     }
 
@@ -380,6 +386,21 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             return null;
         }
         return hierarchyId.getLast().toString();
+    }
+
+    /**
+     * Returns true if this is a table comparison check that compares tables across data sources.
+     * Returns false for simple checks that are executed only on the monitored table.
+     * @return True for table comparison checks that use two tables, false for single table checks.
+     */
+    @JsonIgnore
+    public boolean isTableComparisonCheck() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return false;
+        }
+
+        return Objects.equals(hierarchyId.get(hierarchyId.size() - 3), AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME);
     }
 
     /**
