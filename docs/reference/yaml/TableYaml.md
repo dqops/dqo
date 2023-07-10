@@ -845,9 +845,9 @@ Table level check that ensures that the row count changed by a fixed rate since 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#withinchangeruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[error](#withinchangeruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[fatal](#withinchangeruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
+|[warning](#changepercentrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentRule10ParametersSpec](#changepercentrule10parametersspec)| | | |
+|[error](#changepercentrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentRule20ParametersSpec](#changepercentrule20parametersspec)| | | |
+|[fatal](#changepercentrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentRule50ParametersSpec](#changepercentrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -867,8 +867,8 @@ Table level check that ensures that the row count changed by a fixed rate since 
 
 ___  
 
-## WithinChangeRuleParametersSpec  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound.  
+## ChangePercentRule10ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound.  
   
 
 
@@ -882,7 +882,61 @@ Data quality rule that verifies if data quality sensor readout value changed by 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| | |10<br/>|
+|max_percent|Percentage of maximum accepted change compared to previous readout (inclusive).|double| | |5<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercentRule20ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to previous readout (inclusive).|double| | |5<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercentRule50ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to previous readout (inclusive).|double| | |5<br/>|
 
 
 
@@ -910,9 +964,9 @@ Table level check that ensures that the row count changed by a fixed rate since 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#withinchange1dayruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[error](#withinchange1dayruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[fatal](#withinchange1dayruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
+|[warning](#changepercent1dayrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent1DayRule10ParametersSpec](#changepercent1dayrule10parametersspec)| | | |
+|[error](#changepercent1dayrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent1DayRule20ParametersSpec](#changepercent1dayrule20parametersspec)| | | |
+|[fatal](#changepercent1dayrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent1DayRule50ParametersSpec](#changepercent1dayrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -932,8 +986,8 @@ Table level check that ensures that the row count changed by a fixed rate since 
 
 ___  
 
-## WithinChange1DayRuleParametersSpec  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to yesterday.  
+## ChangePercent1DayRule10ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to yesterday.  
   
 
 
@@ -947,8 +1001,64 @@ Data quality rule that verifies if data quality sensor readout value changed by 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| | |10<br/>|
-|exact|Whether to compare the actual value to the readout exactly 1 day in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts from the current day.|boolean| | |false<br/>|
+|max_percent|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercent1DayRule20ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to yesterday.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercent1DayRule50ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to yesterday.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
 
 
 
@@ -976,9 +1086,9 @@ Table level check that ensures that the row count changed by a fixed rate since 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#withinchange7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[error](#withinchange7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[fatal](#withinchange7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
+|[warning](#changepercent7daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent7DaysRule10ParametersSpec](#changepercent7daysrule10parametersspec)| | | |
+|[error](#changepercent7daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent7DaysRule20ParametersSpec](#changepercent7daysrule20parametersspec)| | | |
+|[fatal](#changepercent7daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent7DaysRule50ParametersSpec](#changepercent7daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -998,8 +1108,8 @@ Table level check that ensures that the row count changed by a fixed rate since 
 
 ___  
 
-## WithinChange7DaysRuleParametersSpec  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last week.  
+## ChangePercent7DaysRule10ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last week.  
   
 
 
@@ -1013,8 +1123,64 @@ Data quality rule that verifies if data quality sensor readout value changed by 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| | |10<br/>|
-|exact|Whether to compare the actual value to the readout exactly 7 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 7 days.|boolean| | |false<br/>|
+|max_percent|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercent7DaysRule20ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last week.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercent7DaysRule50ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last week.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
 
 
 
@@ -1042,9 +1208,9 @@ Table level check that ensures that the row count changed by a fixed rate since 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#withinchange30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[error](#withinchange30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[fatal](#withinchange30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
+|[warning](#changepercent30daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent30DaysRule10ParametersSpec](#changepercent30daysrule10parametersspec)| | | |
+|[error](#changepercent30daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent30DaysRule20ParametersSpec](#changepercent30daysrule20parametersspec)| | | |
+|[fatal](#changepercent30daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent30DaysRule50ParametersSpec](#changepercent30daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -1064,8 +1230,8 @@ Table level check that ensures that the row count changed by a fixed rate since 
 
 ___  
 
-## WithinChange30DaysRuleParametersSpec  
-Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last month.  
+## ChangePercent30DaysRule10ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last month.  
   
 
 
@@ -1079,8 +1245,64 @@ Data quality rule that verifies if data quality sensor readout value changed by 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|max_within|Maximal accepted absolute change with regards to the previous readout (inclusive).|double| | |10<br/>|
-|exact|Whether to compare the actual value to the readout exactly 30 days in the past. If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 30 days.|boolean| | |false<br/>|
+|max_percent|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercent30DaysRule20ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last month.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ChangePercent30DaysRule50ParametersSpec  
+Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last month.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double| | |5<br/>|
+|exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| | |false<br/>|
 
 
 
@@ -1421,7 +1643,7 @@ Container of built-in preconfigured accuracy data quality checks on a table leve
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[row_count_match_percent](#tableaccuracyrowcountmatchpercentcheckspec)|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|[TableAccuracyRowCountMatchPercentCheckSpec](#tableaccuracyrowcountmatchpercentcheckspec)| | | |
+|[total_row_count_match_percent](#tableaccuracytotalrowcountmatchpercentcheckspec)|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|[TableAccuracyTotalRowCountMatchPercentCheckSpec](#tableaccuracytotalrowcountmatchpercentcheckspec)| | | |
 
 
 
@@ -1433,7 +1655,7 @@ Container of built-in preconfigured accuracy data quality checks on a table leve
 
 ___  
 
-## TableAccuracyRowCountMatchPercentCheckSpec  
+## TableAccuracyTotalRowCountMatchPercentCheckSpec  
 Table level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.  
   
 
@@ -1448,7 +1670,7 @@ Table level check that ensures that there are no more than a maximum percentage 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tableaccuracyrowcountmatchpercentsensorparametersspec)|Data quality check parameters|[TableAccuracyRowCountMatchPercentSensorParametersSpec](#tableaccuracyrowcountmatchpercentsensorparametersspec)| | | |
+|[parameters](#tableaccuracytotalrowcountmatchpercentsensorparametersspec)|Data quality check parameters|[TableAccuracyTotalRowCountMatchPercentSensorParametersSpec](#tableaccuracytotalrowcountmatchpercentsensorparametersspec)| | | |
 |[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
 |[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of row count of a table column and of a row count of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
@@ -1471,7 +1693,7 @@ Table level check that ensures that there are no more than a maximum percentage 
 
 ___  
 
-## TableAccuracyRowCountMatchPercentSensorParametersSpec  
+## TableAccuracyTotalRowCountMatchPercentSensorParametersSpec  
 Table level sensor that calculates percentage of the difference of the total row count of all rows in the tested table and the total row count of the other (reference) table.  
   
 
@@ -2786,7 +3008,7 @@ Container of table level recurring, divided by the time window (daily, monthly, 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily](#tabledailyrecurringcategoriesspec)|Configuration of daily recurring evaluated at a table level.|[TableDailyRecurringCategoriesSpec](#tabledailyrecurringcategoriesspec)| | | |
+|[daily](#tabledailyrecurringcheckcategoriesspec)|Configuration of daily recurring evaluated at a table level.|[TableDailyRecurringCheckCategoriesSpec](#tabledailyrecurringcheckcategoriesspec)| | | |
 |[monthly](#tablemonthlyrecurringcheckcategoriesspec)|Configuration of monthly recurring evaluated at a table level.|[TableMonthlyRecurringCheckCategoriesSpec](#tablemonthlyrecurringcheckcategoriesspec)| | | |
 
 
@@ -2799,7 +3021,7 @@ Container of table level recurring, divided by the time window (daily, monthly, 
 
 ___  
 
-## TableDailyRecurringCategoriesSpec  
+## TableDailyRecurringCheckCategoriesSpec  
 Container of table level daily recurring. Contains categories of daily recurring.  
   
 
@@ -2910,7 +3132,7 @@ Container of built-in preconfigured data quality checks on a table level that ar
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_row_count_match_percent](#tableaccuracyrowcountmatchpercentcheckspec)|Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.|[TableAccuracyRowCountMatchPercentCheckSpec](#tableaccuracyrowcountmatchpercentcheckspec)| | | |
+|[daily_total_row_count_match_percent](#tableaccuracytotalrowcountmatchpercentcheckspec)|Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.|[TableAccuracyTotalRowCountMatchPercentCheckSpec](#tableaccuracytotalrowcountmatchpercentcheckspec)| | | |
 
 
 
@@ -3114,7 +3336,7 @@ Container of built-in preconfigured data quality checks on a table level that ar
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_row_count_match_percent](#tableaccuracyrowcountmatchpercentcheckspec)|Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.|[TableAccuracyRowCountMatchPercentCheckSpec](#tableaccuracyrowcountmatchpercentcheckspec)| | | |
+|[monthly_total_row_count_match_percent](#tableaccuracytotalrowcountmatchpercentcheckspec)|Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.|[TableAccuracyTotalRowCountMatchPercentCheckSpec](#tableaccuracytotalrowcountmatchpercentcheckspec)| | | |
 
 
 
@@ -10897,11 +11119,11 @@ Container of built-in preconfigured data quality checks on a column level that a
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[total_sum_match_percent](#columnaccuracytotalsummatchpercentcheckspec)|Verifies that percentage of the difference in sum of a column in a table and sum of a column of another table does not exceed the set number.|[ColumnAccuracyTotalSumMatchPercentCheckSpec](#columnaccuracytotalsummatchpercentcheckspec)| | | |
-|[min_match_percent](#columnaccuracyminmatchpercentcheckspec)|Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number.|[ColumnAccuracyMinMatchPercentCheckSpec](#columnaccuracyminmatchpercentcheckspec)| | | |
-|[max_match_percent](#columnaccuracymaxmatchpercentcheckspec)|Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number.|[ColumnAccuracyMaxMatchPercentCheckSpec](#columnaccuracymaxmatchpercentcheckspec)| | | |
-|[average_match_percent](#columnaccuracyaveragematchpercentcheckspec)|Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number.|[ColumnAccuracyAverageMatchPercentCheckSpec](#columnaccuracyaveragematchpercentcheckspec)| | | |
-|[not_null_count_match_percent](#columnaccuracynotnullcountmatchpercentcheckspec)|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyNotNullCountMatchPercentCheckSpec](#columnaccuracynotnullcountmatchpercentcheckspec)| | | |
+|[total_sum_match_percent](#columnaccuracytotalsummatchpercentcheckspec)|Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.|[ColumnAccuracyTotalSumMatchPercentCheckSpec](#columnaccuracytotalsummatchpercentcheckspec)| | | |
+|[total_min_match_percent](#columnaccuracytotalminmatchpercentcheckspec)|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number.|[ColumnAccuracyTotalMinMatchPercentCheckSpec](#columnaccuracytotalminmatchpercentcheckspec)| | | |
+|[total_max_match_percent](#columnaccuracytotalmaxmatchpercentcheckspec)|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number.|[ColumnAccuracyTotalMaxMatchPercentCheckSpec](#columnaccuracytotalmaxmatchpercentcheckspec)| | | |
+|[total_average_match_percent](#columnaccuracytotalaveragematchpercentcheckspec)|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number.|[ColumnAccuracyTotalAverageMatchPercentCheckSpec](#columnaccuracytotalaveragematchpercentcheckspec)| | | |
+|[total_not_null_count_match_percent](#columnaccuracytotalnotnullcountmatchpercentcheckspec)|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec](#columnaccuracytotalnotnullcountmatchpercentcheckspec)| | | |
 
 
 
@@ -10980,7 +11202,7 @@ Column level sensor that calculates percentage of the difference in sum of a col
 
 ___  
 
-## ColumnAccuracyMinMatchPercentCheckSpec  
+## ColumnAccuracyTotalMinMatchPercentCheckSpec  
 Column level check that ensures that there are no more than a maximum percentage of difference of min of a table column and of a min of another table column.  
   
 
@@ -10995,7 +11217,7 @@ Column level check that ensures that there are no more than a maximum percentage
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnaccuracyminmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyMinMatchPercentSensorParametersSpec](#columnaccuracyminmatchpercentsensorparametersspec)| | | |
+|[parameters](#columnaccuracytotalminmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyTotalMinMatchPercentSensorParametersSpec](#columnaccuracytotalminmatchpercentsensorparametersspec)| | | |
 |[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
 |[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of min of a table column and of a min of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
@@ -11018,7 +11240,7 @@ Column level check that ensures that there are no more than a maximum percentage
 
 ___  
 
-## ColumnAccuracyMinMatchPercentSensorParametersSpec  
+## ColumnAccuracyTotalMinMatchPercentSensorParametersSpec  
 Column level sensor that calculates percentage of the difference in min of a column in a table and min of a column of another table.  
   
 
@@ -11047,7 +11269,7 @@ Column level sensor that calculates percentage of the difference in min of a col
 
 ___  
 
-## ColumnAccuracyMaxMatchPercentCheckSpec  
+## ColumnAccuracyTotalMaxMatchPercentCheckSpec  
 Column level check that ensures that there are no more than a maximum percentage of difference of max of a table column and of a max of another table column.  
   
 
@@ -11062,7 +11284,7 @@ Column level check that ensures that there are no more than a maximum percentage
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnaccuracymaxmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyMaxMatchPercentSensorParametersSpec](#columnaccuracymaxmatchpercentsensorparametersspec)| | | |
+|[parameters](#columnaccuracytotalmaxmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyTotalMaxMatchPercentSensorParametersSpec](#columnaccuracytotalmaxmatchpercentsensorparametersspec)| | | |
 |[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
 |[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of max of a table column and of a max of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
@@ -11085,7 +11307,7 @@ Column level check that ensures that there are no more than a maximum percentage
 
 ___  
 
-## ColumnAccuracyMaxMatchPercentSensorParametersSpec  
+## ColumnAccuracyTotalMaxMatchPercentSensorParametersSpec  
 Column level sensor that calculates percentage of the difference in max of a column in a table and max of a column of another table.  
   
 
@@ -11114,7 +11336,7 @@ Column level sensor that calculates percentage of the difference in max of a col
 
 ___  
 
-## ColumnAccuracyAverageMatchPercentCheckSpec  
+## ColumnAccuracyTotalAverageMatchPercentCheckSpec  
 Column level check that ensures that there are no more than a maximum percentage of difference of average of a table column and of an average of another table column.  
   
 
@@ -11129,7 +11351,7 @@ Column level check that ensures that there are no more than a maximum percentage
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnaccuracyaveragematchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyAverageMatchPercentSensorParametersSpec](#columnaccuracyaveragematchpercentsensorparametersspec)| | | |
+|[parameters](#columnaccuracytotalaveragematchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec](#columnaccuracytotalaveragematchpercentsensorparametersspec)| | | |
 |[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
 |[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of average of a table column and of a average of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
@@ -11152,7 +11374,7 @@ Column level check that ensures that there are no more than a maximum percentage
 
 ___  
 
-## ColumnAccuracyAverageMatchPercentSensorParametersSpec  
+## ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec  
 Column level sensor that calculates percentage of the difference in average of a column in a table and average of a column of another table.  
   
 
@@ -11181,7 +11403,7 @@ Column level sensor that calculates percentage of the difference in average of a
 
 ___  
 
-## ColumnAccuracyNotNullCountMatchPercentCheckSpec  
+## ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec  
 Column level check that ensures that there are no more than a maximum percentage of difference of the row count of a tested table&#x27;s column (counting the not null values) and of an row count of another (reference) table, also counting all rows with not null values.  
   
 
@@ -11196,7 +11418,7 @@ Column level check that ensures that there are no more than a maximum percentage
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnaccuracynotnullcountmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec](#columnaccuracynotnullcountmatchpercentsensorparametersspec)| | | |
+|[parameters](#columnaccuracytotalnotnullcountmatchpercentsensorparametersspec)|Data quality check parameters|[ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec](#columnaccuracytotalnotnullcountmatchpercentsensorparametersspec)| | | |
 |[warning](#maxdiffpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxDiffPercentRule0ParametersSpec](#maxdiffpercentrule0parametersspec)| | | |
 |[error](#maxdiffpercentrule1parametersspec)|Default alerting threshold for a maximum percentage of difference of row count of a table column and of a row count of another table column that raises a data quality error (alert).|[MaxDiffPercentRule1ParametersSpec](#maxdiffpercentrule1parametersspec)| | | |
 |[fatal](#maxdiffpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxDiffPercentRule5ParametersSpec](#maxdiffpercentrule5parametersspec)| | | |
@@ -11219,7 +11441,7 @@ Column level check that ensures that there are no more than a maximum percentage
 
 ___  
 
-## ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec  
+## ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec  
 Column level sensor that calculates percentage of the difference in row count of a column in a table and row count of a column of another table.  
   
 
@@ -11787,9 +12009,9 @@ Column level check that ensures that the mean value in a monitored column has ch
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#withinchangeruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[error](#withinchangeruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[fatal](#withinchangeruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
+|[warning](#changepercentrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentRule10ParametersSpec](#changepercentrule10parametersspec)| | | |
+|[error](#changepercentrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentRule20ParametersSpec](#changepercentrule20parametersspec)| | | |
+|[fatal](#changepercentrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentRule50ParametersSpec](#changepercentrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11825,9 +12047,9 @@ Column level check that ensures that the mean value in a monitored column has ch
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#withinchange1dayruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[error](#withinchange1dayruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[fatal](#withinchange1dayruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
+|[warning](#changepercent1dayrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent1DayRule10ParametersSpec](#changepercent1dayrule10parametersspec)| | | |
+|[error](#changepercent1dayrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent1DayRule20ParametersSpec](#changepercent1dayrule20parametersspec)| | | |
+|[fatal](#changepercent1dayrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent1DayRule50ParametersSpec](#changepercent1dayrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11863,9 +12085,9 @@ Column level check that ensures that the mean value in a monitored column has ch
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#withinchange7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[error](#withinchange7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[fatal](#withinchange7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
+|[warning](#changepercent7daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent7DaysRule10ParametersSpec](#changepercent7daysrule10parametersspec)| | | |
+|[error](#changepercent7daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent7DaysRule20ParametersSpec](#changepercent7daysrule20parametersspec)| | | |
+|[fatal](#changepercent7daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent7DaysRule50ParametersSpec](#changepercent7daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11901,9 +12123,9 @@ Column level check that ensures that the mean value in a monitored column has ch
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#withinchange30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[error](#withinchange30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[fatal](#withinchange30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
+|[warning](#changepercent30daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent30DaysRule10ParametersSpec](#changepercent30daysrule10parametersspec)| | | |
+|[error](#changepercent30daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent30DaysRule20ParametersSpec](#changepercent30daysrule20parametersspec)| | | |
+|[fatal](#changepercent30daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent30DaysRule50ParametersSpec](#changepercent30daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11939,9 +12161,9 @@ Column level check that ensures that the median in a monitored column has change
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#withinchangeruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[error](#withinchangeruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[fatal](#withinchangeruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
+|[warning](#changepercentrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentRule10ParametersSpec](#changepercentrule10parametersspec)| | | |
+|[error](#changepercentrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentRule20ParametersSpec](#changepercentrule20parametersspec)| | | |
+|[fatal](#changepercentrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentRule50ParametersSpec](#changepercentrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11977,9 +12199,9 @@ Column level check that ensures that the median in a monitored column has change
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#withinchange1dayruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[error](#withinchange1dayruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[fatal](#withinchange1dayruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
+|[warning](#changepercent1dayrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent1DayRule10ParametersSpec](#changepercent1dayrule10parametersspec)| | | |
+|[error](#changepercent1dayrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent1DayRule20ParametersSpec](#changepercent1dayrule20parametersspec)| | | |
+|[fatal](#changepercent1dayrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent1DayRule50ParametersSpec](#changepercent1dayrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -12015,9 +12237,9 @@ Column level check that ensures that the median in a monitored column has change
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#withinchange7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[error](#withinchange7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[fatal](#withinchange7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
+|[warning](#changepercent7daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent7DaysRule10ParametersSpec](#changepercent7daysrule10parametersspec)| | | |
+|[error](#changepercent7daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent7DaysRule20ParametersSpec](#changepercent7daysrule20parametersspec)| | | |
+|[fatal](#changepercent7daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent7DaysRule50ParametersSpec](#changepercent7daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -12053,9 +12275,9 @@ Column level check that ensures that the median in a monitored column has change
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#withinchange30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[error](#withinchange30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[fatal](#withinchange30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
+|[warning](#changepercent30daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent30DaysRule10ParametersSpec](#changepercent30daysrule10parametersspec)| | | |
+|[error](#changepercent30daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent30DaysRule20ParametersSpec](#changepercent30daysrule20parametersspec)| | | |
+|[fatal](#changepercent30daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent30DaysRule50ParametersSpec](#changepercent30daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -12091,9 +12313,9 @@ Column level check that ensures that the sum in a monitored column has changed b
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#withinchangeruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[error](#withinchangeruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
-|[fatal](#withinchangeruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChangeRuleParametersSpec](#withinchangeruleparametersspec)| | | |
+|[warning](#changepercentrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentRule10ParametersSpec](#changepercentrule10parametersspec)| | | |
+|[error](#changepercentrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentRule20ParametersSpec](#changepercentrule20parametersspec)| | | |
+|[fatal](#changepercentrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentRule50ParametersSpec](#changepercentrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -12129,9 +12351,9 @@ Column level check that ensures that the sum in a monitored column has changed b
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#withinchange1dayruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[error](#withinchange1dayruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
-|[fatal](#withinchange1dayruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange1DayRuleParametersSpec](#withinchange1dayruleparametersspec)| | | |
+|[warning](#changepercent1dayrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent1DayRule10ParametersSpec](#changepercent1dayrule10parametersspec)| | | |
+|[error](#changepercent1dayrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent1DayRule20ParametersSpec](#changepercent1dayrule20parametersspec)| | | |
+|[fatal](#changepercent1dayrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent1DayRule50ParametersSpec](#changepercent1dayrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -12167,9 +12389,9 @@ Column level check that ensures that the sum in a monitored column has changed b
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#withinchange7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[error](#withinchange7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
-|[fatal](#withinchange7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange7DaysRuleParametersSpec](#withinchange7daysruleparametersspec)| | | |
+|[warning](#changepercent7daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent7DaysRule10ParametersSpec](#changepercent7daysrule10parametersspec)| | | |
+|[error](#changepercent7daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent7DaysRule20ParametersSpec](#changepercent7daysrule20parametersspec)| | | |
+|[fatal](#changepercent7daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent7DaysRule50ParametersSpec](#changepercent7daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -12205,9 +12427,9 @@ Column level check that ensures that the sum in a monitored column has changed b
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#withinchange30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[error](#withinchange30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
-|[fatal](#withinchange30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[WithinChange30DaysRuleParametersSpec](#withinchange30daysruleparametersspec)| | | |
+|[warning](#changepercent30daysrule10parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercent30DaysRule10ParametersSpec](#changepercent30daysrule10parametersspec)| | | |
+|[error](#changepercent30daysrule20parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercent30DaysRule20ParametersSpec](#changepercent30daysrule20parametersspec)| | | |
+|[fatal](#changepercent30daysrule50parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercent30DaysRule50ParametersSpec](#changepercent30daysrule50parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -13129,11 +13351,11 @@ Container of accuracy data quality recurring checks on a column level that are c
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_total_sum_match_percent](#columnaccuracytotalsummatchpercentcheckspec)|Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyTotalSumMatchPercentCheckSpec](#columnaccuracytotalsummatchpercentcheckspec)| | | |
-|[daily_min_match_percent](#columnaccuracyminmatchpercentcheckspec)|Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyMinMatchPercentCheckSpec](#columnaccuracyminmatchpercentcheckspec)| | | |
-|[daily_max_match_percent](#columnaccuracymaxmatchpercentcheckspec)|Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyMaxMatchPercentCheckSpec](#columnaccuracymaxmatchpercentcheckspec)| | | |
-|[daily_average_match_percent](#columnaccuracyaveragematchpercentcheckspec)|Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyAverageMatchPercentCheckSpec](#columnaccuracyaveragematchpercentcheckspec)| | | |
-|[daily_not_null_count_match_percent](#columnaccuracynotnullcountmatchpercentcheckspec)|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyNotNullCountMatchPercentCheckSpec](#columnaccuracynotnullcountmatchpercentcheckspec)| | | |
+|[daily_total_sum_match_percent](#columnaccuracytotalsummatchpercentcheckspec)|Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyTotalSumMatchPercentCheckSpec](#columnaccuracytotalsummatchpercentcheckspec)| | | |
+|[daily_total_min_match_percent](#columnaccuracytotalminmatchpercentcheckspec)|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyTotalMinMatchPercentCheckSpec](#columnaccuracytotalminmatchpercentcheckspec)| | | |
+|[daily_total_max_match_percent](#columnaccuracytotalmaxmatchpercentcheckspec)|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyTotalMaxMatchPercentCheckSpec](#columnaccuracytotalmaxmatchpercentcheckspec)| | | |
+|[daily_total_average_match_percent](#columnaccuracytotalaveragematchpercentcheckspec)|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyTotalAverageMatchPercentCheckSpec](#columnaccuracytotalaveragematchpercentcheckspec)| | | |
+|[daily_total_not_null_count_match_percent](#columnaccuracytotalnotnullcountmatchpercentcheckspec)|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec](#columnaccuracytotalnotnullcountmatchpercentcheckspec)| | | |
 
 
 
@@ -13698,11 +13920,11 @@ Container of accuracy data quality recurring checks on a column level that are c
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_total_sum_match_percent](#columnaccuracytotalsummatchpercentcheckspec)|Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalSumMatchPercentCheckSpec](#columnaccuracytotalsummatchpercentcheckspec)| | | |
-|[monthly_min_match_percent](#columnaccuracyminmatchpercentcheckspec)|Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyMinMatchPercentCheckSpec](#columnaccuracyminmatchpercentcheckspec)| | | |
-|[monthly_max_match_percent](#columnaccuracymaxmatchpercentcheckspec)|Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyMaxMatchPercentCheckSpec](#columnaccuracymaxmatchpercentcheckspec)| | | |
-|[monthly_average_match_percent](#columnaccuracyaveragematchpercentcheckspec)|Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyAverageMatchPercentCheckSpec](#columnaccuracyaveragematchpercentcheckspec)| | | |
-|[monthly_not_null_count_match_percent](#columnaccuracynotnullcountmatchpercentcheckspec)|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyNotNullCountMatchPercentCheckSpec](#columnaccuracynotnullcountmatchpercentcheckspec)| | | |
+|[monthly_total_sum_match_percent](#columnaccuracytotalsummatchpercentcheckspec)|Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalSumMatchPercentCheckSpec](#columnaccuracytotalsummatchpercentcheckspec)| | | |
+|[monthly_total_min_match_percent](#columnaccuracytotalminmatchpercentcheckspec)|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalMinMatchPercentCheckSpec](#columnaccuracytotalminmatchpercentcheckspec)| | | |
+|[monthly_total_max_match_percent](#columnaccuracytotalmaxmatchpercentcheckspec)|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalMaxMatchPercentCheckSpec](#columnaccuracytotalmaxmatchpercentcheckspec)| | | |
+|[monthly_total_average_match_percent](#columnaccuracytotalaveragematchpercentcheckspec)|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalAverageMatchPercentCheckSpec](#columnaccuracytotalaveragematchpercentcheckspec)| | | |
+|[monthly_total_not_null_count_match_percent](#columnaccuracytotalnotnullcountmatchpercentcheckspec)|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec](#columnaccuracytotalnotnullcountmatchpercentcheckspec)| | | |
 
 
 
