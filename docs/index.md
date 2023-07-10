@@ -1,9 +1,7 @@
 # What is DQO?
 
 DQO is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
-DQO comes with around 100 predefined data quality checks which helps you monitor the quality of your data.  
-
-![DQO screens](https://dqops.com/docs/images/dqo-screens.gif)
+DQO comes with around 100 predefined data quality checks which helps you monitor the quality of your data.
 
 ## DQO features
 - Intuitive graphical interface and access via CLI
@@ -25,6 +23,14 @@ Try our [tutorial](./getting-started/index.md) to learn how to start monitoring 
 You can use DQO with the most popular databases. [Learn here how to connect a data source to DQO](./working-with-dqo/adding-data-source-connection/index.md).
 
 ![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png) &nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png) &nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift.png) &nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png) &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png) &nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
+
+## DQO user interface
+
+DQO has a dynamic user interface for configuration of all data quality checks that is similar to popular database management tools.
+Tabs allow managing data quality checks at the same time on multiple tables. Just imagine that it is a web based
+Visual Studio Code for data quality. 
+
+![DQO screens](https://dqops.com/docs/images/dqo-screens.gif)
 
 ## Additional resources
 
