@@ -16,6 +16,7 @@ import { CheckTypes } from '../../../shared/routes';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { IconButton } from '@material-tailwind/react';
 
 interface CheckResultsTabProps {
   results: CheckResultsDetailedDataModel[];
@@ -350,26 +351,44 @@ const CheckResultsTab = ({
           />
         </div>
         <div className="flex space-x-4 items-center">
-          <SvgIcon
-            name="table"
-            className={clsx(
-              'w-5 h-5 cursor-pointer',
-              mode === 'table' ? 'font-bold' : 'text-gray-400'
-            )}
+          <IconButton
+            size="sm"
+            className={
+              mode === 'chart'
+                ? 'bg-white border border-teal-500'
+                : 'bg-teal-500'
+            }
             onClick={() => {
               isChartOpen(false), setMode('table');
             }}
-          />
-          <SvgIcon
-            name="chart-line"
-            className={clsx(
-              'w-5 h-5 cursor-pointer',
-              mode === 'chart' ? 'font-bold' : 'text-gray-400'
-            )}
+          >
+            <SvgIcon
+              name="table"
+              className={clsx(
+                'w-4 h-4 cursor-pointer ',
+                mode === 'table' ? 'font-bold text-white' : 'text-teal-500'
+              )}
+            />
+          </IconButton>
+          <IconButton
+            size="sm"
+            className={
+              mode === 'table'
+                ? 'bg-white border border-teal-500 '
+                : 'bg-teal-500'
+            }
             onClick={() => {
               isChartOpen(true), setMode('chart');
             }}
-          />
+          >
+            <SvgIcon
+              name="chart-line"
+              className={clsx(
+                'w-4 h-4 cursor-pointer',
+                mode === 'chart' ? 'font-bold text-white' : 'text-teal-500'
+              )}
+            />
+          </IconButton>
         </div>
       </div>
       {results.length === 0 && (
