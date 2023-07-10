@@ -91,14 +91,19 @@ const CheckCategoriesView = ({
 
   return (
     <Fragment>
-      <tr>
+      <tr onClick={() => setIsExtended(!isExtended)} className="cursor-pointer">
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="font-semibold text-gray-700 capitalize">
                 {category.category}
               </div>
-              <div className="flex items-center">
+              <div
+                className="flex items-center"
+                onClick={(event: React.MouseEvent<HTMLDivElement>) =>
+                  event.stopPropagation()
+                }
+              >
                 {(!job ||
                   job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
                   job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
@@ -128,10 +133,7 @@ const CheckCategoriesView = ({
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t">
-          <div
-            className="flex justify-end"
-            onClick={() => setIsExtended(!isExtended)}
-          >
+          <div className="flex justify-end">
             {isExtended === false ? (
               <SvgIcon name="chevron-down" className="w-5 h-5 text-gray-700" />
             ) : (
