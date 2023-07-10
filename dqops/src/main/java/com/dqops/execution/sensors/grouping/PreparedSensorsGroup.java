@@ -110,6 +110,9 @@ public class PreparedSensorsGroup {
             } else {
                 for (int sensorIndex = 0; sensorIndex < this.preparedSensors.size(); sensorIndex++) {
                     SensorPrepareResult sensorPrepareResult = this.preparedSensors.get(sensorIndex);
+                    sensorPrepareResult.setActualValueAlias(sensorPrepareResult.getSensorRunParameters().getActualValueAlias());
+                    sensorPrepareResult.setExpectedValueAlias(sensorPrepareResult.getSensorRunParameters().getExpectedValueAlias());
+
                     FragmentedSqlQuery fragmentedSqlQuery = sensorPrepareResult.getFragmentedSqlQuery();
                     SqlQueryFragment sensorSqlFragment = fragmentedSqlQuery.getComponents().get(fragmentIndex);
                     String sqlFragmentText = sensorSqlFragment.getText();

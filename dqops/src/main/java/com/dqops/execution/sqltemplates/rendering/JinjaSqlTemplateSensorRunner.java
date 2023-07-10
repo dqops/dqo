@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
+import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -170,14 +171,20 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
         Table sensorResultRows = Table.create(multiSensorTableResult.name());
         Column<?> actualValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getActualValueAlias());
         if (actualValueColumn != null) {
-            sensorResultRows.addColumns(Objects.equals(actualValueColumn.name(),
-                    SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) ? actualValueColumn : actualValueColumn.copy());
+            if (!Objects.equals(actualValueColumn.name(), SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME)) {
+                actualValueColumn = actualValueColumn.copy();
+                actualValueColumn.setName(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+            }
+            sensorResultRows.addColumns(actualValueColumn);
         }
 
         Column<?> expectedValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getExpectedValueAlias());
         if (expectedValueColumn != null) {
-            sensorResultRows.addColumns(Objects.equals(expectedValueColumn.name(),
-                    SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME) ? expectedValueColumn : expectedValueColumn.copy());
+            if (!Objects.equals(expectedValueColumn.name(), SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {
+                expectedValueColumn = expectedValueColumn.copy();
+                expectedValueColumn.setName(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+            }
+            sensorResultRows.addColumns(expectedValueColumn);
         }
 
         Column<?> timePeriodColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
@@ -187,6 +194,16 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
         Column<?> timePeriodUtcColumn = TableColumnUtility.findColumn(multiSensorTableResult, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
         if (timePeriodUtcColumn != null) {
             sensorResultRows.addColumns(timePeriodUtcColumn);
+        }
+
+        // statistics (column sampling) specific columns
+        Column<?> sampleCountColumn = TableColumnUtility.findColumn(multiSensorTableResult, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
+        if (sampleCountColumn != null) {
+            sensorResultRows.addColumns(sampleCountColumn);
+        }
+        Column<?> sampleIndexColumn = TableColumnUtility.findColumn(multiSensorTableResult, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
+        if (sampleIndexColumn != null) {
+            sensorResultRows.addColumns(sampleIndexColumn);
         }
 
         List<Column<?>> allSourceColumns = multiSensorTableResult.columns();
