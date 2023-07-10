@@ -63,7 +63,8 @@ venv/
 .DS_Store
 
 # Documentation site
-site/
+/site/
+/.cache/
 
 # DQO Examples
 .localsettings.dqosettings.yaml

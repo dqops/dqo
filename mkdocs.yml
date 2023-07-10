@@ -340,6 +340,7 @@ theme:
   custom_dir: docs
   features:
     - navigation.indexes
+    - navigation.footer
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
@@ -364,6 +365,8 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
   font: false
+# Disable search, the index is too big
+plugins: []
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets
@@ -396,5 +399,16 @@ extra:
       as to measure the effectiveness of our documentation and whether users
       find what they are looking for. With your consent, you help us improve our documentation.
   homepage: https://dqops.com/
-# TODO Tags
-# TODO Footer
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/dqops/dqo
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/DQOpsCenter
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/dqops-com/
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/dqops/dqo
+    - icon: fontawesome/brands/facebook
+      link: https://www.facebook.com/dqops
+copyright: Copyright &copy; 2021 - 2023 DQOps
