@@ -11,34 +11,34 @@ T = TypeVar("T", bound="PercentileMovingWithin30DaysRuleParametersSpec")
 class PercentileMovingWithin30DaysRuleParametersSpec:
     """
     Attributes:
-        percentile_within (Union[Unset, float]): Probability that the current sensor readout will achieve values within
+        anomaly_percent (Union[Unset, float]): Probability that the current sensor readout will achieve values within
             the mean according to the distribution of the previous values gathered within the time window. In other words,
             the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the
             threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days,
             etc.) time window, but at least 10 readouts must exist to run the calculation.
     """
 
-    percentile_within: Union[Unset, float] = UNSET
+    anomaly_percent: Union[Unset, float] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        percentile_within = self.percentile_within
+        anomaly_percent = self.anomaly_percent
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if percentile_within is not UNSET:
-            field_dict["percentile_within"] = percentile_within
+        if anomaly_percent is not UNSET:
+            field_dict["anomaly_percent"] = anomaly_percent
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        percentile_within = d.pop("percentile_within", UNSET)
+        anomaly_percent = d.pop("anomaly_percent", UNSET)
 
         percentile_moving_within_30_days_rule_parameters_spec = cls(
-            percentile_within=percentile_within,
+            anomaly_percent=anomaly_percent,
         )
 
         percentile_moving_within_30_days_rule_parameters_spec.additional_properties = d

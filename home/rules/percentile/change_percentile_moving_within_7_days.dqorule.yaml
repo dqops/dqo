@@ -10,8 +10,8 @@ spec:
     min_periods_with_readouts: 3
     historic_data_point_grouping: day
   fields:
-  - field_name: percentile_within
-    display_name: percentile_within
+  - field_name: anomaly_percent
+    display_name: anomaly_percent
     help_text: "Probability that the current sensor readout will achieve values within\
       \ the mean according to the distribution of the previous values gathered within the time window.\
       \ In other words, the inter-quantile range around the mean of the estimated normal distribution.\

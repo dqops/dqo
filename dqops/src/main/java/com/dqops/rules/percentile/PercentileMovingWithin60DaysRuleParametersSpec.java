@@ -48,13 +48,13 @@ public class PercentileMovingWithin60DaysRuleParametersSpec extends AbstractRule
             " The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist" +
             " to run the calculation.")
     @SampleValues(values = "95")
-    private Double percentileWithin;
+    private Double anomalyPercent;
 
     /**
      * Default constructor.
      */
     public PercentileMovingWithin60DaysRuleParametersSpec() {
-        this.percentileWithin = null;
+        this.anomalyPercent = null;
     }
 
     /**
@@ -63,17 +63,17 @@ public class PercentileMovingWithin60DaysRuleParametersSpec extends AbstractRule
      * the previous values gathered within the time window.
      * @return The upper percentile of the estimated normal distribution.
      */
-    public Double getPercentileWithin() {
-        return percentileWithin;
+    public Double getAnomalyPercent() {
+        return anomalyPercent;
     }
 
     /**
      * Sets the upper percentile threshold of the estimated normal distribution.
-     * @param percentileWithin Percentage of values in the right tail that should be considered erroneous.
+     * @param anomalyPercent Percentage of values in the right tail that should be considered erroneous.
      */
-    public void setPercentileWithin(Double percentileWithin) {
-        this.setDirtyIf(!Objects.equals(this.percentileWithin, percentileWithin));
-        this.percentileWithin = percentileWithin;
+    public void setAnomalyPercent(Double anomalyPercent) {
+        this.setDirtyIf(!Objects.equals(this.anomalyPercent, anomalyPercent));
+        this.anomalyPercent = anomalyPercent;
     }
 
     /**

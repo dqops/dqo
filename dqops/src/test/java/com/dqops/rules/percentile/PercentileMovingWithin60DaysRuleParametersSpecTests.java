@@ -59,7 +59,7 @@ public class PercentileMovingWithin60DaysRuleParametersSpecTests extends BaseTes
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setPercentileWithin(80.0);
+        this.sut.setAnomalyPercent(80.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             if(i % 2 == 0) {
@@ -83,7 +83,7 @@ public class PercentileMovingWithin60DaysRuleParametersSpecTests extends BaseTes
 
     @Test
     void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreEqual_thenReturnsPassed() {
-        this.sut.setPercentileWithin(80.0);
+        this.sut.setAnomalyPercent(80.0);
 
         Arrays.fill(this.sensorReadouts, 10.0);
 

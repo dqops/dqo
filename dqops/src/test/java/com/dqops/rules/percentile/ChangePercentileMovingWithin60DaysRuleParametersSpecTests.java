@@ -59,7 +59,7 @@ public class ChangePercentileMovingWithin60DaysRuleParametersSpecTests extends B
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndPastValuesAreNormal_thenReturnsPassed() {
-        this.sut.setPercentileWithin(80.0);
+        this.sut.setAnomalyPercent(80.0);
         Random random = new Random(0);
         Double increment = 5.0;
 
@@ -86,7 +86,7 @@ public class ChangePercentileMovingWithin60DaysRuleParametersSpecTests extends B
 
     @Test
     void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteady_thenReturnsPassed() {
-        this.sut.setPercentileWithin(80.0);
+        this.sut.setAnomalyPercent(80.0);
 
         Double increment = 7.0;
         this.sensorReadouts[0] = 0.0;

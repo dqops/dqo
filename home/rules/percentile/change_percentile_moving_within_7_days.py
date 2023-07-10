@@ -23,7 +23,7 @@ import scipy.stats
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class PercentileMovingWithinRuleParametersSpec:
-    percentile_within: float
+    anomaly_percent: float
 
 
 class HistoricDataPoint:
