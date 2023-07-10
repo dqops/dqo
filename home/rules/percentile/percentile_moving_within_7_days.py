@@ -78,7 +78,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     else:
         # Assumption: the historical data follows normal distribution
         readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
-        one_sided_tail = (1 - rule_parameters.parameters.percentile_within / 100.0) / 2
+        one_sided_tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
 
         threshold_lower = float(readout_distribution.ppf(one_sided_tail))
         threshold_upper = float(readout_distribution.ppf(1 - one_sided_tail))
