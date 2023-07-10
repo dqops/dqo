@@ -152,24 +152,16 @@ from .column_anomaly_daily_partitioned_checks_spec import (
 from .column_anomaly_daily_recurring_checks_spec import (
     ColumnAnomalyDailyRecurringChecksSpec,
 )
-from .column_anomaly_mean_7_days_check_spec import ColumnAnomalyMean7DaysCheckSpec
 from .column_anomaly_mean_30_days_check_spec import ColumnAnomalyMean30DaysCheckSpec
 from .column_anomaly_mean_60_days_check_spec import ColumnAnomalyMean60DaysCheckSpec
-from .column_anomaly_mean_change_7_days_check_spec import (
-    ColumnAnomalyMeanChange7DaysCheckSpec,
-)
 from .column_anomaly_mean_change_30_days_check_spec import (
     ColumnAnomalyMeanChange30DaysCheckSpec,
 )
 from .column_anomaly_mean_change_60_days_check_spec import (
     ColumnAnomalyMeanChange60DaysCheckSpec,
 )
-from .column_anomaly_median_7_days_check_spec import ColumnAnomalyMedian7DaysCheckSpec
 from .column_anomaly_median_30_days_check_spec import ColumnAnomalyMedian30DaysCheckSpec
 from .column_anomaly_median_60_days_check_spec import ColumnAnomalyMedian60DaysCheckSpec
-from .column_anomaly_median_change_7_days_check_spec import (
-    ColumnAnomalyMedianChange7DaysCheckSpec,
-)
 from .column_anomaly_median_change_30_days_check_spec import (
     ColumnAnomalyMedianChange30DaysCheckSpec,
 )
@@ -183,12 +175,8 @@ from .column_anomaly_monthly_recurring_checks_spec import (
     ColumnAnomalyMonthlyRecurringChecksSpec,
 )
 from .column_anomaly_profiling_checks_spec import ColumnAnomalyProfilingChecksSpec
-from .column_anomaly_sum_7_days_check_spec import ColumnAnomalySum7DaysCheckSpec
 from .column_anomaly_sum_30_days_check_spec import ColumnAnomalySum30DaysCheckSpec
 from .column_anomaly_sum_60_days_check_spec import ColumnAnomalySum60DaysCheckSpec
-from .column_anomaly_sum_change_7_days_check_spec import (
-    ColumnAnomalySumChange7DaysCheckSpec,
-)
 from .column_anomaly_sum_change_30_days_check_spec import (
     ColumnAnomalySumChange30DaysCheckSpec,
 )
@@ -1385,17 +1373,11 @@ from .table_accuracy_total_row_count_match_percent_check_spec import (
 from .table_accuracy_total_row_count_match_percent_sensor_parameters_spec import (
     TableAccuracyTotalRowCountMatchPercentSensorParametersSpec,
 )
-from .table_anomaly_row_count_7_days_check_spec import (
-    TableAnomalyRowCount7DaysCheckSpec,
-)
 from .table_anomaly_row_count_30_days_check_spec import (
     TableAnomalyRowCount30DaysCheckSpec,
 )
 from .table_anomaly_row_count_60_days_check_spec import (
     TableAnomalyRowCount60DaysCheckSpec,
-)
-from .table_anomaly_row_count_change_7_days_check_spec import (
-    TableAnomalyRowCountChange7DaysCheckSpec,
 )
 from .table_anomaly_row_count_change_30_days_check_spec import (
     TableAnomalyRowCountChange30DaysCheckSpec,
@@ -1689,25 +1671,19 @@ __all__ = (
     "ColumnAnomalyDailyRecurringChecksSpec",
     "ColumnAnomalyMean30DaysCheckSpec",
     "ColumnAnomalyMean60DaysCheckSpec",
-    "ColumnAnomalyMean7DaysCheckSpec",
     "ColumnAnomalyMeanChange30DaysCheckSpec",
     "ColumnAnomalyMeanChange60DaysCheckSpec",
-    "ColumnAnomalyMeanChange7DaysCheckSpec",
     "ColumnAnomalyMedian30DaysCheckSpec",
     "ColumnAnomalyMedian60DaysCheckSpec",
-    "ColumnAnomalyMedian7DaysCheckSpec",
     "ColumnAnomalyMedianChange30DaysCheckSpec",
     "ColumnAnomalyMedianChange60DaysCheckSpec",
-    "ColumnAnomalyMedianChange7DaysCheckSpec",
     "ColumnAnomalyMonthlyPartitionedChecksSpec",
     "ColumnAnomalyMonthlyRecurringChecksSpec",
     "ColumnAnomalyProfilingChecksSpec",
     "ColumnAnomalySum30DaysCheckSpec",
     "ColumnAnomalySum60DaysCheckSpec",
-    "ColumnAnomalySum7DaysCheckSpec",
     "ColumnAnomalySumChange30DaysCheckSpec",
     "ColumnAnomalySumChange60DaysCheckSpec",
-    "ColumnAnomalySumChange7DaysCheckSpec",
     "ColumnBasicModel",
     "ColumnBoolDailyPartitionedChecksSpec",
     "ColumnBoolDailyRecurringChecksSpec",
@@ -2256,10 +2232,8 @@ __all__ = (
     "TableAccuracyTotalRowCountMatchPercentSensorParametersSpec",
     "TableAnomalyRowCount30DaysCheckSpec",
     "TableAnomalyRowCount60DaysCheckSpec",
-    "TableAnomalyRowCount7DaysCheckSpec",
     "TableAnomalyRowCountChange30DaysCheckSpec",
     "TableAnomalyRowCountChange60DaysCheckSpec",
-    "TableAnomalyRowCountChange7DaysCheckSpec",
     "TableAvailabilityCheckSpec",
     "TableAvailabilityDailyRecurringChecksSpec",
     "TableAvailabilityMonthlyRecurringChecksSpec",
