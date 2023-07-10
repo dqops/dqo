@@ -68,7 +68,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
     console.log(url);
     if (defaultTab) {
-      console.log('inside');
       if (item.value === CheckTypes.RECURRING) {
         url = ROUTES.TABLE_RECURRING(
           item.value,
