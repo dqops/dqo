@@ -28,6 +28,9 @@ const NotificationMenu = () => {
     (state: IRootState) => state.job || {}
   );
 
+  const [data, setData] = useState<
+    Array<{ type: string; item: DqoJobHistoryEntryModel }>
+  >([]);
   const dispatch = useActionDispatch();
   const { errors } = useError();
 
@@ -49,7 +52,7 @@ const NotificationMenu = () => {
     getData();
   }, []);
 
-  const data = useMemo(() => {
+  useEffect(() => {
     const jobsData = Object.values(job_dictionary_state)
       .sort((a, b) => {
         return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
@@ -67,7 +70,7 @@ const NotificationMenu = () => {
       return moment(date1).isBefore(moment(date2)) ? 1 : -1;
     });
 
-    return newData;
+    setData(newData);
   }, [job_dictionary_state, errors]);
 
   const [sizeOfNot, setSizeOfNot] = useState<number>(data.length);
@@ -101,32 +104,40 @@ const NotificationMenu = () => {
   };
 
   const setNewJobArray = (): jobInterface[] => {
-    const newArray = data.filter(
-      (x) => x.item.jobId?.parentJobId?.jobId === undefined
-    );
-    const newArray2: jobInterface[] = newArray.map((x) => ({
-      errorMessage: x.item.errorMessage,
-      jobId: {
-        jobId: x.item.jobId?.jobId,
-        createdAt: x.item.jobId?.createdAt
-      },
-      jobType: x.item.jobType,
-      parameters: x.item.parameters,
-      status: x.item.status,
-      statusChangedAt: x.item.statusChangedAt,
-      childs: data
-        .filter((y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId)
-        .map((y) => y.item)
-    }));
-    useEffect(() => {
-      if (newArray2.some((x) => x.jobType === undefined)) {
-        newArray2.map(() => ({
-          ...newArray2
-        }));
-      }
-    }, [newArray2]);
+    const newArray: jobInterface[] = data
+      .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
+      .map((x) => ({
+        errorMessage: x.item.errorMessage,
+        jobId: {
+          jobId: x.item.jobId?.jobId,
+          createdAt: x.item.jobId?.createdAt
+        },
+        jobType: x.item.jobType,
+        parameters: x.item.parameters,
+        status: x.item.status,
+        statusChangedAt: x.item.statusChangedAt,
+        childs: data
+          .filter(
+            (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
+          )
+          .map((y) => y.item)
+      }));
 
-    return newArray2;
+    const updatedArray: jobInterface[] = newArray.map((x) => {
+      if (x.jobType === undefined) {
+        return {
+          ...x,
+          jobType: (
+            Object.values(job_dictionary_state).find(
+              (y) => y.jobId?.jobId === x.jobId?.jobId
+            ) as any
+          ).updatedModel?.jobType
+        };
+      }
+      return x;
+    });
+
+    return updatedArray;
   };
 
   return (

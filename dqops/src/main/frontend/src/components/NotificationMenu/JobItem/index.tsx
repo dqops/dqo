@@ -141,8 +141,6 @@ const JobItem = ({
   //   return false;
   // };
 
-  console.log(job);
-
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
       <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
