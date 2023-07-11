@@ -4,18 +4,18 @@ import attr
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="PercentileMovingWithin7DaysRuleParametersSpec")
+T = TypeVar("T", bound="ChangePercentileMovingAverage30DaysRuleParametersSpec")
 
 
 @attr.s(auto_attribs=True)
-class PercentileMovingWithin7DaysRuleParametersSpec:
+class ChangePercentileMovingAverage30DaysRuleParametersSpec:
     """
     Attributes:
         anomaly_percent (Union[Unset, float]): Probability that the current sensor readout will achieve values within
             the mean according to the distribution of the previous values gathered within the time window. In other words,
             the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the
-            threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days,
-            etc.) time window, but at least 3 readouts must exist to run the calculation.
+            threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30
+            periods (days, etc.), but at least 10 readouts must exist to run the calculation.
     """
 
     anomaly_percent: Union[Unset, float] = UNSET
@@ -37,12 +37,14 @@ class PercentileMovingWithin7DaysRuleParametersSpec:
         d = src_dict.copy()
         anomaly_percent = d.pop("anomaly_percent", UNSET)
 
-        percentile_moving_within_7_days_rule_parameters_spec = cls(
+        change_percentile_moving_average_30_days_rule_parameters_spec = cls(
             anomaly_percent=anomaly_percent,
         )
 
-        percentile_moving_within_7_days_rule_parameters_spec.additional_properties = d
-        return percentile_moving_within_7_days_rule_parameters_spec
+        change_percentile_moving_average_30_days_rule_parameters_spec.additional_properties = (
+            d
+        )
+        return change_percentile_moving_average_30_days_rule_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

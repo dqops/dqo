@@ -35,11 +35,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Random;
 
 @SpringBootTest
-public class PercentileMovingWithin60DaysRuleParametersSpecTests extends BaseTest {
-    private PercentileMovingWithin60DaysRuleParametersSpec sut;
+public class ChangePercentileMovingAverageRuleParametersSpecTests extends BaseTest {
+    private ChangePercentileMovingAverageRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class PercentileMovingWithin60DaysRuleParametersSpecTests extends BaseTes
 
     @BeforeEach
     void setUp() {
-        this.sut = new PercentileMovingWithin60DaysRuleParametersSpec();
+        this.sut = new ChangePercentileMovingAverageRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -58,45 +58,53 @@ public class PercentileMovingWithin60DaysRuleParametersSpecTests extends BaseTes
     }
 
     @Test
-    void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
+    void executeRule_whenActualValueIsBelowMaxValueAndPastValuesAreNormal_thenReturnsPassed() {
         this.sut.setAnomalyPercent(80.0);
+        Random random = new Random(0);
+        Double increment = 5.0;
 
-        for (int i = 0; i < this.sensorReadouts.length; i++) {
-            if(i % 2 == 0) {
-                this.sensorReadouts[i] = 15.0;
-            } else {
-                this.sensorReadouts[i] = 25.0;
-            }
+        this.sensorReadouts[0] = 0.0;
+        for (int i = 1; i < this.sensorReadouts.length; i++) {
+            // Increment with some noise.
+            this.sensorReadouts[i] = Math.max(
+                    this.sensorReadouts[i - 1],
+                    this.sensorReadouts[i - 1] + random.nextGaussian() * 3 + increment);
         }
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
+        Double actualValue = 310.0;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(13.48, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(26.52, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(307.77, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(304.59, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(310.94, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
-    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreEqual_thenReturnsPassed() {
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteady_thenReturnsPassed() {
         this.sut.setAnomalyPercent(80.0);
 
-        Arrays.fill(this.sensorReadouts, 10.0);
+        Double increment = 7.0;
+        this.sensorReadouts[0] = 0.0;
+        for (int i = 1; i < this.sensorReadouts.length; ++i) {
+            this.sensorReadouts[i] = this.sensorReadouts[i - 1] + increment;
+        }
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
+        Double actualValue = this.sensorReadouts[0] + this.sensorReadouts.length * increment;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getUpperBound());
+        Assertions.assertEquals(actualValue, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(actualValue, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(actualValue, ruleExecutionResult.getUpperBound());
     }
 
     @Test

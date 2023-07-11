@@ -14,14 +14,11 @@ from .bulk_check_disable_parameters import BulkCheckDisableParameters
 from .bulk_check_disable_parameters_selected_tables_to_columns import (
     BulkCheckDisableParametersSelectedTablesToColumns,
 )
-from .change_percentile_moving_within_7_days_rule_parameters_spec import (
-    ChangePercentileMovingWithin7DaysRuleParametersSpec,
+from .change_percentile_moving_average_30_days_rule_parameters_spec import (
+    ChangePercentileMovingAverage30DaysRuleParametersSpec,
 )
-from .change_percentile_moving_within_30_days_rule_parameters_spec import (
-    ChangePercentileMovingWithin30DaysRuleParametersSpec,
-)
-from .change_percentile_moving_within_60_days_rule_parameters_spec import (
-    ChangePercentileMovingWithin60DaysRuleParametersSpec,
+from .change_percentile_moving_average_rule_parameters_spec import (
+    ChangePercentileMovingAverageRuleParametersSpec,
 )
 from .check_basic_model import CheckBasicModel
 from .check_configuration_model import CheckConfigurationModel
@@ -1267,14 +1264,12 @@ from .parameter_definition_spec import ParameterDefinitionSpec
 from .parameter_definition_spec_data_type import ParameterDefinitionSpecDataType
 from .parameter_definition_spec_display_hint import ParameterDefinitionSpecDisplayHint
 from .partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
-from .percentile_moving_within_7_days_rule_parameters_spec import (
-    PercentileMovingWithin7DaysRuleParametersSpec,
+
+from .percentile_moving_average_30_days_rule_parameters_spec import (
+    PercentileMovingAverage30DaysRuleParametersSpec,
 )
-from .percentile_moving_within_30_days_rule_parameters_spec import (
-    PercentileMovingWithin30DaysRuleParametersSpec,
-)
-from .percentile_moving_within_60_days_rule_parameters_spec import (
-    PercentileMovingWithin60DaysRuleParametersSpec,
+from .percentile_moving_average_rule_parameters_spec import (
+    PercentileMovingAverageRuleParametersSpec,
 )
 from .physical_table_name import PhysicalTableName
 from .postgresql_parameters_spec import PostgresqlParametersSpec
@@ -1605,9 +1600,8 @@ __all__ = (
     "BigQueryParametersSpecAuthenticationMode",
     "BulkCheckDisableParameters",
     "BulkCheckDisableParametersSelectedTablesToColumns",
-    "ChangePercentileMovingWithin30DaysRuleParametersSpec",
-    "ChangePercentileMovingWithin60DaysRuleParametersSpec",
-    "ChangePercentileMovingWithin7DaysRuleParametersSpec",
+    "ChangePercentileMovingAverage30DaysRuleParametersSpec",
+    "ChangePercentileMovingAverageRuleParametersSpec",
     "CheckBasicModel",
     "CheckConfigurationModel",
     "CheckConfigurationModelCheckTarget",
@@ -2160,9 +2154,8 @@ __all__ = (
     "ParameterDefinitionSpecDataType",
     "ParameterDefinitionSpecDisplayHint",
     "PartitionIncrementalTimeWindowSpec",
-    "PercentileMovingWithin30DaysRuleParametersSpec",
-    "PercentileMovingWithin60DaysRuleParametersSpec",
-    "PercentileMovingWithin7DaysRuleParametersSpec",
+    "PercentileMovingAverage30DaysRuleParametersSpec",
+    "PercentileMovingAverageRuleParametersSpec",
     "PhysicalTableName",
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",

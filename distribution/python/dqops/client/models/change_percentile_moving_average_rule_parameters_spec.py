@@ -4,18 +4,19 @@ import attr
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="PercentileMovingWithin30DaysRuleParametersSpec")
+T = TypeVar("T", bound="ChangePercentileMovingAverageRuleParametersSpec")
 
 
 @attr.s(auto_attribs=True)
-class PercentileMovingWithin30DaysRuleParametersSpec:
+class ChangePercentileMovingAverageRuleParametersSpec:
     """
     Attributes:
         anomaly_percent (Union[Unset, float]): Probability that the current sensor readout will achieve values within
             the mean according to the distribution of the previous values gathered within the time window. In other words,
             the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the
-            threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days,
-            etc.) time window, but at least 10 readouts must exist to run the calculation.
+            threshold level for all severity levels (warning, error, fatal) at once. The default is a 90 time periods (days,
+            etc.) time window, but at least 30 readouts must exist to run the calculation. You can change the default
+            value by modifying prediction_time_window parameter in Definitions section.
     """
 
     anomaly_percent: Union[Unset, float] = UNSET
@@ -37,12 +38,14 @@ class PercentileMovingWithin30DaysRuleParametersSpec:
         d = src_dict.copy()
         anomaly_percent = d.pop("anomaly_percent", UNSET)
 
-        percentile_moving_within_30_days_rule_parameters_spec = cls(
+        change_percentile_moving_average_rule_parameters_spec = cls(
             anomaly_percent=anomaly_percent,
         )
 
-        percentile_moving_within_30_days_rule_parameters_spec.additional_properties = d
-        return percentile_moving_within_30_days_rule_parameters_spec
+        change_percentile_moving_average_rule_parameters_spec.additional_properties = (
+            d
+        )
+        return change_percentile_moving_average_rule_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

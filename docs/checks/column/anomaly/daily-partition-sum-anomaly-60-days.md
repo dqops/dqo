@@ -12,7 +12,7 @@ Verifies that the sum in a column is within a percentile from measurements made 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_anomaly_60_days|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[percentile_moving_within_60_days](../../../../reference/rules/Percentile/#percentile-moving-within-60-days)|
+|daily_partition_sum_anomaly_60_days|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[percentile_moving_average](../../../../reference/rules/Percentile/#percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -43,11 +43,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           anomaly:
             daily_partition_sum_anomaly_60_days:
               warning:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               error:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               fatal:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -68,11 +68,11 @@ spec:
           anomaly:
             daily_partition_sum_anomaly_60_days:
               warning:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               error:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               fatal:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -264,11 +264,11 @@ spec:
               anomaly:
                 daily_partition_sum_anomaly_60_days:
                   warning:
-                    percentile_within: 95.0
+                    anomaly_percent: 0.1
                   error:
-                    percentile_within: 95.0
+                    anomaly_percent: 0.1
                   fatal:
-                    percentile_within: 95.0
+                    anomaly_percent: 0.1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

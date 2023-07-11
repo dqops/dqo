@@ -38,8 +38,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @SpringBootTest
-public class PercentileMovingWithin7DaysRuleParametersSpecTests extends BaseTest {
-    private PercentileMovingWithin7DaysRuleParametersSpec sut;
+public class PercentileMovingAverage30DaysRuleParametersSpecTests extends BaseTest {
+    private PercentileMovingAverage30DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class PercentileMovingWithin7DaysRuleParametersSpecTests extends BaseTest
 
     @BeforeEach
     void setUp() {
-        this.sut = new PercentileMovingWithin7DaysRuleParametersSpec();
+        this.sut = new PercentileMovingAverage30DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -76,9 +76,9 @@ public class PercentileMovingWithin7DaysRuleParametersSpecTests extends BaseTest
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(19.29, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(12.44, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(26.14, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(18.71, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(21.28, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

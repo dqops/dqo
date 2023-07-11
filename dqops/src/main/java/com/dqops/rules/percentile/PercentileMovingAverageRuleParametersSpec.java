@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PercentileMovingWithin30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<PercentileMovingWithin30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class PercentileMovingAverageRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<PercentileMovingAverageRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -45,15 +45,16 @@ public class PercentileMovingWithin30DaysRuleParametersSpec extends AbstractRule
             " the mean according to the distribution of the previous values gathered within the time window." +
             " In other words, the inter-quantile range around the mean of the estimated normal distribution." +
             " Set the time window at the threshold level for all severity levels (warning, error, fatal) at once." +
-            " The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist" +
-            " to run the calculation.")
-    @SampleValues(values = "95")
+            " The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist" +
+            " to run the calculation. You can change the default value by modifying prediction_time_window parameter" +
+            "in Definitions section.")
+    @SampleValues(values = "0.1")
     private Double anomalyPercent;
 
     /**
      * Default constructor.
      */
-    public PercentileMovingWithin30DaysRuleParametersSpec() {
+    public PercentileMovingAverageRuleParametersSpec() {
         this.anomalyPercent = null;
     }
 
@@ -93,6 +94,6 @@ public class PercentileMovingWithin30DaysRuleParametersSpec extends AbstractRule
      */
     @Override
     public String getRuleDefinitionName() {
-        return "percentile/percentile_moving_within_30_days";
+        return "percentile/percentile_moving_average";
     }
 }

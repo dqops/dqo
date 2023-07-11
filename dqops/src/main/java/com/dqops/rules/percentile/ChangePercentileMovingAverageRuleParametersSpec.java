@@ -29,13 +29,14 @@ import java.util.Objects;
 
 /**
  * Data quality rule that verifies if a data quality sensor readout value is probable under
- * the estimated normal distribution based on the previous values gathered within a time window.
+ * the estimated normal distribution based on the increments of previous values gathered
+ * within a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PercentileMovingWithin7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<PercentileMovingWithin7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class ChangePercentileMovingAverageRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ChangePercentileMovingAverageRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -45,15 +46,16 @@ public class PercentileMovingWithin7DaysRuleParametersSpec extends AbstractRuleP
             " the mean according to the distribution of the previous values gathered within the time window." +
             " In other words, the inter-quantile range around the mean of the estimated normal distribution." +
             " Set the time window at the threshold level for all severity levels (warning, error, fatal) at once." +
-            " The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist" +
-            " to run the calculation.")
-    @SampleValues(values = "95")
+            " The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist" +
+            " to run the calculation. You can change the default value by modifying prediction_time_window parameter" +
+            "in Definitions section.")
+    @SampleValues(values = "0.1")
     private Double anomalyPercent;
 
     /**
      * Default constructor.
      */
-    public PercentileMovingWithin7DaysRuleParametersSpec() {
+    public ChangePercentileMovingAverageRuleParametersSpec() {
         this.anomalyPercent = null;
     }
 
@@ -93,6 +95,6 @@ public class PercentileMovingWithin7DaysRuleParametersSpec extends AbstractRuleP
      */
     @Override
     public String getRuleDefinitionName() {
-        return "percentile/percentile_moving_within_7_days";
+        return "percentile/change_percentile_moving_average";
     }
 }
