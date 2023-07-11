@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.percentile.PercentileMovingWithin60DaysRuleParametersSpec;
+import com.dqops.rules.percentile.PercentileMovingAverageRuleParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericMedianSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnAnomalyMedian60DaysCheckSpec
-        extends AbstractCheckSpec<ColumnNumericMedianSensorParametersSpec, PercentileMovingWithin60DaysRuleParametersSpec, PercentileMovingWithin60DaysRuleParametersSpec, PercentileMovingWithin60DaysRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericMedianSensorParametersSpec, PercentileMovingAverageRuleParametersSpec, PercentileMovingAverageRuleParametersSpec, PercentileMovingAverageRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyMedian60DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -52,17 +52,17 @@ public class ColumnAnomalyMedian60DaysCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingWithin60DaysRuleParametersSpec warning;
+    private PercentileMovingAverageRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingWithin60DaysRuleParametersSpec error;
+    private PercentileMovingAverageRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingWithin60DaysRuleParametersSpec fatal;
+    private PercentileMovingAverageRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class ColumnAnomalyMedian60DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public PercentileMovingWithin60DaysRuleParametersSpec getWarning() {
+    public PercentileMovingAverageRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +100,7 @@ public class ColumnAnomalyMedian60DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(PercentileMovingWithin60DaysRuleParametersSpec warning) {
+    public void setWarning(PercentileMovingAverageRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -112,7 +112,7 @@ public class ColumnAnomalyMedian60DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public PercentileMovingWithin60DaysRuleParametersSpec getError() {
+    public PercentileMovingAverageRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -121,7 +121,7 @@ public class ColumnAnomalyMedian60DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(PercentileMovingWithin60DaysRuleParametersSpec error) {
+    public void setError(PercentileMovingAverageRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -133,7 +133,7 @@ public class ColumnAnomalyMedian60DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public PercentileMovingWithin60DaysRuleParametersSpec getFatal() {
+    public PercentileMovingAverageRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -142,7 +142,7 @@ public class ColumnAnomalyMedian60DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(PercentileMovingWithin60DaysRuleParametersSpec fatal) {
+    public void setFatal(PercentileMovingAverageRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

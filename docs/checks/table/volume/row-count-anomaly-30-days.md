@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_anomaly_30_days|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-30-days)|
+|row_count_anomaly_30_days|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_a
     volume:
       row_count_anomaly_30_days:
         warning:
-          percentile_within: 95.0
+          anomaly_percent: 0.1
         error:
-          percentile_within: 95.0
+          anomaly_percent: 0.1
         fatal:
-          percentile_within: 95.0
+          anomaly_percent: 0.1
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-19"
@@ -64,11 +64,11 @@ spec:
     volume:
       row_count_anomaly_30_days:
         warning:
-          percentile_within: 95.0
+          anomaly_percent: 0.1
         error:
-          percentile_within: 95.0
+          anomaly_percent: 0.1
         fatal:
-          percentile_within: 95.0
+          anomaly_percent: 0.1
   columns:
     col_event_timestamp:
       labels:
@@ -286,11 +286,11 @@ spec:
         volume:
           row_count_anomaly_30_days:
             warning:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
             error:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
             fatal:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
       columns:
         col_event_timestamp:
           labels:
@@ -520,7 +520,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_anomaly_30_days|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-30-days)|
+|daily_row_count_anomaly_30_days|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -551,11 +551,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
       volume:
         daily_row_count_anomaly_30_days:
           warning:
-            percentile_within: 95.0
+            anomaly_percent: 0.1
           error:
-            percentile_within: 95.0
+            anomaly_percent: 0.1
           fatal:
-            percentile_within: 95.0
+            anomaly_percent: 0.1
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="11-20"
@@ -574,11 +574,11 @@ spec:
       volume:
         daily_row_count_anomaly_30_days:
           warning:
-            percentile_within: 95.0
+            anomaly_percent: 0.1
           error:
-            percentile_within: 95.0
+            anomaly_percent: 0.1
           fatal:
-            percentile_within: 95.0
+            anomaly_percent: 0.1
   columns:
     col_event_timestamp:
       labels:
@@ -797,11 +797,11 @@ spec:
           volume:
             daily_row_count_anomaly_30_days:
               warning:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               error:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               fatal:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
       columns:
         col_event_timestamp:
           labels:

@@ -3,6 +3,6 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/numeric/mean
-  rule_name: percentile/percentile_moving_within_30_days
+  rule_name: percentile/percentile_moving_average_30_days
   help_text: Verifies that the mean value in a column is within a percentile from
     measurements made during the last 30 days.

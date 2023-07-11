@@ -39,7 +39,6 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("row_count", o -> o.rowCount);
-            put("row_count_anomaly_7_days", o -> o.rowCountAnomaly7Days);
             put("row_count_anomaly_30_days", o -> o.rowCountAnomaly30Days);
             put("row_count_anomaly_60_days", o -> o.rowCountAnomaly60Days);
             put("row_count_change", o -> o.rowCountChange);
@@ -51,10 +50,6 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
     private TableRowCountCheckSpec rowCount;
-
-    @JsonProperty("row_count_anomaly_7_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.")
-    private TableAnomalyRowCountChange7DaysCheckSpec rowCountAnomaly7Days;
 
     @JsonProperty("row_count_anomaly_30_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.")
@@ -95,24 +90,6 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
         this.rowCount = rowCount;
         propagateHierarchyIdToField(rowCount, "row_count");
-    }
-
-    /**
-     * Returns the row count anomaly 7 days check.
-     * @return Row count anomaly 7 days check.
-     */
-    public TableAnomalyRowCountChange7DaysCheckSpec getRowCountAnomaly7Days() {
-        return rowCountAnomaly7Days;
-    }
-
-    /**
-     * Sets a new row count anomaly 7 days check.
-     * @param rowCountAnomaly7Days Row count anomaly 7 days check.
-     */
-    public void setRowCountAnomaly7Days(TableAnomalyRowCountChange7DaysCheckSpec rowCountAnomaly7Days) {
-        this.setDirtyIf(!Objects.equals(this.rowCountAnomaly7Days, rowCountAnomaly7Days));
-        this.rowCountAnomaly7Days = rowCountAnomaly7Days;
-        propagateHierarchyIdToField(rowCountAnomaly7Days, "row_count_anomaly_7_days");
     }
 
     /**

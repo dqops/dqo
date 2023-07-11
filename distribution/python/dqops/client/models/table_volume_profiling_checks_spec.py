@@ -5,9 +5,6 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_anomaly_row_count_change_7_days_check_spec import (
-        TableAnomalyRowCountChange7DaysCheckSpec,
-    )
     from ..models.table_anomaly_row_count_change_30_days_check_spec import (
         TableAnomalyRowCountChange30DaysCheckSpec,
     )
@@ -37,7 +34,6 @@ class TableVolumeProfilingChecksSpec:
         row_count (Union[Unset, TableRowCountCheckSpec]):
         row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
         row_count_change_yesterday (Union[Unset, TableChangeRowCountSinceYesterdayCheckSpec]):
-        row_count_anomaly_7_days (Union[Unset, TableAnomalyRowCountChange7DaysCheckSpec]):
         row_count_anomaly_30_days (Union[Unset, TableAnomalyRowCountChange30DaysCheckSpec]):
         row_count_anomaly_60_days (Union[Unset, TableAnomalyRowCountChange60DaysCheckSpec]):
         row_count_change_7_days (Union[Unset, TableChangeRowCountSince7DaysCheckSpec]):
@@ -48,9 +44,6 @@ class TableVolumeProfilingChecksSpec:
     row_count_change: Union[Unset, "TableChangeRowCountCheckSpec"] = UNSET
     row_count_change_yesterday: Union[
         Unset, "TableChangeRowCountSinceYesterdayCheckSpec"
-    ] = UNSET
-    row_count_anomaly_7_days: Union[
-        Unset, "TableAnomalyRowCountChange7DaysCheckSpec"
     ] = UNSET
     row_count_anomaly_30_days: Union[
         Unset, "TableAnomalyRowCountChange30DaysCheckSpec"
@@ -79,10 +72,6 @@ class TableVolumeProfilingChecksSpec:
         if not isinstance(self.row_count_change_yesterday, Unset):
             row_count_change_yesterday = self.row_count_change_yesterday.to_dict()
 
-        row_count_anomaly_7_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.row_count_anomaly_7_days, Unset):
-            row_count_anomaly_7_days = self.row_count_anomaly_7_days.to_dict()
-
         row_count_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.row_count_anomaly_30_days, Unset):
             row_count_anomaly_30_days = self.row_count_anomaly_30_days.to_dict()
@@ -108,8 +97,6 @@ class TableVolumeProfilingChecksSpec:
             field_dict["row_count_change"] = row_count_change
         if row_count_change_yesterday is not UNSET:
             field_dict["row_count_change_yesterday"] = row_count_change_yesterday
-        if row_count_anomaly_7_days is not UNSET:
-            field_dict["row_count_anomaly_7_days"] = row_count_anomaly_7_days
         if row_count_anomaly_30_days is not UNSET:
             field_dict["row_count_anomaly_30_days"] = row_count_anomaly_30_days
         if row_count_anomaly_60_days is not UNSET:
@@ -123,9 +110,6 @@ class TableVolumeProfilingChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_anomaly_row_count_change_7_days_check_spec import (
-            TableAnomalyRowCountChange7DaysCheckSpec,
-        )
         from ..models.table_anomaly_row_count_change_30_days_check_spec import (
             TableAnomalyRowCountChange30DaysCheckSpec,
         )
@@ -171,17 +155,6 @@ class TableVolumeProfilingChecksSpec:
             row_count_change_yesterday = (
                 TableChangeRowCountSinceYesterdayCheckSpec.from_dict(
                     _row_count_change_yesterday
-                )
-            )
-
-        _row_count_anomaly_7_days = d.pop("row_count_anomaly_7_days", UNSET)
-        row_count_anomaly_7_days: Union[Unset, TableAnomalyRowCountChange7DaysCheckSpec]
-        if isinstance(_row_count_anomaly_7_days, Unset):
-            row_count_anomaly_7_days = UNSET
-        else:
-            row_count_anomaly_7_days = (
-                TableAnomalyRowCountChange7DaysCheckSpec.from_dict(
-                    _row_count_anomaly_7_days
                 )
             )
 
@@ -235,7 +208,6 @@ class TableVolumeProfilingChecksSpec:
             row_count=row_count,
             row_count_change=row_count_change,
             row_count_change_yesterday=row_count_change_yesterday,
-            row_count_anomaly_7_days=row_count_anomaly_7_days,
             row_count_anomaly_30_days=row_count_anomaly_30_days,
             row_count_anomaly_60_days=row_count_anomaly_60_days,
             row_count_change_7_days=row_count_change_7_days,
