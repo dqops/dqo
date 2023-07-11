@@ -5,9 +5,6 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_anomaly_row_count_7_days_check_spec import (
-        TableAnomalyRowCount7DaysCheckSpec,
-    )
     from ..models.table_anomaly_row_count_30_days_check_spec import (
         TableAnomalyRowCount30DaysCheckSpec,
     )
@@ -37,7 +34,6 @@ class TableVolumeDailyPartitionedChecksSpec:
         daily_partition_row_count (Union[Unset, TableRowCountCheckSpec]):
         daily_partition_row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
         daily_partition_row_count_change_yesterday (Union[Unset, TableChangeRowCountSinceYesterdayCheckSpec]):
-        daily_partition_row_count_anomaly_7_days (Union[Unset, TableAnomalyRowCount7DaysCheckSpec]):
         daily_partition_row_count_anomaly_30_days (Union[Unset, TableAnomalyRowCount30DaysCheckSpec]):
         daily_partition_row_count_anomaly_60_days (Union[Unset, TableAnomalyRowCount60DaysCheckSpec]):
         daily_partition_row_count_change_7_days (Union[Unset, TableChangeRowCountSince7DaysCheckSpec]):
@@ -50,9 +46,6 @@ class TableVolumeDailyPartitionedChecksSpec:
     ] = UNSET
     daily_partition_row_count_change_yesterday: Union[
         Unset, "TableChangeRowCountSinceYesterdayCheckSpec"
-    ] = UNSET
-    daily_partition_row_count_anomaly_7_days: Union[
-        Unset, "TableAnomalyRowCount7DaysCheckSpec"
     ] = UNSET
     daily_partition_row_count_anomaly_30_days: Union[
         Unset, "TableAnomalyRowCount30DaysCheckSpec"
@@ -83,12 +76,6 @@ class TableVolumeDailyPartitionedChecksSpec:
         if not isinstance(self.daily_partition_row_count_change_yesterday, Unset):
             daily_partition_row_count_change_yesterday = (
                 self.daily_partition_row_count_change_yesterday.to_dict()
-            )
-
-        daily_partition_row_count_anomaly_7_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_row_count_anomaly_7_days, Unset):
-            daily_partition_row_count_anomaly_7_days = (
-                self.daily_partition_row_count_anomaly_7_days.to_dict()
             )
 
         daily_partition_row_count_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
@@ -128,10 +115,6 @@ class TableVolumeDailyPartitionedChecksSpec:
             field_dict[
                 "daily_partition_row_count_change_yesterday"
             ] = daily_partition_row_count_change_yesterday
-        if daily_partition_row_count_anomaly_7_days is not UNSET:
-            field_dict[
-                "daily_partition_row_count_anomaly_7_days"
-            ] = daily_partition_row_count_anomaly_7_days
         if daily_partition_row_count_anomaly_30_days is not UNSET:
             field_dict[
                 "daily_partition_row_count_anomaly_30_days"
@@ -153,9 +136,6 @@ class TableVolumeDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_anomaly_row_count_7_days_check_spec import (
-            TableAnomalyRowCount7DaysCheckSpec,
-        )
         from ..models.table_anomaly_row_count_30_days_check_spec import (
             TableAnomalyRowCount30DaysCheckSpec,
         )
@@ -209,21 +189,6 @@ class TableVolumeDailyPartitionedChecksSpec:
             daily_partition_row_count_change_yesterday = (
                 TableChangeRowCountSinceYesterdayCheckSpec.from_dict(
                     _daily_partition_row_count_change_yesterday
-                )
-            )
-
-        _daily_partition_row_count_anomaly_7_days = d.pop(
-            "daily_partition_row_count_anomaly_7_days", UNSET
-        )
-        daily_partition_row_count_anomaly_7_days: Union[
-            Unset, TableAnomalyRowCount7DaysCheckSpec
-        ]
-        if isinstance(_daily_partition_row_count_anomaly_7_days, Unset):
-            daily_partition_row_count_anomaly_7_days = UNSET
-        else:
-            daily_partition_row_count_anomaly_7_days = (
-                TableAnomalyRowCount7DaysCheckSpec.from_dict(
-                    _daily_partition_row_count_anomaly_7_days
                 )
             )
 
@@ -291,7 +256,6 @@ class TableVolumeDailyPartitionedChecksSpec:
             daily_partition_row_count=daily_partition_row_count,
             daily_partition_row_count_change=daily_partition_row_count_change,
             daily_partition_row_count_change_yesterday=daily_partition_row_count_change_yesterday,
-            daily_partition_row_count_anomaly_7_days=daily_partition_row_count_anomaly_7_days,
             daily_partition_row_count_anomaly_30_days=daily_partition_row_count_anomaly_30_days,
             daily_partition_row_count_anomaly_60_days=daily_partition_row_count_anomaly_60_days,
             daily_partition_row_count_change_7_days=daily_partition_row_count_change_7_days,

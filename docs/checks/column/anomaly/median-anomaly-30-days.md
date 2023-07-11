@@ -12,7 +12,7 @@ Verifies that the median in a column changes in a rate within a percentile bound
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|median_anomaly_30_days|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percentile_moving_within_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-30-days)|
+|median_anomaly_30_days|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -44,11 +44,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=median_anom
             parameters:
               percentile_value: 0.5
             warning:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
             error:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
             fatal:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-23"
@@ -70,11 +70,11 @@ spec:
             parameters:
               percentile_value: 0.5
             warning:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
             error:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
             fatal:
-              percentile_within: 95.0
+              anomaly_percent: 0.1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -341,11 +341,11 @@ spec:
                 parameters:
                   percentile_value: 0.5
                 warning:
-                  percentile_within: 95.0
+                  anomaly_percent: 0.1
                 error:
-                  percentile_within: 95.0
+                  anomaly_percent: 0.1
                 fatal:
-                  percentile_within: 95.0
+                  anomaly_percent: 0.1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -613,7 +613,7 @@ Verifies that the median in a column changes in a rate within a percentile bound
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_anomaly_30_days|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percentile_moving_within_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-30-days)|
+|daily_median_anomaly_30_days|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -646,11 +646,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_media
               parameters:
                 percentile_value: 0.5
               warning:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               error:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               fatal:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -673,11 +673,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               error:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
               fatal:
-                percentile_within: 95.0
+                anomaly_percent: 0.1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -945,11 +945,11 @@ spec:
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    percentile_within: 95.0
+                    anomaly_percent: 0.1
                   error:
-                    percentile_within: 95.0
+                    anomaly_percent: 0.1
                   fatal:
-                    percentile_within: 95.0
+                    anomaly_percent: 0.1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

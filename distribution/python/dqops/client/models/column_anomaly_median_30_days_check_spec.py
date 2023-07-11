@@ -9,8 +9,8 @@ if TYPE_CHECKING:
         ColumnNumericMedianSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.percentile_moving_within_30_days_rule_parameters_spec import (
-        PercentileMovingWithin30DaysRuleParametersSpec,
+    from ..models.percentile_moving_average_30_days_rule_parameters_spec import (
+        PercentileMovingAverage30DaysRuleParametersSpec,
     )
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
 
@@ -44,9 +44,9 @@ class ColumnAnomalyMedian30DaysCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, ColumnNumericMedianSensorParametersSpec]):
-        warning (Union[Unset, PercentileMovingWithin30DaysRuleParametersSpec]):
-        error (Union[Unset, PercentileMovingWithin30DaysRuleParametersSpec]):
-        fatal (Union[Unset, PercentileMovingWithin30DaysRuleParametersSpec]):
+        warning (Union[Unset, PercentileMovingAverage30DaysRuleParametersSpec]):
+        error (Union[Unset, PercentileMovingAverage30DaysRuleParametersSpec]):
+        fatal (Union[Unset, PercentileMovingAverage30DaysRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -58,9 +58,9 @@ class ColumnAnomalyMedian30DaysCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnNumericMedianSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "PercentileMovingWithin30DaysRuleParametersSpec"] = UNSET
-    error: Union[Unset, "PercentileMovingWithin30DaysRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "PercentileMovingWithin30DaysRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "PercentileMovingAverage30DaysRuleParametersSpec"] = UNSET
+    error: Union[Unset, "PercentileMovingAverage30DaysRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "PercentileMovingAverage30DaysRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -134,8 +134,8 @@ class ColumnAnomalyMedian30DaysCheckSpec:
             ColumnNumericMedianSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.percentile_moving_within_30_days_rule_parameters_spec import (
-            PercentileMovingWithin30DaysRuleParametersSpec,
+        from ..models.percentile_moving_average_30_days_rule_parameters_spec import (
+            PercentileMovingAverage30DaysRuleParametersSpec,
         )
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
 
@@ -174,25 +174,25 @@ class ColumnAnomalyMedian30DaysCheckSpec:
             parameters = ColumnNumericMedianSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, PercentileMovingWithin30DaysRuleParametersSpec]
+        warning: Union[Unset, PercentileMovingAverage30DaysRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = PercentileMovingWithin30DaysRuleParametersSpec.from_dict(_warning)
+            warning = PercentileMovingAverage30DaysRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, PercentileMovingWithin30DaysRuleParametersSpec]
+        error: Union[Unset, PercentileMovingAverage30DaysRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = PercentileMovingWithin30DaysRuleParametersSpec.from_dict(_error)
+            error = PercentileMovingAverage30DaysRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, PercentileMovingWithin30DaysRuleParametersSpec]
+        fatal: Union[Unset, PercentileMovingAverage30DaysRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = PercentileMovingWithin30DaysRuleParametersSpec.from_dict(_fatal)
+            fatal = PercentileMovingAverage30DaysRuleParametersSpec.from_dict(_fatal)
 
         column_anomaly_median_30_days_check_spec = cls(
             schedule_override=schedule_override,

@@ -6,8 +6,8 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.percentile_moving_within_60_days_rule_parameters_spec import (
-        PercentileMovingWithin60DaysRuleParametersSpec,
+    from ..models.percentile_moving_average_rule_parameters_spec import (
+        PercentileMovingAverageRuleParametersSpec,
     )
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
     from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -44,9 +44,9 @@ class TableAnomalyRowCount60DaysCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
-        warning (Union[Unset, PercentileMovingWithin60DaysRuleParametersSpec]):
-        error (Union[Unset, PercentileMovingWithin60DaysRuleParametersSpec]):
-        fatal (Union[Unset, PercentileMovingWithin60DaysRuleParametersSpec]):
+        warning (Union[Unset, PercentileMovingAverageRuleParametersSpec]):
+        error (Union[Unset, PercentileMovingAverageRuleParametersSpec]):
+        fatal (Union[Unset, PercentileMovingAverageRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -58,9 +58,9 @@ class TableAnomalyRowCount60DaysCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "PercentileMovingWithin60DaysRuleParametersSpec"] = UNSET
-    error: Union[Unset, "PercentileMovingWithin60DaysRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "PercentileMovingWithin60DaysRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "PercentileMovingAverageRuleParametersSpec"] = UNSET
+    error: Union[Unset, "PercentileMovingAverageRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "PercentileMovingAverageRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -131,8 +131,8 @@ class TableAnomalyRowCount60DaysCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.percentile_moving_within_60_days_rule_parameters_spec import (
-            PercentileMovingWithin60DaysRuleParametersSpec,
+        from ..models.percentile_moving_average_rule_parameters_spec import (
+            PercentileMovingAverageRuleParametersSpec,
         )
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
         from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -174,25 +174,25 @@ class TableAnomalyRowCount60DaysCheckSpec:
             parameters = TableVolumeRowCountSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, PercentileMovingWithin60DaysRuleParametersSpec]
+        warning: Union[Unset, PercentileMovingAverageRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = PercentileMovingWithin60DaysRuleParametersSpec.from_dict(_warning)
+            warning = PercentileMovingAverageRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, PercentileMovingWithin60DaysRuleParametersSpec]
+        error: Union[Unset, PercentileMovingAverageRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = PercentileMovingWithin60DaysRuleParametersSpec.from_dict(_error)
+            error = PercentileMovingAverageRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, PercentileMovingWithin60DaysRuleParametersSpec]
+        fatal: Union[Unset, PercentileMovingAverageRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = PercentileMovingWithin60DaysRuleParametersSpec.from_dict(_fatal)
+            fatal = PercentileMovingAverageRuleParametersSpec.from_dict(_fatal)
 
         table_anomaly_row_count_60_days_check_spec = cls(
             schedule_override=schedule_override,
