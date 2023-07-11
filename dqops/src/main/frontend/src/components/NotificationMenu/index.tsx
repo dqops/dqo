@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Popover,
   PopoverHandler,
@@ -28,9 +28,6 @@ const NotificationMenu = () => {
     (state: IRootState) => state.job || {}
   );
 
-  const [data, setData] = useState<
-    Array<{ type: string; item: DqoJobHistoryEntryModel }>
-  >([]);
   const dispatch = useActionDispatch();
   const { errors } = useError();
 
@@ -52,7 +49,7 @@ const NotificationMenu = () => {
     getData();
   }, []);
 
-  useEffect(() => {
+  const data = useMemo(() => {
     const jobsData = Object.values(job_dictionary_state)
       .sort((a, b) => {
         return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
@@ -70,7 +67,7 @@ const NotificationMenu = () => {
       return moment(date1).isBefore(moment(date2)) ? 1 : -1;
     });
 
-    setData(newData);
+    return newData;
   }, [job_dictionary_state, errors]);
 
   const [sizeOfNot, setSizeOfNot] = useState<number>(data.length);
