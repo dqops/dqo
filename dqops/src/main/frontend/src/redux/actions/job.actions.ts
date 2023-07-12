@@ -84,7 +84,7 @@ export const getJobsChanges =
           dispatch(getJobsChangesFailed(err));
           //dispatch(getJobsChanges(sequenceNumber) as any);
           return;
-        }, 1000);
+        }, JOB_CHANGES_RETRY_INTERVAL);
       });
   };
 

@@ -101,32 +101,61 @@ const NotificationMenu = () => {
   };
 
   const setNewJobArray = (): jobInterface[] => {
-    const newArray = data.filter(
-      (x) => x.item.jobId?.parentJobId?.jobId === undefined
-    );
-    const newArray2: jobInterface[] = newArray.map((x) => ({
-      errorMessage: x.item.errorMessage,
-      jobId: {
-        jobId: x.item.jobId?.jobId,
-        createdAt: x.item.jobId?.createdAt
-      },
-      jobType: x.item.jobType,
-      parameters: x.item.parameters,
-      status: x.item.status,
-      statusChangedAt: x.item.statusChangedAt,
-      childs: data
-        .filter((y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId)
-        .map((y) => y.item)
-    }));
-    useEffect(() => {
-      if (newArray2.some((x) => x.jobType === undefined)) {
-        newArray2.map(() => ({
-          ...newArray2
-        }));
-      }
-    }, [newArray2]);
+    const newArray: jobInterface[] = data
+      .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
+      .map((x) => ({
+        errorMessage: x.item.errorMessage,
+        jobId: {
+          jobId: x.item.jobId?.jobId,
+          createdAt: x.item.jobId?.createdAt
+        },
+        jobType: x.item.jobType,
+        parameters: x.item.parameters,
+        status: x.item.status,
+        statusChangedAt: x.item.statusChangedAt,
+        childs: data
+          .filter(
+            (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
+          )
+          .map((y) => y.item)
+      }));
 
-    return newArray2;
+    const updatedArray: jobInterface[] = newArray.map((x) => {
+      if (x.jobType === undefined) {
+        return {
+          ...x,
+          jobType: (
+            Object.values(job_dictionary_state).find(
+              (y) => y.jobId?.jobId === x.jobId?.jobId
+            ) as any
+          ).updatedModel?.jobType
+        };
+      }
+      return x;
+    });
+
+    const updatedChildArray: jobInterface[] = updatedArray.map((x) => {
+      if (x.childs) {
+        const updatedChilds = x.childs.map((z) => {
+          if (z.jobType === undefined) {
+            return {
+              ...z,
+              jobType: (
+                Object.values(job_dictionary_state).find(
+                  (y) => y.jobId?.jobId === z.jobId?.jobId
+                ) as any
+              ).updatedModel?.jobType
+            };
+          }
+          return z;
+        });
+        return { ...x, childs: updatedChilds };
+      }
+
+      return x;
+    });
+
+    return updatedChildArray;
   };
 
   return (

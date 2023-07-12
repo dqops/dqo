@@ -141,8 +141,6 @@ const JobItem = ({
   //   return false;
   // };
 
-  console.log(job);
-
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
       <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
@@ -165,20 +163,21 @@ const JobItem = ({
             )}
             <div className=" relative">
               <div className="flex items-center gap-x-3">
-                {job.jobType === 'run checks' && (
-                  <div
-                    className="w-3 h-3"
-                    style={{
-                      backgroundColor: getColor(
-                        job.parameters?.runChecksParameters?.runChecksResult
-                          ?.highestSeverity
-                          ? job.parameters?.runChecksParameters?.runChecksResult
-                              ?.highestSeverity
-                          : 'error'
-                      )
-                    }}
-                  />
-                )}
+                {job.jobType === 'run checks' &&
+                  job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
+                    <div
+                      className="w-3 h-3"
+                      style={{
+                        backgroundColor: getColor(
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.highestSeverity
+                            ? job.parameters?.runChecksParameters
+                                ?.runChecksResult?.highestSeverity
+                            : 'error'
+                        )
+                      }}
+                    />
+                  )}
                 <div>
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
@@ -387,29 +386,31 @@ const JobItem = ({
                 </tr>
               </>
             )}
-            <Accordion open={open2} className="min-w-100">
-              <AccordionHeader
-                onClick={() => {
-                  setOpen2(!open2), reduceCount();
-                }}
-              >
-                <div
-                  className=" flex justify-between items-center text-sm w-full text-gray-700"
-                  onClick={() => setSizeOfNot(sizeOfNot && sizeOfNot - 6)}
+            {job.childs.length !== 0 && (
+              <Accordion open={open2} className="min-w-100">
+                <AccordionHeader
+                  onClick={() => {
+                    setOpen2(!open2), reduceCount();
+                  }}
                 >
-                  Tasks{' '}
-                </div>
-              </AccordionHeader>
-              <AccordionBody className="py-0">
-                <div className="overflow-y-hidden">
-                  {job.childs.map((notification: any, index) => (
-                    <div key={index}>
-                      <JobChild job={notification} />
-                    </div>
-                  ))}
-                </div>
-              </AccordionBody>
-            </Accordion>
+                  <div
+                    className=" flex justify-between items-center text-sm w-full text-gray-700"
+                    onClick={() => setSizeOfNot(sizeOfNot && sizeOfNot - 6)}
+                  >
+                    Tasks{' '}
+                  </div>
+                </AccordionHeader>
+                <AccordionBody className="py-0">
+                  <div className="overflow-y-hidden">
+                    {job.childs.map((notification: any, index) => (
+                      <div key={index}>
+                        <JobChild job={notification} />
+                      </div>
+                    ))}
+                  </div>
+                </AccordionBody>
+              </Accordion>
+            )}
           </tbody>
         </table>
       </AccordionBody>
