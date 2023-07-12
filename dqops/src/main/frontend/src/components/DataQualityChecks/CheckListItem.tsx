@@ -5,7 +5,8 @@ import {
   DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
   CheckModel,
-  FieldModel
+  FieldModel,
+  RuleParametersModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import CheckSettings from './CheckSettings';
@@ -25,6 +26,7 @@ import Checkbox from '../Checkbox';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { rule } from 'postcss';
 
 export interface ITab {
   label: string;
@@ -81,6 +83,9 @@ const CheckListItem = ({
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [enabledType, setEnabledType] = useState<
+    'error' | 'warning' | 'fatal' | ''
+  >('');
 
   useEffect(() => {
     const localState = localStorage.getItem(
@@ -107,6 +112,12 @@ const CheckListItem = ({
       `${checkTypes}_${check.check_name}`,
       newValue.toString()
     );
+  };
+
+  const changeEnabled = (
+    variable: 'error' | 'warning' | 'fatal' | ''
+  ): void => {
+    setEnabledType(variable);
   };
 
   const closeExpand = () => {
@@ -268,6 +279,26 @@ const CheckListItem = ({
 
     return date.toLocaleString('en-US', options);
   };
+
+  console.log(check.rule?.warning?.configured);
+
+  useEffect(() => {
+    if (check.rule?.warning?.configured === true && enabledType !== 'warning') {
+      const obj: RuleParametersModel = {
+        rule_name: check.rule?.warning?.rule_name,
+        rule_parameters: check.rule?.warning?.rule_parameters,
+        disabled: check.rule?.warning?.disabled,
+        configured: false
+      };
+      handleChange({
+        rule: {
+          ...check?.rule,
+          obj
+        }
+      });
+      console.log('inside');
+    }
+  }, [enabledType]);
 
   return (
     <>
@@ -489,13 +520,15 @@ const CheckListItem = ({
             onChange={(warning) =>
               handleChange({
                 rule: {
-                  ...check?.rule,
+                  ...check.rule,
                   warning
                 }
               })
             }
             type="warning"
             onUpdate={onUpdate}
+            changeEnabled={changeEnabled}
+            configuredType={enabledType}
           />
         </td>
         <td className="py-2 px-4 bg-orange-100">
@@ -512,6 +545,8 @@ const CheckListItem = ({
             }
             type="error"
             onUpdate={onUpdate}
+            changeEnabled={changeEnabled}
+            configuredType={enabledType}
           />
         </td>
         <td className="py-2 px-4 bg-red-100">
@@ -528,8 +563,11 @@ const CheckListItem = ({
             }
             type="fatal"
             onUpdate={onUpdate}
+            changeEnabled={changeEnabled}
+            configuredType={enabledType}
           />
         </td>
+        {check.rule?.warning?.configured ? 'warning on' : 'off'}
       </tr>
       {expanded && (
         <tr>

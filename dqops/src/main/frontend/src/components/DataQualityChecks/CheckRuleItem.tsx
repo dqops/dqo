@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SvgIcon from '../SvgIcon';
 import FieldControl from './FieldControl';
 import { FieldModel, RuleParametersModel } from '../../api';
@@ -12,6 +12,8 @@ interface CheckRuleItemProps {
   type: 'error' | 'warning' | 'fatal';
   disabled?: boolean;
   onUpdate: () => void;
+  changeEnabled?: (variable: 'error' | 'warning' | 'fatal' | '') => void;
+  configuredType?: 'error' | 'warning' | 'fatal' | '';
 }
 
 const buttonLabelMap = {
@@ -31,7 +33,9 @@ const CheckRuleItem = ({
   onChange,
   type,
   disabled,
-  onUpdate
+  onUpdate,
+  changeEnabled,
+  configuredType
 }: CheckRuleItemProps) => {
   const handleRuleParameterChange = (field: FieldModel, idx: number) => {
     const newParameters = parameters?.rule_parameters?.map((item, index) =>
@@ -42,12 +46,33 @@ const CheckRuleItem = ({
       rule_parameters: newParameters
     });
   };
-  console.log(parameters);
+
+  useEffect(() => {
+    // if (
+    //   parameters?.configured &&
+    //   changeEnabled &&
+    //   parameters.rule_parameters?.length === 0
+    // ) {
+    //   changeEnabled(type);
+    // }
+    if (configuredType && configuredType !== type) {
+      onChange({
+        ...parameters,
+        configured: false
+      });
+    }
+    if (configuredType !== 'warning' && type === 'warning') {
+      onChange({
+        ...parameters,
+        configured: false
+      });
+    }
+  }, [parameters?.configured, configuredType, type]);
 
   return (
     <div className="text-left text-gray-700 h-13 flex items-center justify-center">
       <div className="flex space-x-2 items-end justify-center">
-        {parameters?.configured ? (
+        {parameters?.configured === true ? (
           <div className="flex items-center gap-x-2">
             <IconButton
               className={clsx(
@@ -55,17 +80,18 @@ const CheckRuleItem = ({
                 'rounded-full w-6 h-6 my-1 !shadow-none'
               )}
               ripple={false}
-              onClick={() =>
+              onClick={() => {
                 onChange({
                   ...parameters,
                   configured: false
-                })
-              }
+                }),
+                  changeEnabled && changeEnabled('');
+              }}
             >
               <SvgIcon name="close" />
             </IconButton>
             {parameters.rule_parameters?.length === 0 && (
-              <div className="font-bold">Enabled</div>
+              <div className="font-bold">Enabled </div>
             )}
           </div>
         ) : (
@@ -76,14 +102,15 @@ const CheckRuleItem = ({
               disabled ? 'text-gray-500 ' : 'text-white'
             )}
             textSize="sm"
-            onClick={() =>
+            onClick={() => {
               onChange({
                 ...parameters,
                 configured: true
-              })
-            }
+              }),
+                changeEnabled && changeEnabled(type);
+            }}
             disabled={disabled}
-            label={buttonLabelMap[type]}
+            label={buttonLabelMap[type] + parameters?.configured}
           />
         )}
         {parameters?.configured &&
@@ -104,7 +131,10 @@ const CheckRuleItem = ({
           <div>Enabled</div>
         )}
       </div>
-      {parameters?.configured}
+      {parameters?.configured ? 'configured' : 'not'}
+      {type}
+      {'lalala'}
+      {configuredType === type ? 'zgadza soe' : 'nie'}
     </div>
   );
 };
