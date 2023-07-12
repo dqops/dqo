@@ -163,20 +163,21 @@ const JobItem = ({
             )}
             <div className=" relative">
               <div className="flex items-center gap-x-3">
-                {job.jobType === 'run checks' && (
-                  <div
-                    className="w-3 h-3"
-                    style={{
-                      backgroundColor: getColor(
-                        job.parameters?.runChecksParameters?.runChecksResult
-                          ?.highestSeverity
-                          ? job.parameters?.runChecksParameters?.runChecksResult
-                              ?.highestSeverity
-                          : 'error'
-                      )
-                    }}
-                  />
-                )}
+                {job.jobType === 'run checks' &&
+                  job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
+                    <div
+                      className="w-3 h-3"
+                      style={{
+                        backgroundColor: getColor(
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.highestSeverity
+                            ? job.parameters?.runChecksParameters
+                                ?.runChecksResult?.highestSeverity
+                            : 'error'
+                        )
+                      }}
+                    />
+                  )}
                 <div>
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>

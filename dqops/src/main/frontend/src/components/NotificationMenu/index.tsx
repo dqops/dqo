@@ -133,26 +133,29 @@ const NotificationMenu = () => {
       }
       return x;
     });
-    // const updatedChildArray: DqoJobHistoryEntryModel[] = newArray.map((x) => {
-    //   if (x.childs && x.childs.some((z) => z.jobType === undefined)) {
-    //     const updatedChilds = x.childs.map((z) => {
-    //       if (z.jobType === undefined) {
-    //         const matchedJob = Object.values(job_dictionary_state).find(
-    //           (y) => y.jobId?.jobId === z.jobId?.jobId
-    //         );
-    //         if (matchedJob) {
-    //           return { ...z, jobType: matchedJob.jobType };
-    //         }
-    //       }
-    //       return z;
-    //     });
-    //     return { ...x, childs: updatedChilds };
-    //   }
 
-    //   return x;
-    // });
+    const updatedChildArray: jobInterface[] = updatedArray.map((x) => {
+      if (x.childs) {
+        const updatedChilds = x.childs.map((z) => {
+          if (z.jobType === undefined) {
+            return {
+              ...z,
+              jobType: (
+                Object.values(job_dictionary_state).find(
+                  (y) => y.jobId?.jobId === z.jobId?.jobId
+                ) as any
+              ).updatedModel?.jobType
+            };
+          }
+          return z;
+        });
+        return { ...x, childs: updatedChilds };
+      }
 
-    return updatedArray;
+      return x;
+    });
+
+    return updatedChildArray;
   };
 
   return (
