@@ -255,7 +255,7 @@ const TableColumns = ({
     const arr: number[] = [];
     statistics?.column_statistics?.map((x) => {
       x.statistics?.map((y) => {
-        if (y.collector == 'unique_count') {
+        if (y.collector == 'distinct_count') {
           arr.push(Number(y.result));
         }
       });
@@ -293,7 +293,7 @@ const TableColumns = ({
   );
   const uniqueCountData = statistics?.column_statistics?.map((x) =>
     x.statistics
-      ?.filter((item) => item.collector === 'unique_count')
+      ?.filter((item) => item.collector === 'distinct_count')
       .map((item) => item.result)
   );
   const nullCountData = statistics?.column_statistics?.map((x) =>
