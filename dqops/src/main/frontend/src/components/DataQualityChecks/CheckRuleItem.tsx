@@ -4,7 +4,7 @@ import FieldControl from './FieldControl';
 import { FieldModel, RuleParametersModel } from '../../api';
 import clsx from 'clsx';
 import { IconButton } from '@material-tailwind/react';
-import Button from "../Button";
+import Button from '../Button';
 
 interface CheckRuleItemProps {
   parameters?: RuleParametersModel;
@@ -42,29 +42,38 @@ const CheckRuleItem = ({
       rule_parameters: newParameters
     });
   };
+  console.log(parameters);
 
   return (
     <div className="text-left text-gray-700 h-13 flex items-center justify-center">
       <div className="flex space-x-2 items-end justify-center">
         {parameters?.configured ? (
-          <IconButton
-            className={clsx(classesMap[type], 'rounded-full w-6 h-6 my-1 !shadow-none')}
-            ripple={false}
-            onClick={() =>
-              onChange({
-                ...parameters,
-                configured: false
-              })
-            }
-          >
-            <SvgIcon name="close" />
-          </IconButton>
+          <div className="flex items-center gap-x-2">
+            <IconButton
+              className={clsx(
+                classesMap[type],
+                'rounded-full w-6 h-6 my-1 !shadow-none'
+              )}
+              ripple={false}
+              onClick={() =>
+                onChange({
+                  ...parameters,
+                  configured: false
+                })
+              }
+            >
+              <SvgIcon name="close" />
+            </IconButton>
+            {parameters.rule_parameters?.length === 0 && (
+              <div className="font-bold">Enabled</div>
+            )}
+          </div>
         ) : (
           <Button
             className={clsx(
               'px-4 py-2 whitespace-nowrap disabled:bg-gray-100 disabled:disabled:cursor-not-allowed',
               classesMap[type],
-              disabled ? 'text-gray-500 ' : 'text-white',
+              disabled ? 'text-gray-500 ' : 'text-white'
             )}
             textSize="sm"
             onClick={() =>
@@ -91,7 +100,11 @@ const CheckRuleItem = ({
               />
             </div>
           ))}
+        {parameters?.configured && !parameters?.rule_parameters && (
+          <div>Enabled</div>
+        )}
       </div>
+      {parameters?.configured}
     </div>
   );
 };
