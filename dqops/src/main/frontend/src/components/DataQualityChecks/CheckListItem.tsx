@@ -26,7 +26,6 @@ import Checkbox from '../Checkbox';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
-import { rule } from 'postcss';
 
 export interface ITab {
   label: string;
@@ -280,23 +279,48 @@ const CheckListItem = ({
     return date.toLocaleString('en-US', options);
   };
 
-  console.log(check.rule?.warning?.configured);
-
   useEffect(() => {
-    if (check.rule?.warning?.configured === true && enabledType !== 'warning') {
-      const obj: RuleParametersModel = {
-        rule_name: check.rule?.warning?.rule_name,
-        rule_parameters: check.rule?.warning?.rule_parameters,
-        disabled: check.rule?.warning?.disabled,
-        configured: false
-      };
-      handleChange({
-        rule: {
-          ...check?.rule,
-          obj
-        }
-      });
-      console.log('inside');
+    if (check.rule?.error?.rule_parameters?.length === 0) {
+      if (
+        check.rule?.warning?.configured === true &&
+        enabledType !== 'warning' &&
+        enabledType !== ''
+      ) {
+        const obj: RuleParametersModel = {
+          rule_name: check.rule?.warning?.rule_name,
+          rule_parameters: check.rule?.warning?.rule_parameters,
+          disabled: check.rule?.warning?.disabled,
+          configured: false
+        };
+        const updatedRule = {
+          ...check.rule,
+          warning: obj
+        };
+        handleChange({
+          rule: updatedRule
+        });
+      } else if (enabledType === 'warning') {
+        const objFatal: RuleParametersModel = {
+          rule_name: check.rule?.fatal?.rule_name,
+          rule_parameters: check.rule?.fatal?.rule_parameters,
+          disabled: check.rule?.fatal?.disabled,
+          configured: false
+        };
+        const objError: RuleParametersModel = {
+          rule_name: check.rule?.error?.rule_name,
+          rule_parameters: check.rule?.error?.rule_parameters,
+          disabled: check.rule?.error?.disabled,
+          configured: false
+        };
+        const updatedRule = {
+          ...check.rule,
+          error: objError,
+          fatal: objFatal
+        };
+        handleChange({
+          rule: updatedRule
+        });
+      }
     }
   }, [enabledType]);
 
@@ -567,7 +591,6 @@ const CheckListItem = ({
             configuredType={enabledType}
           />
         </td>
-        {check.rule?.warning?.configured ? 'warning on' : 'off'}
       </tr>
       {expanded && (
         <tr>

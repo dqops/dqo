@@ -55,19 +55,27 @@ const CheckRuleItem = ({
     // ) {
     //   changeEnabled(type);
     // }
-    if (configuredType && configuredType !== type) {
-      onChange({
-        ...parameters,
-        configured: false
-      });
-    }
-    if (configuredType !== 'warning' && type === 'warning') {
+    if (
+      configuredType &&
+      configuredType !== type &&
+      parameters &&
+      parameters.rule_parameters?.length === 0
+    ) {
       onChange({
         ...parameters,
         configured: false
       });
     }
   }, [parameters?.configured, configuredType, type]);
+
+  const myfunction = (): void => {
+    if (changeEnabled) {
+      changeEnabled('');
+      setTimeout(() => {
+        changeEnabled(type);
+      }, 1);
+    }
+  };
 
   return (
     <div className="text-left text-gray-700 h-13 flex items-center justify-center">
@@ -107,7 +115,7 @@ const CheckRuleItem = ({
                 ...parameters,
                 configured: true
               }),
-                changeEnabled && changeEnabled(type);
+                myfunction();
             }}
             disabled={disabled}
             label={buttonLabelMap[type] + parameters?.configured}
@@ -131,10 +139,6 @@ const CheckRuleItem = ({
           <div>Enabled</div>
         )}
       </div>
-      {parameters?.configured ? 'configured' : 'not'}
-      {type}
-      {'lalala'}
-      {configuredType === type ? 'zgadza soe' : 'nie'}
     </div>
   );
 };
