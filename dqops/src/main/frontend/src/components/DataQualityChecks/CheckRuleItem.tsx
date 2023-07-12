@@ -48,13 +48,6 @@ const CheckRuleItem = ({
   };
 
   useEffect(() => {
-    // if (
-    //   parameters?.configured &&
-    //   changeEnabled &&
-    //   parameters.rule_parameters?.length === 0
-    // ) {
-    //   changeEnabled(type);
-    // }
     if (
       configuredType &&
       configuredType !== type &&
@@ -67,15 +60,6 @@ const CheckRuleItem = ({
       });
     }
   }, [parameters?.configured, configuredType, type]);
-
-  const myfunction = (): void => {
-    if (changeEnabled) {
-      changeEnabled('');
-      setTimeout(() => {
-        changeEnabled(type);
-      }, 1);
-    }
-  };
 
   return (
     <div className="text-left text-gray-700 h-13 flex items-center justify-center">
@@ -115,7 +99,7 @@ const CheckRuleItem = ({
                 ...parameters,
                 configured: true
               }),
-                myfunction();
+                changeEnabled && changeEnabled(type);
             }}
             disabled={disabled}
             label={buttonLabelMap[type] + parameters?.configured}

@@ -336,7 +336,7 @@ const CheckListItem = ({
         <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
           <div className="flex space-x-1 items-center">
             {mode ? (
-              <div className="w-5 h-5 block flex items-center">
+              <div className="w-5 h-5 block items-center">
                 {check?.configured && (
                   <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
                 )}
