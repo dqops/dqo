@@ -43,6 +43,15 @@ public class SensorGroupingKey {
     }
 
     /**
+     * Creates a copy of this key, but with a new query grouping id. We are creating new groups when the previous group has too many merged queries.
+     * @param queryGroupingId New query grouping id.
+     * @return A new sensor grouping key that differs by the query grouping id.
+     */
+    public SensorGroupingKey createWithNewGroupingId(int queryGroupingId) {
+        return new SensorGroupingKey(this.fragmentedSqlQuery, this.sensorExecutor, queryGroupingId);
+    }
+
+    /**
      * SQL query fragments that are used for comparison.
      * @return SQL query fragments.
      */

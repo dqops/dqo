@@ -64,6 +64,21 @@ public class SensorExecutionRunParameters {
     private CheckSearchFilters checkSearchFilter;
     private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
+    @JsonIgnore
+    private boolean success;
+    @JsonIgnore
+    private Throwable sensorConfigurationException;
+
+    /**
+     * Creates a sensor execution run parameters when the sensor configuration failed and was not successful.
+     * @param check The check that failed to be configured for execution.
+     * @param sensorConfigurationException Exception that describes why the sensor failed to be configured.
+     */
+    public SensorExecutionRunParameters(AbstractCheckSpec<?,?,?,?> check, Throwable sensorConfigurationException) {
+        this.success = false;
+        this.check = check;
+        this.sensorConfigurationException = sensorConfigurationException;
+    }
 
     /**
      * Creates a sensor run parameters object with all objects required to run a sensor.
@@ -95,6 +110,7 @@ public class SensorExecutionRunParameters {
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings,
             CheckSearchFilters checkSearchFilter) {
+        this.success = true;
         this.connection = connection;
         this.table = table;
         this.column = column;
@@ -108,6 +124,38 @@ public class SensorExecutionRunParameters {
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
         this.checkSearchFilter = checkSearchFilter;
+    }
+
+    /**
+     * Returns true if the sensor parameter preparation was successful.
+     * @return True when the sensor was prepared correctly, false when the table mis configuration caused some issues.
+     */
+    public boolean isSuccess() {
+        return success;
+    }
+
+    /**
+     * Sets the flag if the sensor preparation was successful.
+     * @param success Sensor was configured correctly.
+     */
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    /**
+     * Returns an exception that was thrown when the sensor was prepared.
+     * @return Sensor preparation exception.
+     */
+    public Throwable getSensorConfigurationException() {
+        return sensorConfigurationException;
+    }
+
+    /**
+     * Sets an exception that was raised when the sensor configuration was prepared.
+     * @param sensorConfigurationException Sensor configuration exception.
+     */
+    public void setSensorConfigurationException(Throwable sensorConfigurationException) {
+        this.sensorConfigurationException = sensorConfigurationException;
     }
 
     /**

@@ -76,4 +76,40 @@ public class LocalDateTimePeriodUtility {
                 throw new RuntimeException("Unsupported gradient: " + gradient);
         }
     }
+
+    /**
+     * Finds the minimal (earliest) date time.
+     * @param first First date time (to ensure that there is at least one).
+     * @param other The other time periods.
+     * @return Earliest date time.
+     */
+    public static LocalDateTime min(LocalDateTime first, LocalDateTime... other) {
+        LocalDateTime result = first;
+        for (int i = 0; i < other.length; i++) {
+            LocalDateTime otherDateTime = other[i];
+            if (otherDateTime.isBefore(result)) {
+                result = otherDateTime;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Finds the maximum (latest) date time.
+     * @param first First date time (to ensure that there is at least one).
+     * @param other The other time periods.
+     * @return Latest date time.
+     */
+    public static LocalDateTime max(LocalDateTime first, LocalDateTime... other) {
+        LocalDateTime result = first;
+        for (int i = 0; i < other.length; i++) {
+            LocalDateTime otherDateTime = other[i];
+            if (otherDateTime.isAfter(result)) {
+                result = otherDateTime;
+            }
+        }
+
+        return result;
+    }
 }

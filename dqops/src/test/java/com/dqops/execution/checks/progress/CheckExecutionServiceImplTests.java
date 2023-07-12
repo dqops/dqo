@@ -29,6 +29,8 @@ import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheck
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
+import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.jobqueue.JobCancellationTokenObjectMother;
@@ -154,7 +156,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 errorsNormalizationService,
                 ErrorsSnapshotFactoryObjectMother.createDummyErrorsStorageService(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
-                null);
+                null,
+                DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault());
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,

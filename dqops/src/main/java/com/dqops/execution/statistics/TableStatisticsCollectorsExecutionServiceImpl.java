@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
@@ -67,6 +68,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
     private ConnectionProviderRegistry connectionProviderRegistry;
     private StatisticsResultsNormalizationService statisticsResultsNormalizationService;
     private StatisticsSnapshotFactory statisticsSnapshotFactory;
+    private DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
 
     /**
      * Creates a statistics collectors execution service with given dependencies.
@@ -76,6 +78,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
      * @param connectionProviderRegistry Connection provider.
      * @param statisticsResultsNormalizationService Normalization service that creates profiling results.
      * @param statisticsSnapshotFactory Statistics results snapshot factory. Snapshots support storage of profiler results.
+     * @param dqoSensorLimitsConfigurationProperties DQO sensor limits configuration.
      */
     @Autowired
     public TableStatisticsCollectorsExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -83,13 +86,15 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                                          DataQualitySensorRunner dataQualitySensorRunner,
                                                          ConnectionProviderRegistry connectionProviderRegistry,
                                                          StatisticsResultsNormalizationService statisticsResultsNormalizationService,
-                                                         StatisticsSnapshotFactory statisticsSnapshotFactory) {
+                                                         StatisticsSnapshotFactory statisticsSnapshotFactory,
+                                                         DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.statisticsResultsNormalizationService = statisticsResultsNormalizationService;
         this.statisticsSnapshotFactory = statisticsSnapshotFactory;
+        this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
     }
 
     /**
@@ -139,7 +144,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(collectors, executionContext, userHome, progressListener,
                 executionStatistics, statisticsDataScope, jobCancellationToken);
 
-        GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection();
+        GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
         groupedSensorsCollection.addAllPreparedSensors(allPreparedSensors);
 
         List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(groupedSensorsCollection, executionContext, progressListener,

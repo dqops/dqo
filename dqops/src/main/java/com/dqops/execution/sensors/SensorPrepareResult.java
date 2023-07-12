@@ -99,6 +99,7 @@ public class SensorPrepareResult {
         return new SensorPrepareResult(sensorRunParameters, sensorDefinition, null, null, true) {{
             setSuccess(false);
             setPrepareException(prepareException);
+            setDisableMergingQueries(true);
         }};
     }
 

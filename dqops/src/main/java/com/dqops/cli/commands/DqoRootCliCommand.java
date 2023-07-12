@@ -277,6 +277,18 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "When running DQO in a docker container, allow DQO user home folder to be initialized inside the container's filesystem if the folder hasn't been mounted to an external volume.", defaultValue = "false")
     private Boolean dqoDockerUserHomeAllowUnmounted;
 
+    @CommandLine.Option(names = {"--dqo.sensor.limit.sensor-readout-limit"},
+            description = "Default row count limit retrieved from a single sensor. This is the row count limit applied when querying the data source. When the data grouping configuration sets up a GROUP BY too many columns or columns with too many distinct values, the data source will return too many results to store them as data quality check results and sensor readouts. DQO will discard additional values returned from the data source.", defaultValue = "10000")
+    private int dqoSensorLimitSensorReadoutLimit;
+
+    @CommandLine.Option(names = {"--dqo.sensor.limit.fail-on-sensor-readout-limit-exceeded"},
+            description = "Configures the behavior when the number of rows returned from a data quality sensor exceeds the limit configured in the 'sensor-readout-limit' parameter. When true, the whole check execution is failed. When false, only results up to the limit are analyzed.", defaultValue = "true")
+    private boolean dqoSensorLimitFailOnSensorReadoutLimitExceeded;
+
+    @CommandLine.Option(names = {"--dqo.sensor.limit.max-merged-queries"},
+            description = "The maximum number of queries that are merged into a bigger query, to calculate multiple sensors on the same table and to analyze multiple columns from the same table.", defaultValue = "100")
+    private int dqoSensorLimitMaxMergedQueries;
+
     @CommandLine.Option(names = {"--spring.config.location"},
             description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +
                     "The format of this value is: --spring.config.location=file:./foldername/,file:./alternativeapplication.yml")
