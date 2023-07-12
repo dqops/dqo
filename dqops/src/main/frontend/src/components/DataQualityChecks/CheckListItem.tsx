@@ -5,7 +5,8 @@ import {
   DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
   CheckModel,
-  FieldModel
+  FieldModel,
+  RuleParametersModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import CheckSettings from './CheckSettings';
@@ -81,6 +82,9 @@ const CheckListItem = ({
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [enabledType, setEnabledType] = useState<
+    'error' | 'warning' | 'fatal' | ''
+  >('');
 
   useEffect(() => {
     const localState = localStorage.getItem(
@@ -107,6 +111,12 @@ const CheckListItem = ({
       `${checkTypes}_${check.check_name}`,
       newValue.toString()
     );
+  };
+
+  const changeEnabled = (
+    variable: 'error' | 'warning' | 'fatal' | ''
+  ): void => {
+    setEnabledType(variable);
   };
 
   const closeExpand = () => {
@@ -269,6 +279,51 @@ const CheckListItem = ({
     return date.toLocaleString('en-US', options);
   };
 
+  useEffect(() => {
+    if (check.rule?.error?.rule_parameters?.length === 0) {
+      if (
+        check.rule?.warning?.configured === true &&
+        enabledType !== 'warning' &&
+        enabledType !== ''
+      ) {
+        const obj: RuleParametersModel = {
+          rule_name: check.rule?.warning?.rule_name,
+          rule_parameters: check.rule?.warning?.rule_parameters,
+          disabled: check.rule?.warning?.disabled,
+          configured: false
+        };
+        const updatedRule = {
+          ...check.rule,
+          warning: obj
+        };
+        handleChange({
+          rule: updatedRule
+        });
+      } else if (enabledType === 'warning') {
+        const objFatal: RuleParametersModel = {
+          rule_name: check.rule?.fatal?.rule_name,
+          rule_parameters: check.rule?.fatal?.rule_parameters,
+          disabled: check.rule?.fatal?.disabled,
+          configured: false
+        };
+        const objError: RuleParametersModel = {
+          rule_name: check.rule?.error?.rule_name,
+          rule_parameters: check.rule?.error?.rule_parameters,
+          disabled: check.rule?.error?.disabled,
+          configured: false
+        };
+        const updatedRule = {
+          ...check.rule,
+          error: objError,
+          fatal: objFatal
+        };
+        handleChange({
+          rule: updatedRule
+        });
+      }
+    }
+  }, [enabledType]);
+
   return (
     <>
       <tr
@@ -281,7 +336,7 @@ const CheckListItem = ({
         <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
           <div className="flex space-x-1 items-center">
             {mode ? (
-              <div className="w-5 h-5 block flex items-center">
+              <div className="w-5 h-5 block items-center">
                 {check?.configured && (
                   <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
                 )}
@@ -489,13 +544,15 @@ const CheckListItem = ({
             onChange={(warning) =>
               handleChange({
                 rule: {
-                  ...check?.rule,
+                  ...check.rule,
                   warning
                 }
               })
             }
             type="warning"
             onUpdate={onUpdate}
+            changeEnabled={changeEnabled}
+            configuredType={enabledType}
           />
         </td>
         <td className="py-2 px-4 bg-orange-100">
@@ -512,6 +569,8 @@ const CheckListItem = ({
             }
             type="error"
             onUpdate={onUpdate}
+            changeEnabled={changeEnabled}
+            configuredType={enabledType}
           />
         </td>
         <td className="py-2 px-4 bg-red-100">
@@ -528,6 +587,8 @@ const CheckListItem = ({
             }
             type="fatal"
             onUpdate={onUpdate}
+            changeEnabled={changeEnabled}
+            configuredType={enabledType}
           />
         </td>
       </tr>
