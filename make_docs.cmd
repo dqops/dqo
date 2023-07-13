@@ -1,3 +1,3 @@
 @echo off
-python -m pip install --user -r ./requirements.txt
-python -m mkdocs serve
+python3 -m pip install --upgrade --user -r ./requirements.txt
+python3 -m mkdocs serve
