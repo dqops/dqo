@@ -107,6 +107,32 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
         ), renderedTemplate);
     }
 
+    @Test
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStreamAndNoFilters_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
+            setMode(TimeSeriesMode.timestamp_column);
+            setTimeGradient(TimePeriodGradient.day);
+            setTimestampColumn("date");
+        }});
+        runParameters.getSensorParameters().setFilter(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+                SELECT
+                    COUNT(*) AS actual_value,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName()
+        ), renderedTemplate);
+    }
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
@@ -135,6 +161,69 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
+
+    @Test
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStreamAndOneAdditionalFilter_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
+            setMode(TimeSeriesMode.timestamp_column);
+            setTimeGradient(TimePeriodGradient.day);
+            setTimestampColumn("date");
+        }});
+        runParameters.getAdditionalFilters().add("{alias}.col2=5");
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+                SELECT
+                    COUNT(*) AS actual_value,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s
+                      AND analyzed_table.col2=5
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStreamAndTwoAdditionalFilters_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
+            setMode(TimeSeriesMode.timestamp_column);
+            setTimeGradient(TimePeriodGradient.day);
+            setTimestampColumn("date");
+        }});
+        runParameters.getAdditionalFilters().add("{alias}.col2=5");
+        runParameters.getAdditionalFilters().add("{alias}.col3='x'");
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+                SELECT
+                    COUNT(*) AS actual_value,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s
+                      AND analyzed_table.col2=5
+                      AND analyzed_table.col3='x'
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
 
     @Test
     void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {

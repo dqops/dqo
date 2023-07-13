@@ -34,6 +34,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * Context object whose properties will be available as variables in the Jinja2 SQL template.
  */
@@ -55,6 +57,7 @@ public class JinjaTemplateRenderParameters {
     private ProviderDialectSettings dialectSettings;
     private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
+    private List<String> additionalFilters;
 
     /**
      * Creates a default, empty jinja template render parameters object.
@@ -77,6 +80,7 @@ public class JinjaTemplateRenderParameters {
      * @param dialectSettings Dialect settings with configuration of the dialect.
      * @param actualValueAlias The column alias that should be used for the actual value output column name.
      * @param expectedValueAlias The column alias that should be used for the expected value output column name.
+     * @param additionalFilters List of additional filters.
      */
     public JinjaTemplateRenderParameters(ConnectionSpec connection,
 										 TableSpec table,
@@ -90,7 +94,8 @@ public class JinjaTemplateRenderParameters {
 										 ProviderSensorDefinitionSpec providerSensorDefinition,
 										 ProviderDialectSettings dialectSettings,
                                          String actualValueAlias,
-                                         String expectedValueAlias) {
+                                         String expectedValueAlias,
+                                         List<String> additionalFilters) {
         this.connection = connection;
         this.table = table;
         this.targetTable = table.getPhysicalTableName();
@@ -105,6 +110,7 @@ public class JinjaTemplateRenderParameters {
         this.dialectSettings = dialectSettings;
         this.actualValueAlias = actualValueAlias;
         this.expectedValueAlias = expectedValueAlias;
+        this.additionalFilters = additionalFilters;
     }
 
     /**
@@ -132,6 +138,7 @@ public class JinjaTemplateRenderParameters {
             setEffectiveTimeWindowFilter(sensorRunParameters.getTimeWindowFilter());
             setActualValueAlias(sensorRunParameters.getActualValueAlias());
             setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
+            setAdditionalFilters(sensorRunParameters.getAdditionalFilters());
         }};
 
         return result;
@@ -359,5 +366,21 @@ public class JinjaTemplateRenderParameters {
      */
     public void setExpectedValueAlias(String expectedValueAlias) {
         this.expectedValueAlias = expectedValueAlias;
+    }
+
+    /**
+     * Returns a list of additional filters.
+     * @return List of additional filters.
+     */
+    public List<String> getAdditionalFilters() {
+        return additionalFilters;
+    }
+
+    /**
+     * Sets a reference to a list of additional filters.
+     * @param additionalFilters A list of additional filters.
+     */
+    public void setAdditionalFilters(List<String> additionalFilters) {
+        this.additionalFilters = additionalFilters;
     }
 }

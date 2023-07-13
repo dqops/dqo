@@ -36,6 +36,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sensor execution parameter object that contains all objects required to run the sensor.
@@ -68,6 +70,7 @@ public class SensorExecutionRunParameters {
     private boolean success;
     @JsonIgnore
     private Throwable sensorConfigurationException;
+    private List<String> additionalFilters = new ArrayList<>();
 
     /**
      * Creates a sensor execution run parameters when the sensor configuration failed and was not successful.
@@ -413,6 +416,22 @@ public class SensorExecutionRunParameters {
      */
     public void setExpectedValueAlias(String expectedValueAlias) {
         this.expectedValueAlias = expectedValueAlias;
+    }
+
+    /**
+     * Returns a list of additional filters (SQL fragments) that will be added to the WHERE clause.
+     * @return List of additional filters.
+     */
+    public List<String> getAdditionalFilters() {
+        return additionalFilters;
+    }
+
+    /**
+     * Sets a reference to a list of additional filters.
+     * @param additionalFilters A list of additional filters.
+     */
+    public void setAdditionalFilters(List<String> additionalFilters) {
+        this.additionalFilters = additionalFilters;
     }
 
     /**
