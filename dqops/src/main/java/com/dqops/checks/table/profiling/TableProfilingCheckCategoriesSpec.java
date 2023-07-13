@@ -206,6 +206,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns the dictionary of comparisons.
      * @return Dictionary of comparisons.
      */
+    @Override
     public TableComparisonProfilingChecksSpecMap getComparisons() {
         return comparisons;
     }

@@ -38,6 +38,12 @@ public class QualityCategoryModel {
     @JsonPropertyDescription("Data quality check category name.")
     private String category;
 
+    @JsonPropertyDescription("The name of the reference table configuration used for a cross table data comparison (when the category is 'comparisons').")
+    private String comparisonName;
+
+    @JsonPropertyDescription("The name of the column in the reference table that is compared.")
+    private String compareToColumn;
+
     @JsonPropertyDescription("Help text that describes the category.")
     private String helpText;
 

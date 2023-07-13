@@ -375,6 +375,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of column level comparisons to columns in the reference table.
      * @return Dictionary of comparisons to columns.
      */
+    @Override
     public ColumnComparisonProfilingChecksSpecMap getComparisons() {
         return comparisons;
     }

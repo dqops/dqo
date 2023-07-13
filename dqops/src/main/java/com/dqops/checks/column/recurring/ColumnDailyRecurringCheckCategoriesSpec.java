@@ -386,6 +386,7 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
      * Returns the container of column level comparisons to columns in the reference table.
      * @return Dictionary of comparisons to columns.
      */
+    @Override
     public ColumnComparisonDailyRecurringChecksSpecMap getComparisons() {
         return comparisons;
     }

@@ -15,6 +15,10 @@
  */
 package com.dqops.utils.reflection;
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,15 +28,19 @@ import java.util.Objects;
  * expected UI control types.
  */
 public class ClassInfo {
-    private Class<?> reflectedClass;
-    private List<FieldInfo> fields = new ArrayList<>();
+    private final Class<?> reflectedClass;
+    private final Constructor<?> constructor;
+    private final List<FieldInfo> fields = new ArrayList<>();
 
     /**
      * Creates a class reflection info, storing the class type.
+     *
      * @param reflectedClass Target class type.
+     * @param constructor
      */
-    public ClassInfo(Class<?> reflectedClass) {
+    public ClassInfo(Class<?> reflectedClass, Constructor<?> constructor) {
         this.reflectedClass = reflectedClass;
+        this.constructor = constructor;
     }
 
     /**
@@ -41,6 +49,14 @@ public class ClassInfo {
      */
     public Class<?> getReflectedClass() {
         return reflectedClass;
+    }
+
+    /**
+     * Returns the default parameterless constructor for the class.
+     * @return The default parameterless constructor for the class.
+     */
+    public Constructor<?> getConstructor() {
+        return constructor;
     }
 
     /**
@@ -81,5 +97,22 @@ public class ClassInfo {
         }
 
         return null;
+    }
+
+    /**
+     * Creates a new instance of the object, using the default constructor.
+     * @return A new instance of the object.
+     */
+    public Object createNewInstance() {
+        try {
+            Object newInstance = this.constructor.newInstance();
+            return newInstance;
+        } catch (InstantiationException e) {
+            throw new DqoRuntimeException("Instantiation exception", e);
+        } catch (InvocationTargetException e) {
+            throw new DqoRuntimeException("Invocation exception", e);
+        } catch (IllegalAccessException e) {
+            throw new DqoRuntimeException("Illegal access exception", e);
+        }
     }
 }

@@ -15,6 +15,8 @@
  */
 package com.dqops.metadata.sources;
 
+import com.dqops.metadata.id.HierarchyId;
+
 /**
  * Object mother for TableSpec.
  */
@@ -26,12 +28,16 @@ public class TableSpecObjectMother {
      * @return Table spec.
      */
     public static TableSpec create(String schemaName, String tableName) {
-        return new TableSpec() {{
-			setPhysicalTableName(new PhysicalTableName() {{
-				setSchemaName(schemaName);
-				setTableName(tableName);
-            }});
+        PhysicalTableName physicalTableName = new PhysicalTableName() {{
+            setSchemaName(schemaName);
+            setTableName(tableName);
         }};
+
+        TableSpec tableSpec = new TableSpec() {{
+            setPhysicalTableName(physicalTableName);
+            setHierarchyId(HierarchyId.makeHierarchyIdForTable("connection", physicalTableName));
+        }};
+        return tableSpec;
     }
 
     /**

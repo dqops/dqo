@@ -16,6 +16,8 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.*;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -377,15 +379,60 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, SearchParameterObject parameter) {
-        String checkCategoryFilter = this.filters.getCheckCategory();
-        if (!Strings.isNullOrEmpty(checkCategoryFilter)) {
-            String categoryName = abstractCheckCategorySpec.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(categoryName, checkCategoryFilter)) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
+        if (abstractCheckCategorySpec instanceof AbstractComparisonCheckCategorySpec) {
+            AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec)abstractCheckCategorySpec;
+            String dataComparisonNameFilter = this.filters.getDataComparisonName();
+            if (!Strings.isNullOrEmpty(dataComparisonNameFilter)) {
+                String comparisonName = comparisonCheckCategorySpec.getComparisonName();
+                if (!StringPatternComparer.matchSearchPattern(comparisonName, dataComparisonNameFilter)) {
+                    return TreeNodeTraversalResult.SKIP_CHILDREN;
+                }
+            }
+        } else {
+            String checkCategoryFilter = this.filters.getCheckCategory();
+            if (!Strings.isNullOrEmpty(checkCategoryFilter)) {
+                String categoryName = abstractCheckCategorySpec.getHierarchyId().getLast().toString();
+                if (!StringPatternComparer.matchSearchPattern(categoryName, checkCategoryFilter)) {
+                    return TreeNodeTraversalResult.SKIP_CHILDREN;
+                }
             }
         }
 
         return super.accept(abstractCheckCategorySpec, parameter);
+    }
+
+    /**
+     * Accepts a map of comparison checks for a named comparison.
+     *
+     * @param abstractComparisonCheckCategorySpecMap Comparison map with checks.
+     * @param parameter                              Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, SearchParameterObject parameter) {
+        String checkCategoryFilter = this.filters.getCheckCategory();
+        if (!Strings.isNullOrEmpty(checkCategoryFilter)) {
+            String comparisonsObjectFieldName = abstractComparisonCheckCategorySpecMap.getHierarchyId().getLast().toString();
+            if (!StringPatternComparer.matchSearchPattern(comparisonsObjectFieldName, checkCategoryFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        String dataComparisonName = this.filters.getDataComparisonName();
+        if (!Strings.isNullOrEmpty(dataComparisonName)) {
+            if (StringPatternComparer.isSearchPattern(dataComparisonName)) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
+            }
+
+            // exact comparison name given, let's find it
+            AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = abstractComparisonCheckCategorySpecMap.get(dataComparisonName);
+            if (comparisonCheckCategorySpec == null) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
+            }
+
+            return TreeNodeTraversalResult.traverseSelectedChildNodes(comparisonCheckCategorySpec);
+        }
+        return super.accept(abstractComparisonCheckCategorySpecMap, parameter);
     }
 
     /**

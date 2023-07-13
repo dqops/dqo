@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.table.partitioned.comparison.TableComparisonDailyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.sql.TableSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
@@ -53,9 +54,9 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
-            // put("anomaly", o -> o.anomaly); Moved to volume category
+            put("comparisons", o -> o.comparisons);
 
-            // accuracy checks are not supported on partitioned checks yet
+            // accuracy checks are not supported on partitioned checks yet, but we support comparisons
         }
     };
 
@@ -73,6 +74,11 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlDailyPartitionedChecksSpec sql;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableComparisonDailyPartitionedChecksSpecMap comparisons = new TableComparisonDailyPartitionedChecksSpecMap();
 
     /**
      * Returns the container of daily partitioned checks for volume data quality checks.
@@ -126,6 +132,25 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns the dictionary of comparisons.
+     * @return Dictionary of comparisons.
+     */
+    @Override
+    public TableComparisonDailyPartitionedChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the dictionary of comparisons.
+     * @param comparisons Dictionary of comparisons.
+     */
+    public void setComparisons(TableComparisonDailyPartitionedChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**

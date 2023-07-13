@@ -21,6 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.recurring.accuracy.TableAccuracyMonthlyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.availability.TableAvailabilityMonthlyRecurringChecksSpec;
+import com.dqops.checks.table.recurring.comparison.TableComparisonMonthlyRecurringChecksSpecMap;
 import com.dqops.checks.table.recurring.schema.TableSchemaMonthlyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.sql.TableSqlMonthlyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
@@ -59,6 +60,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -91,6 +93,11 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSchemaMonthlyRecurringChecksSpec schema;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableComparisonMonthlyRecurringChecksSpecMap comparisons = new TableComparisonMonthlyRecurringChecksSpecMap();
 
     /**
      * Returns the container of recurring for volume data quality checks.
@@ -198,6 +205,25 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns the dictionary of comparisons.
+     * @return Dictionary of comparisons.
+     */
+    @Override
+    public TableComparisonMonthlyRecurringChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the dictionary of comparisons.
+     * @param comparisons Dictionary of comparisons.
+     */
+    public void setComparisons(TableComparisonMonthlyRecurringChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**
