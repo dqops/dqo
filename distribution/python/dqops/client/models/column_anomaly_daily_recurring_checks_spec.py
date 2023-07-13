@@ -5,23 +5,23 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_anomaly_mean_change_30_days_check_spec import (
-        ColumnAnomalyMeanChange30DaysCheckSpec,
+    from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
+        ColumnAnomalyStationaryMean30DaysCheckSpec,
     )
-    from ..models.column_anomaly_mean_change_60_days_check_spec import (
-        ColumnAnomalyMeanChange60DaysCheckSpec,
+    from ..models.column_anomaly_stationary_mean_check_spec import (
+        ColumnAnomalyStationaryMeanCheckSpec,
     )
-    from ..models.column_anomaly_median_change_30_days_check_spec import (
-        ColumnAnomalyMedianChange30DaysCheckSpec,
+    from ..models.column_anomaly_stationary_median_30_days_check_spec import (
+        ColumnAnomalyStationaryMedian30DaysCheckSpec,
     )
-    from ..models.column_anomaly_median_change_60_days_check_spec import (
-        ColumnAnomalyMedianChange60DaysCheckSpec,
+    from ..models.column_anomaly_stationary_median_check_spec import (
+        ColumnAnomalyStationaryMedianCheckSpec,
     )
-    from ..models.column_anomaly_sum_change_30_days_check_spec import (
-        ColumnAnomalySumChange30DaysCheckSpec,
+    from ..models.column_anomaly_differencing_sum_30_days_check_spec import (
+        ColumnAnomalyDifferencingSum30DaysCheckSpec,
     )
-    from ..models.column_anomaly_sum_change_60_days_check_spec import (
-        ColumnAnomalySumChange60DaysCheckSpec,
+    from ..models.column_anomaly_differencing_sum_check_spec import (
+        ColumnAnomalyDifferencingSumCheckSpec,
     )
     from ..models.column_change_mean_check_spec import ColumnChangeMeanCheckSpec
     from ..models.column_change_mean_since_7_days_check_spec import (
@@ -68,12 +68,12 @@ class ColumnAnomalyDailyRecurringChecksSpec:
         daily_median_change_yesterday (Union[Unset, ColumnChangeMedianSinceYesterdayCheckSpec]):
         daily_sum_change (Union[Unset, ColumnChangeSumCheckSpec]):
         daily_sum_change_yesterday (Union[Unset, ColumnChangeSumSinceYesterdayCheckSpec]):
-        daily_mean_anomaly_30_days (Union[Unset, ColumnAnomalyMeanChange30DaysCheckSpec]):
-        daily_mean_anomaly_60_days (Union[Unset, ColumnAnomalyMeanChange60DaysCheckSpec]):
-        daily_median_anomaly_30_days (Union[Unset, ColumnAnomalyMedianChange30DaysCheckSpec]):
-        daily_median_anomaly_60_days (Union[Unset, ColumnAnomalyMedianChange60DaysCheckSpec]):
-        daily_sum_anomaly_30_days (Union[Unset, ColumnAnomalySumChange30DaysCheckSpec]):
-        daily_sum_anomaly_60_days (Union[Unset, ColumnAnomalySumChange60DaysCheckSpec]):
+        daily_mean_anomaly_stationary_30_days (Union[Unset, ColumnAnomalyStationaryMean30DaysCheckSpec]):
+        daily_mean_anomaly_stationary (Union[Unset, ColumnAnomalyStationaryMeanCheckSpec]):
+        daily_median_anomaly_stationary_30_days (Union[Unset, ColumnAnomalyStationaryMedian30DaysCheckSpec]):
+        daily_median_anomaly_stationary (Union[Unset, ColumnAnomalyStationaryMedianCheckSpec]):
+        daily_sum_anomaly_differencing_30_days (Union[Unset, ColumnAnomalyDifferencingSum30DaysCheckSpec]):
+        daily_sum_anomaly_differencing (Union[Unset, ColumnAnomalyDifferencingSumCheckSpec]):
         daily_mean_change_7_days (Union[Unset, ColumnChangeMeanSince7DaysCheckSpec]):
         daily_mean_change_30_days (Union[Unset, ColumnChangeMeanSince30DaysCheckSpec]):
         daily_median_change_7_days (Union[Unset, ColumnChangeMedianSince7DaysCheckSpec]):
@@ -94,23 +94,23 @@ class ColumnAnomalyDailyRecurringChecksSpec:
     daily_sum_change_yesterday: Union[
         Unset, "ColumnChangeSumSinceYesterdayCheckSpec"
     ] = UNSET
-    daily_mean_anomaly_30_days: Union[
-        Unset, "ColumnAnomalyMeanChange30DaysCheckSpec"
+    daily_mean_anomaly_stationary_30_days: Union[
+        Unset, "ColumnAnomalyStationaryMean30DaysCheckSpec"
     ] = UNSET
-    daily_mean_anomaly_60_days: Union[
-        Unset, "ColumnAnomalyMeanChange60DaysCheckSpec"
+    daily_mean_anomaly_stationary: Union[
+        Unset, "ColumnAnomalyStationaryMeanCheckSpec"
     ] = UNSET
-    daily_median_anomaly_30_days: Union[
-        Unset, "ColumnAnomalyMedianChange30DaysCheckSpec"
+    daily_median_anomaly_stationary_30_days: Union[
+        Unset, "ColumnAnomalyStationaryMedian30DaysCheckSpec"
     ] = UNSET
-    daily_median_anomaly_60_days: Union[
-        Unset, "ColumnAnomalyMedianChange60DaysCheckSpec"
+    daily_median_anomaly_stationary: Union[
+        Unset, "ColumnAnomalyStationaryMedianCheckSpec"
     ] = UNSET
-    daily_sum_anomaly_30_days: Union[
-        Unset, "ColumnAnomalySumChange30DaysCheckSpec"
+    daily_sum_anomaly_differencing_30_days: Union[
+        Unset, "ColumnAnomalyDifferencingSum30DaysCheckSpec"
     ] = UNSET
-    daily_sum_anomaly_60_days: Union[
-        Unset, "ColumnAnomalySumChange60DaysCheckSpec"
+    daily_sum_anomaly_differencing: Union[
+        Unset, "ColumnAnomalyDifferencingSumCheckSpec"
     ] = UNSET
     daily_mean_change_7_days: Union[
         Unset, "ColumnChangeMeanSince7DaysCheckSpec"
@@ -155,29 +155,29 @@ class ColumnAnomalyDailyRecurringChecksSpec:
         if not isinstance(self.daily_sum_change_yesterday, Unset):
             daily_sum_change_yesterday = self.daily_sum_change_yesterday.to_dict()
 
-        daily_mean_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_mean_anomaly_30_days, Unset):
-            daily_mean_anomaly_30_days = self.daily_mean_anomaly_30_days.to_dict()
+        daily_mean_anomaly_stationary_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_mean_anomaly_stationary_30_days, Unset):
+            daily_mean_anomaly_stationary_30_days = self.daily_mean_anomaly_stationary_30_days.to_dict()
 
-        daily_mean_anomaly_60_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_mean_anomaly_60_days, Unset):
-            daily_mean_anomaly_60_days = self.daily_mean_anomaly_60_days.to_dict()
+        daily_mean_anomaly_stationary: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_mean_anomaly_stationary, Unset):
+            daily_mean_anomaly_stationary = self.daily_mean_anomaly_stationary.to_dict()
 
-        daily_median_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_median_anomaly_30_days, Unset):
-            daily_median_anomaly_30_days = self.daily_median_anomaly_30_days.to_dict()
+        daily_median_anomaly_stationary_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_median_anomaly_stationary_30_days, Unset):
+            daily_median_anomaly_stationary_30_days = self.daily_median_anomaly_stationary_30_days.to_dict()
 
-        daily_median_anomaly_60_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_median_anomaly_60_days, Unset):
-            daily_median_anomaly_60_days = self.daily_median_anomaly_60_days.to_dict()
+        daily_median_anomaly_stationary: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_median_anomaly_stationary, Unset):
+            daily_median_anomaly_stationary = self.daily_median_anomaly_stationary.to_dict()
 
-        daily_sum_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_sum_anomaly_30_days, Unset):
-            daily_sum_anomaly_30_days = self.daily_sum_anomaly_30_days.to_dict()
+        daily_sum_anomaly_differencing_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_sum_anomaly_differencing_30_days, Unset):
+            daily_sum_anomaly_differencing_30_days = self.daily_sum_anomaly_differencing_30_days.to_dict()
 
-        daily_sum_anomaly_60_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_sum_anomaly_60_days, Unset):
-            daily_sum_anomaly_60_days = self.daily_sum_anomaly_60_days.to_dict()
+        daily_sum_anomaly_differencing: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_sum_anomaly_differencing, Unset):
+            daily_sum_anomaly_differencing = self.daily_sum_anomaly_differencing.to_dict()
 
         daily_mean_change_7_days: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_mean_change_7_days, Unset):
@@ -218,18 +218,18 @@ class ColumnAnomalyDailyRecurringChecksSpec:
             field_dict["daily_sum_change"] = daily_sum_change
         if daily_sum_change_yesterday is not UNSET:
             field_dict["daily_sum_change_yesterday"] = daily_sum_change_yesterday
-        if daily_mean_anomaly_30_days is not UNSET:
-            field_dict["daily_mean_anomaly_30_days"] = daily_mean_anomaly_30_days
-        if daily_mean_anomaly_60_days is not UNSET:
-            field_dict["daily_mean_anomaly_60_days"] = daily_mean_anomaly_60_days
-        if daily_median_anomaly_30_days is not UNSET:
-            field_dict["daily_median_anomaly_30_days"] = daily_median_anomaly_30_days
-        if daily_median_anomaly_60_days is not UNSET:
-            field_dict["daily_median_anomaly_60_days"] = daily_median_anomaly_60_days
-        if daily_sum_anomaly_30_days is not UNSET:
-            field_dict["daily_sum_anomaly_30_days"] = daily_sum_anomaly_30_days
-        if daily_sum_anomaly_60_days is not UNSET:
-            field_dict["daily_sum_anomaly_60_days"] = daily_sum_anomaly_60_days
+        if daily_mean_anomaly_stationary_30_days is not UNSET:
+            field_dict["daily_mean_anomaly_stationary_30_days"] = daily_mean_anomaly_stationary_30_days
+        if daily_mean_anomaly_stationary is not UNSET:
+            field_dict["daily_mean_anomaly_stationary"] = daily_mean_anomaly_stationary
+        if daily_median_anomaly_stationary_30_days is not UNSET:
+            field_dict["daily_median_anomaly_stationary_30_days"] = daily_median_anomaly_stationary_30_days
+        if daily_median_anomaly_stationary is not UNSET:
+            field_dict["daily_median_anomaly_stationary"] = daily_median_anomaly_stationary
+        if daily_sum_anomaly_differencing_30_days is not UNSET:
+            field_dict["daily_sum_anomaly_differencing_30_days"] = daily_sum_anomaly_differencing_30_days
+        if daily_sum_anomaly_differencing is not UNSET:
+            field_dict["daily_sum_anomaly_differencing"] = daily_sum_anomaly_differencing
         if daily_mean_change_7_days is not UNSET:
             field_dict["daily_mean_change_7_days"] = daily_mean_change_7_days
         if daily_mean_change_30_days is not UNSET:
@@ -247,23 +247,23 @@ class ColumnAnomalyDailyRecurringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_anomaly_mean_change_30_days_check_spec import (
-            ColumnAnomalyMeanChange30DaysCheckSpec,
+        from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
+            ColumnAnomalyStationaryMean30DaysCheckSpec,
         )
-        from ..models.column_anomaly_mean_change_60_days_check_spec import (
-            ColumnAnomalyMeanChange60DaysCheckSpec,
+        from ..models.column_anomaly_stationary_mean_check_spec import (
+            ColumnAnomalyStationaryMeanCheckSpec,
         )
-        from ..models.column_anomaly_median_change_30_days_check_spec import (
-            ColumnAnomalyMedianChange30DaysCheckSpec,
+        from ..models.column_anomaly_stationary_median_30_days_check_spec import (
+            ColumnAnomalyStationaryMedian30DaysCheckSpec,
         )
-        from ..models.column_anomaly_median_change_60_days_check_spec import (
-            ColumnAnomalyMedianChange60DaysCheckSpec,
+        from ..models.column_anomaly_stationary_median_check_spec import (
+            ColumnAnomalyStationaryMedianCheckSpec,
         )
-        from ..models.column_anomaly_sum_change_30_days_check_spec import (
-            ColumnAnomalySumChange30DaysCheckSpec,
+        from ..models.column_anomaly_differencing_sum_30_days_check_spec import (
+            ColumnAnomalyDifferencingSum30DaysCheckSpec,
         )
-        from ..models.column_anomaly_sum_change_60_days_check_spec import (
-            ColumnAnomalySumChange60DaysCheckSpec,
+        from ..models.column_anomaly_differencing_sum_check_spec import (
+            ColumnAnomalyDifferencingSumCheckSpec,
         )
         from ..models.column_change_mean_check_spec import ColumnChangeMeanCheckSpec
         from ..models.column_change_mean_since_7_days_check_spec import (
@@ -357,70 +357,70 @@ class ColumnAnomalyDailyRecurringChecksSpec:
                 )
             )
 
-        _daily_mean_anomaly_30_days = d.pop("daily_mean_anomaly_30_days", UNSET)
-        daily_mean_anomaly_30_days: Union[Unset, ColumnAnomalyMeanChange30DaysCheckSpec]
-        if isinstance(_daily_mean_anomaly_30_days, Unset):
-            daily_mean_anomaly_30_days = UNSET
+        _daily_mean_anomaly_stationary_30_days = d.pop("daily_mean_anomaly_stationary_30_days", UNSET)
+        daily_mean_anomaly_stationary_30_days: Union[Unset, ColumnAnomalyStationaryMean30DaysCheckSpec]
+        if isinstance(_daily_mean_anomaly_stationary_30_days, Unset):
+            daily_mean_anomaly_stationary_30_days = UNSET
         else:
-            daily_mean_anomaly_30_days = (
-                ColumnAnomalyMeanChange30DaysCheckSpec.from_dict(
-                    _daily_mean_anomaly_30_days
+            daily_mean_anomaly_stationary_30_days = (
+                ColumnAnomalyStationaryMean30DaysCheckSpec.from_dict(
+                    _daily_mean_anomaly_stationary_30_days
                 )
             )
 
-        _daily_mean_anomaly_60_days = d.pop("daily_mean_anomaly_60_days", UNSET)
-        daily_mean_anomaly_60_days: Union[Unset, ColumnAnomalyMeanChange60DaysCheckSpec]
-        if isinstance(_daily_mean_anomaly_60_days, Unset):
-            daily_mean_anomaly_60_days = UNSET
+        _daily_mean_anomaly_stationary = d.pop("daily_mean_anomaly_stationary", UNSET)
+        daily_mean_anomaly_stationary: Union[Unset, ColumnAnomalyStationaryMeanCheckSpec]
+        if isinstance(_daily_mean_anomaly_stationary, Unset):
+            daily_mean_anomaly_stationary = UNSET
         else:
-            daily_mean_anomaly_60_days = (
-                ColumnAnomalyMeanChange60DaysCheckSpec.from_dict(
-                    _daily_mean_anomaly_60_days
+            daily_mean_anomaly_stationary = (
+                ColumnAnomalyStationaryMeanCheckSpec.from_dict(
+                    _daily_mean_anomaly_stationary
                 )
             )
 
-        _daily_median_anomaly_30_days = d.pop("daily_median_anomaly_30_days", UNSET)
-        daily_median_anomaly_30_days: Union[
-            Unset, ColumnAnomalyMedianChange30DaysCheckSpec
+        _daily_median_anomaly_stationary_30_days = d.pop("daily_median_anomaly_stationary_30_days", UNSET)
+        daily_median_anomaly_stationary_30_days: Union[
+            Unset, ColumnAnomalyStationaryMedian30DaysCheckSpec
         ]
-        if isinstance(_daily_median_anomaly_30_days, Unset):
-            daily_median_anomaly_30_days = UNSET
+        if isinstance(_daily_median_anomaly_stationary_30_days, Unset):
+            daily_median_anomaly_stationary_30_days = UNSET
         else:
-            daily_median_anomaly_30_days = (
-                ColumnAnomalyMedianChange30DaysCheckSpec.from_dict(
-                    _daily_median_anomaly_30_days
+            daily_median_anomaly_stationary_30_days = (
+                ColumnAnomalyStationaryMedian30DaysCheckSpec.from_dict(
+                    _daily_median_anomaly_stationary_30_days
                 )
             )
 
-        _daily_median_anomaly_60_days = d.pop("daily_median_anomaly_60_days", UNSET)
-        daily_median_anomaly_60_days: Union[
-            Unset, ColumnAnomalyMedianChange60DaysCheckSpec
+        _daily_median_anomaly_stationary = d.pop("daily_median_anomaly_stationary", UNSET)
+        daily_median_anomaly_stationary: Union[
+            Unset, ColumnAnomalyStationaryMedianCheckSpec
         ]
-        if isinstance(_daily_median_anomaly_60_days, Unset):
-            daily_median_anomaly_60_days = UNSET
+        if isinstance(_daily_median_anomaly_stationary, Unset):
+            daily_median_anomaly_stationary = UNSET
         else:
-            daily_median_anomaly_60_days = (
-                ColumnAnomalyMedianChange60DaysCheckSpec.from_dict(
-                    _daily_median_anomaly_60_days
+            daily_median_anomaly_stationary = (
+                ColumnAnomalyStationaryMedianCheckSpec.from_dict(
+                    _daily_median_anomaly_stationary
                 )
             )
 
-        _daily_sum_anomaly_30_days = d.pop("daily_sum_anomaly_30_days", UNSET)
-        daily_sum_anomaly_30_days: Union[Unset, ColumnAnomalySumChange30DaysCheckSpec]
-        if isinstance(_daily_sum_anomaly_30_days, Unset):
-            daily_sum_anomaly_30_days = UNSET
+        _daily_sum_anomaly_differencing_30_days = d.pop("daily_sum_anomaly_differencing_30_days", UNSET)
+        daily_sum_anomaly_differencing_30_days: Union[Unset, ColumnAnomalyDifferencingSum30DaysCheckSpec]
+        if isinstance(_daily_sum_anomaly_differencing_30_days, Unset):
+            daily_sum_anomaly_differencing_30_days = UNSET
         else:
-            daily_sum_anomaly_30_days = ColumnAnomalySumChange30DaysCheckSpec.from_dict(
-                _daily_sum_anomaly_30_days
+            daily_sum_anomaly_differencing_30_days = ColumnAnomalyDifferencingSum30DaysCheckSpec.from_dict(
+                _daily_sum_anomaly_differencing_30_days
             )
 
-        _daily_sum_anomaly_60_days = d.pop("daily_sum_anomaly_60_days", UNSET)
-        daily_sum_anomaly_60_days: Union[Unset, ColumnAnomalySumChange60DaysCheckSpec]
-        if isinstance(_daily_sum_anomaly_60_days, Unset):
-            daily_sum_anomaly_60_days = UNSET
+        _daily_sum_anomaly_differencing = d.pop("daily_sum_anomaly_differencing", UNSET)
+        daily_sum_anomaly_differencing: Union[Unset, ColumnAnomalyDifferencingSumCheckSpec]
+        if isinstance(_daily_sum_anomaly_differencing, Unset):
+            daily_sum_anomaly_differencing = UNSET
         else:
-            daily_sum_anomaly_60_days = ColumnAnomalySumChange60DaysCheckSpec.from_dict(
-                _daily_sum_anomaly_60_days
+            daily_sum_anomaly_differencing = ColumnAnomalyDifferencingSumCheckSpec.from_dict(
+                _daily_sum_anomaly_differencing
             )
 
         _daily_mean_change_7_days = d.pop("daily_mean_change_7_days", UNSET)
@@ -490,12 +490,12 @@ class ColumnAnomalyDailyRecurringChecksSpec:
             daily_median_change_yesterday=daily_median_change_yesterday,
             daily_sum_change=daily_sum_change,
             daily_sum_change_yesterday=daily_sum_change_yesterday,
-            daily_mean_anomaly_30_days=daily_mean_anomaly_30_days,
-            daily_mean_anomaly_60_days=daily_mean_anomaly_60_days,
-            daily_median_anomaly_30_days=daily_median_anomaly_30_days,
-            daily_median_anomaly_60_days=daily_median_anomaly_60_days,
-            daily_sum_anomaly_30_days=daily_sum_anomaly_30_days,
-            daily_sum_anomaly_60_days=daily_sum_anomaly_60_days,
+            daily_mean_anomaly_stationary_30_days=daily_mean_anomaly_stationary_30_days,
+            daily_mean_anomaly_stationary=daily_mean_anomaly_stationary,
+            daily_median_anomaly_stationary_30_days=daily_median_anomaly_stationary_30_days,
+            daily_median_anomaly_stationary=daily_median_anomaly_stationary,
+            daily_sum_anomaly_differencing_30_days=daily_sum_anomaly_differencing_30_days,
+            daily_sum_anomaly_differencing=daily_sum_anomaly_differencing,
             daily_mean_change_7_days=daily_mean_change_7_days,
             daily_mean_change_30_days=daily_mean_change_30_days,
             daily_median_change_7_days=daily_median_change_7_days,

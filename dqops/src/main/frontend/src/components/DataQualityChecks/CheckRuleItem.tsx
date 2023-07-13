@@ -102,7 +102,7 @@ const CheckRuleItem = ({
                 changeEnabled && changeEnabled(type);
             }}
             disabled={disabled}
-            label={buttonLabelMap[type] + parameters?.configured}
+            label={buttonLabelMap[type]}
           />
         )}
         {parameters?.configured &&
