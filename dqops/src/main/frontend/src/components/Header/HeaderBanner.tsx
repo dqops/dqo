@@ -172,7 +172,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
               }
               color="primary"
               label="Close advisor"
-              className="px-2"
+              className="px-2 my-4"
               onClick={openAdvisor}
             />
           </div>
