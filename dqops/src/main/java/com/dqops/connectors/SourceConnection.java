@@ -66,11 +66,17 @@ public interface SourceConnection extends Closeable {
 
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
+     *
      * @param sqlQueryStatement SQL statement that returns a row set.
      * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     * @param maxRows Maximum rows limit.
+     * @param failWhenMaxRowsExceeded Throws an exception if the maximum number of rows is exceeded.
      * @return Tabular result captured from the query.
      */
-    Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken);
+    Table executeQuery(String sqlQueryStatement,
+                       JobCancellationToken jobCancellationToken,
+                       Integer maxRows,
+                       boolean failWhenMaxRowsExceeded);
 
     /**
      * Executes a provider specific SQL that runs a command DML/DDL command.

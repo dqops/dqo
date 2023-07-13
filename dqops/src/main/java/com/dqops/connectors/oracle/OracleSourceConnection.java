@@ -79,7 +79,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
         sqlBuilder.append("SELECT OWNER AS schema_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
         String listSchemataSql = sqlBuilder.toString();
-        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         List<SourceSchemaModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
@@ -110,7 +110,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
         sqlBuilder.append("'");
 
         String listTablesSql = sqlBuilder.toString();
-        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken());
+        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
@@ -137,7 +137,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
         try {
             List<TableSpec> tableSpecs = new ArrayList<>();
             String sql = buildListColumnsSql(schemaName, tableNames);
-            tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken());
+            tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
             Column<?>[] columns = tableResult.columnArray();
             for (Column<?> column : columns) {
                 column.setName(column.name().toLowerCase(Locale.ROOT));
@@ -394,20 +394,31 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
-     * @param sqlQueryStatement SQL statement that returns a row set.
-     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     *
+     * @param sqlQueryStatement       SQL statement that returns a row set.
+     * @param jobCancellationToken    Job cancellation token, enables cancelling a running query.
+     * @param maxRows                 Maximum rows limit.
+     * @param failWhenMaxRowsExceeded Throws an exception if the maximum number of rows is exceeded.
      * @return Tabular result captured from the query.
      */
     @Override
-    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken) {
+    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
         try {
             try (Statement statement = this.getJdbcConnection().createStatement()) {
+                if (maxRows != null) {
+                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                }
+
                 try (JobCancellationListenerHandle cancellationListenerHandle =
                              jobCancellationToken.registerCancellationListener(
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
                         try (OracleResultSet oracleResultSet = new OracleResultSet(results)) {
                             Table resultTable = Table.read().db(oracleResultSet, sqlQueryStatement);
+                            if (maxRows != null && resultTable.rowCount() > maxRows) {
+                                throw new RowCountLimitExceededException(maxRows);
+                            }
+
                             for (Column<?> column : resultTable.columns()) {
                                 if (column.name() != null) {
                                     column.setName(column.name().toLowerCase(Locale.ROOT));

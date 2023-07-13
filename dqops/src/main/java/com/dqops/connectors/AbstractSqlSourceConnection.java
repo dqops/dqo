@@ -125,7 +125,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME <> 'INFORMATION_SCHEMA'");
         String listSchemataSql = sqlBuilder.toString();
-        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         List<SourceSchemaModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
@@ -162,7 +162,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         String listTablesSql = sqlBuilder.toString();
-        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken());
+        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
@@ -189,7 +189,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         try {
             List<TableSpec> tableSpecs = new ArrayList<>();
             String sql = buildListColumnsSql(schemaName, tableNames);
-            tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken());
+            tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
             Column<?>[] columns = tableResult.columnArray();
             for (Column<?> column : columns) {
                 column.setName(column.name().toLowerCase(Locale.ROOT));
@@ -302,10 +302,15 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      *
      * @param sqlQueryStatement SQL statement that returns a row set.
      * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     * @param maxRows Maximum rows limit.
+     * @param failWhenMaxRowsExceeded Throws an exception if the maximum number of rows is exceeded.
      * @return Tabular result captured from the query.
      */
     @Override
-    public abstract Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken);
+    public abstract Table executeQuery(String sqlQueryStatement,
+                                       JobCancellationToken jobCancellationToken,
+                                       Integer maxRows,
+                                       boolean failWhenMaxRowsExceeded);
 
     /**
      * Executes a provider specific SQL that runs a command DML/DDL command.

@@ -58,9 +58,9 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      */
     @Autowired
     public BigQuerySourceConnection(BigQuerySqlRunner bigQuerySqlRunner,
-									SecretValueProvider secretValueProvider,
-									BigQueryConnectionProvider bigQueryConnectionProvider,
-									BigQueryConnectionPool bigQueryConnectionPool) {
+                                    SecretValueProvider secretValueProvider,
+                                    BigQueryConnectionProvider bigQueryConnectionProvider,
+                                    BigQueryConnectionPool bigQueryConnectionPool) {
         super(secretValueProvider, bigQueryConnectionProvider);
         this.bigQuerySqlRunner = bigQuerySqlRunner;
         this.bigQueryConnectionPool = bigQueryConnectionPool;
@@ -93,13 +93,18 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      *
-     * @param sqlQueryStatement SQL statement that returns a row set.
-     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     * @param sqlQueryStatement       SQL statement that returns a row set.
+     * @param jobCancellationToken    Job cancellation token, enables cancelling a running query.
+     * @param maxRows                 Maximum rows limit.
+     * @param failWhenMaxRowsExceeded Throws an exception if the maximum number of rows is exceeded.
      * @return Tabular result captured from the query.
      */
     @Override
-    public tech.tablesaw.api.Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken) {
-        return this.bigQuerySqlRunner.executeQuery(this, sqlQueryStatement);
+    public tech.tablesaw.api.Table executeQuery(String sqlQueryStatement,
+                                                JobCancellationToken jobCancellationToken,
+                                                Integer maxRows,
+                                                boolean failWhenMaxRowsExceeded) {
+        return this.bigQuerySqlRunner.executeQuery(this, sqlQueryStatement, maxRows, failWhenMaxRowsExceeded);
     }
 
     /**
@@ -205,7 +210,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
         try {
             List<TableSpec> tableSpecs = new ArrayList<>();
             String sql = buildListColumnsSql(schemaName, tableNames);
-            tech.tablesaw.api.Table tableResult = this.bigQuerySqlRunner.executeQuery(this, sql);
+            tech.tablesaw.api.Table tableResult = this.bigQuerySqlRunner.executeQuery(this, sql, null, false);
             HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
 
             for (Row colRow : tableResult) {
