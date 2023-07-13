@@ -1,20 +1,30 @@
-import React, { useEffect, useMemo, useState } from "react";
-import ConnectionLayout from "../../components/ConnectionLayout";
-import SvgIcon from "../../components/SvgIcon";
-import Tabs from "../../components/Tabs";
-import { useHistory, useParams } from "react-router-dom";
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import { TableBasicModel } from "../../api";
-import { TableApiClient } from "../../services/apiClient";
-import Button from "../../components/Button";
-import AddTableDialog from "../../components/CustomTree/AddTableDialog";
-import { SchemaTables } from "./SchemaTables";
-import { MultiChecks } from "./MultiChecks";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { setActiveFirstLevelTab } from "../../redux/actions/source.actions";
+import React, { useEffect, useMemo, useState } from 'react';
+import ConnectionLayout from '../../components/ConnectionLayout';
+import SvgIcon from '../../components/SvgIcon';
+import Tabs from '../../components/Tabs';
+import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { TableBasicModel } from '../../api';
+import { TableApiClient } from '../../services/apiClient';
+import Button from '../../components/Button';
+import AddTableDialog from '../../components/CustomTree/AddTableDialog';
+import { SchemaTables } from './SchemaTables';
+import { MultiChecks } from './MultiChecks';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
 
 const SchemaPage = () => {
-  const { connection, schema, tab: activeTab, checkTypes }: { connection: string, schema: string, tab: string, checkTypes: CheckTypes } = useParams();
+  const {
+    connection,
+    schema,
+    tab: activeTab,
+    checkTypes
+  }: {
+    connection: string;
+    schema: string;
+    tab: string;
+    checkTypes: CheckTypes;
+  } = useParams();
   const [tables, setTables] = useState<TableBasicModel[]>([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
@@ -22,18 +32,23 @@ const SchemaPage = () => {
 
   const history = useHistory();
 
-  const tabs = useMemo(() => [
-    {
-      label: 'Tables',
-      value: 'tables'
-    },
-    ...checkTypes !== CheckTypes.SOURCES ? [
+  const tabs = useMemo(
+    () => [
       {
-        label: 'Multiple checks edit',
-        value: 'multiple_checks'
-      }
-    ] : []
-  ], [checkTypes]);
+        label: 'Tables',
+        value: 'tables'
+      },
+      ...(checkTypes !== CheckTypes.SOURCES
+        ? [
+            // {
+            //   label: 'Multiple checks edit',
+            //   value: 'multiple_checks'
+            // }
+          ]
+        : [])
+    ],
+    [checkTypes]
+  );
 
   useEffect(() => {
     TableApiClient.getTables(connection, schema).then((res) => {
@@ -46,8 +61,19 @@ const SchemaPage = () => {
   };
 
   const onImportMoreTables = () => {
-    dispatch(setActiveFirstLevelTab(checkTypes, ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, connection)));
-    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connection, 'schemas')}?import_schema=true&import_table=true&schema=${schema}`);
+    dispatch(
+      setActiveFirstLevelTab(
+        checkTypes,
+        ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, connection)
+      )
+    );
+    history.push(
+      `${ROUTES.CONNECTION_DETAIL(
+        checkTypes,
+        connection,
+        'schemas'
+      )}?import_schema=true&import_table=true&schema=${schema}`
+    );
   };
 
   return (
