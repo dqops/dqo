@@ -1,24 +1,32 @@
-import { IconButton, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
-import React, { useState } from "react";
-import Button from "../Button";
-import Checkbox from "../Checkbox";
-import { JobApiClient } from "../../services/apiClient";
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import { useHistory, useParams } from "react-router-dom";
-import AdvisorConfirmDialog from "./AdvisorConfirmDialog";
-import SvgIcon from "../SvgIcon";
+import {
+  IconButton,
+  Popover,
+  PopoverContent,
+  PopoverHandler
+} from '@material-tailwind/react';
+import React, { useState } from 'react';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
+import { JobApiClient } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useHistory, useParams } from 'react-router-dom';
+import AdvisorConfirmDialog from './AdvisorConfirmDialog';
+import SvgIcon from '../SvgIcon';
 
 type HeaderBannerProps = {
   onClose: () => void;
-}
+};
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const [openPopover, setOpenPopover] = React.useState(false);
   const triggers = {
     onMouseEnter: () => setOpenPopover(true),
-    onMouseLeave: () => setOpenPopover(false),
+    onMouseLeave: () => setOpenPopover(false)
   };
-  const { connection }: { checkTypes: CheckTypes; connection: string; schema: string; } = useParams();
+  const {
+    connection
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
+    useParams();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const history = useHistory();
   const [scheduleConfigured, setScheduleConfigured] = useState(false);
@@ -27,8 +35,9 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
 
   const collectStatistics = () => {
     setIsCollected(true);
+
     JobApiClient.collectStatisticsOnDataGroups({
-      connectionName: connection,
+      connectionName: connection
     });
   };
 
@@ -38,13 +47,15 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
         connectionName: connection,
         checkType: CheckTypes.PROFILING
       }
-    })
+    });
     setIsProfilingChecked(true);
   };
 
   const configureScheduling = () => {
     setScheduleConfigured(true);
-    history.push(ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule'));
+    history.push(
+      ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule')
+    );
   };
 
   const openAdvisor = () => {
@@ -63,7 +74,9 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
           <div className="h-12 bg-orange-500 flex justify-between items-center px-4 bg-opacity-90">
             <div className="flex items-center gap-2">
               <SvgIcon name="info" className="text-white" />
-              <h4 className="text-white font-bold">Data source needs configuration</h4>
+              <h4 className="text-white font-bold">
+                Data source needs configuration
+              </h4>
             </div>
 
             <IconButton
@@ -77,21 +90,29 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
           </div>
         </PopoverHandler>
 
-        <PopoverContent {...triggers} className="max-w-150 z-50 !top-12 !left-0 rounded-none text-gray-700">
+        <PopoverContent
+          {...triggers}
+          className="max-w-150 z-50 !top-12 !left-0 rounded-none text-gray-700"
+        >
           <div className="flex mb-2 items-center justify-between">
             <div className="grow">Collect basic statistics</div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
-                variant="outlined"
-                color="primary"
+                variant={'contained'}
+                color={isCollected ? 'secondary' : 'primary'}
                 label="Collect statistics"
-                className="text-sm px-2"
-                onClick={collectStatistics}
+                className="text-sm px-2 w-40"
+                onClick={isCollected ? undefined : collectStatistics}
               />
 
               <div className="pr-4 flex items-center">
-                 <Checkbox checked={isCollected} onChange={() => {}} />
+                <Checkbox
+                  checked={isCollected}
+                  onChange={() => {
+                    setIsCollected(!isCollected);
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -100,42 +121,55 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
-                variant="outlined"
-                color="primary"
+                variant="contained"
+                color={isProfilingChecked ? 'secondary' : 'primary'}
                 label="Run profiling checks"
-                className="text-sm px-2"
-                onClick={runProfilingChecks}
+                className="text-sm px-2 w-40"
+                onClick={isProfilingChecked ? undefined : runProfilingChecks}
               />
 
               <div className="pr-4 flex items-center">
-                <Checkbox checked={isProfilingChecked} onChange={() => {}} />
+                <Checkbox
+                  checked={isProfilingChecked}
+                  onChange={() => {
+                    setIsProfilingChecked(!isProfilingChecked);
+                  }}
+                />
               </div>
             </div>
           </div>
           <div className="flex mb-2 items-center justify-between">
-            <div className="grow">Configure scheduling for profiling and daily recurring checks</div>
+            <div className="grow">
+              Configure scheduling for profiling and daily recurring checks
+            </div>
 
             <div className="w-50 justify-between flex gap-2 items-center">
               <Button
-                variant="outlined"
-                color="primary"
+                variant={scheduleConfigured ? 'contained' : 'outlined'}
+                color={scheduleConfigured ? 'secondary' : 'primary'}
                 label="Configure scheduling"
-                className="text-sm px-2"
-                onClick={configureScheduling}
+                className="text-sm px-2 w-40"
+                onClick={scheduleConfigured ? undefined : configureScheduling}
               />
 
               <div className="pr-4 flex items-center">
                 <Checkbox
                   checked={scheduleConfigured}
-                  onChange={() => {}}
+                  onChange={() => {
+                    setScheduleConfigured(!scheduleConfigured);
+                  }}
                 />
               </div>
-           </div>
+            </div>
           </div>
 
-          <div>
+          <div className="flex justify-end">
             <Button
-              variant="outlined"
+              variant={
+                scheduleConfigured && isCollected && isProfilingChecked
+                  ? 'contained'
+                  : 'outlined'
+              }
               color="primary"
               label="Close advisor"
               className="px-2"
@@ -145,7 +179,10 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
         </PopoverContent>
       </Popover>
 
-      <AdvisorConfirmDialog open={confirmOpen} onClose={() => setConfirmOpen(false)} />
+      <AdvisorConfirmDialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+      />
     </div>
-  )
-}
+  );
+};
