@@ -128,7 +128,7 @@ const NotificationMenu = () => {
             Object.values(job_dictionary_state).find(
               (y) => y.jobId?.jobId === x.jobId?.jobId
             ) as any
-          ).updatedModel?.jobType
+          )?.updatedModel?.jobType
         };
       }
       return x;
@@ -144,7 +144,7 @@ const NotificationMenu = () => {
                 Object.values(job_dictionary_state).find(
                   (y) => y.jobId?.jobId === z.jobId?.jobId
                 ) as any
-              ).updatedModel?.jobType
+              )?.updatedModel?.jobType
             };
           }
           return z;
