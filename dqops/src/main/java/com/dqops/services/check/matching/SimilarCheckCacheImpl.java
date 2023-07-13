@@ -61,14 +61,7 @@ public class SimilarCheckCacheImpl implements SimilarCheckCache {
                 return this.tableLevelSimilarChecks;
             }
 
-            UserHomeImpl userHome = new UserHomeImpl();
-            ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("sample");
-            TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("sample_schema", "sample_table"));
-            TableSpec tableSpec = new TableSpec();
-            tableSpec.setPhysicalTableName(tableWrapper.getPhysicalTableName());
-            tableWrapper.setSpec(tableSpec);
-            SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks(tableSpec);
-
+            SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
             this.tableLevelSimilarChecks = similarTableChecks;
             return similarTableChecks;
         }
@@ -85,15 +78,7 @@ public class SimilarCheckCacheImpl implements SimilarCheckCache {
                 return this.columnLevelSimilarChecks;
             }
 
-            UserHomeImpl userHome = new UserHomeImpl();
-            ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("sample");
-            TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("sample_schema", "sample_table"));
-            TableSpec tableSpec = new TableSpec();
-            tableSpec.setPhysicalTableName(tableWrapper.getPhysicalTableName());
-            tableWrapper.setSpec(tableSpec);
-            ColumnSpec columnSpec = new ColumnSpec();
-            tableSpec.getColumns().put("sample_column", columnSpec);
-            SimilarChecksContainer similarColumnChecks = this.similarCheckMatchingService.findSimilarColumnChecks(tableSpec, columnSpec);
+            SimilarChecksContainer similarColumnChecks = this.similarCheckMatchingService.findSimilarColumnChecks();
 
             this.columnLevelSimilarChecks = similarColumnChecks;
             return similarColumnChecks;

@@ -17,9 +17,6 @@ package com.dqops.services.check.matching;
 
 import com.dqops.BaseTest;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import com.dqops.metadata.sources.*;
-import com.dqops.metadata.userhome.UserHome;
-import com.dqops.metadata.userhome.UserHomeObjectMother;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -33,33 +30,23 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class SimilarCheckMatchingServiceImplTests extends BaseTest {
     private SimilarCheckMatchingServiceImpl sut;
-    private UserHome userHome;
-    private TableSpec tableSpec;
-    private ColumnSpec columnSpec;
 
     @BeforeEach
     void setUp() {
         this.sut = new SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl()));
-        this.userHome = UserHomeObjectMother.createBareUserHome();
-        ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
-        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab"));
-        this.tableSpec = new TableSpec();
-        tableWrapper.setSpec(this.tableSpec);
-        this.columnSpec = new ColumnSpec();
-        this.tableSpec.getColumns().put("col1", this.columnSpec);
     }
 
     @Test
     void findSimilarTableChecks_whenEmptyTable_thenCreatesSimilarChecks() {
-        SimilarChecksContainer similarChecks = this.sut.findSimilarTableChecks(tableSpec);
+        SimilarChecksContainer similarChecks = this.sut.findSimilarTableChecks();
         Assertions.assertNotNull(similarChecks);
         Assertions.assertTrue(similarChecks.getSimilarCheckGroups().size() > 3);
     }
 
     @Test
     void findSimilarColumnChecks_whenEmptyColumn_thenCreatesSimilarChecks() {
-        SimilarChecksContainer similarChecks = this.sut.findSimilarColumnChecks(tableSpec, columnSpec);
+        SimilarChecksContainer similarChecks = this.sut.findSimilarColumnChecks();
         Assertions.assertNotNull(similarChecks);
         Assertions.assertTrue(similarChecks.getSimilarCheckGroups().size() > 10);
     }

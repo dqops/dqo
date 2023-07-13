@@ -20,8 +20,6 @@ import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.matching.SimilarCheckMatchingService;
@@ -57,9 +55,9 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
 
         HashSet<String> foundChecks = new HashSet<>();
         ArrayList<SimilarChecksGroup> allCheckGroups = new ArrayList<>();
-        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks(new TableSpec());
+        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         allCheckGroups.addAll(similarTableChecks.getSimilarCheckGroups());
-        SimilarChecksContainer similarColumnChecks = this.similarCheckMatchingService.findSimilarColumnChecks(new TableSpec(), new ColumnSpec());
+        SimilarChecksContainer similarColumnChecks = this.similarCheckMatchingService.findSimilarColumnChecks();
         allCheckGroups.addAll(similarColumnChecks.getSimilarCheckGroups());
 
         for (SimilarChecksGroup similarChecksGroup : allCheckGroups) {

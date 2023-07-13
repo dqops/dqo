@@ -191,7 +191,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableSpec tableSpec = createTableSpec(false);
         tableWrapper.setSpec(tableSpec);
 
-        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks(tableSpec);
+        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
 
@@ -212,8 +212,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableSpec tableSpec = createTableSpec(true);
         tableWrapper.setSpec(tableSpec);
 
-        ColumnSpec columnSpec = tableSpec.getColumns().getAt(0);
-        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks(tableSpec, columnSpec);
+        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
 

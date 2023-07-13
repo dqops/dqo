@@ -15,8 +15,6 @@
  */
 package com.dqops.services.check.matching;
 
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.TableSpec;
 
 /**
  * Service that finds similar checks on a table or on a column.
@@ -25,17 +23,14 @@ public interface SimilarCheckMatchingService {
     /**
      * Find similar checks in all check types for a table.
      *
-     * @param tableSpec Table to be analyzed.
      * @return List of similar checks.
      */
-    SimilarChecksContainer findSimilarTableChecks(TableSpec tableSpec);
+    SimilarChecksContainer findSimilarTableChecks();
 
     /**
      * Find similar checks in all check types for a column.
      *
-     * @param tableSpec  Parent table of the column
-     * @param columnSpec Column specification.
      * @return List of similar checks.
      */
-    SimilarChecksContainer findSimilarColumnChecks(TableSpec tableSpec, ColumnSpec columnSpec);
+    SimilarChecksContainer findSimilarColumnChecks();
 }
