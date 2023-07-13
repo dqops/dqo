@@ -14,11 +14,23 @@ from .bulk_check_disable_parameters import BulkCheckDisableParameters
 from .bulk_check_disable_parameters_selected_tables_to_columns import (
     BulkCheckDisableParametersSelectedTablesToColumns,
 )
-from .change_percentile_moving_average_30_days_rule_parameters_spec import (
-    ChangePercentileMovingAverage30DaysRuleParametersSpec,
+from .change_percentile_moving_average_30_days_rule_1_parameters_spec import (
+    ChangePercentileMovingAverage30DaysRule1ParametersSpec,
 )
-from .change_percentile_moving_average_rule_parameters_spec import (
-    ChangePercentileMovingAverageRuleParametersSpec,
+from .change_percentile_moving_average_30_days_rule_05_parameters_spec import (
+    ChangePercentileMovingAverage30DaysRule05ParametersSpec,
+)
+from .change_percentile_moving_average_30_days_rule_01_parameters_spec import (
+    ChangePercentileMovingAverage30DaysRule01ParametersSpec,
+)
+from .change_percentile_moving_average_rule_1_parameters_spec import (
+    ChangePercentileMovingAverageRule1ParametersSpec,
+)
+from .change_percentile_moving_average_rule_05_parameters_spec import (
+    ChangePercentileMovingAverageRule05ParametersSpec,
+)
+from .change_percentile_moving_average_rule_01_parameters_spec import (
+    ChangePercentileMovingAverageRule01ParametersSpec,
 )
 from .check_basic_model import CheckBasicModel
 from .check_configuration_model import CheckConfigurationModel
@@ -149,22 +161,12 @@ from .column_anomaly_daily_partitioned_checks_spec import (
 from .column_anomaly_daily_recurring_checks_spec import (
     ColumnAnomalyDailyRecurringChecksSpec,
 )
-from .column_anomaly_mean_30_days_check_spec import ColumnAnomalyMean30DaysCheckSpec
-from .column_anomaly_mean_60_days_check_spec import ColumnAnomalyMean60DaysCheckSpec
-from .column_anomaly_mean_change_30_days_check_spec import (
-    ColumnAnomalyMeanChange30DaysCheckSpec,
-)
-from .column_anomaly_mean_change_60_days_check_spec import (
-    ColumnAnomalyMeanChange60DaysCheckSpec,
-)
-from .column_anomaly_median_30_days_check_spec import ColumnAnomalyMedian30DaysCheckSpec
-from .column_anomaly_median_60_days_check_spec import ColumnAnomalyMedian60DaysCheckSpec
-from .column_anomaly_median_change_30_days_check_spec import (
-    ColumnAnomalyMedianChange30DaysCheckSpec,
-)
-from .column_anomaly_median_change_60_days_check_spec import (
-    ColumnAnomalyMedianChange60DaysCheckSpec,
-)
+from .column_anomaly_stationary_mean_30_days_check_spec import ColumnAnomalyStationaryMean30DaysCheckSpec
+from .column_anomaly_stationary_mean_check_spec import ColumnAnomalyStationaryMeanCheckSpec
+
+from .column_anomaly_stationary_median_30_days_check_spec import ColumnAnomalyStationaryMedian30DaysCheckSpec
+from .column_anomaly_stationary_median_check_spec import ColumnAnomalyStationaryMedianCheckSpec
+
 from .column_anomaly_monthly_partitioned_checks_spec import (
     ColumnAnomalyMonthlyPartitionedChecksSpec,
 )
@@ -172,14 +174,11 @@ from .column_anomaly_monthly_recurring_checks_spec import (
     ColumnAnomalyMonthlyRecurringChecksSpec,
 )
 from .column_anomaly_profiling_checks_spec import ColumnAnomalyProfilingChecksSpec
-from .column_anomaly_sum_30_days_check_spec import ColumnAnomalySum30DaysCheckSpec
-from .column_anomaly_sum_60_days_check_spec import ColumnAnomalySum60DaysCheckSpec
-from .column_anomaly_sum_change_30_days_check_spec import (
-    ColumnAnomalySumChange30DaysCheckSpec,
-)
-from .column_anomaly_sum_change_60_days_check_spec import (
-    ColumnAnomalySumChange60DaysCheckSpec,
-)
+from .column_anomaly_differencing_sum_30_days_check_spec import ColumnAnomalyDifferencingSum30DaysCheckSpec
+from .column_anomaly_differencing_sum_check_spec import ColumnAnomalyDifferencingSumCheckSpec
+from .column_anomaly_stationary_partition_sum_30_days_check_spec import ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
+from .column_anomaly_stationary_partition_sum_check_spec import ColumnAnomalyStationaryPartitionSumCheckSpec
+
 from .column_basic_model import ColumnBasicModel
 from .column_bool_daily_partitioned_checks_spec import (
     ColumnBoolDailyPartitionedChecksSpec,
@@ -1265,11 +1264,23 @@ from .parameter_definition_spec_data_type import ParameterDefinitionSpecDataType
 from .parameter_definition_spec_display_hint import ParameterDefinitionSpecDisplayHint
 from .partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
 
-from .percentile_moving_average_30_days_rule_parameters_spec import (
-    PercentileMovingAverage30DaysRuleParametersSpec,
+from .percentile_moving_average_30_days_rule_1_parameters_spec import (
+    PercentileMovingAverage30DaysRule1ParametersSpec,
 )
-from .percentile_moving_average_rule_parameters_spec import (
-    PercentileMovingAverageRuleParametersSpec,
+from .percentile_moving_average_30_days_rule_05_parameters_spec import (
+    PercentileMovingAverage30DaysRule05ParametersSpec,
+)
+from .percentile_moving_average_30_days_rule_01_parameters_spec import (
+    PercentileMovingAverage30DaysRule01ParametersSpec,
+)
+from .percentile_moving_average_rule_1_parameters_spec import (
+    PercentileMovingAverageRule1ParametersSpec,
+)
+from .percentile_moving_average_rule_05_parameters_spec import (
+    PercentileMovingAverageRule05ParametersSpec,
+)
+from .percentile_moving_average_rule_01_parameters_spec import (
+    PercentileMovingAverageRule01ParametersSpec,
 )
 from .physical_table_name import PhysicalTableName
 from .postgresql_parameters_spec import PostgresqlParametersSpec
@@ -1368,17 +1379,17 @@ from .table_accuracy_total_row_count_match_percent_check_spec import (
 from .table_accuracy_total_row_count_match_percent_sensor_parameters_spec import (
     TableAccuracyTotalRowCountMatchPercentSensorParametersSpec,
 )
-from .table_anomaly_row_count_30_days_check_spec import (
-    TableAnomalyRowCount30DaysCheckSpec,
+from .table_anomaly_differencing_row_count_30_days_check_spec import (
+    TableAnomalyDifferencingRowCount30DaysCheckSpec,
 )
-from .table_anomaly_row_count_60_days_check_spec import (
-    TableAnomalyRowCount60DaysCheckSpec,
+from .table_anomaly_differencing_row_count_check_spec import (
+    TableAnomalyDifferencingRowCountCheckSpec,
 )
-from .table_anomaly_row_count_change_30_days_check_spec import (
-    TableAnomalyRowCountChange30DaysCheckSpec,
+from .table_anomaly_stationary_partition_row_count_30_days_check_spec import (
+    TableAnomalyStationaryPartitionRowCount30DaysCheckSpec,
 )
-from .table_anomaly_row_count_change_60_days_check_spec import (
-    TableAnomalyRowCountChange60DaysCheckSpec,
+from .table_anomaly_stationary_partition_row_count_check_spec import (
+    TableAnomalyStationaryPartitionRowCountCheckSpec,
 )
 from .table_availability_check_spec import TableAvailabilityCheckSpec
 from .table_availability_daily_recurring_checks_spec import (
@@ -1600,8 +1611,12 @@ __all__ = (
     "BigQueryParametersSpecAuthenticationMode",
     "BulkCheckDisableParameters",
     "BulkCheckDisableParametersSelectedTablesToColumns",
-    "ChangePercentileMovingAverage30DaysRuleParametersSpec",
-    "ChangePercentileMovingAverageRuleParametersSpec",
+    "ChangePercentileMovingAverage30DaysRule1ParametersSpec",
+    "ChangePercentileMovingAverage30DaysRule05ParametersSpec",
+    "ChangePercentileMovingAverage30DaysRule01ParametersSpec",
+    "ChangePercentileMovingAverageRule1ParametersSpec",
+    "ChangePercentileMovingAverageRule05ParametersSpec",
+    "ChangePercentileMovingAverageRule01ParametersSpec",
     "CheckBasicModel",
     "CheckConfigurationModel",
     "CheckConfigurationModelCheckTarget",
@@ -1663,21 +1678,21 @@ __all__ = (
     "ColumnAccuracyTotalSumMatchPercentSensorParametersSpec",
     "ColumnAnomalyDailyPartitionedChecksSpec",
     "ColumnAnomalyDailyRecurringChecksSpec",
-    "ColumnAnomalyMean30DaysCheckSpec",
-    "ColumnAnomalyMean60DaysCheckSpec",
-    "ColumnAnomalyMeanChange30DaysCheckSpec",
-    "ColumnAnomalyMeanChange60DaysCheckSpec",
-    "ColumnAnomalyMedian30DaysCheckSpec",
-    "ColumnAnomalyMedian60DaysCheckSpec",
-    "ColumnAnomalyMedianChange30DaysCheckSpec",
-    "ColumnAnomalyMedianChange60DaysCheckSpec",
+    "ColumnAnomalyStationaryMean30DaysCheckSpec",
+    "ColumnAnomalyStationaryMeanCheckSpec",
+    "ColumnAnomalyStationaryMeanCheckSpec",
+    "ColumnAnomalyStationaryMeanCheckSpec",
+    "ColumnAnomalyStationaryMedian30DaysCheckSpec",
+    "ColumnAnomalyStationaryMedianCheckSpec",
+    "ColumnAnomalyStationaryMedian30DaysCheckSpec",
+    "ColumnAnomalyStationaryMedianCheckSpec",
     "ColumnAnomalyMonthlyPartitionedChecksSpec",
     "ColumnAnomalyMonthlyRecurringChecksSpec",
     "ColumnAnomalyProfilingChecksSpec",
-    "ColumnAnomalySum30DaysCheckSpec",
-    "ColumnAnomalySum60DaysCheckSpec",
-    "ColumnAnomalySumChange30DaysCheckSpec",
-    "ColumnAnomalySumChange60DaysCheckSpec",
+    "ColumnAnomalyDifferencingSum30DaysCheckSpec",
+    "ColumnAnomalyDifferencingSumCheckSpec",
+    "ColumnAnomalyStationaryPartitionSum30DaysCheckSpec",
+    "ColumnAnomalyStationaryPartitionSumCheckSpec",
     "ColumnBasicModel",
     "ColumnBoolDailyPartitionedChecksSpec",
     "ColumnBoolDailyRecurringChecksSpec",
@@ -2154,8 +2169,12 @@ __all__ = (
     "ParameterDefinitionSpecDataType",
     "ParameterDefinitionSpecDisplayHint",
     "PartitionIncrementalTimeWindowSpec",
-    "PercentileMovingAverage30DaysRuleParametersSpec",
-    "PercentileMovingAverageRuleParametersSpec",
+    "PercentileMovingAverage30DaysRule1ParametersSpec",
+    "PercentileMovingAverage30DaysRule05ParametersSpec",
+    "PercentileMovingAverage30DaysRule01ParametersSpec",
+    "PercentileMovingAverageRule1ParametersSpec",
+    "PercentileMovingAverageRule05ParametersSpec",
+    "PercentileMovingAverageRule01ParametersSpec",
     "PhysicalTableName",
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
@@ -2223,10 +2242,11 @@ __all__ = (
     "TableAccuracyProfilingChecksSpec",
     "TableAccuracyTotalRowCountMatchPercentCheckSpec",
     "TableAccuracyTotalRowCountMatchPercentSensorParametersSpec",
-    "TableAnomalyRowCount30DaysCheckSpec",
-    "TableAnomalyRowCount60DaysCheckSpec",
-    "TableAnomalyRowCountChange30DaysCheckSpec",
-    "TableAnomalyRowCountChange60DaysCheckSpec",
+    "TableAnomalyDifferencingRowCount30DaysCheckSpec",
+    "TableAnomalyDifferencingRowCountCheckSpec",
+    "TableAnomalyDifferencingRowCount30DaysCheckSpec",
+    "TableAnomalyStationaryPartitionRowCount30DaysCheckSpec",
+    "TableAnomalyStationaryPartitionRowCountCheckSpec",
     "TableAvailabilityCheckSpec",
     "TableAvailabilityDailyRecurringChecksSpec",
     "TableAvailabilityMonthlyRecurringChecksSpec",

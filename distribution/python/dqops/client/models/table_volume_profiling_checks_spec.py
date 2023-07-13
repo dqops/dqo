@@ -5,11 +5,11 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_anomaly_row_count_change_30_days_check_spec import (
-        TableAnomalyRowCountChange30DaysCheckSpec,
+    from ..models.table_anomaly_differencing_row_count_30_days_check_spec import (
+        TableAnomalyDifferencingRowCount30DaysCheckSpec,
     )
-    from ..models.table_anomaly_row_count_change_60_days_check_spec import (
-        TableAnomalyRowCountChange60DaysCheckSpec,
+    from ..models.table_anomaly_differencing_row_count_check_spec import (
+        TableAnomalyDifferencingRowCountCheckSpec,
     )
     from ..models.table_change_row_count_check_spec import TableChangeRowCountCheckSpec
     from ..models.table_change_row_count_since_7_days_check_spec import (
@@ -34,8 +34,8 @@ class TableVolumeProfilingChecksSpec:
         row_count (Union[Unset, TableRowCountCheckSpec]):
         row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
         row_count_change_yesterday (Union[Unset, TableChangeRowCountSinceYesterdayCheckSpec]):
-        row_count_anomaly_30_days (Union[Unset, TableAnomalyRowCountChange30DaysCheckSpec]):
-        row_count_anomaly_60_days (Union[Unset, TableAnomalyRowCountChange60DaysCheckSpec]):
+        row_count_anomaly_differencing_30_days (Union[Unset, TableAnomalyDifferencingRowCount30DaysCheckSpec]):
+        row_count_anomaly_differencing (Union[Unset, TableAnomalyDifferencingRowCountCheckSpec]):
         row_count_change_7_days (Union[Unset, TableChangeRowCountSince7DaysCheckSpec]):
         row_count_change_30_days (Union[Unset, TableChangeRowCountSince30DaysCheckSpec]):
     """
@@ -45,11 +45,11 @@ class TableVolumeProfilingChecksSpec:
     row_count_change_yesterday: Union[
         Unset, "TableChangeRowCountSinceYesterdayCheckSpec"
     ] = UNSET
-    row_count_anomaly_30_days: Union[
-        Unset, "TableAnomalyRowCountChange30DaysCheckSpec"
+    row_count_anomaly_differencing_30_days: Union[
+        Unset, "TableAnomalyDifferencingRowCount30DaysCheckSpec"
     ] = UNSET
-    row_count_anomaly_60_days: Union[
-        Unset, "TableAnomalyRowCountChange60DaysCheckSpec"
+    row_count_anomaly_differencing: Union[
+        Unset, "TableAnomalyDifferencingRowCountCheckSpec"
     ] = UNSET
     row_count_change_7_days: Union[
         Unset, "TableChangeRowCountSince7DaysCheckSpec"
@@ -72,13 +72,13 @@ class TableVolumeProfilingChecksSpec:
         if not isinstance(self.row_count_change_yesterday, Unset):
             row_count_change_yesterday = self.row_count_change_yesterday.to_dict()
 
-        row_count_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.row_count_anomaly_30_days, Unset):
-            row_count_anomaly_30_days = self.row_count_anomaly_30_days.to_dict()
+        row_count_anomaly_differencing_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.row_count_anomaly_differencing_30_days, Unset):
+            row_count_anomaly_differencing_30_days = self.row_count_anomaly_differencing_30_days.to_dict()
 
-        row_count_anomaly_60_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.row_count_anomaly_60_days, Unset):
-            row_count_anomaly_60_days = self.row_count_anomaly_60_days.to_dict()
+        row_count_anomaly_differencing: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.row_count_anomaly, Unset):
+            row_count_anomaly_differencing = self.row_count_anomaly.to_dict()
 
         row_count_change_7_days: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.row_count_change_7_days, Unset):
@@ -97,10 +97,10 @@ class TableVolumeProfilingChecksSpec:
             field_dict["row_count_change"] = row_count_change
         if row_count_change_yesterday is not UNSET:
             field_dict["row_count_change_yesterday"] = row_count_change_yesterday
-        if row_count_anomaly_30_days is not UNSET:
-            field_dict["row_count_anomaly_30_days"] = row_count_anomaly_30_days
-        if row_count_anomaly_60_days is not UNSET:
-            field_dict["row_count_anomaly_60_days"] = row_count_anomaly_60_days
+        if row_count_anomaly_differencing_30_days is not UNSET:
+            field_dict["row_count_anomaly_differencing_30_days"] = row_count_anomaly_differencing_30_days
+        if row_count_anomaly_differencing is not UNSET:
+            field_dict["row_count_anomaly"] = row_count_anomaly
         if row_count_change_7_days is not UNSET:
             field_dict["row_count_change_7_days"] = row_count_change_7_days
         if row_count_change_30_days is not UNSET:
@@ -110,11 +110,11 @@ class TableVolumeProfilingChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_anomaly_row_count_change_30_days_check_spec import (
-            TableAnomalyRowCountChange30DaysCheckSpec,
+        from ..models.table_anomaly_differencing_row_count_30_days_check_spec import (
+            TableAnomalyDifferencingRowCount30DaysCheckSpec,
         )
-        from ..models.table_anomaly_row_count_change_60_days_check_spec import (
-            TableAnomalyRowCountChange60DaysCheckSpec,
+        from ..models.table_anomaly_differencing_row_count_check_spec import (
+            TableAnomalyDifferencingRowCountCheckSpec,
         )
         from ..models.table_change_row_count_check_spec import (
             TableChangeRowCountCheckSpec,
@@ -158,29 +158,29 @@ class TableVolumeProfilingChecksSpec:
                 )
             )
 
-        _row_count_anomaly_30_days = d.pop("row_count_anomaly_30_days", UNSET)
-        row_count_anomaly_30_days: Union[
-            Unset, TableAnomalyRowCountChange30DaysCheckSpec
+        _row_count_anomaly_differencing_30_days = d.pop("row_count_anomaly_differencing_30_days", UNSET)
+        row_count_anomaly_differencing_30_days: Union[
+            Unset, TableAnomalyDifferencingRowCount30DaysCheckSpec
         ]
-        if isinstance(_row_count_anomaly_30_days, Unset):
-            row_count_anomaly_30_days = UNSET
+        if isinstance(_row_count_anomaly_differencing_30_days, Unset):
+            row_count_anomaly_differencing_30_days = UNSET
         else:
-            row_count_anomaly_30_days = (
-                TableAnomalyRowCountChange30DaysCheckSpec.from_dict(
-                    _row_count_anomaly_30_days
+            row_count_anomaly_differencing_30_days = (
+                TableAnomalyDifferencingRowCount30DaysCheckSpec.from_dict(
+                    _row_count_anomaly_differencing_30_days
                 )
             )
 
-        _row_count_anomaly_60_days = d.pop("row_count_anomaly_60_days", UNSET)
-        row_count_anomaly_60_days: Union[
-            Unset, TableAnomalyRowCountChange60DaysCheckSpec
+        _row_count_anomaly_differencing = d.pop("row_count_anomaly", UNSET)
+        row_count_anomaly_differencing: Union[
+            Unset, TableAnomalyDifferencingRowCountCheckSpec
         ]
-        if isinstance(_row_count_anomaly_60_days, Unset):
-            row_count_anomaly_60_days = UNSET
+        if isinstance(_row_count_anomaly, Unset):
+            row_count_anomaly_differencing = UNSET
         else:
-            row_count_anomaly_60_days = (
-                TableAnomalyRowCountChange60DaysCheckSpec.from_dict(
-                    _row_count_anomaly_60_days
+            row_count_anomaly_differencing = (
+                TableAnomalyDifferencingRowCountCheckSpec.from_dict(
+                    _row_count_anomaly
                 )
             )
 
@@ -208,8 +208,8 @@ class TableVolumeProfilingChecksSpec:
             row_count=row_count,
             row_count_change=row_count_change,
             row_count_change_yesterday=row_count_change_yesterday,
-            row_count_anomaly_30_days=row_count_anomaly_30_days,
-            row_count_anomaly_60_days=row_count_anomaly_60_days,
+            row_count_anomaly_differencing_30_days=row_count_anomaly_differencing_30_days,
+            row_count_anomaly=row_count_anomaly,
             row_count_change_7_days=row_count_change_7_days,
             row_count_change_30_days=row_count_change_30_days,
         )

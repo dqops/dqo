@@ -39,7 +39,7 @@ import java.util.Arrays;
 
 @SpringBootTest
 public class PercentileMovingAverageRuleParametersSpecTests extends BaseTest {
-    private PercentileMovingAverageRuleParametersSpec sut;
+    private PercentileMovingAverageRule1ParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class PercentileMovingAverageRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new PercentileMovingAverageRuleParametersSpec();
+        this.sut = new PercentileMovingAverageRule1ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());

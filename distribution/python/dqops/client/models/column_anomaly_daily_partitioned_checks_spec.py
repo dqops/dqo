@@ -5,23 +5,23 @@ import attr
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_anomaly_mean_30_days_check_spec import (
-        ColumnAnomalyMean30DaysCheckSpec,
+    from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
+        ColumnAnomalyStationaryMean30DaysCheckSpec,
     )
-    from ..models.column_anomaly_mean_60_days_check_spec import (
-        ColumnAnomalyMean60DaysCheckSpec,
+    from ..models.column_anomaly_stationary_mean_check_spec import (
+        ColumnAnomalyStationaryMeanCheckSpec,
     )
-    from ..models.column_anomaly_median_30_days_check_spec import (
-        ColumnAnomalyMedian30DaysCheckSpec,
+    from ..models.column_anomaly_stationary_median_30_days_check_spec import (
+        ColumnAnomalyStationaryMedian30DaysCheckSpec,
     )
-    from ..models.column_anomaly_median_60_days_check_spec import (
-        ColumnAnomalyMedian60DaysCheckSpec,
+    from ..models.column_anomaly_stationary_median_check_spec import (
+        ColumnAnomalyStationaryMedianCheckSpec,
     )
-    from ..models.column_anomaly_sum_30_days_check_spec import (
-        ColumnAnomalySum30DaysCheckSpec,
+    from ..models.column_anomaly_stationary_partition_sum_30_days_check_spec import (
+        ColumnAnomalyStationaryPartitionSum30DaysCheckSpec,
     )
-    from ..models.column_anomaly_sum_60_days_check_spec import (
-        ColumnAnomalySum60DaysCheckSpec,
+    from ..models.column_anomaly_stationary_partition_sum_check_spec import (
+        ColumnAnomalyStationaryPartitionSumCheckSpec,
     )
     from ..models.column_change_mean_check_spec import ColumnChangeMeanCheckSpec
     from ..models.column_change_mean_since_7_days_check_spec import (
@@ -68,12 +68,12 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
         daily_partition_median_change_yesterday (Union[Unset, ColumnChangeMedianSinceYesterdayCheckSpec]):
         daily_partition_sum_change (Union[Unset, ColumnChangeSumCheckSpec]):
         daily_partition_sum_change_yesterday (Union[Unset, ColumnChangeSumSinceYesterdayCheckSpec]):
-        daily_partition_mean_anomaly_30_days (Union[Unset, ColumnAnomalyMean30DaysCheckSpec]):
-        daily_partition_mean_anomaly_60_days (Union[Unset, ColumnAnomalyMean60DaysCheckSpec]):
-        daily_partition_median_anomaly_30_days (Union[Unset, ColumnAnomalyMedian30DaysCheckSpec]):
-        daily_partition_median_anomaly_60_days (Union[Unset, ColumnAnomalyMedian60DaysCheckSpec]):
-        daily_partition_sum_anomaly_30_days (Union[Unset, ColumnAnomalySum30DaysCheckSpec]):
-        daily_partition_sum_anomaly_60_days (Union[Unset, ColumnAnomalySum60DaysCheckSpec]):
+        daily_partition_mean_anomaly_stationary_30_days (Union[Unset, ColumnAnomalyStationaryMean30DaysCheckSpec]):
+        daily_partition_mean_anomaly (Union[Unset, ColumnAnomalyStationaryMeanCheckSpec]):
+        daily_partition_median_anomaly_stationary_30_days (Union[Unset, ColumnAnomalyStationaryMedian30DaysCheckSpec]):
+        daily_partition_median_anomaly (Union[Unset, ColumnAnomalyStationaryMedianCheckSpec]):
+        daily_partition_sum_anomaly_stationary_30_days (Union[Unset, ColumnAnomalyStationaryPartitionSum30DaysCheckSpec]):
+        daily_partition_sum_anomaly_stationary (Union[Unset, ColumnAnomalyStationaryPartitionSumCheckSpec]):
         daily_partition_mean_change_7_days (Union[Unset, ColumnChangeMeanSince7DaysCheckSpec]):
         daily_partition_mean_change_30_days (Union[Unset, ColumnChangeMeanSince30DaysCheckSpec]):
         daily_partition_median_change_7_days (Union[Unset, ColumnChangeMedianSince7DaysCheckSpec]):
@@ -94,23 +94,23 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
     daily_partition_sum_change_yesterday: Union[
         Unset, "ColumnChangeSumSinceYesterdayCheckSpec"
     ] = UNSET
-    daily_partition_mean_anomaly_30_days: Union[
-        Unset, "ColumnAnomalyMean30DaysCheckSpec"
+    daily_partition_mean_anomaly_stationary_30_days: Union[
+        Unset, "ColumnAnomalyStationaryMean30DaysCheckSpec"
     ] = UNSET
-    daily_partition_mean_anomaly_60_days: Union[
-        Unset, "ColumnAnomalyMean60DaysCheckSpec"
+    daily_partition_mean_anomaly: Union[
+        Unset, "ColumnAnomalyStationaryMeanCheckSpec"
     ] = UNSET
-    daily_partition_median_anomaly_30_days: Union[
-        Unset, "ColumnAnomalyMedian30DaysCheckSpec"
+    daily_partition_median_anomaly_stationary_30_days: Union[
+        Unset, "ColumnAnomalyStationaryMedian30DaysCheckSpec"
     ] = UNSET
-    daily_partition_median_anomaly_60_days: Union[
-        Unset, "ColumnAnomalyMedian60DaysCheckSpec"
+    daily_partition_median_anomaly: Union[
+        Unset, "ColumnAnomalyStationaryMedianCheckSpec"
     ] = UNSET
-    daily_partition_sum_anomaly_30_days: Union[
-        Unset, "ColumnAnomalySum30DaysCheckSpec"
+    daily_partition_sum_anomaly_stationary_30_days: Union[
+        Unset, "ColumnAnomalyStationaryPartitionSum30DaysCheckSpec"
     ] = UNSET
-    daily_partition_sum_anomaly_60_days: Union[
-        Unset, "ColumnAnomalySum60DaysCheckSpec"
+    daily_partition_sum_anomaly_stationary: Union[
+        Unset, "ColumnAnomalyStationaryPartitionSumCheckSpec"
     ] = UNSET
     daily_partition_mean_change_7_days: Union[
         Unset, "ColumnChangeMeanSince7DaysCheckSpec"
@@ -163,40 +163,40 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
                 self.daily_partition_sum_change_yesterday.to_dict()
             )
 
-        daily_partition_mean_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_mean_anomaly_30_days, Unset):
-            daily_partition_mean_anomaly_30_days = (
-                self.daily_partition_mean_anomaly_30_days.to_dict()
+        daily_partition_mean_anomaly_stationary_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_mean_anomaly_stationary_30_days, Unset):
+            daily_partition_mean_anomaly_stationary_30_days = (
+                self.daily_partition_mean_anomaly_stationary_30_days.to_dict()
             )
 
-        daily_partition_mean_anomaly_60_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_mean_anomaly_60_days, Unset):
-            daily_partition_mean_anomaly_60_days = (
-                self.daily_partition_mean_anomaly_60_days.to_dict()
+        daily_partition_mean_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_mean_anomaly, Unset):
+            daily_partition_mean_anomaly = (
+                self.daily_partition_mean_anomaly.to_dict()
             )
 
-        daily_partition_median_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_median_anomaly_30_days, Unset):
-            daily_partition_median_anomaly_30_days = (
-                self.daily_partition_median_anomaly_30_days.to_dict()
+        daily_partition_median_anomaly_stationary_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_median_anomaly_stationary_30_days, Unset):
+            daily_partition_median_anomaly_stationary_30_days = (
+                self.daily_partition_median_anomaly_stationary_30_days.to_dict()
             )
 
-        daily_partition_median_anomaly_60_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_median_anomaly_60_days, Unset):
-            daily_partition_median_anomaly_60_days = (
-                self.daily_partition_median_anomaly_60_days.to_dict()
+        daily_partition_median_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_median_anomaly, Unset):
+            daily_partition_median_anomaly = (
+                self.daily_partition_median_anomaly.to_dict()
             )
 
-        daily_partition_sum_anomaly_30_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_sum_anomaly_30_days, Unset):
-            daily_partition_sum_anomaly_30_days = (
-                self.daily_partition_sum_anomaly_30_days.to_dict()
+        daily_partition_sum_anomaly_stationary_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_sum_anomaly_stationary_30_days, Unset):
+            daily_partition_sum_anomaly_stationary_30_days = (
+                self.daily_partition_sum_anomaly_stationary_30_days.to_dict()
             )
 
-        daily_partition_sum_anomaly_60_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_sum_anomaly_60_days, Unset):
-            daily_partition_sum_anomaly_60_days = (
-                self.daily_partition_sum_anomaly_60_days.to_dict()
+        daily_partition_sum_anomaly_stationary: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_sum_anomaly_stationary, Unset):
+            daily_partition_sum_anomaly_stationary = (
+                self.daily_partition_sum_anomaly_stationary.to_dict()
             )
 
         daily_partition_mean_change_7_days: Union[Unset, Dict[str, Any]] = UNSET
@@ -256,30 +256,30 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
             field_dict[
                 "daily_partition_sum_change_yesterday"
             ] = daily_partition_sum_change_yesterday
-        if daily_partition_mean_anomaly_30_days is not UNSET:
+        if daily_partition_mean_anomaly_stationary_30_days is not UNSET:
             field_dict[
-                "daily_partition_mean_anomaly_30_days"
-            ] = daily_partition_mean_anomaly_30_days
-        if daily_partition_mean_anomaly_60_days is not UNSET:
+                "daily_partition_mean_anomaly_stationary_30_days"
+            ] = daily_partition_mean_anomaly_stationary_30_days
+        if daily_partition_mean_anomaly is not UNSET:
             field_dict[
-                "daily_partition_mean_anomaly_60_days"
-            ] = daily_partition_mean_anomaly_60_days
-        if daily_partition_median_anomaly_30_days is not UNSET:
+                "daily_partition_mean_anomaly"
+            ] = daily_partition_mean_anomaly
+        if daily_partition_median_anomaly_stationary_30_days is not UNSET:
             field_dict[
-                "daily_partition_median_anomaly_30_days"
-            ] = daily_partition_median_anomaly_30_days
-        if daily_partition_median_anomaly_60_days is not UNSET:
+                "daily_partition_median_anomaly_stationary_30_days"
+            ] = daily_partition_median_anomaly_stationary_30_days
+        if daily_partition_median_anomaly is not UNSET:
             field_dict[
-                "daily_partition_median_anomaly_60_days"
-            ] = daily_partition_median_anomaly_60_days
-        if daily_partition_sum_anomaly_30_days is not UNSET:
+                "daily_partition_median_anomaly"
+            ] = daily_partition_median_anomaly
+        if daily_partition_sum_anomaly_stationary_30_days is not UNSET:
             field_dict[
-                "daily_partition_sum_anomaly_30_days"
-            ] = daily_partition_sum_anomaly_30_days
-        if daily_partition_sum_anomaly_60_days is not UNSET:
+                "daily_partition_sum_anomaly_stationary_30_days"
+            ] = daily_partition_sum_anomaly_stationary_30_days
+        if daily_partition_sum_anomaly_stationary is not UNSET:
             field_dict[
-                "daily_partition_sum_anomaly_60_days"
-            ] = daily_partition_sum_anomaly_60_days
+                "daily_partition_sum_anomaly_stationary"
+            ] = daily_partition_sum_anomaly_stationary
         if daily_partition_mean_change_7_days is not UNSET:
             field_dict[
                 "daily_partition_mean_change_7_days"
@@ -309,23 +309,23 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_anomaly_mean_30_days_check_spec import (
-            ColumnAnomalyMean30DaysCheckSpec,
+        from ..models.column_anomaly_stationary_mean_30_days_check_spec import (
+            ColumnAnomalyStationaryMean30DaysCheckSpec,
         )
-        from ..models.column_anomaly_mean_60_days_check_spec import (
-            ColumnAnomalyMean60DaysCheckSpec,
+        from ..models.column_anomaly_stationary_mean_check_spec import (
+            ColumnAnomalyStationaryMeanCheckSpec,
         )
-        from ..models.column_anomaly_median_30_days_check_spec import (
-            ColumnAnomalyMedian30DaysCheckSpec,
+        from ..models.column_anomaly_stationary_median_30_days_check_spec import (
+            ColumnAnomalyStationaryMedian30DaysCheckSpec,
         )
-        from ..models.column_anomaly_median_60_days_check_spec import (
-            ColumnAnomalyMedian60DaysCheckSpec,
+        from ..models.column_anomaly_stationary_median_check_spec import (
+            ColumnAnomalyStationaryMedianCheckSpec,
         )
-        from ..models.column_anomaly_sum_30_days_check_spec import (
-            ColumnAnomalySum30DaysCheckSpec,
+        from ..models.column_anomaly_stationary_partition_sum_30_days_check_spec import (
+            ColumnAnomalyStationaryPartitionSum30DaysCheckSpec,
         )
-        from ..models.column_anomaly_sum_60_days_check_spec import (
-            ColumnAnomalySum60DaysCheckSpec,
+        from ..models.column_anomaly_stationary_partition_sum_check_spec import (
+            ColumnAnomalyStationaryPartitionSumCheckSpec,
         )
         from ..models.column_change_mean_check_spec import ColumnChangeMeanCheckSpec
         from ..models.column_change_mean_since_7_days_check_spec import (
@@ -431,93 +431,93 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
                 )
             )
 
-        _daily_partition_mean_anomaly_30_days = d.pop(
-            "daily_partition_mean_anomaly_30_days", UNSET
+        _daily_partition_mean_anomaly_stationary_30_days = d.pop(
+            "daily_partition_mean_anomaly_stationary_30_days", UNSET
         )
-        daily_partition_mean_anomaly_30_days: Union[
-            Unset, ColumnAnomalyMean30DaysCheckSpec
+        daily_partition_mean_anomaly_stationary_30_days: Union[
+            Unset, ColumnAnomalyStationaryMean30DaysCheckSpec
         ]
-        if isinstance(_daily_partition_mean_anomaly_30_days, Unset):
-            daily_partition_mean_anomaly_30_days = UNSET
+        if isinstance(_daily_partition_mean_anomaly_stationary_30_days, Unset):
+            daily_partition_mean_anomaly_stationary_30_days = UNSET
         else:
-            daily_partition_mean_anomaly_30_days = (
-                ColumnAnomalyMean30DaysCheckSpec.from_dict(
-                    _daily_partition_mean_anomaly_30_days
+            daily_partition_mean_anomaly_stationary_30_days = (
+                ColumnAnomalyStationaryMean30DaysCheckSpec.from_dict(
+                    _daily_partition_mean_anomaly_stationary_30_days
                 )
             )
 
-        _daily_partition_mean_anomaly_60_days = d.pop(
-            "daily_partition_mean_anomaly_60_days", UNSET
+        _daily_partition_mean_anomaly = d.pop(
+            "daily_partition_mean_anomaly", UNSET
         )
-        daily_partition_mean_anomaly_60_days: Union[
-            Unset, ColumnAnomalyMean60DaysCheckSpec
+        daily_partition_mean_anomaly: Union[
+            Unset, ColumnAnomalyStationaryMeanCheckSpec
         ]
-        if isinstance(_daily_partition_mean_anomaly_60_days, Unset):
-            daily_partition_mean_anomaly_60_days = UNSET
+        if isinstance(_daily_partition_mean_anomaly, Unset):
+            daily_partition_mean_anomaly = UNSET
         else:
-            daily_partition_mean_anomaly_60_days = (
-                ColumnAnomalyMean60DaysCheckSpec.from_dict(
-                    _daily_partition_mean_anomaly_60_days
+            daily_partition_mean_anomaly = (
+                ColumnAnomalyStationaryMeanCheckSpec.from_dict(
+                    _daily_partition_mean_anomaly
                 )
             )
 
-        _daily_partition_median_anomaly_30_days = d.pop(
-            "daily_partition_median_anomaly_30_days", UNSET
+        _daily_partition_median_anomaly_stationary_30_days = d.pop(
+            "daily_partition_median_anomaly_stationary_30_days", UNSET
         )
-        daily_partition_median_anomaly_30_days: Union[
-            Unset, ColumnAnomalyMedian30DaysCheckSpec
+        daily_partition_median_anomaly_stationary_30_days: Union[
+            Unset, ColumnAnomalyStationaryMedian30DaysCheckSpec
         ]
-        if isinstance(_daily_partition_median_anomaly_30_days, Unset):
-            daily_partition_median_anomaly_30_days = UNSET
+        if isinstance(_daily_partition_median_anomaly_stationary_30_days, Unset):
+            daily_partition_median_anomaly_stationary_30_days = UNSET
         else:
-            daily_partition_median_anomaly_30_days = (
-                ColumnAnomalyMedian30DaysCheckSpec.from_dict(
-                    _daily_partition_median_anomaly_30_days
+            daily_partition_median_anomaly_stationary_30_days = (
+                ColumnAnomalyStationaryMedian30DaysCheckSpec.from_dict(
+                    _daily_partition_median_anomaly_stationary_30_days
                 )
             )
 
-        _daily_partition_median_anomaly_60_days = d.pop(
-            "daily_partition_median_anomaly_60_days", UNSET
+        _daily_partition_median_anomaly = d.pop(
+            "daily_partition_median_anomaly", UNSET
         )
-        daily_partition_median_anomaly_60_days: Union[
-            Unset, ColumnAnomalyMedian60DaysCheckSpec
+        daily_partition_median_anomaly: Union[
+            Unset, ColumnAnomalyStationaryMedianCheckSpec
         ]
-        if isinstance(_daily_partition_median_anomaly_60_days, Unset):
-            daily_partition_median_anomaly_60_days = UNSET
+        if isinstance(_daily_partition_median_anomaly, Unset):
+            daily_partition_median_anomaly = UNSET
         else:
-            daily_partition_median_anomaly_60_days = (
-                ColumnAnomalyMedian60DaysCheckSpec.from_dict(
-                    _daily_partition_median_anomaly_60_days
+            daily_partition_median_anomaly = (
+                ColumnAnomalyStationaryMedianCheckSpec.from_dict(
+                    _daily_partition_median_anomaly
                 )
             )
 
-        _daily_partition_sum_anomaly_30_days = d.pop(
-            "daily_partition_sum_anomaly_30_days", UNSET
+        _daily_partition_sum_anomaly_stationary_30_days = d.pop(
+            "daily_partition_sum_anomaly_stationary_30_days", UNSET
         )
-        daily_partition_sum_anomaly_30_days: Union[
-            Unset, ColumnAnomalySum30DaysCheckSpec
+        daily_partition_sum_anomaly_stationary_30_days: Union[
+            Unset, ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
         ]
-        if isinstance(_daily_partition_sum_anomaly_30_days, Unset):
-            daily_partition_sum_anomaly_30_days = UNSET
+        if isinstance(_daily_partition_sum_anomaly_stationary_30_days, Unset):
+            daily_partition_sum_anomaly_stationary_30_days = UNSET
         else:
-            daily_partition_sum_anomaly_30_days = (
-                ColumnAnomalySum30DaysCheckSpec.from_dict(
-                    _daily_partition_sum_anomaly_30_days
+            daily_partition_sum_anomaly_stationary_30_days = (
+                ColumnAnomalyStationaryPartitionSum30DaysCheckSpec.from_dict(
+                    _daily_partition_sum_anomaly_stationary_30_days
                 )
             )
 
-        _daily_partition_sum_anomaly_60_days = d.pop(
-            "daily_partition_sum_anomaly_60_days", UNSET
+        _daily_partition_sum_anomaly_stationary = d.pop(
+            "daily_partition_sum_anomaly_stationary", UNSET
         )
-        daily_partition_sum_anomaly_60_days: Union[
-            Unset, ColumnAnomalySum60DaysCheckSpec
+        daily_partition_sum_anomaly_stationary: Union[
+            Unset, ColumnAnomalyStationaryPartitionSumCheckSpec
         ]
-        if isinstance(_daily_partition_sum_anomaly_60_days, Unset):
-            daily_partition_sum_anomaly_60_days = UNSET
+        if isinstance(_daily_partition_sum_anomaly_stationary, Unset):
+            daily_partition_sum_anomaly_stationary = UNSET
         else:
-            daily_partition_sum_anomaly_60_days = (
-                ColumnAnomalySum60DaysCheckSpec.from_dict(
-                    _daily_partition_sum_anomaly_60_days
+            daily_partition_sum_anomaly_stationary = (
+                ColumnAnomalyStationaryPartitionSumCheckSpec.from_dict(
+                    _daily_partition_sum_anomaly_stationary
                 )
             )
 
@@ -618,12 +618,12 @@ class ColumnAnomalyDailyPartitionedChecksSpec:
             daily_partition_median_change_yesterday=daily_partition_median_change_yesterday,
             daily_partition_sum_change=daily_partition_sum_change,
             daily_partition_sum_change_yesterday=daily_partition_sum_change_yesterday,
-            daily_partition_mean_anomaly_30_days=daily_partition_mean_anomaly_30_days,
-            daily_partition_mean_anomaly_60_days=daily_partition_mean_anomaly_60_days,
-            daily_partition_median_anomaly_30_days=daily_partition_median_anomaly_30_days,
-            daily_partition_median_anomaly_60_days=daily_partition_median_anomaly_60_days,
-            daily_partition_sum_anomaly_30_days=daily_partition_sum_anomaly_30_days,
-            daily_partition_sum_anomaly_60_days=daily_partition_sum_anomaly_60_days,
+            daily_partition_mean_anomaly_stationary_30_days=daily_partition_mean_anomaly_stationary_30_days,
+            daily_partition_mean_anomaly=daily_partition_mean_anomaly,
+            daily_partition_median_anomaly_stationary_30_days=daily_partition_median_anomaly_stationary_30_days,
+            daily_partition_median_anomaly=daily_partition_median_anomaly,
+            daily_partition_sum_anomaly_stationary_30_days=daily_partition_sum_anomaly_stationary_30_days,
+            daily_partition_sum_anomaly_stationary=daily_partition_sum_anomaly_stationary,
             daily_partition_mean_change_7_days=daily_partition_mean_change_7_days,
             daily_partition_mean_change_30_days=daily_partition_mean_change_30_days,
             daily_partition_median_change_7_days=daily_partition_median_change_7_days,

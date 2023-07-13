@@ -40,8 +40,8 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_row_count", o -> o.dailyPartitionRowCount);
-            put("daily_partition_row_count_anomaly_30_days", o -> o.dailyPartitionRowCountAnomaly30Days);
-            put("daily_partition_row_count_anomaly_60_days", o -> o.dailyPartitionRowCountAnomaly60Days);
+            put("daily_partition_row_count_anomaly_stationary_30_days", o -> o.dailyPartitionRowCountAnomalyStationary30Days);
+            put("daily_partition_row_count_anomaly_stationary", o -> o.dailyPartitionRowCountAnomalyStationary);
             put("daily_partition_row_count_change", o -> o.dailyPartitionRowCountChange);
             put("daily_partition_row_count_change_yesterday", o -> o.dailyPartitionRowCountChangeYesterday);
             put("daily_partition_row_count_change_7_days", o -> o.dailyPartitionRowCountChange7Days);
@@ -54,13 +54,13 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec dailyPartitionRowCount;
 
-    @JsonProperty("daily_partition_row_count_anomaly_30_days")
+    @JsonProperty("daily_partition_row_count_anomaly_stationary_30_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.")
-    private TableAnomalyRowCount30DaysCheckSpec dailyPartitionRowCountAnomaly30Days;
+    private TableAnomalyStationaryPartitionRowCount30DaysCheckSpec dailyPartitionRowCountAnomalyStationary30Days;
 
-    @JsonProperty("daily_partition_row_count_anomaly_60_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 60 days.")
-    private TableAnomalyRowCount60DaysCheckSpec dailyPartitionRowCountAnomaly60Days;
+    @JsonProperty("daily_partition_row_count_anomaly_stationary")
+    @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.")
+    private TableAnomalyStationaryPartitionRowCountCheckSpec dailyPartitionRowCountAnomalyStationary;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
     private TableChangeRowCountCheckSpec dailyPartitionRowCountChange;
@@ -99,36 +99,36 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Returns the row count anomaly 30 days check.
      * @return Row count anomaly 30 days check.
      */
-    public TableAnomalyRowCount30DaysCheckSpec getDailyPartitionRowCountAnomaly30Days() {
-        return dailyPartitionRowCountAnomaly30Days;
+    public TableAnomalyStationaryPartitionRowCount30DaysCheckSpec getDailyPartitionRowCountAnomalyStationary30Days() {
+        return dailyPartitionRowCountAnomalyStationary30Days;
     }
 
     /**
      * Sets a new row count anomaly 30 days check.
-     * @param dailyPartitionRowCountAnomaly30Days Row count anomaly 30 days check.
+     * @param dailyPartitionRowCountAnomalyStationary30Days Row count anomaly 30 days check.
      */
-    public void setDailyPartitionRowCountAnomaly30Days(TableAnomalyRowCount30DaysCheckSpec dailyPartitionRowCountAnomaly30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly30Days, dailyPartitionRowCountAnomaly30Days));
-        this.dailyPartitionRowCountAnomaly30Days = dailyPartitionRowCountAnomaly30Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly30Days, "daily_partition_row_count_anomaly_30_days");
+    public void setDailyPartitionRowCountAnomalyStationary30Days(TableAnomalyStationaryPartitionRowCount30DaysCheckSpec dailyPartitionRowCountAnomalyStationary30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomalyStationary30Days, dailyPartitionRowCountAnomalyStationary30Days));
+        this.dailyPartitionRowCountAnomalyStationary30Days = dailyPartitionRowCountAnomalyStationary30Days;
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomalyStationary30Days, "daily_partition_row_count_anomaly_stationary_30_days");
     }
 
     /**
      * Returns the row count anomaly 60 days check.
      * @return Row count anomaly 60 days check.
      */
-    public TableAnomalyRowCount60DaysCheckSpec getDailyPartitionRowCountAnomaly60Days() {
-        return dailyPartitionRowCountAnomaly60Days;
+    public TableAnomalyStationaryPartitionRowCountCheckSpec getDailyPartitionRowCountAnomalyStationary() {
+        return dailyPartitionRowCountAnomalyStationary;
     }
 
     /**
      * Sets a new row count anomaly 60 days check.
-     * @param dailyPartitionRowCountAnomaly60Days Row count anomaly 60 days check.
+     * @param dailyPartitionRowCountAnomalyStationary Row count anomaly 60 days check.
      */
-    public void setDailyPartitionRowCountAnomaly60Days(TableAnomalyRowCount60DaysCheckSpec dailyPartitionRowCountAnomaly60Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly60Days, dailyPartitionRowCountAnomaly60Days));
-        this.dailyPartitionRowCountAnomaly60Days = dailyPartitionRowCountAnomaly60Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly60Days, "daily_partition_row_count_anomaly_60_days");
+    public void setDailyPartitionRowCountAnomalyStationary(TableAnomalyStationaryPartitionRowCountCheckSpec dailyPartitionRowCountAnomalyStationary) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomalyStationary, dailyPartitionRowCountAnomalyStationary));
+        this.dailyPartitionRowCountAnomalyStationary = dailyPartitionRowCountAnomalyStationary;
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomalyStationary, "daily_partition_row_count_anomaly_stationary");
     }
 
     /**
