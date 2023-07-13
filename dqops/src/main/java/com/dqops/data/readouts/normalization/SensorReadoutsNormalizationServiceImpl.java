@@ -112,7 +112,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             }
         }
 
-        LongColumn dataStreamHashColumn = this.commonNormalizationService.createDataGroupingHashColumn(dataStreamLevelColumns, resultsRowCount);
+        LongColumn dataStreamHashColumn = this.commonNormalizationService.createDataGroupingHashColumn(
+                dataStreamLevelColumns, sensorRunParameters.getDataGroupings(), resultsRowCount);
         normalizedResults.addColumns(dataStreamHashColumn);
 
         TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultsRowCount);

@@ -28,6 +28,9 @@ import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpecObjectMother;
+import com.dqops.metadata.groupings.DataStreamLevelSpecObjectMother;
 import com.dqops.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -69,6 +72,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         connectionWrapper.getSpec().setProviderType(ProviderType.bigquery);
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
+        tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
 		checkSpec = new TableRowCountCheckSpec();
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
 		tableSpec.getProfilingChecks().getVolume().setRowCount(checkSpec);
@@ -79,7 +83,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 CheckType.PROFILING,
                 null, // time series
                 new TimeWindowFilterParameters(),
-                null, // data stream mapping
+                tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 null);
@@ -274,6 +278,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
 		this.table.addColumns(TextColumn.create("grouping_level_1", "US"));
+        this.tableSpec.getGroupings().getFirstDataGroupingConfiguration()
+                .setLevel1(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 CheckTimeScale.daily, "date"));
 
@@ -288,7 +294,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
-        Assertions.assertEquals(6115115649832173011L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals(3135242802568536781L, results.getDataGroupHashColumn().get(0));
         Assertions.assertEquals("US", results.getDataGroupNameColumn().get(0));
     }
 
@@ -297,6 +303,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
 		this.table.addColumns(TextColumn.create("grouping_level_2", "US"));
+        this.tableSpec.getGroupings().getFirstDataGroupingConfiguration()
+                .setLevel2(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 CheckTimeScale.daily, "date"));
 
@@ -311,7 +319,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getDataGroupHashColumn());
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
-        Assertions.assertEquals(4298143061576664681L, results.getDataGroupHashColumn().get(0));
+        Assertions.assertEquals(3135242802568536780L, results.getDataGroupHashColumn().get(0));
         Assertions.assertEquals(" / US", results.getDataGroupNameColumn().get(0));
     }
 

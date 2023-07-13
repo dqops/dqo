@@ -44,19 +44,21 @@ public interface CommonTableNormalizationService {
      * Calculates a data_grouping_hash hash from all the data stream level columns. Returns 0 when there are no grouping dimension levels.
      *
      * @param dataGroupingLevelColumns Array of data grouping dimension level columns.
+     * @param dataGroupingConfigurationSpec Data grouping configuration used to decide which data grouping dimension levels are configured and will be included in the data group hash.
      * @param rowIndex               Row index to calculate.
      * @return Data grouping hash.
      */
-    long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns, int rowIndex);
+    long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowIndex);
 
     /**
      * Creates and calculates a data_grouping_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
      *
      * @param dataGroupingLevelColumns Array of data grouping dimension level columns.
+     * @param dataGroupingConfigurationSpec Data grouping configuration used to decide which data grouping dimension levels are configured and will be included in the data group hash.
      * @param rowCount               Count of rows to process.
      * @return Data grouping hash column.
      */
-    LongColumn createDataGroupingHashColumn(TextColumn[] dataGroupingLevelColumns, int rowCount);
+    LongColumn createDataGroupingHashColumn(TextColumn[] dataGroupingLevelColumns, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowCount);
 
     /**
      * Calculates a data_grouping_name name from all the data grouping level columns. Returns 0 when there are no data grouping levels.

@@ -221,7 +221,8 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             }
         }
 
-        LongColumn dataStreamHashColumn = this.commonNormalizationService.createDataGroupingHashColumn(dataStreamLevelColumns, resultRowCount);
+        LongColumn dataStreamHashColumn = this.commonNormalizationService.createDataGroupingHashColumn(
+                dataStreamLevelColumns, sensorRunParameters.getDataGroupings(), resultRowCount);
         normalizedResults.addColumns(dataStreamHashColumn);
 
         TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultRowCount);

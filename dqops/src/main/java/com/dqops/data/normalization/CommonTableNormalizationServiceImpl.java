@@ -46,7 +46,9 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Array of data grouping dimension level columns that were found.
      */
     @Override
-    public TextColumn[] extractAndNormalizeDataGroupingDimensionColumns(Table resultsTable, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowCount) {
+    public TextColumn[] extractAndNormalizeDataGroupingDimensionColumns(Table resultsTable,
+                                                                        DataGroupingConfigurationSpec dataGroupingConfigurationSpec,
+                                                                        int rowCount) {
         TextColumn[] dataGroupingLevelColumns = new TextColumn[9]; // we support 9 data stream levels, we store them at their respective indexes shifted 1 value down (0-based array)
 
         for (int levelIndex = 1; levelIndex <= 9; levelIndex++) {
@@ -70,6 +72,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 continue;
             }
 
+            @SuppressWarnings("SpellCheckingInspection")
             TextColumn stringifiedColumn = TableColumnUtility.convertToTextColumn(existingDataGroupingLevelColumn);
             dataGroupingLevelColumns[levelIndex - 1] = stringifiedColumn;
         }
@@ -80,50 +83,73 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
     /**
      * Calculates a data_grouping_hash hash from all the data grouping dimension level columns. Returns 0 when there are no grouping dimension levels.
      * @param dataGroupingLevelColumns Array of data grouping dimension level columns.
+     * @param dataGroupingConfigurationSpec Data grouping configuration used to decide which data grouping dimension levels are configured and will be included in the data group hash.
      * @param rowIndex Row index to calculate.
      * @return Data grouping hash.
      */
     @Override
-    public long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns, int rowIndex) {
-        int notNullColumnCount = 0;
-        for (TextColumn dataStreamLevelColumn : dataGroupingLevelColumns) {
-            if (dataStreamLevelColumn != null) {
-                notNullColumnCount++;
-            }
-        }
-
-        if (notNullColumnCount == 0) {
-            // when no data stream levels columns are used, we return data_stream_hash as 0
+    public long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns,
+                                                DataGroupingConfigurationSpec dataGroupingConfigurationSpec,
+                                                int rowIndex) {
+        if (dataGroupingConfigurationSpec == null || dataGroupingConfigurationSpec.countConfiguredLevels() == 0) {
             return 0L;
         }
 
-        List<HashCode> dataGroupingColumnHashes = Arrays.stream(dataGroupingLevelColumns)
-                .map(column -> {
-                    if (column == null) {
-                        return HashCode.fromLong(0L);
-                    }
-                    String columnValue = column.get(rowIndex);
-                    if (columnValue == null) {
-                        return HashCode.fromLong(0L);
-                    }
-                    return  Hashing.farmHashFingerprint64().hashString(columnValue, StandardCharsets.UTF_8);
-                })
-                .collect(Collectors.toList());
-        return Math.abs(Hashing.combineOrdered(dataGroupingColumnHashes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users
+        List<HashCode> hashCodes = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            DataGroupingDimensionSpec dimensionLevelSpec = dataGroupingConfigurationSpec.getLevel(i + 1);
+            if (dimensionLevelSpec == null) {
+                continue;
+            }
+
+            if (dimensionLevelSpec.getSource() == DataGroupingDimensionSource.tag) {
+                String tag = dimensionLevelSpec.getTag();
+                if (tag != null) {
+                    HashCode stringHashCode = Hashing.farmHashFingerprint64().hashString(tag, StandardCharsets.UTF_8);
+                    hashCodes.add(HashCode.fromLong(stringHashCode.asLong() + i));
+                } else if (i != 0) {
+                    hashCodes.add(HashCode.fromLong(i));
+                }
+
+                continue;
+            }
+
+            TextColumn dataGroupingLevelColumn = dataGroupingLevelColumns[i];
+            if (dataGroupingLevelColumn == null) {
+                continue;
+            }
+
+            String columnValue = dataGroupingLevelColumn.get(rowIndex);
+            if (columnValue != null) {
+                HashCode stringHashCode = Hashing.farmHashFingerprint64().hashString(columnValue, StandardCharsets.UTF_8);
+                hashCodes.add(HashCode.fromLong(stringHashCode.asLong() + i));
+            } else if (i != 0) {
+                hashCodes.add(HashCode.fromLong(i));
+            }
+        }
+
+        if (hashCodes.size() == 0) {
+            return 0L;
+        }
+
+        return Math.abs(Hashing.combineOrdered(hashCodes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier to use (more user friendly)
     }
 
     /**
      * Creates and calculates a data_stream_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
      * @param dataGroupingLevelColumns Array of data stream level columns.
+     * @param dataGroupingConfigurationSpec Data grouping configuration used to decide which data grouping dimension levels are configured and will be included in the data group hash.
      * @param rowCount Count of rows to process.
      * @return Data stream hash column.
      */
     @Override
-    public LongColumn createDataGroupingHashColumn(TextColumn[] dataGroupingLevelColumns, int rowCount) {
+    public LongColumn createDataGroupingHashColumn(TextColumn[] dataGroupingLevelColumns,
+                                                   DataGroupingConfigurationSpec dataGroupingConfigurationSpec,
+                                                   int rowCount) {
         LongColumn dataGroupingHashColumn = LongColumn.create(CommonColumnNames.DATA_GROUP_HASH_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
-            long dimensionIdHash = calculateDataGroupingHashForRow(dataGroupingLevelColumns, i);
+            long dimensionIdHash = calculateDataGroupingHashForRow(dataGroupingLevelColumns, dataGroupingConfigurationSpec, i);
             dataGroupingHashColumn.set(i, dimensionIdHash);
         }
 
@@ -210,8 +236,8 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
         TextColumn timeSeriesUuidColumn = TextColumn.create(CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
-            Long dataStreamHash = sortedDataGroupingHashColumn.get(i);
-            UUID uuid = new UUID(checkOrProfilerHash, dataStreamHash ^ tableHash ^ columnHash);
+            Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
+            UUID uuid = new UUID(checkOrProfilerHash, dataGroupingHash ^ tableHash ^ columnHash);
             String timeSeriesUuidString = uuid.toString();
             timeSeriesUuidColumn.set(i, timeSeriesUuidString);
         }
