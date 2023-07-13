@@ -17,7 +17,7 @@ package com.dqops.utils.reflection;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.table.checkspecs.volume.TableAnomalyRowCountChange30DaysCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
@@ -365,14 +365,14 @@ public class ReflectionServiceImplTests extends BaseTest {
 
         @JsonProperty("customSerialization_option（笑）")
         @JsonPropertyDescription("Some description.")
-        private TableAnomalyRowCountChange30DaysCheckSpec ordinarilyNamedCheck;
+        private TableAnomalyDifferencingRowCountCheckSpec ordinarilyNamedCheck;
 
 
-        public TableAnomalyRowCountChange30DaysCheckSpec getOrdinarilyNamedCheck() {
+        public TableAnomalyDifferencingRowCountCheckSpec getOrdinarilyNamedCheck() {
             return ordinarilyNamedCheck;
         }
 
-        public void setOrdinarilyNamedCheck(TableAnomalyRowCountChange30DaysCheckSpec ordinarilyNamedCheck) {
+        public void setOrdinarilyNamedCheck(TableAnomalyDifferencingRowCountCheckSpec ordinarilyNamedCheck) {
             this.ordinarilyNamedCheck = ordinarilyNamedCheck;
         }
 

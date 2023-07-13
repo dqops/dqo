@@ -41,8 +41,8 @@ public class TableVolumeDailyRecurringChecksSpec extends AbstractCheckCategorySp
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_row_count", o -> o.dailyRowCount);
-            put("daily_row_count_anomaly_30_days", o -> o.dailyRowCountAnomaly30Days);
-            put("daily_row_count_anomaly_60_days", o -> o.dailyRowCountAnomaly60Days);
+            put("daily_row_count_anomaly_differencing_30_days", o -> o.dailyRowCountAnomalyDifferencing30Days);
+            put("daily_row_count_anomaly_differencing", o -> o.dailyRowCountAnomalyDifferencing60Days);
             put("daily_row_count_change", o -> o.dailyRowCountChange);
             put("daily_row_count_change_yesterday", o -> o.dailyRowCountChangeYesterday);
             put("daily_row_count_change_7_days", o -> o.dailyRowCountChange7Days);
@@ -55,13 +55,13 @@ public class TableVolumeDailyRecurringChecksSpec extends AbstractCheckCategorySp
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec dailyRowCount;
 
-    @JsonProperty("daily_row_count_anomaly_30_days")
+    @JsonProperty("daily_row_count_anomaly_differencing_30_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.")
-    private TableAnomalyRowCountChange30DaysCheckSpec dailyRowCountAnomaly30Days;
+    private TableAnomalyDifferencingRowCount30DaysCheckSpec dailyRowCountAnomalyDifferencing30Days;
 
-    @JsonProperty("daily_row_count_anomaly_60_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.")
-    private TableAnomalyRowCountChange60DaysCheckSpec dailyRowCountAnomaly60Days;
+    @JsonProperty("daily_row_count_anomaly_differencing")
+    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.")
+    private TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing60Days;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
     private TableChangeRowCountCheckSpec dailyRowCountChange;
@@ -100,36 +100,36 @@ public class TableVolumeDailyRecurringChecksSpec extends AbstractCheckCategorySp
      * Returns the row count anomaly 30 days check.
      * @return Row count anomaly 30 days check.
      */
-    public TableAnomalyRowCountChange30DaysCheckSpec getDailyRowCountAnomaly30Days() {
-        return dailyRowCountAnomaly30Days;
+    public TableAnomalyDifferencingRowCount30DaysCheckSpec getDailyRowCountAnomalyDifferencing30Days() {
+        return dailyRowCountAnomalyDifferencing30Days;
     }
 
     /**
      * Sets a new row count anomaly 30 days check.
-     * @param dailyRowCountAnomaly30Days Row count anomaly 30 days check.
+     * @param dailyRowCountAnomalyDifferencing30Days Row count anomaly 30 days check.
      */
-    public void setDailyRowCountAnomaly30Days(TableAnomalyRowCountChange30DaysCheckSpec dailyRowCountAnomaly30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly30Days, dailyRowCountAnomaly30Days));
-        this.dailyRowCountAnomaly30Days = dailyRowCountAnomaly30Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly30Days, "daily_row_count_anomaly_30_days");
+    public void setDailyRowCountAnomalyDifferencing30Days(TableAnomalyDifferencingRowCount30DaysCheckSpec dailyRowCountAnomalyDifferencing30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomalyDifferencing30Days, dailyRowCountAnomalyDifferencing30Days));
+        this.dailyRowCountAnomalyDifferencing30Days = dailyRowCountAnomalyDifferencing30Days;
+        propagateHierarchyIdToField(dailyRowCountAnomalyDifferencing30Days, "daily_row_count_anomaly_differencing_30_days");
     }
 
     /**
      * Returns the row count anomaly 60 days check.
      * @return Row count anomaly 60 days check.
      */
-    public TableAnomalyRowCountChange60DaysCheckSpec getDailyRowCountAnomaly60Days() {
-        return dailyRowCountAnomaly60Days;
+    public TableAnomalyDifferencingRowCountCheckSpec getDailyRowCountAnomalyDifferencing60Days() {
+        return dailyRowCountAnomalyDifferencing60Days;
     }
 
     /**
      * Sets a new row count anomaly 60 days check.
-     * @param dailyRowCountAnomaly60Days Row count anomaly 60 days check.
+     * @param dailyRowCountAnomalyDifferencing60Days Row count anomaly 60 days check.
      */
-    public void setDailyRowCountAnomaly60Days(TableAnomalyRowCountChange60DaysCheckSpec dailyRowCountAnomaly60Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly60Days, dailyRowCountAnomaly60Days));
-        this.dailyRowCountAnomaly60Days = dailyRowCountAnomaly60Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly60Days, "daily_row_count_anomaly_60_days");
+    public void setDailyRowCountAnomalyDifferencing60Days(TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing60Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomalyDifferencing60Days, dailyRowCountAnomalyDifferencing60Days));
+        this.dailyRowCountAnomalyDifferencing60Days = dailyRowCountAnomalyDifferencing60Days;
+        propagateHierarchyIdToField(dailyRowCountAnomalyDifferencing60Days, "daily_row_count_anomaly_differencing");
     }
 
     /**

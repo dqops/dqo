@@ -158,14 +158,14 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[row_count_anomaly_30_days](./table/volume/row-count-anomaly-30-days/#row-count-anomaly-30-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
-|[daily_row_count_anomaly_30_days](./table/volume/row-count-anomaly-30-days/#daily-row-count-anomaly-30-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
+|[row_count_anomaly_differencing_30_days](./table/volume/row-count-anomaly-differencing-30-days/#row-count-anomaly-differencing-30-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
+|[daily_row_count_anomaly_differencing_30_days](./table/volume/row-count-anomaly-differencing-30-days/#daily-row-count-anomaly-differencing-30-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[row_count_anomaly_60_days](./table/volume/row-count-anomaly-60-days/#row-count-anomaly-60-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|
-|[daily_row_count_anomaly_60_days](./table/volume/row-count-anomaly-60-days/#daily-row-count-anomaly-60-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|
+|[row_count_anomaly_differencing](./table/volume/row-count-anomaly-differencing/#row-count-anomaly-differencing)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|
+|[daily_row_count_anomaly_differencing](./table/volume/row-count-anomaly-differencing/#daily-row-count-anomaly-differencing)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|
 
 
 | Check name | Check type | Description |
@@ -200,12 +200,12 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[daily_partition_row_count_anomaly_30_days](./table/volume/daily-partition-row-count-anomaly-30-days/#daily-partition-row-count-anomaly-30-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.|
+|[daily_partition_row_count_anomaly_stationary_30_days](./table/volume/daily-partition-row-count-anomaly-stationary-30-days/#daily-partition-row-count-anomaly-stationary-30-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[daily_partition_row_count_anomaly_60_days](./table/volume/daily-partition-row-count-anomaly-60-days/#daily-partition-row-count-anomaly-60-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 60 days.|
+|[daily_partition_row_count_anomaly_stationary](./table/volume/daily-partition-row-count-anomaly-stationary/#daily-partition-row-count-anomaly-stationary)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.|
 
 
 
@@ -317,38 +317,42 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[mean_anomaly_30_days](./column/anomaly/mean-anomaly-30-days/#mean-anomaly-30-days)|profiling|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_mean_anomaly_30_days](./column/anomaly/mean-anomaly-30-days/#daily-mean-anomaly-30-days)|recurring|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|
+|[mean_anomaly_stationary_30_days](./column/anomaly/mean-anomaly-stationary-30-days/#mean-anomaly-stationary-30-days)|profiling|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|
+|[daily_mean_anomaly_stationary_30_days](./column/anomaly/mean-anomaly-stationary-30-days/#daily-mean-anomaly-stationary-30-days)|recurring|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|
+|[daily_partition_mean_anomaly_stationary_30_days](./column/anomaly/mean-anomaly-stationary-30-days/#daily-partition-mean-anomaly-stationary-30-days)|partitioned|Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[mean_anomaly_60_days](./column/anomaly/mean-anomaly-60-days/#mean-anomaly-60-days)|profiling|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 60 days.|
-|[daily_mean_anomaly_60_days](./column/anomaly/mean-anomaly-60-days/#daily-mean-anomaly-60-days)|recurring|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 60 days.|
+|[mean_anomaly_stationary](./column/anomaly/mean-anomaly-stationary/#mean-anomaly-stationary)|profiling|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_mean_anomaly_stationary](./column/anomaly/mean-anomaly-stationary/#daily-mean-anomaly-stationary)|recurring|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_partition_mean_anomaly_stationary](./column/anomaly/mean-anomaly-stationary/#daily-partition-mean-anomaly-stationary)|partitioned|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[median_anomaly_30_days](./column/anomaly/median-anomaly-30-days/#median-anomaly-30-days)|profiling|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_median_anomaly_30_days](./column/anomaly/median-anomaly-30-days/#daily-median-anomaly-30-days)|recurring|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|
+|[median_anomaly_stationary_30_days](./column/anomaly/median-anomaly-stationary-30-days/#median-anomaly-stationary-30-days)|profiling|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|
+|[daily_median_anomaly_stationary_30_days](./column/anomaly/median-anomaly-stationary-30-days/#daily-median-anomaly-stationary-30-days)|recurring|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|
+|[daily_partition_median_anomaly_stationary_30_days](./column/anomaly/median-anomaly-stationary-30-days/#daily-partition-median-anomaly-stationary-30-days)|partitioned|Verifies that the median in a column is within a percentile from measurements made during the last 30 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[median_anomaly_60_days](./column/anomaly/median-anomaly-60-days/#median-anomaly-60-days)|profiling|Verifies that the median in a column changes in a rate within a percentile boundary during last 60 days.|
-|[daily_median_anomaly_60_days](./column/anomaly/median-anomaly-60-days/#daily-median-anomaly-60-days)|recurring|Verifies that the median in a column changes in a rate within a percentile boundary during last 60 days.|
+|[median_anomaly_stationary](./column/anomaly/median-anomaly-stationary/#median-anomaly-stationary)|profiling|Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_median_anomaly_stationary](./column/anomaly/median-anomaly-stationary/#daily-median-anomaly-stationary)|recurring|Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_partition_median_anomaly_stationary](./column/anomaly/median-anomaly-stationary/#daily-partition-median-anomaly-stationary)|partitioned|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[sum_anomaly_30_days](./column/anomaly/sum-anomaly-30-days/#sum-anomaly-30-days)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_sum_anomaly_30_days](./column/anomaly/sum-anomaly-30-days/#daily-sum-anomaly-30-days)|recurring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|
+|[sum_anomaly_differencing_30_days](./column/anomaly/sum-anomaly-differencing-30-days/#sum-anomaly-differencing-30-days)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|
+|[daily_sum_anomaly_differencing_30_days](./column/anomaly/sum-anomaly-differencing-30-days/#daily-sum-anomaly-differencing-30-days)|recurring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[sum_anomaly_60_days](./column/anomaly/sum-anomaly-60-days/#sum-anomaly-60-days)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.|
-|[daily_sum_anomaly_60_days](./column/anomaly/sum-anomaly-60-days/#daily-sum-anomaly-60-days)|recurring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.|
+|[sum_anomaly_differencing_60_days](./column/anomaly/sum-anomaly-differencing-60-days/#sum-anomaly-differencing-60-days)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_sum_anomaly_differencing](./column/anomaly/sum-anomaly-differencing-60-days/#daily-sum-anomaly-differencing)|recurring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
 
 
 | Check name | Check type | Description |
@@ -443,32 +447,12 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[daily_partition_mean_anomaly_30_days](./column/anomaly/daily-partition-mean-anomaly-30-days/#daily-partition-mean-anomaly-30-days)|partitioned|Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.|
+|[daily_partition_sum_anomaly_stationary_30_days](./column/anomaly/daily-partition-sum-anomaly-stationary-30-days/#daily-partition-sum-anomaly-stationary-30-days)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[daily_partition_mean_anomaly_60_days](./column/anomaly/daily-partition-mean-anomaly-60-days/#daily-partition-mean-anomaly-60-days)|partitioned|Verifies that the mean value in a column is within a percentile from measurements made during the last 60 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_median_anomaly_30_days](./column/anomaly/daily-partition-median-anomaly-30-days/#daily-partition-median-anomaly-30-days)|partitioned|Verifies that the median in a column is within a percentile from measurements made during the last 30 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_median_anomaly_60_days](./column/anomaly/daily-partition-median-anomaly-60-days/#daily-partition-median-anomaly-60-days)|partitioned|Verifies that the median in a column is within a percentile from measurements made during the last 60 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_sum_anomaly_30_days](./column/anomaly/daily-partition-sum-anomaly-30-days/#daily-partition-sum-anomaly-30-days)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_sum_anomaly_60_days](./column/anomaly/daily-partition-sum-anomaly-60-days/#daily-partition-sum-anomaly-60-days)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 60 days.|
+|[daily_partition_sum_anomaly_stationary](./column/anomaly/daily-partition-sum-anomaly-stationary/#daily-partition-sum-anomaly-stationary)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|
 
 
 

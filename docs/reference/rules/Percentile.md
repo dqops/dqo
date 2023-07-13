@@ -550,11 +550,12 @@ spec:
       \ the time window. In other words, the inter-quantile range around the mean\
       \ of the estimated normal distribution. Set the time window at the threshold\
       \ level for all severity levels (warning, error, fatal) at once. The default\
-      \ is a 90 time periods (days, etc.) time window, but at least 30 readouts must\
-      \ exist to run the calculation.&quot;
+      \ is a time window of 90 periods (days, etc.), but at least 30 readouts must\
+      \ exist to run the calculation. You can change the default value by modifying\
+      \ prediction_time_window parameterin Definitions section.&quot;
     data_type: double
     sample_values:
-    - 95
+    - 0.1
 ```
 
 
@@ -1345,11 +1346,12 @@ spec:
       \ the time window. In other words, the inter-quantile range around the mean\
       \ of the estimated normal distribution. Set the time window at the threshold\
       \ level for all severity levels (warning, error, fatal) at once. The default\
-      \ is a 90 time periods (days, etc.) time window, but at least 30 readouts must\
-      \ exist to run the calculation.&quot;
+      \ is a time window of 90 periods (days, etc.), but at least 30 readouts must\
+      \ exist to run the calculation. You can change the default value by modifying\
+      \ prediction_time_window parameterin Definitions section.&quot;
     data_type: double
     sample_values:
-    - 95
+    - 0.1
 ```
 
 
