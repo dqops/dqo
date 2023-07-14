@@ -9,14 +9,14 @@ if TYPE_CHECKING:
         ColumnNumericSumSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.change_percentile_moving_average_30_days_rule_1_parameters_spec import (
-        ChangePercentileMovingAverage30DaysRule1ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_30_days_rule_1_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec,
     )
-    from ..models.change_percentile_moving_average_30_days_rule_05_parameters_spec import (
-        ChangePercentileMovingAverage30DaysRule05ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_30_days_rule_05_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec,
     )
-    from ..models.change_percentile_moving_average_30_days_rule_01_parameters_spec import (
-        ChangePercentileMovingAverage30DaysRule01ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_30_days_rule_01_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec,
     )
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
 
@@ -50,9 +50,9 @@ class ColumnAnomalyDifferencingSum30DaysCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, ColumnNumericSumSensorParametersSpec]):
-        warning (Union[Unset, ChangePercentileMovingAverage30DaysRule1ParametersSpec]):
-        error (Union[Unset, ChangePercentileMovingAverage30DaysRule05ParametersSpec]):
-        fatal (Union[Unset, ChangePercentileMovingAverage30DaysRule01ParametersSpec]):
+        warning (Union[Unset, AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec]):
+        error (Union[Unset, AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec]):
+        fatal (Union[Unset, AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -64,9 +64,9 @@ class ColumnAnomalyDifferencingSum30DaysCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnNumericSumSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "ChangePercentileMovingAverage30DaysRule1ParametersSpec"] = UNSET
-    error: Union[Unset, "ChangePercentileMovingAverage30DaysRule05ParametersSpec"] = UNSET
-    fatal: Union[Unset, "ChangePercentileMovingAverage30DaysRule01ParametersSpec"] = UNSET
+    warning: Union[Unset, "AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec"] = UNSET
+    error: Union[Unset, "AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec"] = UNSET
+    fatal: Union[Unset, "AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -140,14 +140,14 @@ class ColumnAnomalyDifferencingSum30DaysCheckSpec:
             ColumnNumericSumSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.change_percentile_moving_average_30_days_rule_1_parameters_spec import (
-            ChangePercentileMovingAverage30DaysRule1ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_30_days_rule_1_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec,
         )
-        from ..models.change_percentile_moving_average_30_days_rule_05_parameters_spec import (
-            ChangePercentileMovingAverage30DaysRule05ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_30_days_rule_05_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec,
         )
-        from ..models.change_percentile_moving_average_30_days_rule_01_parameters_spec import (
-            ChangePercentileMovingAverage30DaysRule01ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_30_days_rule_01_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec,
         )
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
 
@@ -186,25 +186,25 @@ class ColumnAnomalyDifferencingSum30DaysCheckSpec:
             parameters = ColumnNumericSumSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, ChangePercentileMovingAverage30DaysRule1ParametersSpec]
+        warning: Union[Unset, AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = ChangePercentileMovingAverage30DaysRule1ParametersSpec.from_dict(_warning)
+            warning = AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, ChangePercentileMovingAverage30DaysRule05ParametersSpec]
+        error: Union[Unset, AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = ChangePercentileMovingAverage30DaysRule05ParametersSpec.from_dict(_error)
+            error = AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, ChangePercentileMovingAverage30DaysRule01ParametersSpec]
+        fatal: Union[Unset, AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = ChangePercentileMovingAverage30DaysRule01ParametersSpec.from_dict(_fatal)
+            fatal = AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec.from_dict(_fatal)
 
         column_anomaly_differencing_sum_30_days_check_spec = cls(
             schedule_override=schedule_override,

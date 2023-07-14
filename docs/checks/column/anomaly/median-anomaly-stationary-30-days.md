@@ -12,7 +12,7 @@ Verifies that the median in a column changes in a rate within a percentile bound
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|median_anomaly_stationary_30_days|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[percentile_moving_average_30_days](../../../../reference/rules/Percentile/#percentile-moving-average-30-days)|
+|median_anomaly_stationary_30_days|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -613,7 +613,7 @@ Verifies that the median in a column changes in a rate within a percentile bound
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_anomaly_stationary_30_days|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[percentile_moving_average_30_days](../../../../reference/rules/Percentile/#percentile-moving-average-30-days)|
+|daily_median_anomaly_stationary_30_days|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -1217,7 +1217,7 @@ Verifies that the median in a column is within a percentile from measurements ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_median_anomaly_stationary_30_days|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[percentile_moving_average_30_days](../../../../reference/rules/Percentile/#percentile-moving-average-30-days)|
+|daily_partition_median_anomaly_stationary_30_days|partitioned|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

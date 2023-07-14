@@ -6,14 +6,14 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.percentile_moving_average_rule_1_parameters_spec import (
-        PercentileMovingAverageRule1ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
     )
-    from ..models.percentile_moving_average_rule_05_parameters_spec import (
-        PercentileMovingAverageRule05ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
     )
-    from ..models.percentile_moving_average_rule_01_parameters_spec import (
-        PercentileMovingAverageRule01ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
     )
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
     from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -50,9 +50,9 @@ class TableAnomalyStationaryPartitionRowCountCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
-        warning (Union[Unset, PercentileMovingAverageRule1ParametersSpec]):
-        error (Union[Unset, PercentileMovingAverageRule05ParametersSpec]):
-        fatal (Union[Unset, PercentileMovingAverageRule01ParametersSpec]):
+        warning (Union[Unset, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec]):
+        error (Union[Unset, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec]):
+        fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -64,9 +64,9 @@ class TableAnomalyStationaryPartitionRowCountCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "PercentileMovingAverageRule1ParametersSpec"] = UNSET
-    error: Union[Unset, "PercentileMovingAverageRule05ParametersSpec"] = UNSET
-    fatal: Union[Unset, "PercentileMovingAverageRule01ParametersSpec"] = UNSET
+    warning: Union[Unset, "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"] = UNSET
+    error: Union[Unset, "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"] = UNSET
+    fatal: Union[Unset, "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -137,14 +137,14 @@ class TableAnomalyStationaryPartitionRowCountCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.percentile_moving_average_rule_1_parameters_spec import (
-            PercentileMovingAverageRule1ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
         )
-        from ..models.percentile_moving_average_rule_05_parameters_spec import (
-            PercentileMovingAverageRule05ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
         )
-        from ..models.percentile_moving_average_rule_01_parameters_spec import (
-            PercentileMovingAverageRule01ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
         )
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
         from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -186,25 +186,25 @@ class TableAnomalyStationaryPartitionRowCountCheckSpec:
             parameters = TableVolumeRowCountSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, PercentileMovingAverageRule1ParametersSpec]
+        warning: Union[Unset, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = PercentileMovingAverageRule1ParametersSpec.from_dict(_warning)
+            warning = AnomalyStationaryPercentileMovingAverageRule1ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, PercentileMovingAverageRule05ParametersSpec]
+        error: Union[Unset, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = PercentileMovingAverageRule05ParametersSpec.from_dict(_error)
+            error = AnomalyStationaryPercentileMovingAverageRule05ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, PercentileMovingAverageRule01ParametersSpec]
+        fatal: Union[Unset, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = PercentileMovingAverageRule01ParametersSpec.from_dict(_fatal)
+            fatal = AnomalyStationaryPercentileMovingAverageRule01ParametersSpec.from_dict(_fatal)
 
         table_anomaly_row_count_check_spec = cls(
             schedule_override=schedule_override,

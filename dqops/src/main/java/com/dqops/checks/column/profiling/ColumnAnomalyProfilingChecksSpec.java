@@ -45,7 +45,7 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("median_anomaly_stationary", o -> o.medianAnomalyStationary);
 
             put("sum_anomaly_differencing_30_days", o -> o.sumAnomalyDifferencing30Days);
-            put("sum_anomaly_differencing_60_days", o -> o.sumAnomalyDifferencing);
+            put("sum_anomaly_differencing", o -> o.sumAnomalyDifferencing);
 
             put("mean_change", o -> o.meanChange);
             put("mean_change_yesterday", o -> o.meanChangeYesterday);
@@ -84,7 +84,7 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.")
     private ColumnAnomalyDifferencingSum30DaysCheckSpec sumAnomalyDifferencing30Days;
 
-    @JsonProperty("sum_anomaly_differencing_60_days")
+    @JsonProperty("sum_anomaly_differencing")
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.")
     private ColumnAnomalyDifferencingSumCheckSpec sumAnomalyDifferencing;
     
@@ -236,7 +236,7 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
     public void setSumAnomalyDifferencing(ColumnAnomalyDifferencingSumCheckSpec sumAnomalyDifferencing) {
         this.setDirtyIf(!Objects.equals(this.sumAnomalyDifferencing, sumAnomalyDifferencing));
         this.sumAnomalyDifferencing = sumAnomalyDifferencing;
-        propagateHierarchyIdToField(sumAnomalyDifferencing, "sum_anomaly_differencing_60_days");
+        propagateHierarchyIdToField(sumAnomalyDifferencing, "sum_anomaly_differencing");
     }
 
     /**

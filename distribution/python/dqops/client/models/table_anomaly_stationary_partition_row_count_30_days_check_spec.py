@@ -6,14 +6,14 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.percentile_moving_average_30_days_rule_1_parameters_spec import (
-        PercentileMovingAverage30DaysRule1ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
     )
-    from ..models.percentile_moving_average_30_days_rule_05_parameters_spec import (
-        PercentileMovingAverage30DaysRule05ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_05_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec,
     )
-    from ..models.percentile_moving_average_30_days_rule_01_parameters_spec import (
-        PercentileMovingAverage30DaysRule01ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_01_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec,
     )
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
     from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -50,9 +50,9 @@ class TableAnomalyStationaryPartitionRowCount30DaysCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
-        warning (Union[Unset, PercentileMovingAverage30DaysRule1ParametersSpec]):
-        error (Union[Unset, PercentileMovingAverage30DaysRule05ParametersSpec]):
-        fatal (Union[Unset, PercentileMovingAverage30DaysRule01ParametersSpec]):
+        warning (Union[Unset, AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec]):
+        error (Union[Unset, AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec]):
+        fatal (Union[Unset, AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -64,9 +64,9 @@ class TableAnomalyStationaryPartitionRowCount30DaysCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "PercentileMovingAverage30DaysRule1ParametersSpec"] = UNSET
-    error: Union[Unset, "PercentileMovingAverage30DaysRule05ParametersSpec"] = UNSET
-    fatal: Union[Unset, "PercentileMovingAverage30DaysRule01ParametersSpec"] = UNSET
+    warning: Union[Unset, "AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec"] = UNSET
+    error: Union[Unset, "AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec"] = UNSET
+    fatal: Union[Unset, "AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -137,14 +137,14 @@ class TableAnomalyStationaryPartitionRowCount30DaysCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.percentile_moving_average_30_days_rule_1_parameters_spec import (
-            PercentileMovingAverage30DaysRule1ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
         )
-        from ..models.percentile_moving_average_30_days_rule_05_parameters_spec import (
-            PercentileMovingAverage30DaysRule05ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_05_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec,
         )
-        from ..models.percentile_moving_average_30_days_rule_01_parameters_spec import (
-            PercentileMovingAverage30DaysRule01ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_30_days_rule_01_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec,
         )
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
         from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -186,25 +186,25 @@ class TableAnomalyStationaryPartitionRowCount30DaysCheckSpec:
             parameters = TableVolumeRowCountSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, PercentileMovingAverage30DaysRule1ParametersSpec]
+        warning: Union[Unset, AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = PercentileMovingAverage30DaysRule1ParametersSpec.from_dict(_warning)
+            warning = AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, PercentileMovingAverage30DaysRule05ParametersSpec]
+        error: Union[Unset, AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = PercentileMovingAverage30DaysRule05ParametersSpec.from_dict(_error)
+            error = AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, PercentileMovingAverage30DaysRule01ParametersSpec]
+        fatal: Union[Unset, AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = PercentileMovingAverage30DaysRule01ParametersSpec.from_dict(_fatal)
+            fatal = AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec.from_dict(_fatal)
 
         table_anomaly_row_count_30_days_check_spec = cls(
             schedule_override=schedule_override,

@@ -12,7 +12,7 @@ Verifies that the sum in a column changes in a rate within a percentile boundary
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sum_anomaly_differencing_30_days|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-average-30-days)|
+|sum_anomaly_differencing_30_days|profiling| |[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -452,7 +452,7 @@ Verifies that the sum in a column changes in a rate within a percentile boundary
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sum_anomaly_differencing_30_days|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[change_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#change-percentile-moving-average-30-days)|
+|daily_sum_anomaly_differencing_30_days|recurring|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_differencing_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)

@@ -146,7 +146,7 @@ nav:
         - median anomaly stationary 30 days: 'checks/column/anomaly/median-anomaly-stationary-30-days.md'
         - median anomaly stationary: 'checks/column/anomaly/median-anomaly-stationary.md'
         - sum anomaly differencing 30 days: 'checks/column/anomaly/sum-anomaly-differencing-30-days.md'
-        - sum anomaly differencing 60 days: 'checks/column/anomaly/sum-anomaly-differencing-60-days.md'
+        - sum anomaly differencing: 'checks/column/anomaly/sum-anomaly-differencing.md'
         - mean change: 'checks/column/anomaly/mean-change.md'
         - mean change yesterday: 'checks/column/anomaly/mean-change-yesterday.md'
         - mean change 7 days: 'checks/column/anomaly/mean-change-7-days.md'

@@ -14,23 +14,23 @@ from .bulk_check_disable_parameters import BulkCheckDisableParameters
 from .bulk_check_disable_parameters_selected_tables_to_columns import (
     BulkCheckDisableParametersSelectedTablesToColumns,
 )
-from .change_percentile_moving_average_30_days_rule_1_parameters_spec import (
-    ChangePercentileMovingAverage30DaysRule1ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_30_days_rule_1_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec,
 )
-from .change_percentile_moving_average_30_days_rule_05_parameters_spec import (
-    ChangePercentileMovingAverage30DaysRule05ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_30_days_rule_05_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec,
 )
-from .change_percentile_moving_average_30_days_rule_01_parameters_spec import (
-    ChangePercentileMovingAverage30DaysRule01ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_30_days_rule_01_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec,
 )
-from .change_percentile_moving_average_rule_1_parameters_spec import (
-    ChangePercentileMovingAverageRule1ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
 )
-from .change_percentile_moving_average_rule_05_parameters_spec import (
-    ChangePercentileMovingAverageRule05ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
 )
-from .change_percentile_moving_average_rule_01_parameters_spec import (
-    ChangePercentileMovingAverageRule01ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
 )
 from .check_basic_model import CheckBasicModel
 from .check_configuration_model import CheckConfigurationModel
@@ -1264,23 +1264,23 @@ from .parameter_definition_spec_data_type import ParameterDefinitionSpecDataType
 from .parameter_definition_spec_display_hint import ParameterDefinitionSpecDisplayHint
 from .partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
 
-from .percentile_moving_average_30_days_rule_1_parameters_spec import (
-    PercentileMovingAverage30DaysRule1ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
 )
-from .percentile_moving_average_30_days_rule_05_parameters_spec import (
-    PercentileMovingAverage30DaysRule05ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_30_days_rule_05_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec,
 )
-from .percentile_moving_average_30_days_rule_01_parameters_spec import (
-    PercentileMovingAverage30DaysRule01ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_30_days_rule_01_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec,
 )
-from .percentile_moving_average_rule_1_parameters_spec import (
-    PercentileMovingAverageRule1ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
 )
-from .percentile_moving_average_rule_05_parameters_spec import (
-    PercentileMovingAverageRule05ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
 )
-from .percentile_moving_average_rule_01_parameters_spec import (
-    PercentileMovingAverageRule01ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
 )
 from .physical_table_name import PhysicalTableName
 from .postgresql_parameters_spec import PostgresqlParametersSpec
@@ -1611,12 +1611,12 @@ __all__ = (
     "BigQueryParametersSpecAuthenticationMode",
     "BulkCheckDisableParameters",
     "BulkCheckDisableParametersSelectedTablesToColumns",
-    "ChangePercentileMovingAverage30DaysRule1ParametersSpec",
-    "ChangePercentileMovingAverage30DaysRule05ParametersSpec",
-    "ChangePercentileMovingAverage30DaysRule01ParametersSpec",
-    "ChangePercentileMovingAverageRule1ParametersSpec",
-    "ChangePercentileMovingAverageRule05ParametersSpec",
-    "ChangePercentileMovingAverageRule01ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
     "CheckBasicModel",
     "CheckConfigurationModel",
     "CheckConfigurationModelCheckTarget",
@@ -2169,12 +2169,12 @@ __all__ = (
     "ParameterDefinitionSpecDataType",
     "ParameterDefinitionSpecDisplayHint",
     "PartitionIncrementalTimeWindowSpec",
-    "PercentileMovingAverage30DaysRule1ParametersSpec",
-    "PercentileMovingAverage30DaysRule05ParametersSpec",
-    "PercentileMovingAverage30DaysRule01ParametersSpec",
-    "PercentileMovingAverageRule1ParametersSpec",
-    "PercentileMovingAverageRule05ParametersSpec",
-    "PercentileMovingAverageRule01ParametersSpec",
+    "AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec",
+    "AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec",
+    "AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
     "PhysicalTableName",
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
