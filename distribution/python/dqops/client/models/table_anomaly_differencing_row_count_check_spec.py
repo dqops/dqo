@@ -6,14 +6,14 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.change_percentile_moving_average_rule_1_parameters_spec import (
-        ChangePercentileMovingAverageRule1ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
     )
-    from ..models.change_percentile_moving_average_rule_05_parameters_spec import (
-        ChangePercentileMovingAverageRule05ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
     )
-    from ..models.change_percentile_moving_average_rule_01_parameters_spec import (
-        ChangePercentileMovingAverageRule01ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
     )
     from ..models.recurring_schedule_spec import RecurringScheduleSpec
     from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -50,9 +50,9 @@ class TableAnomalyDifferencingRowCountCheckSpec:
             quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
             the data quality check). Use a name of one of known data streams defined on the parent table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
-        warning (Union[Unset, ChangePercentileMovingAverageRule1ParametersSpec]):
-        error (Union[Unset, ChangePercentileMovingAverageRule05ParametersSpec]):
-        fatal (Union[Unset, ChangePercentileMovingAverageRule01ParametersSpec]):
+        warning (Union[Unset, AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec]):
+        error (Union[Unset, AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec]):
+        fatal (Union[Unset, AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
@@ -64,9 +64,9 @@ class TableAnomalyDifferencingRowCountCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_stream: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "ChangePercentileMovingAverageRule1ParametersSpec"] = UNSET
-    error: Union[Unset, "ChangePercentileMovingAverageRule05ParametersSpec"] = UNSET
-    fatal: Union[Unset, "ChangePercentileMovingAverageRule01ParametersSpec"] = UNSET
+    warning: Union[Unset, "AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"] = UNSET
+    error: Union[Unset, "AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"] = UNSET
+    fatal: Union[Unset, "AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -137,14 +137,14 @@ class TableAnomalyDifferencingRowCountCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.change_percentile_moving_average_rule_1_parameters_spec import (
-            ChangePercentileMovingAverageRule1ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
         )
-        from ..models.change_percentile_moving_average_rule_05_parameters_spec import (
-            ChangePercentileMovingAverageRule05ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
         )
-        from ..models.change_percentile_moving_average_rule_01_parameters_spec import (
-            ChangePercentileMovingAverageRule01ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
         )
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
         from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -186,25 +186,25 @@ class TableAnomalyDifferencingRowCountCheckSpec:
             parameters = TableVolumeRowCountSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, ChangePercentileMovingAverageRule1ParametersSpec]
+        warning: Union[Unset, AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = ChangePercentileMovingAverageRule1ParametersSpec.from_dict(_warning)
+            warning = AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, ChangePercentileMovingAverageRule05ParametersSpec]
+        error: Union[Unset, AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = ChangePercentileMovingAverageRule05ParametersSpec.from_dict(_error)
+            error = AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, ChangePercentileMovingAverageRule01ParametersSpec]
+        fatal: Union[Unset, AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = ChangePercentileMovingAverageRule01ParametersSpec.from_dict(_fatal)
+            fatal = AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec.from_dict(_fatal)
 
         table_anomaly_row_count_check_spec = cls(
             schedule_override=schedule_override,

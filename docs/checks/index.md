@@ -351,8 +351,8 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[sum_anomaly_differencing_60_days](./column/anomaly/sum-anomaly-differencing-60-days/#sum-anomaly-differencing-60-days)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_sum_anomaly_differencing](./column/anomaly/sum-anomaly-differencing-60-days/#daily-sum-anomaly-differencing)|recurring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
+|[sum_anomaly_differencing](./column/anomaly/sum-anomaly-differencing/#sum-anomaly-differencing)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_sum_anomaly_differencing](./column/anomaly/sum-anomaly-differencing/#daily-sum-anomaly-differencing)|recurring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
 
 
 | Check name | Check type | Description |
