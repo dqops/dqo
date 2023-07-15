@@ -100,7 +100,9 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
-                null);
+                null,
+                1000,
+                true);
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
         SensorReadoutsSnapshotFactory dummySensorReadoutStorageService = SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService();

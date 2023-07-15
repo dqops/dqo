@@ -526,7 +526,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
                         checkSpec.getParameters(),
                         providerDialectSettings,
-                        new CheckSearchFilters()
+                        new CheckSearchFilters(),
+                        1000,
+                        true
                 );
 
                 JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(

@@ -60,7 +60,6 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     private final JinjaTemplateRenderService jinjaTemplateRenderService;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor;
-    private final DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
 
     /**
      * Creates a sql template runner.
@@ -72,13 +71,11 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     public JinjaSqlTemplateSensorRunner(JinjaTemplateRenderService jinjaTemplateRenderService,
                                         ConnectionProviderRegistry connectionProviderRegistry,
                                         DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                        JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor,
-                                        DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties) {
+                                        JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor) {
         super(defaultTimeZoneProvider);
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.jinjaSqlTemplateSensorExecutor = jinjaSqlTemplateSensorExecutor;
-        this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
     }
 
     /**
@@ -142,8 +139,8 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                 try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
                     jobCancellationToken.throwIfCancelled();
                     Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken,
-                            this.dqoSensorLimitsConfigurationProperties.getSensorReadoutLimit(),
-                            this.dqoSensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded());
+                            sensorRunParameters.getRowCountLimit(),
+                            sensorRunParameters.isFailOnSensorReadoutLimitExceeded());
                     return new SensorExecutionResult(sensorRunParameters, sensorResultRows);
                 }
             }

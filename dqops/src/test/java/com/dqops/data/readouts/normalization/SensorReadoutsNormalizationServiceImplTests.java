@@ -86,7 +86,9 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
-                null);
+                null,
+                1000,
+                true);
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
     }
 

@@ -77,4 +77,16 @@ public interface SensorExecutionRunParametersFactory {
                                                                   TimeWindowFilterParameters userTimeWindowFilters,
                                                                   StatisticsDataScope statisticsDataScope,
                                                                   ProviderDialectSettings dialectSettings);
+
+    /**
+     * Creates an effective time range filter, picking the correct configuration from the table's incremental time window
+     * for the time scale used by a partitioned check or just uses the user provided filters.
+     * @param tableSpec Table specification with the incremental time window configuration.
+     * @param timeSeriesConfigurationSpec Time series configuration, to check what time scale (daily, monthly) is used.
+     * @param userTimeWindowFilters User provided time window filter that will override the default configuration.
+     * @return Effective incremental time window filers, not null (even empty, but not null).
+     */
+    TimeWindowFilterParameters makeEffectiveIncrementalFilter(TableSpec tableSpec,
+                                                              TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
+                                                              TimeWindowFilterParameters userTimeWindowFilters);
 }

@@ -278,8 +278,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoDockerUserHomeAllowUnmounted;
 
     @CommandLine.Option(names = {"--dqo.sensor.limit.sensor-readout-limit"},
-            description = "Default row count limit retrieved from a single sensor. This is the row count limit applied when querying the data source. When the data grouping configuration sets up a GROUP BY too many columns or columns with too many distinct values, the data source will return too many results to store them as data quality check results and sensor readouts. DQO will discard additional values returned from the data source.", defaultValue = "10000")
+            description = "Default row count limit retrieved by a data quality sensor from the results of an SQL query for non-partitioned checks (profiling and recurring). This is the row count limit applied when querying the data source. When the data grouping configuration sets up a GROUP BY too many columns or columns with too many distinct values, the data source will return too many results to store them as data quality check results and sensor readouts. DQO will discard additional values returned from the data source or raise an error.", defaultValue = "1000")
     private int dqoSensorLimitSensorReadoutLimit;
+
+    @CommandLine.Option(names = {"--dqo.sensor.limit.sensor-readout-limit-partitioned"},
+            description = "Default row count limit retrieved by a data quality sensor from the results of an SQL query for partitioned checks. This is the row count limit applied when querying the data source. When the data grouping configuration sets up a GROUP BY too many columns or columns with too many distinct values, the data source will return too many results to store them as data quality check results and sensor readouts. DQO will discard additional values returned from the data source or return an error. The default value is 7x bigger than the sensor-readout-limit to allow analysing the last 7 daily partitions.", defaultValue = "7000")
+    private int dqoSensorLimitSensorReadoutLimitPartitioned;
 
     @CommandLine.Option(names = {"--dqo.sensor.limit.fail-on-sensor-readout-limit-exceeded"},
             description = "Configures the behavior when the number of rows returned from a data quality sensor exceeds the limit configured in the 'sensor-readout-limit' parameter. When true, the whole check execution is failed. When false, only results up to the limit are analyzed.", defaultValue = "true")

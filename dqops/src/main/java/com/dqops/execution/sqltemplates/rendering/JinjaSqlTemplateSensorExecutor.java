@@ -47,21 +47,17 @@ import java.time.Instant;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecutor {
     private final ConnectionProviderRegistry connectionProviderRegistry;
-    private final DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
 
     /**
      * Creates a sql template runner.
      * @param connectionProviderRegistry Connection provider registry.
      * @param defaultTimeZoneProvider Default time zone provider. Returns the default server time zone.
-     * @param dqoSensorLimitsConfigurationProperties The configuration of row limits.
      */
     @Autowired
     public JinjaSqlTemplateSensorExecutor(ConnectionProviderRegistry connectionProviderRegistry,
-                                          DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                          DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties) {
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
-        this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
     }
 
     /**
@@ -96,8 +92,8 @@ public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecuto
                 try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
                     jobCancellationToken.throwIfCancelled();
                     Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken,
-                            this.dqoSensorLimitsConfigurationProperties.getSensorReadoutLimit(),
-                            this.dqoSensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded());
+                            sensorRunParameters.getRowCountLimit(),
+                            sensorRunParameters.isFailOnSensorReadoutLimitExceeded());
                     return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, sensorResultRows);
                 }
             }

@@ -71,6 +71,9 @@ public class SensorExecutionRunParameters {
     @JsonIgnore
     private Throwable sensorConfigurationException;
     private List<String> additionalFilters = new ArrayList<>();
+    private int rowCountLimit = 1000;
+    private boolean failOnSensorReadoutLimitExceeded = true;
+
 
     /**
      * Creates a sensor execution run parameters when the sensor configuration failed and was not successful.
@@ -98,6 +101,8 @@ public class SensorExecutionRunParameters {
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
      * @param checkSearchFilter Check search filter to find this particular check.
+     * @param rowCountLimit Sets the row count limit.
+     * @param failOnSensorReadoutLimitExceeded Fail when the row count limit is exceeded.
      */
     public SensorExecutionRunParameters(
 			ConnectionSpec connection,
@@ -112,7 +117,9 @@ public class SensorExecutionRunParameters {
             DataGroupingConfigurationSpec dataGroupings,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings,
-            CheckSearchFilters checkSearchFilter) {
+            CheckSearchFilters checkSearchFilter,
+            int rowCountLimit,
+            boolean failOnSensorReadoutLimitExceeded) {
         this.success = true;
         this.connection = connection;
         this.table = table;
@@ -127,6 +134,8 @@ public class SensorExecutionRunParameters {
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
         this.checkSearchFilter = checkSearchFilter;
+        this.rowCountLimit = rowCountLimit;
+        this.failOnSensorReadoutLimitExceeded = failOnSensorReadoutLimitExceeded;
     }
 
     /**
@@ -432,6 +441,38 @@ public class SensorExecutionRunParameters {
      */
     public void setAdditionalFilters(List<String> additionalFilters) {
         this.additionalFilters = additionalFilters;
+    }
+
+    /**
+     * Returns the row count limit.
+     * @return Row count limit.
+     */
+    public int getRowCountLimit() {
+        return rowCountLimit;
+    }
+
+    /**
+     * Sets the row count limit.
+     * @param rowCountLimit Row count limit.
+     */
+    public void setRowCountLimit(int rowCountLimit) {
+        this.rowCountLimit = rowCountLimit;
+    }
+
+    /**
+     * Returns true if the sensor execution should fail if the data source returned too many results.
+     * @return True - fail, false - truncate the results and process only up to the limit.
+     */
+    public boolean isFailOnSensorReadoutLimitExceeded() {
+        return failOnSensorReadoutLimitExceeded;
+    }
+
+    /**
+     * Sets the flag to fail the sensor execution when the result count limit was exceeded.
+     * @param failOnSensorReadoutLimitExceeded Fail when result count exceeded.
+     */
+    public void setFailOnSensorReadoutLimitExceeded(boolean failOnSensorReadoutLimitExceeded) {
+        this.failOnSensorReadoutLimitExceeded = failOnSensorReadoutLimitExceeded;
     }
 
     /**

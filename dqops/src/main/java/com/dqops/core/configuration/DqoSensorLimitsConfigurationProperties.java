@@ -27,9 +27,14 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoSensorLimitsConfigurationProperties implements Cloneable {
     /**
-     * Default row count limit retrieved from a single sensor. This is the row count limit applied when querying the data source.
+     * Default row count limit retrieved from a single sensor for non-partitioned checks (profiling, recurring). This is the row count limit applied when querying the data source.
      */
-    public static final int DEFAULT_SENSOR_READOUT_LIMIT = 10000;
+    public static final int DEFAULT_SENSOR_READOUT_LIMIT = 1000;
+
+    /**
+     * Default row count limit retrieved from a single sensor for partitioned checks. This is the row count limit applied when querying the data source by a partitioned check.
+     */
+    public static final int DEFAULT_SENSOR_READOUT_LIMIT_PARTITIONED = 7000;
 
     /**
      * The maximum number of queries that are merged into a bigger query, to calculate multiple sensors on the same table and to analyze multiple columns from the same table.
@@ -37,6 +42,7 @@ public class DqoSensorLimitsConfigurationProperties implements Cloneable {
     public static final int DEFAULT_MAX_MERGED_QUERIES = 100;
 
     private int sensorReadoutLimit = DEFAULT_SENSOR_READOUT_LIMIT;
+    private int sensorReadoutLimitPartitioned = DEFAULT_SENSOR_READOUT_LIMIT_PARTITIONED;
     private boolean failOnSensorReadoutLimitExceeded = true;
     private int maxMergedQueries = DEFAULT_MAX_MERGED_QUERIES;
 
@@ -54,6 +60,22 @@ public class DqoSensorLimitsConfigurationProperties implements Cloneable {
      */
     public void setSensorReadoutLimit(int sensorReadoutLimit) {
         this.sensorReadoutLimit = sensorReadoutLimit;
+    }
+
+    /**
+     * Returns the row count limit retrieved from a single sensor. This is the row count limit applied when querying the data source by partitioned checks.
+     * @return The row count limit retrieved from a single sensor. This is the row count limit applied when querying the data source by partitioned checks.
+     */
+    public int getSensorReadoutLimitPartitioned() {
+        return sensorReadoutLimitPartitioned;
+    }
+
+    /**
+     * Sets the row count limit retrieved from a single sensor. This is the row count limit applied when querying the data source by partitioned checks.
+     * @param sensorReadoutLimitPartitioned The row count limit retrieved from a single sensor by partitioned checks.
+     */
+    public void setSensorReadoutLimitPartitioned(int sensorReadoutLimitPartitioned) {
+        this.sensorReadoutLimitPartitioned = sensorReadoutLimitPartitioned;
     }
 
     /**

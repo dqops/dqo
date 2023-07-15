@@ -954,9 +954,12 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         rootChecksContainerSpec.getCheckTimeScale(), customCheckSpec.getCheckName());
             }
 
+            TimeWindowFilterParameters timeWindowConfigurationFromComparedTable =
+                    this.sensorExecutionRunParametersFactory.makeEffectiveIncrementalFilter(comparedTableSpec, timeSeriesConfigurationSpec, userTimeWindowFilters);
+
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                     referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
-                    timeSeriesConfigurationSpec, userTimeWindowFilters, referencedDialectSettings);
+                    timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
             return sensorRunParameters;
         }
         catch (Throwable ex) {

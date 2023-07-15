@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
@@ -44,14 +45,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionRunParametersFactory {
     private final SecretValueProvider secretValueProvider;
+    private DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties;
 
     /**
      * Default injection constructor.
      * @param secretValueProvider Secret value provider to expand environment variables and secrets.
+     * @param sensorLimitsConfigurationProperties Sensor limit configuration properties.
      */
     @Autowired
-    public SensorExecutionRunParametersFactoryImpl(SecretValueProvider secretValueProvider) {
+    public SensorExecutionRunParametersFactoryImpl(SecretValueProvider secretValueProvider,
+                                                   DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties) {
         this.secretValueProvider = secretValueProvider;
+        this.sensorLimitsConfigurationProperties = sensorLimitsConfigurationProperties;
     }
 
     /**
@@ -120,9 +125,13 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         exactCheckSearchFilters.setCheckName(check.getCheckName());
         exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());
 
+        int rowCountLimit = checkType == CheckType.PARTITIONED ? this.sensorLimitsConfigurationProperties.getSensorReadoutLimitPartitioned() :
+                this.sensorLimitsConfigurationProperties.getSensorReadoutLimit();
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
-                dataGroupingConfiguration, sensorParameters, dialectSettings, exactCheckSearchFilters);
+                dataGroupingConfiguration, sensorParameters, dialectSettings, exactCheckSearchFilters,
+                rowCountLimit,
+                this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded());
     }
 
     /**
@@ -160,7 +169,9 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
-                dataStreams, sensorParameters, dialectSettings, null);
+                dataStreams, sensorParameters, dialectSettings, null,
+                this.sensorLimitsConfigurationProperties.getSensorReadoutLimit(),
+                false); // statistics is opportunistic, we do not fail, we just collect something for data groups
     }
 
     /**
@@ -171,7 +182,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param userTimeWindowFilters User provided time window filter that will override the default configuration.
      * @return Effective incremental time window filers, not null (even empty, but not null).
      */
-    private TimeWindowFilterParameters makeEffectiveIncrementalFilter(
+    @Override
+    public TimeWindowFilterParameters makeEffectiveIncrementalFilter(
             TableSpec tableSpec,
             TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
             TimeWindowFilterParameters userTimeWindowFilters) {
