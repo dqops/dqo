@@ -3,24 +3,18 @@ import SvgIcon from '../SvgIcon';
 import CheckListItem from './CheckListItem';
 import {
   CheckResultsOverviewDataModel,
-  DqoJobHistoryEntryModelStatusEnum,
   TimeWindowFilterParameters,
   CheckModel,
   QualityCategoryModel
 } from '../../api';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { JobApiClient } from '../../services/apiClient';
 import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
-import CheckMenu from './CheckMenu';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../shared/routes';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../redux/selectors';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
@@ -47,15 +41,10 @@ const CheckCategoriesView = ({
   changeCopyUI,
   copyCategory
 }: CheckCategoriesViewProps) => {
-  const { job_dictionary_state } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const { currentJobId } = useSelector(getFirstLevelState(checkTypes));
-  const job = currentJobId ? job_dictionary_state[currentJobId] : undefined;
   const [isExtended, setIsExtended] = useState(false);
 
   const shouldExtend = () => {
@@ -91,40 +80,26 @@ const CheckCategoriesView = ({
 
   return (
     <Fragment>
-      <tr onClick={() => setIsExtended(!isExtended)} className="cursor-pointer">
+      <tr>
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="font-semibold text-gray-700 capitalize">
-                {category.category}
-              </div>
               <div
-                className="flex items-center"
-                onClick={(event: React.MouseEvent<HTMLDivElement>) =>
-                  event.stopPropagation()
-                }
+                className="font-semibold text-gray-700 capitalize flex items-center justify-center gap-x-3 cursor-pointer"
+                onClick={() => setIsExtended(!isExtended)}
               >
-                {(!job ||
-                  job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-                  job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-                  <CheckMenu
-                    onRunChecks={onRunChecks}
-                    onDeleteChecks={() => setDeleteDataDialogOpened(true)}
-                  />
-                )}
-                {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
+                {isExtended === false ? (
                   <SvgIcon
-                    name="hourglass"
-                    className="text-gray-700 h-5 cursor-pointer"
+                    name="chevron-right"
+                    className="w-5 h-5 text-gray-700"
                   />
-                )}
-                {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
-                  job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
+                ) : (
                   <SvgIcon
-                    name="hourglass"
-                    className="text-gray-700 h-5 cursor-pointer"
+                    name="chevron-down"
+                    className="w-5 h-5 text-gray-700"
                   />
                 )}
+                {category.category}
               </div>
             </div>
             <div> </div>
@@ -133,12 +108,29 @@ const CheckCategoriesView = ({
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t">
-          <div className="flex justify-end">
-            {isExtended === false ? (
-              <SvgIcon name="chevron-down" className="w-5 h-5 text-gray-700" />
-            ) : (
-              <SvgIcon name="chevron-up" className="w-5 h-5 text-gray-700" />
-            )}
+          <div className="flex justify-end gap-x-3">
+            <div className="group relative">
+              <SvgIcon
+                name="delete"
+                width={20}
+                className="cursor-pointer"
+                onClick={() => setDeleteDataDialogOpened(true)}
+              />
+              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                Delete data for the category
+              </div>
+            </div>
+            <div className="group relative">
+              <SvgIcon
+                name="play"
+                width={20}
+                className="text-primary cursor-pointer"
+                onClick={onRunChecks}
+              />
+              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                Run checks for the category
+              </div>
+            </div>
           </div>
         </td>
       </tr>
