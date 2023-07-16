@@ -129,19 +129,20 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         if (dataGroupingConfigurationSearcherObject != null) {
             dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableWrapper.getSpec().getGroupings());
+            dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableWrapper.getSpec().getDefaultDataGrouping());
         }
 
-        LabelSetSpec overridenLabels = new LabelSetSpec();
+        LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getTableLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getTableLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getTableLabels());
         }
 
         if (labelsSearcherObject.getConnectionLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!LabelsSearchMatcher.matchTableLabels(this.filters, overridenLabels)) {
+        if (!LabelsSearchMatcher.matchTableLabels(this.filters, overriddenLabels)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

@@ -17,6 +17,7 @@ package com.dqops.metadata.sources;
 
 import com.dqops.metadata.basespecs.AbstractIndexingList;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 
 import java.util.List;
@@ -90,7 +91,11 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
             if (existingTableWrapper == null) {
                 TableWrapper newTableWrapper = this.createAndAddNew(sourceTablePhysicalName);
                 newTableWrapper.setSpec(sourceTableSpec);
-                sourceTableSpec.getGroupings().setFirstDataGroupingConfiguration(defaultDataGroupingConfiguration);
+                if (defaultDataGroupingConfiguration != null) {
+                    final String dataGroupingConfigurationName = DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME;
+                    sourceTableSpec.getGroupings().put(dataGroupingConfigurationName, defaultDataGroupingConfiguration);
+                    sourceTableSpec.setDefaultDataGrouping(dataGroupingConfigurationName);
+                }
             }
             else {
                 // merge columns and update

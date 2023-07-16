@@ -65,7 +65,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         
         this.sut = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.tableSpec = TableSpecObjectMother.create("public", "tab1");
-        this.tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
+        this.tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
     }
 
     @Test

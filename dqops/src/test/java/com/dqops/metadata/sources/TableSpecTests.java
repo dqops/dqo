@@ -183,7 +183,7 @@ public class TableSpecTests extends BaseTest {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         DataGroupingConfigurationSpec dataGroupingConfiguration = new DataGroupingConfigurationSpec();
         dataGroupingConfiguration.setLevel1(DataStreamLevelSpecObjectMother.createTag("tag1"));
-        this.sut.getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfiguration);
+        this.sut.setDefaultDataGroupingConfiguration(dataGroupingConfiguration);
 
         String yaml = yamlSerializer.serialize(this.sut);
 

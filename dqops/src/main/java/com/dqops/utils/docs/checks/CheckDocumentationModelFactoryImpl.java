@@ -20,25 +20,18 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderType;
-import com.dqops.connectors.bigquery.BigQueryConnectionProvider;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
-import com.dqops.connectors.mysql.MysqlConnectionProvider;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
-import com.dqops.connectors.oracle.OracleConnectionProvider;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.oracle.OracleProviderDialectSettings;
-import com.dqops.connectors.postgresql.PostgresqlConnectionProvider;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlProviderDialectSettings;
-import com.dqops.connectors.redshift.RedshiftConnectionProvider;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
-import com.dqops.connectors.snowflake.SnowflakeConnectionProvider;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeProviderDialectSettings;
-import com.dqops.connectors.sqlserver.SqlServerConnectionProvider;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
@@ -369,7 +362,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         DataGroupingConfigurationSpec groupingConfigurationSpec = new DataGroupingConfigurationSpec();
         groupingConfigurationSpec.setLevel1(DataGroupingDimensionSpec.createForColumn("country"));
         groupingConfigurationSpec.setLevel2(DataGroupingDimensionSpec.createForColumn("state"));
-        trimmedTableSpec.getGroupings().setFirstDataGroupingConfiguration(groupingConfigurationSpec);
+        String groupingName = "group_by_country_and_state";
+        trimmedTableSpec.getGroupings().put(groupingName, groupingConfigurationSpec);
+        trimmedTableSpec.setDefaultDataGrouping(groupingName);
 
         TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
         String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
@@ -524,7 +519,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         checkRootContainer.getCheckType(),
                         timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
                         null,
-                        tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
+                        tableSpec.getDefaultDataGroupingConfiguration(),
                         checkSpec.getParameters(),
                         providerDialectSettings,
                         new CheckSearchFilters()

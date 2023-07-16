@@ -76,7 +76,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         
         this.bigQueryConnectionSpec = BigQueryConnectionSpecObjectMother.create();
         this.tableSpec = TableSpecObjectMother.create("public", "tab1");
-        this.tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
+        this.tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
         this.executionContext = new ExecutionContext(null, DqoHomeContextObjectMother.getRealDqoHomeContext());
     }
 

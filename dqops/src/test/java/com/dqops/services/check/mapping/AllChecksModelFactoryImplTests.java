@@ -90,7 +90,7 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
         ColumnSpecMap columnSpecMap = this.tableSpec.getColumns();
         ColumnSpec columnSpec = new ColumnSpec();
         columnSpecMap.put("col1", columnSpec);
-        this.tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
+        this.tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
     }
 
     @Test

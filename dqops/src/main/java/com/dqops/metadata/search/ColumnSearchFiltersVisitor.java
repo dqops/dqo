@@ -129,6 +129,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
         dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableWrapper.getSpec().getGroupings());
+        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableWrapper.getSpec().getDefaultDataGrouping());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -161,6 +162,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
         dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableSpec.getGroupings());
+        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableSpec.getDefaultDataGrouping());
         if (enabledFilter != null) {
             if (enabledFilter && tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -235,26 +237,25 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
         DataGroupingConfigurationSpec overriddenDataGroupingConfiguration =
-                dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations() != null ?
-                dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations().getFirstDataGroupingConfiguration() : null;
-        LabelSetSpec overridenLabels = new LabelSetSpec();
+                dataGroupingConfigurationSearcherObject.getDefaultGroupingConfiguration();
+        LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getColumnLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getColumnLabels());
         }
 
         if (labelsSearcherObject.getTableLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getTableLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getTableLabels());
         }
 
         if (labelsSearcherObject.getConnectionLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
         if (!DataStreamsTagsSearchMatcher.matchAllColumnDataGroupingTags(this.filters, overriddenDataGroupingConfiguration)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
-        if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overridenLabels)) {
+        if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overriddenLabels)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
