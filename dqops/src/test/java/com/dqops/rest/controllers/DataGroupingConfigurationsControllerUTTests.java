@@ -76,7 +76,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
             put(DATASTREAM_NAME_1, dsmSpec1);
             put(DATASTREAM_NAME_2, dsmSpec2);
         }};
-        this.sampleTable.getTableSpec().setDefaultDataGrouping(DATASTREAM_NAME_1);
+        this.sampleTable.getTableSpec().setDefaultGroupingName(DATASTREAM_NAME_1);
         this.sampleTable.getTableSpec().setGroupings(dataGroupingConfigurationSpecMap);
     }
 
@@ -237,7 +237,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
 
-        Assertions.assertEquals(dataStreamName, sampleTableSpec.getDefaultDataGrouping());
+        Assertions.assertEquals(dataStreamName, sampleTableSpec.getDefaultGroupingName());
 //        Assertions.assertEquals(specBeforeAction, sampleTableSpec.getGroupings().getFirstDataGroupingConfiguration());
 
         Assertions.assertEquals(2, sampleTableSpec.getGroupings().size());

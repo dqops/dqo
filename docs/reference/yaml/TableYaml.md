@@ -49,6 +49,7 @@ Table specification that defines data quality tests that are enabled on a table 
 |filter|SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.|string| | | |
 |[timestamp_columns](#timestampcolumnsspec)|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|[TimestampColumnsSpec](#timestampcolumnsspec)| | | |
 |[incremental_time_window](#partitionincrementaltimewindowspec)|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|[PartitionIncrementalTimeWindowSpec](#partitionincrementaltimewindowspec)| | | |
+|default_grouping_name|The name of the default data grouping configuration that is applied on data quality checks. When a default data grouping is selected, all data quality checks run SQL queries with a GROUP BY clause, calculating separate data quality checks for each group of data. The data groupings are defined in the &#x27;groupings&#x27; dictionary (indexed by the data grouping name).|string| | | |
 |[groupings](#datagroupingconfigurationspecmap)|Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a tag is assigned to a table (within a data grouping level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.).|[DataGroupingConfigurationSpecMap](#datagroupingconfigurationspecmap)| | | |
 |[reference_tables](#referencetablespecmap)|Dictionary of reference table configurations. Reference tables are ued for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The reference table&#x27;s metadata must be imported into DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.|[ReferenceTableSpecMap](#referencetablespecmap)| | | |
 |[incident_grouping](#tableincidentgroupingspec)|Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.|[TableIncidentGroupingSpec](#tableincidentgroupingspec)| | | |
@@ -401,9 +402,8 @@ Container of built-in preconfigured volume data quality checks on a table level.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[row_count](#tablerowcountcheckspec)|Verifies that the number of rows in a table does not exceed the minimum accepted count.|[TableRowCountCheckSpec](#tablerowcountcheckspec)| | | |
-|[row_count_anomaly_7_days](#tableanomalyrowcountchange7dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.|[TableAnomalyRowCountChange7DaysCheckSpec](#tableanomalyrowcountchange7dayscheckspec)| | | |
-|[row_count_anomaly_30_days](#tableanomalyrowcountchange30dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyRowCountChange30DaysCheckSpec](#tableanomalyrowcountchange30dayscheckspec)| | | |
-|[row_count_anomaly_60_days](#tableanomalyrowcountchange60dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|[TableAnomalyRowCountChange60DaysCheckSpec](#tableanomalyrowcountchange60dayscheckspec)| | | |
+|[row_count_anomaly_differencing_30_days](#tableanomalydifferencingrowcount30dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyDifferencingRowCount30DaysCheckSpec](#tableanomalydifferencingrowcount30dayscheckspec)| | | |
+|[row_count_anomaly_differencing](#tableanomalydifferencingrowcountcheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|[TableAnomalyDifferencingRowCountCheckSpec](#tableanomalydifferencingrowcountcheckspec)| | | |
 |[row_count_change](#tablechangerowcountcheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableChangeRowCountCheckSpec](#tablechangerowcountcheckspec)| | | |
 |[row_count_change_yesterday](#tablechangerowcountsinceyesterdaycheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableChangeRowCountSinceYesterdayCheckSpec](#tablechangerowcountsinceyesterdaycheckspec)| | | |
 |[row_count_change_7_days](#tablechangerowcountsince7dayscheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableChangeRowCountSince7DaysCheckSpec](#tablechangerowcountsince7dayscheckspec)| | | |
@@ -628,8 +628,8 @@ Comment entry. Comments are added when a change was made and the change should b
 
 ___  
 
-## TableAnomalyRowCountChange7DaysCheckSpec  
-Table level check that ensures that the row count changes in a rate within a two-tailed percentile during last 7 days.  
+## TableAnomalyDifferencingRowCount30DaysCheckSpec  
+Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
   
 
 
@@ -644,9 +644,9 @@ Table level check that ensures that the row count changes in a rate within a two
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
+|[warning](#anomalydifferencingpercentilemovingaverage30daysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec](#anomalydifferencingpercentilemovingaverage30daysrule1parametersspec)| | | |
+|[error](#anomalydifferencingpercentilemovingaverage30daysrule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec](#anomalydifferencingpercentilemovingaverage30daysrule05parametersspec)| | | |
+|[fatal](#anomalydifferencingpercentilemovingaverage30daysrule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec](#anomalydifferencingpercentilemovingaverage30daysrule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -666,7 +666,7 @@ Table level check that ensures that the row count changes in a rate within a two
 
 ___  
 
-## ChangePercentileMovingWithin7DaysRuleParametersSpec  
+## AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec  
 Data quality rule that verifies if a data quality sensor readout value is probable under
  the estimated normal distribution based on the increments of previous values gathered
  within a time window.  
@@ -683,7 +683,7 @@ Data quality rule that verifies if a data quality sensor readout value is probab
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|percentile_within|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| | |95<br/>|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist to run the calculation.|double| | |0.1<br/>|
 
 
 
@@ -695,8 +695,66 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 ___  
 
-## TableAnomalyRowCountChange30DaysCheckSpec  
-Table level check that ensures that the row count changes in a rate within a two-tailed percentile during last 30 days.  
+## AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec  
+Data quality rule that verifies if a data quality sensor readout value is probable under
+ the estimated normal distribution based on the increments of previous values gathered
+ within a time window.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist to run the calculation.|double| | |0.1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec  
+Data quality rule that verifies if a data quality sensor readout value is probable under
+ the estimated normal distribution based on the increments of previous values gathered
+ within a time window.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist to run the calculation.|double| | |0.1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## TableAnomalyDifferencingRowCountCheckSpec  
+Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.  
   
 
 
@@ -711,9 +769,9 @@ Table level check that ensures that the row count changes in a rate within a two
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
+|[warning](#anomalydifferencingpercentilemovingaveragerule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec](#anomalydifferencingpercentilemovingaveragerule1parametersspec)| | | |
+|[error](#anomalydifferencingpercentilemovingaveragerule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec](#anomalydifferencingpercentilemovingaveragerule05parametersspec)| | | |
+|[fatal](#anomalydifferencingpercentilemovingaveragerule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec](#anomalydifferencingpercentilemovingaveragerule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -733,7 +791,7 @@ Table level check that ensures that the row count changes in a rate within a two
 
 ___  
 
-## ChangePercentileMovingWithin30DaysRuleParametersSpec  
+## AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec  
 Data quality rule that verifies if a data quality sensor readout value is probable under
  the estimated normal distribution based on the increments of previous values gathered
  within a time window.  
@@ -750,7 +808,7 @@ Data quality rule that verifies if a data quality sensor readout value is probab
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|percentile_within|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| | |95<br/>|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| | |0.1<br/>|
 
 
 
@@ -762,45 +820,7 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 ___  
 
-## TableAnomalyRowCountChange60DaysCheckSpec  
-Table level check that ensures that the row count changes in a rate within a two-tailed percentile during last 60 days.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ChangePercentileMovingWithin60DaysRuleParametersSpec  
+## AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec  
 Data quality rule that verifies if a data quality sensor readout value is probable under
  the estimated normal distribution based on the increments of previous values gathered
  within a time window.  
@@ -817,7 +837,36 @@ Data quality rule that verifies if a data quality sensor readout value is probab
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|percentile_within|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| | |95<br/>|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| | |0.1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec  
+Data quality rule that verifies if a data quality sensor readout value is probable under
+ the estimated normal distribution based on the increments of previous values gathered
+ within a time window.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| | |0.1<br/>|
 
 
 
@@ -3070,9 +3119,8 @@ Container of table level daily recurring for volume data quality checks.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[daily_row_count](#tablerowcountcheckspec)|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|[TableRowCountCheckSpec](#tablerowcountcheckspec)| | | |
-|[daily_row_count_anomaly_7_days](#tableanomalyrowcountchange7dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.|[TableAnomalyRowCountChange7DaysCheckSpec](#tableanomalyrowcountchange7dayscheckspec)| | | |
-|[daily_row_count_anomaly_30_days](#tableanomalyrowcountchange30dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyRowCountChange30DaysCheckSpec](#tableanomalyrowcountchange30dayscheckspec)| | | |
-|[daily_row_count_anomaly_60_days](#tableanomalyrowcountchange60dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|[TableAnomalyRowCountChange60DaysCheckSpec](#tableanomalyrowcountchange60dayscheckspec)| | | |
+|[daily_row_count_anomaly_differencing_30_days](#tableanomalydifferencingrowcount30dayscheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyDifferencingRowCount30DaysCheckSpec](#tableanomalydifferencingrowcount30dayscheckspec)| | | |
+|[daily_row_count_anomaly_differencing](#tableanomalydifferencingrowcountcheckspec)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|[TableAnomalyDifferencingRowCountCheckSpec](#tableanomalydifferencingrowcountcheckspec)| | | |
 |[daily_row_count_change](#tablechangerowcountcheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableChangeRowCountCheckSpec](#tablechangerowcountcheckspec)| | | |
 |[daily_row_count_change_yesterday](#tablechangerowcountsinceyesterdaycheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableChangeRowCountSinceYesterdayCheckSpec](#tablechangerowcountsinceyesterdaycheckspec)| | | |
 |[daily_row_count_change_7_days](#tablechangerowcountsince7dayscheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableChangeRowCountSince7DaysCheckSpec](#tablechangerowcountsince7dayscheckspec)| | | |
@@ -3509,9 +3557,8 @@ Container of table level date partitioned volume data quality checks.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[daily_partition_row_count](#tablerowcountcheckspec)|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[TableRowCountCheckSpec](#tablerowcountcheckspec)| | | |
-|[daily_partition_row_count_anomaly_7_days](#tableanomalyrowcount7dayscheckspec)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 7 days.|[TableAnomalyRowCount7DaysCheckSpec](#tableanomalyrowcount7dayscheckspec)| | | |
-|[daily_partition_row_count_anomaly_30_days](#tableanomalyrowcount30dayscheckspec)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.|[TableAnomalyRowCount30DaysCheckSpec](#tableanomalyrowcount30dayscheckspec)| | | |
-|[daily_partition_row_count_anomaly_60_days](#tableanomalyrowcount60dayscheckspec)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 60 days.|[TableAnomalyRowCount60DaysCheckSpec](#tableanomalyrowcount60dayscheckspec)| | | |
+|[daily_partition_row_count_anomaly_stationary_30_days](#tableanomalystationarypartitionrowcount30dayscheckspec)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.|[TableAnomalyStationaryPartitionRowCount30DaysCheckSpec](#tableanomalystationarypartitionrowcount30dayscheckspec)| | | |
+|[daily_partition_row_count_anomaly_stationary](#tableanomalystationarypartitionrowcountcheckspec)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.|[TableAnomalyStationaryPartitionRowCountCheckSpec](#tableanomalystationarypartitionrowcountcheckspec)| | | |
 |[daily_partition_row_count_change](#tablechangerowcountcheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableChangeRowCountCheckSpec](#tablechangerowcountcheckspec)| | | |
 |[daily_partition_row_count_change_yesterday](#tablechangerowcountsinceyesterdaycheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableChangeRowCountSinceYesterdayCheckSpec](#tablechangerowcountsinceyesterdaycheckspec)| | | |
 |[daily_partition_row_count_change_7_days](#tablechangerowcountsince7dayscheckspec)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableChangeRowCountSince7DaysCheckSpec](#tablechangerowcountsince7dayscheckspec)| | | |
@@ -3527,73 +3574,7 @@ Container of table level date partitioned volume data quality checks.
 
 ___  
 
-## TableAnomalyRowCount7DaysCheckSpec  
-Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 7 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## PercentileMovingWithin7DaysRuleParametersSpec  
-Data quality rule that verifies if a data quality sensor readout value is probable under
- the estimated normal distribution based on the previous values gathered within a time window.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|percentile_within|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| | |95<br/>|
-
-
-
-
-
-
-
-
-
-___  
-
-## TableAnomalyRowCount30DaysCheckSpec  
+## TableAnomalyStationaryPartitionRowCount30DaysCheckSpec  
 Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
   
 
@@ -3609,9 +3590,9 @@ Table level check that ensures that the row count is within a two-tailed percent
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -3631,7 +3612,7 @@ Table level check that ensures that the row count is within a two-tailed percent
 
 ___  
 
-## PercentileMovingWithin30DaysRuleParametersSpec  
+## AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec  
 Data quality rule that verifies if a data quality sensor readout value is probable under
  the estimated normal distribution based on the previous values gathered within a time window.  
   
@@ -3647,7 +3628,7 @@ Data quality rule that verifies if a data quality sensor readout value is probab
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|percentile_within|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| | |95<br/>|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| | |0.1<br/>|
 
 
 
@@ -3659,8 +3640,64 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 ___  
 
-## TableAnomalyRowCount60DaysCheckSpec  
-Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 60 days. Use in partitioned checks.  
+## AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec  
+Data quality rule that verifies if a data quality sensor readout value is probable under
+ the estimated normal distribution based on the previous values gathered within a time window.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| | |0.1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec  
+Data quality rule that verifies if a data quality sensor readout value is probable under
+ the estimated normal distribution based on the previous values gathered within a time window.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| | |0.1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## TableAnomalyStationaryPartitionRowCountCheckSpec  
+Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.  
   
 
 
@@ -3675,9 +3712,9 @@ Table level check that ensures that the row count is within a two-tailed percent
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|[TableVolumeRowCountSensorParametersSpec](#tablevolumerowcountsensorparametersspec)| | | |
-|[warning](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaveragerule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverageRule1ParametersSpec](#anomalystationarypercentilemovingaveragerule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaveragerule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverageRule05ParametersSpec](#anomalystationarypercentilemovingaveragerule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaveragerule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverageRule01ParametersSpec](#anomalystationarypercentilemovingaveragerule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -3697,7 +3734,7 @@ Table level check that ensures that the row count is within a two-tailed percent
 
 ___  
 
-## PercentileMovingWithin60DaysRuleParametersSpec  
+## AnomalyStationaryPercentileMovingAverageRule1ParametersSpec  
 Data quality rule that verifies if a data quality sensor readout value is probable under
  the estimated normal distribution based on the previous values gathered within a time window.  
   
@@ -3713,7 +3750,63 @@ Data quality rule that verifies if a data quality sensor readout value is probab
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|percentile_within|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| | |95<br/>|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| | |0.1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## AnomalyStationaryPercentileMovingAverageRule05ParametersSpec  
+Data quality rule that verifies if a data quality sensor readout value is probable under
+ the estimated normal distribution based on the previous values gathered within a time window.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| | |0.1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## AnomalyStationaryPercentileMovingAverageRule01ParametersSpec  
+Data quality rule that verifies if a data quality sensor readout value is probable under
+ the estimated normal distribution based on the previous values gathered within a time window.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| | |0.1<br/>|
 
 
 
@@ -11619,15 +11712,12 @@ Container of built-in preconfigured data quality checks on a column level for de
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[mean_anomaly_7_days](#columnanomalymeanchange7dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 7 days.|[ColumnAnomalyMeanChange7DaysCheckSpec](#columnanomalymeanchange7dayscheckspec)| | | |
-|[mean_anomaly_30_days](#columnanomalymeanchange30dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyMeanChange30DaysCheckSpec](#columnanomalymeanchange30dayscheckspec)| | | |
-|[mean_anomaly_60_days](#columnanomalymeanchange60dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 60 days.|[ColumnAnomalyMeanChange60DaysCheckSpec](#columnanomalymeanchange60dayscheckspec)| | | |
-|[median_anomaly_7_days](#columnanomalymedianchange7dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 7 days.|[ColumnAnomalyMedianChange7DaysCheckSpec](#columnanomalymedianchange7dayscheckspec)| | | |
-|[median_anomaly_30_days](#columnanomalymedianchange30dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyMedianChange30DaysCheckSpec](#columnanomalymedianchange30dayscheckspec)| | | |
-|[median_anomaly_60_days](#columnanomalymedianchange60dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 60 days.|[ColumnAnomalyMedianChange60DaysCheckSpec](#columnanomalymedianchange60dayscheckspec)| | | |
-|[sum_anomaly_7_days](#columnanomalysumchange7dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 7 days.|[ColumnAnomalySumChange7DaysCheckSpec](#columnanomalysumchange7dayscheckspec)| | | |
-|[sum_anomaly_30_days](#columnanomalysumchange30dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalySumChange30DaysCheckSpec](#columnanomalysumchange30dayscheckspec)| | | |
-|[sum_anomaly_60_days](#columnanomalysumchange60dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.|[ColumnAnomalySumChange60DaysCheckSpec](#columnanomalysumchange60dayscheckspec)| | | |
+|[mean_anomaly_stationary_30_days](#columnanomalystationarymean30dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyStationaryMean30DaysCheckSpec](#columnanomalystationarymean30dayscheckspec)| | | |
+|[mean_anomaly_stationary](#columnanomalystationarymeancheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyStationaryMeanCheckSpec](#columnanomalystationarymeancheckspec)| | | |
+|[median_anomaly_stationary_30_days](#columnanomalystationarymedian30dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyStationaryMedian30DaysCheckSpec](#columnanomalystationarymedian30dayscheckspec)| | | |
+|[median_anomaly_stationary](#columnanomalystationarymediancheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyStationaryMedianCheckSpec](#columnanomalystationarymediancheckspec)| | | |
+|[sum_anomaly_differencing_30_days](#columnanomalydifferencingsum30dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyDifferencingSum30DaysCheckSpec](#columnanomalydifferencingsum30dayscheckspec)| | | |
+|[sum_anomaly_differencing](#columnanomalydifferencingsumcheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyDifferencingSumCheckSpec](#columnanomalydifferencingsumcheckspec)| | | |
 |[mean_change](#columnchangemeancheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](#columnchangemeancheckspec)| | | |
 |[mean_change_yesterday](#columnchangemeansinceyesterdaycheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeMeanSinceYesterdayCheckSpec](#columnchangemeansinceyesterdaycheckspec)| | | |
 |[mean_change_7_days](#columnchangemeansince7dayscheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|[ColumnChangeMeanSince7DaysCheckSpec](#columnchangemeansince7dayscheckspec)| | | |
@@ -11651,8 +11741,8 @@ Container of built-in preconfigured data quality checks on a column level for de
 
 ___  
 
-## ColumnAnomalyMeanChange7DaysCheckSpec  
-Column level check that ensures that the mean value in a monitored column changes in a rate within a two-tailed percentile during last 7 days.  
+## ColumnAnomalyStationaryMean30DaysCheckSpec  
+Column level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
   
 
 
@@ -11667,9 +11757,9 @@ Column level check that ensures that the mean value in a monitored column change
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11689,8 +11779,8 @@ Column level check that ensures that the mean value in a monitored column change
 
 ___  
 
-## ColumnAnomalyMeanChange30DaysCheckSpec  
-Column level check that ensures that the mean value in a monitored column changes in a rate within a two-tailed percentile during last 30 days.  
+## ColumnAnomalyStationaryMeanCheckSpec  
+Column level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.  
   
 
 
@@ -11705,9 +11795,9 @@ Column level check that ensures that the mean value in a monitored column change
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaveragerule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverageRule1ParametersSpec](#anomalystationarypercentilemovingaveragerule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaveragerule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverageRule05ParametersSpec](#anomalystationarypercentilemovingaveragerule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaveragerule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverageRule01ParametersSpec](#anomalystationarypercentilemovingaveragerule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11727,46 +11817,8 @@ Column level check that ensures that the mean value in a monitored column change
 
 ___  
 
-## ColumnAnomalyMeanChange60DaysCheckSpec  
-Column level check that ensures that the mean value in a monitored column changes in a rate within a two-tailed percentile during last 60 days.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalyMedianChange7DaysCheckSpec  
-Column level check that ensures that the median in a monitored column changes in a rate within a two-tailed percentile during last 7 days.  
+## ColumnAnomalyStationaryMedian30DaysCheckSpec  
+Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
   
 
 
@@ -11781,9 +11833,9 @@ Column level check that ensures that the median in a monitored column changes in
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11803,8 +11855,8 @@ Column level check that ensures that the median in a monitored column changes in
 
 ___  
 
-## ColumnAnomalyMedianChange30DaysCheckSpec  
-Column level check that ensures that the median in a monitored column changes in a rate within a two-tailed percentile during last 30 days.  
+## ColumnAnomalyStationaryMedianCheckSpec  
+Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.  
   
 
 
@@ -11819,9 +11871,9 @@ Column level check that ensures that the median in a monitored column changes in
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaveragerule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverageRule1ParametersSpec](#anomalystationarypercentilemovingaveragerule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaveragerule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverageRule05ParametersSpec](#anomalystationarypercentilemovingaveragerule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaveragerule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverageRule01ParametersSpec](#anomalystationarypercentilemovingaveragerule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11841,46 +11893,8 @@ Column level check that ensures that the median in a monitored column changes in
 
 ___  
 
-## ColumnAnomalyMedianChange60DaysCheckSpec  
-Column level check that ensures that the median in a monitored column changes in a rate within a two-tailed percentile during last 60 days.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalySumChange7DaysCheckSpec  
-Column level check that ensures that the sum in a monitored column changes in a rate within a two-tailed percentile during last 7 days.  
+## ColumnAnomalyDifferencingSum30DaysCheckSpec  
+Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
   
 
 
@@ -11895,9 +11909,9 @@ Column level check that ensures that the sum in a monitored column changes in a 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin7DaysRuleParametersSpec](#changepercentilemovingwithin7daysruleparametersspec)| | | |
+|[warning](#anomalydifferencingpercentilemovingaverage30daysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec](#anomalydifferencingpercentilemovingaverage30daysrule1parametersspec)| | | |
+|[error](#anomalydifferencingpercentilemovingaverage30daysrule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec](#anomalydifferencingpercentilemovingaverage30daysrule05parametersspec)| | | |
+|[fatal](#anomalydifferencingpercentilemovingaverage30daysrule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec](#anomalydifferencingpercentilemovingaverage30daysrule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -11917,8 +11931,8 @@ Column level check that ensures that the sum in a monitored column changes in a 
 
 ___  
 
-## ColumnAnomalySumChange30DaysCheckSpec  
-Column level check that ensures that the sum in a monitored column changes in a rate within a two-tailed percentile during last 30 days.  
+## ColumnAnomalyDifferencingSumCheckSpec  
+Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.  
   
 
 
@@ -11933,47 +11947,9 @@ Column level check that ensures that the sum in a monitored column changes in a 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin30DaysRuleParametersSpec](#changepercentilemovingwithin30daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalySumChange60DaysCheckSpec  
-Column level check that ensures that the sum in a monitored column changes in a rate within a two-tailed percentile during last 60 days.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#changepercentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ChangePercentileMovingWithin60DaysRuleParametersSpec](#changepercentilemovingwithin60daysruleparametersspec)| | | |
+|[warning](#anomalydifferencingpercentilemovingaveragerule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec](#anomalydifferencingpercentilemovingaveragerule1parametersspec)| | | |
+|[error](#anomalydifferencingpercentilemovingaveragerule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec](#anomalydifferencingpercentilemovingaveragerule05parametersspec)| | | |
+|[fatal](#anomalydifferencingpercentilemovingaveragerule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec](#anomalydifferencingpercentilemovingaveragerule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -13410,15 +13386,12 @@ Container of built-in preconfigured data quality checks on a column level for de
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_mean_anomaly_7_days](#columnanomalymeanchange7dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 7 days.|[ColumnAnomalyMeanChange7DaysCheckSpec](#columnanomalymeanchange7dayscheckspec)| | | |
-|[daily_mean_anomaly_30_days](#columnanomalymeanchange30dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyMeanChange30DaysCheckSpec](#columnanomalymeanchange30dayscheckspec)| | | |
-|[daily_mean_anomaly_60_days](#columnanomalymeanchange60dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 60 days.|[ColumnAnomalyMeanChange60DaysCheckSpec](#columnanomalymeanchange60dayscheckspec)| | | |
-|[daily_median_anomaly_7_days](#columnanomalymedianchange7dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 7 days.|[ColumnAnomalyMedianChange7DaysCheckSpec](#columnanomalymedianchange7dayscheckspec)| | | |
-|[daily_median_anomaly_30_days](#columnanomalymedianchange30dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyMedianChange30DaysCheckSpec](#columnanomalymedianchange30dayscheckspec)| | | |
-|[daily_median_anomaly_60_days](#columnanomalymedianchange60dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 60 days.|[ColumnAnomalyMedianChange60DaysCheckSpec](#columnanomalymedianchange60dayscheckspec)| | | |
-|[daily_sum_anomaly_7_days](#columnanomalysumchange7dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 7 days.|[ColumnAnomalySumChange7DaysCheckSpec](#columnanomalysumchange7dayscheckspec)| | | |
-|[daily_sum_anomaly_30_days](#columnanomalysumchange30dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalySumChange30DaysCheckSpec](#columnanomalysumchange30dayscheckspec)| | | |
-|[daily_sum_anomaly_60_days](#columnanomalysumchange60dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.|[ColumnAnomalySumChange60DaysCheckSpec](#columnanomalysumchange60dayscheckspec)| | | |
+|[daily_mean_anomaly_stationary_30_days](#columnanomalystationarymean30dayscheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyStationaryMean30DaysCheckSpec](#columnanomalystationarymean30dayscheckspec)| | | |
+|[daily_mean_anomaly_stationary](#columnanomalystationarymeancheckspec)|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyStationaryMeanCheckSpec](#columnanomalystationarymeancheckspec)| | | |
+|[daily_median_anomaly_stationary_30_days](#columnanomalystationarymedian30dayscheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyStationaryMedian30DaysCheckSpec](#columnanomalystationarymedian30dayscheckspec)| | | |
+|[daily_median_anomaly_stationary](#columnanomalystationarymediancheckspec)|Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyStationaryMedianCheckSpec](#columnanomalystationarymediancheckspec)| | | |
+|[daily_sum_anomaly_differencing_30_days](#columnanomalydifferencingsum30dayscheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|[ColumnAnomalyDifferencingSum30DaysCheckSpec](#columnanomalydifferencingsum30dayscheckspec)| | | |
+|[daily_sum_anomaly_differencing](#columnanomalydifferencingsumcheckspec)|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|[ColumnAnomalyDifferencingSumCheckSpec](#columnanomalydifferencingsumcheckspec)| | | |
 |[daily_mean_change](#columnchangemeancheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](#columnchangemeancheckspec)| | | |
 |[daily_mean_change_yesterday](#columnchangemeansinceyesterdaycheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeMeanSinceYesterdayCheckSpec](#columnchangemeansinceyesterdaycheckspec)| | | |
 |[daily_mean_change_7_days](#columnchangemeansince7dayscheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|[ColumnChangeMeanSince7DaysCheckSpec](#columnchangemeansince7dayscheckspec)| | | |
@@ -14552,15 +14525,12 @@ Container of built-in preconfigured data quality checks on a column level for de
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_mean_anomaly_7_days](#columnanomalymean7dayscheckspec)|Verifies that the mean value in a column is within a percentile from measurements made during the last 7 days.|[ColumnAnomalyMean7DaysCheckSpec](#columnanomalymean7dayscheckspec)| | | |
-|[daily_partition_mean_anomaly_30_days](#columnanomalymean30dayscheckspec)|Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyMean30DaysCheckSpec](#columnanomalymean30dayscheckspec)| | | |
-|[daily_partition_mean_anomaly_60_days](#columnanomalymean60dayscheckspec)|Verifies that the mean value in a column is within a percentile from measurements made during the last 60 days.|[ColumnAnomalyMean60DaysCheckSpec](#columnanomalymean60dayscheckspec)| | | |
-|[daily_partition_median_anomaly_7_days](#columnanomalymedian7dayscheckspec)|Verifies that the median in a column is within a percentile from measurements made during the last 7 days.|[ColumnAnomalyMedian7DaysCheckSpec](#columnanomalymedian7dayscheckspec)| | | |
-|[daily_partition_median_anomaly_30_days](#columnanomalymedian30dayscheckspec)|Verifies that the median in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyMedian30DaysCheckSpec](#columnanomalymedian30dayscheckspec)| | | |
-|[daily_partition_median_anomaly_60_days](#columnanomalymedian60dayscheckspec)|Verifies that the median in a column is within a percentile from measurements made during the last 60 days.|[ColumnAnomalyMedian60DaysCheckSpec](#columnanomalymedian60dayscheckspec)| | | |
-|[daily_partition_sum_anomaly_7_days](#columnanomalysum7dayscheckspec)|Verifies that the sum in a column is within a percentile from measurements made during the last 7 days.|[ColumnAnomalySum7DaysCheckSpec](#columnanomalysum7dayscheckspec)| | | |
-|[daily_partition_sum_anomaly_30_days](#columnanomalysum30dayscheckspec)|Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalySum30DaysCheckSpec](#columnanomalysum30dayscheckspec)| | | |
-|[daily_partition_sum_anomaly_60_days](#columnanomalysum60dayscheckspec)|Verifies that the sum in a column is within a percentile from measurements made during the last 60 days.|[ColumnAnomalySum60DaysCheckSpec](#columnanomalysum60dayscheckspec)| | | |
+|[daily_partition_mean_anomaly_stationary_30_days](#columnanomalystationarymean30dayscheckspec)|Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryMean30DaysCheckSpec](#columnanomalystationarymean30dayscheckspec)| | | |
+|[daily_partition_mean_anomaly_stationary](#columnanomalystationarymeancheckspec)|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryMeanCheckSpec](#columnanomalystationarymeancheckspec)| | | |
+|[daily_partition_median_anomaly_stationary_30_days](#columnanomalystationarymedian30dayscheckspec)|Verifies that the median in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryMedian30DaysCheckSpec](#columnanomalystationarymedian30dayscheckspec)| | | |
+|[daily_partition_median_anomaly_stationary](#columnanomalystationarymediancheckspec)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryMedianCheckSpec](#columnanomalystationarymediancheckspec)| | | |
+|[daily_partition_sum_anomaly_stationary_30_days](#columnanomalystationarypartitionsum30dayscheckspec)|Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.|[ColumnAnomalyStationaryPartitionSum30DaysCheckSpec](#columnanomalystationarypartitionsum30dayscheckspec)| | | |
+|[daily_partition_sum_anomaly_stationary](#columnanomalystationarypartitionsumcheckspec)|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|[ColumnAnomalyStationaryPartitionSumCheckSpec](#columnanomalystationarypartitionsumcheckspec)| | | |
 |[daily_partition_mean_change](#columnchangemeancheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](#columnchangemeancheckspec)| | | |
 |[daily_partition_mean_change_yesterday](#columnchangemeansinceyesterdaycheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|[ColumnChangeMeanSinceYesterdayCheckSpec](#columnchangemeansinceyesterdaycheckspec)| | | |
 |[daily_partition_mean_change_7_days](#columnchangemeansince7dayscheckspec)|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|[ColumnChangeMeanSince7DaysCheckSpec](#columnchangemeansince7dayscheckspec)| | | |
@@ -14584,273 +14554,7 @@ Container of built-in preconfigured data quality checks on a column level for de
 
 ___  
 
-## ColumnAnomalyMean7DaysCheckSpec  
-Column level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 7 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalyMean30DaysCheckSpec  
-Column level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalyMean60DaysCheckSpec  
-Column level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 60 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmeansensorparametersspec)|Data quality check parameters|[ColumnNumericMeanSensorParametersSpec](#columnnumericmeansensorparametersspec)| | | |
-|[warning](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalyMedian7DaysCheckSpec  
-Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 7 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalyMedian30DaysCheckSpec  
-Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalyMedian60DaysCheckSpec  
-Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 60 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericmediansensorparametersspec)|Data quality check parameters|[ColumnNumericMedianSensorParametersSpec](#columnnumericmediansensorparametersspec)| | | |
-|[warning](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalySum7DaysCheckSpec  
-Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 7 days. Use in partitioned checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin7DaysRuleParametersSpec](#percentilemovingwithin7daysruleparametersspec)| | | |
-|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
-|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
-|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
-|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
-|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
-|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
-|data_grouping|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnAnomalySum30DaysCheckSpec  
+## ColumnAnomalyStationaryPartitionSum30DaysCheckSpec  
 Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.  
   
 
@@ -14866,9 +14570,9 @@ Column level check that ensures that the sum in a monitored column is within a t
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin30DaysRuleParametersSpec](#percentilemovingwithin30daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec](#anomalystationarypercentilemovingaverage30daysrule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -14888,8 +14592,8 @@ Column level check that ensures that the sum in a monitored column is within a t
 
 ___  
 
-## ColumnAnomalySum60DaysCheckSpec  
-Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 60 days. Use in partitioned checks.  
+## ColumnAnomalyStationaryPartitionSumCheckSpec  
+Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.  
   
 
 
@@ -14904,9 +14608,9 @@ Column level check that ensures that the sum in a monitored column is within a t
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Data quality check parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
-|[warning](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[error](#percentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
-|[fatal](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[PercentileMovingWithin60DaysRuleParametersSpec](#percentilemovingwithin60daysruleparametersspec)| | | |
+|[warning](#anomalystationarypercentilemovingaveragerule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[AnomalyStationaryPercentileMovingAverageRule1ParametersSpec](#anomalystationarypercentilemovingaveragerule1parametersspec)| | | |
+|[error](#anomalystationarypercentilemovingaveragerule05parametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|[AnomalyStationaryPercentileMovingAverageRule05ParametersSpec](#anomalystationarypercentilemovingaveragerule05parametersspec)| | | |
+|[fatal](#anomalystationarypercentilemovingaveragerule01parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[AnomalyStationaryPercentileMovingAverageRule01ParametersSpec](#anomalystationarypercentilemovingaveragerule01parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |

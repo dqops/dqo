@@ -1875,17 +1875,17 @@ public class TablesController {
 
         TableSpec tableSpec = tableWrapper.getSpec();
         if (dataGroupingConfigurationSpec.isPresent()) {
-            if (!Strings.isNullOrEmpty(tableSpec.getDefaultDataGrouping())) {
-                tableSpec.getGroupings().remove(tableSpec.getDefaultDataGrouping());
-                tableSpec.getGroupings().put(tableSpec.getDefaultDataGrouping(), dataGroupingConfigurationSpec.get());
+            if (!Strings.isNullOrEmpty(tableSpec.getDefaultGroupingName())) {
+                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec.get());
             } else {
                 tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec.get());
-                tableSpec.setDefaultDataGrouping(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+                tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
             }
         } else {
-            if (tableSpec.getDefaultDataGrouping() != null) {
-                tableSpec.getGroupings().remove(tableSpec.getDefaultDataGrouping());
-                tableSpec.setDefaultDataGrouping(null);
+            if (tableSpec.getDefaultGroupingName() != null) {
+                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                tableSpec.setDefaultGroupingName(null);
             }
         }
         userHomeContext.flush();

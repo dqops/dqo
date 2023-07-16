@@ -132,7 +132,7 @@ public class SampleTableMetadataObjectMother {
         TableSpec tableSpec = new TableSpec(physicalTableName);
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
         tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
-        tableSpec.setDefaultDataGrouping(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 
         for (Column<?> dataColumn : sampleTable.getTable().columns()) {

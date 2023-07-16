@@ -19,6 +19,7 @@ import com.dqops.BaseTest;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
@@ -50,8 +51,9 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SpecToModelCheckMappingService specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl());
-        SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService);
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
+        SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService,
+                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory());
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.sut = new CheckDocumentationModelFactoryImpl(
                 similarCheckMatchingService,
@@ -75,20 +77,10 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
     }
 
     @Test
-    void makeDocumentationForTableChecks_whenCalled_thenGeneratesTableLevelSensorDocumentation() {
+    void makeDocumentationForTableChecks_whenCalled_thenGeneratesTableLevelSensorDocumentation() throws Exception {
         List<CheckCategoryDocumentationModel> documentationModels = this.sut.makeDocumentationForTableChecks();
         Assertions.assertTrue(documentationModels.size() > 1);
-    }
 
-    @Test
-    void makeDocumentationForColumnChecks_whenCalled_thenGeneratesColumnLevelSensorDocumentation() {
-        List<CheckCategoryDocumentationModel> documentationModels = this.sut.makeDocumentationForColumnChecks();
-        Assertions.assertTrue(documentationModels.size() > 1);
-    }
-
-    @Test
-    void makeDocumentationForTableChecks_whenCalledDuringTesting_thenGeneratesFileWithCheckNames() throws Exception {
-        List<CheckCategoryDocumentationModel> documentationModels = this.sut.makeDocumentationForTableChecks();
         List<String> listOfAllCheckNames = documentationModels.stream()
                 .flatMap(category -> category.getCheckGroups().stream())
                 .flatMap(checkGroup -> checkGroup.getAllChecks().stream())
@@ -100,8 +92,9 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
     }
 
     @Test
-    void makeDocumentationForColumnChecks_whenCalledDuringTesting_thenGeneratesFileWithCheckNames() throws Exception {
+    void makeDocumentationForColumnChecks_whenCalled_thenGeneratesColumnLevelSensorDocumentation() throws Exception {
         List<CheckCategoryDocumentationModel> documentationModels = this.sut.makeDocumentationForColumnChecks();
+        Assertions.assertTrue(documentationModels.size() > 1);
         List<String> listOfAllCheckNames = documentationModels.stream()
                 .flatMap(category -> category.getCheckGroups().stream())
                 .flatMap(checkGroup -> checkGroup.getAllChecks().stream())

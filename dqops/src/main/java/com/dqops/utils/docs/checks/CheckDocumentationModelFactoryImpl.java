@@ -357,24 +357,26 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         providerSamples.sort(checkProviderRenderedSqlDocumentationModelComparator);
         checkDocumentationModel.setProviderTemplates(providerSamples);
 
-        trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
-        trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the second grouping key"));
-        DataGroupingConfigurationSpec groupingConfigurationSpec = new DataGroupingConfigurationSpec();
-        groupingConfigurationSpec.setLevel1(DataGroupingDimensionSpec.createForColumn("country"));
-        groupingConfigurationSpec.setLevel2(DataGroupingDimensionSpec.createForColumn("state"));
-        String groupingName = "group_by_country_and_state";
-        trimmedTableSpec.getGroupings().put(groupingName, groupingConfigurationSpec);
-        trimmedTableSpec.setDefaultDataGrouping(groupingName);
+        if (similarCheckModel.getCheckModel().isSupportsGrouping()) {
+            trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
+            trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the second grouping key"));
+            DataGroupingConfigurationSpec groupingConfigurationSpec = new DataGroupingConfigurationSpec();
+            groupingConfigurationSpec.setLevel1(DataGroupingDimensionSpec.createForColumn("country"));
+            groupingConfigurationSpec.setLevel2(DataGroupingDimensionSpec.createForColumn("state"));
+            String groupingName = "group_by_country_and_state";
+            trimmedTableSpec.getGroupings().put(groupingName, groupingConfigurationSpec);
+            trimmedTableSpec.setDefaultGroupingName(groupingName);
 
-        TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
-        String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
-        checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
-        checkDocumentationModel.setSplitSampleYamlWithDataStreams(splitStringByEndOfLine(yamlSampleWithDataStreams));
-        createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
+            TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
+            String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
+            checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
+            checkDocumentationModel.setSplitSampleYamlWithDataStreams(splitStringByEndOfLine(yamlSampleWithDataStreams));
+            createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
-        List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
-        providerSamplesDataStream.sort(checkProviderRenderedSqlDocumentationModelComparator);
-        checkDocumentationModel.setProviderTemplatesDataStreams(providerSamplesDataStream);
+            List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
+            providerSamplesDataStream.sort(checkProviderRenderedSqlDocumentationModelComparator);
+            checkDocumentationModel.setProviderTemplatesDataStreams(providerSamplesDataStream);
+        }
 
 
         // TODO: generate sample CLI commands
@@ -435,9 +437,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         List<String> splitYaml = List.of(yamlSampleWithDataStreams.split("\\r?\\n|\\r"));
 
         for (int i = 0; i <= splitYaml.size(); i++) {
-            if (splitYaml.get(i).contains("data_streams")) {
+            if (splitYaml.get(i).contains("default_grouping_name:")) {
                 int firstSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
-                int firstSectionEndMarker = firstSectionBeginMarker + 7; // +7 because first data stream section includes 7 lines
+                int firstSectionEndMarker = firstSectionBeginMarker + 8; // +8 because first data group section includes 9 lines
 
                 checkDocumentationModel.setFirstSectionBeginMarker(firstSectionBeginMarker);
                 checkDocumentationModel.setFirstSectionEndMarker(firstSectionEndMarker);
@@ -531,12 +533,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                     String renderedTemplate = this.jinjaTemplateRenderService.renderTemplate(sqlTemplate, templateRenderParameters);
                     providerDocModel.setRenderedTemplate(renderedTemplate);
                     providerDocModel.setListOfRenderedTemplate(splitStringByEndOfLine(renderedTemplate));
+
+                    results.add(providerDocModel);
                 }
                 catch (Exception ex) {
                     System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName() + " for provider: " + providerType + ", error: " + ex.getMessage());
                 }
             }
-            results.add(providerDocModel);
         }
 
         return results;

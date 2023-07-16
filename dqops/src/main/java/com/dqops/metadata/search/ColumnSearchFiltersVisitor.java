@@ -129,7 +129,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
         dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableWrapper.getSpec().getGroupings());
-        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableWrapper.getSpec().getDefaultDataGrouping());
+        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableWrapper.getSpec().getDefaultGroupingName());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -162,7 +162,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
         dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableSpec.getGroupings());
-        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableSpec.getDefaultDataGrouping());
+        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableSpec.getDefaultGroupingName());
         if (enabledFilter != null) {
             if (enabledFilter && tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;

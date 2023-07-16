@@ -89,7 +89,7 @@ public class DataGroupingConfigurationsController {
         List<String> dataGroupingNamesList = new ArrayList<>(dataGroupingsMapping.keySet());
         for (int i = 0; i < dataGroupingNamesList.size() ; i++) {
             String groupingConfigurationName = dataGroupingNamesList.get(i);
-            boolean isDefaultDataGrouping = Objects.equals(tableSpec.getDefaultDataGrouping(), groupingConfigurationName);
+            boolean isDefaultDataGrouping = Objects.equals(tableSpec.getDefaultGroupingName(), groupingConfigurationName);
             result.add(new DataGroupingConfigurationBasicModel(){{
                 setConnectionName(connectionName);
                 setSchemaName(schemaName);
@@ -199,8 +199,8 @@ public class DataGroupingConfigurationsController {
         if (!newName.equals(dataGroupingConfigurationName)) {
             // If renaming actually happened.
             dataGroupingMapping.remove(dataGroupingConfigurationName);
-            if (Objects.equals(tableSpec.getDefaultDataGrouping(), dataGroupingConfigurationName)) {
-                tableSpec.setDefaultDataGrouping(newName);
+            if (Objects.equals(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationName)) {
+                tableSpec.setDefaultGroupingName(newName);
             }
         }
 
@@ -287,9 +287,9 @@ public class DataGroupingConfigurationsController {
         }
 
         if (Strings.isNullOrEmpty(dataGroupingConfigurationName)) {
-            tableSpec.setDefaultDataGrouping(null);
+            tableSpec.setDefaultGroupingName(null);
         } else {
-            tableSpec.setDefaultDataGrouping(dataGroupingConfigurationName);
+            tableSpec.setDefaultGroupingName(dataGroupingConfigurationName);
         }
 
         userHomeContext.flush();
@@ -338,8 +338,8 @@ public class DataGroupingConfigurationsController {
 
         // If data grouping configuration is not found, return success (idempotence).
         dataGroupingsMap.remove(dataGroupingConfigurationName);
-        if (Objects.equals(dataGroupingConfigurationName, tableSpec.getDefaultDataGrouping())) {
-            tableSpec.setDefaultDataGrouping(null);
+        if (Objects.equals(dataGroupingConfigurationName, tableSpec.getDefaultGroupingName())) {
+            tableSpec.setDefaultGroupingName(null);
         }
 
         userHomeContext.flush();

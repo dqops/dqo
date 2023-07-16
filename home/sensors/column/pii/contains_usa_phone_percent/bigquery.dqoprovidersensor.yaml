@@ -4,5 +4,5 @@ kind: provider_sensor
 spec:
   type: sql_template
   java_class_name: com.dqops.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner
-  supports_grouping: false
+  supports_grouping: true
   supports_partitioned_checks: true

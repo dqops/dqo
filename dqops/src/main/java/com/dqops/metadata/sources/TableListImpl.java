@@ -94,7 +94,7 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
                 if (defaultDataGroupingConfiguration != null) {
                     final String dataGroupingConfigurationName = DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME;
                     sourceTableSpec.getGroupings().put(dataGroupingConfigurationName, defaultDataGroupingConfiguration);
-                    sourceTableSpec.setDefaultDataGrouping(dataGroupingConfigurationName);
+                    sourceTableSpec.setDefaultGroupingName(dataGroupingConfigurationName);
                 }
             }
             else {

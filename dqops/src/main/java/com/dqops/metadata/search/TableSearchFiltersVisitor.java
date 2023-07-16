@@ -129,7 +129,7 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         if (dataGroupingConfigurationSearcherObject != null) {
             dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableWrapper.getSpec().getGroupings());
-            dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableWrapper.getSpec().getDefaultDataGrouping());
+            dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableWrapper.getSpec().getDefaultGroupingName());
         }
 
         LabelSetSpec overriddenLabels = new LabelSetSpec();

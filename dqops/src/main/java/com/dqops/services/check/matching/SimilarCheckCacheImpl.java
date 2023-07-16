@@ -19,6 +19,7 @@ package com.dqops.services.check.matching;
 import com.dqops.checks.CheckTarget;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.utils.reflection.ReflectionService;
@@ -45,9 +46,11 @@ public class SimilarCheckCacheImpl implements SimilarCheckCache {
      * Default dependency injection constructor.
      */
     @Autowired
-    public SimilarCheckCacheImpl(ReflectionService reflectionService, SensorDefinitionFindService sensorDefinitionFindService) {
+    public SimilarCheckCacheImpl(ReflectionService reflectionService,
+                                 SensorDefinitionFindService sensorDefinitionFindService,
+                                 DqoHomeContextFactory dqoHomeContextFactory) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, sensorDefinitionFindService);
-        this.similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService);
+        this.similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, dqoHomeContextFactory);
     }
 
     /**

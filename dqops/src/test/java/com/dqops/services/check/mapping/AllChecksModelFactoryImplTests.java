@@ -25,6 +25,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
@@ -60,17 +61,18 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
                 triggerFactory,
                 defaultTimeZoneProvider);
 
+        DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
         SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(
                 reflectionService,
                 sensorDefinitionFindService,
                 schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
 
         ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(
                 UserHomeContextFactoryObjectMother.createWithInMemoryContext(),
-                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory()
+                dqoHomeContextFactory
         );
 
         this.sut = new AllChecksModelFactoryImpl(

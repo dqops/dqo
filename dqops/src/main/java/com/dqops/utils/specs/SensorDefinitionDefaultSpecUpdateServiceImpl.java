@@ -102,7 +102,7 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                 ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorWrapper.getSpec();
                 providerSensorDefinitionSpec.setJavaClassName(abstractSensorParametersSpec.getSensorRunnerClass().getName());
                 providerSensorDefinitionSpec.setSupportsGrouping(
-                        sqlTemplate.contains("lib.render_data_stream_projections") &&
+                        sqlTemplate.contains("lib.render_data_grouping_projections") &&
                                 abstractSensorParametersSpec.getSupportsDataStreams());
                 providerSensorDefinitionSpec.setSupportsPartitionedChecks(
                         sqlTemplate.contains("lib.render_time_dimension_projection") &&
