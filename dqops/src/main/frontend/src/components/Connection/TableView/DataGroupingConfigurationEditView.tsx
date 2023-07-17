@@ -137,8 +137,9 @@ const DataGroupingConfigurationEditView = ({
     <div className="px-4 text-sm">
       <ActionGroup
         onUpdate={onUpdate}
-        isUpdated={name === '' ? false : true}
+        isUpdated={isUpdated ? true : false}
         isUpdating={isUpdating}
+        isDisabled={false}
       />
       <div className="flex py-4 border-b border-gray-300 px-8 -mx-4 justify-between items-center">
         {selectedGroupingConfiguration ? (
