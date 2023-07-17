@@ -63,8 +63,10 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
         for (SimilarChecksGroup similarChecksGroup : allCheckGroups) {
             for (SimilarCheckModel similarCheckModel : similarChecksGroup.getSimilarChecks()) {
                 CheckModel checkModel = similarCheckModel.getCheckModel();
+                String categoryName = similarCheckModel.getCategory();
                 String fullCheckName = CheckDefinitionList.makeCheckName(similarCheckModel.getCheckTarget(),
-                        similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), checkModel.getCheckName());
+                        similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(),
+                        categoryName, checkModel.getCheckName());
 
                 String sensorName = checkModel.getSensorName();
                 String ruleName = checkModel.getRule().getError().getRuleName();

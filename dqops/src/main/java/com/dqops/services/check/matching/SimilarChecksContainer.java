@@ -69,7 +69,11 @@ public class SimilarChecksContainer {
                 SimilarCheckSensorRuleKey similarCheckMatchKey = checkModel.createSimilarCheckMatchKey();
 
                 SimilarChecksGroup similarCheckGroup = this.getSimilarCheckGroup(similarCheckMatchKey);
-                SimilarCheckModel similarCheckModel = new SimilarCheckModel(checkTarget, checkType, timeScale, categoryModel.getCategory(), checkModel);
+                String categoryName = categoryModel.getCategory();
+                if (categoryName.startsWith("comparisons/")) {
+                    categoryName = "comparisons";
+                }
+                SimilarCheckModel similarCheckModel = new SimilarCheckModel(checkTarget, checkType, timeScale, categoryName, checkModel);
                 similarCheckGroup.addSimilarCheck(similarCheckModel);
 
                 if (this.similarChecksByCheckName.containsKey(checkModel.getCheckName())) {

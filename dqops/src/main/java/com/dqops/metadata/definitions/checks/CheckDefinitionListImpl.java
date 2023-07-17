@@ -85,6 +85,7 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
      * @param checkTarget    Check target (table or column).
      * @param checkType      Check type (profiling, recurring, partitioned).
      * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
+     * @param category       Check category name.
      * @param checkName      Check name.
      * @return Check specification when the check was found or null when the check is unknown.
      */
@@ -92,8 +93,9 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
     public CheckDefinitionSpec getCheckDefinitionSpec(CheckTarget checkTarget,
                                                       CheckType checkType,
                                                       CheckTimeScale checkTimeScale,
+                                                      String category,
                                                       String checkName) {
-        String fullCheckName = CheckDefinitionList.makeCheckName(checkTarget, checkType, checkTimeScale, checkName);
+        String fullCheckName = CheckDefinitionList.makeCheckName(checkTarget, checkType, checkTimeScale, category, checkName);
 
         CheckDefinitionWrapper checkDefinitionWrapper = this.getByObjectName(fullCheckName, true);
         if (checkDefinitionWrapper == null) {

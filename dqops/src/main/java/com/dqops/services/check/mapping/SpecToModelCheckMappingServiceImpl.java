@@ -349,6 +349,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
 
         for (FieldInfo checkFieldInfo : checksFields) {
+            if (checkFieldInfo.getDataType() != ParameterDataType.object_type) {
+                continue;
+            }
+
             AbstractSpec checkSpecObjectNullable = (AbstractSpec)checkFieldInfo.getFieldValue(checkCategoryParentNode);
             AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                     (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);

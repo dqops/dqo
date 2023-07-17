@@ -823,7 +823,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 CustomCheckSpec customCheckSpec = (CustomCheckSpec) checkSpec;
                 customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
                         rootChecksContainerSpec.getCheckTarget(), checkType,
-                        rootChecksContainerSpec.getCheckTimeScale(), customCheckSpec.getCheckName());
+                        rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
             }
 
             Optional<HierarchyNode> comparisonCheckCategory = Lists.reverse(nodesOnPath)
@@ -951,7 +951,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 CustomCheckSpec customCheckSpec = (CustomCheckSpec) checkSpec;
                 customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
                         rootChecksContainerSpec.getCheckTarget(), checkType,
-                        rootChecksContainerSpec.getCheckTimeScale(), customCheckSpec.getCheckName());
+                        rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
             }
 
             TimeWindowFilterParameters timeWindowConfigurationFromComparedTable =

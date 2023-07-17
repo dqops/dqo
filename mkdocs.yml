@@ -108,6 +108,8 @@ nav:
         - total row count match percent: 'checks/table/accuracy/total-row-count-match-percent.md'
       - availability:
         - table availability: 'checks/table/availability/table-availability.md'
+      - comparisons:
+        - row count match: 'checks/table/comparisons/row-count-match.md'
       - schema:
         - column count: 'checks/table/schema/column-count.md'
         - column count changed: 'checks/table/schema/column-count-changed.md'
@@ -164,6 +166,13 @@ nav:
       - bool:
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'
+      - comparisons:
+        - sum match: 'checks/column/comparisons/sum-match.md'
+        - min match: 'checks/column/comparisons/min-match.md'
+        - max match: 'checks/column/comparisons/max-match.md'
+        - mean match: 'checks/column/comparisons/mean-match.md'
+        - not null count match: 'checks/column/comparisons/not-null-count-match.md'
+        - null count match: 'checks/column/comparisons/null-count-match.md'
       - consistency:
         - date match format percent: 'checks/column/consistency/date-match-format-percent.md'
         - string datatype changed: 'checks/column/consistency/string-datatype-changed.md'

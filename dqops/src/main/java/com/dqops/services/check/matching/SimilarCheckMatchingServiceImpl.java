@@ -29,6 +29,7 @@ import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.ExecutionContext;
+import com.dqops.metadata.comparisons.ReferenceTableSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHomeImpl;
@@ -107,6 +108,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(false);
+        tableSpec.getReferenceTables().put("comparison_to_source_of_truth", new ReferenceTableSpec());
         tableWrapper.setSpec(tableSpec);
 
         SimilarChecksContainer similarChecksContainer = new SimilarChecksContainer();
@@ -156,6 +158,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(true);
         tableWrapper.setSpec(tableSpec);
+        tableSpec.getReferenceTables().put("comparison_to_source_of_truth", new ReferenceTableSpec());
         ColumnSpec columnSpec = tableSpec.getColumns().getAt(0);
 
         SimilarChecksContainer similarChecksContainer = new SimilarChecksContainer();

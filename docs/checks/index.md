@@ -31,6 +31,21 @@ Checks whether the table is accessible and available for use.
 
 
 
+###comparisons  
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_match](./table/comparisons/row-count-match/#row-count-match)|profiling|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.|
+|[daily_row_count_match](./table/comparisons/row-count-match/#daily-row-count-match)|recurring|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_row_count_match](./table/comparisons/row-count-match/#monthly-row-count-match)|recurring|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_row_count_match](./table/comparisons/row-count-match/#daily-partition-row-count-match)|partitioned|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause on the time period (the daily partition) and all other data grouping columns. Stores the most recent captured value for each daily partition that was analyzed.|
+|[monthly_partition_row_count_match](./table/comparisons/row-count-match/#monthly-partition-row-count-match)|partitioned|Verifies that the row count of the tested (parent) table matches the row count of the reference table, for each monthly partition (grouping rows by the time period, truncated to the month). Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each monthly partition and optionally data groups.|
+
+
+
+
+
 ###schema  
 Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.
 
@@ -250,7 +265,13 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
+
+
+
 ## **Column checks**
+
+
+
 
 
 
@@ -477,6 +498,66 @@ Calculates the percentage of data in a Boolean format.
 |[monthly_false_percent](./column/bool/false-percent/#monthly-false-percent)|recurring|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[daily_partition_false_percent](./column/bool/false-percent/#daily-partition-false-percent)|partitioned|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_false_percent](./column/bool/false-percent/#monthly-partition-false-percent)|partitioned|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+
+
+
+
+###comparisons  
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[sum_match](./column/comparisons/sum-match/#sum-match)|profiling|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_sum_match](./column/comparisons/sum-match/#daily-sum-match)|recurring|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_sum_match](./column/comparisons/sum-match/#monthly-sum-match)|recurring|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_sum_match](./column/comparisons/sum-match/#daily-partition-sum-match)|partitioned|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_sum_match](./column/comparisons/sum-match/#monthly-partition-sum-match)|partitioned|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[min_match](./column/comparisons/min-match/#min-match)|profiling|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_min_match](./column/comparisons/min-match/#daily-min-match)|recurring|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_min_match](./column/comparisons/min-match/#monthly-min-match)|recurring|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_min_match](./column/comparisons/min-match/#daily-partition-min-match)|partitioned|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_min_match](./column/comparisons/min-match/#monthly-partition-min-match)|partitioned|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[max_match](./column/comparisons/max-match/#max-match)|profiling|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_max_match](./column/comparisons/max-match/#daily-max-match)|recurring|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_max_match](./column/comparisons/max-match/#monthly-max-match)|recurring|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_max_match](./column/comparisons/max-match/#daily-partition-max-match)|partitioned|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_max_match](./column/comparisons/max-match/#monthly-partition-max-match)|partitioned|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[mean_match](./column/comparisons/mean-match/#mean-match)|profiling|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_mean_match](./column/comparisons/mean-match/#daily-mean-match)|recurring|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_mean_match](./column/comparisons/mean-match/#monthly-mean-match)|recurring|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_mean_match](./column/comparisons/mean-match/#daily-partition-mean-match)|partitioned|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_mean_match](./column/comparisons/mean-match/#monthly-partition-mean-match)|partitioned|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[not_null_count_match](./column/comparisons/not-null-count-match/#not-null-count-match)|profiling|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_not_null_count_match](./column/comparisons/not-null-count-match/#daily-not-null-count-match)|recurring|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_not_null_count_match](./column/comparisons/not-null-count-match/#monthly-not-null-count-match)|recurring|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_not_null_count_match](./column/comparisons/not-null-count-match/#daily-partition-not-null-count-match)|partitioned|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_not_null_count_match](./column/comparisons/not-null-count-match/#monthly-partition-not-null-count-match)|partitioned|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[null_count_match](./column/comparisons/null-count-match/#null-count-match)|profiling|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds.|
+|[daily_null_count_match](./column/comparisons/null-count-match/#daily-null-count-match)|recurring|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_null_count_match](./column/comparisons/null-count-match/#monthly-null-count-match)|recurring|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|
+|[daily_partition_null_count_match](./column/comparisons/null-count-match/#daily-partition-null-count-match)|partitioned|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|
+|[monthly_partition_null_count_match](./column/comparisons/null-count-match/#monthly-partition-null-count-match)|partitioned|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|
 
 
 
