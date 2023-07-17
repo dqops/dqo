@@ -49,7 +49,6 @@ For more information about different categories of checks, see [DQO concepts sec
 7. Synchronize locally stored results with your DQO Cloud account to be able to view the results on the dashboards.
 
     To synchronize all the data click on Synchronize button in the upper right corner of the navigation menu.
-8. 
 
 ### Configure date or datetime column for partition checks
 
@@ -96,8 +95,13 @@ To configure the event and/or ingestion timestamp columns:
 Data quality checks are stored in YAML configuration files. YAMl configuration files are located in the `./sources` folder.
 The complete DQO YAML schema can be found [here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json).
 
-The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install YAML 
-extension by RedHat and Better Jinja by Samuel Colvin
+The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
+extension by RedHat and Better Jinja by Samuel Colvin.
+
+![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
+
+![Better Jinja extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/better-jinja-extension.png)
+
 
 To add and run data quality checks using the DQO Shell, follow the steps below. 
 
