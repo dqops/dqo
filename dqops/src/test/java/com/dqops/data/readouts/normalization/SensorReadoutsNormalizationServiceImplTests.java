@@ -72,7 +72,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         connectionWrapper.getSpec().setProviderType(ProviderType.bigquery);
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
-        tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
+        tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
 		checkSpec = new TableRowCountCheckSpec();
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
 		tableSpec.getProfilingChecks().getVolume().setRowCount(checkSpec);
@@ -83,7 +83,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 CheckType.PROFILING,
                 null, // time series
                 new TimeWindowFilterParameters(),
-                tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
+                tableSpec.getDefaultDataGroupingConfiguration(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 null,
@@ -280,7 +280,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
 		this.table.addColumns(TextColumn.create("grouping_level_1", "US"));
-        this.tableSpec.getGroupings().getFirstDataGroupingConfiguration()
+        this.tableSpec.getDefaultDataGroupingConfiguration()
                 .setLevel1(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 CheckTimeScale.daily, "date"));
@@ -305,7 +305,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
 		this.table.addColumns(TextColumn.create("grouping_level_2", "US"));
-        this.tableSpec.getGroupings().getFirstDataGroupingConfiguration()
+        this.tableSpec.getDefaultDataGroupingConfiguration()
                 .setLevel2(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 CheckTimeScale.daily, "date"));

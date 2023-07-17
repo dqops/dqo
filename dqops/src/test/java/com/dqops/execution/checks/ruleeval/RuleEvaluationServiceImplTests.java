@@ -86,7 +86,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         connectionWrapper.getSpec().setProviderType(ProviderType.bigquery);
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
-        tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
+        tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
 		checkSpec = new TableRowCountCheckSpec();
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
 		tableSpec.getProfilingChecks().getVolume().setRowCount(this.checkSpec);
@@ -97,7 +97,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 CheckType.PROFILING,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),
-                tableSpec.getGroupings().getFirstDataGroupingConfiguration(),
+                tableSpec.getDefaultDataGroupingConfiguration(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 null,
@@ -429,7 +429,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     void evaluateRules_whenTwoRowsForDifferentTimeSeriesAndOneRule_thenReturnsTwoResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0, 10.0));
 		this.table.addColumns(TextColumn.create("grouping_level_1", "one", "two"));
-        this.tableSpec.getGroupings().getFirstDataGroupingConfiguration()
+        this.tableSpec.getDefaultDataGroupingConfiguration()
                 .setLevel1(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 CheckTimeScale.daily, "date"));
