@@ -74,7 +74,13 @@ export default function UserProfile({ name, email }: UserProfile) {
         </div>
         <div className="font-bold h-8 ml-1">Account limits:</div>
         <div className="flex justify-between items-center">
-          <div className="ml-1">Connections:</div>
+          <div className="ml-1">Users:</div>
+          <div className="mr-1">
+            {userProfile?.users_limit ? userProfile.users_limit : '-'}
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="ml-1">Monitored connections:</div>
           <div className="mr-1">
             {userProfile?.connections_limit
               ? userProfile?.connections_limit
@@ -82,19 +88,13 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="ml-1">Users:</div>
+          <div className="ml-1">Total monitored tables:</div>
           <div className="mr-1">
-            {userProfile?.users_limit ? userProfile.users_limit : '-'}
+            {userProfile?.tables_limit ? userProfile.tables_limit : '-'}
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="ml-1">Months:</div>
-          <div className="mr-1">
-            {userProfile?.months_limit ? userProfile.months_limit : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Connection Tables:</div>
+          <div className="ml-1">Tables per connection:</div>
           <div className="mr-1">
             {userProfile?.connection_tables_limit
               ? userProfile.connection_tables_limit
@@ -102,15 +102,15 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="ml-1">Tables:</div>
+          <div className="ml-1">Concurrent jobs:</div>
           <div className="mr-1">
-            {userProfile?.tables_limit ? userProfile.tables_limit : '-'}
+            {userProfile?.jobs_limit ? userProfile.jobs_limit : '-'}
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="ml-1">Jobs:</div>
+          <div className="ml-1">Months in warehouse:</div>
           <div className="mr-1">
-            {userProfile?.jobs_limit ? userProfile.jobs_limit : '-'}
+            {userProfile?.months_limit ? userProfile.months_limit : '-'}
           </div>
         </div>
         <div className="w-full text-center flex justify-center items-center h-20 text-black">
