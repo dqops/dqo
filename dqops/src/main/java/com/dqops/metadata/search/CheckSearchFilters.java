@@ -48,6 +48,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private CheckType checkType;
     private CheckTimeScale timeScale;
     private String checkCategory;
+    private String dataComparisonName;
     private String checkName;
     private String sensorName;
     private Boolean checkConfigured;
@@ -212,6 +213,22 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     public void setCheckCategory(String checkCategory) {
         this.checkCategory = checkCategory;
+    }
+
+    /**
+     * Returns the data comparison name (the name of a reference table configuration).
+     * @return The name of the data comparison.
+     */
+    public String getDataComparisonName() {
+        return dataComparisonName;
+    }
+
+    /**
+     * Sets the name of the data comparison (the reference table name).
+     * @param dataComparisonName The name of the reference table for table comparisons.
+     */
+    public void setDataComparisonName(String dataComparisonName) {
+        this.dataComparisonName = dataComparisonName;
     }
 
     /**

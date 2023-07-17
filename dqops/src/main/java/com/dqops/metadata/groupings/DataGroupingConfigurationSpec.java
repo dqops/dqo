@@ -349,39 +349,39 @@ public class DataGroupingConfigurationSpec extends AbstractSpec {
     public int countConfiguredLevels() {
         int maxConfiguredLevel = 0;
         if (this.level1 != null) {
-            maxConfiguredLevel = 1;
+            maxConfiguredLevel++;
         }
 
         if (this.level2 != null) {
-            maxConfiguredLevel = 2;
+            maxConfiguredLevel++;
         }
 
         if (this.level3 != null) {
-            maxConfiguredLevel = 3;
+            maxConfiguredLevel++;
         }
 
         if (this.level4 != null) {
-            maxConfiguredLevel = 4;
+            maxConfiguredLevel++;
         }
 
         if (this.level5 != null) {
-            maxConfiguredLevel = 5;
+            maxConfiguredLevel++;
         }
 
         if (this.level6 != null) {
-            maxConfiguredLevel = 6;
+            maxConfiguredLevel++;
         }
 
         if (this.level7 != null) {
-            maxConfiguredLevel = 7;
+            maxConfiguredLevel++;
         }
 
         if (this.level8 != null) {
-            maxConfiguredLevel = 8;
+            maxConfiguredLevel++;
         }
 
         if (this.level9 != null) {
-            maxConfiguredLevel = 9;
+            maxConfiguredLevel++;
         }
 
         return maxConfiguredLevel;

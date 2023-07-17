@@ -42,6 +42,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+
 @SpringBootTest
 public class JinjaTemplateRenderServiceImplTests extends BaseTest {
     private JinjaTemplateRenderServiceImpl sut;
@@ -71,7 +73,8 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 new ProviderSensorDefinitionSpec(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME,
-                SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME
+                SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME,
+                new ArrayList<>()
         );
     }
 

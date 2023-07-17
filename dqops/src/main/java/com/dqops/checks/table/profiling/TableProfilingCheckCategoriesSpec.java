@@ -19,7 +19,6 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.comparison.CheckCategoriesTableComparisonMapParent;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
@@ -46,7 +45,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec
-        implements TimeSeriesConfigurationProvider, CheckCategoriesTableComparisonMapParent {
+        implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);
@@ -206,6 +205,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns the dictionary of comparisons.
      * @return Dictionary of comparisons.
      */
+    @Override
     public TableComparisonProfilingChecksSpecMap getComparisons() {
         return comparisons;
     }

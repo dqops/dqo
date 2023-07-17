@@ -28,6 +28,15 @@ import java.util.LinkedHashMap;
 public class GroupedSensorsCollection {
     private int standaloneQueryNextId = 0;
     private final LinkedHashMap<SensorGroupingKey, PreparedSensorsGroup> sensorGroups = new LinkedHashMap<>();
+    private final int maxQueriesInGroup;
+
+    /**
+     * Creates a group configuration, given the maximum number of queries to use in a group.
+     * @param maxQueriesInGroup Max queries in a group.
+     */
+    public GroupedSensorsCollection(int maxQueriesInGroup) {
+        this.maxQueriesInGroup = maxQueriesInGroup;
+    }
 
     /**
      * Returns a collection of prepared sensor groups that were identified and could be executed as a single, merged query.
@@ -50,6 +59,13 @@ public class GroupedSensorsCollection {
         PreparedSensorsGroup preparedSensorsGroup = this.sensorGroups.get(sensorGroupingKey);
         if (preparedSensorsGroup == null) {
             preparedSensorsGroup = new PreparedSensorsGroup();
+            this.sensorGroups.put(sensorGroupingKey, preparedSensorsGroup);
+        }
+
+        if (preparedSensorsGroup.size() >= this.maxQueriesInGroup) {
+            SensorGroupingKey sensorGroupingKeyForOldGroup = sensorGroupingKey.createWithNewGroupingId(standaloneQueryNextId++);
+            this.sensorGroups.put(sensorGroupingKeyForOldGroup, preparedSensorsGroup);
+            preparedSensorsGroup = new PreparedSensorsGroup(); // new empty group
             this.sensorGroups.put(sensorGroupingKey, preparedSensorsGroup);
         }
 

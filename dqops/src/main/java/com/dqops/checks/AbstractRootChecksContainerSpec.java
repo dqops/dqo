@@ -15,6 +15,7 @@
  */
 package com.dqops.checks;
 
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildFieldEntry;
@@ -108,6 +109,12 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
      */
     @JsonIgnore
     public abstract CheckRunRecurringScheduleGroup getSchedulingGroup();
+
+    /**
+     * Returns the comparisons container for table comparison checks, indexed by the reference table configuration name.
+     * @return Table comparison container.
+     */
+    public abstract AbstractComparisonCheckCategorySpecMap<?> getComparisons();
 
     /**
      * Checks if there are any configured checks (not null) in any check category.

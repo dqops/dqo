@@ -36,6 +36,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sensor execution parameter object that contains all objects required to run the sensor.
@@ -64,6 +66,25 @@ public class SensorExecutionRunParameters {
     private CheckSearchFilters checkSearchFilter;
     private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
+    @JsonIgnore
+    private boolean success;
+    @JsonIgnore
+    private Throwable sensorConfigurationException;
+    private List<String> additionalFilters = new ArrayList<>();
+    private int rowCountLimit = 1000;
+    private boolean failOnSensorReadoutLimitExceeded = true;
+
+
+    /**
+     * Creates a sensor execution run parameters when the sensor configuration failed and was not successful.
+     * @param check The check that failed to be configured for execution.
+     * @param sensorConfigurationException Exception that describes why the sensor failed to be configured.
+     */
+    public SensorExecutionRunParameters(AbstractCheckSpec<?,?,?,?> check, Throwable sensorConfigurationException) {
+        this.success = false;
+        this.check = check;
+        this.sensorConfigurationException = sensorConfigurationException;
+    }
 
     /**
      * Creates a sensor run parameters object with all objects required to run a sensor.
@@ -80,6 +101,8 @@ public class SensorExecutionRunParameters {
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
      * @param checkSearchFilter Check search filter to find this particular check.
+     * @param rowCountLimit Sets the row count limit.
+     * @param failOnSensorReadoutLimitExceeded Fail when the row count limit is exceeded.
      */
     public SensorExecutionRunParameters(
 			ConnectionSpec connection,
@@ -94,7 +117,10 @@ public class SensorExecutionRunParameters {
             DataGroupingConfigurationSpec dataGroupings,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings,
-            CheckSearchFilters checkSearchFilter) {
+            CheckSearchFilters checkSearchFilter,
+            int rowCountLimit,
+            boolean failOnSensorReadoutLimitExceeded) {
+        this.success = true;
         this.connection = connection;
         this.table = table;
         this.column = column;
@@ -108,6 +134,40 @@ public class SensorExecutionRunParameters {
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
         this.checkSearchFilter = checkSearchFilter;
+        this.rowCountLimit = rowCountLimit;
+        this.failOnSensorReadoutLimitExceeded = failOnSensorReadoutLimitExceeded;
+    }
+
+    /**
+     * Returns true if the sensor parameter preparation was successful.
+     * @return True when the sensor was prepared correctly, false when the table mis configuration caused some issues.
+     */
+    public boolean isSuccess() {
+        return success;
+    }
+
+    /**
+     * Sets the flag if the sensor preparation was successful.
+     * @param success Sensor was configured correctly.
+     */
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    /**
+     * Returns an exception that was thrown when the sensor was prepared.
+     * @return Sensor preparation exception.
+     */
+    public Throwable getSensorConfigurationException() {
+        return sensorConfigurationException;
+    }
+
+    /**
+     * Sets an exception that was raised when the sensor configuration was prepared.
+     * @param sensorConfigurationException Sensor configuration exception.
+     */
+    public void setSensorConfigurationException(Throwable sensorConfigurationException) {
+        this.sensorConfigurationException = sensorConfigurationException;
     }
 
     /**
@@ -365,6 +425,54 @@ public class SensorExecutionRunParameters {
      */
     public void setExpectedValueAlias(String expectedValueAlias) {
         this.expectedValueAlias = expectedValueAlias;
+    }
+
+    /**
+     * Returns a list of additional filters (SQL fragments) that will be added to the WHERE clause.
+     * @return List of additional filters.
+     */
+    public List<String> getAdditionalFilters() {
+        return additionalFilters;
+    }
+
+    /**
+     * Sets a reference to a list of additional filters.
+     * @param additionalFilters A list of additional filters.
+     */
+    public void setAdditionalFilters(List<String> additionalFilters) {
+        this.additionalFilters = additionalFilters;
+    }
+
+    /**
+     * Returns the row count limit.
+     * @return Row count limit.
+     */
+    public int getRowCountLimit() {
+        return rowCountLimit;
+    }
+
+    /**
+     * Sets the row count limit.
+     * @param rowCountLimit Row count limit.
+     */
+    public void setRowCountLimit(int rowCountLimit) {
+        this.rowCountLimit = rowCountLimit;
+    }
+
+    /**
+     * Returns true if the sensor execution should fail if the data source returned too many results.
+     * @return True - fail, false - truncate the results and process only up to the limit.
+     */
+    public boolean isFailOnSensorReadoutLimitExceeded() {
+        return failOnSensorReadoutLimitExceeded;
+    }
+
+    /**
+     * Sets the flag to fail the sensor execution when the result count limit was exceeded.
+     * @param failOnSensorReadoutLimitExceeded Fail when result count exceeded.
+     */
+    public void setFailOnSensorReadoutLimitExceeded(boolean failOnSensorReadoutLimitExceeded) {
+        this.failOnSensorReadoutLimitExceeded = failOnSensorReadoutLimitExceeded;
     }
 
     /**

@@ -387,6 +387,7 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
      * Returns the container of column level comparisons to columns in the reference table.
      * @return Dictionary of comparisons to columns.
      */
+    @Override
     public ColumnComparisonMonthlyRecurringChecksSpecMap getComparisons() {
         return comparisons;
     }

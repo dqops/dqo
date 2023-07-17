@@ -43,14 +43,14 @@ import java.util.stream.Collectors;
 public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
     private BigQuerySourceConnection sut;
     private ConnectionSpec connectionSpec;
-    private BigQuerySqlRunner bigQuerySqlRunner;
+    private BigQuerySqlRunnerImpl bigQuerySqlRunner;
 
     @BeforeEach
     void setUp() {
         BigQueryConnectionProvider connectionProvider = (BigQueryConnectionProvider) ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.bigquery);
         BigQueryConnectionPoolImpl bigQueryConnectionPool = new BigQueryConnectionPoolImpl();
         SecretValueProvider secretValueProvider = SecretValueProviderObjectMother.getInstance();
-		bigQuerySqlRunner = new BigQuerySqlRunner();
+		bigQuerySqlRunner = new BigQuerySqlRunnerImpl();
 		this.sut = new BigQuerySourceConnection(bigQuerySqlRunner, secretValueProvider, connectionProvider, bigQueryConnectionPool);
 		connectionSpec = BigQueryConnectionSpecObjectMother.create();
 		this.sut.setConnectionSpec(connectionSpec);
@@ -138,7 +138,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
         this.sut.open();
         Table results = this.sut.executeQuery("select count(*) from `bigquery-public-data.austin_crime.crime`",
-                JobCancellationToken.createDummyJobCancellationToken());
+                JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         Assertions.assertNotNull(results);
         Assertions.assertEquals(1, results.rowCount());

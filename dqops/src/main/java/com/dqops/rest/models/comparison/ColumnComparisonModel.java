@@ -145,9 +145,10 @@ public class ColumnComparisonModel {
         columnComparisonModel.setComparedColumnName(columnSpec.getColumnName());
 
         AbstractRootChecksContainerSpec columnCheckRootContainer = columnSpec.getColumnCheckRootContainer(checkType, checkTimeScale, false);
-        if (columnCheckRootContainer instanceof CheckCategoriesColumnComparisonMapParent) {
-            CheckCategoriesColumnComparisonMapParent columnComparisonMapParent = (CheckCategoriesColumnComparisonMapParent)columnCheckRootContainer;
-            AbstractColumnComparisonCheckCategorySpecMap<? extends AbstractColumnComparisonCheckCategorySpec> columnCheckComparisonsMap = columnComparisonMapParent.getComparisons();
+        AbstractComparisonCheckCategorySpecMap<?> comparisonsMap = columnCheckRootContainer.getComparisons();
+        if (comparisonsMap instanceof AbstractColumnComparisonCheckCategorySpecMap) {
+            AbstractColumnComparisonCheckCategorySpecMap<? extends AbstractColumnComparisonCheckCategorySpec> columnCheckComparisonsMap =
+                    (AbstractColumnComparisonCheckCategorySpecMap<? extends AbstractColumnComparisonCheckCategorySpec>)comparisonsMap;
             AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks = columnCheckComparisonsMap.get(referenceTableConfigurationName);
 
             if (columnCheckComparisonChecks != null) {
@@ -189,13 +190,7 @@ public class ColumnComparisonModel {
                                  CheckTimeScale checkTimeScale) {
         AbstractRootChecksContainerSpec columnCheckRootContainer = targetColumnSpec.getColumnCheckRootContainer(
                 checkType, checkTimeScale, true);
-
-        if (!(columnCheckRootContainer instanceof CheckCategoriesColumnComparisonMapParent)) {
-            throw new DqoRuntimeException("The target check type does not support comparison checks.");
-        }
-
-        CheckCategoriesColumnComparisonMapParent columnComparisonMapParent = (CheckCategoriesColumnComparisonMapParent)columnCheckRootContainer;
-        AbstractColumnComparisonCheckCategorySpecMap<? extends AbstractColumnComparisonCheckCategorySpec> columnCheckComparisonsMap = columnComparisonMapParent.getComparisons();
+        AbstractComparisonCheckCategorySpecMap columnCheckComparisonsMap = columnCheckRootContainer.getComparisons();
 
         if (Strings.isNullOrEmpty(this.referenceColumnName)) {
             // comparison is disabled and should be removed, because there is no reference column, so the model was send to UI and returned back only to show it
@@ -203,7 +198,8 @@ public class ColumnComparisonModel {
             return;
         }
 
-        AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks = columnCheckComparisonsMap.getOrAdd(referenceTableConfigurationName);
+        AbstractColumnComparisonCheckCategorySpec columnCheckComparisonChecks =
+                (AbstractColumnComparisonCheckCategorySpec)columnCheckComparisonsMap.getOrAdd(referenceTableConfigurationName);
         columnCheckComparisonChecks.setReferenceColumn(this.referenceColumnName);
 
         if (this.compareMin != null) {

@@ -29,7 +29,10 @@ import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.ExecutionContext;
+import com.dqops.metadata.comparisons.ReferenceTableSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.metadata.sources.*;
+import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -60,12 +63,54 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
     }
 
     /**
+     * Creates a column specification with a label.
+     * @param label Label to add to the column.
+     * @return Column specification.
+     */
+    private ColumnSpec createColumnWithLabel(String label) {
+        ColumnSpec columnSpec = new ColumnSpec();
+        LabelSetSpec labels = new LabelSetSpec();
+        labels.add(label);
+        columnSpec.setLabels(labels);
+        return columnSpec;
+    }
+
+    /**
+     * Creates a table specification with one sample table and the timestamp columns configured.
+     * @param addAnalyzedColumn Boolean value - add the analyzed column.
+     * @return Table specification.
+     */
+    private TableSpec createTableSpec(boolean addAnalyzedColumn) {
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setPhysicalTableName(new PhysicalTableName("target_schema", "target_table"));
+
+        if (addAnalyzedColumn) {
+            ColumnSpec columnSpec = createColumnWithLabel("This is the column that is analyzed for data quality issues");
+            tableSpec.getColumns().put("target_column", columnSpec);
+        }
+
+        tableSpec.getColumns().put("col_event_timestamp", createColumnWithLabel("optional column that stores the timestamp when the event/transaction happened"));
+        tableSpec.getColumns().put("col_inserted_at", createColumnWithLabel("optional column that stores the timestamp when row was ingested"));
+        TimestampColumnsSpec timestampColumns = tableSpec.getTimestampColumns();
+        timestampColumns.setEventTimestampColumn("col_event_timestamp");
+        timestampColumns.setIngestionTimestampColumn("col_inserted_at");
+
+        return tableSpec;
+    }
+
+    /**
      * Find similar checks in all check types for a table.
-     * @param tableSpec Table to be analyzed.
      * @return List of similar checks.
      */
     @Override
-    public SimilarChecksContainer findSimilarTableChecks(TableSpec tableSpec) {
+    public SimilarChecksContainer findSimilarTableChecks() {
+        UserHomeImpl userHome = new UserHomeImpl();
+        ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
+        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
+        TableSpec tableSpec = createTableSpec(false);
+        tableSpec.getReferenceTables().put("comparison_to_source_of_truth", new ReferenceTableSpec());
+        tableWrapper.setSpec(tableSpec);
+
         SimilarChecksContainer similarChecksContainer = new SimilarChecksContainer();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setEnabled(true);
@@ -104,12 +149,18 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
 
     /**
      * Find similar checks in all check types for a column.
-     * @param tableSpec Parent table of the column
-     * @param columnSpec Column specification.
      * @return List of similar checks.
      */
     @Override
-    public SimilarChecksContainer findSimilarColumnChecks(TableSpec tableSpec, ColumnSpec columnSpec) {
+    public SimilarChecksContainer findSimilarColumnChecks() {
+        UserHomeImpl userHome = new UserHomeImpl();
+        ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
+        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
+        TableSpec tableSpec = createTableSpec(true);
+        tableWrapper.setSpec(tableSpec);
+        tableSpec.getReferenceTables().put("comparison_to_source_of_truth", new ReferenceTableSpec());
+        ColumnSpec columnSpec = tableSpec.getColumns().getAt(0);
+
         SimilarChecksContainer similarChecksContainer = new SimilarChecksContainer();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setEnabled(true);

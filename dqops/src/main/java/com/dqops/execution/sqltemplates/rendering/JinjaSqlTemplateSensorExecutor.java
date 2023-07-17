@@ -18,6 +18,7 @@ package com.dqops.execution.sqltemplates.rendering;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
+import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -90,7 +91,9 @@ public class JinjaSqlTemplateSensorExecutor extends AbstractGroupedSensorExecuto
                 ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
                 try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
                     jobCancellationToken.throwIfCancelled();
-                    Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken);
+                    Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken,
+                            sensorRunParameters.getRowCountLimit(),
+                            sensorRunParameters.isFailOnSensorReadoutLimitExceeded());
                     return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, sensorResultRows);
                 }
             }

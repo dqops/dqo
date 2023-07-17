@@ -301,7 +301,7 @@
 {% endmacro %}
 
 {% macro render_where_clause(extra_filter = none, table_alias_prefix = 'analyzed_table', indentation = '') %}
-    {%- with filters = [table.filter|default(none, true), parameters.filter|default(none, true), extra_filter|default(none, true)] | reject('none') | list -%}
+    {%- with filters = ([table.filter|default(none, true), parameters.filter|default(none, true), extra_filter|default(none, true)] | reject('none') | list) + (additional_filters | list) -%}
         {%- if (filters | length) > 0 %}
 {{ indentation ~ 'WHERE ' -}}
             {%- for filter in filters -%}

@@ -71,12 +71,14 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
      * @param checkTarget Check target (table or column).
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
+     * @param category Check category name.
      * @param checkName Check name.
      * @return Check specification when the check was found or null when the check is unknown.
      */
     CheckDefinitionSpec getCheckDefinitionSpec(CheckTarget checkTarget,
                                                CheckType checkType,
                                                CheckTimeScale checkTimeScale,
+                                               String category,
                                                String checkName);
 
     /**
@@ -106,10 +108,11 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
      * @param checkTarget Check target (table or column).
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @param category Check category name.
      * @param checkName Check name.
      * @return Full check name.
      */
-    static String makeCheckName(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale, String checkName) {
+    static String makeCheckName(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale, String category, String checkName) {
         StringBuilder checkNameBuilder = new StringBuilder();
         checkNameBuilder.append(checkTarget);
         checkNameBuilder.append('/');
@@ -119,6 +122,8 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
             checkNameBuilder.append(timeScale);
             checkNameBuilder.append('/');
         }
+        checkNameBuilder.append(category);
+        checkNameBuilder.append('/');
         checkNameBuilder.append(checkName);
 
         String fullCheckName = checkNameBuilder.toString();

@@ -17,6 +17,8 @@ package com.dqops.services.check.mapping;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -28,7 +30,10 @@ import com.dqops.utils.reflection.ReflectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -64,13 +69,35 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
 
         for (QualityCategoryModel categoryModel : categoryModelList) {
             String categoryDisplayName = categoryModel.getCategory();
+            if (categoryDisplayName.startsWith("comparisons/")) {
+                AbstractComparisonCheckCategorySpecMap<?> comparisons = checkContainerSpec.getComparisons();
+                String comparisonName = categoryModel.getComparisonName();
+                AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = comparisons.get(comparisonName);
+                if (comparisonCheckCategorySpec == null) {
+                    Type actualTypeArgument = ((ParameterizedType) comparisons.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+                    Class<?> comparisonContainerClassType = (Class<?>) actualTypeArgument;
+                    ClassInfo comparisonChecksCategoryClassInfo = reflectionService.getClassInfoForClass(comparisonContainerClassType);
+
+                    comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec) comparisonChecksCategoryClassInfo.createNewInstance();
+                }
+
+                updateCategoryChecksSpec(categoryModel, comparisonCheckCategorySpec);
+
+                if (comparisonCheckCategorySpec.isDefault()) {
+                    comparisons.remove(comparisonName);
+                } else {
+                    ((Map)comparisons).put(comparisonName, comparisonCheckCategorySpec);
+                }
+
+                continue;
+            }
+
             FieldInfo categoryFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(categoryDisplayName);
             if (categoryFieldInfo == null) {
                 throw new DqoRuntimeException("Category " + categoryDisplayName + " not found on " + checkContainerSpec.getClass().getCanonicalName());
             }
 
             AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkContainerSpec);
-
             updateCategoryChecksSpec(categoryModel, categorySpec);
 
             if (categorySpec.isDefault()) {

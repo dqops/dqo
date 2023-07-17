@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.table.partitioned.comparison.TableComparisonMonthlyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
@@ -53,8 +54,9 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
+            put("comparisons", o -> o.comparisons);
 
-            // accuracy checks are not supported on partitioned checks yet
+            // accuracy checks are not supported on partitioned checks yet, but we support comparisons
         }
     };
 
@@ -72,6 +74,11 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyPartitionedChecksSpec sql;
+
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableComparisonMonthlyPartitionedChecksSpecMap comparisons = new TableComparisonMonthlyPartitionedChecksSpecMap();
 
 
     /**
@@ -126,6 +133,25 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns the dictionary of comparisons.
+     * @return Dictionary of comparisons.
+     */
+    @Override
+    public TableComparisonMonthlyPartitionedChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the dictionary of comparisons.
+     * @param comparisons Dictionary of comparisons.
+     */
+    public void setComparisons(TableComparisonMonthlyPartitionedChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**

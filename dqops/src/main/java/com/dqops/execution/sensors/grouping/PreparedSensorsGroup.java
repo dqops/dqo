@@ -88,15 +88,15 @@ public class PreparedSensorsGroup {
         SensorPrepareResult firstPreparedStatement = this.preparedSensors.get(0);
         FragmentedSqlQuery firstQuerySqlFragments = firstPreparedStatement.getFragmentedSqlQuery();
 
+        if (firstQuerySqlFragments == null || firstPreparedStatement.getRenderedSensorSql() == null) {
+            this.mergedSql = null; // these sensors are not SQL sensors
+            return;
+        }
+
         if (this.preparedSensors.size() == 1) {
             this.mergedSql = firstPreparedStatement.getRenderedSensorSql();
             firstPreparedStatement.setActualValueAlias(firstQuerySqlFragments.getActualValueAlias());
             firstPreparedStatement.setExpectedValueAlias(firstQuerySqlFragments.getExpectedValueAlias());
-            return;
-        }
-
-        if (firstPreparedStatement.getRenderedSensorSql() == null) {
-            this.mergedSql = null; // these sensors are not SQL sensors
             return;
         }
 

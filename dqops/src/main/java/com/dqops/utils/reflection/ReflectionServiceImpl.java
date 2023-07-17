@@ -78,7 +78,12 @@ public class ReflectionServiceImpl implements ReflectionService {
      * @return Reflection info of all fields that will be used for JSON serialization.
      */
     protected ClassInfo reflectClass(Class<?> targetClass) {
-        ClassInfo classInfo = new ClassInfo(targetClass);
+        Constructor<?>[] constructors = targetClass.getDeclaredConstructors();
+        Optional<Constructor<?>> parameterlessConstructor = Arrays.stream(constructors)
+                .filter(c -> c.getParameterCount() == 0)
+                .findFirst();
+
+        ClassInfo classInfo = new ClassInfo(targetClass, parameterlessConstructor.orElse(null));
 
         Class<?> reflectedClass = targetClass;
         while (reflectedClass != Object.class) {

@@ -21,6 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.recurring.accuracy.TableAccuracyDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
+import com.dqops.checks.table.recurring.comparison.TableComparisonDailyRecurringChecksSpecMap;
 import com.dqops.checks.table.recurring.schema.TableSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
@@ -59,6 +60,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
+            put("comparisons", o -> o.comparisons);
         }
     };
 
@@ -92,9 +94,15 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSchemaDailyRecurringChecksSpec schema;
 
+    @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableComparisonDailyRecurringChecksSpecMap comparisons = new TableComparisonDailyRecurringChecksSpecMap();
+
 
     /**
      * Returns the container of recurring for volume data quality checks.
+     *
      * @return Container of row volume data quality recurring.
      */
     public TableVolumeDailyRecurringChecksSpec getVolume() {
@@ -103,16 +111,18 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Sets the container of volume data quality checks (recurring).
+     *
      * @param volume New volume checks.
      */
     public void setVolume(TableVolumeDailyRecurringChecksSpec volume) {
-		this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.setDirtyIf(!Objects.equals(this.volume, volume));
         this.volume = volume;
-		this.propagateHierarchyIdToField(volume, "volume");
+        this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**
      * Returns a container of table level timeliness recurring.
+     *
      * @return Custom timeliness recurring.
      */
     public TableTimelinessDailyRecurringChecksSpec getTimeliness() {
@@ -121,6 +131,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Sets a reference to a container of timeliness recurring.
+     *
      * @param timeliness Custom timeliness recurring.
      */
     public void setTimeliness(TableTimelinessDailyRecurringChecksSpec timeliness) {
@@ -131,6 +142,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Returns a container of table level accuracy recurring checks.
+     *
      * @return Table level accuracy checks.
      */
     public TableAccuracyDailyRecurringChecksSpec getAccuracy() {
@@ -139,6 +151,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Sets a new container of daily recurring accuracy checks.
+     *
      * @param accuracy New daily recurring accuracy checks.
      */
     public void setAccuracy(TableAccuracyDailyRecurringChecksSpec accuracy) {
@@ -149,6 +162,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Returns a container of table level custom SQL recurring.
+     *
      * @return Custom sql recurring.
      */
     public TableSqlDailyRecurringChecksSpec getSql() {
@@ -157,6 +171,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Sets a reference to a container of custom sql recurring.
+     *
      * @param sql Custom sql recurring.
      */
     public void setSql(TableSqlDailyRecurringChecksSpec sql) {
@@ -167,6 +182,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Returns a container of table availability checks.
+     *
      * @return Table availability checks.
      */
     public TableAvailabilityDailyRecurringChecksSpec getAvailability() {
@@ -175,6 +191,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Sets a reference to a container of the table availability checks.
+     *
      * @param availability Container of table availability checks.
      */
     public void setAvailability(TableAvailabilityDailyRecurringChecksSpec availability) {
@@ -185,6 +202,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Returns a container of table schema checks.
+     *
      * @return Table schema checks.
      */
     public TableSchemaDailyRecurringChecksSpec getSchema() {
@@ -193,12 +211,32 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
 
     /**
      * Sets a reference to a container with the table schema checks.
+     *
      * @param schema Container of table schema checks.
      */
     public void setSchema(TableSchemaDailyRecurringChecksSpec schema) {
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns the dictionary of comparisons.
+     * @return Dictionary of comparisons.
+     */
+    @Override
+    public TableComparisonDailyRecurringChecksSpecMap getComparisons() {
+        return comparisons;
+    }
+
+    /**
+     * Sets the dictionary of comparisons.
+     * @param comparisons Dictionary of comparisons.
+     */
+    public void setComparisons(TableComparisonDailyRecurringChecksSpecMap comparisons) {
+        this.setDirtyIf(!Objects.equals(this.comparisons, comparisons));
+        this.comparisons = comparisons;
+        this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
     /**
@@ -219,8 +257,7 @@ public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksCo
      */
     @Override
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
-        return new TimeSeriesConfigurationSpec()
-        {{
+        return new TimeSeriesConfigurationSpec() {{
             setMode(TimeSeriesMode.current_time);
             setTimeGradient(TimePeriodGradient.day);
         }};

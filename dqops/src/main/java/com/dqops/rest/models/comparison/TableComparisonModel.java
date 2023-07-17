@@ -150,10 +150,11 @@ public class TableComparisonModel {
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = comparedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false);
+        AbstractComparisonCheckCategorySpecMap<?> comparisons = tableCheckRootContainer.getComparisons();
 
-        if (tableCheckRootContainer instanceof CheckCategoriesTableComparisonMapParent) {
-            CheckCategoriesTableComparisonMapParent tableComparisonMapParent = (CheckCategoriesTableComparisonMapParent)tableCheckRootContainer;
-            AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap = tableComparisonMapParent.getComparisons();
+        if (comparisons instanceof AbstractTableComparisonCheckCategorySpecMap) {
+            AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap =
+                    (AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec>)comparisons;
             AbstractTableComparisonCheckCategorySpec tableCheckComparisonChecks = tableCheckComparisonsMap.get(referenceTableConfigurationName);
 
             if (tableCheckComparisonChecks != null) {
@@ -198,13 +199,10 @@ public class TableComparisonModel {
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = targetTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, true);
-        if (!(tableCheckRootContainer instanceof CheckCategoriesTableComparisonMapParent)) {
-            throw new DqoRuntimeException("The target check type does not support comparison checks.");
-        }
 
-        CheckCategoriesTableComparisonMapParent tableComparisonMapParent = (CheckCategoriesTableComparisonMapParent)tableCheckRootContainer;
-        AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap = tableComparisonMapParent.getComparisons();
-        AbstractTableComparisonCheckCategorySpec tableCheckComparisonChecks = tableCheckComparisonsMap.getOrAdd(referenceTableConfigurationName);
+        AbstractComparisonCheckCategorySpecMap tableCheckComparisonsMap = tableCheckRootContainer.getComparisons();
+        AbstractTableComparisonCheckCategorySpec tableCheckComparisonChecks =
+                (AbstractTableComparisonCheckCategorySpec)tableCheckComparisonsMap.getOrAdd(referenceTableConfigurationName);
         if (this.compareRowCount != null) {
             ComparisonCheckRules rowCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);
             this.compareRowCount.copyToComparisonCheckSpec(rowCountMatch);

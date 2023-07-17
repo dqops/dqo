@@ -361,6 +361,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Returns the container of column level comparisons to columns in the reference table.
      * @return Dictionary of comparisons to columns.
      */
+    @Override
     public ColumnComparisonMonthlyPartitionedChecksSpecMap getComparisons() {
         return comparisons;
     }

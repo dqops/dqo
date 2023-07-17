@@ -18,6 +18,8 @@ package com.dqops.utils.docs.checks;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
@@ -79,6 +81,8 @@ import java.util.*;
  */
 @Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
+    private static final String COMPARISON_NAME = "compare_to_source_of_truth_table";
+
     private static final Map<String, String> TABLE_CATEGORY_HELP = new LinkedHashMap<>() {{
         put("volume", "Evaluates the overall quality of the table by verifying the number of rows.");
         put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
@@ -184,7 +188,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableSpec tableSpec = createTableSpec(false);
         tableWrapper.setSpec(tableSpec);
 
-        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks(tableSpec);
+        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
 
@@ -205,8 +209,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableSpec tableSpec = createTableSpec(true);
         tableWrapper.setSpec(tableSpec);
 
-        ColumnSpec columnSpec = tableSpec.getColumns().getAt(0);
-        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks(tableSpec, columnSpec);
+        SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
 
@@ -289,7 +292,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
         checkDocumentationModel.setCheckHelp(checkModel.getHelpText());
         checkDocumentationModel.setCheckModel(checkModel);
-        checkDocumentationModel.setCategory(similarCheckModel.getCategory());
+        String checkCategoryName = similarCheckModel.getCategory();
+        checkDocumentationModel.setCategory(checkCategoryName);
 
         ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(checkModel.getCheckSpec().getClass());
         if (checkClassJavadoc != null) {
@@ -318,7 +322,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         }
 
         CheckContainerModel allChecksModel = new CheckContainerModel();
-        QualityCategoryModel uiCategoryModel = new QualityCategoryModel(similarCheckModel.getCategory());
+        QualityCategoryModel uiCategoryModel;
+        if (Objects.equals(checkCategoryName, "comparisons")) {
+            uiCategoryModel = new QualityCategoryModel("comparisons/" + COMPARISON_NAME);
+            uiCategoryModel.setComparisonName(COMPARISON_NAME);
+        } else {
+            uiCategoryModel = new QualityCategoryModel(checkCategoryName);
+        }
         CheckModel sampleCheckModel = checkModel.cloneForUpdate();
         sampleCheckModel.setConfigured(true);
         if (sampleCheckModel.getRule().getError() != null) {
@@ -335,10 +345,22 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         allChecksModel.getCategories().add(uiCategoryModel);
         this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
 
-        HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
+        HierarchyNode checkCategoryContainer = checkRootContainer.getChild(checkCategoryName);
         if (checkCategoryContainer == null) {
-            System.err.println("Sorry but check root container: " + checkRootContainer.getClass().getName() + " has no category " + similarCheckModel.getCategory());
+            System.err.println("Sorry but check root container: " + checkRootContainer.getClass().getName() + " has no category " + checkCategoryName);
         }
+
+        if (checkCategoryContainer instanceof AbstractComparisonCheckCategorySpecMap) {
+            AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec> comparisonCategoryMap =
+                    (AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec>)checkCategoryContainer;
+            AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = comparisonCategoryMap.getAt(0);
+            checkCategoryContainer = comparisonCheckCategorySpec;
+            uiCategoryModel.setComparisonName(comparisonCheckCategorySpec.getComparisonName());
+            uiCategoryModel.setCompareToColumn("source_of_truth_column_name");
+
+            // TODO: add a definition of a table comparison (the reference table) to trimmedTableSpec
+        }
+
         AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());
         if (checkSpec == null) {
             System.err.println("Sorry but check category container: " + checkCategoryContainer.getClass().getName() + " has no check named " + checkModel.getCheckName());
@@ -524,7 +546,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         tableSpec.getDefaultDataGroupingConfiguration(),
                         checkSpec.getParameters(),
                         providerDialectSettings,
-                        new CheckSearchFilters()
+                        new CheckSearchFilters(),
+                        1000,
+                        true
                 );
 
                 JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(

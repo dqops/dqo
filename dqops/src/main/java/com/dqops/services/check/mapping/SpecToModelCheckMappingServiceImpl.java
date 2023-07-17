@@ -16,6 +16,8 @@
 package com.dqops.services.check.mapping;
 
 import com.dqops.checks.*;
+import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
@@ -28,6 +30,7 @@ import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import com.dqops.metadata.scheduling.RecurringScheduleSpec;
 import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
@@ -47,13 +50,13 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -65,7 +68,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     private final ReflectionService reflectionService;
     private final SensorDefinitionFindService sensorDefinitionFindService;
     private final SchedulesUtilityService schedulesUtilityService;
-    private SimilarCheckCache similarCheckCache;
+    private final SimilarCheckCache similarCheckCache;
 
     /**
      * Creates a check mapping service that exchanges the data for data quality checks between models and the data quality check specifications.
@@ -163,7 +166,59 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
-                continue; // not supported here
+                AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap = (AbstractComparisonCheckCategorySpecMap<?>)categoryFieldValue;
+                Type actualTypeArgument = ((ParameterizedType) categoryFieldInfo.getClazz().getGenericSuperclass()).getActualTypeArguments()[0];
+                Class<?> comparisonContainerClassType = (Class<?>) actualTypeArgument;
+                ClassInfo comparisonChecksCategoryClassInfo = reflectionService.getClassInfoForClass(comparisonContainerClassType);
+
+                if (tableSpec.getReferenceTables() != null && tableSpec.getReferenceTables().size() > 0) {
+                    for (String comparisonName : tableSpec.getReferenceTables().keySet()) {
+                        AbstractComparisonCheckCategorySpec configuredComparisonChecksCategory = comparisonCheckCategorySpecMap.get(comparisonName);
+                        if (configuredComparisonChecksCategory == null) {
+                            configuredComparisonChecksCategory = (AbstractComparisonCheckCategorySpec) comparisonChecksCategoryClassInfo.createNewInstance();
+                            configuredComparisonChecksCategory.setHierarchyId(
+                                    new HierarchyId(new HierarchyId(comparisonCheckCategorySpecMap.getHierarchyId()),
+                                            categoryFieldInfo.getYamlFieldName(), comparisonName));
+                        }
+
+                        QualityCategoryModel comparisonCategoryModel = createCategoryModel(categoryFieldInfo,
+                                configuredComparisonChecksCategory,
+                                checkCategoriesSpec.getSchedulingGroup(),
+                                runChecksTemplate,
+                                tableSpec,
+                                executionContext,
+                                providerType,
+                                checkCategoriesSpec.getCheckTarget(),
+                                checkType,
+                                checkTimeScale);
+                        if (comparisonCategoryModel != null && comparisonCategoryModel.getChecks().size() > 0) {
+                            checkContainerModel.getCategories().add(comparisonCategoryModel);
+                        }
+                    }
+                }
+
+                for (AbstractComparisonCheckCategorySpec configuredComparisonChecks : comparisonCheckCategorySpecMap.values()) {
+                    if (tableSpec.getReferenceTables() != null && tableSpec.getReferenceTables().get(configuredComparisonChecks.getComparisonName()) != null) {
+                        continue; // already added, we are adding only orphaned check configuration for reference table configurations no longer configured
+                        // TODO: assign some boolean flag to the model to identify misconfigured (orphaned) checks, because they will fail to run anyway
+                    }
+
+                    QualityCategoryModel comparisonCategoryModel = createCategoryModel(categoryFieldInfo,
+                            configuredComparisonChecks,
+                            checkCategoriesSpec.getSchedulingGroup(),
+                            runChecksTemplate,
+                            tableSpec,
+                            executionContext,
+                            providerType,
+                            checkCategoriesSpec.getCheckTarget(),
+                            checkType,
+                            checkTimeScale);
+                    if (comparisonCategoryModel != null && comparisonCategoryModel.getChecks().size() > 0) {
+                        checkContainerModel.getCategories().add(comparisonCategoryModel);
+                    }
+                }
+
+                continue; // it is a comparison container, skipping
             }
 
             QualityCategoryModel categoryModel = createCategoryModel(categoryFieldInfo,
@@ -265,9 +320,22 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                                        CheckType checkType,
                                                        CheckTimeScale checkTimeScale) {
         QualityCategoryModel categoryModel = new QualityCategoryModel();
-        categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
-        categoryModel.setHelpText(categoryFieldInfo.getHelpText());
         CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate.clone();
+        if (checkCategoryParentNode instanceof AbstractComparisonCheckCategorySpec) {
+            AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec)checkCategoryParentNode;
+            String comparisonName = comparisonCheckCategorySpec.getComparisonName();
+            categoryModel.setCategory(categoryFieldInfo.getYamlFieldName() + "/" + comparisonName);
+            categoryModel.setComparisonName(comparisonName);
+            if (comparisonCheckCategorySpec instanceof AbstractColumnComparisonCheckCategorySpec) {
+                AbstractColumnComparisonCheckCategorySpec columnComparisonCheckCategorySpec = (AbstractColumnComparisonCheckCategorySpec)comparisonCheckCategorySpec;
+                categoryModel.setCompareToColumn(columnComparisonCheckCategorySpec.getReferenceColumn());
+            }
+            runChecksCategoryTemplate.setDataComparisonName(comparisonName);
+        } else {
+            categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
+        }
+
+        categoryModel.setHelpText(categoryFieldInfo.getHelpText());
         runChecksCategoryTemplate.setCheckCategory(categoryFieldInfo.getYamlFieldName());
         categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
         categoryModel.setDataCleanJobTemplate(
@@ -281,6 +349,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
 
         for (FieldInfo checkFieldInfo : checksFields) {
+            if (checkFieldInfo.getDataType() != ParameterDataType.object_type) {
+                continue;
+            }
+
             AbstractSpec checkSpecObjectNullable = (AbstractSpec)checkFieldInfo.getFieldValue(checkCategoryParentNode);
             AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                     (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
