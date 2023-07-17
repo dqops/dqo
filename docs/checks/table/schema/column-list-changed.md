@@ -79,8 +79,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **daily column list changed**  
@@ -157,8 +155,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **monthly column list changed**  
@@ -230,8 +226,6 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
-
-
 
 
 

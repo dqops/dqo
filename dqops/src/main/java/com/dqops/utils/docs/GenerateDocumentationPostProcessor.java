@@ -15,14 +15,32 @@
  */
 package com.dqops.utils.docs;
 
+import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
+import com.dqops.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
+import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.incidents.IncidentNotificationMessage;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
+import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
+import com.dqops.metadata.storage.localfiles.ruledefinitions.RuleDefinitionYaml;
+import com.dqops.metadata.storage.localfiles.sensordefinitions.ProviderSensorYaml;
+import com.dqops.metadata.storage.localfiles.sensordefinitions.SensorDefinitionYaml;
+import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
+import com.dqops.metadata.storage.localfiles.sources.ConnectionYaml;
+import com.dqops.metadata.storage.localfiles.sources.TableYaml;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
@@ -49,6 +67,7 @@ import com.dqops.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.yaml.YamlDocumentationGenerator;
 import com.dqops.utils.docs.yaml.YamlDocumentationGeneratorImpl;
 import com.dqops.utils.docs.yaml.YamlDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.yaml.YamlDocumentationSchemaNode;
 import com.dqops.utils.python.PythonCallerServiceImpl;
 import com.dqops.utils.python.PythonVirtualEnvServiceImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -56,6 +75,7 @@ import com.dqops.utils.serialization.JsonSerializerImpl;
 import com.dqops.utils.serialization.YamlSerializerImpl;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -241,7 +261,8 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder currentYamlDocFiles = DocumentationFolderFactory.loadCurrentFiles(yamlDocPath);
         YamlDocumentationGenerator yamlDocumentationGenerator = new YamlDocumentationGeneratorImpl(new YamlDocumentationModelFactoryImpl());
 
-        DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot);
+        List<YamlDocumentationSchemaNode> yamlDocumentationSchema = getYamlDocumentationSchema();
+        DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot, yamlDocumentationSchema);
         renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
@@ -249,6 +270,83 @@ public class GenerateDocumentationPostProcessor {
                 renderedIndexYaml,
                 "########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE YAML REFERENCE");
+    }
+
+    /**
+     * Gets the schema describing the layout of files in documentation for Yaml.
+     * @return List of Yaml documentation schema nodes, containing data about the layout.
+     */
+    protected static List<YamlDocumentationSchemaNode> getYamlDocumentationSchema() {
+        List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = new ArrayList<>();
+
+        Path profilingPath = Path.of("profiling");
+        Path recurringPath = Path.of("recurring");
+        Path partitionedPath = Path.of("partitioned");
+
+        // Assumption: No cyclical dependencies (considering linkage to different docs pages).
+        // Approach:   Ordering in the nodes list matters: bottom-up, starting from the leaves.
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        TableProfilingCheckCategoriesSpec.class, profilingPath.resolve("table-profiling-checks")
+                )
+        );
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        ColumnProfilingCheckCategoriesSpec.class, profilingPath.resolve("column-profiling-checks")
+                )
+        );
+
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        TableDailyRecurringCheckCategoriesSpec.class, recurringPath.resolve("table-daily-recurring-checks")
+                )
+        );
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        TableMonthlyRecurringCheckCategoriesSpec.class, recurringPath.resolve("table-monthly-recurring-checks")
+                )
+        );
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        ColumnDailyRecurringCheckCategoriesSpec.class, recurringPath.resolve("column-daily-recurring-checks")
+                )
+        );
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        ColumnMonthlyRecurringCheckCategoriesSpec.class, recurringPath.resolve("column-monthly-recurring-checks")
+                )
+        );
+
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        TableDailyPartitionedCheckCategoriesSpec.class, partitionedPath.resolve("table-daily-partitioned-checks")
+                )
+        );
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        TableMonthlyPartitionedCheckCategoriesSpec.class, partitionedPath.resolve("table-monthly-partitioned-checks")
+                )
+        );
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        ColumnDailyPartitionedCheckCategoriesSpec.class, partitionedPath.resolve("column-daily-partitioned-checks")
+                )
+        );
+        yamlDocumentationSchemaNodes.add(
+                new YamlDocumentationSchemaNode(
+                        ColumnMonthlyPartitionedCheckCategoriesSpec.class, partitionedPath.resolve("column-monthly-partitioned-checks")
+                )
+        );
+
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(ConnectionYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(DashboardYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(ProviderSensorYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(RuleDefinitionYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(SensorDefinitionYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(SettingsYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(TableYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(IncidentNotificationMessage.class)); // the incident notification message format
+        return yamlDocumentationSchemaNodes;
     }
 
     /**

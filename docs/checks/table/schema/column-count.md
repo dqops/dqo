@@ -83,8 +83,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **daily column count**  
@@ -167,8 +165,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **monthly column count**  
@@ -246,8 +242,6 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
-
-
 
 
 

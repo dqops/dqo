@@ -80,8 +80,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **daily column types changed**  
@@ -158,8 +156,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **monthly column types changed**  
@@ -231,8 +227,6 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
-
-
 
 
 

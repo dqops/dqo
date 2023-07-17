@@ -87,8 +87,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **daily column exists**  
@@ -174,8 +172,6 @@ spec:
 
 
 
-
-
 ___
 
 ## **monthly column exists**  
@@ -256,8 +252,6 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
-
-
 
 
 

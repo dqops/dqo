@@ -33,13 +33,17 @@ public class YamlObjectDocumentationModel {
      */
     private String classSimpleName;
     /**
-     * Object class simple name.
+     * Object class description.
      */
     private String classDescription;
     /**
      * Object class.
      */
     private Class<?> reflectedClass;
+    /**
+     * Object class path of the superior object the class is documented in.
+     */
+    private String classLocationFile;
     /**
      * List of all object fields.
      */

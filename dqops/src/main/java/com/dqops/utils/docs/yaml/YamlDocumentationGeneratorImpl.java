@@ -37,26 +37,28 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
      * Renders documentation for all yaml classes as markdown files.
      *
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
+     * @param yamlDocumentationSchema Yaml documentation schema, describing the layout of documentation for YAML.
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderYamlDocumentation(Path projectRootPath) {
-        DocumentationFolder sensorsFolder = new DocumentationFolder();
-        sensorsFolder.setFolderName("reference/yaml");
-        sensorsFolder.setLinkName("Yaml");
-        sensorsFolder.setDirectPath(projectRootPath.resolve("../docs/reference/yaml").toAbsolutePath().normalize());
+    public DocumentationFolder renderYamlDocumentation(Path projectRootPath, List<YamlDocumentationSchemaNode> yamlDocumentationSchema) {
+        DocumentationFolder yamlFolder = new DocumentationFolder();
+        yamlFolder.setFolderName("reference/yaml");
+        yamlFolder.setLinkName("Yaml");
+        yamlFolder.setDirectPath(projectRootPath.resolve("../docs/reference/yaml").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("yaml/yaml_documentation");
 
-        List<YamlSuperiorObjectDocumentationModel> yamlSuperiorObjectDocumentationModels = yamlDocumentationModelFactory.createDocumentationForYaml();
+        List<YamlSuperiorObjectDocumentationModel> yamlSuperiorObjectDocumentationModels =
+                yamlDocumentationModelFactory.createDocumentationForYaml(yamlDocumentationSchema);
 
         for (YamlSuperiorObjectDocumentationModel yamlSuperiorObjectDocumentationModel : yamlSuperiorObjectDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(yamlSuperiorObjectDocumentationModel.getSuperiorClassSimpleName() + ".md");
+            DocumentationMarkdownFile documentationMarkdownFile = yamlFolder.addNestedFile(yamlSuperiorObjectDocumentationModel.getLocationFilePath());
             documentationMarkdownFile.setRenderContext(yamlSuperiorObjectDocumentationModel);
 
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, yamlSuperiorObjectDocumentationModel);
             documentationMarkdownFile.setFileContent(renderedDocument);
         }
-        return sensorsFolder;
+        return yamlFolder;
     }
 }
