@@ -75,7 +75,12 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        DataGroupingConfigurationSpecMap dataGroupingsMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DataGroupingConfigurationSpecMap dataGroupingsMapping = tableSpec.getGroupings();
         if (dataGroupingsMapping == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -84,7 +89,7 @@ public class DataGroupingConfigurationsController {
         List<String> dataGroupingNamesList = new ArrayList<>(dataGroupingsMapping.keySet());
         for (int i = 0; i < dataGroupingNamesList.size() ; i++) {
             String groupingConfigurationName = dataGroupingNamesList.get(i);
-            boolean isDefaultDataGrouping = (i == 0);
+            boolean isDefaultDataGrouping = Objects.equals(tableSpec.getDefaultGroupingName(), groupingConfigurationName);
             result.add(new DataGroupingConfigurationBasicModel(){{
                 setConnectionName(connectionName);
                 setSchemaName(schemaName);
@@ -124,7 +129,7 @@ public class DataGroupingConfigurationsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        DataGroupingConfigurationModel result = new DataGroupingConfigurationModel(){{
+        DataGroupingConfigurationModel result = new DataGroupingConfigurationModel() {{
             setConnectionName(connectionName);
             setSchemaName(schemaName);
             setTableName(tableName);
@@ -170,7 +175,12 @@ public class DataGroupingConfigurationsController {
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        DataGroupingConfigurationSpecMap dataGroupingMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
         if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -180,7 +190,7 @@ public class DataGroupingConfigurationsController {
             newName = dataGroupingConfigurationName;
         }
 
-        if (newName != null && !Objects.equals(newName, dataGroupingConfigurationName) && dataGroupingMapping.containsKey(newName)) {
+        if (!Objects.equals(newName, dataGroupingConfigurationName) && dataGroupingMapping.containsKey(newName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data grouping configuration with this name already exists
         }
 
@@ -189,6 +199,9 @@ public class DataGroupingConfigurationsController {
         if (!newName.equals(dataGroupingConfigurationName)) {
             // If renaming actually happened.
             dataGroupingMapping.remove(dataGroupingConfigurationName);
+            if (Objects.equals(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationName)) {
+                tableSpec.setDefaultGroupingName(newName);
+            }
         }
 
         userHomeContext.flush();
@@ -250,7 +263,7 @@ public class DataGroupingConfigurationsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}/setdefault", produces = "application/json")
-    @ApiOperation(value = "setTableDefaultGroupingConfiguration", notes = "Sets a table's grouping configuration as the default")
+    @ApiOperation(value = "setTableDefaultGroupingConfiguration", notes = "Sets a table's grouping configuration as the default or disables data grouping")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data grouping configuration successfully set as the default for the table"),
@@ -261,7 +274,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Data grouping configuration name") @PathVariable String dataGroupingConfigurationName) {
+            @ApiParam("Data grouping configuration name or null to disable data grouping") @PathVariable String dataGroupingConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
@@ -269,21 +282,14 @@ public class DataGroupingConfigurationsController {
         }
 
         DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
-        if (!dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
+        if (!Strings.isNullOrEmpty(dataGroupingConfigurationName) && !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        if (!dataGroupingConfigurationName.equals(dataGroupingMapping.getFirstDataGroupingConfigurationName())) {
-            // TODO: Think about implementing this inside DataGroupingMappingSpecMap.
-            DataGroupingConfigurationSpecMap newMapping = new DataGroupingConfigurationSpecMap();
-            newMapping.put(dataGroupingConfigurationName, dataGroupingMapping.get(dataGroupingConfigurationName));
-            for (Map.Entry<String, DataGroupingConfigurationSpec> dataGroupingEntry : dataGroupingMapping.entrySet()) {
-                if (dataGroupingEntry.getKey().equals(dataGroupingConfigurationName)) {
-                    continue;
-                }
-                newMapping.put(dataGroupingEntry.getKey(), dataGroupingEntry.getValue());
-            }
-            tableSpec.setGroupings(newMapping);
+        if (Strings.isNullOrEmpty(dataGroupingConfigurationName)) {
+            tableSpec.setDefaultGroupingName(null);
+        } else {
+            tableSpec.setDefaultGroupingName(dataGroupingConfigurationName);
         }
 
         userHomeContext.flush();
@@ -320,13 +326,21 @@ public class DataGroupingConfigurationsController {
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        DataGroupingConfigurationSpecMap dataGroupingsMap = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DataGroupingConfigurationSpecMap dataGroupingsMap = tableSpec.getGroupings();
         if (dataGroupingsMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
         // If data grouping configuration is not found, return success (idempotence).
         dataGroupingsMap.remove(dataGroupingConfigurationName);
+        if (Objects.equals(dataGroupingConfigurationName, tableSpec.getDefaultGroupingName())) {
+            tableSpec.setDefaultGroupingName(null);
+        }
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

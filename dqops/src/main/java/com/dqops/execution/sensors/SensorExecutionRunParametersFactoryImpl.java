@@ -95,7 +95,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         DataGroupingConfigurationSpec dataGroupingConfiguration =
                 dataGroupingConfigurationOverride != null ? dataGroupingConfigurationOverride :
                         (check.getDataGrouping() != null ?
-                         expandedTable.getGroupings().get(check.getDataGrouping()) : expandedTable.getGroupings().getFirstDataGroupingConfiguration());
+                         expandedTable.getGroupings().get(check.getDataGrouping()) : expandedTable.getDefaultDataGroupingConfiguration());
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
         EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames();
@@ -161,7 +161,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
         DataGroupingConfigurationSpec dataStreams = statisticsDataScope == StatisticsDataScope.table ? null :
-                expandedTable.getGroupings().getFirstDataGroupingConfiguration();
+                expandedTable.getDefaultDataGroupingConfiguration();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
         EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(

@@ -57,4 +57,9 @@ be raised.
 YAMl configuration files are located in the `./sources` folder. The complete DQO YAML schema can e found 
 [here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json). 
 
-The YAML files in DQO support code completion in code editors such as Visual Studio Code.
+The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
+extension by RedHat and Better Jinja by Samuel Colvin.
+
+![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
+
+![Better Jinja extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/better-jinja-extension.png)

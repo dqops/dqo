@@ -12,7 +12,7 @@ Verifies that the sum in a column is within a percentile from measurements made 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_anomaly_stationary|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[percentile_moving_average](../../../../reference/rules/Percentile/#percentile-moving-average)|
+|daily_partition_sum_anomaly_stationary|partitioned|daily|[sum](../../../../reference/sensors/Column/numeric-column-sensors/#sum)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -235,10 +235,11 @@ spec:
     
         
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 39-44"
+    ```yaml hl_lines="11-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -249,8 +250,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -443,6 +445,7 @@ spec:
             
         ```
     
+
 
 
 

@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.percentile.ChangePercentileMovingAverageRule01ParametersSpec;
-import com.dqops.rules.percentile.ChangePercentileMovingAverageRule05ParametersSpec;
-import com.dqops.rules.percentile.ChangePercentileMovingAverageRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec;
+import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnAnomalyDifferencingSumCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, ChangePercentileMovingAverageRule1ParametersSpec, ChangePercentileMovingAverageRule05ParametersSpec, ChangePercentileMovingAverageRule01ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec, AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec, AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyDifferencingSumCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +54,17 @@ public class ColumnAnomalyDifferencingSumCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentileMovingAverageRule1ParametersSpec warning;
+    private AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentileMovingAverageRule05ParametersSpec error;
+    private AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentileMovingAverageRule01ParametersSpec fatal;
+    private AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -93,7 +93,7 @@ public class ColumnAnomalyDifferencingSumCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public ChangePercentileMovingAverageRule1ParametersSpec getWarning() {
+    public AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +102,7 @@ public class ColumnAnomalyDifferencingSumCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ChangePercentileMovingAverageRule1ParametersSpec warning) {
+    public void setWarning(AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +114,7 @@ public class ColumnAnomalyDifferencingSumCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public ChangePercentileMovingAverageRule05ParametersSpec getError() {
+    public AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +123,7 @@ public class ColumnAnomalyDifferencingSumCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(ChangePercentileMovingAverageRule05ParametersSpec error) {
+    public void setError(AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -135,7 +135,7 @@ public class ColumnAnomalyDifferencingSumCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ChangePercentileMovingAverageRule01ParametersSpec getFatal() {
+    public AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -144,7 +144,7 @@ public class ColumnAnomalyDifferencingSumCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ChangePercentileMovingAverageRule01ParametersSpec fatal) {
+    public void setFatal(AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

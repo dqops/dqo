@@ -30,7 +30,10 @@ DQO has a dynamic user interface for configuration of all data quality checks th
 Tabs allow managing data quality checks at the same time on multiple tables. Just imagine that it is a web based
 Visual Studio Code for data quality. 
 
-![DQO screens](https://dqops.com/docs/images/dqo-screens.gif)
+![](https://dqops.com/docs/images/dqo-screen1.png) &nbsp; &nbsp; &nbsp; ![](https://dqops.com/docs/images/dqo-screen2.png)
+
+
+![](https://dqops.com/docs/images/dqo-screen3.png) &nbsp; &nbsp; &nbsp; ![](https://dqops.com/docs/images/dqo-screen4.png) 
 
 ## Additional resources
 

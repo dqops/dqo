@@ -29,6 +29,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.comparisons.ReferenceTableSpecMap;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -47,6 +48,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.parquet.Strings;
 
 import java.util.Map;
 import java.util.Objects;
@@ -116,6 +118,10 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PartitionIncrementalTimeWindowSpec incrementalTimeWindow = new PartitionIncrementalTimeWindowSpec();
+
+    @JsonPropertyDescription("The name of the default data grouping configuration that is applied on data quality checks. When a default data grouping is selected, all data quality checks run SQL queries with a GROUP BY clause, calculating separate data quality checks for each group of data. The data groupings are defined in the 'groupings' dictionary (indexed by the data grouping name).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String defaultGroupingName;
 
     @JsonPropertyDescription("Data grouping configurations list. Data grouping configurations are configured in two cases:" +
             " (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning." +
@@ -283,6 +289,23 @@ public class TableSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.incrementalTimeWindow, incrementalTimeWindow));
         this.incrementalTimeWindow = incrementalTimeWindow;
         propagateHierarchyIdToField(incrementalTimeWindow, "incremental_time_window");
+    }
+
+    /**
+     * Returns the name of the default data grouping.
+     * @return The name of the default data grouping.
+     */
+    public String getDefaultGroupingName() {
+        return defaultGroupingName;
+    }
+
+    /**
+     * Sets the name of the default data grouping.
+     * @param defaultGroupingName The name of the default data grouping or null to disable data grouping.
+     */
+    public void setDefaultGroupingName(String defaultGroupingName) {
+        setDirtyIf(!Objects.equals(this.defaultGroupingName, defaultGroupingName));
+        this.defaultGroupingName = defaultGroupingName;
     }
 
     /**
@@ -513,6 +536,41 @@ public class TableSpec extends AbstractSpec {
             } else {
                 existingColumnSpec.setTypeSnapshot(sourceColumnEntry.getValue().getTypeSnapshot());
                 // quality checks are not modified for existing columns, only the type snapshot
+            }
+        }
+    }
+
+    /**
+     * Retrieves the data grouping configuration that is selected as the default data grouping or returns null when no data grouping configuration
+     * is selected or the selected data grouping configuration is not found in the 'groupings' dictionary.
+     * @return The default data grouping configuration specification or null, when no grouping should be applied.
+     */
+    @JsonIgnore
+    public DataGroupingConfigurationSpec getDefaultDataGroupingConfiguration() {
+        if (Strings.isNullOrEmpty(this.defaultGroupingName) || this.groupings == null) {
+            return null;
+        }
+
+        return this.groupings.get(this.defaultGroupingName);
+    }
+
+    /**
+     * Sets the default data grouping configuration or updates the existing default grouping configuration.
+     * @param dataGroupingConfigurationSpec Data grouping configuration.
+     */
+    @JsonIgnore
+    public void setDefaultDataGroupingConfiguration(DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
+        if (dataGroupingConfigurationSpec != null) {
+            if (Strings.isNullOrEmpty(this.defaultGroupingName)) {
+                this.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+                this.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+            } else {
+                this.getGroupings().put(this.defaultGroupingName, dataGroupingConfigurationSpec);
+            }
+        } else {
+            if (this.defaultGroupingName != null) {
+                this.getGroupings().remove(this.defaultGroupingName);
+                this.setDefaultGroupingName(null);
             }
         }
     }

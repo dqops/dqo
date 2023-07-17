@@ -164,6 +164,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
         DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableSpec.getGroupings());
+        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableSpec.getDefaultGroupingName());
 
         if (tableSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;

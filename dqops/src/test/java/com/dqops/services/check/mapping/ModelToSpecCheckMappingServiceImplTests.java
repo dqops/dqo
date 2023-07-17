@@ -26,6 +26,8 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableSpecObjectMother;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -54,18 +56,19 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
                 triggerFactory,
                 defaultTimeZoneProvider);
 
+        DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
         this.specToUiMapper = new SpecToModelCheckMappingServiceImpl(
                 reflectionService, sensorDefinitionFindService, schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
 
         this.bigQueryConnectionSpec = BigQueryConnectionSpecObjectMother.create();
         
         
         this.sut = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.tableSpec = TableSpecObjectMother.create("public", "tab1");
-        this.tableSpec.getGroupings().setFirstDataGroupingConfiguration(new DataGroupingConfigurationSpec());
+        this.tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
     }
 
     @Test

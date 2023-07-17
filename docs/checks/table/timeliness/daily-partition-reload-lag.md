@@ -484,10 +484,11 @@ spec:
     
         
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 36-41"
+    ```yaml hl_lines="11-19 37-42"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -498,8 +499,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -937,6 +939,7 @@ spec:
             
         ```
     
+
 
 
 
@@ -1419,10 +1422,11 @@ spec:
     
         
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 36-41"
+    ```yaml hl_lines="11-19 37-42"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1433,8 +1437,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -1872,6 +1877,7 @@ spec:
             
         ```
     
+
 
 
 

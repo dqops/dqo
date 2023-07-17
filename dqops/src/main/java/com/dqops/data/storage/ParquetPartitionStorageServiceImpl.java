@@ -35,6 +35,7 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.tables.TableCompressUtility;
 import com.dqops.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
@@ -128,6 +129,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             TablesawParquetReadOptions readOptions = optionsBuilder.build();
 
             Table data = new DqoTablesawParquetReader(this.hadoopConfigurationProvider.getHadoopConfiguration()).read(readOptions);
+            TableCompressUtility.internStrings(data);
 
             LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
             return loadedPartition;

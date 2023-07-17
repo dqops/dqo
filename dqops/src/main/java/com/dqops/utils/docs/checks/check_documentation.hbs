@@ -64,7 +64,8 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName
     {{/each~}}
     ```
 {{/each~}}
-### **Configuration with a data stream segmentation**{{#with "  "}}{{.}}{{/with}}
+{{#if splitSampleYamlWithDataStreams}}
+### **Configuration with data grouping**{{#with "  "}}{{.}}{{/with}}
 ??? info "Click to see more"{{#with "  "}}{{.}}{{/with}}
     **Sample configuration (Yaml)**{{#with "  "}}{{.}}{{/with}}
     ```yaml hl_lines="{{firstSectionBeginMarker}}-{{firstSectionEndMarker}} {{secondSectionBeginMarker}}-{{secondSectionEndMarker}}"
@@ -88,6 +89,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName
         {{/each~}}
         ```
     {{/each~}}
+{{/if}}
 {{#if runOnConnectionCliCommand}}
 **CLI command to run check on connection**{{#with "  "}}{{.}}{{/with}}
 ```

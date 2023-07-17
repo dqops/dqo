@@ -306,7 +306,8 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
 
         if (this.filters.getTags() != null && this.filters.getTags().length > 0) {
             DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
-            DataGroupingConfigurationSpec selectedDataGroupingConfiguration = dataGroupingConfigurationSearcherObject.getTableDataGroupingConfigurations().getFirstDataGroupingConfiguration();
+            DataGroupingConfigurationSpec selectedDataGroupingConfiguration =
+                    dataGroupingConfigurationSearcherObject.getDefaultGroupingConfiguration();
 
             if (!DataStreamsTagsSearchMatcher.matchAllRequiredTags(this.filters.getTags(), selectedDataGroupingConfiguration)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;

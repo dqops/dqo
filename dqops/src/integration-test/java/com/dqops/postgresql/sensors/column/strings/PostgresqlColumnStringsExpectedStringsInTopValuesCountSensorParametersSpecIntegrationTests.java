@@ -88,12 +88,12 @@ public class PostgresqlColumnStringsExpectedStringsInTopValuesCountSensorParamet
         this.sut.setTop(2L);
         this.sut.setFilter("id < 5");
 
-        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getGroupings().getFirstDataGroupingConfiguration();
+        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getDefaultDataGroupingConfiguration();
         dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
             setSource(DataGroupingDimensionSource.column_value);
             setColumn("mix_string_int");
         }});
-        this.sampleTableMetadata.getTableSpec().getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfiguration);
+        this.sampleTableMetadata.getTableSpec().setDefaultDataGroupingConfiguration(dataGroupingConfiguration);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);

@@ -35,6 +35,7 @@ import com.dqops.data.statistics.services.models.StatisticsResultsForTableModel;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import com.dqops.metadata.scheduling.RecurringScheduleSpec;
@@ -284,14 +285,14 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the default (first) data grouping configuration for a table given a connection name and a table names.
+     * Retrieves the default data grouping configuration for a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @return Default data grouping configuration for the requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultgroupingconfiguration", produces = "application/json")
-    @ApiOperation(value = "getTableDefaultGroupingConfiguration", notes = "Return the default (first) data grouping configuration for a table", response = DataGroupingConfigurationSpec.class)
+    @ApiOperation(value = "getTableDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a table.", response = DataGroupingConfigurationSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Default data grouping configuration for a table returned", response = DataGroupingConfigurationSpec.class),
@@ -318,7 +319,7 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        DataGroupingConfigurationSpec dataGroupingConfiguration = tableSpec.getGroupings().getFirstDataGroupingConfiguration();
+        DataGroupingConfigurationSpec dataGroupingConfiguration = tableSpec.getDefaultDataGroupingConfiguration();
 
         return new ResponseEntity<>(Mono.justOrEmpty(dataGroupingConfiguration), HttpStatus.OK); // 200
     }
@@ -1828,7 +1829,7 @@ public class TablesController {
     }
 
     /**
-     * Updates the default (first) data grouping configuration of an existing table.
+     * Updates the default data grouping configuration of an existing table.
      * @param connectionName         Connection name.
      * @param schemaName             Schema name.
      * @param tableName              Table name.
@@ -1872,12 +1873,20 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
         if (dataGroupingConfigurationSpec.isPresent()) {
-            tableSpec.getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfigurationSpec.get());
+            if (!Strings.isNullOrEmpty(tableSpec.getDefaultGroupingName())) {
+                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec.get());
+            } else {
+                tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec.get());
+                tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+            }
         } else {
-            tableSpec.getGroupings().setFirstDataGroupingConfiguration(null); // will remove the first mapping
+            if (tableSpec.getDefaultGroupingName() != null) {
+                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                tableSpec.setDefaultGroupingName(null);
+            }
         }
         userHomeContext.flush();
 

@@ -93,7 +93,7 @@ public class CheckServiceImplTests extends BaseTest {
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         this.specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
         this.allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToModelCheckMappingService);
 
         ModelToSpecCheckMappingService modelToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);

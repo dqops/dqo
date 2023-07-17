@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.percentile.PercentileMovingAverage30DaysRule01ParametersSpec;
-import com.dqops.rules.percentile.PercentileMovingAverage30DaysRule05ParametersSpec;
-import com.dqops.rules.percentile.PercentileMovingAverage30DaysRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, PercentileMovingAverage30DaysRule1ParametersSpec, PercentileMovingAverage30DaysRule05ParametersSpec, PercentileMovingAverage30DaysRule01ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec, AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec, AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyStationaryPartitionSum30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +54,17 @@ public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingAverage30DaysRule1ParametersSpec warning;
+    private AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingAverage30DaysRule05ParametersSpec error;
+    private AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingAverage30DaysRule01ParametersSpec fatal;
+    private AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -93,7 +93,7 @@ public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public PercentileMovingAverage30DaysRule1ParametersSpec getWarning() {
+    public AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +102,7 @@ public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(PercentileMovingAverage30DaysRule1ParametersSpec warning) {
+    public void setWarning(AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +114,7 @@ public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public PercentileMovingAverage30DaysRule05ParametersSpec getError() {
+    public AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +123,7 @@ public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(PercentileMovingAverage30DaysRule05ParametersSpec error) {
+    public void setError(AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -135,7 +135,7 @@ public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public PercentileMovingAverage30DaysRule01ParametersSpec getFatal() {
+    public AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -144,7 +144,7 @@ public class ColumnAnomalyStationaryPartitionSum30DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(PercentileMovingAverage30DaysRule01ParametersSpec fatal) {
+    public void setFatal(AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

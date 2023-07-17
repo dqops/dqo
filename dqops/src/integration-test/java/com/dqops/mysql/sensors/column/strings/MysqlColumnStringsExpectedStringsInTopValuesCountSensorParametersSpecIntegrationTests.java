@@ -106,12 +106,12 @@ public class MysqlColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
 
-        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getGroupings().getFirstDataGroupingConfiguration();
+        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getDefaultDataGroupingConfiguration();
         dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
             setSource(DataGroupingDimensionSource.column_value);
             setColumn("dim1");
         }});
-        this.sampleTableMetadata.getTableSpec().getGroupings().setFirstDataGroupingConfiguration(dataGroupingConfiguration);
+        this.sampleTableMetadata.getTableSpec().setDefaultDataGroupingConfiguration(dataGroupingConfiguration);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);

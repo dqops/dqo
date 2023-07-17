@@ -18,6 +18,7 @@ package com.dqops.utils.specs;
 
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
@@ -96,7 +97,13 @@ public class DqoHomeDefinitionFillPostProcessor {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         CheckDefinitionDefaultSpecUpdateService sensorDefinitionDefaultSpecUpdateService =
-                new CheckDefinitionDefaultSpecUpdateServiceImpl(new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService));
+                new CheckDefinitionDefaultSpecUpdateServiceImpl(new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService,
+                        new DqoHomeContextFactory() {
+                            @Override
+                            public DqoHomeContext openLocalDqoHome() {
+                                return dqoHomeContext;
+                            }
+                        }));
 
         sensorDefinitionDefaultSpecUpdateService.updateCheckSpecifications(dqoHomeContext);
     }

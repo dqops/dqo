@@ -343,10 +343,11 @@ spec:
     LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
     ON analyzed_table.[target_column] = foreign_table.[customer_id]
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 41-46"
+    ```yaml hl_lines="11-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -357,8 +358,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -662,6 +664,7 @@ spec:
             
         ```
     
+
 
 
 
@@ -1009,10 +1012,11 @@ spec:
     LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
     ON analyzed_table.[target_column] = foreign_table.[customer_id]
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 42-47"
+    ```yaml hl_lines="11-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1023,8 +1027,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -1329,6 +1334,7 @@ spec:
             
         ```
     
+
 
 
 
@@ -1676,10 +1682,11 @@ spec:
     LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
     ON analyzed_table.[target_column] = foreign_table.[customer_id]
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 42-47"
+    ```yaml hl_lines="11-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1690,8 +1697,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -1996,6 +2004,7 @@ spec:
             
         ```
     
+
 
 
 
@@ -2347,10 +2356,11 @@ spec:
     
         
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 42-47"
+    ```yaml hl_lines="11-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2361,8 +2371,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -2665,6 +2676,7 @@ spec:
             
         ```
     
+
 
 
 
@@ -3016,10 +3028,11 @@ spec:
     
         
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 42-47"
+    ```yaml hl_lines="11-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3030,8 +3043,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -3334,6 +3348,7 @@ spec:
             
         ```
     
+
 
 
 

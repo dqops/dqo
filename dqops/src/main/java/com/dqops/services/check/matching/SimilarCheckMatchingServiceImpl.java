@@ -27,9 +27,14 @@ import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategories
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
+import com.dqops.connectors.ProviderType;
+import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHomeImpl;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,14 +47,18 @@ import java.util.Objects;
 @Component
 public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingService {
     private SpecToModelCheckMappingService specToModelCheckMappingService;
+    private DqoHomeContextFactory dqoHomeContextFactory;
 
     /**
      * Creates a service given dependencies.
      * @param specToModelCheckMappingService Check specification to check model mapping service.
+     * @param dqoHomeContextFactory Returns the default DQO home context.
      */
     @Autowired
-    public SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingService specToModelCheckMappingService) {
+    public SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingService specToModelCheckMappingService,
+                                           DqoHomeContextFactory dqoHomeContextFactory) {
         this.specToModelCheckMappingService = specToModelCheckMappingService;
+        this.dqoHomeContextFactory = dqoHomeContextFactory;
     }
 
     /**
@@ -106,29 +115,31 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
             // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
+        ExecutionContext executionContext = new ExecutionContext(null, this.dqoHomeContextFactory.openLocalDqoHome());
+
         TableProfilingCheckCategoriesSpec profilingChecks = tableSpec.getProfilingChecks();
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(profilingChecks,
-                checkSearchFilters, null, tableSpec, null, null),
+                checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
         TableDailyRecurringCheckCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getDaily(), TableDailyRecurringCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyRecurring,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());
 
         TableMonthlyRecurringCheckCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getMonthly(), TableMonthlyRecurringCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyRecurring,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 monthlyRecurring.getCheckTarget(), monthlyRecurring.getCheckType(), monthlyRecurring.getCheckTimeScale());
 
         TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getDaily(), TableDailyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyPartitioned,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getMonthly(), TableMonthlyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyPartitioned,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 monthlyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 
         return similarChecksContainer;
@@ -153,31 +164,33 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
             // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
+        ExecutionContext executionContext = new ExecutionContext(null, this.dqoHomeContextFactory.openLocalDqoHome());
+
         ColumnProfilingCheckCategoriesSpec profilingChecks = Objects.requireNonNullElseGet(columnSpec.getProfilingChecks(), ColumnProfilingCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(profilingChecks,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
         ColumnRecurringChecksRootSpec recurring = Objects.requireNonNullElseGet(columnSpec.getRecurringChecks(), ColumnRecurringChecksRootSpec::new);
         ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(recurring.getDaily(), ColumnDailyRecurringCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyRecurring,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());
 
         ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(recurring.getMonthly(), ColumnMonthlyRecurringCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyRecurring,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 monthlyRecurring.getCheckTarget(), monthlyRecurring.getCheckType(), monthlyRecurring.getCheckTimeScale());
 
         ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyPartitioned,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getMonthly(), ColumnMonthlyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyPartitioned,
-                        checkSearchFilters, null, tableSpec,null, null),
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery),
                 dailyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 
         return similarChecksContainer;

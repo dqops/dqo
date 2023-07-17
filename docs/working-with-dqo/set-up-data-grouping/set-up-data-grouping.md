@@ -64,10 +64,14 @@ To set up data grouping configuration at the table level:
 ## Set up data grouping configuration using the DQO Shell
 
 Data quality checks are stored in YAML configuration files. YAML configuration files are located in the `./sources` folder.
-The complete DQO YAML schema can be found [here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json).
+The complete [DQO YAML schema can be found here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json).
 
-The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install YAML
-extension by RedHat and Better Jinja by Samuel Colvin
+The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
+extension by RedHat and Better Jinja by Samuel Colvin.
+
+![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
+
+![Better Jinja extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/better-jinja-extension.png)
 
 To set up a default data grouping configuration at the data source level, follow the steps below.
 

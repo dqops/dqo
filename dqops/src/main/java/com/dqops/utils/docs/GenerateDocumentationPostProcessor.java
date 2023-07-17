@@ -21,6 +21,7 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
@@ -201,7 +202,7 @@ public class GenerateDocumentationPostProcessor {
      * @param dqoHomeContext DQO Home context.
      * @return Check documentation model factory.
      */
-    public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext){
+    public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, final DqoHomeContext dqoHomeContext){
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl());
@@ -217,7 +218,12 @@ public class GenerateDocumentationPostProcessor {
                 configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
 
         CheckDocumentationModelFactory checkDocumentationModelFactory = new CheckDocumentationModelFactoryImpl(
-                new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService),
+                new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, new DqoHomeContextFactory() {
+                    @Override
+                    public DqoHomeContext openLocalDqoHome() {
+                        return dqoHomeContext;
+                    }
+                }),
                 createSensorDocumentationModelFactory(dqoHomeContext),
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
                 new ModelToSpecCheckMappingServiceImpl(reflectionService),

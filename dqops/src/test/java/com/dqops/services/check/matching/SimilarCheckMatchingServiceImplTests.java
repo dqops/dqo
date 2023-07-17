@@ -17,6 +17,8 @@ package com.dqops.services.check.matching;
 
 import com.dqops.BaseTest;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
+import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -33,8 +35,10 @@ public class SimilarCheckMatchingServiceImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl()));
+        SpecToModelCheckMappingServiceImpl specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+        DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
+        this.sut = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService, dqoHomeContextFactory);
     }
 
     @Test

@@ -32,7 +32,7 @@ To start DQO in server mode follow the steps below.
     - The `-p` flag creates a mapping between the host’s port 8888 to the container’s port 8888. Without the port mapping, you would not be able to access the application.
     - The `--dqo.cloud.api-key` argument specifies the API Key of your [DQO Cloud account](https://cloud.dqo.ai/registration).
 
-3. After a few seconds open your web browser to [http://localhost:8888](http://localhost:8888). You should see the graphical interface of the DQO.
+3. After a few seconds open your web browser to **http://localhost:8888**. You should see the graphical interface of the DQO.
 
 
 ## Start DQO in Shell mode

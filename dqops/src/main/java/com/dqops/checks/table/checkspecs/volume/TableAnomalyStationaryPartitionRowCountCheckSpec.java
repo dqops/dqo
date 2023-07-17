@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.percentile.PercentileMovingAverageRule01ParametersSpec;
-import com.dqops.rules.percentile.PercentileMovingAverageRule05ParametersSpec;
-import com.dqops.rules.percentile.PercentileMovingAverageRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule01ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule05ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
 import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableAnomalyStationaryPartitionRowCountCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, PercentileMovingAverageRule1ParametersSpec, PercentileMovingAverageRule05ParametersSpec, PercentileMovingAverageRule01ParametersSpec> {
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableAnomalyStationaryPartitionRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +54,17 @@ public class TableAnomalyStationaryPartitionRowCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingAverageRule1ParametersSpec warning;
+    private AnomalyStationaryPercentileMovingAverageRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingAverageRule05ParametersSpec error;
+    private AnomalyStationaryPercentileMovingAverageRule05ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingAverageRule01ParametersSpec fatal;
+    private AnomalyStationaryPercentileMovingAverageRule01ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -93,7 +93,7 @@ public class TableAnomalyStationaryPartitionRowCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public PercentileMovingAverageRule1ParametersSpec getWarning() {
+    public AnomalyStationaryPercentileMovingAverageRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +102,7 @@ public class TableAnomalyStationaryPartitionRowCountCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(PercentileMovingAverageRule1ParametersSpec warning) {
+    public void setWarning(AnomalyStationaryPercentileMovingAverageRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +114,7 @@ public class TableAnomalyStationaryPartitionRowCountCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public PercentileMovingAverageRule05ParametersSpec getError() {
+    public AnomalyStationaryPercentileMovingAverageRule05ParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +123,7 @@ public class TableAnomalyStationaryPartitionRowCountCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(PercentileMovingAverageRule05ParametersSpec error) {
+    public void setError(AnomalyStationaryPercentileMovingAverageRule05ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -135,7 +135,7 @@ public class TableAnomalyStationaryPartitionRowCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public PercentileMovingAverageRule01ParametersSpec getFatal() {
+    public AnomalyStationaryPercentileMovingAverageRule01ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -144,7 +144,7 @@ public class TableAnomalyStationaryPartitionRowCountCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(PercentileMovingAverageRule01ParametersSpec fatal) {
+    public void setFatal(AnomalyStationaryPercentileMovingAverageRule01ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_anomaly_differencing|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percentile_moving_average](../../../../reference/rules/Percentile/#change-percentile-moving-average)|
+|row_count_anomaly_differencing|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -260,10 +260,11 @@ spec:
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 35-40"
+    ```yaml hl_lines="11-19 36-41"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -274,8 +275,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -511,6 +513,7 @@ spec:
 
 
 
+
 ___
 
 ## **daily row count anomaly differencing**  
@@ -520,7 +523,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_anomaly_differencing|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[change_percentile_moving_average](../../../../reference/rules/Percentile/#change-percentile-moving-average)|
+|daily_row_count_anomaly_differencing|recurring|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_differencing_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-differencing-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -770,10 +773,11 @@ spec:
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **Configuration with a data stream segmentation**  
+
+### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="0-0 36-41"
+    ```yaml hl_lines="11-19 37-42"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -784,8 +788,9 @@ spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
+      default_grouping_name: group_by_country_and_state
       groupings:
-        default:
+        group_by_country_and_state:
           level_1:
             source: column_value
             column: country
@@ -1017,6 +1022,7 @@ spec:
             
         ```
     
+
 
 
 
