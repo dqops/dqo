@@ -544,6 +544,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
                         null,
                         tableSpec.getDefaultDataGroupingConfiguration(),
+                        null,
+                        null,
                         checkSpec.getParameters(),
                         providerDialectSettings,
                         new CheckSearchFilters(),

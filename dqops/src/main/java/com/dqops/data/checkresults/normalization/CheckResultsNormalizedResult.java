@@ -27,6 +27,7 @@ import tech.tablesaw.api.*;
 public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult {
     private final IntColumn severityColumn;
     private final LongColumn incidentHashColumn;
+    private final TextColumn tableComparisonNameColumn;
     private final TextColumn referenceConnectionColumn;
     private final TextColumn referenceSchemaColumn;
     private final TextColumn referenceTableColumn;
@@ -49,6 +50,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
         super(table);
         this.severityColumn = TableColumnUtility.getOrAddIntColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
         this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(table, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
+        this.tableComparisonNameColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
         this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME);
         this.referenceSchemaColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME);
         this.referenceTableColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME);
@@ -77,6 +79,14 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      */
     public LongColumn getIncidentHashColumn() {
         return incidentHashColumn;
+    }
+
+    /**
+     * Returns the column that contains the table comparison name for data comparison checks.
+     * @return Table comparison name column.
+     */
+    public TextColumn getTableComparisonNameColumn() {
+        return tableComparisonNameColumn;
     }
 
     /**

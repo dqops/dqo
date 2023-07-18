@@ -98,6 +98,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),
                 tableSpec.getDefaultDataGroupingConfiguration(),
+                null,
+                null,
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 null,

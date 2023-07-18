@@ -911,10 +911,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
             ConnectionProvider referencedConnectionProvider = this.connectionProviderRegistry.getConnectionProvider(referencedConnectionSpec.getProviderType());
             ProviderDialectSettings referencedDialectSettings = referencedConnectionProvider.getDialectSettings(referencedConnectionSpec);
+            String referencedColumnName = null;
             ColumnSpec referencedColumnSpec = null;
             if (comparedColumnSpec != null) {
                 AbstractColumnComparisonCheckCategorySpec columnComparisonCheckCategorySpec = (AbstractColumnComparisonCheckCategorySpec) comparisonCheckCategorySpec;
-                String referencedColumnName = columnComparisonCheckCategorySpec.getReferenceColumn();
+                referencedColumnName = columnComparisonCheckCategorySpec.getReferenceColumn();
                 referencedColumnSpec = referencedTableSpec.getColumns().get(referencedColumnName);
                 if (referencedColumnSpec == null) {
                     throw new DqoRuntimeException("Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced column " +
@@ -960,6 +961,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                     referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
                     timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
+            sensorRunParameters.setTableComparisonConfiguration(tableComparisonConfigurationSpec);
+            sensorRunParameters.setReferenceColumnName(referencedColumnName);
+
             return sensorRunParameters;
         }
         catch (Throwable ex) {
