@@ -26,11 +26,12 @@ const DataGroupingConfigurationListView = ({
     groupingConfiguration: DataGroupingConfigurationBasicModel
   ) => {
     try {
-      await DataGroupingConfigurationsApi.setTableDefaultGroupingToNull(
+      await DataGroupingConfigurationsApi.tableDefaultGroupingToNull(
         groupingConfiguration.connection_name || '',
         groupingConfiguration.schema_name || '',
         groupingConfiguration.table_name || '',
-        groupingConfiguration.data_grouping_configuration_name || ''
+        groupingConfiguration.data_grouping_configuration_name || '',
+        true
       );
       getDataGroupingConfigurations();
     } catch (err) {

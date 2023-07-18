@@ -295,41 +295,7 @@ public class DataGroupingConfigurationsController {
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
-    /**
-     * Sets a specific data grouping configuration as a default for the table.
-     * @param connectionName  Connection name.
-     * @param schemaName      Schema name.
-     * @param tableName       Table name.
-     * @param dataGroupingConfigurationName  Data grouping configuration name.
-     * @return Empty response.
-     */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}/setdefault", produces = "application/json")
-    @ApiOperation(value = "setTableDefaultGroupingToNull", notes = "Sets a table's grouping configuration as the default or disables data grouping")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Data grouping configuration successfully set as the default for the table"),
-            @ApiResponse(code = 404, message = "Connection, table or data grouping configuration not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<?>> setTableDefaultGroupingToNull(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Data grouping configuration name or null to disable data grouping") @PathVariable String dataGroupingConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
 
-        DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
-        if (!Strings.isNullOrEmpty(dataGroupingConfigurationName) && !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-            tableSpec.setDefaultGroupingName(null);
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-    }
 
     /**
      * Deletes a specific data grouping configuration.
@@ -421,5 +387,46 @@ public class DataGroupingConfigurationsController {
             return null;
         }
         return tableSpec.getGroupings();
+    }
+
+    /**
+     * Sets a specific data grouping configuration as a default for the table.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
+     * @param dataGroupingConfigurationName  Data grouping configuration name.
+     * @return Empty response.
+     */
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}/setdefault", produces = "application/json")
+    @ApiOperation(value = "tableDefaultGroupingToNull", notes = "Sets a table's grouping configuration to null")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Data grouping configuration successfully set as the default for the table"),
+            @ApiResponse(code = 404, message = "Connection, table or data grouping configuration not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> tableDefaultGroupingToNull(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Data grouping configuration name or null to disable data grouping") @PathVariable String dataGroupingConfigurationName,
+            @ApiParam("Check if default should be null") @PathVariable boolean check )
+    {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
+        if (!Strings.isNullOrEmpty(dataGroupingConfigurationName) && !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        if(check == true){
+
+            tableSpec.setDefaultGroupingName(null);
+        }
+        userHomeContext.flush();
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 }
