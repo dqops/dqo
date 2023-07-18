@@ -23,7 +23,7 @@ import com.dqops.sampledata.files.SampleTableFromCsv;
  * This object describes a desired target table for testing on a target database.
  */
 public class SampleTableMetadata {
-    private final String connectionName;
+    private String connectionName;
     private final ConnectionSpec connectionSpec;
     private final TableSpec tableSpec;
     private final SampleTableFromCsv tableData;
@@ -48,6 +48,14 @@ public class SampleTableMetadata {
      */
     public String getConnectionName() {
         return connectionName;
+    }
+
+    /**
+     * Sets a new connection name.
+     * @param connectionName Connection name.
+     */
+    public void setConnectionName(String connectionName) {
+        this.connectionName = connectionName;
     }
 
     /**
