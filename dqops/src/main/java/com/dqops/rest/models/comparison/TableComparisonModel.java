@@ -19,8 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.*;
-import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
-import com.dqops.metadata.comparisons.ReferenceTableSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -47,10 +46,10 @@ import java.util.List;
 @Data
 public class TableComparisonModel {
     /**
-     * The name of the reference table configuration that is defined in the 'reference_tables' node on the table specification.
+     * The name of the table comparison configuration that is defined in the 'table_comparisons' node on the table specification.
      */
-    @JsonPropertyDescription("The name of the reference table configuration that is defined in the 'reference_tables' node on the table specification.")
-    private String referenceTableConfigurationName;
+    @JsonPropertyDescription("The name of the table comparison configuration that is defined in the 'table_comparisons' node on the table specification.")
+    private String tableComparisonConfigurationName;
 
     /**
      * Compared connection name - the connection name to the data source that is compared (verified).
@@ -135,12 +134,12 @@ public class TableComparisonModel {
             throw new DqoRuntimeException("Cannot map a detached table, because the connection and table name is unknown");
         }
 
-        ReferenceTableSpec comparisonSpec = comparedTableSpec.getReferenceTables().get(referenceTableConfigurationName);
+        TableComparisonConfigurationSpec comparisonSpec = comparedTableSpec.getTableComparisons().get(referenceTableConfigurationName);
         if (comparisonSpec == null) {
             throw new DqoRuntimeException("Table comparison '" + referenceTableConfigurationName + "' not found in the table " + comparedTableHierarchyId.toString());
         }
 
-        tableComparisonModel.setReferenceTableConfigurationName(comparisonSpec.getComparisonName());
+        tableComparisonModel.setTableComparisonConfigurationName(comparisonSpec.getComparisonName());
         tableComparisonModel.comparedConnection = comparedTableHierarchyId.getConnectionName();
         tableComparisonModel.comparedTable = comparedTableHierarchyId.getPhysicalTableName();
         tableComparisonModel.referenceConnection = comparisonSpec.getReferenceTableConnectionName();
@@ -192,7 +191,7 @@ public class TableComparisonModel {
                                 String referenceTableConfigurationName,
                                 CheckType checkType,
                                 CheckTimeScale checkTimeScale) {
-        ReferenceTableSpec comparisonSpec = targetTableSpec.getReferenceTables().get(referenceTableConfigurationName);
+        TableComparisonConfigurationSpec comparisonSpec = targetTableSpec.getTableComparisons().get(referenceTableConfigurationName);
         if (comparisonSpec == null) {
             throw new DqoRuntimeException("Table comparison '" + referenceTableConfigurationName + "' was not found in table " + targetTableSpec.getHierarchyId());
         }

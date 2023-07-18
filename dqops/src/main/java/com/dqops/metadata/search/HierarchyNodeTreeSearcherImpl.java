@@ -16,6 +16,7 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.id.HierarchyNode;
@@ -230,5 +231,20 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
                 node -> node.visit(searchFilterVisitor, resultsCollector));
 
         return (List<AbstractCheckSpec<?,?,?,?>>)(ArrayList<?>)resultsCollector.getResults();
+    }
+
+    /**
+     * Finds all maps of table comparison check maps on the table (for all check types) and on columns (also for all check types).
+     *
+     * @param startNode Start node.
+     * @return Connection of comparison check category maps.
+     */
+    @Override
+    public Collection<AbstractComparisonCheckCategorySpecMap<?>> findComparisonCheckCategoryMaps(HierarchyNode startNode) {
+        AbstractComparisonCheckCategorySpecMapVisitor visitor = new AbstractComparisonCheckCategorySpecMapVisitor();
+        ArrayList<AbstractComparisonCheckCategorySpecMap<?>> foundNodes = new ArrayList<>();
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode,
+                node -> node.visit(visitor, foundNodes));
+        return foundNodes;
     }
 }

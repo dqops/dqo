@@ -247,7 +247,7 @@ export const EditProfilingReferenceTable = ({
         connection,
         schema,
         table,
-        reference?.reference_table_configuration_name ?? '',
+        reference?.table_comparison_configuration_name ?? '',
         data
       )
         .then(() => {
@@ -265,7 +265,7 @@ export const EditProfilingReferenceTable = ({
           connection,
           schema,
           table,
-          reference?.reference_table_configuration_name ?? '',
+          reference?.table_comparison_configuration_name ?? '',
           data
         )
           .then(() => {
@@ -282,7 +282,7 @@ export const EditProfilingReferenceTable = ({
           connection,
           schema,
           table,
-          reference?.reference_table_configuration_name ?? '',
+          reference?.table_comparison_configuration_name ?? '',
           data
         )
           .then(() => {
@@ -301,7 +301,7 @@ export const EditProfilingReferenceTable = ({
           connection,
           schema,
           table,
-          reference?.reference_table_configuration_name ?? '',
+          reference?.table_comparison_configuration_name ?? '',
           data
         )
           .then(() => {
@@ -318,7 +318,7 @@ export const EditProfilingReferenceTable = ({
           connection,
           schema,
           table,
-          reference?.reference_table_configuration_name ?? '',
+          reference?.table_comparison_configuration_name ?? '',
           data
         )
           .then(() => {
@@ -388,9 +388,9 @@ export const EditProfilingReferenceTable = ({
       <div className="flex items-center justify-between border-b border-t border-gray-300 py-2 px-8">
         <div className="flex items-center gap-3">
           <span>
-            Profiling table comparison using the reference table configuration:
+            Profiling table comparison using the table comparison configuration:
           </span>
-          <span>{reference?.reference_table_configuration_name}</span>
+          <span>{reference?.table_comparison_configuration_name}</span>
         </div>
         <Button
           label="Back"

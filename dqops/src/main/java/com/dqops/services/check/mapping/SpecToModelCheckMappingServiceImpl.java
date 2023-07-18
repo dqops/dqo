@@ -52,7 +52,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -171,8 +170,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 Class<?> comparisonContainerClassType = (Class<?>) actualTypeArgument;
                 ClassInfo comparisonChecksCategoryClassInfo = reflectionService.getClassInfoForClass(comparisonContainerClassType);
 
-                if (tableSpec.getReferenceTables() != null && tableSpec.getReferenceTables().size() > 0) {
-                    for (String comparisonName : tableSpec.getReferenceTables().keySet()) {
+                if (tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().size() > 0) {
+                    for (String comparisonName : tableSpec.getTableComparisons().keySet()) {
                         AbstractComparisonCheckCategorySpec configuredComparisonChecksCategory = comparisonCheckCategorySpecMap.get(comparisonName);
                         if (configuredComparisonChecksCategory == null) {
                             configuredComparisonChecksCategory = (AbstractComparisonCheckCategorySpec) comparisonChecksCategoryClassInfo.createNewInstance();
@@ -198,7 +197,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 }
 
                 for (AbstractComparisonCheckCategorySpec configuredComparisonChecks : comparisonCheckCategorySpecMap.values()) {
-                    if (tableSpec.getReferenceTables() != null && tableSpec.getReferenceTables().get(configuredComparisonChecks.getComparisonName()) != null) {
+                    if (tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().get(configuredComparisonChecks.getComparisonName()) != null) {
                         continue; // already added, we are adding only orphaned check configuration for reference table configurations no longer configured
                         // TODO: assign some boolean flag to the model to identify misconfigured (orphaned) checks, because they will fail to run anyway
                     }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReferenceTableList from './ReferenceTableList';
 import { TableComparisonsApi } from '../../../services/apiClient';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { ReferenceTableModel } from '../../../api';
+import { TableComparisonConfigurationModel } from '../../../api';
 import EditReferenceTable from './EditReferenceTable';
 import qs from "query-string";
 
@@ -13,7 +13,7 @@ const TableReferences = () => {
     table
   }: { connection: string; schema: string; table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [references, setReferences] = useState<ReferenceTableModel[]>([]);
+  const [references, setReferences] = useState<TableComparisonConfigurationModel[]>([]);
   const [selectedReference, setSelectedReference] = useState<string>();
   const location = useLocation();
   const history = useHistory();
@@ -29,7 +29,7 @@ const TableReferences = () => {
   }, []);
 
   const getReferences = () => {
-    TableComparisonsApi.getReferenceTables(connection, schema, table).then((res) => {
+    TableComparisonsApi.getTableComparisonConfigurations(connection, schema, table).then((res) => {
       setReferences(res.data);
     });
   };
@@ -51,9 +51,9 @@ const TableReferences = () => {
     getReferences();
   };
 
-  const onEditReferenceTable = (reference: ReferenceTableModel) => {
-    setSelectedReference(reference.reference_table_configuration_name);
-    onChangeEditing(true, reference.reference_table_configuration_name);
+  const onEditReferenceTable = (reference: TableComparisonConfigurationModel) => {
+    setSelectedReference(reference.table_comparison_configuration_name);
+    onChangeEditing(true, reference.table_comparison_configuration_name);
   };
 
   const onCreate = () => {

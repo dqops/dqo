@@ -54,7 +54,7 @@ import com.dqops.execution.sensors.progress.ExecutingSensorEvent;
 import com.dqops.execution.sensors.progress.PreparingSensorEvent;
 import com.dqops.execution.sensors.progress.SensorExecutedEvent;
 import com.dqops.execution.sensors.progress.SensorFailedEvent;
-import com.dqops.metadata.comparisons.ReferenceTableSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -834,15 +834,15 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             if (comparisonCheckCategory.isPresent()) {
                 AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec) comparisonCheckCategory.get();
                 String referenceTableConfigurationName = comparisonCheckCategorySpec.getComparisonName();
-                ReferenceTableSpec referenceTableSpec = tableSpec.getReferenceTables().get(referenceTableConfigurationName);
-                if (referenceTableSpec == null) {
+                TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableSpec.getTableComparisons().get(referenceTableConfigurationName);
+                if (tableComparisonConfigurationSpec == null) {
                     throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableSpec.toString() +
                             " because the reference table configuration " + referenceTableConfigurationName + " is not configured on the table. " +
                             "Reason: an old configuration of comparison checks is still configured, despite that the reference table configuration was removed. " +
                             "Please remove table comparison check configuration to fix the problem.");
                 }
 
-                String comparedTableGroupingName = referenceTableSpec.getComparedTableGroupingName();
+                String comparedTableGroupingName = tableComparisonConfigurationSpec.getComparedTableGroupingName();
                 dataGroupingConfigurationForComparison = tableSpec.getGroupings().get(comparedTableGroupingName);
                 if (dataGroupingConfigurationForComparison == null) {
                     throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableSpec.toString() +
@@ -887,24 +887,24 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             assert comparisonCheckCategory.isPresent();
             AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec) comparisonCheckCategory.get();
             String comparisonName = comparisonCheckCategorySpec.getComparisonName();
-            ReferenceTableSpec referenceTableSpec = comparedTableSpec.getReferenceTables().get(comparisonName);
-            if (referenceTableSpec == null) {
+            TableComparisonConfigurationSpec tableComparisonConfigurationSpec = comparedTableSpec.getTableComparisons().get(comparisonName);
+            if (tableComparisonConfigurationSpec == null) {
                 throw new DqoRuntimeException("Cannot execute a table comparison check on table " + comparedTableSpec.toString() +
                         " because the reference table configuration " + comparisonName + " is not configured on the table. " +
                         "Reason: an old configuration of comparison checks is still configured, despite that the reference table configuration was removed. " +
                         "Please remove table comparison check configuration to fix the problem.");
             }
 
-            ConnectionWrapper referencedConnectionWrapper = userHome.getConnections().getByObjectName(referenceTableSpec.getReferenceTableConnectionName(), true);
+            ConnectionWrapper referencedConnectionWrapper = userHome.getConnections().getByObjectName(tableComparisonConfigurationSpec.getReferenceTableConnectionName(), true);
             if (referencedConnectionWrapper == null) {
                 throw new DqoRuntimeException("Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the data source connection " +
-                        referenceTableSpec.getReferenceTableConnectionName() + " is not defined in the metadata.");
+                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + " is not defined in the metadata.");
             }
-            PhysicalTableName referenceTablePhysicalName = new PhysicalTableName(referenceTableSpec.getReferenceTableSchemaName(), referenceTableSpec.getReferenceTableName());
+            PhysicalTableName referenceTablePhysicalName = new PhysicalTableName(tableComparisonConfigurationSpec.getReferenceTableSchemaName(), tableComparisonConfigurationSpec.getReferenceTableName());
             TableWrapper referenceTableWrapper = referencedConnectionWrapper.getTables().getByObjectName(referenceTablePhysicalName, true);
             if (referenceTableWrapper == null) {
                 throw new DqoRuntimeException("Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced table " +
-                        referenceTableSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " is not defined in the metadata.");
+                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " is not defined in the metadata.");
             }
             ConnectionSpec referencedConnectionSpec = referencedConnectionWrapper.getSpec();
             TableSpec referencedTableSpec = referenceTableWrapper.getSpec();
@@ -919,14 +919,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 if (referencedColumnSpec == null) {
                     throw new DqoRuntimeException("Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced column " +
                             referencedColumnName + " was not found in the referenced table " +
-                            referenceTableSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " in the metadata. Please fix the configuration or import the metadata of the missing column.");
+                            tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " in the metadata. Please fix the configuration or import the metadata of the missing column.");
                 }
             }
 
-            DataGroupingConfigurationSpec referencedTableGroupingConfiguration = referencedTableSpec.getGroupings().get(referenceTableSpec.getReferenceTableGroupingName());
+            DataGroupingConfigurationSpec referencedTableGroupingConfiguration = referencedTableSpec.getGroupings().get(tableComparisonConfigurationSpec.getReferenceTableGroupingName());
             if (referencedTableGroupingConfiguration == null) {
-                throw new DqoRuntimeException("Cannot execute a table comparison check on table " + referenceTableSpec.toString() +
-                        " because the data grouping configuration " + referenceTableSpec.getReferenceTableGroupingName() + " is not configured on the table.");
+                throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableComparisonConfigurationSpec.toString() +
+                        " because the data grouping configuration " + tableComparisonConfigurationSpec.getReferenceTableGroupingName() + " is not configured on the table.");
             }
 
             Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)
