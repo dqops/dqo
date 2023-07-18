@@ -4,6 +4,7 @@ import Button from '../../Button';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 import SvgIcon from '../../SvgIcon';
+import RadioButton from '../../RadioButton';
 
 interface IDataGroupingConfigurationListViewProps {
   dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
@@ -25,7 +26,7 @@ const DataGroupingConfigurationListView = ({
     groupingConfiguration: DataGroupingConfigurationBasicModel
   ) => {
     try {
-      await DataGroupingConfigurationsApi.setTableDefaultGroupingConfiguration(
+      await DataGroupingConfigurationsApi.setTableDefaultGroupingToNull(
         groupingConfiguration.connection_name || '',
         groupingConfiguration.schema_name || '',
         groupingConfiguration.table_name || '',
@@ -62,6 +63,25 @@ const DataGroupingConfigurationListView = ({
     setOpen(true);
     setSelectedGroupingConfiguration(groupingConfiguration);
   };
+  // const setDefaultGroupingToNull = async (
+  //   groupingConfiguration: DataGroupingConfigurationBasicModel
+  // ) => {
+  //   try {
+  //     await DataGroupingConfigurationsApi.setTableDefaultGroupingToNull(
+  //       groupingConfiguration.connection_name || '',
+  //       groupingConfiguration.schema_name || '',
+  //       groupingConfiguration.table_name || '',
+  //       groupingConfiguration.data_grouping_configuration_name || ''
+  //     );
+  //     getDataGroupingConfigurations();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  const elem: DataGroupingConfigurationBasicModel | undefined =
+    dataGroupingConfigurations.find(
+      (x) => x.default_data_grouping_configuration === true
+    );
 
   return (
     <div className="px-8 py-4 text-sm">
@@ -73,17 +93,43 @@ const DataGroupingConfigurationListView = ({
           </tr>
         </thead>
         <tbody>
+          <div className="pr-2 py-2 relative flex items-center gap-2  ">
+            <div className="w-5 h-5">
+              {' '}
+              <RadioButton
+                checked={
+                  !dataGroupingConfigurations.find(
+                    (x) => x.default_data_grouping_configuration === true
+                  )
+                }
+                onClick={() =>
+                  elem ? setDefaultGroupingConfiguration(elem) : undefined
+                }
+              />
+            </div>
+            <div>Disable data grouping</div>
+          </div>
           {dataGroupingConfigurations.map((groupingConfiguration, index) => (
             <tr key={index}>
               <td className="pr-2 py-2 relative flex items-center gap-2">
-                {groupingConfiguration.default_data_grouping_configuration ===
+                {/* {groupingConfiguration.default_data_grouping_configuration ===
                 true ? (
                   <div className="w-5 h-5 bg-primary rounded flex items-center justify-center">
                     <SvgIcon name="check" className="text-white" />
                   </div>
                 ) : (
                   <div className="w-5 h-5"></div>
-                )}
+                )} */}
+                <div className="w-5 h-5">
+                  <RadioButton
+                    checked={
+                      groupingConfiguration.default_data_grouping_configuration
+                    }
+                    onClick={() =>
+                      setDefaultGroupingConfiguration(groupingConfiguration)
+                    }
+                  />
+                </div>
                 <span>
                   {groupingConfiguration.data_grouping_configuration_name}
                 </span>
