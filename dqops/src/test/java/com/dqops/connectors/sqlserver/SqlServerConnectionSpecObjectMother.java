@@ -20,6 +20,8 @@ import com.dqops.connectors.testcontainers.TestContainersObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.testcontainers.containers.MSSQLServerContainer;
 
+import java.util.LinkedHashMap;
+
 
 public class SqlServerConnectionSpecObjectMother {
 
@@ -66,6 +68,10 @@ public class SqlServerConnectionSpecObjectMother {
                 setDatabase("master");
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
+                setSsl(false);
+                setProperties(new LinkedHashMap<>() {{
+                    put("trustServerCertificate", "true");
+                }});
             }});
         }};
         return connectionSpec;
