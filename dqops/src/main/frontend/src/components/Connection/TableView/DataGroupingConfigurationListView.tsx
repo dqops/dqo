@@ -26,12 +26,11 @@ const DataGroupingConfigurationListView = ({
     groupingConfiguration: DataGroupingConfigurationBasicModel
   ) => {
     try {
-      await DataGroupingConfigurationsApi.tableDefaultGroupingToNull(
+      await DataGroupingConfigurationsApi.setTableDefaultGroupingConfiguration(
         groupingConfiguration.connection_name || '',
         groupingConfiguration.schema_name || '',
         groupingConfiguration.table_name || '',
-        groupingConfiguration.data_grouping_configuration_name || '',
-        true
+        groupingConfiguration.data_grouping_configuration_name || ''
       );
       getDataGroupingConfigurations();
     } catch (err) {
@@ -64,21 +63,7 @@ const DataGroupingConfigurationListView = ({
     setOpen(true);
     setSelectedGroupingConfiguration(groupingConfiguration);
   };
-  // const setDefaultGroupingToNull = async (
-  //   groupingConfiguration: DataGroupingConfigurationBasicModel
-  // ) => {
-  //   try {
-  //     await DataGroupingConfigurationsApi.setTableDefaultGroupingToNull(
-  //       groupingConfiguration.connection_name || '',
-  //       groupingConfiguration.schema_name || '',
-  //       groupingConfiguration.table_name || '',
-  //       groupingConfiguration.data_grouping_configuration_name || ''
-  //     );
-  //     getDataGroupingConfigurations();
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+
   const elem: DataGroupingConfigurationBasicModel | undefined =
     dataGroupingConfigurations.find(
       (x) => x.default_data_grouping_configuration === true
