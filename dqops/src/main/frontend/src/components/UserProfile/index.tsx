@@ -51,6 +51,8 @@ export default function UserProfile({ name, email }: UserProfile) {
     );
   }, [name, email]);
 
+  console.log(`${(10 / 14) * 100}%`);
+
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
       <PopoverHandler>
@@ -64,14 +66,43 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-65 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
+      <PopoverContent className="bg-white h-83 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
         <div className="flex justify-between items-center h-12 ">
-          <div className="ml-1">
+          <div className="ml-1 flex items-center justify-center gap-x-2">
             {' '}
+            <div className="font-bold">User:</div>
             {userProfile?.user ? userProfile.user : '-'}{' '}
           </div>
-          <div className="mr-1 whitespace-normal font-bold"></div>
         </div>
+        <div className="h-15">
+          <div className="ml-1 flex items-center gap-x-2 my-2">
+            {' '}
+            <div className="font-bold">Subscription plan:</div>
+            {userProfile?.license_type ? userProfile.license_type : '-'}{' '}
+          </div>
+          {userProfile?.trial_period_expires_at && (
+            <div className="ml-1 flex items-center gap-x-2 my-2">
+              {' '}
+              <div className="font-bold" style={{ whiteSpace: 'nowrap' }}>
+                {userProfile?.trial_period_expires_at} days left
+              </div>
+              <div
+                className="h-1 bg-gray-100"
+                style={{ width: '100%', position: 'relative' }}
+              >
+                <div
+                  className="h-1 absolute bg-teal-500"
+                  style={{
+                    width: `${
+                      (userProfile?.trial_period_expires_at / 14) * 100
+                    }%`
+                  }}
+                ></div>
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="font-bold h-8 ml-1">Account limits:</div>
         <div className="flex justify-between items-center">
           <div className="ml-1">Users:</div>
