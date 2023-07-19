@@ -232,10 +232,10 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 checkExecutionSummary.getCheckExecutionErrorSummary() != null ?
                         checkExecutionSummary.getCheckExecutionErrorSummary().getDebugMessage() : null);
         Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
-        Assertions.assertEquals(4, checkExecutionSummary.getTotalCheckResultsCount());
+        Assertions.assertEquals(3, checkExecutionSummary.getTotalCheckResultsCount());
         Assertions.assertEquals(1, checkExecutionSummary.getValidResultsCount());
         Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
-        Assertions.assertEquals(3, checkExecutionSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(2, checkExecutionSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
     }
@@ -268,10 +268,10 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 checkExecutionSummary.getCheckExecutionErrorSummary() != null ?
                         checkExecutionSummary.getCheckExecutionErrorSummary().getDebugMessage() : null);
         Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
-        Assertions.assertEquals(25, checkExecutionSummary.getTotalCheckResultsCount());
+        Assertions.assertEquals(24, checkExecutionSummary.getTotalCheckResultsCount());
         Assertions.assertEquals(0, checkExecutionSummary.getValidResultsCount());
         Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
-        Assertions.assertEquals(25, checkExecutionSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(24, checkExecutionSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
     }

@@ -445,7 +445,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                 int[] rowIndexesNotInComparedTable = referencedTableIndexedData.findRowIndexesNotInOtherDataHolder(comparedTableIndexedData);
                 if (rowIndexesNotInComparedTable.length > 0) {
-                    Table expectedValuesNotInComparedTable = normalizedSensorResultsReferenceTable.getTable();
+                    Table expectedValuesNotInComparedTable = normalizedSensorResultsReferenceTable.getTable()
+                            .rows(rowIndexesNotInComparedTable);
                     normalizedSensorResultsComparedTable.getTable().append(expectedValuesNotInComparedTable); // append rows from the reference table that do not have a match in the tested (compared table), so the actual_value is null, but the expected_value is not
                 }
 

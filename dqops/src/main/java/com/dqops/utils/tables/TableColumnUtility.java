@@ -84,9 +84,19 @@ public final class TableColumnUtility {
             }
         }
         else {
-            for (int i = 0; i < size; i++) {
-                if (!sourceColumn.isMissing(i)) {
-                    targetColumn.set(i, sourceColumn.get(i).toString());
+            if (sourceColumn instanceof NumberColumn<?,?>) {
+                NumberColumn<?,?> numberColumn = (NumberColumn<?,?>) sourceColumn;
+                for (int i = 0; i < size; i++) {
+                    if (!numberColumn.isMissing(i)) {
+                        double doubleValue = numberColumn.getDouble(i);
+                        targetColumn.set(i, Double.toString(doubleValue));
+                    }
+                }
+            } else {
+                for (int i = 0; i < size; i++) {
+                    if (!sourceColumn.isMissing(i)) {
+                        targetColumn.set(i, sourceColumn.get(i).toString());
+                    }
                 }
             }
         }
