@@ -61,6 +61,18 @@ public class TimestampColumnsSpec extends AbstractSpec {
     private String partitionByColumn;
 
     /**
+     * Creates a new instance of the timestamp column specification for the given partition by column.
+     * @param partitionByColumn The name of the column to partition by.
+     * @return Timestamp column specification.
+     */
+    public static TimestampColumnsSpec createForPartitionByColumn(String partitionByColumn) {
+        TimestampColumnsSpec timestampColumnsSpec = new TimestampColumnsSpec() {{
+            setPartitionByColumn(partitionByColumn);
+        }};
+        return timestampColumnsSpec;
+    }
+
+    /**
      * Returns the name of the column that identifies the event timestamp, it could be the transaction timestamp.
      * @return Event timestamp column name.
      */

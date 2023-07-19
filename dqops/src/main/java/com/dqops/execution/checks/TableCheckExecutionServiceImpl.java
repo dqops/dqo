@@ -389,7 +389,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
 
         GroupedSensorsCollection groupedSensorsCollectionOnReferenceTables = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
-        groupedSensorsCollectionOnComparedTable.addAllPreparedSensors(allPreparedSensorsOnReferenceTables);
+        groupedSensorsCollectionOnReferenceTables.addAllPreparedSensors(allPreparedSensorsOnReferenceTables);
 
         List<SensorExecutionResult> sensorExecutionResultsOnReferenceTables = this.executeSensors(
                 groupedSensorsCollectionOnReferenceTables, executionContext, progressListener, allErrorsTable,
