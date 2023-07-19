@@ -21,9 +21,9 @@ const SetDefaultDialog = ({
   };
 
   return (
-    <Dialog open={open} handler={onClose}>
+    <Dialog open={open} handler={onClose} className='bg-yellow-100'>
       <DialogBody className="pt-10 pb-2 px-8">
-        <div className="text-2xl text-gray-700 text-center whitespace-normal ">
+        <div className="text-xl text-gray-700 text-center whitespace-normal ">
           {message}
           <br></br><br></br>
           Please review DQO documentation before turning on a custom data grouping configuration.
@@ -34,7 +34,6 @@ const SetDefaultDialog = ({
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button
           color="primary"
-          
           className="px-8"
           onClick={onClose}
           label="No"

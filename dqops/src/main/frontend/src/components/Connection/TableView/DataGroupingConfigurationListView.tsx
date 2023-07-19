@@ -147,7 +147,7 @@ console.log(messageBox)
                     }
                   />
                 </div>
-                <span onClick={() => onEdit(groupingConfiguration)} className='cursor-pointer '>
+                <span onClick={() => onEdit(groupingConfiguration)} className='cursor-pointer underline'>
                   {groupingConfiguration.data_grouping_configuration_name}
                 </span>
               </td>
