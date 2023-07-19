@@ -1,13 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
+from ..types import UNSET, Unset
+
+from typing import cast
+from typing import Dict
+from typing import Union
 from ..models.dqo_job_change_model_status import DqoJobChangeModelStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
-    from ..models.dqo_queue_job_id import DqoQueueJobId
+  from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
+  from ..models.dqo_queue_job_id import DqoQueueJobId
+
+
+
 
 
 T = TypeVar("T", bound="DqoJobChangeModel")
@@ -15,23 +26,26 @@ T = TypeVar("T", bound="DqoJobChangeModel")
 
 @attr.s(auto_attribs=True)
 class DqoJobChangeModel:
-    """
-    Attributes:
-        status (Union[Unset, DqoJobChangeModelStatus]):
-        job_id (Union[Unset, DqoQueueJobId]):
-        change_sequence (Union[Unset, int]):
-        updated_model (Union[Unset, DqoJobHistoryEntryModel]):
-        status_changed_at (Union[Unset, int]):
-    """
+    """ 
+        Attributes:
+            status (Union[Unset, DqoJobChangeModelStatus]):
+            job_id (Union[Unset, DqoQueueJobId]):
+            change_sequence (Union[Unset, int]):
+            updated_model (Union[Unset, DqoJobHistoryEntryModel]):
+            status_changed_at (Union[Unset, int]):
+     """
 
     status: Union[Unset, DqoJobChangeModelStatus] = UNSET
-    job_id: Union[Unset, "DqoQueueJobId"] = UNSET
+    job_id: Union[Unset, 'DqoQueueJobId'] = UNSET
     change_sequence: Union[Unset, int] = UNSET
-    updated_model: Union[Unset, "DqoJobHistoryEntryModel"] = UNSET
+    updated_model: Union[Unset, 'DqoJobHistoryEntryModel'] = UNSET
     status_changed_at: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
+        from ..models.dqo_queue_job_id import DqoQueueJobId
         status: Union[Unset, str] = UNSET
         if not isinstance(self.status, Unset):
             status = self.status.value
@@ -49,7 +63,8 @@ class DqoJobChangeModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if status is not UNSET:
             field_dict["status"] = status
         if job_id is not UNSET:
@@ -63,34 +78,44 @@ class DqoJobChangeModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
         from ..models.dqo_queue_job_id import DqoQueueJobId
-
         d = src_dict.copy()
         _status = d.pop("status", UNSET)
         status: Union[Unset, DqoJobChangeModelStatus]
-        if isinstance(_status, Unset):
+        if isinstance(_status,  Unset):
             status = UNSET
         else:
             status = DqoJobChangeModelStatus(_status)
 
+
+
+
         _job_id = d.pop("jobId", UNSET)
         job_id: Union[Unset, DqoQueueJobId]
-        if isinstance(_job_id, Unset):
+        if isinstance(_job_id,  Unset):
             job_id = UNSET
         else:
             job_id = DqoQueueJobId.from_dict(_job_id)
+
+
+
 
         change_sequence = d.pop("changeSequence", UNSET)
 
         _updated_model = d.pop("updatedModel", UNSET)
         updated_model: Union[Unset, DqoJobHistoryEntryModel]
-        if isinstance(_updated_model, Unset):
+        if isinstance(_updated_model,  Unset):
             updated_model = UNSET
         else:
             updated_model = DqoJobHistoryEntryModel.from_dict(_updated_model)
+
+
+
 
         status_changed_at = d.pop("statusChangedAt", UNSET)
 

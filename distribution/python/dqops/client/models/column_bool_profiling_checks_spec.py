@@ -1,12 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
-    from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
+  from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
+  from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnBoolProfilingChecksSpec")
@@ -14,17 +25,20 @@ T = TypeVar("T", bound="ColumnBoolProfilingChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnBoolProfilingChecksSpec:
-    """
-    Attributes:
-        true_percent (Union[Unset, ColumnTruePercentCheckSpec]):
-        false_percent (Union[Unset, ColumnFalsePercentCheckSpec]):
-    """
+    """ 
+        Attributes:
+            true_percent (Union[Unset, ColumnTruePercentCheckSpec]):
+            false_percent (Union[Unset, ColumnFalsePercentCheckSpec]):
+     """
 
-    true_percent: Union[Unset, "ColumnTruePercentCheckSpec"] = UNSET
-    false_percent: Union[Unset, "ColumnFalsePercentCheckSpec"] = UNSET
+    true_percent: Union[Unset, 'ColumnTruePercentCheckSpec'] = UNSET
+    false_percent: Union[Unset, 'ColumnFalsePercentCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
+        from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
         true_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.true_percent, Unset):
             true_percent = self.true_percent.to_dict()
@@ -33,9 +47,11 @@ class ColumnBoolProfilingChecksSpec:
         if not isinstance(self.false_percent, Unset):
             false_percent = self.false_percent.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if true_percent is not UNSET:
             field_dict["true_percent"] = true_percent
         if false_percent is not UNSET:
@@ -43,25 +59,32 @@ class ColumnBoolProfilingChecksSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.column_false_percent_check_spec import ColumnFalsePercentCheckSpec
         from ..models.column_true_percent_check_spec import ColumnTruePercentCheckSpec
-
         d = src_dict.copy()
         _true_percent = d.pop("true_percent", UNSET)
         true_percent: Union[Unset, ColumnTruePercentCheckSpec]
-        if isinstance(_true_percent, Unset):
+        if isinstance(_true_percent,  Unset):
             true_percent = UNSET
         else:
             true_percent = ColumnTruePercentCheckSpec.from_dict(_true_percent)
 
+
+
+
         _false_percent = d.pop("false_percent", UNSET)
         false_percent: Union[Unset, ColumnFalsePercentCheckSpec]
-        if isinstance(_false_percent, Unset):
+        if isinstance(_false_percent,  Unset):
             false_percent = UNSET
         else:
             false_percent = ColumnFalsePercentCheckSpec.from_dict(_false_percent)
+
+
+
 
         column_bool_profiling_checks_spec = cls(
             true_percent=true_percent,

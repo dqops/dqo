@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class RunChecksQueueJobResultHighestSeverity(str, Enum):
     ERROR = "error"
     FATAL = "fatal"

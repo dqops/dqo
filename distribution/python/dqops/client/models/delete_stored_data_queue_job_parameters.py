@@ -1,38 +1,52 @@
-import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
-from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
+
+from typing import cast
+from dateutil.parser import isoparse
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+import datetime
+
+
+
+
+
 
 T = TypeVar("T", bound="DeleteStoredDataQueueJobParameters")
 
 
 @attr.s(auto_attribs=True)
 class DeleteStoredDataQueueJobParameters:
-    """
-    Attributes:
-        connection_name (Union[Unset, str]):
-        schema_table_name (Union[Unset, str]):
-        date_start (Union[Unset, datetime.date]):
-        date_end (Union[Unset, datetime.date]):
-        delete_errors (Union[Unset, bool]):
-        delete_statistics (Union[Unset, bool]):
-        delete_check_results (Union[Unset, bool]):
-        delete_sensor_readouts (Union[Unset, bool]):
-        column_names (Union[Unset, List[str]]):
-        check_category (Union[Unset, str]):
-        check_name (Union[Unset, str]):
-        check_type (Union[Unset, str]):
-        sensor_name (Union[Unset, str]):
-        data_stream_name (Union[Unset, str]):
-        quality_dimension (Union[Unset, str]):
-        time_gradient (Union[Unset, str]):
-        collector_category (Union[Unset, str]):
-        collector_name (Union[Unset, str]):
-        collector_target (Union[Unset, str]):
-    """
+    """ 
+        Attributes:
+            connection_name (Union[Unset, str]):
+            schema_table_name (Union[Unset, str]):
+            date_start (Union[Unset, datetime.date]):
+            date_end (Union[Unset, datetime.date]):
+            delete_errors (Union[Unset, bool]):
+            delete_statistics (Union[Unset, bool]):
+            delete_check_results (Union[Unset, bool]):
+            delete_sensor_readouts (Union[Unset, bool]):
+            column_names (Union[Unset, List[str]]):
+            check_category (Union[Unset, str]):
+            data_comparison_name (Union[Unset, str]):
+            check_name (Union[Unset, str]):
+            check_type (Union[Unset, str]):
+            sensor_name (Union[Unset, str]):
+            data_group_tag (Union[Unset, str]):
+            quality_dimension (Union[Unset, str]):
+            time_gradient (Union[Unset, str]):
+            collector_category (Union[Unset, str]):
+            collector_name (Union[Unset, str]):
+            collector_target (Union[Unset, str]):
+     """
 
     connection_name: Union[Unset, str] = UNSET
     schema_table_name: Union[Unset, str] = UNSET
@@ -44,16 +58,18 @@ class DeleteStoredDataQueueJobParameters:
     delete_sensor_readouts: Union[Unset, bool] = UNSET
     column_names: Union[Unset, List[str]] = UNSET
     check_category: Union[Unset, str] = UNSET
+    data_comparison_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     check_type: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
-    data_stream_name: Union[Unset, str] = UNSET
+    data_group_tag: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
     time_gradient: Union[Unset, str] = UNSET
     collector_category: Union[Unset, str] = UNSET
     collector_name: Union[Unset, str] = UNSET
     collector_target: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -74,11 +90,15 @@ class DeleteStoredDataQueueJobParameters:
         if not isinstance(self.column_names, Unset):
             column_names = self.column_names
 
+
+
+
         check_category = self.check_category
+        data_comparison_name = self.data_comparison_name
         check_name = self.check_name
         check_type = self.check_type
         sensor_name = self.sensor_name
-        data_stream_name = self.data_stream_name
+        data_group_tag = self.data_group_tag
         quality_dimension = self.quality_dimension
         time_gradient = self.time_gradient
         collector_category = self.collector_category
@@ -87,7 +107,8 @@ class DeleteStoredDataQueueJobParameters:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if connection_name is not UNSET:
             field_dict["connectionName"] = connection_name
         if schema_table_name is not UNSET:
@@ -108,14 +129,16 @@ class DeleteStoredDataQueueJobParameters:
             field_dict["columnNames"] = column_names
         if check_category is not UNSET:
             field_dict["checkCategory"] = check_category
+        if data_comparison_name is not UNSET:
+            field_dict["dataComparisonName"] = data_comparison_name
         if check_name is not UNSET:
             field_dict["checkName"] = check_name
         if check_type is not UNSET:
             field_dict["checkType"] = check_type
         if sensor_name is not UNSET:
             field_dict["sensorName"] = sensor_name
-        if data_stream_name is not UNSET:
-            field_dict["dataStreamName"] = data_stream_name
+        if data_group_tag is not UNSET:
+            field_dict["dataGroupTag"] = data_group_tag
         if quality_dimension is not UNSET:
             field_dict["qualityDimension"] = quality_dimension
         if time_gradient is not UNSET:
@@ -129,6 +152,8 @@ class DeleteStoredDataQueueJobParameters:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
@@ -138,17 +163,23 @@ class DeleteStoredDataQueueJobParameters:
 
         _date_start = d.pop("dateStart", UNSET)
         date_start: Union[Unset, datetime.date]
-        if isinstance(_date_start, Unset):
+        if isinstance(_date_start,  Unset):
             date_start = UNSET
         else:
             date_start = isoparse(_date_start).date()
 
+
+
+
         _date_end = d.pop("dateEnd", UNSET)
         date_end: Union[Unset, datetime.date]
-        if isinstance(_date_end, Unset):
+        if isinstance(_date_end,  Unset):
             date_end = UNSET
         else:
             date_end = isoparse(_date_end).date()
+
+
+
 
         delete_errors = d.pop("deleteErrors", UNSET)
 
@@ -160,7 +191,10 @@ class DeleteStoredDataQueueJobParameters:
 
         column_names = cast(List[str], d.pop("columnNames", UNSET))
 
+
         check_category = d.pop("checkCategory", UNSET)
+
+        data_comparison_name = d.pop("dataComparisonName", UNSET)
 
         check_name = d.pop("checkName", UNSET)
 
@@ -168,7 +202,7 @@ class DeleteStoredDataQueueJobParameters:
 
         sensor_name = d.pop("sensorName", UNSET)
 
-        data_stream_name = d.pop("dataStreamName", UNSET)
+        data_group_tag = d.pop("dataGroupTag", UNSET)
 
         quality_dimension = d.pop("qualityDimension", UNSET)
 
@@ -191,10 +225,11 @@ class DeleteStoredDataQueueJobParameters:
             delete_sensor_readouts=delete_sensor_readouts,
             column_names=column_names,
             check_category=check_category,
+            data_comparison_name=data_comparison_name,
             check_name=check_name,
             check_type=check_type,
             sensor_name=sensor_name,
-            data_stream_name=data_stream_name,
+            data_group_tag=data_group_tag,
             quality_dimension=quality_dimension,
             time_gradient=time_gradient,
             collector_category=collector_category,

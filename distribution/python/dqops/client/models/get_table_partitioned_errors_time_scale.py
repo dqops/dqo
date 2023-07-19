@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class GetTablePartitionedErrorsTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

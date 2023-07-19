@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class GetColumnPartitionedErrorsTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

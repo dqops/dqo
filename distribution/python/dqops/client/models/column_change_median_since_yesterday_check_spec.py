@@ -1,18 +1,28 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
 if TYPE_CHECKING:
-    from ..models.column_numeric_median_sensor_parameters_spec import (
-        ColumnNumericMedianSensorParametersSpec,
-    )
-    from ..models.comment_spec import CommentSpec
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
-    from ..models.change_percent_1_day_rule_10_parameters_spec import ChangePercent1DayRule10ParametersSpec
-    from ..models.change_percent_1_day_rule_20_parameters_spec import ChangePercent1DayRule20ParametersSpec
-    from ..models.change_percent_1_day_rule_50_parameters_spec import ChangePercent1DayRule50ParametersSpec
+  from ..models.recurring_schedule_spec import RecurringScheduleSpec
+  from ..models.change_percent_1_day_rule_10_parameters_spec import ChangePercent1DayRule10ParametersSpec
+  from ..models.change_percent_1_day_rule_20_parameters_spec import ChangePercent1DayRule20ParametersSpec
+  from ..models.comment_spec import CommentSpec
+  from ..models.column_numeric_median_sensor_parameters_spec import ColumnNumericMedianSensorParametersSpec
+  from ..models.change_percent_1_day_rule_50_parameters_spec import ChangePercent1DayRule50ParametersSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnChangeMedianSinceYesterdayCheckSpec")
@@ -20,50 +30,57 @@ T = TypeVar("T", bound="ColumnChangeMedianSinceYesterdayCheckSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnChangeMedianSinceYesterdayCheckSpec:
-    """
-    Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
-        comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
-            collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
-            deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
-            are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
-            should be preserved in the configuration.
-        exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
-            calculation by default. Set this field to true in order to exclude this data quality check from the data quality
-            KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
-        quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
-            the built-in dimensions (Timeliness, Validity, etc.).
-        display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
-            the check_display_name stored in the parquet result files is the check_name.
-        data_stream (Union[Unset, str]): Data stream name that should be applied to this data quality check. The data
-            stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data
-            quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by
-            the data quality check). Use a name of one of known data streams defined on the parent table.
-        parameters (Union[Unset, ColumnNumericMedianSensorParametersSpec]):
-        warning (Union[Unset, ChangePercent1DayRule10ParametersSpec]):
-        error (Union[Unset, ChangePercent1DayRule20ParametersSpec]):
-        fatal (Union[Unset, ChangePercent1DayRule50ParametersSpec]):
-    """
+    """ 
+        Attributes:
+            schedule_override (Union[Unset, RecurringScheduleSpec]):
+            comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
+                collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
+                deserialization will remove non tracked comments).
+            disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+                are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
+                should be preserved in the configuration.
+            exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
+                calculation by default. Set this field to true in order to exclude this data quality check from the data quality
+                KPI calculation.
+            include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
+                quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
+                for the dataset.
+            quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
+                the built-in dimensions (Timeliness, Validity, etc.).
+            display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
+                the check_display_name stored in the parquet result files is the check_name.
+            data_grouping (Union[Unset, str]): Data grouping configuration name that should be applied to this data quality
+                check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
+                quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
+                table.
+            parameters (Union[Unset, ColumnNumericMedianSensorParametersSpec]):
+            warning (Union[Unset, ChangePercent1DayRule10ParametersSpec]):
+            error (Union[Unset, ChangePercent1DayRule20ParametersSpec]):
+            fatal (Union[Unset, ChangePercent1DayRule50ParametersSpec]):
+     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
-    comments: Union[Unset, List["CommentSpec"]] = UNSET
+    schedule_override: Union[Unset, 'RecurringScheduleSpec'] = UNSET
+    comments: Union[Unset, List['CommentSpec']] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
     include_in_sla: Union[Unset, bool] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
-    data_stream: Union[Unset, str] = UNSET
-    parameters: Union[Unset, "ColumnNumericMedianSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "ChangePercent1DayRule10ParametersSpec"] = UNSET
-    error: Union[Unset, "ChangePercent1DayRule20ParametersSpec"] = UNSET
-    fatal: Union[Unset, "ChangePercent1DayRule50ParametersSpec"] = UNSET
+    data_grouping: Union[Unset, str] = UNSET
+    parameters: Union[Unset, 'ColumnNumericMedianSensorParametersSpec'] = UNSET
+    warning: Union[Unset, 'ChangePercent1DayRule10ParametersSpec'] = UNSET
+    error: Union[Unset, 'ChangePercent1DayRule20ParametersSpec'] = UNSET
+    fatal: Union[Unset, 'ChangePercent1DayRule50ParametersSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.change_percent_1_day_rule_10_parameters_spec import ChangePercent1DayRule10ParametersSpec
+        from ..models.change_percent_1_day_rule_20_parameters_spec import ChangePercent1DayRule20ParametersSpec
+        from ..models.comment_spec import CommentSpec
+        from ..models.column_numeric_median_sensor_parameters_spec import ColumnNumericMedianSensorParametersSpec
+        from ..models.change_percent_1_day_rule_50_parameters_spec import ChangePercent1DayRule50ParametersSpec
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.schedule_override, Unset):
             schedule_override = self.schedule_override.to_dict()
@@ -76,12 +93,15 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
 
                 comments.append(comments_item)
 
+
+
+
         disabled = self.disabled
         exclude_from_kpi = self.exclude_from_kpi
         include_in_sla = self.include_in_sla
         quality_dimension = self.quality_dimension
         display_name = self.display_name
-        data_stream = self.data_stream
+        data_grouping = self.data_grouping
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -98,9 +118,11 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
         if not isinstance(self.fatal, Unset):
             fatal = self.fatal.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if schedule_override is not UNSET:
             field_dict["schedule_override"] = schedule_override
         if comments is not UNSET:
@@ -115,8 +137,8 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
             field_dict["quality_dimension"] = quality_dimension
         if display_name is not UNSET:
             field_dict["display_name"] = display_name
-        if data_stream is not UNSET:
-            field_dict["data_stream"] = data_stream
+        if data_grouping is not UNSET:
+            field_dict["data_grouping"] = data_grouping
         if parameters is not UNSET:
             field_dict["parameters"] = parameters
         if warning is not UNSET:
@@ -128,31 +150,36 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_numeric_median_sensor_parameters_spec import (
-            ColumnNumericMedianSensorParametersSpec,
-        )
-        from ..models.comment_spec import CommentSpec
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
         from ..models.change_percent_1_day_rule_10_parameters_spec import ChangePercent1DayRule10ParametersSpec
         from ..models.change_percent_1_day_rule_20_parameters_spec import ChangePercent1DayRule20ParametersSpec
+        from ..models.comment_spec import CommentSpec
+        from ..models.column_numeric_median_sensor_parameters_spec import ColumnNumericMedianSensorParametersSpec
         from ..models.change_percent_1_day_rule_50_parameters_spec import ChangePercent1DayRule50ParametersSpec
-
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
         schedule_override: Union[Unset, RecurringScheduleSpec]
-        if isinstance(_schedule_override, Unset):
+        if isinstance(_schedule_override,  Unset):
             schedule_override = UNSET
         else:
             schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
 
+
+
+
         comments = []
         _comments = d.pop("comments", UNSET)
-        for comments_item_data in _comments or []:
+        for comments_item_data in (_comments or []):
             comments_item = CommentSpec.from_dict(comments_item_data)
 
+
+
             comments.append(comments_item)
+
 
         disabled = d.pop("disabled", UNSET)
 
@@ -164,35 +191,47 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
 
         display_name = d.pop("display_name", UNSET)
 
-        data_stream = d.pop("data_stream", UNSET)
+        data_grouping = d.pop("data_grouping", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, ColumnNumericMedianSensorParametersSpec]
-        if isinstance(_parameters, Unset):
+        if isinstance(_parameters,  Unset):
             parameters = UNSET
         else:
             parameters = ColumnNumericMedianSensorParametersSpec.from_dict(_parameters)
 
+
+
+
         _warning = d.pop("warning", UNSET)
         warning: Union[Unset, ChangePercent1DayRule10ParametersSpec]
-        if isinstance(_warning, Unset):
+        if isinstance(_warning,  Unset):
             warning = UNSET
         else:
             warning = ChangePercent1DayRule10ParametersSpec.from_dict(_warning)
 
+
+
+
         _error = d.pop("error", UNSET)
         error: Union[Unset, ChangePercent1DayRule20ParametersSpec]
-        if isinstance(_error, Unset):
+        if isinstance(_error,  Unset):
             error = UNSET
         else:
             error = ChangePercent1DayRule20ParametersSpec.from_dict(_error)
 
+
+
+
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, ChangePercent1DayRule50ParametersSpec]
-        if isinstance(_fatal, Unset):
+        if isinstance(_fatal,  Unset):
             fatal = UNSET
         else:
             fatal = ChangePercent1DayRule50ParametersSpec.from_dict(_fatal)
+
+
+
 
         column_change_median_since_yesterday_check_spec = cls(
             schedule_override=schedule_override,
@@ -202,7 +241,7 @@ class ColumnChangeMedianSinceYesterdayCheckSpec:
             include_in_sla=include_in_sla,
             quality_dimension=quality_dimension,
             display_name=display_name,
-            data_stream=data_stream,
+            data_grouping=data_grouping,
             parameters=parameters,
             warning=warning,
             error=error,

@@ -1,16 +1,25 @@
-import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
-from dateutil.parser import isoparse
 
-from ..models.statistics_metric_model_result_data_type import (
-    StatisticsMetricModelResultDataType,
-)
 from ..types import UNSET, Unset
 
+from dateutil.parser import isoparse
+from typing import cast
+from typing import Dict
+from ..models.statistics_metric_model_result_data_type import StatisticsMetricModelResultDataType
+from typing import Union
+from ..types import UNSET, Unset
+import datetime
+
 if TYPE_CHECKING:
-    from ..models.statistics_metric_model_result import StatisticsMetricModelResult
+  from ..models.statistics_metric_model_result import StatisticsMetricModelResult
+
+
+
 
 
 T = TypeVar("T", bound="StatisticsMetricModel")
@@ -18,29 +27,31 @@ T = TypeVar("T", bound="StatisticsMetricModel")
 
 @attr.s(auto_attribs=True)
 class StatisticsMetricModel:
-    """
-    Attributes:
-        category (Union[Unset, str]): Statistics category
-        collector (Union[Unset, str]): Statistics (metric) name
-        result_data_type (Union[Unset, StatisticsMetricModelResultDataType]): Statistics result data type
-        result (Union[Unset, StatisticsMetricModelResult]): Statistics result for the metric
-        collected_at (Union[Unset, datetime.datetime]): The local timestamp when the metric was collected
-        sample_count (Union[Unset, int]): The number of the value samples for this result value. Filled only by the
-            column value sampling profilers.
-        sample_index (Union[Unset, int]): The index of the result that was returned. Filled only by the column value
-            sampling profilers to identify each column value sample.
-    """
+    """ 
+        Attributes:
+            category (Union[Unset, str]): Statistics category
+            collector (Union[Unset, str]): Statistics (metric) name
+            result_data_type (Union[Unset, StatisticsMetricModelResultDataType]): Statistics result data type
+            result (Union[Unset, StatisticsMetricModelResult]): Statistics result for the metric
+            collected_at (Union[Unset, datetime.datetime]): The local timestamp when the metric was collected
+            sample_count (Union[Unset, int]): The number of the value samples for this result value. Filled only by the
+                column value sampling profilers.
+            sample_index (Union[Unset, int]): The index of the result that was returned. Filled only by the column value
+                sampling profilers to identify each column value sample.
+     """
 
     category: Union[Unset, str] = UNSET
     collector: Union[Unset, str] = UNSET
     result_data_type: Union[Unset, StatisticsMetricModelResultDataType] = UNSET
-    result: Union[Unset, "StatisticsMetricModelResult"] = UNSET
+    result: Union[Unset, 'StatisticsMetricModelResult'] = UNSET
     collected_at: Union[Unset, datetime.datetime] = UNSET
     sample_count: Union[Unset, int] = UNSET
     sample_index: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.statistics_metric_model_result import StatisticsMetricModelResult
         category = self.category
         collector = self.collector
         result_data_type: Union[Unset, str] = UNSET
@@ -60,7 +71,8 @@ class StatisticsMetricModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if category is not UNSET:
             field_dict["category"] = category
         if collector is not UNSET:
@@ -78,10 +90,11 @@ class StatisticsMetricModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.statistics_metric_model_result import StatisticsMetricModelResult
-
         d = src_dict.copy()
         category = d.pop("category", UNSET)
 
@@ -89,24 +102,33 @@ class StatisticsMetricModel:
 
         _result_data_type = d.pop("resultDataType", UNSET)
         result_data_type: Union[Unset, StatisticsMetricModelResultDataType]
-        if isinstance(_result_data_type, Unset):
+        if isinstance(_result_data_type,  Unset):
             result_data_type = UNSET
         else:
             result_data_type = StatisticsMetricModelResultDataType(_result_data_type)
 
+
+
+
         _result = d.pop("result", UNSET)
         result: Union[Unset, StatisticsMetricModelResult]
-        if isinstance(_result, Unset):
+        if isinstance(_result,  Unset):
             result = UNSET
         else:
             result = StatisticsMetricModelResult.from_dict(_result)
 
+
+
+
         _collected_at = d.pop("collectedAt", UNSET)
         collected_at: Union[Unset, datetime.datetime]
-        if isinstance(_collected_at, Unset):
+        if isinstance(_collected_at,  Unset):
             collected_at = UNSET
         else:
             collected_at = isoparse(_collected_at)
+
+
+
 
         sample_count = d.pop("sampleCount", UNSET)
 

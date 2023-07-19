@@ -1,26 +1,37 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="CollectStatisticsQueueJobResult")
 
 
 @attr.s(auto_attribs=True)
 class CollectStatisticsQueueJobResult:
-    """Returns the result with the summary of the statistics collected.
+    """ Returns the result with the summary of the statistics collected.
 
-    Attributes:
-        executed_statistics_collectors (Union[Unset, int]): The total count of all executed statistics collectors.
-        total_collectors_executed (Union[Unset, int]): The count of executed statistics collectors.
-        columns_analyzed (Union[Unset, int]): The count of columns for which DQO executed a collector and tried to read
-            the statistics.
-        columns_successfully_analyzed (Union[Unset, int]): The count of columns for which DQO managed to obtain
-            statistics.
-        total_collectors_failed (Union[Unset, int]): The count of statistics collectors that failed to execute.
-        total_collected_results (Union[Unset, int]): The total number of results that were collected.
-    """
+        Attributes:
+            executed_statistics_collectors (Union[Unset, int]): The total count of all executed statistics collectors.
+            total_collectors_executed (Union[Unset, int]): The count of executed statistics collectors.
+            columns_analyzed (Union[Unset, int]): The count of columns for which DQO executed a collector and tried to read
+                the statistics.
+            columns_successfully_analyzed (Union[Unset, int]): The count of columns for which DQO managed to obtain
+                statistics.
+            total_collectors_failed (Union[Unset, int]): The count of statistics collectors that failed to execute.
+            total_collected_results (Union[Unset, int]): The total number of results that were collected.
+     """
 
     executed_statistics_collectors: Union[Unset, int] = UNSET
     total_collectors_executed: Union[Unset, int] = UNSET
@@ -29,6 +40,7 @@ class CollectStatisticsQueueJobResult:
     total_collectors_failed: Union[Unset, int] = UNSET
     total_collected_results: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         executed_statistics_collectors = self.executed_statistics_collectors
@@ -40,7 +52,8 @@ class CollectStatisticsQueueJobResult:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if executed_statistics_collectors is not UNSET:
             field_dict["executedStatisticsCollectors"] = executed_statistics_collectors
         if total_collectors_executed is not UNSET:
@@ -55,6 +68,8 @@ class CollectStatisticsQueueJobResult:
             field_dict["totalCollectedResults"] = total_collected_results
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

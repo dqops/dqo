@@ -1,9 +1,20 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
+from ..types import UNSET, Unset
+
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.custom_check_spec import CustomCheckSpec
+  from ..models.custom_check_spec import CustomCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableProfilingCheckCategoriesSpecCustom")
@@ -11,49 +22,58 @@ T = TypeVar("T", bound="TableProfilingCheckCategoriesSpecCustom")
 
 @attr.s(auto_attribs=True)
 class TableProfilingCheckCategoriesSpecCustom:
-    """Dictionary of custom checks. The keys are check names."""
+    """ Dictionary of custom checks. The keys are check names.
 
-    additional_properties: Dict[str, "CustomCheckSpec"] = attr.ib(
-        init=False, factory=dict
-    )
+     """
+
+    additional_properties: Dict[str, 'CustomCheckSpec'] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
-        pass
-
+        from ..models.custom_check_spec import CustomCheckSpec
+        
         field_dict: Dict[str, Any] = {}
         for prop_name, prop in self.additional_properties.items():
             field_dict[prop_name] = prop.to_dict()
 
-        field_dict.update({})
+        field_dict.update({
+        })
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.custom_check_spec import CustomCheckSpec
-
         d = src_dict.copy()
-        table_profiling_check_categories_spec_custom = cls()
+        table_profiling_check_categories_spec_custom = cls(
+        )
 
+
+        from ..models.comment_spec import CommentSpec
+        from ..models.custom_rule_parameters_spec import CustomRuleParametersSpec
+        from ..models.custom_sensor_parameters_spec import CustomSensorParametersSpec
+        from ..models.recurring_schedule_spec import RecurringScheduleSpec
         additional_properties = {}
         for prop_name, prop_dict in d.items():
             additional_property = CustomCheckSpec.from_dict(prop_dict)
 
+
+
             additional_properties[prop_name] = additional_property
 
-        table_profiling_check_categories_spec_custom.additional_properties = (
-            additional_properties
-        )
+        table_profiling_check_categories_spec_custom.additional_properties = additional_properties
         return table_profiling_check_categories_spec_custom
 
     @property
     def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
-    def __getitem__(self, key: str) -> "CustomCheckSpec":
+    def __getitem__(self, key: str) -> 'CustomCheckSpec':
         return self.additional_properties[key]
 
-    def __setitem__(self, key: str, value: "CustomCheckSpec") -> None:
+    def __setitem__(self, key: str, value: 'CustomCheckSpec') -> None:
         self.additional_properties[key] = value
 
     def __delitem__(self, key: str) -> None:

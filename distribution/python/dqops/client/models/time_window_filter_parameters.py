@@ -1,17 +1,29 @@
-import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
-from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
+
+from typing import cast
+from dateutil.parser import isoparse
+from typing import Union
+from ..types import UNSET, Unset
+import datetime
+
+
+
+
+
 
 T = TypeVar("T", bound="TimeWindowFilterParameters")
 
 
 @attr.s(auto_attribs=True)
 class TimeWindowFilterParameters:
-    """Time window configuration for partitioned checks (the number of recent days or months to analyze in an incremental
+    """ Time window configuration for partitioned checks (the number of recent days or months to analyze in an incremental
     mode) or an absolute time range to analyze.
 
         Attributes:
@@ -51,7 +63,7 @@ class TimeWindowFilterParameters:
                 offset (yyyy-MM-dd HH:mm:ss). For example: 2023-02-20 14:10:00+02. The analyzed table must have the timestamp
                 column properly configured, it is the column that is used for filtering the date and time ranges. Setting the
                 end date and time overrides the parameters to disable analyzing today or the current month.
-    """
+     """
 
     daily_partitioning_recent_days: Union[Unset, int] = UNSET
     daily_partitioning_include_today: Union[Unset, bool] = UNSET
@@ -65,13 +77,12 @@ class TimeWindowFilterParameters:
     to_date_time_offset: Union[Unset, datetime.datetime] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
         daily_partitioning_recent_days = self.daily_partitioning_recent_days
         daily_partitioning_include_today = self.daily_partitioning_include_today
         monthly_partitioning_recent_months = self.monthly_partitioning_recent_months
-        monthly_partitioning_include_current_month = (
-            self.monthly_partitioning_include_current_month
-        )
+        monthly_partitioning_include_current_month = self.monthly_partitioning_include_current_month
         from_date: Union[Unset, str] = UNSET
         if not isinstance(self.from_date, Unset):
             from_date = self.from_date.isoformat()
@@ -96,25 +107,19 @@ class TimeWindowFilterParameters:
         if not isinstance(self.to_date_time_offset, Unset):
             to_date_time_offset = self.to_date_time_offset.isoformat()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if daily_partitioning_recent_days is not UNSET:
-            field_dict[
-                "daily_partitioning_recent_days"
-            ] = daily_partitioning_recent_days
+            field_dict["daily_partitioning_recent_days"] = daily_partitioning_recent_days
         if daily_partitioning_include_today is not UNSET:
-            field_dict[
-                "daily_partitioning_include_today"
-            ] = daily_partitioning_include_today
+            field_dict["daily_partitioning_include_today"] = daily_partitioning_include_today
         if monthly_partitioning_recent_months is not UNSET:
-            field_dict[
-                "monthly_partitioning_recent_months"
-            ] = monthly_partitioning_recent_months
+            field_dict["monthly_partitioning_recent_months"] = monthly_partitioning_recent_months
         if monthly_partitioning_include_current_month is not UNSET:
-            field_dict[
-                "monthly_partitioning_include_current_month"
-            ] = monthly_partitioning_include_current_month
+            field_dict["monthly_partitioning_include_current_month"] = monthly_partitioning_include_current_month
         if from_date is not UNSET:
             field_dict["from_date"] = from_date
         if from_date_time is not UNSET:
@@ -130,64 +135,78 @@ class TimeWindowFilterParameters:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         daily_partitioning_recent_days = d.pop("daily_partitioning_recent_days", UNSET)
 
-        daily_partitioning_include_today = d.pop(
-            "daily_partitioning_include_today", UNSET
-        )
+        daily_partitioning_include_today = d.pop("daily_partitioning_include_today", UNSET)
 
-        monthly_partitioning_recent_months = d.pop(
-            "monthly_partitioning_recent_months", UNSET
-        )
+        monthly_partitioning_recent_months = d.pop("monthly_partitioning_recent_months", UNSET)
 
-        monthly_partitioning_include_current_month = d.pop(
-            "monthly_partitioning_include_current_month", UNSET
-        )
+        monthly_partitioning_include_current_month = d.pop("monthly_partitioning_include_current_month", UNSET)
 
         _from_date = d.pop("from_date", UNSET)
         from_date: Union[Unset, datetime.date]
-        if isinstance(_from_date, Unset):
+        if isinstance(_from_date,  Unset):
             from_date = UNSET
         else:
             from_date = isoparse(_from_date).date()
 
+
+
+
         _from_date_time = d.pop("from_date_time", UNSET)
         from_date_time: Union[Unset, datetime.datetime]
-        if isinstance(_from_date_time, Unset):
+        if isinstance(_from_date_time,  Unset):
             from_date_time = UNSET
         else:
             from_date_time = isoparse(_from_date_time)
 
+
+
+
         _from_date_time_offset = d.pop("from_date_time_offset", UNSET)
         from_date_time_offset: Union[Unset, datetime.datetime]
-        if isinstance(_from_date_time_offset, Unset):
+        if isinstance(_from_date_time_offset,  Unset):
             from_date_time_offset = UNSET
         else:
             from_date_time_offset = isoparse(_from_date_time_offset)
 
+
+
+
         _to_date = d.pop("to_date", UNSET)
         to_date: Union[Unset, datetime.date]
-        if isinstance(_to_date, Unset):
+        if isinstance(_to_date,  Unset):
             to_date = UNSET
         else:
             to_date = isoparse(_to_date).date()
 
+
+
+
         _to_date_time = d.pop("to_date_time", UNSET)
         to_date_time: Union[Unset, datetime.datetime]
-        if isinstance(_to_date_time, Unset):
+        if isinstance(_to_date_time,  Unset):
             to_date_time = UNSET
         else:
             to_date_time = isoparse(_to_date_time)
 
+
+
+
         _to_date_time_offset = d.pop("to_date_time_offset", UNSET)
         to_date_time_offset: Union[Unset, datetime.datetime]
-        if isinstance(_to_date_time_offset, Unset):
+        if isinstance(_to_date_time_offset,  Unset):
             to_date_time_offset = UNSET
         else:
             to_date_time_offset = isoparse(_to_date_time_offset)
+
+
+
 
         time_window_filter_parameters = cls(
             daily_partitioning_recent_days=daily_partitioning_recent_days,

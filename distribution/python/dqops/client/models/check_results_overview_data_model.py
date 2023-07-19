@@ -1,38 +1,49 @@
-import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
-from dateutil.parser import isoparse
 
-from ..models.check_results_overview_data_model_statuses_item import (
-    CheckResultsOverviewDataModelStatusesItem,
-)
 from ..types import UNSET, Unset
+
+from typing import cast
+from dateutil.parser import isoparse
+from typing import Union
+from ..models.check_results_overview_data_model_statuses_item import CheckResultsOverviewDataModelStatusesItem
+from ..types import UNSET, Unset
+from typing import cast, List
+import datetime
+
+
+
+
+
 
 T = TypeVar("T", bound="CheckResultsOverviewDataModel")
 
 
 @attr.s(auto_attribs=True)
 class CheckResultsOverviewDataModel:
-    """
-    Attributes:
-        check_hash (Union[Unset, int]): Check hash.
-        check_category (Union[Unset, str]): Check category name.
-        check_name (Union[Unset, str]): Check name.
-        time_periods (Union[Unset, List[datetime.datetime]]): List of time periods for the results, returned as a local
-            time, sorted from the newest to the oldest.
-        time_periods_utc (Union[Unset, List[int]]): List of time periods for the results, returned as absolute UTC time.
-        executed_at_timestamps (Union[Unset, List[int]]): List of absolute timestamp (UTC) when the check was executed
-            or an error was raised.
-        time_period_display_texts (Union[Unset, List[str]]): List of time periods, sorted descending, returned as a text
-            with a possible time zone.
-        statuses (Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]]): List of check severity levels or an
-            error status, indexes with the severity levels match the time periods.
-        data_streams (Union[Unset, List[str]]): List of data stream names. Identifies the data stream with the highest
-            severity or error result.
-        results (Union[Unset, List[float]]): List of sensor results. Returns the data quality result readout for the
-            data stream with the alert of the higest severity level.
-    """
+    """ 
+        Attributes:
+            check_hash (Union[Unset, int]): Check hash.
+            check_category (Union[Unset, str]): Check category name.
+            check_name (Union[Unset, str]): Check name.
+            time_periods (Union[Unset, List[datetime.datetime]]): List of time periods for the results, returned as a local
+                time, sorted from the newest to the oldest.
+            time_periods_utc (Union[Unset, List[int]]): List of time periods for the results, returned as absolute UTC time.
+            executed_at_timestamps (Union[Unset, List[int]]): List of absolute timestamp (UTC) when the check was executed
+                or an error was raised.
+            time_period_display_texts (Union[Unset, List[str]]): List of time periods, sorted descending, returned as a text
+                with a possible time zone.
+            statuses (Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]]): List of check severity levels or an
+                error status, indexes with the severity levels match the time periods.
+            data_groups (Union[Unset, List[str]]): List of data group names. Identifies the data group with the highest
+                severity or error result.
+            results (Union[Unset, List[float]]): List of sensor results. Returns the data quality result readout for the
+                data group with the alert of the highest severity level.
+     """
 
     check_hash: Union[Unset, int] = UNSET
     check_category: Union[Unset, str] = UNSET
@@ -42,9 +53,10 @@ class CheckResultsOverviewDataModel:
     executed_at_timestamps: Union[Unset, List[int]] = UNSET
     time_period_display_texts: Union[Unset, List[str]] = UNSET
     statuses: Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]] = UNSET
-    data_streams: Union[Unset, List[str]] = UNSET
+    data_groups: Union[Unset, List[str]] = UNSET
     results: Union[Unset, List[float]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         check_hash = self.check_hash
@@ -58,17 +70,29 @@ class CheckResultsOverviewDataModel:
 
                 time_periods.append(time_periods_item)
 
+
+
+
         time_periods_utc: Union[Unset, List[int]] = UNSET
         if not isinstance(self.time_periods_utc, Unset):
             time_periods_utc = self.time_periods_utc
+
+
+
 
         executed_at_timestamps: Union[Unset, List[int]] = UNSET
         if not isinstance(self.executed_at_timestamps, Unset):
             executed_at_timestamps = self.executed_at_timestamps
 
+
+
+
         time_period_display_texts: Union[Unset, List[str]] = UNSET
         if not isinstance(self.time_period_display_texts, Unset):
             time_period_display_texts = self.time_period_display_texts
+
+
+
 
         statuses: Union[Unset, List[str]] = UNSET
         if not isinstance(self.statuses, Unset):
@@ -78,17 +102,28 @@ class CheckResultsOverviewDataModel:
 
                 statuses.append(statuses_item)
 
-        data_streams: Union[Unset, List[str]] = UNSET
-        if not isinstance(self.data_streams, Unset):
-            data_streams = self.data_streams
+
+
+
+        data_groups: Union[Unset, List[str]] = UNSET
+        if not isinstance(self.data_groups, Unset):
+            data_groups = self.data_groups
+
+
+
 
         results: Union[Unset, List[float]] = UNSET
         if not isinstance(self.results, Unset):
             results = self.results
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if check_hash is not UNSET:
             field_dict["checkHash"] = check_hash
         if check_category is not UNSET:
@@ -105,12 +140,14 @@ class CheckResultsOverviewDataModel:
             field_dict["timePeriodDisplayTexts"] = time_period_display_texts
         if statuses is not UNSET:
             field_dict["statuses"] = statuses
-        if data_streams is not UNSET:
-            field_dict["dataStreams"] = data_streams
+        if data_groups is not UNSET:
+            field_dict["dataGroups"] = data_groups
         if results is not UNSET:
             field_dict["results"] = results
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -123,31 +160,38 @@ class CheckResultsOverviewDataModel:
 
         time_periods = []
         _time_periods = d.pop("timePeriods", UNSET)
-        for time_periods_item_data in _time_periods or []:
+        for time_periods_item_data in (_time_periods or []):
             time_periods_item = isoparse(time_periods_item_data)
+
+
 
             time_periods.append(time_periods_item)
 
+
         time_periods_utc = cast(List[int], d.pop("timePeriodsUtc", UNSET))
+
 
         executed_at_timestamps = cast(List[int], d.pop("executedAtTimestamps", UNSET))
 
-        time_period_display_texts = cast(
-            List[str], d.pop("timePeriodDisplayTexts", UNSET)
-        )
+
+        time_period_display_texts = cast(List[str], d.pop("timePeriodDisplayTexts", UNSET))
+
 
         statuses = []
         _statuses = d.pop("statuses", UNSET)
-        for statuses_item_data in _statuses or []:
-            statuses_item = CheckResultsOverviewDataModelStatusesItem(
-                statuses_item_data
-            )
+        for statuses_item_data in (_statuses or []):
+            statuses_item = CheckResultsOverviewDataModelStatusesItem(statuses_item_data)
+
+
 
             statuses.append(statuses_item)
 
-        data_streams = cast(List[str], d.pop("dataStreams", UNSET))
+
+        data_groups = cast(List[str], d.pop("dataGroups", UNSET))
+
 
         results = cast(List[float], d.pop("results", UNSET))
+
 
         check_results_overview_data_model = cls(
             check_hash=check_hash,
@@ -158,7 +202,7 @@ class CheckResultsOverviewDataModel:
             executed_at_timestamps=executed_at_timestamps,
             time_period_display_texts=time_period_display_texts,
             statuses=statuses,
-            data_streams=data_streams,
+            data_groups=data_groups,
             results=results,
         )
 

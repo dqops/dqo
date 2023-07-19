@@ -1,15 +1,21 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
 from ... import errors
-from ...client import Client
+
+from typing import cast
+from typing import Dict
+from ...types import UNSET, Unset
+from typing import Union
+from ...models.get_schema_profiling_checks_model_check_target import GetSchemaProfilingChecksModelCheckTarget
+from typing import cast, List
 from ...models.check_configuration_model import CheckConfigurationModel
-from ...models.get_schema_profiling_checks_model_check_target import (
-    GetSchemaProfilingChecksModelCheckTarget,
-)
-from ...types import UNSET, Response, Unset
+from typing import Optional
+
 
 
 def _get_kwargs(
@@ -25,20 +31,27 @@ def _get_kwargs(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
+
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/profiling/model".format(
-        client.base_url, connectionName=connection_name, schemaName=schema_name
-    )
+        client.base_url,connectionName=connection_name,schemaName=schema_name)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    
+
+    
+
     params: Dict[str, Any] = {}
     params["tableNamePattern"] = table_name_pattern
 
+
     params["columnNamePattern"] = column_name_pattern
 
+
     params["columnDataType"] = column_data_type
+
 
     json_check_target: Union[Unset, None, str] = UNSET
     if not isinstance(check_target, Unset):
@@ -46,18 +59,29 @@ def _get_kwargs(
 
     params["checkTarget"] = json_check_target
 
+
     params["checkCategory"] = check_category
+
 
     params["checkName"] = check_name
 
+
     params["checkEnabled"] = check_enabled
+
 
     params["checkConfigured"] = check_configured
 
+
+
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
+
+    
+
+    
+
     return {
-        "method": "get",
+	    "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -67,16 +91,14 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[List["CheckConfigurationModel"]]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List['CheckConfigurationModel']]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
-        for response_200_item_data in _response_200:
-            response_200_item = CheckConfigurationModel.from_dict(
-                response_200_item_data
-            )
+        for response_200_item_data in (_response_200):
+            response_200_item = CheckConfigurationModel.from_dict(response_200_item_data)
+
+
 
             response_200.append(response_200_item)
 
@@ -87,9 +109,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[List["CheckConfigurationModel"]]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[List['CheckConfigurationModel']]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -111,8 +131,9 @@ def sync_detailed(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
-) -> Response[List["CheckConfigurationModel"]]:
-    """getSchemaProfilingChecksModel
+
+) -> Response[List['CheckConfigurationModel']]:
+    """ getSchemaProfilingChecksModel
 
      Return a flat list of configurations for profiling checks on a schema
 
@@ -134,20 +155,22 @@ def sync_detailed(
 
     Returns:
         Response[List['CheckConfigurationModel']]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        schema_name=schema_name,
-        client=client,
-        table_name_pattern=table_name_pattern,
-        column_name_pattern=column_name_pattern,
-        column_data_type=column_data_type,
-        check_target=check_target,
-        check_category=check_category,
-        check_name=check_name,
-        check_enabled=check_enabled,
-        check_configured=check_configured,
+schema_name=schema_name,
+client=client,
+table_name_pattern=table_name_pattern,
+column_name_pattern=column_name_pattern,
+column_data_type=column_data_type,
+check_target=check_target,
+check_category=check_category,
+check_name=check_name,
+check_enabled=check_enabled,
+check_configured=check_configured,
+
     )
 
     response = httpx.request(
@@ -156,7 +179,6 @@ def sync_detailed(
     )
 
     return _build_response(client=client, response=response)
-
 
 def sync(
     connection_name: str,
@@ -171,8 +193,9 @@ def sync(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
-) -> Optional[List["CheckConfigurationModel"]]:
-    """getSchemaProfilingChecksModel
+
+) -> Optional[List['CheckConfigurationModel']]:
+    """ getSchemaProfilingChecksModel
 
      Return a flat list of configurations for profiling checks on a schema
 
@@ -194,22 +217,23 @@ def sync(
 
     Returns:
         List['CheckConfigurationModel']
-    """
+     """
+
 
     return sync_detailed(
         connection_name=connection_name,
-        schema_name=schema_name,
-        client=client,
-        table_name_pattern=table_name_pattern,
-        column_name_pattern=column_name_pattern,
-        column_data_type=column_data_type,
-        check_target=check_target,
-        check_category=check_category,
-        check_name=check_name,
-        check_enabled=check_enabled,
-        check_configured=check_configured,
-    ).parsed
+schema_name=schema_name,
+client=client,
+table_name_pattern=table_name_pattern,
+column_name_pattern=column_name_pattern,
+column_data_type=column_data_type,
+check_target=check_target,
+check_category=check_category,
+check_name=check_name,
+check_enabled=check_enabled,
+check_configured=check_configured,
 
+    ).parsed
 
 async def asyncio_detailed(
     connection_name: str,
@@ -224,8 +248,9 @@ async def asyncio_detailed(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
-) -> Response[List["CheckConfigurationModel"]]:
-    """getSchemaProfilingChecksModel
+
+) -> Response[List['CheckConfigurationModel']]:
+    """ getSchemaProfilingChecksModel
 
      Return a flat list of configurations for profiling checks on a schema
 
@@ -247,27 +272,30 @@ async def asyncio_detailed(
 
     Returns:
         Response[List['CheckConfigurationModel']]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        schema_name=schema_name,
-        client=client,
-        table_name_pattern=table_name_pattern,
-        column_name_pattern=column_name_pattern,
-        column_data_type=column_data_type,
-        check_target=check_target,
-        check_category=check_category,
-        check_name=check_name,
-        check_enabled=check_enabled,
-        check_configured=check_configured,
+schema_name=schema_name,
+client=client,
+table_name_pattern=table_name_pattern,
+column_name_pattern=column_name_pattern,
+column_data_type=column_data_type,
+check_target=check_target,
+check_category=check_category,
+check_name=check_name,
+check_enabled=check_enabled,
+check_configured=check_configured,
+
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+        response = await _client.request(
+            **kwargs
+        )
 
     return _build_response(client=client, response=response)
-
 
 async def asyncio(
     connection_name: str,
@@ -282,8 +310,9 @@ async def asyncio(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
-) -> Optional[List["CheckConfigurationModel"]]:
-    """getSchemaProfilingChecksModel
+
+) -> Optional[List['CheckConfigurationModel']]:
+    """ getSchemaProfilingChecksModel
 
      Return a flat list of configurations for profiling checks on a schema
 
@@ -305,20 +334,20 @@ async def asyncio(
 
     Returns:
         List['CheckConfigurationModel']
-    """
+     """
 
-    return (
-        await asyncio_detailed(
-            connection_name=connection_name,
-            schema_name=schema_name,
-            client=client,
-            table_name_pattern=table_name_pattern,
-            column_name_pattern=column_name_pattern,
-            column_data_type=column_data_type,
-            check_target=check_target,
-            check_category=check_category,
-            check_name=check_name,
-            check_enabled=check_enabled,
-            check_configured=check_configured,
-        )
-    ).parsed
+
+    return (await asyncio_detailed(
+        connection_name=connection_name,
+schema_name=schema_name,
+client=client,
+table_name_pattern=table_name_pattern,
+column_name_pattern=column_name_pattern,
+column_data_type=column_data_type,
+check_target=check_target,
+check_category=check_category,
+check_name=check_name,
+check_enabled=check_enabled,
+check_configured=check_configured,
+
+    )).parsed

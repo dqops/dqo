@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class GetIncidentIssuesOrder(str, Enum):
     ACTUALVALUE = "actualValue"
     CHECKCATEGORY = "checkCategory"
@@ -9,7 +8,7 @@ class GetIncidentIssuesOrder(str, Enum):
     CHECKNAME = "checkName"
     CHECKTYPE = "checkType"
     COLUMNNAME = "columnName"
-    DATASTREAM = "dataStream"
+    DATAGROUP = "dataGroup"
     EXECUTEDAT = "executedAt"
     EXPECTEDVALUE = "expectedValue"
     QUALITYDIMENSION = "qualityDimension"

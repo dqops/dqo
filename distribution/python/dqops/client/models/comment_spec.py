@@ -1,27 +1,40 @@
-import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
-from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
+
+from typing import cast
+from dateutil.parser import isoparse
+from typing import Union
+from ..types import UNSET, Unset
+import datetime
+
+
+
+
+
 
 T = TypeVar("T", bound="CommentSpec")
 
 
 @attr.s(auto_attribs=True)
 class CommentSpec:
-    """
-    Attributes:
-        date (Union[Unset, datetime.datetime]): Comment date and time
-        comment_by (Union[Unset, str]): Commented by
-        comment (Union[Unset, str]): Comment text
-    """
+    """ 
+        Attributes:
+            date (Union[Unset, datetime.datetime]): Comment date and time
+            comment_by (Union[Unset, str]): Commented by
+            comment (Union[Unset, str]): Comment text
+     """
 
     date: Union[Unset, datetime.datetime] = UNSET
     comment_by: Union[Unset, str] = UNSET
     comment: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         date: Union[Unset, str] = UNSET
@@ -33,7 +46,8 @@ class CommentSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if date is not UNSET:
             field_dict["date"] = date
         if comment_by is not UNSET:
@@ -43,15 +57,20 @@ class CommentSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _date = d.pop("date", UNSET)
         date: Union[Unset, datetime.datetime]
-        if isinstance(_date, Unset):
+        if isinstance(_date,  Unset):
             date = UNSET
         else:
             date = isoparse(_date)
+
+
+
 
         comment_by = d.pop("comment_by", UNSET)
 

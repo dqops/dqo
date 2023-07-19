@@ -1,25 +1,26 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_accuracy_total_average_match_percent_check_spec import (
-        ColumnAccuracyTotalAverageMatchPercentCheckSpec,
-    )
-    from ..models.column_accuracy_total_max_match_percent_check_spec import (
-        ColumnAccuracyTotalMaxMatchPercentCheckSpec,
-    )
-    from ..models.column_accuracy_total_min_match_percent_check_spec import (
-        ColumnAccuracyTotalMinMatchPercentCheckSpec,
-    )
-    from ..models.column_accuracy_total_not_null_count_match_percent_check_spec import (
-        ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec,
-    )
-    from ..models.column_accuracy_total_sum_match_percent_check_spec import (
-        ColumnAccuracyTotalSumMatchPercentCheckSpec,
-    )
+  from ..models.column_accuracy_total_sum_match_percent_check_spec import ColumnAccuracyTotalSumMatchPercentCheckSpec
+  from ..models.column_accuracy_total_average_match_percent_check_spec import ColumnAccuracyTotalAverageMatchPercentCheckSpec
+  from ..models.column_accuracy_total_min_match_percent_check_spec import ColumnAccuracyTotalMinMatchPercentCheckSpec
+  from ..models.column_accuracy_total_not_null_count_match_percent_check_spec import ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec
+  from ..models.column_accuracy_total_max_match_percent_check_spec import ColumnAccuracyTotalMaxMatchPercentCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnAccuracyProfilingChecksSpec")
@@ -27,29 +28,29 @@ T = TypeVar("T", bound="ColumnAccuracyProfilingChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnAccuracyProfilingChecksSpec:
-    """
-    Attributes:
-        total_sum_match_percent (Union[Unset, ColumnAccuracyTotalSumMatchPercentCheckSpec]):
-        total_min_match_percent (Union[Unset, ColumnAccuracyTotalTotalMinMatchPercentCheckSpec]):
-        total_max_match_percent (Union[Unset, ColumnAccuracyTotalTotalMaxMatchPercentCheckSpec]):
-        total_average_match_percent (Union[Unset, ColumnAccuracyTotalTotalAverageMatchPercentCheckSpec]):
-        total_not_null_count_match_percent (Union[Unset, ColumnAccuracyTotalTotalNotNullCountMatchPercentCheckSpec]):
-    """
+    """ 
+        Attributes:
+            total_sum_match_percent (Union[Unset, ColumnAccuracyTotalSumMatchPercentCheckSpec]):
+            total_min_match_percent (Union[Unset, ColumnAccuracyTotalMinMatchPercentCheckSpec]):
+            total_max_match_percent (Union[Unset, ColumnAccuracyTotalMaxMatchPercentCheckSpec]):
+            total_average_match_percent (Union[Unset, ColumnAccuracyTotalAverageMatchPercentCheckSpec]):
+            total_not_null_count_match_percent (Union[Unset, ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec]):
+     """
 
-    total_sum_match_percent: Union[
-        Unset, "ColumnAccuracyTotalSumMatchPercentCheckSpec"
-    ] = UNSET
-    total_min_match_percent: Union[Unset, "ColumnAccuracyTotalTotalMinMatchPercentCheckSpec"] = UNSET
-    total_max_match_percent: Union[Unset, "ColumnAccuracyTotalTotalMaxMatchPercentCheckSpec"] = UNSET
-    total_average_match_percent: Union[
-        Unset, "ColumnAccuracyTotalTotalAverageMatchPercentCheckSpec"
-    ] = UNSET
-    total_not_null_count_match_percent: Union[
-        Unset, "ColumnAccuracyTotalTotalNotNullCountMatchPercentCheckSpec"
-    ] = UNSET
+    total_sum_match_percent: Union[Unset, 'ColumnAccuracyTotalSumMatchPercentCheckSpec'] = UNSET
+    total_min_match_percent: Union[Unset, 'ColumnAccuracyTotalMinMatchPercentCheckSpec'] = UNSET
+    total_max_match_percent: Union[Unset, 'ColumnAccuracyTotalMaxMatchPercentCheckSpec'] = UNSET
+    total_average_match_percent: Union[Unset, 'ColumnAccuracyTotalAverageMatchPercentCheckSpec'] = UNSET
+    total_not_null_count_match_percent: Union[Unset, 'ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.column_accuracy_total_sum_match_percent_check_spec import ColumnAccuracyTotalSumMatchPercentCheckSpec
+        from ..models.column_accuracy_total_average_match_percent_check_spec import ColumnAccuracyTotalAverageMatchPercentCheckSpec
+        from ..models.column_accuracy_total_min_match_percent_check_spec import ColumnAccuracyTotalMinMatchPercentCheckSpec
+        from ..models.column_accuracy_total_not_null_count_match_percent_check_spec import ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec
+        from ..models.column_accuracy_total_max_match_percent_check_spec import ColumnAccuracyTotalMaxMatchPercentCheckSpec
         total_sum_match_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.total_sum_match_percent, Unset):
             total_sum_match_percent = self.total_sum_match_percent.to_dict()
@@ -70,9 +71,11 @@ class ColumnAccuracyProfilingChecksSpec:
         if not isinstance(self.total_not_null_count_match_percent, Unset):
             total_not_null_count_match_percent = self.total_not_null_count_match_percent.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if total_sum_match_percent is not UNSET:
             field_dict["total_sum_match_percent"] = total_sum_match_percent
         if total_min_match_percent is not UNSET:
@@ -86,79 +89,65 @@ class ColumnAccuracyProfilingChecksSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_accuracy_total_average_match_percent_check_spec import (
-            ColumnAccuracyTotalAverageMatchPercentCheckSpec,
-        )
-        from ..models.column_accuracy_total_max_match_percent_check_spec import (
-            ColumnAccuracyTotalMaxMatchPercentCheckSpec,
-        )
-        from ..models.column_accuracy_total_min_match_percent_check_spec import (
-            ColumnAccuracyTotalMinMatchPercentCheckSpec,
-        )
-        from ..models.column_accuracy_total_not_null_count_match_percent_check_spec import (
-            ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec,
-        )
-        from ..models.column_accuracy_total_sum_match_percent_check_spec import (
-            ColumnAccuracyTotalSumMatchPercentCheckSpec,
-        )
-
+        from ..models.column_accuracy_total_sum_match_percent_check_spec import ColumnAccuracyTotalSumMatchPercentCheckSpec
+        from ..models.column_accuracy_total_average_match_percent_check_spec import ColumnAccuracyTotalAverageMatchPercentCheckSpec
+        from ..models.column_accuracy_total_min_match_percent_check_spec import ColumnAccuracyTotalMinMatchPercentCheckSpec
+        from ..models.column_accuracy_total_not_null_count_match_percent_check_spec import ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec
+        from ..models.column_accuracy_total_max_match_percent_check_spec import ColumnAccuracyTotalMaxMatchPercentCheckSpec
         d = src_dict.copy()
         _total_sum_match_percent = d.pop("total_sum_match_percent", UNSET)
-        total_sum_match_percent: Union[
-            Unset, ColumnAccuracyTotalSumMatchPercentCheckSpec
-        ]
-        if isinstance(_total_sum_match_percent, Unset):
+        total_sum_match_percent: Union[Unset, ColumnAccuracyTotalSumMatchPercentCheckSpec]
+        if isinstance(_total_sum_match_percent,  Unset):
             total_sum_match_percent = UNSET
         else:
-            total_sum_match_percent = (
-                ColumnAccuracyTotalSumMatchPercentCheckSpec.from_dict(
-                    _total_sum_match_percent
-                )
-            )
+            total_sum_match_percent = ColumnAccuracyTotalSumMatchPercentCheckSpec.from_dict(_total_sum_match_percent)
+
+
+
 
         _total_min_match_percent = d.pop("total_min_match_percent", UNSET)
         total_min_match_percent: Union[Unset, ColumnAccuracyTotalMinMatchPercentCheckSpec]
-        if isinstance(_total_min_match_percent, Unset):
+        if isinstance(_total_min_match_percent,  Unset):
             total_min_match_percent = UNSET
         else:
-            total_min_match_percent = ColumnAccuracyTotalMinMatchPercentCheckSpec.from_dict(
-                _total_min_match_percent
-            )
+            total_min_match_percent = ColumnAccuracyTotalMinMatchPercentCheckSpec.from_dict(_total_min_match_percent)
+
+
+
 
         _total_max_match_percent = d.pop("total_max_match_percent", UNSET)
         total_max_match_percent: Union[Unset, ColumnAccuracyTotalMaxMatchPercentCheckSpec]
-        if isinstance(_total_max_match_percent, Unset):
+        if isinstance(_total_max_match_percent,  Unset):
             total_max_match_percent = UNSET
         else:
-            total_max_match_percent = ColumnAccuracyTotalMaxMatchPercentCheckSpec.from_dict(
-                _total_max_match_percent
-            )
+            total_max_match_percent = ColumnAccuracyTotalMaxMatchPercentCheckSpec.from_dict(_total_max_match_percent)
+
+
+
 
         _total_average_match_percent = d.pop("total_average_match_percent", UNSET)
         total_average_match_percent: Union[Unset, ColumnAccuracyTotalAverageMatchPercentCheckSpec]
-        if isinstance(_total_average_match_percent, Unset):
+        if isinstance(_total_average_match_percent,  Unset):
             total_average_match_percent = UNSET
         else:
-            total_average_match_percent = (
-                ColumnAccuracyTotalAverageMatchPercentCheckSpec.from_dict(
-                    _total_average_match_percent
-                )
-            )
+            total_average_match_percent = ColumnAccuracyTotalAverageMatchPercentCheckSpec.from_dict(_total_average_match_percent)
+
+
+
 
         _total_not_null_count_match_percent = d.pop("total_not_null_count_match_percent", UNSET)
-        total_not_null_count_match_percent: Union[
-            Unset, ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec
-        ]
-        if isinstance(_total_not_null_count_match_percent, Unset):
+        total_not_null_count_match_percent: Union[Unset, ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec]
+        if isinstance(_total_not_null_count_match_percent,  Unset):
             total_not_null_count_match_percent = UNSET
         else:
-            total_not_null_count_match_percent = (
-                ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec.from_dict(
-                    _total_not_null_count_match_percent
-                )
-            )
+            total_not_null_count_match_percent = ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec.from_dict(_total_not_null_count_match_percent)
+
+
+
 
         column_accuracy_profiling_checks_spec = cls(
             total_sum_match_percent=total_sum_match_percent,

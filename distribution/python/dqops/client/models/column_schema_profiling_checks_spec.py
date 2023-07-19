@@ -1,16 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_schema_column_exists_check_spec import (
-        ColumnSchemaColumnExistsCheckSpec,
-    )
-    from ..models.column_schema_type_changed_check_spec import (
-        ColumnSchemaTypeChangedCheckSpec,
-    )
+  from ..models.column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
+  from ..models.column_schema_column_exists_check_spec import ColumnSchemaColumnExistsCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnSchemaProfilingChecksSpec")
@@ -18,17 +25,20 @@ T = TypeVar("T", bound="ColumnSchemaProfilingChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnSchemaProfilingChecksSpec:
-    """
-    Attributes:
-        column_exists (Union[Unset, ColumnSchemaColumnExistsCheckSpec]):
-        column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
-    """
+    """ 
+        Attributes:
+            column_exists (Union[Unset, ColumnSchemaColumnExistsCheckSpec]):
+            column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
+     """
 
-    column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
-    column_type_changed: Union[Unset, "ColumnSchemaTypeChangedCheckSpec"] = UNSET
+    column_exists: Union[Unset, 'ColumnSchemaColumnExistsCheckSpec'] = UNSET
+    column_type_changed: Union[Unset, 'ColumnSchemaTypeChangedCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
+        from ..models.column_schema_column_exists_check_spec import ColumnSchemaColumnExistsCheckSpec
         column_exists: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.column_exists, Unset):
             column_exists = self.column_exists.to_dict()
@@ -37,9 +47,11 @@ class ColumnSchemaProfilingChecksSpec:
         if not isinstance(self.column_type_changed, Unset):
             column_type_changed = self.column_type_changed.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if column_exists is not UNSET:
             field_dict["column_exists"] = column_exists
         if column_type_changed is not UNSET:
@@ -47,31 +59,32 @@ class ColumnSchemaProfilingChecksSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_schema_column_exists_check_spec import (
-            ColumnSchemaColumnExistsCheckSpec,
-        )
-        from ..models.column_schema_type_changed_check_spec import (
-            ColumnSchemaTypeChangedCheckSpec,
-        )
-
+        from ..models.column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
+        from ..models.column_schema_column_exists_check_spec import ColumnSchemaColumnExistsCheckSpec
         d = src_dict.copy()
         _column_exists = d.pop("column_exists", UNSET)
         column_exists: Union[Unset, ColumnSchemaColumnExistsCheckSpec]
-        if isinstance(_column_exists, Unset):
+        if isinstance(_column_exists,  Unset):
             column_exists = UNSET
         else:
             column_exists = ColumnSchemaColumnExistsCheckSpec.from_dict(_column_exists)
 
+
+
+
         _column_type_changed = d.pop("column_type_changed", UNSET)
         column_type_changed: Union[Unset, ColumnSchemaTypeChangedCheckSpec]
-        if isinstance(_column_type_changed, Unset):
+        if isinstance(_column_type_changed,  Unset):
             column_type_changed = UNSET
         else:
-            column_type_changed = ColumnSchemaTypeChangedCheckSpec.from_dict(
-                _column_type_changed
-            )
+            column_type_changed = ColumnSchemaTypeChangedCheckSpec.from_dict(_column_type_changed)
+
+
+
 
         column_schema_profiling_checks_spec = cls(
             column_exists=column_exists,

@@ -1,33 +1,48 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="DatatypeEqualsRuleParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class DatatypeEqualsRuleParametersSpec:
-    """
-    Attributes:
-        expected_datatype (Union[Unset, int]): Expected data type code, the data type codes are: 1 - integers, 2 -
-            floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
-    """
+    """ 
+        Attributes:
+            expected_datatype (Union[Unset, int]): Expected data type code, the data type codes are: 1 - integers, 2 -
+                floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+     """
 
     expected_datatype: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         expected_datatype = self.expected_datatype
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if expected_datatype is not UNSET:
             field_dict["expected_datatype"] = expected_datatype
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

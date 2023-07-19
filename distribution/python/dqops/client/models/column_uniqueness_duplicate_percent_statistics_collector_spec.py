@@ -1,13 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_uniqueness_duplicate_percent_sensor_parameters_spec import (
-        ColumnUniquenessDuplicatePercentSensorParametersSpec,
-    )
+  from ..models.column_uniqueness_duplicate_percent_sensor_parameters_spec import ColumnUniquenessDuplicatePercentSensorParametersSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnUniquenessDuplicatePercentStatisticsCollectorSpec")
@@ -15,28 +24,30 @@ T = TypeVar("T", bound="ColumnUniquenessDuplicatePercentStatisticsCollectorSpec"
 
 @attr.s(auto_attribs=True)
 class ColumnUniquenessDuplicatePercentStatisticsCollectorSpec:
-    """
-    Attributes:
-        disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
-            process.
-        parameters (Union[Unset, ColumnUniquenessDuplicatePercentSensorParametersSpec]):
-    """
+    """ 
+        Attributes:
+            disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
+                process.
+            parameters (Union[Unset, ColumnUniquenessDuplicatePercentSensorParametersSpec]):
+     """
 
     disabled: Union[Unset, bool] = UNSET
-    parameters: Union[
-        Unset, "ColumnUniquenessDuplicatePercentSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, 'ColumnUniquenessDuplicatePercentSensorParametersSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.column_uniqueness_duplicate_percent_sensor_parameters_spec import ColumnUniquenessDuplicatePercentSensorParametersSpec
         disabled = self.disabled
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
         if parameters is not UNSET:
@@ -44,32 +55,30 @@ class ColumnUniquenessDuplicatePercentStatisticsCollectorSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_uniqueness_duplicate_percent_sensor_parameters_spec import (
-            ColumnUniquenessDuplicatePercentSensorParametersSpec,
-        )
-
+        from ..models.column_uniqueness_duplicate_percent_sensor_parameters_spec import ColumnUniquenessDuplicatePercentSensorParametersSpec
         d = src_dict.copy()
         disabled = d.pop("disabled", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, ColumnUniquenessDuplicatePercentSensorParametersSpec]
-        if isinstance(_parameters, Unset):
+        if isinstance(_parameters,  Unset):
             parameters = UNSET
         else:
-            parameters = ColumnUniquenessDuplicatePercentSensorParametersSpec.from_dict(
-                _parameters
-            )
+            parameters = ColumnUniquenessDuplicatePercentSensorParametersSpec.from_dict(_parameters)
+
+
+
 
         column_uniqueness_duplicate_percent_statistics_collector_spec = cls(
             disabled=disabled,
             parameters=parameters,
         )
 
-        column_uniqueness_duplicate_percent_statistics_collector_spec.additional_properties = (
-            d
-        )
+        column_uniqueness_duplicate_percent_statistics_collector_spec.additional_properties = d
         return column_uniqueness_duplicate_percent_statistics_collector_spec
 
     @property

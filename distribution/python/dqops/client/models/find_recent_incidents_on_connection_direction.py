@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class FindRecentIncidentsOnConnectionDirection(str, Enum):
     ASC = "asc"
     DESC = "desc"

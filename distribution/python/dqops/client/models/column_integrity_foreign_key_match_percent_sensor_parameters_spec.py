@@ -1,28 +1,40 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec:
-    """
-    Attributes:
-        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-            sensor query filter are added, separated by an AND operator.
-        foreign_table (Union[Unset, str]): This field can be used to define the name of the table to be compared to. In
-            order to define the name of the table, user should write correct name as a String.
-        foreign_column (Union[Unset, str]): This field can be used to define the name of the column to be compared to.
-            In order to define the name of the column, user should write correct name as a String.
-    """
+    """ 
+        Attributes:
+            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+                sensor query filter are added, separated by an AND operator.
+            foreign_table (Union[Unset, str]): This field can be used to define the name of the table to be compared to. In
+                order to define the name of the table, user should write correct name as a String.
+            foreign_column (Union[Unset, str]): This field can be used to define the name of the column to be compared to.
+                In order to define the name of the column, user should write correct name as a String.
+     """
 
     filter_: Union[Unset, str] = UNSET
     foreign_table: Union[Unset, str] = UNSET
     foreign_column: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -31,7 +43,8 @@ class ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if foreign_table is not UNSET:
@@ -40,6 +53,8 @@ class ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec:
             field_dict["foreign_column"] = foreign_column
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -56,9 +71,7 @@ class ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec:
             foreign_column=foreign_column,
         )
 
-        column_integrity_foreign_key_match_percent_sensor_parameters_spec.additional_properties = (
-            d
-        )
+        column_integrity_foreign_key_match_percent_sensor_parameters_spec.additional_properties = d
         return column_integrity_foreign_key_match_percent_sensor_parameters_spec
 
     @property

@@ -1,13 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.snowflake_parameters_spec_properties import (
-        SnowflakeParametersSpecProperties,
-    )
+  from ..models.snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
+
+
+
 
 
 T = TypeVar("T", bound="SnowflakeParametersSpec")
@@ -15,23 +24,23 @@ T = TypeVar("T", bound="SnowflakeParametersSpec")
 
 @attr.s(auto_attribs=True)
 class SnowflakeParametersSpec:
-    """
-    Attributes:
-        account (Union[Unset, str]): Snowflake account name, e.q. <account>, <account>-<locator>, <account>.<region> or
-            <account>.<region>.<platform>.. Supports also a ${SNOWFLAKE_ACCOUNT} configuration with a custom environment
-            variable.
-        warehouse (Union[Unset, str]): Snowflake warehouse name. Supports also a ${SNOWFLAKE_WAREHOUSE} configuration
-            with a custom environment variable.
-        database (Union[Unset, str]): Snowflake database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-            format to use dynamic substitution.
-        user (Union[Unset, str]): Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to
-            use dynamic substitution.
-        password (Union[Unset, str]): Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-            format to use dynamic substitution.
-        role (Union[Unset, str]): Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom
-            environment variable.
-        properties (Union[Unset, SnowflakeParametersSpecProperties]):
-    """
+    """ 
+        Attributes:
+            account (Union[Unset, str]): Snowflake account name, e.q. <account>, <account>-<locator>, <account>.<region> or
+                <account>.<region>.<platform>.. Supports also a ${SNOWFLAKE_ACCOUNT} configuration with a custom environment
+                variable.
+            warehouse (Union[Unset, str]): Snowflake warehouse name. Supports also a ${SNOWFLAKE_WAREHOUSE} configuration
+                with a custom environment variable.
+            database (Union[Unset, str]): Snowflake database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+                format to use dynamic substitution.
+            user (Union[Unset, str]): Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to
+                use dynamic substitution.
+            password (Union[Unset, str]): Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+                format to use dynamic substitution.
+            role (Union[Unset, str]): Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom
+                environment variable.
+            properties (Union[Unset, SnowflakeParametersSpecProperties]):
+     """
 
     account: Union[Unset, str] = UNSET
     warehouse: Union[Unset, str] = UNSET
@@ -39,10 +48,12 @@ class SnowflakeParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     role: Union[Unset, str] = UNSET
-    properties: Union[Unset, "SnowflakeParametersSpecProperties"] = UNSET
+    properties: Union[Unset, 'SnowflakeParametersSpecProperties'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
         account = self.account
         warehouse = self.warehouse
         database = self.database
@@ -53,9 +64,11 @@ class SnowflakeParametersSpec:
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if account is not UNSET:
             field_dict["account"] = account
         if warehouse is not UNSET:
@@ -73,12 +86,11 @@ class SnowflakeParametersSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.snowflake_parameters_spec_properties import (
-            SnowflakeParametersSpecProperties,
-        )
-
+        from ..models.snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
         d = src_dict.copy()
         account = d.pop("account", UNSET)
 
@@ -94,10 +106,13 @@ class SnowflakeParametersSpec:
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, SnowflakeParametersSpecProperties]
-        if isinstance(_properties, Unset):
+        if isinstance(_properties,  Unset):
             properties = UNSET
         else:
             properties = SnowflakeParametersSpecProperties.from_dict(_properties)
+
+
+
 
         snowflake_parameters_spec = cls(
             account=account,

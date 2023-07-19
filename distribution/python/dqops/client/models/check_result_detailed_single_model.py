@@ -1,45 +1,57 @@
-import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
-from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
+
+from typing import cast
+from dateutil.parser import isoparse
+from typing import Union
+from ..types import UNSET, Unset
+import datetime
+
+
+
+
+
 
 T = TypeVar("T", bound="CheckResultDetailedSingleModel")
 
 
 @attr.s(auto_attribs=True)
 class CheckResultDetailedSingleModel:
-    """
-    Attributes:
-        id (Union[Unset, str]): Check result ID.
-        check_hash (Union[Unset, int]): Check hash.
-        check_category (Union[Unset, str]): Check category name.
-        check_name (Union[Unset, str]): Check name.
-        check_display_name (Union[Unset, str]): Check display name.
-        check_type (Union[Unset, str]): Check type.
-        actual_value (Union[Unset, float]): Actual value.
-        expected_value (Union[Unset, float]): Expected value.
-        warning_lower_bound (Union[Unset, float]): Warning lower bound.
-        warning_upper_bound (Union[Unset, float]): Warning upper bound.
-        error_lower_bound (Union[Unset, float]): Error lower bound.
-        error_upper_bound (Union[Unset, float]): Error upper bound.
-        fatal_lower_bound (Union[Unset, float]): Fatal lower bound.
-        fatal_upper_bound (Union[Unset, float]): Fatal upper bound.
-        severity (Union[Unset, int]): Severity.
-        column_name (Union[Unset, str]): Column name.
-        data_stream (Union[Unset, str]): Data stream.
-        duration_ms (Union[Unset, int]): Duration (ms).
-        executed_at (Union[Unset, int]): Executed at.
-        time_gradient (Union[Unset, str]): Time gradient.
-        time_period (Union[Unset, datetime.datetime]): Time period.
-        include_in_kpi (Union[Unset, bool]): Include in KPI.
-        include_in_sla (Union[Unset, bool]): Include in SLA.
-        provider (Union[Unset, str]): Provider.
-        quality_dimension (Union[Unset, str]): Quality dimension.
-        sensor_name (Union[Unset, str]): Sensor name.
-    """
+    """ 
+        Attributes:
+            id (Union[Unset, str]): Check result ID.
+            check_hash (Union[Unset, int]): Check hash.
+            check_category (Union[Unset, str]): Check category name.
+            check_name (Union[Unset, str]): Check name.
+            check_display_name (Union[Unset, str]): Check display name.
+            check_type (Union[Unset, str]): Check type.
+            actual_value (Union[Unset, float]): Actual value.
+            expected_value (Union[Unset, float]): Expected value.
+            warning_lower_bound (Union[Unset, float]): Warning lower bound.
+            warning_upper_bound (Union[Unset, float]): Warning upper bound.
+            error_lower_bound (Union[Unset, float]): Error lower bound.
+            error_upper_bound (Union[Unset, float]): Error upper bound.
+            fatal_lower_bound (Union[Unset, float]): Fatal lower bound.
+            fatal_upper_bound (Union[Unset, float]): Fatal upper bound.
+            severity (Union[Unset, int]): Severity.
+            column_name (Union[Unset, str]): Column name.
+            data_group (Union[Unset, str]): Data group.
+            duration_ms (Union[Unset, int]): Duration (ms).
+            executed_at (Union[Unset, int]): Executed at.
+            time_gradient (Union[Unset, str]): Time gradient.
+            time_period (Union[Unset, datetime.datetime]): Time period.
+            include_in_kpi (Union[Unset, bool]): Include in KPI.
+            include_in_sla (Union[Unset, bool]): Include in SLA.
+            provider (Union[Unset, str]): Provider.
+            quality_dimension (Union[Unset, str]): Quality dimension.
+            sensor_name (Union[Unset, str]): Sensor name.
+     """
 
     id: Union[Unset, str] = UNSET
     check_hash: Union[Unset, int] = UNSET
@@ -57,7 +69,7 @@ class CheckResultDetailedSingleModel:
     fatal_upper_bound: Union[Unset, float] = UNSET
     severity: Union[Unset, int] = UNSET
     column_name: Union[Unset, str] = UNSET
-    data_stream: Union[Unset, str] = UNSET
+    data_group: Union[Unset, str] = UNSET
     duration_ms: Union[Unset, int] = UNSET
     executed_at: Union[Unset, int] = UNSET
     time_gradient: Union[Unset, str] = UNSET
@@ -68,6 +80,7 @@ class CheckResultDetailedSingleModel:
     quality_dimension: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
@@ -86,7 +99,7 @@ class CheckResultDetailedSingleModel:
         fatal_upper_bound = self.fatal_upper_bound
         severity = self.severity
         column_name = self.column_name
-        data_stream = self.data_stream
+        data_group = self.data_group
         duration_ms = self.duration_ms
         executed_at = self.executed_at
         time_gradient = self.time_gradient
@@ -102,7 +115,8 @@ class CheckResultDetailedSingleModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if id is not UNSET:
             field_dict["id"] = id
         if check_hash is not UNSET:
@@ -135,8 +149,8 @@ class CheckResultDetailedSingleModel:
             field_dict["severity"] = severity
         if column_name is not UNSET:
             field_dict["columnName"] = column_name
-        if data_stream is not UNSET:
-            field_dict["dataStream"] = data_stream
+        if data_group is not UNSET:
+            field_dict["dataGroup"] = data_group
         if duration_ms is not UNSET:
             field_dict["durationMs"] = duration_ms
         if executed_at is not UNSET:
@@ -157,6 +171,8 @@ class CheckResultDetailedSingleModel:
             field_dict["sensorName"] = sensor_name
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -193,7 +209,7 @@ class CheckResultDetailedSingleModel:
 
         column_name = d.pop("columnName", UNSET)
 
-        data_stream = d.pop("dataStream", UNSET)
+        data_group = d.pop("dataGroup", UNSET)
 
         duration_ms = d.pop("durationMs", UNSET)
 
@@ -203,10 +219,13 @@ class CheckResultDetailedSingleModel:
 
         _time_period = d.pop("timePeriod", UNSET)
         time_period: Union[Unset, datetime.datetime]
-        if isinstance(_time_period, Unset):
+        if isinstance(_time_period,  Unset):
             time_period = UNSET
         else:
             time_period = isoparse(_time_period)
+
+
+
 
         include_in_kpi = d.pop("includeInKpi", UNSET)
 
@@ -235,7 +254,7 @@ class CheckResultDetailedSingleModel:
             fatal_upper_bound=fatal_upper_bound,
             severity=severity,
             column_name=column_name,
-            data_stream=data_stream,
+            data_group=data_group,
             duration_ms=duration_ms,
             executed_at=executed_at,
             time_gradient=time_gradient,

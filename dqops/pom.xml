@@ -82,6 +82,35 @@
 			</build>
 		</profile>
 		<profile>
+			<id>generate-python-client</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>generate-python-client</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.rest.server.client.GeneratePythonClientPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-2.json</argument>
+										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3-python-client.json</argument>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>update-dqo-home-specs</id>
 			<build>
 				<plugins>
@@ -867,20 +896,6 @@
 							<mainClass>com.dqops.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
 							<arguments>
 								<argument>${project.basedir}/src/main/frontend/src/api</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>upgrade-swagger2-to-openapi3</id>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<phase>compile</phase>
-						<configuration>
-							<mainClass>com.dqops.rest.server.openapi.PrepareOpenApiFileForPythonClientPostProcessor</mainClass>
-							<arguments>
-								<argument>${project.basedir}/target/swagger/dqo-ui-swagger-2.json</argument>
-								<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3-python-client.json</argument>
 							</arguments>
 						</configuration>
 					</execution>

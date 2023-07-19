@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class GetTablePartitionedSensorReadoutsTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

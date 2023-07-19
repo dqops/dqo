@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class RuleModelType(str, Enum):
     JAVA_CLASS = "java_class"
     PYTHON = "python"

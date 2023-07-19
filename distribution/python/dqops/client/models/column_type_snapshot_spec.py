@@ -1,22 +1,33 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="ColumnTypeSnapshotSpec")
 
 
 @attr.s(auto_attribs=True)
 class ColumnTypeSnapshotSpec:
-    """
-    Attributes:
-        column_type (Union[Unset, str]): Column data type using the monitored database type names.
-        nullable (Union[Unset, bool]): Column is nullable.
-        length (Union[Unset, int]): Maximum length of text and binary columns.
-        precision (Union[Unset, int]): Precision of a numeric (decimal) data type.
-        scale (Union[Unset, int]): Scale of a numeric (decimal) data type.
-    """
+    """ 
+        Attributes:
+            column_type (Union[Unset, str]): Column data type using the monitored database type names.
+            nullable (Union[Unset, bool]): Column is nullable.
+            length (Union[Unset, int]): Maximum length of text and binary columns.
+            precision (Union[Unset, int]): Precision of a numeric (decimal) data type.
+            scale (Union[Unset, int]): Scale of a numeric (decimal) data type.
+     """
 
     column_type: Union[Unset, str] = UNSET
     nullable: Union[Unset, bool] = UNSET
@@ -24,6 +35,7 @@ class ColumnTypeSnapshotSpec:
     precision: Union[Unset, int] = UNSET
     scale: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         column_type = self.column_type
@@ -34,7 +46,8 @@ class ColumnTypeSnapshotSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if column_type is not UNSET:
             field_dict["column_type"] = column_type
         if nullable is not UNSET:
@@ -47,6 +60,8 @@ class ColumnTypeSnapshotSpec:
             field_dict["scale"] = scale
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class CheckContainerTypeModelCheckType(str, Enum):
     PARTITIONED = "partitioned"
     PROFILING = "profiling"

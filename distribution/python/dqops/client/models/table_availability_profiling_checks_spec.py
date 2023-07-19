@@ -1,11 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.table_availability_check_spec import TableAvailabilityCheckSpec
+  from ..models.table_availability_check_spec import TableAvailabilityCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableAvailabilityProfilingChecksSpec")
@@ -13,40 +24,46 @@ T = TypeVar("T", bound="TableAvailabilityProfilingChecksSpec")
 
 @attr.s(auto_attribs=True)
 class TableAvailabilityProfilingChecksSpec:
-    """
-    Attributes:
-        table_availability (Union[Unset, TableAvailabilityCheckSpec]):
-    """
+    """ 
+        Attributes:
+            table_availability (Union[Unset, TableAvailabilityCheckSpec]):
+     """
 
-    table_availability: Union[Unset, "TableAvailabilityCheckSpec"] = UNSET
+    table_availability: Union[Unset, 'TableAvailabilityCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_availability_check_spec import TableAvailabilityCheckSpec
         table_availability: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.table_availability, Unset):
             table_availability = self.table_availability.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if table_availability is not UNSET:
             field_dict["table_availability"] = table_availability
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.table_availability_check_spec import TableAvailabilityCheckSpec
-
         d = src_dict.copy()
         _table_availability = d.pop("table_availability", UNSET)
         table_availability: Union[Unset, TableAvailabilityCheckSpec]
-        if isinstance(_table_availability, Unset):
+        if isinstance(_table_availability,  Unset):
             table_availability = UNSET
         else:
-            table_availability = TableAvailabilityCheckSpec.from_dict(
-                _table_availability
-            )
+            table_availability = TableAvailabilityCheckSpec.from_dict(_table_availability)
+
+
+
 
         table_availability_profiling_checks_spec = cls(
             table_availability=table_availability,

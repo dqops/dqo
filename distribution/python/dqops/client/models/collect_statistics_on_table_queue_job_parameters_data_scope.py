@@ -1,8 +1,7 @@
 from enum import Enum
 
-
 class CollectStatisticsOnTableQueueJobParametersDataScope(str, Enum):
-    DATA_STREAM = "data_stream"
+    DATA_GROUPINGS = "data_groupings"
     TABLE = "table"
 
     def __str__(self) -> str:

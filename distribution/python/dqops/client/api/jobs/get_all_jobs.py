@@ -1,27 +1,41 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
 from ... import errors
-from ...client import Client
-from ...models.dqo_job_queue_initial_snapshot_model import (
-    DqoJobQueueInitialSnapshotModel,
-)
-from ...types import Response
+
+from typing import cast
+from ...models.dqo_job_queue_initial_snapshot_model import DqoJobQueueInitialSnapshotModel
+from typing import Dict
+
 
 
 def _get_kwargs(
     *,
     client: Client,
+
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/jobs".format(client.base_url)
+    url = "{}/api/jobs/jobs".format(
+        client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    
+
+    
+
+    
+
+    
+
+    
+
     return {
-        "method": "get",
+	    "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -30,11 +44,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[DqoJobQueueInitialSnapshotModel]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[DqoJobQueueInitialSnapshotModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = DqoJobQueueInitialSnapshotModel.from_dict(response.json())
+
+
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -43,9 +57,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[DqoJobQueueInitialSnapshotModel]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[DqoJobQueueInitialSnapshotModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -57,8 +69,9 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
+
 ) -> Response[DqoJobQueueInitialSnapshotModel]:
-    """getAllJobs
+    """ getAllJobs
 
      Retrieves a list of all queued and recently finished jobs.
 
@@ -68,10 +81,12 @@ def sync_detailed(
 
     Returns:
         Response[DqoJobQueueInitialSnapshotModel]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         client=client,
+
     )
 
     response = httpx.request(
@@ -81,12 +96,12 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
-
 def sync(
     *,
     client: Client,
+
 ) -> Optional[DqoJobQueueInitialSnapshotModel]:
-    """getAllJobs
+    """ getAllJobs
 
      Retrieves a list of all queued and recently finished jobs.
 
@@ -96,18 +111,20 @@ def sync(
 
     Returns:
         DqoJobQueueInitialSnapshotModel
-    """
+     """
+
 
     return sync_detailed(
         client=client,
-    ).parsed
 
+    ).parsed
 
 async def asyncio_detailed(
     *,
     client: Client,
+
 ) -> Response[DqoJobQueueInitialSnapshotModel]:
-    """getAllJobs
+    """ getAllJobs
 
      Retrieves a list of all queued and recently finished jobs.
 
@@ -117,23 +134,27 @@ async def asyncio_detailed(
 
     Returns:
         Response[DqoJobQueueInitialSnapshotModel]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         client=client,
+
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+        response = await _client.request(
+            **kwargs
+        )
 
     return _build_response(client=client, response=response)
-
 
 async def asyncio(
     *,
     client: Client,
+
 ) -> Optional[DqoJobQueueInitialSnapshotModel]:
-    """getAllJobs
+    """ getAllJobs
 
      Retrieves a list of all queued and recently finished jobs.
 
@@ -143,10 +164,10 @@ async def asyncio(
 
     Returns:
         DqoJobQueueInitialSnapshotModel
-    """
+     """
 
-    return (
-        await asyncio_detailed(
-            client=client,
-        )
-    ).parsed
+
+    return (await asyncio_detailed(
+        client=client,
+
+    )).parsed

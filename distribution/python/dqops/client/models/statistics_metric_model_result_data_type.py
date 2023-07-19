@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class StatisticsMetricModelResultDataType(str, Enum):
     BOOLEAN = "boolean"
     DATE = "date"

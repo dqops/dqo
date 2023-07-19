@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class ConnectionBasicModelProviderType(str, Enum):
     BIGQUERY = "bigquery"
     MYSQL = "mysql"

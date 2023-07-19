@@ -1,30 +1,35 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
 if TYPE_CHECKING:
-    from ..models.comment_spec import CommentSpec
-    from ..models.partition_incremental_time_window_spec import (
-        PartitionIncrementalTimeWindowSpec,
-    )
-    from ..models.recurring_schedules_spec import RecurringSchedulesSpec
-    from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
-    from ..models.table_owner_spec import TableOwnerSpec
-    from ..models.table_partitioned_checks_root_spec import (
-        TablePartitionedChecksRootSpec,
-    )
-    from ..models.table_profiling_check_categories_spec import (
-        TableProfilingCheckCategoriesSpec,
-    )
-    from ..models.table_recurring_checks_spec import TableRecurringChecksSpec
-    from ..models.table_spec_columns import TableSpecColumns
-    from ..models.table_spec_data_streams import TableSpecDataStreams
-    from ..models.table_statistics_collectors_root_categories_spec import (
-        TableStatisticsCollectorsRootCategoriesSpec,
-    )
-    from ..models.timestamp_columns_spec import TimestampColumnsSpec
+  from ..models.table_owner_spec import TableOwnerSpec
+  from ..models.recurring_schedules_spec import RecurringSchedulesSpec
+  from ..models.table_spec_table_comparisons import TableSpecTableComparisons
+  from ..models.partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
+  from ..models.table_profiling_check_categories_spec import TableProfilingCheckCategoriesSpec
+  from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
+  from ..models.table_spec_columns import TableSpecColumns
+  from ..models.table_spec_groupings import TableSpecGroupings
+  from ..models.timestamp_columns_spec import TimestampColumnsSpec
+  from ..models.table_partitioned_checks_root_spec import TablePartitionedChecksRootSpec
+  from ..models.comment_spec import CommentSpec
+  from ..models.table_statistics_collectors_root_categories_spec import TableStatisticsCollectorsRootCategoriesSpec
+  from ..models.table_recurring_checks_spec import TableRecurringChecksSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableSpec")
@@ -32,61 +37,91 @@ T = TypeVar("T", bound="TableSpec")
 
 @attr.s(auto_attribs=True)
 class TableSpec:
-    """
-    Attributes:
-        disabled (Union[Unset, bool]): Disables all data quality checks on the table. Data quality checks will not be
-            executed.
-        stage (Union[Unset, str]): Stage name.
-        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level.
-            The table priority is copied into each data quality check result and a sensor result, enabling efficient
-            grouping of more and less important tables during a data quality improvement project, when the data quality
-            issues on higher priority tables are fixed before data quality issues on less important tables.
-        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to
-            replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed
-            table or {column} to replace the content with the analyzed column name.
-        timestamp_columns (Union[Unset, TimestampColumnsSpec]):
-        incremental_time_window (Union[Unset, PartitionIncrementalTimeWindowSpec]):
-        data_streams (Union[Unset, TableSpecDataStreams]): Data stream mappings list. Data streams are configured in two
-            cases: (1) a tag is assigned to a table (within a data stream level hierarchy), when the data is segmented at a
-            table level (similar tables store the same information, but for different countries, etc.). (2) the data in the
-            table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series,
-            for example a table contains data from multiple countries and there is a 'country' column used for partitioning.
-        incident_grouping (Union[Unset, TableIncidentGroupingSpec]):
-        owner (Union[Unset, TableOwnerSpec]):
-        profiling_checks (Union[Unset, TableProfilingCheckCategoriesSpec]):
-        recurring_checks (Union[Unset, TableRecurringChecksSpec]):
-        partitioned_checks (Union[Unset, TablePartitionedChecksRootSpec]):
-        statistics (Union[Unset, TableStatisticsCollectorsRootCategoriesSpec]):
-        schedules_override (Union[Unset, RecurringSchedulesSpec]):
-        columns (Union[Unset, TableSpecColumns]): Dictionary of columns, indexed by a physical column name. Column
-            specification contains the expected column data type and a list of column level data quality checks that are
-            enabled for a column.
-        labels (Union[Unset, List[str]]): Custom labels that were assigned to the table. Labels are used for searching
-            for tables when filtered data quality checks are executed.
-        comments (Union[Unset, List['CommentSpec']]): Comments used for change tracking and documenting changes directly
-            in the table data quality specification file.
-    """
+    """ 
+        Attributes:
+            disabled (Union[Unset, bool]): Disables all data quality checks on the table. Data quality checks will not be
+                executed.
+            stage (Union[Unset, str]): Stage name.
+            priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level.
+                The table priority is copied into each data quality check result and a sensor result, enabling efficient
+                grouping of more and less important tables during a data quality improvement project, when the data quality
+                issues on higher priority tables are fixed before data quality issues on less important tables.
+            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to
+                replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed
+                table or {column} to replace the content with the analyzed column name.
+            timestamp_columns (Union[Unset, TimestampColumnsSpec]):
+            incremental_time_window (Union[Unset, PartitionIncrementalTimeWindowSpec]):
+            default_grouping_name (Union[Unset, str]): The name of the default data grouping configuration that is applied
+                on data quality checks. When a default data grouping is selected, all data quality checks run SQL queries with a
+                GROUP BY clause, calculating separate data quality checks for each group of data. The data groupings are defined
+                in the 'groupings' dictionary (indexed by the data grouping name).
+            groupings (Union[Unset, TableSpecGroupings]): Data grouping configurations list. Data grouping configurations
+                are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze
+                different datasets using separate time series, for example a table contains data from multiple countries and
+                there is a 'country' column used for partitioning. (2) a tag is assigned to a table (within a data grouping
+                level hierarchy), when the data is segmented at a table level (similar tables store the same information, but
+                for different countries, etc.).
+            table_comparisons (Union[Unset, TableSpecTableComparisons]): Dictionary of data comparison configurations. Data
+                comparison configurations are used for cross data-source comparisons to compare this table (called the compared
+                table) with other reference tables (the source of truth). The reference table's metadata must be imported into
+                DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated
+                for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data
+                grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected
+                data grouping configurations must match. DQO will run the same data quality sensors on both the parent table
+                (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured
+                from both the tables.
+            incident_grouping (Union[Unset, TableIncidentGroupingSpec]):
+            owner (Union[Unset, TableOwnerSpec]):
+            profiling_checks (Union[Unset, TableProfilingCheckCategoriesSpec]):
+            recurring_checks (Union[Unset, TableRecurringChecksSpec]):
+            partitioned_checks (Union[Unset, TablePartitionedChecksRootSpec]):
+            statistics (Union[Unset, TableStatisticsCollectorsRootCategoriesSpec]):
+            schedules_override (Union[Unset, RecurringSchedulesSpec]):
+            columns (Union[Unset, TableSpecColumns]): Dictionary of columns, indexed by a physical column name. Column
+                specification contains the expected column data type and a list of column level data quality checks that are
+                enabled for a column.
+            labels (Union[Unset, List[str]]): Custom labels that were assigned to the table. Labels are used for searching
+                for tables when filtered data quality checks are executed.
+            comments (Union[Unset, List['CommentSpec']]): Comments used for change tracking and documenting changes directly
+                in the table data quality specification file.
+     """
 
     disabled: Union[Unset, bool] = UNSET
     stage: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
     filter_: Union[Unset, str] = UNSET
-    timestamp_columns: Union[Unset, "TimestampColumnsSpec"] = UNSET
-    incremental_time_window: Union[Unset, "PartitionIncrementalTimeWindowSpec"] = UNSET
-    data_streams: Union[Unset, "TableSpecDataStreams"] = UNSET
-    incident_grouping: Union[Unset, "TableIncidentGroupingSpec"] = UNSET
-    owner: Union[Unset, "TableOwnerSpec"] = UNSET
-    profiling_checks: Union[Unset, "TableProfilingCheckCategoriesSpec"] = UNSET
-    recurring_checks: Union[Unset, "TableRecurringChecksSpec"] = UNSET
-    partitioned_checks: Union[Unset, "TablePartitionedChecksRootSpec"] = UNSET
-    statistics: Union[Unset, "TableStatisticsCollectorsRootCategoriesSpec"] = UNSET
-    schedules_override: Union[Unset, "RecurringSchedulesSpec"] = UNSET
-    columns: Union[Unset, "TableSpecColumns"] = UNSET
+    timestamp_columns: Union[Unset, 'TimestampColumnsSpec'] = UNSET
+    incremental_time_window: Union[Unset, 'PartitionIncrementalTimeWindowSpec'] = UNSET
+    default_grouping_name: Union[Unset, str] = UNSET
+    groupings: Union[Unset, 'TableSpecGroupings'] = UNSET
+    table_comparisons: Union[Unset, 'TableSpecTableComparisons'] = UNSET
+    incident_grouping: Union[Unset, 'TableIncidentGroupingSpec'] = UNSET
+    owner: Union[Unset, 'TableOwnerSpec'] = UNSET
+    profiling_checks: Union[Unset, 'TableProfilingCheckCategoriesSpec'] = UNSET
+    recurring_checks: Union[Unset, 'TableRecurringChecksSpec'] = UNSET
+    partitioned_checks: Union[Unset, 'TablePartitionedChecksRootSpec'] = UNSET
+    statistics: Union[Unset, 'TableStatisticsCollectorsRootCategoriesSpec'] = UNSET
+    schedules_override: Union[Unset, 'RecurringSchedulesSpec'] = UNSET
+    columns: Union[Unset, 'TableSpecColumns'] = UNSET
     labels: Union[Unset, List[str]] = UNSET
-    comments: Union[Unset, List["CommentSpec"]] = UNSET
+    comments: Union[Unset, List['CommentSpec']] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_owner_spec import TableOwnerSpec
+        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
+        from ..models.table_spec_table_comparisons import TableSpecTableComparisons
+        from ..models.partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
+        from ..models.table_profiling_check_categories_spec import TableProfilingCheckCategoriesSpec
+        from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
+        from ..models.table_spec_columns import TableSpecColumns
+        from ..models.table_spec_groupings import TableSpecGroupings
+        from ..models.timestamp_columns_spec import TimestampColumnsSpec
+        from ..models.table_partitioned_checks_root_spec import TablePartitionedChecksRootSpec
+        from ..models.comment_spec import CommentSpec
+        from ..models.table_statistics_collectors_root_categories_spec import TableStatisticsCollectorsRootCategoriesSpec
+        from ..models.table_recurring_checks_spec import TableRecurringChecksSpec
         disabled = self.disabled
         stage = self.stage
         priority = self.priority
@@ -99,9 +134,14 @@ class TableSpec:
         if not isinstance(self.incremental_time_window, Unset):
             incremental_time_window = self.incremental_time_window.to_dict()
 
-        data_streams: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.data_streams, Unset):
-            data_streams = self.data_streams.to_dict()
+        default_grouping_name = self.default_grouping_name
+        groupings: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.groupings, Unset):
+            groupings = self.groupings.to_dict()
+
+        table_comparisons: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.table_comparisons, Unset):
+            table_comparisons = self.table_comparisons.to_dict()
 
         incident_grouping: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.incident_grouping, Unset):
@@ -139,6 +179,9 @@ class TableSpec:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
+
+
+
         comments: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.comments, Unset):
             comments = []
@@ -147,9 +190,14 @@ class TableSpec:
 
                 comments.append(comments_item)
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
         if stage is not UNSET:
@@ -162,8 +210,12 @@ class TableSpec:
             field_dict["timestamp_columns"] = timestamp_columns
         if incremental_time_window is not UNSET:
             field_dict["incremental_time_window"] = incremental_time_window
-        if data_streams is not UNSET:
-            field_dict["data_streams"] = data_streams
+        if default_grouping_name is not UNSET:
+            field_dict["default_grouping_name"] = default_grouping_name
+        if groupings is not UNSET:
+            field_dict["groupings"] = groupings
+        if table_comparisons is not UNSET:
+            field_dict["table_comparisons"] = table_comparisons
         if incident_grouping is not UNSET:
             field_dict["incident_grouping"] = incident_grouping
         if owner is not UNSET:
@@ -187,29 +239,23 @@ class TableSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.comment_spec import CommentSpec
-        from ..models.partition_incremental_time_window_spec import (
-            PartitionIncrementalTimeWindowSpec,
-        )
-        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
-        from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
         from ..models.table_owner_spec import TableOwnerSpec
-        from ..models.table_partitioned_checks_root_spec import (
-            TablePartitionedChecksRootSpec,
-        )
-        from ..models.table_profiling_check_categories_spec import (
-            TableProfilingCheckCategoriesSpec,
-        )
-        from ..models.table_recurring_checks_spec import TableRecurringChecksSpec
+        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
+        from ..models.table_spec_table_comparisons import TableSpecTableComparisons
+        from ..models.partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
+        from ..models.table_profiling_check_categories_spec import TableProfilingCheckCategoriesSpec
+        from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
         from ..models.table_spec_columns import TableSpecColumns
-        from ..models.table_spec_data_streams import TableSpecDataStreams
-        from ..models.table_statistics_collectors_root_categories_spec import (
-            TableStatisticsCollectorsRootCategoriesSpec,
-        )
+        from ..models.table_spec_groupings import TableSpecGroupings
         from ..models.timestamp_columns_spec import TimestampColumnsSpec
-
+        from ..models.table_partitioned_checks_root_spec import TablePartitionedChecksRootSpec
+        from ..models.comment_spec import CommentSpec
+        from ..models.table_statistics_collectors_root_categories_spec import TableStatisticsCollectorsRootCategoriesSpec
+        from ..models.table_recurring_checks_spec import TableRecurringChecksSpec
         d = src_dict.copy()
         disabled = d.pop("disabled", UNSET)
 
@@ -221,97 +267,138 @@ class TableSpec:
 
         _timestamp_columns = d.pop("timestamp_columns", UNSET)
         timestamp_columns: Union[Unset, TimestampColumnsSpec]
-        if isinstance(_timestamp_columns, Unset):
+        if isinstance(_timestamp_columns,  Unset):
             timestamp_columns = UNSET
         else:
             timestamp_columns = TimestampColumnsSpec.from_dict(_timestamp_columns)
 
+
+
+
         _incremental_time_window = d.pop("incremental_time_window", UNSET)
         incremental_time_window: Union[Unset, PartitionIncrementalTimeWindowSpec]
-        if isinstance(_incremental_time_window, Unset):
+        if isinstance(_incremental_time_window,  Unset):
             incremental_time_window = UNSET
         else:
-            incremental_time_window = PartitionIncrementalTimeWindowSpec.from_dict(
-                _incremental_time_window
-            )
+            incremental_time_window = PartitionIncrementalTimeWindowSpec.from_dict(_incremental_time_window)
 
-        _data_streams = d.pop("data_streams", UNSET)
-        data_streams: Union[Unset, TableSpecDataStreams]
-        if isinstance(_data_streams, Unset):
-            data_streams = UNSET
+
+
+
+        default_grouping_name = d.pop("default_grouping_name", UNSET)
+
+        _groupings = d.pop("groupings", UNSET)
+        groupings: Union[Unset, TableSpecGroupings]
+        if isinstance(_groupings,  Unset):
+            groupings = UNSET
         else:
-            data_streams = TableSpecDataStreams.from_dict(_data_streams)
+            groupings = TableSpecGroupings.from_dict(_groupings)
+
+
+
+
+        _table_comparisons = d.pop("table_comparisons", UNSET)
+        table_comparisons: Union[Unset, TableSpecTableComparisons]
+        if isinstance(_table_comparisons,  Unset):
+            table_comparisons = UNSET
+        else:
+            table_comparisons = TableSpecTableComparisons.from_dict(_table_comparisons)
+
+
+
 
         _incident_grouping = d.pop("incident_grouping", UNSET)
         incident_grouping: Union[Unset, TableIncidentGroupingSpec]
-        if isinstance(_incident_grouping, Unset):
+        if isinstance(_incident_grouping,  Unset):
             incident_grouping = UNSET
         else:
             incident_grouping = TableIncidentGroupingSpec.from_dict(_incident_grouping)
 
+
+
+
         _owner = d.pop("owner", UNSET)
         owner: Union[Unset, TableOwnerSpec]
-        if isinstance(_owner, Unset):
+        if isinstance(_owner,  Unset):
             owner = UNSET
         else:
             owner = TableOwnerSpec.from_dict(_owner)
 
+
+
+
         _profiling_checks = d.pop("profiling_checks", UNSET)
         profiling_checks: Union[Unset, TableProfilingCheckCategoriesSpec]
-        if isinstance(_profiling_checks, Unset):
+        if isinstance(_profiling_checks,  Unset):
             profiling_checks = UNSET
         else:
-            profiling_checks = TableProfilingCheckCategoriesSpec.from_dict(
-                _profiling_checks
-            )
+            profiling_checks = TableProfilingCheckCategoriesSpec.from_dict(_profiling_checks)
+
+
+
 
         _recurring_checks = d.pop("recurring_checks", UNSET)
         recurring_checks: Union[Unset, TableRecurringChecksSpec]
-        if isinstance(_recurring_checks, Unset):
+        if isinstance(_recurring_checks,  Unset):
             recurring_checks = UNSET
         else:
             recurring_checks = TableRecurringChecksSpec.from_dict(_recurring_checks)
 
+
+
+
         _partitioned_checks = d.pop("partitioned_checks", UNSET)
         partitioned_checks: Union[Unset, TablePartitionedChecksRootSpec]
-        if isinstance(_partitioned_checks, Unset):
+        if isinstance(_partitioned_checks,  Unset):
             partitioned_checks = UNSET
         else:
-            partitioned_checks = TablePartitionedChecksRootSpec.from_dict(
-                _partitioned_checks
-            )
+            partitioned_checks = TablePartitionedChecksRootSpec.from_dict(_partitioned_checks)
+
+
+
 
         _statistics = d.pop("statistics", UNSET)
         statistics: Union[Unset, TableStatisticsCollectorsRootCategoriesSpec]
-        if isinstance(_statistics, Unset):
+        if isinstance(_statistics,  Unset):
             statistics = UNSET
         else:
-            statistics = TableStatisticsCollectorsRootCategoriesSpec.from_dict(
-                _statistics
-            )
+            statistics = TableStatisticsCollectorsRootCategoriesSpec.from_dict(_statistics)
+
+
+
 
         _schedules_override = d.pop("schedules_override", UNSET)
         schedules_override: Union[Unset, RecurringSchedulesSpec]
-        if isinstance(_schedules_override, Unset):
+        if isinstance(_schedules_override,  Unset):
             schedules_override = UNSET
         else:
             schedules_override = RecurringSchedulesSpec.from_dict(_schedules_override)
 
+
+
+
         _columns = d.pop("columns", UNSET)
         columns: Union[Unset, TableSpecColumns]
-        if isinstance(_columns, Unset):
+        if isinstance(_columns,  Unset):
             columns = UNSET
         else:
             columns = TableSpecColumns.from_dict(_columns)
 
+
+
+
         labels = cast(List[str], d.pop("labels", UNSET))
+
 
         comments = []
         _comments = d.pop("comments", UNSET)
-        for comments_item_data in _comments or []:
+        for comments_item_data in (_comments or []):
             comments_item = CommentSpec.from_dict(comments_item_data)
 
+
+
             comments.append(comments_item)
+
 
         table_spec = cls(
             disabled=disabled,
@@ -320,7 +407,9 @@ class TableSpec:
             filter_=filter_,
             timestamp_columns=timestamp_columns,
             incremental_time_window=incremental_time_window,
-            data_streams=data_streams,
+            default_grouping_name=default_grouping_name,
+            groupings=groupings,
+            table_comparisons=table_comparisons,
             incident_grouping=incident_grouping,
             owner=owner,
             profiling_checks=profiling_checks,

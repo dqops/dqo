@@ -1,23 +1,35 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="TableOwnerSpec")
 
 
 @attr.s(auto_attribs=True)
 class TableOwnerSpec:
-    """
-    Attributes:
-        data_steward (Union[Unset, str]): Data steward name
-        application (Union[Unset, str]): Business application name
-    """
+    """ 
+        Attributes:
+            data_steward (Union[Unset, str]): Data steward name
+            application (Union[Unset, str]): Business application name
+     """
 
     data_steward: Union[Unset, str] = UNSET
     application: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         data_steward = self.data_steward
@@ -25,13 +37,16 @@ class TableOwnerSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if data_steward is not UNSET:
             field_dict["data_steward"] = data_steward
         if application is not UNSET:
             field_dict["application"] = application
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

@@ -1,25 +1,37 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="ImportSchemaQueueJobParameters")
 
 
 @attr.s(auto_attribs=True)
 class ImportSchemaQueueJobParameters:
-    """
-    Attributes:
-        connection_name (Union[Unset, str]):
-        schema_name (Union[Unset, str]):
-        table_name_pattern (Union[Unset, str]):
-    """
+    """ 
+        Attributes:
+            connection_name (Union[Unset, str]):
+            schema_name (Union[Unset, str]):
+            table_name_pattern (Union[Unset, str]):
+     """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name_pattern: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -28,7 +40,8 @@ class ImportSchemaQueueJobParameters:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if connection_name is not UNSET:
             field_dict["connectionName"] = connection_name
         if schema_name is not UNSET:
@@ -37,6 +50,8 @@ class ImportSchemaQueueJobParameters:
             field_dict["tableNamePattern"] = table_name_pattern
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

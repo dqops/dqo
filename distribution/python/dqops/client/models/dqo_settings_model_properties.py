@@ -1,11 +1,20 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
+from ..types import UNSET, Unset
+
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.dqo_settings_model_properties_additional_property import (
-        DqoSettingsModelPropertiesAdditionalProperty,
-    )
+  from ..models.dqo_settings_model_properties_additional_property import DqoSettingsModelPropertiesAdditionalProperty
+
+
+
 
 
 T = TypeVar("T", bound="DqoSettingsModelProperties")
@@ -13,40 +22,41 @@ T = TypeVar("T", bound="DqoSettingsModelProperties")
 
 @attr.s(auto_attribs=True)
 class DqoSettingsModelProperties:
-    """Dictionary of all effective DQO system properties, retrieved from the default configuration files, user
+    """ Dictionary of all effective DQO system properties, retrieved from the default configuration files, user
     configuration files, environment variables and 'dqo' command arguments.
 
-    """
+     """
 
-    additional_properties: Dict[
-        str, "DqoSettingsModelPropertiesAdditionalProperty"
-    ] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, 'DqoSettingsModelPropertiesAdditionalProperty'] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
-        pass
-
+        from ..models.dqo_settings_model_properties_additional_property import DqoSettingsModelPropertiesAdditionalProperty
+        
         field_dict: Dict[str, Any] = {}
         for prop_name, prop in self.additional_properties.items():
             field_dict[prop_name] = prop.to_dict()
 
-        field_dict.update({})
+        field_dict.update({
+        })
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.dqo_settings_model_properties_additional_property import (
-            DqoSettingsModelPropertiesAdditionalProperty,
+        from ..models.dqo_settings_model_properties_additional_property import DqoSettingsModelPropertiesAdditionalProperty
+        d = src_dict.copy()
+        dqo_settings_model_properties = cls(
         )
 
-        d = src_dict.copy()
-        dqo_settings_model_properties = cls()
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
-            additional_property = (
-                DqoSettingsModelPropertiesAdditionalProperty.from_dict(prop_dict)
-            )
+            additional_property = DqoSettingsModelPropertiesAdditionalProperty.from_dict(prop_dict)
+
+
 
             additional_properties[prop_name] = additional_property
 
@@ -57,12 +67,10 @@ class DqoSettingsModelProperties:
     def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
-    def __getitem__(self, key: str) -> "DqoSettingsModelPropertiesAdditionalProperty":
+    def __getitem__(self, key: str) -> 'DqoSettingsModelPropertiesAdditionalProperty':
         return self.additional_properties[key]
 
-    def __setitem__(
-        self, key: str, value: "DqoSettingsModelPropertiesAdditionalProperty"
-    ) -> None:
+    def __setitem__(self, key: str, value: 'DqoSettingsModelPropertiesAdditionalProperty') -> None:
         self.additional_properties[key] = value
 
     def __delitem__(self, key: str) -> None:

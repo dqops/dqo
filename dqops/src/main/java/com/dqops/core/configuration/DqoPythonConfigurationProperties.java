@@ -31,6 +31,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     private String evaluateRulesModule = "lib/evaluate_rules.py";
     private String venvPath = "venv";
     private String dqoHomeRequirements = "lib/requirements.txt";
+    private String dqoHomeRequirementsDev = "lib/requirements_dev.txt";
     private boolean useHostPython;
     private int pipTimeoutSeconds = 120;
     private int pythonScriptTimeoutSeconds = 120;
@@ -113,6 +114,22 @@ public class DqoPythonConfigurationProperties implements Cloneable {
      */
     public void setDqoHomeRequirements(String dqoHomeRequirements) {
         this.dqoHomeRequirements = dqoHomeRequirements;
+    }
+
+    /**
+     * Returns a path to the development requirements with a list of pypi packages that should be installed for development environments that are used to compile DQO.
+     * @return Path to development requirements.
+     */
+    public String getDqoHomeRequirementsDev() {
+        return dqoHomeRequirementsDev;
+    }
+
+    /**
+     * Sets a path to development requirements with a list of pypi packages that should be installed for development environments that are used to compile DQO.
+     * @param dqoHomeRequirementsDev Path to development requirements.
+     */
+    public void setDqoHomeRequirementsDev(String dqoHomeRequirementsDev) {
+        this.dqoHomeRequirementsDev = dqoHomeRequirementsDev;
     }
 
     /**

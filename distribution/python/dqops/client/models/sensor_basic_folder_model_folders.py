@@ -1,9 +1,20 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
+from ..types import UNSET, Unset
+
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.sensor_basic_folder_model import SensorBasicFolderModel
+  from ..models.sensor_basic_folder_model import SensorBasicFolderModel
+
+
+
 
 
 T = TypeVar("T", bound="SensorBasicFolderModelFolders")
@@ -11,33 +22,40 @@ T = TypeVar("T", bound="SensorBasicFolderModelFolders")
 
 @attr.s(auto_attribs=True)
 class SensorBasicFolderModelFolders:
-    """A map of folder-level children sensors."""
+    """ A map of folder-level children sensors.
 
-    additional_properties: Dict[str, "SensorBasicFolderModel"] = attr.ib(
-        init=False, factory=dict
-    )
+     """
+
+    additional_properties: Dict[str, 'SensorBasicFolderModel'] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
-        pass
-
+        from ..models.sensor_basic_folder_model import SensorBasicFolderModel
+        
         field_dict: Dict[str, Any] = {}
         for prop_name, prop in self.additional_properties.items():
             field_dict[prop_name] = prop.to_dict()
 
-        field_dict.update({})
+        field_dict.update({
+        })
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.sensor_basic_folder_model import SensorBasicFolderModel
-
         d = src_dict.copy()
-        sensor_basic_folder_model_folders = cls()
+        sensor_basic_folder_model_folders = cls(
+        )
+
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
             additional_property = SensorBasicFolderModel.from_dict(prop_dict)
+
+
 
             additional_properties[prop_name] = additional_property
 
@@ -48,10 +66,10 @@ class SensorBasicFolderModelFolders:
     def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
-    def __getitem__(self, key: str) -> "SensorBasicFolderModel":
+    def __getitem__(self, key: str) -> 'SensorBasicFolderModel':
         return self.additional_properties[key]
 
-    def __setitem__(self, key: str, value: "SensorBasicFolderModel") -> None:
+    def __setitem__(self, key: str, value: 'SensorBasicFolderModel') -> None:
         self.additional_properties[key] = value
 
     def __delitem__(self, key: str) -> None:

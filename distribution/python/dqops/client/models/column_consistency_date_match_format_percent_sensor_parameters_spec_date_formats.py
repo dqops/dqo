@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class ColumnConsistencyDateMatchFormatPercentSensorParametersSpecDateFormats(str, Enum):
     DDMMYYYY = "DD/MM/YYYY"
     DD_MM_YYYY = "DD.MM.YYYY"

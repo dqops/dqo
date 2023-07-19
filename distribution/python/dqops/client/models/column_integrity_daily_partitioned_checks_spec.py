@@ -1,16 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_integrity_foreign_key_match_percent_check_spec import (
-        ColumnIntegrityForeignKeyMatchPercentCheckSpec,
-    )
-    from ..models.column_integrity_foreign_key_not_match_count_check_spec import (
-        ColumnIntegrityForeignKeyNotMatchCountCheckSpec,
-    )
+  from ..models.column_integrity_foreign_key_not_match_count_check_spec import ColumnIntegrityForeignKeyNotMatchCountCheckSpec
+  from ..models.column_integrity_foreign_key_match_percent_check_spec import ColumnIntegrityForeignKeyMatchPercentCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnIntegrityDailyPartitionedChecksSpec")
@@ -18,88 +25,66 @@ T = TypeVar("T", bound="ColumnIntegrityDailyPartitionedChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnIntegrityDailyPartitionedChecksSpec:
-    """
-    Attributes:
-        daily_partition_foreign_key_not_match_count (Union[Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec]):
-        daily_partition_foreign_key_match_percent (Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]):
-    """
+    """ 
+        Attributes:
+            daily_partition_foreign_key_not_match_count (Union[Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec]):
+            daily_partition_foreign_key_match_percent (Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]):
+     """
 
-    daily_partition_foreign_key_not_match_count: Union[
-        Unset, "ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
-    ] = UNSET
-    daily_partition_foreign_key_match_percent: Union[
-        Unset, "ColumnIntegrityForeignKeyMatchPercentCheckSpec"
-    ] = UNSET
+    daily_partition_foreign_key_not_match_count: Union[Unset, 'ColumnIntegrityForeignKeyNotMatchCountCheckSpec'] = UNSET
+    daily_partition_foreign_key_match_percent: Union[Unset, 'ColumnIntegrityForeignKeyMatchPercentCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
-        daily_partition_foreign_key_not_match_count: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        from ..models.column_integrity_foreign_key_not_match_count_check_spec import ColumnIntegrityForeignKeyNotMatchCountCheckSpec
+        from ..models.column_integrity_foreign_key_match_percent_check_spec import ColumnIntegrityForeignKeyMatchPercentCheckSpec
+        daily_partition_foreign_key_not_match_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_foreign_key_not_match_count, Unset):
-            daily_partition_foreign_key_not_match_count = (
-                self.daily_partition_foreign_key_not_match_count.to_dict()
-            )
+            daily_partition_foreign_key_not_match_count = self.daily_partition_foreign_key_not_match_count.to_dict()
 
         daily_partition_foreign_key_match_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_foreign_key_match_percent, Unset):
-            daily_partition_foreign_key_match_percent = (
-                self.daily_partition_foreign_key_match_percent.to_dict()
-            )
+            daily_partition_foreign_key_match_percent = self.daily_partition_foreign_key_match_percent.to_dict()
+
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if daily_partition_foreign_key_not_match_count is not UNSET:
-            field_dict[
-                "daily_partition_foreign_key_not_match_count"
-            ] = daily_partition_foreign_key_not_match_count
+            field_dict["daily_partition_foreign_key_not_match_count"] = daily_partition_foreign_key_not_match_count
         if daily_partition_foreign_key_match_percent is not UNSET:
-            field_dict[
-                "daily_partition_foreign_key_match_percent"
-            ] = daily_partition_foreign_key_match_percent
+            field_dict["daily_partition_foreign_key_match_percent"] = daily_partition_foreign_key_match_percent
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_integrity_foreign_key_match_percent_check_spec import (
-            ColumnIntegrityForeignKeyMatchPercentCheckSpec,
-        )
-        from ..models.column_integrity_foreign_key_not_match_count_check_spec import (
-            ColumnIntegrityForeignKeyNotMatchCountCheckSpec,
-        )
-
+        from ..models.column_integrity_foreign_key_not_match_count_check_spec import ColumnIntegrityForeignKeyNotMatchCountCheckSpec
+        from ..models.column_integrity_foreign_key_match_percent_check_spec import ColumnIntegrityForeignKeyMatchPercentCheckSpec
         d = src_dict.copy()
-        _daily_partition_foreign_key_not_match_count = d.pop(
-            "daily_partition_foreign_key_not_match_count", UNSET
-        )
-        daily_partition_foreign_key_not_match_count: Union[
-            Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec
-        ]
-        if isinstance(_daily_partition_foreign_key_not_match_count, Unset):
+        _daily_partition_foreign_key_not_match_count = d.pop("daily_partition_foreign_key_not_match_count", UNSET)
+        daily_partition_foreign_key_not_match_count: Union[Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec]
+        if isinstance(_daily_partition_foreign_key_not_match_count,  Unset):
             daily_partition_foreign_key_not_match_count = UNSET
         else:
-            daily_partition_foreign_key_not_match_count = (
-                ColumnIntegrityForeignKeyNotMatchCountCheckSpec.from_dict(
-                    _daily_partition_foreign_key_not_match_count
-                )
-            )
+            daily_partition_foreign_key_not_match_count = ColumnIntegrityForeignKeyNotMatchCountCheckSpec.from_dict(_daily_partition_foreign_key_not_match_count)
 
-        _daily_partition_foreign_key_match_percent = d.pop(
-            "daily_partition_foreign_key_match_percent", UNSET
-        )
-        daily_partition_foreign_key_match_percent: Union[
-            Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec
-        ]
-        if isinstance(_daily_partition_foreign_key_match_percent, Unset):
+
+
+
+        _daily_partition_foreign_key_match_percent = d.pop("daily_partition_foreign_key_match_percent", UNSET)
+        daily_partition_foreign_key_match_percent: Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]
+        if isinstance(_daily_partition_foreign_key_match_percent,  Unset):
             daily_partition_foreign_key_match_percent = UNSET
         else:
-            daily_partition_foreign_key_match_percent = (
-                ColumnIntegrityForeignKeyMatchPercentCheckSpec.from_dict(
-                    _daily_partition_foreign_key_match_percent
-                )
-            )
+            daily_partition_foreign_key_match_percent = ColumnIntegrityForeignKeyMatchPercentCheckSpec.from_dict(_daily_partition_foreign_key_match_percent)
+
+
+
 
         column_integrity_daily_partitioned_checks_spec = cls(
             daily_partition_foreign_key_not_match_count=daily_partition_foreign_key_not_match_count,

@@ -1,13 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.oracle_parameters_spec_properties import (
-        OracleParametersSpecProperties,
-    )
+  from ..models.oracle_parameters_spec_properties import OracleParametersSpecProperties
+
+
+
 
 
 T = TypeVar("T", bound="OracleParametersSpec")
@@ -15,24 +24,24 @@ T = TypeVar("T", bound="OracleParametersSpec")
 
 @attr.s(auto_attribs=True)
 class OracleParametersSpec:
-    """
-    Attributes:
-        host (Union[Unset, str]): Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom
-            environment variable.
-        port (Union[Unset, str]): Oracle port name. The default port is 1521. Supports also a ${ORACLE_PORT}
-            configuration with a custom environment variable.
-        database (Union[Unset, str]): Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format
-            to use dynamic substitution.
-        user (Union[Unset, str]): Oracle user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
-            dynamic substitution.
-        password (Union[Unset, str]): Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-            format to use dynamic substitution.
-        options (Union[Unset, str]): Oracle connection 'options' initialization parameter. For example setting this to
-            -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also
-            a ${ORACLE_OPTIONS} configuration with a custom environment variable.
-        ssl (Union[Unset, bool]): Connect to Oracle using SSL. The default value is false.
-        properties (Union[Unset, OracleParametersSpecProperties]):
-    """
+    """ 
+        Attributes:
+            host (Union[Unset, str]): Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom
+                environment variable.
+            port (Union[Unset, str]): Oracle port name. The default port is 1521. Supports also a ${ORACLE_PORT}
+                configuration with a custom environment variable.
+            database (Union[Unset, str]): Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format
+                to use dynamic substitution.
+            user (Union[Unset, str]): Oracle user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
+                dynamic substitution.
+            password (Union[Unset, str]): Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+                format to use dynamic substitution.
+            options (Union[Unset, str]): Oracle connection 'options' initialization parameter. For example setting this to
+                -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also
+                a ${ORACLE_OPTIONS} configuration with a custom environment variable.
+            ssl (Union[Unset, bool]): Connect to Oracle using SSL. The default value is false.
+            properties (Union[Unset, OracleParametersSpecProperties]):
+     """
 
     host: Union[Unset, str] = UNSET
     port: Union[Unset, str] = UNSET
@@ -41,10 +50,12 @@ class OracleParametersSpec:
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     ssl: Union[Unset, bool] = UNSET
-    properties: Union[Unset, "OracleParametersSpecProperties"] = UNSET
+    properties: Union[Unset, 'OracleParametersSpecProperties'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.oracle_parameters_spec_properties import OracleParametersSpecProperties
         host = self.host
         port = self.port
         database = self.database
@@ -56,9 +67,11 @@ class OracleParametersSpec:
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if host is not UNSET:
             field_dict["host"] = host
         if port is not UNSET:
@@ -78,12 +91,11 @@ class OracleParametersSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.oracle_parameters_spec_properties import (
-            OracleParametersSpecProperties,
-        )
-
+        from ..models.oracle_parameters_spec_properties import OracleParametersSpecProperties
         d = src_dict.copy()
         host = d.pop("host", UNSET)
 
@@ -101,10 +113,13 @@ class OracleParametersSpec:
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, OracleParametersSpecProperties]
-        if isinstance(_properties, Unset):
+        if isinstance(_properties,  Unset):
             properties = UNSET
         else:
             properties = OracleParametersSpecProperties.from_dict(_properties)
+
+
+
 
         oracle_parameters_spec = cls(
             host=host,

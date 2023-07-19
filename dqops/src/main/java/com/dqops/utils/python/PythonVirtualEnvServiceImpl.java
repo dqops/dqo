@@ -158,6 +158,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
             }
 
             installDqoHomePipRequirements(pythonVirtualEnv);
+            installDqoHomePipDevelopmentRequirements(pythonVirtualEnv);
             installUserHomePipRequirements(pythonVirtualEnv);
         } else {
             String absolutePythonPath = findAbsolutePythonPath();
@@ -287,6 +288,37 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
     }
 
     /**
+     * Installs python (pip) optional development requirements for the DQO_HOME.
+     * @param pythonVirtualEnv Virtual environment configuration.
+     */
+    public void installDqoHomePipDevelopmentRequirements(PythonVirtualEnv pythonVirtualEnv) {
+        try {
+            Path pathToLastInstalledRequirements = pythonVirtualEnv.getVirtualEnvPath().resolve("home_requirements_dev.txt");
+            Path pathToRequirementsTxt = Path.of(this.dqoConfigurationProperties.getHome()).resolve(this.pythonConfigurationProperties.getDqoHomeRequirementsDev());
+
+            if (!Files.exists(pathToRequirementsTxt)) {
+                return;
+            }
+
+            if (Files.exists(pathToLastInstalledRequirements) &&
+                    Objects.equals(Files.readString(pathToLastInstalledRequirements, StandardCharsets.UTF_8),
+                            Files.readString(pathToRequirementsTxt, StandardCharsets.UTF_8))) {
+                return; // no more requirements to install
+            }
+
+            installPipRequirements(pythonVirtualEnv, pathToRequirementsTxt);
+
+            Files.copy(pathToRequirementsTxt, pathToLastInstalledRequirements, StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (PythonExecutionException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw new PythonExecutionException("Failed to install pip development requirements in a virtual environment: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
      * Installs python (pip) requirements for the user home (user requirements, if present).
      * @param pythonVirtualEnv Virtual environment configuration.
      */
@@ -353,7 +385,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
      * @param inputStream Input stream.
      * @return Content.
      */
-    private String readAllContent(InputStream inputStream) {
+    public String readAllContent(InputStream inputStream) {
         try {
             try (BufferedInputStream br = new BufferedInputStream(inputStream)) {
                 List<String> allLines = IOUtils.readLines(br, StandardCharsets.UTF_8);

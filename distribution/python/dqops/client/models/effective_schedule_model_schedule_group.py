@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class EffectiveScheduleModelScheduleGroup(str, Enum):
     PARTITIONED_DAILY = "partitioned_daily"
     PARTITIONED_MONTHLY = "partitioned_monthly"

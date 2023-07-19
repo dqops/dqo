@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class IncidentModelStatus(str, Enum):
     ACKNOWLEDGED = "acknowledged"
     MUTED = "muted"

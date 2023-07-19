@@ -1,16 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.table_daily_recurring_categories_spec import (
-        TableDailyRecurringCategoriesSpec,
-    )
-    from ..models.table_monthly_recurring_check_categories_spec import (
-        TableMonthlyRecurringCheckCategoriesSpec,
-    )
+  from ..models.table_monthly_recurring_check_categories_spec import TableMonthlyRecurringCheckCategoriesSpec
+  from ..models.table_daily_recurring_check_categories_spec import TableDailyRecurringCheckCategoriesSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableRecurringChecksSpec")
@@ -18,17 +25,20 @@ T = TypeVar("T", bound="TableRecurringChecksSpec")
 
 @attr.s(auto_attribs=True)
 class TableRecurringChecksSpec:
-    """
-    Attributes:
-        daily (Union[Unset, TableDailyRecurringCategoriesSpec]):
-        monthly (Union[Unset, TableMonthlyRecurringCheckCategoriesSpec]):
-    """
+    """ 
+        Attributes:
+            daily (Union[Unset, TableDailyRecurringCheckCategoriesSpec]):
+            monthly (Union[Unset, TableMonthlyRecurringCheckCategoriesSpec]):
+     """
 
-    daily: Union[Unset, "TableDailyRecurringCategoriesSpec"] = UNSET
-    monthly: Union[Unset, "TableMonthlyRecurringCheckCategoriesSpec"] = UNSET
+    daily: Union[Unset, 'TableDailyRecurringCheckCategoriesSpec'] = UNSET
+    monthly: Union[Unset, 'TableMonthlyRecurringCheckCategoriesSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_monthly_recurring_check_categories_spec import TableMonthlyRecurringCheckCategoriesSpec
+        from ..models.table_daily_recurring_check_categories_spec import TableDailyRecurringCheckCategoriesSpec
         daily: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily, Unset):
             daily = self.daily.to_dict()
@@ -37,9 +47,11 @@ class TableRecurringChecksSpec:
         if not isinstance(self.monthly, Unset):
             monthly = self.monthly.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if daily is not UNSET:
             field_dict["daily"] = daily
         if monthly is not UNSET:
@@ -47,29 +59,32 @@ class TableRecurringChecksSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_daily_recurring_categories_spec import (
-            TableDailyRecurringCategoriesSpec,
-        )
-        from ..models.table_monthly_recurring_check_categories_spec import (
-            TableMonthlyRecurringCheckCategoriesSpec,
-        )
-
+        from ..models.table_monthly_recurring_check_categories_spec import TableMonthlyRecurringCheckCategoriesSpec
+        from ..models.table_daily_recurring_check_categories_spec import TableDailyRecurringCheckCategoriesSpec
         d = src_dict.copy()
         _daily = d.pop("daily", UNSET)
-        daily: Union[Unset, TableDailyRecurringCategoriesSpec]
-        if isinstance(_daily, Unset):
+        daily: Union[Unset, TableDailyRecurringCheckCategoriesSpec]
+        if isinstance(_daily,  Unset):
             daily = UNSET
         else:
-            daily = TableDailyRecurringCategoriesSpec.from_dict(_daily)
+            daily = TableDailyRecurringCheckCategoriesSpec.from_dict(_daily)
+
+
+
 
         _monthly = d.pop("monthly", UNSET)
         monthly: Union[Unset, TableMonthlyRecurringCheckCategoriesSpec]
-        if isinstance(_monthly, Unset):
+        if isinstance(_monthly,  Unset):
             monthly = UNSET
         else:
             monthly = TableMonthlyRecurringCheckCategoriesSpec.from_dict(_monthly)
+
+
+
 
         table_recurring_checks_spec = cls(
             daily=daily,

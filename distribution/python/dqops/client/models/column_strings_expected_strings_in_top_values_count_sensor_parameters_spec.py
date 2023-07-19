@@ -1,30 +1,41 @@
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
-T = TypeVar(
-    "T", bound="ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec"
-)
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
+
+
+
+
+
+T = TypeVar("T", bound="ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec:
-    """
-    Attributes:
-        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-            sensor query filter are added, separated by an AND operator.
-        expected_values (Union[Unset, List[str]]): List of expected string values that should be found in the tested
-            column among the TOP most popular (highest distinct count) column values.
-        top (Union[Unset, int]): The number of the most popular values (with the highest distinct count) that are
-            analyzed to find the expected values.
-    """
+    """ 
+        Attributes:
+            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+                sensor query filter are added, separated by an AND operator.
+            expected_values (Union[Unset, List[str]]): List of expected string values that should be found in the tested
+                column among the TOP most popular (highest distinct count) column values.
+            top (Union[Unset, int]): The number of the most popular values (with the highest distinct count) that are
+                analyzed to find the expected values.
+     """
 
     filter_: Union[Unset, str] = UNSET
     expected_values: Union[Unset, List[str]] = UNSET
     top: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -32,11 +43,15 @@ class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec:
         if not isinstance(self.expected_values, Unset):
             expected_values = self.expected_values
 
+
+
+
         top = self.top
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if expected_values is not UNSET:
@@ -46,6 +61,8 @@ class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
@@ -53,22 +70,17 @@ class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec:
 
         expected_values = cast(List[str], d.pop("expected_values", UNSET))
 
+
         top = d.pop("top", UNSET)
 
-        column_strings_expected_strings_in_top_values_count_sensor_parameters_spec = (
-            cls(
-                filter_=filter_,
-                expected_values=expected_values,
-                top=top,
-            )
+        column_strings_expected_strings_in_top_values_count_sensor_parameters_spec = cls(
+            filter_=filter_,
+            expected_values=expected_values,
+            top=top,
         )
 
-        column_strings_expected_strings_in_top_values_count_sensor_parameters_spec.additional_properties = (
-            d
-        )
-        return (
-            column_strings_expected_strings_in_top_values_count_sensor_parameters_spec
-        )
+        column_strings_expected_strings_in_top_values_count_sensor_parameters_spec.additional_properties = d
+        return column_strings_expected_strings_in_top_values_count_sensor_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

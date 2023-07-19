@@ -1,26 +1,42 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
 from ... import errors
-from ...client import Client
+
 from ...models.mono_object import MonoObject
-from ...types import Response
+from typing import cast
+from typing import Dict
+
 
 
 def _get_kwargs(
     job_id: int,
     *,
     client: Client,
+
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/jobs/{jobId}".format(client.base_url, jobId=job_id)
+    url = "{}/api/jobs/jobs/{jobId}".format(
+        client.base_url,jobId=job_id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    
+
+    
+
+    
+
+    
+
+    
+
     return {
-        "method": "delete",
+	    "method": "delete",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -29,11 +45,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[MonoObject]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoObject]:
     if response.status_code == HTTPStatus.OK:
         response_200 = MonoObject.from_dict(response.json())
+
+
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -42,9 +58,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[MonoObject]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoObject]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -57,8 +71,9 @@ def sync_detailed(
     job_id: int,
     *,
     client: Client,
+
 ) -> Response[MonoObject]:
-    """cancelJob
+    """ cancelJob
 
      Cancels a running job
 
@@ -71,11 +86,13 @@ def sync_detailed(
 
     Returns:
         Response[MonoObject]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         job_id=job_id,
-        client=client,
+client=client,
+
     )
 
     response = httpx.request(
@@ -85,13 +102,13 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
-
 def sync(
     job_id: int,
     *,
     client: Client,
+
 ) -> Optional[MonoObject]:
-    """cancelJob
+    """ cancelJob
 
      Cancels a running job
 
@@ -104,20 +121,22 @@ def sync(
 
     Returns:
         MonoObject
-    """
+     """
+
 
     return sync_detailed(
         job_id=job_id,
-        client=client,
-    ).parsed
+client=client,
 
+    ).parsed
 
 async def asyncio_detailed(
     job_id: int,
     *,
     client: Client,
+
 ) -> Response[MonoObject]:
-    """cancelJob
+    """ cancelJob
 
      Cancels a running job
 
@@ -130,25 +149,29 @@ async def asyncio_detailed(
 
     Returns:
         Response[MonoObject]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         job_id=job_id,
-        client=client,
+client=client,
+
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+        response = await _client.request(
+            **kwargs
+        )
 
     return _build_response(client=client, response=response)
-
 
 async def asyncio(
     job_id: int,
     *,
     client: Client,
+
 ) -> Optional[MonoObject]:
-    """cancelJob
+    """ cancelJob
 
      Cancels a running job
 
@@ -161,11 +184,11 @@ async def asyncio(
 
     Returns:
         MonoObject
-    """
+     """
 
-    return (
-        await asyncio_detailed(
-            job_id=job_id,
-            client=client,
-        )
-    ).parsed
+
+    return (await asyncio_detailed(
+        job_id=job_id,
+client=client,
+
+    )).parsed

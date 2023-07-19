@@ -1,12 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
 if TYPE_CHECKING:
-    from ..models.rule_basic_folder_model_folders import RuleBasicFolderModelFolders
-    from ..models.rule_basic_model import RuleBasicModel
+  from ..models.rule_basic_folder_model_folders import RuleBasicFolderModelFolders
+  from ..models.rule_basic_model import RuleBasicModel
+
+
+
 
 
 T = TypeVar("T", bound="RuleBasicFolderModel")
@@ -14,20 +26,23 @@ T = TypeVar("T", bound="RuleBasicFolderModel")
 
 @attr.s(auto_attribs=True)
 class RuleBasicFolderModel:
-    """Rule basic folder model
+    """ Rule basic folder model
 
-    Attributes:
-        folders (Union[Unset, RuleBasicFolderModelFolders]): A map of folder-level children rules.
-        rules (Union[Unset, List['RuleBasicModel']]): Rule basic model list
-        all_rules (Union[Unset, List['RuleBasicModel']]):
-    """
+        Attributes:
+            folders (Union[Unset, RuleBasicFolderModelFolders]): A map of folder-level children rules.
+            rules (Union[Unset, List['RuleBasicModel']]): Rule basic model list
+            all_rules (Union[Unset, List['RuleBasicModel']]):
+     """
 
-    folders: Union[Unset, "RuleBasicFolderModelFolders"] = UNSET
-    rules: Union[Unset, List["RuleBasicModel"]] = UNSET
-    all_rules: Union[Unset, List["RuleBasicModel"]] = UNSET
+    folders: Union[Unset, 'RuleBasicFolderModelFolders'] = UNSET
+    rules: Union[Unset, List['RuleBasicModel']] = UNSET
+    all_rules: Union[Unset, List['RuleBasicModel']] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.rule_basic_folder_model_folders import RuleBasicFolderModelFolders
+        from ..models.rule_basic_model import RuleBasicModel
         folders: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.folders, Unset):
             folders = self.folders.to_dict()
@@ -40,6 +55,9 @@ class RuleBasicFolderModel:
 
                 rules.append(rules_item)
 
+
+
+
         all_rules: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.all_rules, Unset):
             all_rules = []
@@ -48,9 +66,14 @@ class RuleBasicFolderModel:
 
                 all_rules.append(all_rules_item)
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if folders is not UNSET:
             field_dict["folders"] = folders
         if rules is not UNSET:
@@ -60,32 +83,42 @@ class RuleBasicFolderModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.rule_basic_folder_model_folders import RuleBasicFolderModelFolders
         from ..models.rule_basic_model import RuleBasicModel
-
         d = src_dict.copy()
         _folders = d.pop("folders", UNSET)
         folders: Union[Unset, RuleBasicFolderModelFolders]
-        if isinstance(_folders, Unset):
+        if isinstance(_folders,  Unset):
             folders = UNSET
         else:
             folders = RuleBasicFolderModelFolders.from_dict(_folders)
 
+
+
+
         rules = []
         _rules = d.pop("rules", UNSET)
-        for rules_item_data in _rules or []:
+        for rules_item_data in (_rules or []):
             rules_item = RuleBasicModel.from_dict(rules_item_data)
+
+
 
             rules.append(rules_item)
 
+
         all_rules = []
         _all_rules = d.pop("all_rules", UNSET)
-        for all_rules_item_data in _all_rules or []:
+        for all_rules_item_data in (_all_rules or []):
             all_rules_item = RuleBasicModel.from_dict(all_rules_item_data)
 
+
+
             all_rules.append(all_rules_item)
+
 
         rule_basic_folder_model = cls(
             folders=folders,

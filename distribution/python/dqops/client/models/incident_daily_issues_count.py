@@ -1,30 +1,42 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="IncidentDailyIssuesCount")
 
 
 @attr.s(auto_attribs=True)
 class IncidentDailyIssuesCount:
-    """
-    Attributes:
-        warnings (Union[Unset, int]): The number of failed data quality checks that generated a warning severity data
-            quality issue.
-        errors (Union[Unset, int]): The number of failed data quality checks that generated an error severity data
-            quality issue.
-        fatals (Union[Unset, int]): The number of failed data quality checks that generated a fatal severity data
-            quality issue.
-        total_count (Union[Unset, int]): The total count of failed data quality checks on this day.
-    """
+    """ 
+        Attributes:
+            warnings (Union[Unset, int]): The number of failed data quality checks that generated a warning severity data
+                quality issue.
+            errors (Union[Unset, int]): The number of failed data quality checks that generated an error severity data
+                quality issue.
+            fatals (Union[Unset, int]): The number of failed data quality checks that generated a fatal severity data
+                quality issue.
+            total_count (Union[Unset, int]): The total count of failed data quality checks on this day.
+     """
 
     warnings: Union[Unset, int] = UNSET
     errors: Union[Unset, int] = UNSET
     fatals: Union[Unset, int] = UNSET
     total_count: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         warnings = self.warnings
@@ -34,7 +46,8 @@ class IncidentDailyIssuesCount:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if warnings is not UNSET:
             field_dict["warnings"] = warnings
         if errors is not UNSET:
@@ -45,6 +58,8 @@ class IncidentDailyIssuesCount:
             field_dict["totalCount"] = total_count
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

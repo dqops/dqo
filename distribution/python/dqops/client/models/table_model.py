@@ -1,11 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.table_spec import TableSpec
+  from ..models.table_spec import TableSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableModel")
@@ -13,29 +24,33 @@ T = TypeVar("T", bound="TableModel")
 
 @attr.s(auto_attribs=True)
 class TableModel:
-    """Full table model, including all nested objects like columns or checks.
+    """ Full table model, including all nested objects like columns or checks.
 
-    Attributes:
-        connection_name (Union[Unset, str]): Connection name.
-        table_hash (Union[Unset, int]): Table hash that identifies the table using a unique hash code.
-        spec (Union[Unset, TableSpec]):
-    """
+        Attributes:
+            connection_name (Union[Unset, str]): Connection name.
+            table_hash (Union[Unset, int]): Table hash that identifies the table using a unique hash code.
+            spec (Union[Unset, TableSpec]):
+     """
 
     connection_name: Union[Unset, str] = UNSET
     table_hash: Union[Unset, int] = UNSET
-    spec: Union[Unset, "TableSpec"] = UNSET
+    spec: Union[Unset, 'TableSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_spec import TableSpec
         connection_name = self.connection_name
         table_hash = self.table_hash
         spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if table_hash is not UNSET:
@@ -45,10 +60,11 @@ class TableModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.table_spec import TableSpec
-
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
@@ -56,10 +72,13 @@ class TableModel:
 
         _spec = d.pop("spec", UNSET)
         spec: Union[Unset, TableSpec]
-        if isinstance(_spec, Unset):
+        if isinstance(_spec,  Unset):
             spec = UNSET
         else:
             spec = TableSpec.from_dict(_spec)
+
+
+
 
         table_model = cls(
             connection_name=connection_name,

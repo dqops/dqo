@@ -1,33 +1,43 @@
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
-from ..models.parameter_definition_spec_data_type import ParameterDefinitionSpecDataType
-from ..models.parameter_definition_spec_display_hint import (
-    ParameterDefinitionSpecDisplayHint,
-)
 from ..types import UNSET, Unset
+
+from ..models.parameter_definition_spec_display_hint import ParameterDefinitionSpecDisplayHint
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+from ..models.parameter_definition_spec_data_type import ParameterDefinitionSpecDataType
+
+
+
+
+
 
 T = TypeVar("T", bound="ParameterDefinitionSpec")
 
 
 @attr.s(auto_attribs=True)
 class ParameterDefinitionSpec:
-    """Defines a single field that is a sensor parameter or a rule parameter.
+    """ Defines a single field that is a sensor parameter or a rule parameter.
 
-    Attributes:
-        field_name (Union[Unset, str]): Field name that matches the field name (snake_case) used in the YAML
-            specification.
-        display_name (Union[Unset, str]): Field display name that should be shown as a label for the control.
-        help_text (Union[Unset, str]): Help text (full description) that will be shown to the user as a hint when the
-            cursor is moved over the control.
-        data_type (Union[Unset, ParameterDefinitionSpecDataType]): Parameter data type.
-        display_hint (Union[Unset, ParameterDefinitionSpecDisplayHint]): UI control display hint.
-        required (Union[Unset, bool]): True when the value for the parameter must be provided.
-        allowed_values (Union[Unset, List[str]]): List of allowed values for a field that is of an enum type.
-        sample_values (Union[Unset, List[str]]): List of sample values. The sample values are used in the documentation
-            or help messages.
-    """
+        Attributes:
+            field_name (Union[Unset, str]): Field name that matches the field name (snake_case) used in the YAML
+                specification.
+            display_name (Union[Unset, str]): Field display name that should be shown as a label for the control.
+            help_text (Union[Unset, str]): Help text (full description) that will be shown to the user as a hint when the
+                cursor is moved over the control.
+            data_type (Union[Unset, ParameterDefinitionSpecDataType]): Parameter data type.
+            display_hint (Union[Unset, ParameterDefinitionSpecDisplayHint]): UI control display hint.
+            required (Union[Unset, bool]): True when the value for the parameter must be provided.
+            allowed_values (Union[Unset, List[str]]): List of allowed values for a field that is of an enum type.
+            sample_values (Union[Unset, List[str]]): List of sample values. The sample values are used in the documentation
+                or help messages.
+     """
 
     field_name: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
@@ -38,6 +48,7 @@ class ParameterDefinitionSpec:
     allowed_values: Union[Unset, List[str]] = UNSET
     sample_values: Union[Unset, List[str]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         field_name = self.field_name
@@ -56,13 +67,21 @@ class ParameterDefinitionSpec:
         if not isinstance(self.allowed_values, Unset):
             allowed_values = self.allowed_values
 
+
+
+
         sample_values: Union[Unset, List[str]] = UNSET
         if not isinstance(self.sample_values, Unset):
             sample_values = self.sample_values
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if field_name is not UNSET:
             field_dict["field_name"] = field_name
         if display_name is not UNSET:
@@ -82,6 +101,8 @@ class ParameterDefinitionSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
@@ -93,23 +114,31 @@ class ParameterDefinitionSpec:
 
         _data_type = d.pop("data_type", UNSET)
         data_type: Union[Unset, ParameterDefinitionSpecDataType]
-        if isinstance(_data_type, Unset):
+        if isinstance(_data_type,  Unset):
             data_type = UNSET
         else:
             data_type = ParameterDefinitionSpecDataType(_data_type)
 
+
+
+
         _display_hint = d.pop("display_hint", UNSET)
         display_hint: Union[Unset, ParameterDefinitionSpecDisplayHint]
-        if isinstance(_display_hint, Unset):
+        if isinstance(_display_hint,  Unset):
             display_hint = UNSET
         else:
             display_hint = ParameterDefinitionSpecDisplayHint(_display_hint)
+
+
+
 
         required = d.pop("required", UNSET)
 
         allowed_values = cast(List[str], d.pop("allowed_values", UNSET))
 
+
         sample_values = cast(List[str], d.pop("sample_values", UNSET))
+
 
         parameter_definition_spec = cls(
             field_name=field_name,

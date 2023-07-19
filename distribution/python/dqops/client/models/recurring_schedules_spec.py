@@ -1,11 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+  from ..models.recurring_schedule_spec import RecurringScheduleSpec
+
+
+
 
 
 T = TypeVar("T", bound="RecurringSchedulesSpec")
@@ -13,23 +24,25 @@ T = TypeVar("T", bound="RecurringSchedulesSpec")
 
 @attr.s(auto_attribs=True)
 class RecurringSchedulesSpec:
-    """
-    Attributes:
-        profiling (Union[Unset, RecurringScheduleSpec]):
-        recurring_daily (Union[Unset, RecurringScheduleSpec]):
-        recurring_monthly (Union[Unset, RecurringScheduleSpec]):
-        partitioned_daily (Union[Unset, RecurringScheduleSpec]):
-        partitioned_monthly (Union[Unset, RecurringScheduleSpec]):
-    """
+    """ 
+        Attributes:
+            profiling (Union[Unset, RecurringScheduleSpec]):
+            recurring_daily (Union[Unset, RecurringScheduleSpec]):
+            recurring_monthly (Union[Unset, RecurringScheduleSpec]):
+            partitioned_daily (Union[Unset, RecurringScheduleSpec]):
+            partitioned_monthly (Union[Unset, RecurringScheduleSpec]):
+     """
 
-    profiling: Union[Unset, "RecurringScheduleSpec"] = UNSET
-    recurring_daily: Union[Unset, "RecurringScheduleSpec"] = UNSET
-    recurring_monthly: Union[Unset, "RecurringScheduleSpec"] = UNSET
-    partitioned_daily: Union[Unset, "RecurringScheduleSpec"] = UNSET
-    partitioned_monthly: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    profiling: Union[Unset, 'RecurringScheduleSpec'] = UNSET
+    recurring_daily: Union[Unset, 'RecurringScheduleSpec'] = UNSET
+    recurring_monthly: Union[Unset, 'RecurringScheduleSpec'] = UNSET
+    partitioned_daily: Union[Unset, 'RecurringScheduleSpec'] = UNSET
+    partitioned_monthly: Union[Unset, 'RecurringScheduleSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.recurring_schedule_spec import RecurringScheduleSpec
         profiling: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profiling, Unset):
             profiling = self.profiling.to_dict()
@@ -50,9 +63,11 @@ class RecurringSchedulesSpec:
         if not isinstance(self.partitioned_monthly, Unset):
             partitioned_monthly = self.partitioned_monthly.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if profiling is not UNSET:
             field_dict["profiling"] = profiling
         if recurring_daily is not UNSET:
@@ -66,45 +81,61 @@ class RecurringSchedulesSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.recurring_schedule_spec import RecurringScheduleSpec
-
         d = src_dict.copy()
         _profiling = d.pop("profiling", UNSET)
         profiling: Union[Unset, RecurringScheduleSpec]
-        if isinstance(_profiling, Unset):
+        if isinstance(_profiling,  Unset):
             profiling = UNSET
         else:
             profiling = RecurringScheduleSpec.from_dict(_profiling)
 
+
+
+
         _recurring_daily = d.pop("recurring_daily", UNSET)
         recurring_daily: Union[Unset, RecurringScheduleSpec]
-        if isinstance(_recurring_daily, Unset):
+        if isinstance(_recurring_daily,  Unset):
             recurring_daily = UNSET
         else:
             recurring_daily = RecurringScheduleSpec.from_dict(_recurring_daily)
 
+
+
+
         _recurring_monthly = d.pop("recurring_monthly", UNSET)
         recurring_monthly: Union[Unset, RecurringScheduleSpec]
-        if isinstance(_recurring_monthly, Unset):
+        if isinstance(_recurring_monthly,  Unset):
             recurring_monthly = UNSET
         else:
             recurring_monthly = RecurringScheduleSpec.from_dict(_recurring_monthly)
 
+
+
+
         _partitioned_daily = d.pop("partitioned_daily", UNSET)
         partitioned_daily: Union[Unset, RecurringScheduleSpec]
-        if isinstance(_partitioned_daily, Unset):
+        if isinstance(_partitioned_daily,  Unset):
             partitioned_daily = UNSET
         else:
             partitioned_daily = RecurringScheduleSpec.from_dict(_partitioned_daily)
 
+
+
+
         _partitioned_monthly = d.pop("partitioned_monthly", UNSET)
         partitioned_monthly: Union[Unset, RecurringScheduleSpec]
-        if isinstance(_partitioned_monthly, Unset):
+        if isinstance(_partitioned_monthly,  Unset):
             partitioned_monthly = UNSET
         else:
             partitioned_monthly = RecurringScheduleSpec.from_dict(_partitioned_monthly)
+
+
+
 
         recurring_schedules_spec = cls(
             profiling=profiling,

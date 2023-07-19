@@ -1,28 +1,42 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
 from ... import errors
-from ...client import Client
+
 from ...models.dqo_queue_job_id import DqoQueueJobId
-from ...types import Response
+from typing import cast
+from typing import Dict
+
 
 
 def _get_kwargs(
     full_check_name: str,
     *,
     client: Client,
+
 ) -> Dict[str, Any]:
     url = "{}/api/checks/{fullCheckName}".format(
-        client.base_url, fullCheckName=full_check_name
-    )
+        client.base_url,fullCheckName=full_check_name)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    
+
+    
+
+    
+
+    
+
+    
+
     return {
-        "method": "delete",
+	    "method": "delete",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -31,11 +45,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[DqoQueueJobId]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[DqoQueueJobId]:
     if response.status_code == HTTPStatus.OK:
         response_200 = DqoQueueJobId.from_dict(response.json())
+
+
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -44,9 +58,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[DqoQueueJobId]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[DqoQueueJobId]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -59,8 +71,9 @@ def sync_detailed(
     full_check_name: str,
     *,
     client: Client,
+
 ) -> Response[DqoQueueJobId]:
-    """deleteCheck
+    """ deleteCheck
 
      Deletes a custom check definition
 
@@ -73,11 +86,13 @@ def sync_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         full_check_name=full_check_name,
-        client=client,
+client=client,
+
     )
 
     response = httpx.request(
@@ -87,13 +102,13 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
-
 def sync(
     full_check_name: str,
     *,
     client: Client,
+
 ) -> Optional[DqoQueueJobId]:
-    """deleteCheck
+    """ deleteCheck
 
      Deletes a custom check definition
 
@@ -106,20 +121,22 @@ def sync(
 
     Returns:
         DqoQueueJobId
-    """
+     """
+
 
     return sync_detailed(
         full_check_name=full_check_name,
-        client=client,
-    ).parsed
+client=client,
 
+    ).parsed
 
 async def asyncio_detailed(
     full_check_name: str,
     *,
     client: Client,
+
 ) -> Response[DqoQueueJobId]:
-    """deleteCheck
+    """ deleteCheck
 
      Deletes a custom check definition
 
@@ -132,25 +149,29 @@ async def asyncio_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         full_check_name=full_check_name,
-        client=client,
+client=client,
+
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+        response = await _client.request(
+            **kwargs
+        )
 
     return _build_response(client=client, response=response)
-
 
 async def asyncio(
     full_check_name: str,
     *,
     client: Client,
+
 ) -> Optional[DqoQueueJobId]:
-    """deleteCheck
+    """ deleteCheck
 
      Deletes a custom check definition
 
@@ -163,11 +184,11 @@ async def asyncio(
 
     Returns:
         DqoQueueJobId
-    """
+     """
 
-    return (
-        await asyncio_detailed(
-            full_check_name=full_check_name,
-            client=client,
-        )
-    ).parsed
+
+    return (await asyncio_detailed(
+        full_check_name=full_check_name,
+client=client,
+
+    )).parsed

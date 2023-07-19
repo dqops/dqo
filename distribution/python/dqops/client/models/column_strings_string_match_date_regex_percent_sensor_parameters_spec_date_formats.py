@@ -1,9 +1,6 @@
 from enum import Enum
 
-
-class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecDateFormats(
-    str, Enum
-):
+class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecDateFormats(str, Enum):
     DDMMYYYY = "DD/MM/YYYY"
     MMDDYYYY = "MM/DD/YYYY"
     MONTH_D_YYYY = "Month D, YYYY"

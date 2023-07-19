@@ -1,13 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.table_volume_statistics_collectors_spec import (
-        TableVolumeStatisticsCollectorsSpec,
-    )
+  from ..models.table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableStatisticsCollectorsRootCategoriesSpec")
@@ -15,40 +24,46 @@ T = TypeVar("T", bound="TableStatisticsCollectorsRootCategoriesSpec")
 
 @attr.s(auto_attribs=True)
 class TableStatisticsCollectorsRootCategoriesSpec:
-    """
-    Attributes:
-        volume (Union[Unset, TableVolumeStatisticsCollectorsSpec]):
-    """
+    """ 
+        Attributes:
+            volume (Union[Unset, TableVolumeStatisticsCollectorsSpec]):
+     """
 
-    volume: Union[Unset, "TableVolumeStatisticsCollectorsSpec"] = UNSET
+    volume: Union[Unset, 'TableVolumeStatisticsCollectorsSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
         volume: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.volume, Unset):
             volume = self.volume.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if volume is not UNSET:
             field_dict["volume"] = volume
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_volume_statistics_collectors_spec import (
-            TableVolumeStatisticsCollectorsSpec,
-        )
-
+        from ..models.table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
         d = src_dict.copy()
         _volume = d.pop("volume", UNSET)
         volume: Union[Unset, TableVolumeStatisticsCollectorsSpec]
-        if isinstance(_volume, Unset):
+        if isinstance(_volume,  Unset):
             volume = UNSET
         else:
             volume = TableVolumeStatisticsCollectorsSpec.from_dict(_volume)
+
+
+
 
         table_statistics_collectors_root_categories_spec = cls(
             volume=volume,

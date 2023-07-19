@@ -1,13 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.synchronize_root_folder_parameters import (
-        SynchronizeRootFolderParameters,
-    )
+  from ..models.synchronize_root_folder_parameters import SynchronizeRootFolderParameters
+
+
+
 
 
 T = TypeVar("T", bound="SynchronizeRootFolderDqoQueueJobParameters")
@@ -15,42 +24,46 @@ T = TypeVar("T", bound="SynchronizeRootFolderDqoQueueJobParameters")
 
 @attr.s(auto_attribs=True)
 class SynchronizeRootFolderDqoQueueJobParameters:
-    """
-    Attributes:
-        synchronization_parameter (Union[Unset, SynchronizeRootFolderParameters]):
-    """
+    """ 
+        Attributes:
+            synchronization_parameter (Union[Unset, SynchronizeRootFolderParameters]):
+     """
 
-    synchronization_parameter: Union[Unset, "SynchronizeRootFolderParameters"] = UNSET
+    synchronization_parameter: Union[Unset, 'SynchronizeRootFolderParameters'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.synchronize_root_folder_parameters import SynchronizeRootFolderParameters
         synchronization_parameter: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.synchronization_parameter, Unset):
             synchronization_parameter = self.synchronization_parameter.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if synchronization_parameter is not UNSET:
             field_dict["synchronizationParameter"] = synchronization_parameter
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.synchronize_root_folder_parameters import (
-            SynchronizeRootFolderParameters,
-        )
-
+        from ..models.synchronize_root_folder_parameters import SynchronizeRootFolderParameters
         d = src_dict.copy()
         _synchronization_parameter = d.pop("synchronizationParameter", UNSET)
         synchronization_parameter: Union[Unset, SynchronizeRootFolderParameters]
-        if isinstance(_synchronization_parameter, Unset):
+        if isinstance(_synchronization_parameter,  Unset):
             synchronization_parameter = UNSET
         else:
-            synchronization_parameter = SynchronizeRootFolderParameters.from_dict(
-                _synchronization_parameter
-            )
+            synchronization_parameter = SynchronizeRootFolderParameters.from_dict(_synchronization_parameter)
+
+
+
 
         synchronize_root_folder_dqo_queue_job_parameters = cls(
             synchronization_parameter=synchronization_parameter,

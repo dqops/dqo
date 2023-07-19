@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class GetColumnRecurringErrorsTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

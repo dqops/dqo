@@ -1,19 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.incident_issue_histogram_model_checks import (
-        IncidentIssueHistogramModelChecks,
-    )
-    from ..models.incident_issue_histogram_model_columns import (
-        IncidentIssueHistogramModelColumns,
-    )
-    from ..models.incident_issue_histogram_model_days import (
-        IncidentIssueHistogramModelDays,
-    )
+  from ..models.incident_issue_histogram_model_checks import IncidentIssueHistogramModelChecks
+  from ..models.incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
+  from ..models.incident_issue_histogram_model_columns import IncidentIssueHistogramModelColumns
+
+
+
 
 
 T = TypeVar("T", bound="IncidentIssueHistogramModel")
@@ -21,22 +26,26 @@ T = TypeVar("T", bound="IncidentIssueHistogramModel")
 
 @attr.s(auto_attribs=True)
 class IncidentIssueHistogramModel:
-    """
-    Attributes:
-        days (Union[Unset, IncidentIssueHistogramModelDays]): A map of the numbers of data quality issues per day, the
-            day uses the DQO server timezone.
-        columns (Union[Unset, IncidentIssueHistogramModelColumns]): A map of column names with the most data quality
-            issues related to the incident. The map returns the count of issues as the value.
-        checks (Union[Unset, IncidentIssueHistogramModelChecks]): A map of data quality check names with the most data
-            quality issues related to the incident. The map returns the count of issues as the value.
-    """
+    """ 
+        Attributes:
+            days (Union[Unset, IncidentIssueHistogramModelDays]): A map of the numbers of data quality issues per day, the
+                day uses the DQO server timezone.
+            columns (Union[Unset, IncidentIssueHistogramModelColumns]): A map of column names with the most data quality
+                issues related to the incident. The map returns the count of issues as the value.
+            checks (Union[Unset, IncidentIssueHistogramModelChecks]): A map of data quality check names with the most data
+                quality issues related to the incident. The map returns the count of issues as the value.
+     """
 
-    days: Union[Unset, "IncidentIssueHistogramModelDays"] = UNSET
-    columns: Union[Unset, "IncidentIssueHistogramModelColumns"] = UNSET
-    checks: Union[Unset, "IncidentIssueHistogramModelChecks"] = UNSET
+    days: Union[Unset, 'IncidentIssueHistogramModelDays'] = UNSET
+    columns: Union[Unset, 'IncidentIssueHistogramModelColumns'] = UNSET
+    checks: Union[Unset, 'IncidentIssueHistogramModelChecks'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.incident_issue_histogram_model_checks import IncidentIssueHistogramModelChecks
+        from ..models.incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
+        from ..models.incident_issue_histogram_model_columns import IncidentIssueHistogramModelColumns
         days: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.days, Unset):
             days = self.days.to_dict()
@@ -49,9 +58,11 @@ class IncidentIssueHistogramModel:
         if not isinstance(self.checks, Unset):
             checks = self.checks.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if days is not UNSET:
             field_dict["days"] = days
         if columns is not UNSET:
@@ -61,39 +72,43 @@ class IncidentIssueHistogramModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.incident_issue_histogram_model_checks import (
-            IncidentIssueHistogramModelChecks,
-        )
-        from ..models.incident_issue_histogram_model_columns import (
-            IncidentIssueHistogramModelColumns,
-        )
-        from ..models.incident_issue_histogram_model_days import (
-            IncidentIssueHistogramModelDays,
-        )
-
+        from ..models.incident_issue_histogram_model_checks import IncidentIssueHistogramModelChecks
+        from ..models.incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
+        from ..models.incident_issue_histogram_model_columns import IncidentIssueHistogramModelColumns
         d = src_dict.copy()
         _days = d.pop("days", UNSET)
         days: Union[Unset, IncidentIssueHistogramModelDays]
-        if isinstance(_days, Unset):
+        if isinstance(_days,  Unset):
             days = UNSET
         else:
             days = IncidentIssueHistogramModelDays.from_dict(_days)
 
+
+
+
         _columns = d.pop("columns", UNSET)
         columns: Union[Unset, IncidentIssueHistogramModelColumns]
-        if isinstance(_columns, Unset):
+        if isinstance(_columns,  Unset):
             columns = UNSET
         else:
             columns = IncidentIssueHistogramModelColumns.from_dict(_columns)
 
+
+
+
         _checks = d.pop("checks", UNSET)
         checks: Union[Unset, IncidentIssueHistogramModelChecks]
-        if isinstance(_checks, Unset):
+        if isinstance(_checks,  Unset):
             checks = UNSET
         else:
             checks = IncidentIssueHistogramModelChecks.from_dict(_checks)
+
+
+
 
         incident_issue_histogram_model = cls(
             days=days,

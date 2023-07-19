@@ -1,16 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.table_daily_partitioned_check_categories_spec import (
-        TableDailyPartitionedCheckCategoriesSpec,
-    )
-    from ..models.table_monthly_partitioned_check_categories_spec import (
-        TableMonthlyPartitionedCheckCategoriesSpec,
-    )
+  from ..models.table_monthly_partitioned_check_categories_spec import TableMonthlyPartitionedCheckCategoriesSpec
+  from ..models.table_daily_partitioned_check_categories_spec import TableDailyPartitionedCheckCategoriesSpec
+
+
+
 
 
 T = TypeVar("T", bound="TablePartitionedChecksRootSpec")
@@ -18,17 +25,20 @@ T = TypeVar("T", bound="TablePartitionedChecksRootSpec")
 
 @attr.s(auto_attribs=True)
 class TablePartitionedChecksRootSpec:
-    """
-    Attributes:
-        daily (Union[Unset, TableDailyPartitionedCheckCategoriesSpec]):
-        monthly (Union[Unset, TableMonthlyPartitionedCheckCategoriesSpec]):
-    """
+    """ 
+        Attributes:
+            daily (Union[Unset, TableDailyPartitionedCheckCategoriesSpec]):
+            monthly (Union[Unset, TableMonthlyPartitionedCheckCategoriesSpec]):
+     """
 
-    daily: Union[Unset, "TableDailyPartitionedCheckCategoriesSpec"] = UNSET
-    monthly: Union[Unset, "TableMonthlyPartitionedCheckCategoriesSpec"] = UNSET
+    daily: Union[Unset, 'TableDailyPartitionedCheckCategoriesSpec'] = UNSET
+    monthly: Union[Unset, 'TableMonthlyPartitionedCheckCategoriesSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_monthly_partitioned_check_categories_spec import TableMonthlyPartitionedCheckCategoriesSpec
+        from ..models.table_daily_partitioned_check_categories_spec import TableDailyPartitionedCheckCategoriesSpec
         daily: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily, Unset):
             daily = self.daily.to_dict()
@@ -37,9 +47,11 @@ class TablePartitionedChecksRootSpec:
         if not isinstance(self.monthly, Unset):
             monthly = self.monthly.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if daily is not UNSET:
             field_dict["daily"] = daily
         if monthly is not UNSET:
@@ -47,29 +59,32 @@ class TablePartitionedChecksRootSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_daily_partitioned_check_categories_spec import (
-            TableDailyPartitionedCheckCategoriesSpec,
-        )
-        from ..models.table_monthly_partitioned_check_categories_spec import (
-            TableMonthlyPartitionedCheckCategoriesSpec,
-        )
-
+        from ..models.table_monthly_partitioned_check_categories_spec import TableMonthlyPartitionedCheckCategoriesSpec
+        from ..models.table_daily_partitioned_check_categories_spec import TableDailyPartitionedCheckCategoriesSpec
         d = src_dict.copy()
         _daily = d.pop("daily", UNSET)
         daily: Union[Unset, TableDailyPartitionedCheckCategoriesSpec]
-        if isinstance(_daily, Unset):
+        if isinstance(_daily,  Unset):
             daily = UNSET
         else:
             daily = TableDailyPartitionedCheckCategoriesSpec.from_dict(_daily)
 
+
+
+
         _monthly = d.pop("monthly", UNSET)
         monthly: Union[Unset, TableMonthlyPartitionedCheckCategoriesSpec]
-        if isinstance(_monthly, Unset):
+        if isinstance(_monthly,  Unset):
             monthly = UNSET
         else:
             monthly = TableMonthlyPartitionedCheckCategoriesSpec.from_dict(_monthly)
+
+
+
 
         table_partitioned_checks_root_spec = cls(
             daily=daily,

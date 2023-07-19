@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class ParameterDefinitionSpecDataType(str, Enum):
     BOOLEAN = "boolean"
     COLUMN_NAME = "column_name"

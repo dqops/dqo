@@ -1,11 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
 if TYPE_CHECKING:
-    from ..models.check_basic_model import CheckBasicModel
+  from ..models.check_basic_model import CheckBasicModel
+
+
+
 
 
 T = TypeVar("T", bound="CheckContainerBasicModel")
@@ -13,16 +25,18 @@ T = TypeVar("T", bound="CheckContainerBasicModel")
 
 @attr.s(auto_attribs=True)
 class CheckContainerBasicModel:
-    """Simplistic model that returns the list of data quality checks, their names, categories and "configured" flag.
+    """ Simplistic model that returns the list of data quality checks, their names, categories and "configured" flag.
 
-    Attributes:
-        checks (Union[Unset, List['CheckBasicModel']]): Simplistic list of all data quality checks.
-    """
+        Attributes:
+            checks (Union[Unset, List['CheckBasicModel']]): Simplistic list of all data quality checks.
+     """
 
-    checks: Union[Unset, List["CheckBasicModel"]] = UNSET
+    checks: Union[Unset, List['CheckBasicModel']] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.check_basic_model import CheckBasicModel
         checks: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.checks, Unset):
             checks = []
@@ -31,25 +45,34 @@ class CheckContainerBasicModel:
 
                 checks.append(checks_item)
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if checks is not UNSET:
             field_dict["checks"] = checks
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_basic_model import CheckBasicModel
-
         d = src_dict.copy()
         checks = []
         _checks = d.pop("checks", UNSET)
-        for checks_item_data in _checks or []:
+        for checks_item_data in (_checks or []):
             checks_item = CheckBasicModel.from_dict(checks_item_data)
 
+
+
             checks.append(checks_item)
+
 
         check_container_basic_model = cls(
             checks=checks,

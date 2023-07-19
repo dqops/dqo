@@ -1,14 +1,25 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
+from ..types import UNSET, Unset
+
+from typing import cast
+from typing import Dict
 from ..models.dqo_job_history_entry_model_job_type import DqoJobHistoryEntryModelJobType
+from typing import Union
 from ..models.dqo_job_history_entry_model_status import DqoJobHistoryEntryModelStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.dqo_job_entry_parameters_model import DqoJobEntryParametersModel
-    from ..models.dqo_queue_job_id import DqoQueueJobId
+  from ..models.dqo_queue_job_id import DqoQueueJobId
+  from ..models.dqo_job_entry_parameters_model import DqoJobEntryParametersModel
+
+
+
 
 
 T = TypeVar("T", bound="DqoJobHistoryEntryModel")
@@ -16,25 +27,28 @@ T = TypeVar("T", bound="DqoJobHistoryEntryModel")
 
 @attr.s(auto_attribs=True)
 class DqoJobHistoryEntryModel:
-    """
-    Attributes:
-        job_id (Union[Unset, DqoQueueJobId]):
-        job_type (Union[Unset, DqoJobHistoryEntryModelJobType]):
-        parameters (Union[Unset, DqoJobEntryParametersModel]):
-        status (Union[Unset, DqoJobHistoryEntryModelStatus]):
-        error_message (Union[Unset, str]):
-        status_changed_at (Union[Unset, int]):
-    """
+    """ 
+        Attributes:
+            job_id (Union[Unset, DqoQueueJobId]):
+            job_type (Union[Unset, DqoJobHistoryEntryModelJobType]):
+            parameters (Union[Unset, DqoJobEntryParametersModel]):
+            status (Union[Unset, DqoJobHistoryEntryModelStatus]):
+            error_message (Union[Unset, str]):
+            status_changed_at (Union[Unset, int]):
+     """
 
-    job_id: Union[Unset, "DqoQueueJobId"] = UNSET
+    job_id: Union[Unset, 'DqoQueueJobId'] = UNSET
     job_type: Union[Unset, DqoJobHistoryEntryModelJobType] = UNSET
-    parameters: Union[Unset, "DqoJobEntryParametersModel"] = UNSET
+    parameters: Union[Unset, 'DqoJobEntryParametersModel'] = UNSET
     status: Union[Unset, DqoJobHistoryEntryModelStatus] = UNSET
     error_message: Union[Unset, str] = UNSET
     status_changed_at: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.dqo_queue_job_id import DqoQueueJobId
+        from ..models.dqo_job_entry_parameters_model import DqoJobEntryParametersModel
         job_id: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.job_id, Unset):
             job_id = self.job_id.to_dict()
@@ -56,7 +70,8 @@ class DqoJobHistoryEntryModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if job_id is not UNSET:
             field_dict["jobId"] = job_id
         if job_type is not UNSET:
@@ -72,39 +87,52 @@ class DqoJobHistoryEntryModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.dqo_job_entry_parameters_model import DqoJobEntryParametersModel
         from ..models.dqo_queue_job_id import DqoQueueJobId
-
+        from ..models.dqo_job_entry_parameters_model import DqoJobEntryParametersModel
         d = src_dict.copy()
         _job_id = d.pop("jobId", UNSET)
         job_id: Union[Unset, DqoQueueJobId]
-        if isinstance(_job_id, Unset):
+        if isinstance(_job_id,  Unset):
             job_id = UNSET
         else:
             job_id = DqoQueueJobId.from_dict(_job_id)
 
+
+
+
         _job_type = d.pop("jobType", UNSET)
         job_type: Union[Unset, DqoJobHistoryEntryModelJobType]
-        if isinstance(_job_type, Unset):
+        if isinstance(_job_type,  Unset):
             job_type = UNSET
         else:
             job_type = DqoJobHistoryEntryModelJobType(_job_type)
 
+
+
+
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, DqoJobEntryParametersModel]
-        if isinstance(_parameters, Unset):
+        if isinstance(_parameters,  Unset):
             parameters = UNSET
         else:
             parameters = DqoJobEntryParametersModel.from_dict(_parameters)
 
+
+
+
         _status = d.pop("status", UNSET)
         status: Union[Unset, DqoJobHistoryEntryModelStatus]
-        if isinstance(_status, Unset):
+        if isinstance(_status,  Unset):
             status = UNSET
         else:
             status = DqoJobHistoryEntryModelStatus(_status)
+
+
+
 
         error_message = d.pop("errorMessage", UNSET)
 

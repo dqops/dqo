@@ -1,26 +1,39 @@
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
+
+
+
+
 
 T = TypeVar("T", bound="ColumnNumericNumberValueInSetPercentSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class ColumnNumericNumberValueInSetPercentSensorParametersSpec:
-    """
-    Attributes:
-        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-            sensor query filter are added, separated by an AND operator.
-        expected_values (Union[Unset, List[int]]): A list of expected values that must be present in a numeric column,
-            only values from this list are accepted and rows having these values in the tested column are counted as valid
-            rows.
-    """
+    """ 
+        Attributes:
+            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+                sensor query filter are added, separated by an AND operator.
+            expected_values (Union[Unset, List[int]]): A list of expected values that must be present in a numeric column,
+                only values from this list are accepted and rows having these values in the tested column are counted as valid
+                rows.
+     """
 
     filter_: Union[Unset, str] = UNSET
     expected_values: Union[Unset, List[int]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -28,15 +41,22 @@ class ColumnNumericNumberValueInSetPercentSensorParametersSpec:
         if not isinstance(self.expected_values, Unset):
             expected_values = self.expected_values
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if expected_values is not UNSET:
             field_dict["expected_values"] = expected_values
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -45,14 +65,13 @@ class ColumnNumericNumberValueInSetPercentSensorParametersSpec:
 
         expected_values = cast(List[int], d.pop("expected_values", UNSET))
 
+
         column_numeric_number_value_in_set_percent_sensor_parameters_spec = cls(
             filter_=filter_,
             expected_values=expected_values,
         )
 
-        column_numeric_number_value_in_set_percent_sensor_parameters_spec.additional_properties = (
-            d
-        )
+        column_numeric_number_value_in_set_percent_sensor_parameters_spec.additional_properties = d
         return column_numeric_number_value_in_set_percent_sensor_parameters_spec
 
     @property

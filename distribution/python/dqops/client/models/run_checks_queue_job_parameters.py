@@ -1,13 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.check_search_filters import CheckSearchFilters
-    from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
-    from ..models.time_window_filter_parameters import TimeWindowFilterParameters
+  from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
+  from ..models.check_search_filters import CheckSearchFilters
+  from ..models.time_window_filter_parameters import TimeWindowFilterParameters
+
+
+
 
 
 T = TypeVar("T", bound="RunChecksQueueJobParameters")
@@ -15,27 +26,31 @@ T = TypeVar("T", bound="RunChecksQueueJobParameters")
 
 @attr.s(auto_attribs=True)
 class RunChecksQueueJobParameters:
-    """Run checks configuration, specifies the target checks that should be executed and an optional time window.
+    """ Run checks configuration, specifies the target checks that should be executed and an optional time window.
 
-    Attributes:
-        check_search_filters (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
-            checks on which tables and columns should be executed.
-        time_window_filter (Union[Unset, TimeWindowFilterParameters]): Time window configuration for partitioned checks
-            (the number of recent days or months to analyze in an incremental mode) or an absolute time range to analyze.
-        dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
-            dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
-            be rendered.
-        run_checks_result (Union[Unset, RunChecksQueueJobResult]): Returns the result (highest data quality check
-            severity and the finished checks count) for the checks that were recently executed.
-    """
+        Attributes:
+            check_search_filters (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
+                checks on which tables and columns should be executed.
+            time_window_filter (Union[Unset, TimeWindowFilterParameters]): Time window configuration for partitioned checks
+                (the number of recent days or months to analyze in an incremental mode) or an absolute time range to analyze.
+            dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
+                dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
+                be rendered.
+            run_checks_result (Union[Unset, RunChecksQueueJobResult]): Returns the result (highest data quality check
+                severity and the finished checks count) for the checks that were recently executed.
+     """
 
-    check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
-    time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
+    check_search_filters: Union[Unset, 'CheckSearchFilters'] = UNSET
+    time_window_filter: Union[Unset, 'TimeWindowFilterParameters'] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
-    run_checks_result: Union[Unset, "RunChecksQueueJobResult"] = UNSET
+    run_checks_result: Union[Unset, 'RunChecksQueueJobResult'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
+        from ..models.check_search_filters import CheckSearchFilters
+        from ..models.time_window_filter_parameters import TimeWindowFilterParameters
         check_search_filters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.check_search_filters, Unset):
             check_search_filters = self.check_search_filters.to_dict()
@@ -49,9 +64,11 @@ class RunChecksQueueJobParameters:
         if not isinstance(self.run_checks_result, Unset):
             run_checks_result = self.run_checks_result.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if check_search_filters is not UNSET:
             field_dict["checkSearchFilters"] = check_search_filters
         if time_window_filter is not UNSET:
@@ -63,37 +80,45 @@ class RunChecksQueueJobParameters:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.check_search_filters import CheckSearchFilters
         from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
+        from ..models.check_search_filters import CheckSearchFilters
         from ..models.time_window_filter_parameters import TimeWindowFilterParameters
-
         d = src_dict.copy()
         _check_search_filters = d.pop("checkSearchFilters", UNSET)
         check_search_filters: Union[Unset, CheckSearchFilters]
-        if isinstance(_check_search_filters, Unset):
+        if isinstance(_check_search_filters,  Unset):
             check_search_filters = UNSET
         else:
             check_search_filters = CheckSearchFilters.from_dict(_check_search_filters)
 
+
+
+
         _time_window_filter = d.pop("timeWindowFilter", UNSET)
         time_window_filter: Union[Unset, TimeWindowFilterParameters]
-        if isinstance(_time_window_filter, Unset):
+        if isinstance(_time_window_filter,  Unset):
             time_window_filter = UNSET
         else:
-            time_window_filter = TimeWindowFilterParameters.from_dict(
-                _time_window_filter
-            )
+            time_window_filter = TimeWindowFilterParameters.from_dict(_time_window_filter)
+
+
+
 
         dummy_execution = d.pop("dummyExecution", UNSET)
 
         _run_checks_result = d.pop("runChecksResult", UNSET)
         run_checks_result: Union[Unset, RunChecksQueueJobResult]
-        if isinstance(_run_checks_result, Unset):
+        if isinstance(_run_checks_result,  Unset):
             run_checks_result = UNSET
         else:
             run_checks_result = RunChecksQueueJobResult.from_dict(_run_checks_result)
+
+
+
 
         run_checks_queue_job_parameters = cls(
             check_search_filters=check_search_filters,

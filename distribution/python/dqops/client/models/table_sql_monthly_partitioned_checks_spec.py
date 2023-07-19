@@ -1,19 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.table_sql_aggregate_expr_check_spec import (
-        TableSqlAggregateExprCheckSpec,
-    )
-    from ..models.table_sql_condition_failed_count_check_spec import (
-        TableSqlConditionFailedCountCheckSpec,
-    )
-    from ..models.table_sql_condition_passed_percent_check_spec import (
-        TableSqlConditionPassedPercentCheckSpec,
-    )
+  from ..models.table_sql_condition_failed_count_check_spec import TableSqlConditionFailedCountCheckSpec
+  from ..models.table_sql_condition_passed_percent_check_spec import TableSqlConditionPassedPercentCheckSpec
+  from ..models.table_sql_aggregate_expr_check_spec import TableSqlAggregateExprCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableSqlMonthlyPartitionedChecksSpec")
@@ -21,155 +26,104 @@ T = TypeVar("T", bound="TableSqlMonthlyPartitionedChecksSpec")
 
 @attr.s(auto_attribs=True)
 class TableSqlMonthlyPartitionedChecksSpec:
-    """
-    Attributes:
-        monthly_partition_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
-        monthly_partition_sql_condition_failed_count_on_table (Union[Unset, TableSqlConditionFailedCountCheckSpec]):
-        monthly_partition_sql_aggregate_expr_table (Union[Unset, TableSqlAggregateExprCheckSpec]):
-        min_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
-    """
+    """ 
+        Attributes:
+            monthly_partition_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
+            monthly_partition_sql_condition_failed_count_on_table (Union[Unset, TableSqlConditionFailedCountCheckSpec]):
+            monthly_partition_sql_aggregate_expr_table (Union[Unset, TableSqlAggregateExprCheckSpec]):
+            min_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
+     """
 
-    monthly_partition_sql_condition_passed_percent_on_table: Union[
-        Unset, "TableSqlConditionPassedPercentCheckSpec"
-    ] = UNSET
-    monthly_partition_sql_condition_failed_count_on_table: Union[
-        Unset, "TableSqlConditionFailedCountCheckSpec"
-    ] = UNSET
-    monthly_partition_sql_aggregate_expr_table: Union[
-        Unset, "TableSqlAggregateExprCheckSpec"
-    ] = UNSET
-    min_sql_condition_passed_percent_on_table: Union[
-        Unset, "TableSqlConditionPassedPercentCheckSpec"
-    ] = UNSET
+    monthly_partition_sql_condition_passed_percent_on_table: Union[Unset, 'TableSqlConditionPassedPercentCheckSpec'] = UNSET
+    monthly_partition_sql_condition_failed_count_on_table: Union[Unset, 'TableSqlConditionFailedCountCheckSpec'] = UNSET
+    monthly_partition_sql_aggregate_expr_table: Union[Unset, 'TableSqlAggregateExprCheckSpec'] = UNSET
+    min_sql_condition_passed_percent_on_table: Union[Unset, 'TableSqlConditionPassedPercentCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
-        monthly_partition_sql_condition_passed_percent_on_table: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_sql_condition_passed_percent_on_table, Unset
-        ):
-            monthly_partition_sql_condition_passed_percent_on_table = (
-                self.monthly_partition_sql_condition_passed_percent_on_table.to_dict()
-            )
 
-        monthly_partition_sql_condition_failed_count_on_table: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_sql_condition_failed_count_on_table, Unset
-        ):
-            monthly_partition_sql_condition_failed_count_on_table = (
-                self.monthly_partition_sql_condition_failed_count_on_table.to_dict()
-            )
+    def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_sql_condition_failed_count_check_spec import TableSqlConditionFailedCountCheckSpec
+        from ..models.table_sql_condition_passed_percent_check_spec import TableSqlConditionPassedPercentCheckSpec
+        from ..models.table_sql_aggregate_expr_check_spec import TableSqlAggregateExprCheckSpec
+        monthly_partition_sql_condition_passed_percent_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_sql_condition_passed_percent_on_table, Unset):
+            monthly_partition_sql_condition_passed_percent_on_table = self.monthly_partition_sql_condition_passed_percent_on_table.to_dict()
+
+        monthly_partition_sql_condition_failed_count_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_sql_condition_failed_count_on_table, Unset):
+            monthly_partition_sql_condition_failed_count_on_table = self.monthly_partition_sql_condition_failed_count_on_table.to_dict()
 
         monthly_partition_sql_aggregate_expr_table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_sql_aggregate_expr_table, Unset):
-            monthly_partition_sql_aggregate_expr_table = (
-                self.monthly_partition_sql_aggregate_expr_table.to_dict()
-            )
+            monthly_partition_sql_aggregate_expr_table = self.monthly_partition_sql_aggregate_expr_table.to_dict()
 
         min_sql_condition_passed_percent_on_table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.min_sql_condition_passed_percent_on_table, Unset):
-            min_sql_condition_passed_percent_on_table = (
-                self.min_sql_condition_passed_percent_on_table.to_dict()
-            )
+            min_sql_condition_passed_percent_on_table = self.min_sql_condition_passed_percent_on_table.to_dict()
+
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if monthly_partition_sql_condition_passed_percent_on_table is not UNSET:
-            field_dict[
-                "monthly_partition_sql_condition_passed_percent_on_table"
-            ] = monthly_partition_sql_condition_passed_percent_on_table
+            field_dict["monthly_partition_sql_condition_passed_percent_on_table"] = monthly_partition_sql_condition_passed_percent_on_table
         if monthly_partition_sql_condition_failed_count_on_table is not UNSET:
-            field_dict[
-                "monthly_partition_sql_condition_failed_count_on_table"
-            ] = monthly_partition_sql_condition_failed_count_on_table
+            field_dict["monthly_partition_sql_condition_failed_count_on_table"] = monthly_partition_sql_condition_failed_count_on_table
         if monthly_partition_sql_aggregate_expr_table is not UNSET:
-            field_dict[
-                "monthly_partition_sql_aggregate_expr_table"
-            ] = monthly_partition_sql_aggregate_expr_table
+            field_dict["monthly_partition_sql_aggregate_expr_table"] = monthly_partition_sql_aggregate_expr_table
         if min_sql_condition_passed_percent_on_table is not UNSET:
-            field_dict[
-                "min_sql_condition_passed_percent_on_table"
-            ] = min_sql_condition_passed_percent_on_table
+            field_dict["min_sql_condition_passed_percent_on_table"] = min_sql_condition_passed_percent_on_table
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_sql_aggregate_expr_check_spec import (
-            TableSqlAggregateExprCheckSpec,
-        )
-        from ..models.table_sql_condition_failed_count_check_spec import (
-            TableSqlConditionFailedCountCheckSpec,
-        )
-        from ..models.table_sql_condition_passed_percent_check_spec import (
-            TableSqlConditionPassedPercentCheckSpec,
-        )
-
+        from ..models.table_sql_condition_failed_count_check_spec import TableSqlConditionFailedCountCheckSpec
+        from ..models.table_sql_condition_passed_percent_check_spec import TableSqlConditionPassedPercentCheckSpec
+        from ..models.table_sql_aggregate_expr_check_spec import TableSqlAggregateExprCheckSpec
         d = src_dict.copy()
-        _monthly_partition_sql_condition_passed_percent_on_table = d.pop(
-            "monthly_partition_sql_condition_passed_percent_on_table", UNSET
-        )
-        monthly_partition_sql_condition_passed_percent_on_table: Union[
-            Unset, TableSqlConditionPassedPercentCheckSpec
-        ]
-        if isinstance(_monthly_partition_sql_condition_passed_percent_on_table, Unset):
+        _monthly_partition_sql_condition_passed_percent_on_table = d.pop("monthly_partition_sql_condition_passed_percent_on_table", UNSET)
+        monthly_partition_sql_condition_passed_percent_on_table: Union[Unset, TableSqlConditionPassedPercentCheckSpec]
+        if isinstance(_monthly_partition_sql_condition_passed_percent_on_table,  Unset):
             monthly_partition_sql_condition_passed_percent_on_table = UNSET
         else:
-            monthly_partition_sql_condition_passed_percent_on_table = (
-                TableSqlConditionPassedPercentCheckSpec.from_dict(
-                    _monthly_partition_sql_condition_passed_percent_on_table
-                )
-            )
+            monthly_partition_sql_condition_passed_percent_on_table = TableSqlConditionPassedPercentCheckSpec.from_dict(_monthly_partition_sql_condition_passed_percent_on_table)
 
-        _monthly_partition_sql_condition_failed_count_on_table = d.pop(
-            "monthly_partition_sql_condition_failed_count_on_table", UNSET
-        )
-        monthly_partition_sql_condition_failed_count_on_table: Union[
-            Unset, TableSqlConditionFailedCountCheckSpec
-        ]
-        if isinstance(_monthly_partition_sql_condition_failed_count_on_table, Unset):
+
+
+
+        _monthly_partition_sql_condition_failed_count_on_table = d.pop("monthly_partition_sql_condition_failed_count_on_table", UNSET)
+        monthly_partition_sql_condition_failed_count_on_table: Union[Unset, TableSqlConditionFailedCountCheckSpec]
+        if isinstance(_monthly_partition_sql_condition_failed_count_on_table,  Unset):
             monthly_partition_sql_condition_failed_count_on_table = UNSET
         else:
-            monthly_partition_sql_condition_failed_count_on_table = (
-                TableSqlConditionFailedCountCheckSpec.from_dict(
-                    _monthly_partition_sql_condition_failed_count_on_table
-                )
-            )
+            monthly_partition_sql_condition_failed_count_on_table = TableSqlConditionFailedCountCheckSpec.from_dict(_monthly_partition_sql_condition_failed_count_on_table)
 
-        _monthly_partition_sql_aggregate_expr_table = d.pop(
-            "monthly_partition_sql_aggregate_expr_table", UNSET
-        )
-        monthly_partition_sql_aggregate_expr_table: Union[
-            Unset, TableSqlAggregateExprCheckSpec
-        ]
-        if isinstance(_monthly_partition_sql_aggregate_expr_table, Unset):
+
+
+
+        _monthly_partition_sql_aggregate_expr_table = d.pop("monthly_partition_sql_aggregate_expr_table", UNSET)
+        monthly_partition_sql_aggregate_expr_table: Union[Unset, TableSqlAggregateExprCheckSpec]
+        if isinstance(_monthly_partition_sql_aggregate_expr_table,  Unset):
             monthly_partition_sql_aggregate_expr_table = UNSET
         else:
-            monthly_partition_sql_aggregate_expr_table = (
-                TableSqlAggregateExprCheckSpec.from_dict(
-                    _monthly_partition_sql_aggregate_expr_table
-                )
-            )
+            monthly_partition_sql_aggregate_expr_table = TableSqlAggregateExprCheckSpec.from_dict(_monthly_partition_sql_aggregate_expr_table)
 
-        _min_sql_condition_passed_percent_on_table = d.pop(
-            "min_sql_condition_passed_percent_on_table", UNSET
-        )
-        min_sql_condition_passed_percent_on_table: Union[
-            Unset, TableSqlConditionPassedPercentCheckSpec
-        ]
-        if isinstance(_min_sql_condition_passed_percent_on_table, Unset):
+
+
+
+        _min_sql_condition_passed_percent_on_table = d.pop("min_sql_condition_passed_percent_on_table", UNSET)
+        min_sql_condition_passed_percent_on_table: Union[Unset, TableSqlConditionPassedPercentCheckSpec]
+        if isinstance(_min_sql_condition_passed_percent_on_table,  Unset):
             min_sql_condition_passed_percent_on_table = UNSET
         else:
-            min_sql_condition_passed_percent_on_table = (
-                TableSqlConditionPassedPercentCheckSpec.from_dict(
-                    _min_sql_condition_passed_percent_on_table
-                )
-            )
+            min_sql_condition_passed_percent_on_table = TableSqlConditionPassedPercentCheckSpec.from_dict(_min_sql_condition_passed_percent_on_table)
+
+
+
 
         table_sql_monthly_partitioned_checks_spec = cls(
             monthly_partition_sql_condition_passed_percent_on_table=monthly_partition_sql_condition_passed_percent_on_table,

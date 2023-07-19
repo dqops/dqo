@@ -1,28 +1,40 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="RuleBasicModel")
 
 
 @attr.s(auto_attribs=True)
 class RuleBasicModel:
-    """Rule basic model
+    """ Rule basic model
 
-    Attributes:
-        rule_name (Union[Unset, str]): Rule name
-        full_rule_name (Union[Unset, str]): Full rule name
-        custom (Union[Unset, bool]): This rule has is a custom rule or was customized by the user.
-        built_in (Union[Unset, bool]): This rule is provided with DQO as a built-in rule.
-    """
+        Attributes:
+            rule_name (Union[Unset, str]): Rule name
+            full_rule_name (Union[Unset, str]): Full rule name
+            custom (Union[Unset, bool]): This rule has is a custom rule or was customized by the user.
+            built_in (Union[Unset, bool]): This rule is provided with DQO as a built-in rule.
+     """
 
     rule_name: Union[Unset, str] = UNSET
     full_rule_name: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         rule_name = self.rule_name
@@ -32,7 +44,8 @@ class RuleBasicModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if rule_name is not UNSET:
             field_dict["rule_name"] = rule_name
         if full_rule_name is not UNSET:
@@ -43,6 +56,8 @@ class RuleBasicModel:
             field_dict["built_in"] = built_in
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

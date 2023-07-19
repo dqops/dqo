@@ -1,19 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_sql_aggregate_expr_check_spec import (
-        ColumnSqlAggregateExprCheckSpec,
-    )
-    from ..models.column_sql_condition_failed_count_check_spec import (
-        ColumnSqlConditionFailedCountCheckSpec,
-    )
-    from ..models.column_sql_condition_passed_percent_check_spec import (
-        ColumnSqlConditionPassedPercentCheckSpec,
-    )
+  from ..models.column_sql_condition_passed_percent_check_spec import ColumnSqlConditionPassedPercentCheckSpec
+  from ..models.column_sql_condition_failed_count_check_spec import ColumnSqlConditionFailedCountCheckSpec
+  from ..models.column_sql_aggregate_expr_check_spec import ColumnSqlAggregateExprCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnSqlMonthlyRecurringChecksSpec")
@@ -21,120 +26,86 @@ T = TypeVar("T", bound="ColumnSqlMonthlyRecurringChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnSqlMonthlyRecurringChecksSpec:
-    """
-    Attributes:
-        monthly_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
-        monthly_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
-        monthly_sql_aggregate_expr_column (Union[Unset, ColumnSqlAggregateExprCheckSpec]):
-    """
+    """ 
+        Attributes:
+            monthly_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
+            monthly_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
+            monthly_sql_aggregate_expr_column (Union[Unset, ColumnSqlAggregateExprCheckSpec]):
+     """
 
-    monthly_sql_condition_passed_percent_on_column: Union[
-        Unset, "ColumnSqlConditionPassedPercentCheckSpec"
-    ] = UNSET
-    monthly_sql_condition_failed_count_on_column: Union[
-        Unset, "ColumnSqlConditionFailedCountCheckSpec"
-    ] = UNSET
-    monthly_sql_aggregate_expr_column: Union[
-        Unset, "ColumnSqlAggregateExprCheckSpec"
-    ] = UNSET
+    monthly_sql_condition_passed_percent_on_column: Union[Unset, 'ColumnSqlConditionPassedPercentCheckSpec'] = UNSET
+    monthly_sql_condition_failed_count_on_column: Union[Unset, 'ColumnSqlConditionFailedCountCheckSpec'] = UNSET
+    monthly_sql_aggregate_expr_column: Union[Unset, 'ColumnSqlAggregateExprCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
-        monthly_sql_condition_passed_percent_on_column: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.monthly_sql_condition_passed_percent_on_column, Unset):
-            monthly_sql_condition_passed_percent_on_column = (
-                self.monthly_sql_condition_passed_percent_on_column.to_dict()
-            )
 
-        monthly_sql_condition_failed_count_on_column: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+    def to_dict(self) -> Dict[str, Any]:
+        from ..models.column_sql_condition_passed_percent_check_spec import ColumnSqlConditionPassedPercentCheckSpec
+        from ..models.column_sql_condition_failed_count_check_spec import ColumnSqlConditionFailedCountCheckSpec
+        from ..models.column_sql_aggregate_expr_check_spec import ColumnSqlAggregateExprCheckSpec
+        monthly_sql_condition_passed_percent_on_column: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_sql_condition_passed_percent_on_column, Unset):
+            monthly_sql_condition_passed_percent_on_column = self.monthly_sql_condition_passed_percent_on_column.to_dict()
+
+        monthly_sql_condition_failed_count_on_column: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_sql_condition_failed_count_on_column, Unset):
-            monthly_sql_condition_failed_count_on_column = (
-                self.monthly_sql_condition_failed_count_on_column.to_dict()
-            )
+            monthly_sql_condition_failed_count_on_column = self.monthly_sql_condition_failed_count_on_column.to_dict()
 
         monthly_sql_aggregate_expr_column: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_sql_aggregate_expr_column, Unset):
-            monthly_sql_aggregate_expr_column = (
-                self.monthly_sql_aggregate_expr_column.to_dict()
-            )
+            monthly_sql_aggregate_expr_column = self.monthly_sql_aggregate_expr_column.to_dict()
+
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if monthly_sql_condition_passed_percent_on_column is not UNSET:
-            field_dict[
-                "monthly_sql_condition_passed_percent_on_column"
-            ] = monthly_sql_condition_passed_percent_on_column
+            field_dict["monthly_sql_condition_passed_percent_on_column"] = monthly_sql_condition_passed_percent_on_column
         if monthly_sql_condition_failed_count_on_column is not UNSET:
-            field_dict[
-                "monthly_sql_condition_failed_count_on_column"
-            ] = monthly_sql_condition_failed_count_on_column
+            field_dict["monthly_sql_condition_failed_count_on_column"] = monthly_sql_condition_failed_count_on_column
         if monthly_sql_aggregate_expr_column is not UNSET:
-            field_dict[
-                "monthly_sql_aggregate_expr_column"
-            ] = monthly_sql_aggregate_expr_column
+            field_dict["monthly_sql_aggregate_expr_column"] = monthly_sql_aggregate_expr_column
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_sql_aggregate_expr_check_spec import (
-            ColumnSqlAggregateExprCheckSpec,
-        )
-        from ..models.column_sql_condition_failed_count_check_spec import (
-            ColumnSqlConditionFailedCountCheckSpec,
-        )
-        from ..models.column_sql_condition_passed_percent_check_spec import (
-            ColumnSqlConditionPassedPercentCheckSpec,
-        )
-
+        from ..models.column_sql_condition_passed_percent_check_spec import ColumnSqlConditionPassedPercentCheckSpec
+        from ..models.column_sql_condition_failed_count_check_spec import ColumnSqlConditionFailedCountCheckSpec
+        from ..models.column_sql_aggregate_expr_check_spec import ColumnSqlAggregateExprCheckSpec
         d = src_dict.copy()
-        _monthly_sql_condition_passed_percent_on_column = d.pop(
-            "monthly_sql_condition_passed_percent_on_column", UNSET
-        )
-        monthly_sql_condition_passed_percent_on_column: Union[
-            Unset, ColumnSqlConditionPassedPercentCheckSpec
-        ]
-        if isinstance(_monthly_sql_condition_passed_percent_on_column, Unset):
+        _monthly_sql_condition_passed_percent_on_column = d.pop("monthly_sql_condition_passed_percent_on_column", UNSET)
+        monthly_sql_condition_passed_percent_on_column: Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]
+        if isinstance(_monthly_sql_condition_passed_percent_on_column,  Unset):
             monthly_sql_condition_passed_percent_on_column = UNSET
         else:
-            monthly_sql_condition_passed_percent_on_column = (
-                ColumnSqlConditionPassedPercentCheckSpec.from_dict(
-                    _monthly_sql_condition_passed_percent_on_column
-                )
-            )
+            monthly_sql_condition_passed_percent_on_column = ColumnSqlConditionPassedPercentCheckSpec.from_dict(_monthly_sql_condition_passed_percent_on_column)
 
-        _monthly_sql_condition_failed_count_on_column = d.pop(
-            "monthly_sql_condition_failed_count_on_column", UNSET
-        )
-        monthly_sql_condition_failed_count_on_column: Union[
-            Unset, ColumnSqlConditionFailedCountCheckSpec
-        ]
-        if isinstance(_monthly_sql_condition_failed_count_on_column, Unset):
+
+
+
+        _monthly_sql_condition_failed_count_on_column = d.pop("monthly_sql_condition_failed_count_on_column", UNSET)
+        monthly_sql_condition_failed_count_on_column: Union[Unset, ColumnSqlConditionFailedCountCheckSpec]
+        if isinstance(_monthly_sql_condition_failed_count_on_column,  Unset):
             monthly_sql_condition_failed_count_on_column = UNSET
         else:
-            monthly_sql_condition_failed_count_on_column = (
-                ColumnSqlConditionFailedCountCheckSpec.from_dict(
-                    _monthly_sql_condition_failed_count_on_column
-                )
-            )
+            monthly_sql_condition_failed_count_on_column = ColumnSqlConditionFailedCountCheckSpec.from_dict(_monthly_sql_condition_failed_count_on_column)
 
-        _monthly_sql_aggregate_expr_column = d.pop(
-            "monthly_sql_aggregate_expr_column", UNSET
-        )
+
+
+
+        _monthly_sql_aggregate_expr_column = d.pop("monthly_sql_aggregate_expr_column", UNSET)
         monthly_sql_aggregate_expr_column: Union[Unset, ColumnSqlAggregateExprCheckSpec]
-        if isinstance(_monthly_sql_aggregate_expr_column, Unset):
+        if isinstance(_monthly_sql_aggregate_expr_column,  Unset):
             monthly_sql_aggregate_expr_column = UNSET
         else:
-            monthly_sql_aggregate_expr_column = (
-                ColumnSqlAggregateExprCheckSpec.from_dict(
-                    _monthly_sql_aggregate_expr_column
-                )
-            )
+            monthly_sql_aggregate_expr_column = ColumnSqlAggregateExprCheckSpec.from_dict(_monthly_sql_aggregate_expr_column)
+
+
+
 
         column_sql_monthly_recurring_checks_spec = cls(
             monthly_sql_condition_passed_percent_on_column=monthly_sql_condition_passed_percent_on_column,

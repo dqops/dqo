@@ -1,27 +1,39 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="ChangePercent30DaysRule50ParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class ChangePercent30DaysRule50ParametersSpec:
-    """
-    Attributes:
-        max_percent (Union[Unset, float]): Maximal accepted absolute change with regards to the previous readout
-            (inclusive).
-        exact_day (Union[Unset, bool]): When the exact_day parameter is unchecked (exact_day: false), the rule
-        search for the most recent sensor readouts from the past 60 days and compare them. If the parameter is
-        selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results
-        are found from that time, no results or errors will be generated.
-    """
+    """ 
+        Attributes:
+            max_percent (Union[Unset, float]): Percentage of maximum accepted change compared to a readout 30 days ago
+                (inclusive).
+            exact_day (Union[Unset, bool]): When the exact_day parameter is unchecked (exact_day: false), rule searches for
+                the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected
+                (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from
+                that time, no results or errors will be generated.
+     """
 
     max_percent: Union[Unset, float] = UNSET
     exact_day: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         max_percent = self.max_percent
@@ -29,13 +41,16 @@ class ChangePercent30DaysRule50ParametersSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if max_percent is not UNSET:
             field_dict["max_percent"] = max_percent
         if exact_day is not UNSET:
             field_dict["exact_day"] = exact_day
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class DqoJobHistoryEntryModelJobType(str, Enum):
     COLLECT_STATISTICS = "collect statistics"
     COLLECT_STATISTICS_ON_TABLE = "collect statistics on table"

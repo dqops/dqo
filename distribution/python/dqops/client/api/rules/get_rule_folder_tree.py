@@ -1,25 +1,41 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
 from ... import errors
-from ...client import Client
+
+from typing import cast
 from ...models.rule_basic_folder_model import RuleBasicFolderModel
-from ...types import Response
+from typing import Dict
+
 
 
 def _get_kwargs(
     *,
     client: Client,
+
 ) -> Dict[str, Any]:
-    url = "{}/api/definitions/rules".format(client.base_url)
+    url = "{}/api/definitions/rules".format(
+        client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    
+
+    
+
+    
+
+    
+
+    
+
     return {
-        "method": "get",
+	    "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -28,11 +44,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[RuleBasicFolderModel]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[RuleBasicFolderModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = RuleBasicFolderModel.from_dict(response.json())
+
+
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -41,9 +57,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[RuleBasicFolderModel]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[RuleBasicFolderModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -55,8 +69,9 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
+
 ) -> Response[RuleBasicFolderModel]:
-    """getRuleFolderTree
+    """ getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
     rules.
@@ -67,10 +82,12 @@ def sync_detailed(
 
     Returns:
         Response[RuleBasicFolderModel]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         client=client,
+
     )
 
     response = httpx.request(
@@ -80,12 +97,12 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
-
 def sync(
     *,
     client: Client,
+
 ) -> Optional[RuleBasicFolderModel]:
-    """getRuleFolderTree
+    """ getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
     rules.
@@ -96,18 +113,20 @@ def sync(
 
     Returns:
         RuleBasicFolderModel
-    """
+     """
+
 
     return sync_detailed(
         client=client,
-    ).parsed
 
+    ).parsed
 
 async def asyncio_detailed(
     *,
     client: Client,
+
 ) -> Response[RuleBasicFolderModel]:
-    """getRuleFolderTree
+    """ getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
     rules.
@@ -118,23 +137,27 @@ async def asyncio_detailed(
 
     Returns:
         Response[RuleBasicFolderModel]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         client=client,
+
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+        response = await _client.request(
+            **kwargs
+        )
 
     return _build_response(client=client, response=response)
-
 
 async def asyncio(
     *,
     client: Client,
+
 ) -> Optional[RuleBasicFolderModel]:
-    """getRuleFolderTree
+    """ getRuleFolderTree
 
      Returns a tree of all rules available in DQO, both built-in rules and user defined or customized
     rules.
@@ -145,10 +168,10 @@ async def asyncio(
 
     Returns:
         RuleBasicFolderModel
-    """
+     """
 
-    return (
-        await asyncio_detailed(
-            client=client,
-        )
-    ).parsed
+
+    return (await asyncio_detailed(
+        client=client,
+
+    )).parsed

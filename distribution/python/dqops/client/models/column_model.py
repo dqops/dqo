@@ -1,12 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_spec import ColumnSpec
-    from ..models.physical_table_name import PhysicalTableName
+  from ..models.column_spec import ColumnSpec
+  from ..models.physical_table_name import PhysicalTableName
+
+
+
 
 
 T = TypeVar("T", bound="ColumnModel")
@@ -14,24 +25,27 @@ T = TypeVar("T", bound="ColumnModel")
 
 @attr.s(auto_attribs=True)
 class ColumnModel:
-    """Full column model
+    """ Full column model
 
-    Attributes:
-        connection_name (Union[Unset, str]): Connection name.
-        table (Union[Unset, PhysicalTableName]):
-        column_name (Union[Unset, str]): Column name.
-        column_hash (Union[Unset, int]): Column hash that identifies the column using a unique hash code.
-        spec (Union[Unset, ColumnSpec]):
-    """
+        Attributes:
+            connection_name (Union[Unset, str]): Connection name.
+            table (Union[Unset, PhysicalTableName]):
+            column_name (Union[Unset, str]): Column name.
+            column_hash (Union[Unset, int]): Column hash that identifies the column using a unique hash code.
+            spec (Union[Unset, ColumnSpec]):
+     """
 
     connection_name: Union[Unset, str] = UNSET
-    table: Union[Unset, "PhysicalTableName"] = UNSET
+    table: Union[Unset, 'PhysicalTableName'] = UNSET
     column_name: Union[Unset, str] = UNSET
     column_hash: Union[Unset, int] = UNSET
-    spec: Union[Unset, "ColumnSpec"] = UNSET
+    spec: Union[Unset, 'ColumnSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.column_spec import ColumnSpec
+        from ..models.physical_table_name import PhysicalTableName
         connection_name = self.connection_name
         table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.table, Unset):
@@ -43,9 +57,11 @@ class ColumnModel:
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if table is not UNSET:
@@ -59,20 +75,24 @@ class ColumnModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.column_spec import ColumnSpec
         from ..models.physical_table_name import PhysicalTableName
-
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
         _table = d.pop("table", UNSET)
         table: Union[Unset, PhysicalTableName]
-        if isinstance(_table, Unset):
+        if isinstance(_table,  Unset):
             table = UNSET
         else:
             table = PhysicalTableName.from_dict(_table)
+
+
+
 
         column_name = d.pop("column_name", UNSET)
 
@@ -80,10 +100,13 @@ class ColumnModel:
 
         _spec = d.pop("spec", UNSET)
         spec: Union[Unset, ColumnSpec]
-        if isinstance(_spec, Unset):
+        if isinstance(_spec,  Unset):
             spec = UNSET
         else:
             spec = ColumnSpec.from_dict(_spec)
+
+
+
 
         column_model = cls(
             connection_name=connection_name,

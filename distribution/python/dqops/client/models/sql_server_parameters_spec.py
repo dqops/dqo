@@ -1,13 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.sql_server_parameters_spec_properties import (
-        SqlServerParametersSpecProperties,
-    )
+  from ..models.sql_server_parameters_spec_properties import SqlServerParametersSpecProperties
+
+
+
 
 
 T = TypeVar("T", bound="SqlServerParametersSpec")
@@ -15,24 +24,24 @@ T = TypeVar("T", bound="SqlServerParametersSpec")
 
 @attr.s(auto_attribs=True)
 class SqlServerParametersSpec:
-    """
-    Attributes:
-        host (Union[Unset, str]): SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom
-            environment variable.
-        port (Union[Unset, str]): SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT}
-            configuration with a custom environment variable.
-        database (Union[Unset, str]): SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-            format to use dynamic substitution.
-        user (Union[Unset, str]): SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to
-            use dynamic substitution.
-        password (Union[Unset, str]): SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-            format to use dynamic substitution.
-        options (Union[Unset, str]): SQL Server connection 'options' initialization parameter. For example setting this
-            to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
-            also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.
-        ssl (Union[Unset, bool]): Connecting to SQL Server with SSL disabled. The default value is false.
-        properties (Union[Unset, SqlServerParametersSpecProperties]):
-    """
+    """ 
+        Attributes:
+            host (Union[Unset, str]): SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom
+                environment variable.
+            port (Union[Unset, str]): SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT}
+                configuration with a custom environment variable.
+            database (Union[Unset, str]): SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+                format to use dynamic substitution.
+            user (Union[Unset, str]): SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to
+                use dynamic substitution.
+            password (Union[Unset, str]): SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+                format to use dynamic substitution.
+            options (Union[Unset, str]): SQL Server connection 'options' initialization parameter. For example setting this
+                to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
+                also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.
+            ssl (Union[Unset, bool]): Connecting to SQL Server with SSL disabled. The default value is false.
+            properties (Union[Unset, SqlServerParametersSpecProperties]):
+     """
 
     host: Union[Unset, str] = UNSET
     port: Union[Unset, str] = UNSET
@@ -41,10 +50,12 @@ class SqlServerParametersSpec:
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     ssl: Union[Unset, bool] = UNSET
-    properties: Union[Unset, "SqlServerParametersSpecProperties"] = UNSET
+    properties: Union[Unset, 'SqlServerParametersSpecProperties'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.sql_server_parameters_spec_properties import SqlServerParametersSpecProperties
         host = self.host
         port = self.port
         database = self.database
@@ -56,9 +67,11 @@ class SqlServerParametersSpec:
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if host is not UNSET:
             field_dict["host"] = host
         if port is not UNSET:
@@ -78,12 +91,11 @@ class SqlServerParametersSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.sql_server_parameters_spec_properties import (
-            SqlServerParametersSpecProperties,
-        )
-
+        from ..models.sql_server_parameters_spec_properties import SqlServerParametersSpecProperties
         d = src_dict.copy()
         host = d.pop("host", UNSET)
 
@@ -101,10 +113,13 @@ class SqlServerParametersSpec:
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, SqlServerParametersSpecProperties]
-        if isinstance(_properties, Unset):
+        if isinstance(_properties,  Unset):
             properties = UNSET
         else:
             properties = SqlServerParametersSpecProperties.from_dict(_properties)
+
+
+
 
         sql_server_parameters_spec = cls(
             host=host,

@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class SynchronizeRootFolderParametersFolder(str, Enum):
     CHECKS = "checks"
     DATA_CHECK_RESULTS = "data_check_results"

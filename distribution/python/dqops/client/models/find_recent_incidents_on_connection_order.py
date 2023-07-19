@@ -1,9 +1,8 @@
 from enum import Enum
 
-
 class FindRecentIncidentsOnConnectionOrder(str, Enum):
     CHECKNAME = "checkName"
-    DATASTREAMNAME = "dataStreamName"
+    DATAGROUP = "dataGroup"
     FAILEDCHECKSCOUNT = "failedChecksCount"
     FIRSTSEEN = "firstSeen"
     HIGHESTSEVERITY = "highestSeverity"

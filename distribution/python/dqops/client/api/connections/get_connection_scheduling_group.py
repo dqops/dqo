@@ -1,15 +1,17 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
 from ... import errors
-from ...client import Client
-from ...models.get_connection_scheduling_group_scheduling_group import (
-    GetConnectionSchedulingGroupSchedulingGroup,
-)
+
 from ...models.recurring_schedule_spec import RecurringScheduleSpec
-from ...types import Response
+from typing import cast
+from ...models.get_connection_scheduling_group_scheduling_group import GetConnectionSchedulingGroupSchedulingGroup
+from typing import Dict
+
 
 
 def _get_kwargs(
@@ -17,18 +19,26 @@ def _get_kwargs(
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
+
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schedules/{schedulingGroup}".format(
-        client.base_url,
-        connectionName=connection_name,
-        schedulingGroup=scheduling_group,
-    )
+        client.base_url,connectionName=connection_name,schedulingGroup=scheduling_group)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    
+
+    
+
+    
+
+    
+
+    
+
     return {
-        "method": "get",
+	    "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -37,11 +47,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[RecurringScheduleSpec]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[RecurringScheduleSpec]:
     if response.status_code == HTTPStatus.OK:
         response_200 = RecurringScheduleSpec.from_dict(response.json())
+
+
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -50,9 +60,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[RecurringScheduleSpec]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[RecurringScheduleSpec]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -66,8 +74,9 @@ def sync_detailed(
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
+
 ) -> Response[RecurringScheduleSpec]:
-    """getConnectionSchedulingGroup
+    """ getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
 
@@ -81,12 +90,14 @@ def sync_detailed(
 
     Returns:
         Response[RecurringScheduleSpec]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        scheduling_group=scheduling_group,
-        client=client,
+scheduling_group=scheduling_group,
+client=client,
+
     )
 
     response = httpx.request(
@@ -96,14 +107,14 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
-
 def sync(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
+
 ) -> Optional[RecurringScheduleSpec]:
-    """getConnectionSchedulingGroup
+    """ getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
 
@@ -117,22 +128,24 @@ def sync(
 
     Returns:
         RecurringScheduleSpec
-    """
+     """
+
 
     return sync_detailed(
         connection_name=connection_name,
-        scheduling_group=scheduling_group,
-        client=client,
-    ).parsed
+scheduling_group=scheduling_group,
+client=client,
 
+    ).parsed
 
 async def asyncio_detailed(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
+
 ) -> Response[RecurringScheduleSpec]:
-    """getConnectionSchedulingGroup
+    """ getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
 
@@ -146,27 +159,31 @@ async def asyncio_detailed(
 
     Returns:
         Response[RecurringScheduleSpec]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        scheduling_group=scheduling_group,
-        client=client,
+scheduling_group=scheduling_group,
+client=client,
+
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+        response = await _client.request(
+            **kwargs
+        )
 
     return _build_response(client=client, response=response)
-
 
 async def asyncio(
     connection_name: str,
     scheduling_group: GetConnectionSchedulingGroupSchedulingGroup,
     *,
     client: Client,
+
 ) -> Optional[RecurringScheduleSpec]:
-    """getConnectionSchedulingGroup
+    """ getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
 
@@ -180,12 +197,12 @@ async def asyncio(
 
     Returns:
         RecurringScheduleSpec
-    """
+     """
 
-    return (
-        await asyncio_detailed(
-            connection_name=connection_name,
-            scheduling_group=scheduling_group,
-            client=client,
-        )
-    ).parsed
+
+    return (await asyncio_detailed(
+        connection_name=connection_name,
+scheduling_group=scheduling_group,
+client=client,
+
+    )).parsed

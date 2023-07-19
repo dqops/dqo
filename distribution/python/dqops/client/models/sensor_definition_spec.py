@@ -1,14 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
 if TYPE_CHECKING:
-    from ..models.parameter_definition_spec import ParameterDefinitionSpec
-    from ..models.sensor_definition_spec_parameters import (
-        SensorDefinitionSpecParameters,
-    )
+  from ..models.sensor_definition_spec_parameters import SensorDefinitionSpecParameters
+  from ..models.parameter_definition_spec import ParameterDefinitionSpec
+
+
+
 
 
 T = TypeVar("T", bound="SensorDefinitionSpec")
@@ -16,29 +26,32 @@ T = TypeVar("T", bound="SensorDefinitionSpec")
 
 @attr.s(auto_attribs=True)
 class SensorDefinitionSpec:
-    """
-    Attributes:
-        fields (Union[Unset, List['ParameterDefinitionSpec']]): List of fields that are parameters of a custom sensor.
-            Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls
-            for all required fields.
-        requires_event_timestamp (Union[Unset, bool]): The data quality sensor depends on the configuration of the event
-            timestamp column name on the analyzed table. When true, the name of the column that stores the event
-            (transaction, etc.) timestamp must be specified in the timestamp_columns.event_timestamp_column field on the
-            table.
-        requires_ingestion_timestamp (Union[Unset, bool]): The data quality sensor depends on the configuration of the
-            ingestion timestamp column name on the analyzed table. When true, the name of the column that stores the
-            ingestion (created_at, loaded_at, etc.) timestamp must be specified in the
-            timestamp_columns.ingestion_timestamp_column field on the table.
-        parameters (Union[Unset, SensorDefinitionSpecParameters]): Additional sensor definition parameters
-    """
+    """ 
+        Attributes:
+            fields (Union[Unset, List['ParameterDefinitionSpec']]): List of fields that are parameters of a custom sensor.
+                Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls
+                for all required fields.
+            requires_event_timestamp (Union[Unset, bool]): The data quality sensor depends on the configuration of the event
+                timestamp column name on the analyzed table. When true, the name of the column that stores the event
+                (transaction, etc.) timestamp must be specified in the timestamp_columns.event_timestamp_column field on the
+                table.
+            requires_ingestion_timestamp (Union[Unset, bool]): The data quality sensor depends on the configuration of the
+                ingestion timestamp column name on the analyzed table. When true, the name of the column that stores the
+                ingestion (created_at, loaded_at, etc.) timestamp must be specified in the
+                timestamp_columns.ingestion_timestamp_column field on the table.
+            parameters (Union[Unset, SensorDefinitionSpecParameters]): Additional sensor definition parameters
+     """
 
-    fields: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
+    fields: Union[Unset, List['ParameterDefinitionSpec']] = UNSET
     requires_event_timestamp: Union[Unset, bool] = UNSET
     requires_ingestion_timestamp: Union[Unset, bool] = UNSET
-    parameters: Union[Unset, "SensorDefinitionSpecParameters"] = UNSET
+    parameters: Union[Unset, 'SensorDefinitionSpecParameters'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.sensor_definition_spec_parameters import SensorDefinitionSpecParameters
+        from ..models.parameter_definition_spec import ParameterDefinitionSpec
         fields: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.fields, Unset):
             fields = []
@@ -47,15 +60,20 @@ class SensorDefinitionSpec:
 
                 fields.append(fields_item)
 
+
+
+
         requires_event_timestamp = self.requires_event_timestamp
         requires_ingestion_timestamp = self.requires_ingestion_timestamp
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if fields is not UNSET:
             field_dict["fields"] = fields
         if requires_event_timestamp is not UNSET:
@@ -67,20 +85,22 @@ class SensorDefinitionSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.sensor_definition_spec_parameters import SensorDefinitionSpecParameters
         from ..models.parameter_definition_spec import ParameterDefinitionSpec
-        from ..models.sensor_definition_spec_parameters import (
-            SensorDefinitionSpecParameters,
-        )
-
         d = src_dict.copy()
         fields = []
         _fields = d.pop("fields", UNSET)
-        for fields_item_data in _fields or []:
+        for fields_item_data in (_fields or []):
             fields_item = ParameterDefinitionSpec.from_dict(fields_item_data)
 
+
+
             fields.append(fields_item)
+
 
         requires_event_timestamp = d.pop("requires_event_timestamp", UNSET)
 
@@ -88,10 +108,13 @@ class SensorDefinitionSpec:
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, SensorDefinitionSpecParameters]
-        if isinstance(_parameters, Unset):
+        if isinstance(_parameters,  Unset):
             parameters = UNSET
         else:
             parameters = SensorDefinitionSpecParameters.from_dict(_parameters)
+
+
+
 
         sensor_definition_spec = cls(
             fields=fields,

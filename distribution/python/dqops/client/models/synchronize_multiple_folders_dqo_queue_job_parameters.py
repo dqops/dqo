@@ -1,43 +1,50 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
-from ..models.synchronize_multiple_folders_dqo_queue_job_parameters_direction import (
-    SynchronizeMultipleFoldersDqoQueueJobParametersDirection,
-)
 from ..types import UNSET, Unset
+
+from ..models.synchronize_multiple_folders_dqo_queue_job_parameters_direction import SynchronizeMultipleFoldersDqoQueueJobParametersDirection
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="SynchronizeMultipleFoldersDqoQueueJobParameters")
 
 
 @attr.s(auto_attribs=True)
 class SynchronizeMultipleFoldersDqoQueueJobParameters:
-    """
-    Attributes:
-        direction (Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection]): File synchronization
-            direction, the default is full synchronization (push local changes and pull other changes from DQO Cloud).
-        force_refresh_native_tables (Union[Unset, bool]): Force full refresh of native tables in the data quality data
-            warehouse. The default synchronization mode is to refresh only modified data.
-        detect_cron_schedules (Union[Unset, bool]): Scans the yaml files (with the configuration for connections and
-            tables) and detects new cron schedules. Detected cron schedules are registered in the cron (Quartz) job
-            scheduler.
-        sources (Union[Unset, bool]): Synchronize the "sources" folder.
-        sensors (Union[Unset, bool]): Synchronize the "sensors" folder.
-        rules (Union[Unset, bool]): Synchronize the "rules" folder.
-        checks (Union[Unset, bool]): Synchronize the "checks" folder.
-        data_sensor_readouts (Union[Unset, bool]): Synchronize the ".data/sensor_readouts" folder.
-        data_check_results (Union[Unset, bool]): Synchronize the ".data/check_results" folder.
-        data_statistics (Union[Unset, bool]): Synchronize the ".data/statistics" folder.
-        data_errors (Union[Unset, bool]): Synchronize the ".data/errors" folder.
-        data_incidents (Union[Unset, bool]): Synchronize the ".data/incidents" folder.
-        synchronize_folder_with_local_changes (Union[Unset, bool]): Synchronize all folders that have local changes.
-            When this field is set to true, there is no need to enable synchronization of single folders because DQO will
-            decide which folders need synchronization (to be pushed to the cloud).
-    """
+    """ 
+        Attributes:
+            direction (Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection]): File synchronization
+                direction, the default is full synchronization (push local changes and pull other changes from DQO Cloud).
+            force_refresh_native_tables (Union[Unset, bool]): Force full refresh of native tables in the data quality data
+                warehouse. The default synchronization mode is to refresh only modified data.
+            detect_cron_schedules (Union[Unset, bool]): Scans the yaml files (with the configuration for connections and
+                tables) and detects new cron schedules. Detected cron schedules are registered in the cron (Quartz) job
+                scheduler.
+            sources (Union[Unset, bool]): Synchronize the "sources" folder.
+            sensors (Union[Unset, bool]): Synchronize the "sensors" folder.
+            rules (Union[Unset, bool]): Synchronize the "rules" folder.
+            checks (Union[Unset, bool]): Synchronize the "checks" folder.
+            data_sensor_readouts (Union[Unset, bool]): Synchronize the ".data/sensor_readouts" folder.
+            data_check_results (Union[Unset, bool]): Synchronize the ".data/check_results" folder.
+            data_statistics (Union[Unset, bool]): Synchronize the ".data/statistics" folder.
+            data_errors (Union[Unset, bool]): Synchronize the ".data/errors" folder.
+            data_incidents (Union[Unset, bool]): Synchronize the ".data/incidents" folder.
+            synchronize_folder_with_local_changes (Union[Unset, bool]): Synchronize all folders that have local changes.
+                When this field is set to true, there is no need to enable synchronization of single folders because DQO will
+                decide which folders need synchronization (to be pushed to the cloud).
+     """
 
-    direction: Union[
-        Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection
-    ] = UNSET
+    direction: Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection] = UNSET
     force_refresh_native_tables: Union[Unset, bool] = UNSET
     detect_cron_schedules: Union[Unset, bool] = UNSET
     sources: Union[Unset, bool] = UNSET
@@ -51,6 +58,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
     data_incidents: Union[Unset, bool] = UNSET
     synchronize_folder_with_local_changes: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         direction: Union[Unset, str] = UNSET
@@ -68,13 +76,12 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
         data_statistics = self.data_statistics
         data_errors = self.data_errors
         data_incidents = self.data_incidents
-        synchronize_folder_with_local_changes = (
-            self.synchronize_folder_with_local_changes
-        )
+        synchronize_folder_with_local_changes = self.synchronize_folder_with_local_changes
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if direction is not UNSET:
             field_dict["direction"] = direction
         if force_refresh_native_tables is not UNSET:
@@ -100,25 +107,24 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
         if data_incidents is not UNSET:
             field_dict["dataIncidents"] = data_incidents
         if synchronize_folder_with_local_changes is not UNSET:
-            field_dict[
-                "synchronizeFolderWithLocalChanges"
-            ] = synchronize_folder_with_local_changes
+            field_dict["synchronizeFolderWithLocalChanges"] = synchronize_folder_with_local_changes
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _direction = d.pop("direction", UNSET)
-        direction: Union[
-            Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection
-        ]
-        if isinstance(_direction, Unset):
+        direction: Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParametersDirection]
+        if isinstance(_direction,  Unset):
             direction = UNSET
         else:
-            direction = SynchronizeMultipleFoldersDqoQueueJobParametersDirection(
-                _direction
-            )
+            direction = SynchronizeMultipleFoldersDqoQueueJobParametersDirection(_direction)
+
+
+
 
         force_refresh_native_tables = d.pop("forceRefreshNativeTables", UNSET)
 
@@ -142,9 +148,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
 
         data_incidents = d.pop("dataIncidents", UNSET)
 
-        synchronize_folder_with_local_changes = d.pop(
-            "synchronizeFolderWithLocalChanges", UNSET
-        )
+        synchronize_folder_with_local_changes = d.pop("synchronizeFolderWithLocalChanges", UNSET)
 
         synchronize_multiple_folders_dqo_queue_job_parameters = cls(
             direction=direction,

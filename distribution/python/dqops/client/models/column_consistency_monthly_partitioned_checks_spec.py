@@ -1,16 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_consistency_date_match_format_percent_check_spec import (
-        ColumnConsistencyDateMatchFormatPercentCheckSpec,
-    )
-    from ..models.column_string_datatype_changed_check_spec import (
-        ColumnStringDatatypeChangedCheckSpec,
-    )
+  from ..models.column_consistency_date_match_format_percent_check_spec import ColumnConsistencyDateMatchFormatPercentCheckSpec
+  from ..models.column_string_datatype_changed_check_spec import ColumnStringDatatypeChangedCheckSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnConsistencyMonthlyPartitionedChecksSpec")
@@ -18,88 +25,66 @@ T = TypeVar("T", bound="ColumnConsistencyMonthlyPartitionedChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnConsistencyMonthlyPartitionedChecksSpec:
-    """
-    Attributes:
-        monthly_partition_date_match_format_percent (Union[Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec]):
-        monthly_partition_string_datatype_changed (Union[Unset, ColumnStringDatatypeChangedCheckSpec]):
-    """
+    """ 
+        Attributes:
+            monthly_partition_date_match_format_percent (Union[Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec]):
+            monthly_partition_string_datatype_changed (Union[Unset, ColumnStringDatatypeChangedCheckSpec]):
+     """
 
-    monthly_partition_date_match_format_percent: Union[
-        Unset, "ColumnConsistencyDateMatchFormatPercentCheckSpec"
-    ] = UNSET
-    monthly_partition_string_datatype_changed: Union[
-        Unset, "ColumnStringDatatypeChangedCheckSpec"
-    ] = UNSET
+    monthly_partition_date_match_format_percent: Union[Unset, 'ColumnConsistencyDateMatchFormatPercentCheckSpec'] = UNSET
+    monthly_partition_string_datatype_changed: Union[Unset, 'ColumnStringDatatypeChangedCheckSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
-        monthly_partition_date_match_format_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        from ..models.column_consistency_date_match_format_percent_check_spec import ColumnConsistencyDateMatchFormatPercentCheckSpec
+        from ..models.column_string_datatype_changed_check_spec import ColumnStringDatatypeChangedCheckSpec
+        monthly_partition_date_match_format_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_date_match_format_percent, Unset):
-            monthly_partition_date_match_format_percent = (
-                self.monthly_partition_date_match_format_percent.to_dict()
-            )
+            monthly_partition_date_match_format_percent = self.monthly_partition_date_match_format_percent.to_dict()
 
         monthly_partition_string_datatype_changed: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_string_datatype_changed, Unset):
-            monthly_partition_string_datatype_changed = (
-                self.monthly_partition_string_datatype_changed.to_dict()
-            )
+            monthly_partition_string_datatype_changed = self.monthly_partition_string_datatype_changed.to_dict()
+
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if monthly_partition_date_match_format_percent is not UNSET:
-            field_dict[
-                "monthly_partition_date_match_format_percent"
-            ] = monthly_partition_date_match_format_percent
+            field_dict["monthly_partition_date_match_format_percent"] = monthly_partition_date_match_format_percent
         if monthly_partition_string_datatype_changed is not UNSET:
-            field_dict[
-                "monthly_partition_string_datatype_changed"
-            ] = monthly_partition_string_datatype_changed
+            field_dict["monthly_partition_string_datatype_changed"] = monthly_partition_string_datatype_changed
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_consistency_date_match_format_percent_check_spec import (
-            ColumnConsistencyDateMatchFormatPercentCheckSpec,
-        )
-        from ..models.column_string_datatype_changed_check_spec import (
-            ColumnStringDatatypeChangedCheckSpec,
-        )
-
+        from ..models.column_consistency_date_match_format_percent_check_spec import ColumnConsistencyDateMatchFormatPercentCheckSpec
+        from ..models.column_string_datatype_changed_check_spec import ColumnStringDatatypeChangedCheckSpec
         d = src_dict.copy()
-        _monthly_partition_date_match_format_percent = d.pop(
-            "monthly_partition_date_match_format_percent", UNSET
-        )
-        monthly_partition_date_match_format_percent: Union[
-            Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec
-        ]
-        if isinstance(_monthly_partition_date_match_format_percent, Unset):
+        _monthly_partition_date_match_format_percent = d.pop("monthly_partition_date_match_format_percent", UNSET)
+        monthly_partition_date_match_format_percent: Union[Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec]
+        if isinstance(_monthly_partition_date_match_format_percent,  Unset):
             monthly_partition_date_match_format_percent = UNSET
         else:
-            monthly_partition_date_match_format_percent = (
-                ColumnConsistencyDateMatchFormatPercentCheckSpec.from_dict(
-                    _monthly_partition_date_match_format_percent
-                )
-            )
+            monthly_partition_date_match_format_percent = ColumnConsistencyDateMatchFormatPercentCheckSpec.from_dict(_monthly_partition_date_match_format_percent)
 
-        _monthly_partition_string_datatype_changed = d.pop(
-            "monthly_partition_string_datatype_changed", UNSET
-        )
-        monthly_partition_string_datatype_changed: Union[
-            Unset, ColumnStringDatatypeChangedCheckSpec
-        ]
-        if isinstance(_monthly_partition_string_datatype_changed, Unset):
+
+
+
+        _monthly_partition_string_datatype_changed = d.pop("monthly_partition_string_datatype_changed", UNSET)
+        monthly_partition_string_datatype_changed: Union[Unset, ColumnStringDatatypeChangedCheckSpec]
+        if isinstance(_monthly_partition_string_datatype_changed,  Unset):
             monthly_partition_string_datatype_changed = UNSET
         else:
-            monthly_partition_string_datatype_changed = (
-                ColumnStringDatatypeChangedCheckSpec.from_dict(
-                    _monthly_partition_string_datatype_changed
-                )
-            )
+            monthly_partition_string_datatype_changed = ColumnStringDatatypeChangedCheckSpec.from_dict(_monthly_partition_string_datatype_changed)
+
+
+
 
         column_consistency_monthly_partitioned_checks_spec = cls(
             monthly_partition_date_match_format_percent=monthly_partition_date_match_format_percent,

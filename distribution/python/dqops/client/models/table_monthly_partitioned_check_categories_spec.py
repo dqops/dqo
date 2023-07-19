@@ -1,22 +1,26 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.table_monthly_partitioned_check_categories_spec_custom import (
-        TableMonthlyPartitionedCheckCategoriesSpecCustom,
-    )
-    from ..models.table_sql_monthly_partitioned_checks_spec import (
-        TableSqlMonthlyPartitionedChecksSpec,
-    )
-    from ..models.table_timeliness_monthly_partitioned_checks_spec import (
-        TableTimelinessMonthlyPartitionedChecksSpec,
-    )
-    from ..models.table_volume_monthly_partitioned_checks_spec import (
-        TableVolumeMonthlyPartitionedChecksSpec,
-    )
+  from ..models.table_monthly_partitioned_check_categories_spec_comparisons import TableMonthlyPartitionedCheckCategoriesSpecComparisons
+  from ..models.table_sql_monthly_partitioned_checks_spec import TableSqlMonthlyPartitionedChecksSpec
+  from ..models.table_volume_monthly_partitioned_checks_spec import TableVolumeMonthlyPartitionedChecksSpec
+  from ..models.table_monthly_partitioned_check_categories_spec_custom import TableMonthlyPartitionedCheckCategoriesSpecCustom
+  from ..models.table_timeliness_monthly_partitioned_checks_spec import TableTimelinessMonthlyPartitionedChecksSpec
+
+
+
 
 
 T = TypeVar("T", bound="TableMonthlyPartitionedCheckCategoriesSpec")
@@ -24,22 +28,32 @@ T = TypeVar("T", bound="TableMonthlyPartitionedCheckCategoriesSpec")
 
 @attr.s(auto_attribs=True)
 class TableMonthlyPartitionedCheckCategoriesSpec:
-    """
-    Attributes:
-        custom (Union[Unset, TableMonthlyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
-            are check names.
-        volume (Union[Unset, TableVolumeMonthlyPartitionedChecksSpec]):
-        timeliness (Union[Unset, TableTimelinessMonthlyPartitionedChecksSpec]):
-        sql (Union[Unset, TableSqlMonthlyPartitionedChecksSpec]):
-    """
+    """ 
+        Attributes:
+            custom (Union[Unset, TableMonthlyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
+                are check names.
+            volume (Union[Unset, TableVolumeMonthlyPartitionedChecksSpec]):
+            timeliness (Union[Unset, TableTimelinessMonthlyPartitionedChecksSpec]):
+            sql (Union[Unset, TableSqlMonthlyPartitionedChecksSpec]):
+            comparisons (Union[Unset, TableMonthlyPartitionedCheckCategoriesSpecComparisons]): Dictionary of configuration
+                of checks for table comparisons. The key that identifies each comparison must match the name of a data
+                comparison that is configured on the parent table.
+     """
 
-    custom: Union[Unset, "TableMonthlyPartitionedCheckCategoriesSpecCustom"] = UNSET
-    volume: Union[Unset, "TableVolumeMonthlyPartitionedChecksSpec"] = UNSET
-    timeliness: Union[Unset, "TableTimelinessMonthlyPartitionedChecksSpec"] = UNSET
-    sql: Union[Unset, "TableSqlMonthlyPartitionedChecksSpec"] = UNSET
+    custom: Union[Unset, 'TableMonthlyPartitionedCheckCategoriesSpecCustom'] = UNSET
+    volume: Union[Unset, 'TableVolumeMonthlyPartitionedChecksSpec'] = UNSET
+    timeliness: Union[Unset, 'TableTimelinessMonthlyPartitionedChecksSpec'] = UNSET
+    sql: Union[Unset, 'TableSqlMonthlyPartitionedChecksSpec'] = UNSET
+    comparisons: Union[Unset, 'TableMonthlyPartitionedCheckCategoriesSpecComparisons'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.table_monthly_partitioned_check_categories_spec_comparisons import TableMonthlyPartitionedCheckCategoriesSpecComparisons
+        from ..models.table_sql_monthly_partitioned_checks_spec import TableSqlMonthlyPartitionedChecksSpec
+        from ..models.table_volume_monthly_partitioned_checks_spec import TableVolumeMonthlyPartitionedChecksSpec
+        from ..models.table_monthly_partitioned_check_categories_spec_custom import TableMonthlyPartitionedCheckCategoriesSpecCustom
+        from ..models.table_timeliness_monthly_partitioned_checks_spec import TableTimelinessMonthlyPartitionedChecksSpec
         custom: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.custom, Unset):
             custom = self.custom.to_dict()
@@ -56,9 +70,15 @@ class TableMonthlyPartitionedCheckCategoriesSpec:
         if not isinstance(self.sql, Unset):
             sql = self.sql.to_dict()
 
+        comparisons: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.comparisons, Unset):
+            comparisons = self.comparisons.to_dict()
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if custom is not UNSET:
             field_dict["custom"] = custom
         if volume is not UNSET:
@@ -67,60 +87,77 @@ class TableMonthlyPartitionedCheckCategoriesSpec:
             field_dict["timeliness"] = timeliness
         if sql is not UNSET:
             field_dict["sql"] = sql
+        if comparisons is not UNSET:
+            field_dict["comparisons"] = comparisons
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_monthly_partitioned_check_categories_spec_custom import (
-            TableMonthlyPartitionedCheckCategoriesSpecCustom,
-        )
-        from ..models.table_sql_monthly_partitioned_checks_spec import (
-            TableSqlMonthlyPartitionedChecksSpec,
-        )
-        from ..models.table_timeliness_monthly_partitioned_checks_spec import (
-            TableTimelinessMonthlyPartitionedChecksSpec,
-        )
-        from ..models.table_volume_monthly_partitioned_checks_spec import (
-            TableVolumeMonthlyPartitionedChecksSpec,
-        )
-
+        from ..models.table_monthly_partitioned_check_categories_spec_comparisons import TableMonthlyPartitionedCheckCategoriesSpecComparisons
+        from ..models.table_sql_monthly_partitioned_checks_spec import TableSqlMonthlyPartitionedChecksSpec
+        from ..models.table_volume_monthly_partitioned_checks_spec import TableVolumeMonthlyPartitionedChecksSpec
+        from ..models.table_monthly_partitioned_check_categories_spec_custom import TableMonthlyPartitionedCheckCategoriesSpecCustom
+        from ..models.table_timeliness_monthly_partitioned_checks_spec import TableTimelinessMonthlyPartitionedChecksSpec
         d = src_dict.copy()
         _custom = d.pop("custom", UNSET)
         custom: Union[Unset, TableMonthlyPartitionedCheckCategoriesSpecCustom]
-        if isinstance(_custom, Unset):
+        if isinstance(_custom,  Unset):
             custom = UNSET
         else:
             custom = TableMonthlyPartitionedCheckCategoriesSpecCustom.from_dict(_custom)
 
+
+
+
         _volume = d.pop("volume", UNSET)
         volume: Union[Unset, TableVolumeMonthlyPartitionedChecksSpec]
-        if isinstance(_volume, Unset):
+        if isinstance(_volume,  Unset):
             volume = UNSET
         else:
             volume = TableVolumeMonthlyPartitionedChecksSpec.from_dict(_volume)
 
+
+
+
         _timeliness = d.pop("timeliness", UNSET)
         timeliness: Union[Unset, TableTimelinessMonthlyPartitionedChecksSpec]
-        if isinstance(_timeliness, Unset):
+        if isinstance(_timeliness,  Unset):
             timeliness = UNSET
         else:
-            timeliness = TableTimelinessMonthlyPartitionedChecksSpec.from_dict(
-                _timeliness
-            )
+            timeliness = TableTimelinessMonthlyPartitionedChecksSpec.from_dict(_timeliness)
+
+
+
 
         _sql = d.pop("sql", UNSET)
         sql: Union[Unset, TableSqlMonthlyPartitionedChecksSpec]
-        if isinstance(_sql, Unset):
+        if isinstance(_sql,  Unset):
             sql = UNSET
         else:
             sql = TableSqlMonthlyPartitionedChecksSpec.from_dict(_sql)
+
+
+
+
+        _comparisons = d.pop("comparisons", UNSET)
+        comparisons: Union[Unset, TableMonthlyPartitionedCheckCategoriesSpecComparisons]
+        if isinstance(_comparisons,  Unset):
+            comparisons = UNSET
+        else:
+            comparisons = TableMonthlyPartitionedCheckCategoriesSpecComparisons.from_dict(_comparisons)
+
+
+
 
         table_monthly_partitioned_check_categories_spec = cls(
             custom=custom,
             volume=volume,
             timeliness=timeliness,
             sql=sql,
+            comparisons=comparisons,
         )
 
         table_monthly_partitioned_check_categories_spec.additional_properties = d

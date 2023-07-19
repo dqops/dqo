@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class CheckTemplateCheckTarget(str, Enum):
     COLUMN = "column"
     TABLE = "table"

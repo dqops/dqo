@@ -1,15 +1,24 @@
-import datetime
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
 from ... import errors
-from ...client import Client
+
+from typing import cast
+from dateutil.parser import isoparse
+from typing import Dict
 from ...models.check_result_detailed_single_model import CheckResultDetailedSingleModel
+from ...types import UNSET, Unset
+from typing import Union
 from ...models.get_incident_issues_direction import GetIncidentIssuesDirection
+from typing import cast, List
+import datetime
 from ...models.get_incident_issues_order import GetIncidentIssuesOrder
-from ...types import UNSET, Response, Unset
+from typing import Optional
+
 
 
 def _get_kwargs(
@@ -28,26 +37,30 @@ def _get_kwargs(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
+
 ) -> Dict[str, Any]:
     url = "{}/api/incidents/{connectionName}/{year}/{month}/{incidentId}/issues".format(
-        client.base_url,
-        connectionName=connection_name,
-        year=year,
-        month=month,
-        incidentId=incident_id,
-    )
+        client.base_url,connectionName=connection_name,year=year,month=month,incidentId=incident_id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    
+
+    
+
     params: Dict[str, Any] = {}
     params["page"] = page
 
+
     params["limit"] = limit
+
 
     params["filter"] = filter_
 
+
     params["days"] = days
+
 
     json_date: Union[Unset, None, str] = UNSET
     if not isinstance(date, Unset):
@@ -55,9 +68,12 @@ def _get_kwargs(
 
     params["date"] = json_date
 
+
     params["column"] = column
 
+
     params["check"] = check
+
 
     json_order: Union[Unset, None, str] = UNSET
     if not isinstance(order, Unset):
@@ -65,16 +81,24 @@ def _get_kwargs(
 
     params["order"] = json_order
 
+
     json_direction: Union[Unset, None, str] = UNSET
     if not isinstance(direction, Unset):
         json_direction = direction.value if direction else None
 
     params["direction"] = json_direction
 
+
+
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
+
+    
+
+    
+
     return {
-        "method": "get",
+	    "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -84,16 +108,14 @@ def _get_kwargs(
     }
 
 
-def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List['CheckResultDetailedSingleModel']]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
-        for response_200_item_data in _response_200:
-            response_200_item = CheckResultDetailedSingleModel.from_dict(
-                response_200_item_data
-            )
+        for response_200_item_data in (_response_200):
+            response_200_item = CheckResultDetailedSingleModel.from_dict(response_200_item_data)
+
+
 
             response_200.append(response_200_item)
 
@@ -104,9 +126,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[List["CheckResultDetailedSingleModel"]]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[List['CheckResultDetailedSingleModel']]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -131,8 +151,9 @@ def sync_detailed(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Response[List["CheckResultDetailedSingleModel"]]:
-    """getIncidentIssues
+
+) -> Response[List['CheckResultDetailedSingleModel']]:
+    """ getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
 
@@ -157,23 +178,25 @@ def sync_detailed(
 
     Returns:
         Response[List['CheckResultDetailedSingleModel']]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        year=year,
-        month=month,
-        incident_id=incident_id,
-        client=client,
-        page=page,
-        limit=limit,
-        filter_=filter_,
-        days=days,
-        date=date,
-        column=column,
-        check=check,
-        order=order,
-        direction=direction,
+year=year,
+month=month,
+incident_id=incident_id,
+client=client,
+page=page,
+limit=limit,
+filter_=filter_,
+days=days,
+date=date,
+column=column,
+check=check,
+order=order,
+direction=direction,
+
     )
 
     response = httpx.request(
@@ -182,7 +205,6 @@ def sync_detailed(
     )
 
     return _build_response(client=client, response=response)
-
 
 def sync(
     connection_name: str,
@@ -200,8 +222,9 @@ def sync(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
-    """getIncidentIssues
+
+) -> Optional[List['CheckResultDetailedSingleModel']]:
+    """ getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
 
@@ -226,25 +249,26 @@ def sync(
 
     Returns:
         List['CheckResultDetailedSingleModel']
-    """
+     """
+
 
     return sync_detailed(
         connection_name=connection_name,
-        year=year,
-        month=month,
-        incident_id=incident_id,
-        client=client,
-        page=page,
-        limit=limit,
-        filter_=filter_,
-        days=days,
-        date=date,
-        column=column,
-        check=check,
-        order=order,
-        direction=direction,
-    ).parsed
+year=year,
+month=month,
+incident_id=incident_id,
+client=client,
+page=page,
+limit=limit,
+filter_=filter_,
+days=days,
+date=date,
+column=column,
+check=check,
+order=order,
+direction=direction,
 
+    ).parsed
 
 async def asyncio_detailed(
     connection_name: str,
@@ -262,8 +286,9 @@ async def asyncio_detailed(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Response[List["CheckResultDetailedSingleModel"]]:
-    """getIncidentIssues
+
+) -> Response[List['CheckResultDetailedSingleModel']]:
+    """ getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
 
@@ -288,30 +313,33 @@ async def asyncio_detailed(
 
     Returns:
         Response[List['CheckResultDetailedSingleModel']]
-    """
+     """
+
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-        year=year,
-        month=month,
-        incident_id=incident_id,
-        client=client,
-        page=page,
-        limit=limit,
-        filter_=filter_,
-        days=days,
-        date=date,
-        column=column,
-        check=check,
-        order=order,
-        direction=direction,
+year=year,
+month=month,
+incident_id=incident_id,
+client=client,
+page=page,
+limit=limit,
+filter_=filter_,
+days=days,
+date=date,
+column=column,
+check=check,
+order=order,
+direction=direction,
+
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+        response = await _client.request(
+            **kwargs
+        )
 
     return _build_response(client=client, response=response)
-
 
 async def asyncio(
     connection_name: str,
@@ -329,8 +357,9 @@ async def asyncio(
     check: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
     direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
-    """getIncidentIssues
+
+) -> Optional[List['CheckResultDetailedSingleModel']]:
+    """ getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
 
@@ -355,23 +384,23 @@ async def asyncio(
 
     Returns:
         List['CheckResultDetailedSingleModel']
-    """
+     """
 
-    return (
-        await asyncio_detailed(
-            connection_name=connection_name,
-            year=year,
-            month=month,
-            incident_id=incident_id,
-            client=client,
-            page=page,
-            limit=limit,
-            filter_=filter_,
-            days=days,
-            date=date,
-            column=column,
-            check=check,
-            order=order,
-            direction=direction,
-        )
-    ).parsed
+
+    return (await asyncio_detailed(
+        connection_name=connection_name,
+year=year,
+month=month,
+incident_id=incident_id,
+client=client,
+page=page,
+limit=limit,
+filter_=filter_,
+days=days,
+date=date,
+column=column,
+check=check,
+order=order,
+direction=direction,
+
+    )).parsed

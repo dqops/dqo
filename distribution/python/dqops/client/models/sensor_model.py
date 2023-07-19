@@ -1,12 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
 if TYPE_CHECKING:
-    from ..models.provider_sensor_model import ProviderSensorModel
-    from ..models.sensor_definition_spec import SensorDefinitionSpec
+  from ..models.sensor_definition_spec import SensorDefinitionSpec
+  from ..models.provider_sensor_model import ProviderSensorModel
+
+
+
 
 
 T = TypeVar("T", bound="SensorModel")
@@ -14,25 +26,28 @@ T = TypeVar("T", bound="SensorModel")
 
 @attr.s(auto_attribs=True)
 class SensorModel:
-    """Sensor model.
+    """ Sensor model.
 
-    Attributes:
-        full_sensor_name (Union[Unset, str]): Full sensor name.
-        sensor_definition_spec (Union[Unset, SensorDefinitionSpec]):
-        provider_sensor_list (Union[Unset, List['ProviderSensorModel']]): Provider sensors list with provider specific
-            sensor definitions.
-        custom (Union[Unset, bool]): Whether the sensor is a User Home sensor
-        built_in (Union[Unset, bool]): This is a DQO built-in sensor, whose parameters cannot be changed.
-    """
+        Attributes:
+            full_sensor_name (Union[Unset, str]): Full sensor name.
+            sensor_definition_spec (Union[Unset, SensorDefinitionSpec]):
+            provider_sensor_list (Union[Unset, List['ProviderSensorModel']]): Provider sensors list with provider specific
+                sensor definitions.
+            custom (Union[Unset, bool]): Whether the sensor is a User Home sensor
+            built_in (Union[Unset, bool]): This is a DQO built-in sensor, whose parameters cannot be changed.
+     """
 
     full_sensor_name: Union[Unset, str] = UNSET
-    sensor_definition_spec: Union[Unset, "SensorDefinitionSpec"] = UNSET
-    provider_sensor_list: Union[Unset, List["ProviderSensorModel"]] = UNSET
+    sensor_definition_spec: Union[Unset, 'SensorDefinitionSpec'] = UNSET
+    provider_sensor_list: Union[Unset, List['ProviderSensorModel']] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.sensor_definition_spec import SensorDefinitionSpec
+        from ..models.provider_sensor_model import ProviderSensorModel
         full_sensor_name = self.full_sensor_name
         sensor_definition_spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.sensor_definition_spec, Unset):
@@ -46,12 +61,16 @@ class SensorModel:
 
                 provider_sensor_list.append(provider_sensor_list_item)
 
+
+
+
         custom = self.custom
         built_in = self.built_in
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if full_sensor_name is not UNSET:
             field_dict["full_sensor_name"] = full_sensor_name
         if sensor_definition_spec is not UNSET:
@@ -65,31 +84,34 @@ class SensorModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.provider_sensor_model import ProviderSensorModel
         from ..models.sensor_definition_spec import SensorDefinitionSpec
-
+        from ..models.provider_sensor_model import ProviderSensorModel
         d = src_dict.copy()
         full_sensor_name = d.pop("full_sensor_name", UNSET)
 
         _sensor_definition_spec = d.pop("sensor_definition_spec", UNSET)
         sensor_definition_spec: Union[Unset, SensorDefinitionSpec]
-        if isinstance(_sensor_definition_spec, Unset):
+        if isinstance(_sensor_definition_spec,  Unset):
             sensor_definition_spec = UNSET
         else:
-            sensor_definition_spec = SensorDefinitionSpec.from_dict(
-                _sensor_definition_spec
-            )
+            sensor_definition_spec = SensorDefinitionSpec.from_dict(_sensor_definition_spec)
+
+
+
 
         provider_sensor_list = []
         _provider_sensor_list = d.pop("provider_sensor_list", UNSET)
-        for provider_sensor_list_item_data in _provider_sensor_list or []:
-            provider_sensor_list_item = ProviderSensorModel.from_dict(
-                provider_sensor_list_item_data
-            )
+        for provider_sensor_list_item_data in (_provider_sensor_list or []):
+            provider_sensor_list_item = ProviderSensorModel.from_dict(provider_sensor_list_item_data)
+
+
 
             provider_sensor_list.append(provider_sensor_list_item)
+
 
         custom = d.pop("custom", UNSET)
 

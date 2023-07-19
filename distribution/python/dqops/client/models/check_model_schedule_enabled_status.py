@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class CheckModelScheduleEnabledStatus(str, Enum):
     DISABLED = "disabled"
     ENABLED = "enabled"

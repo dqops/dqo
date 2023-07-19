@@ -1,14 +1,24 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
-from ..models.statistics_collector_search_filters_target import (
-    StatisticsCollectorSearchFiltersTarget,
-)
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+from ..models.statistics_collector_search_filters_target import StatisticsCollectorSearchFiltersTarget
+
 if TYPE_CHECKING:
-    from ..models.hierarchy_id_model import HierarchyIdModel
+  from ..models.hierarchy_id_model import HierarchyIdModel
+
+
+
 
 
 T = TypeVar("T", bound="StatisticsCollectorSearchFilters")
@@ -16,20 +26,20 @@ T = TypeVar("T", bound="StatisticsCollectorSearchFilters")
 
 @attr.s(auto_attribs=True)
 class StatisticsCollectorSearchFilters:
-    """
-    Attributes:
-        connection_name (Union[Unset, str]):
-        schema_table_name (Union[Unset, str]):
-        enabled (Union[Unset, bool]):
-        tags (Union[Unset, List[str]]):
-        labels (Union[Unset, List[str]]):
-        column_name (Union[Unset, str]):
-        collector_name (Union[Unset, str]):
-        sensor_name (Union[Unset, str]):
-        collector_category (Union[Unset, str]):
-        target (Union[Unset, StatisticsCollectorSearchFiltersTarget]):
-        collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
-    """
+    """ 
+        Attributes:
+            connection_name (Union[Unset, str]):
+            schema_table_name (Union[Unset, str]):
+            enabled (Union[Unset, bool]):
+            tags (Union[Unset, List[str]]):
+            labels (Union[Unset, List[str]]):
+            column_name (Union[Unset, str]):
+            collector_name (Union[Unset, str]):
+            sensor_name (Union[Unset, str]):
+            collector_category (Union[Unset, str]):
+            target (Union[Unset, StatisticsCollectorSearchFiltersTarget]):
+            collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
+     """
 
     connection_name: Union[Unset, str] = UNSET
     schema_table_name: Union[Unset, str] = UNSET
@@ -41,10 +51,12 @@ class StatisticsCollectorSearchFilters:
     sensor_name: Union[Unset, str] = UNSET
     collector_category: Union[Unset, str] = UNSET
     target: Union[Unset, StatisticsCollectorSearchFiltersTarget] = UNSET
-    collectors_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
+    collectors_hierarchy_ids_models: Union[Unset, List['HierarchyIdModel']] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.hierarchy_id_model import HierarchyIdModel
         connection_name = self.connection_name
         schema_table_name = self.schema_table_name
         enabled = self.enabled
@@ -52,9 +64,15 @@ class StatisticsCollectorSearchFilters:
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
+
+
+
         labels: Union[Unset, List[str]] = UNSET
         if not isinstance(self.labels, Unset):
             labels = self.labels
+
+
+
 
         column_name = self.column_name
         collector_name = self.collector_name
@@ -67,20 +85,19 @@ class StatisticsCollectorSearchFilters:
         collectors_hierarchy_ids_models: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.collectors_hierarchy_ids_models, Unset):
             collectors_hierarchy_ids_models = []
-            for (
-                collectors_hierarchy_ids_models_item_data
-            ) in self.collectors_hierarchy_ids_models:
-                collectors_hierarchy_ids_models_item = (
-                    collectors_hierarchy_ids_models_item_data.to_dict()
-                )
+            for collectors_hierarchy_ids_models_item_data in self.collectors_hierarchy_ids_models:
+                collectors_hierarchy_ids_models_item = collectors_hierarchy_ids_models_item_data.to_dict()
 
-                collectors_hierarchy_ids_models.append(
-                    collectors_hierarchy_ids_models_item
-                )
+                collectors_hierarchy_ids_models.append(collectors_hierarchy_ids_models_item)
+
+
+
+
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if connection_name is not UNSET:
             field_dict["connectionName"] = connection_name
         if schema_table_name is not UNSET:
@@ -106,10 +123,11 @@ class StatisticsCollectorSearchFilters:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.hierarchy_id_model import HierarchyIdModel
-
         d = src_dict.copy()
         connection_name = d.pop("connectionName", UNSET)
 
@@ -119,7 +137,9 @@ class StatisticsCollectorSearchFilters:
 
         tags = cast(List[str], d.pop("tags", UNSET))
 
+
         labels = cast(List[str], d.pop("labels", UNSET))
+
 
         column_name = d.pop("columnName", UNSET)
 
@@ -131,21 +151,23 @@ class StatisticsCollectorSearchFilters:
 
         _target = d.pop("target", UNSET)
         target: Union[Unset, StatisticsCollectorSearchFiltersTarget]
-        if isinstance(_target, Unset):
+        if isinstance(_target,  Unset):
             target = UNSET
         else:
             target = StatisticsCollectorSearchFiltersTarget(_target)
 
+
+
+
         collectors_hierarchy_ids_models = []
         _collectors_hierarchy_ids_models = d.pop("collectorsHierarchyIdsModels", UNSET)
-        for collectors_hierarchy_ids_models_item_data in (
-            _collectors_hierarchy_ids_models or []
-        ):
-            collectors_hierarchy_ids_models_item = HierarchyIdModel.from_dict(
-                collectors_hierarchy_ids_models_item_data
-            )
+        for collectors_hierarchy_ids_models_item_data in (_collectors_hierarchy_ids_models or []):
+            collectors_hierarchy_ids_models_item = HierarchyIdModel.from_dict(collectors_hierarchy_ids_models_item_data)
+
+
 
             collectors_hierarchy_ids_models.append(collectors_hierarchy_ids_models_item)
+
 
         statistics_collector_search_filters = cls(
             connection_name=connection_name,

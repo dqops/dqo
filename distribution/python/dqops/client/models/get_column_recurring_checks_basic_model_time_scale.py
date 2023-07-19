@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class GetColumnRecurringChecksBasicModelTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

@@ -1,25 +1,37 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from ..types import UNSET, Unset
+
+
+
+
+
 
 T = TypeVar("T", bound="TableSqlConditionFailedCountSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class TableSqlConditionFailedCountSensorParametersSpec:
-    """
-    Attributes:
-        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-            sensor query filter are added, separated by an AND operator.
-        sql_condition (Union[Unset, str]): SQL condition (expression) that returns true or false. The condition is
-            evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.
-    """
+    """ 
+        Attributes:
+            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+                sensor query filter are added, separated by an AND operator.
+            sql_condition (Union[Unset, str]): SQL condition (expression) that returns true or false. The condition is
+                evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.
+     """
 
     filter_: Union[Unset, str] = UNSET
     sql_condition: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -27,13 +39,16 @@ class TableSqlConditionFailedCountSensorParametersSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if sql_condition is not UNSET:
             field_dict["sql_condition"] = sql_condition
 
         return field_dict
+
+
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -47,9 +62,7 @@ class TableSqlConditionFailedCountSensorParametersSpec:
             sql_condition=sql_condition,
         )
 
-        table_sql_condition_failed_count_sensor_parameters_spec.additional_properties = (
-            d
-        )
+        table_sql_condition_failed_count_sensor_parameters_spec.additional_properties = d
         return table_sql_condition_failed_count_sensor_parameters_spec
 
     @property

@@ -1,22 +1,25 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from ..types import UNSET, Unset
+from typing import Union
+from typing import cast
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.column_range_max_value_statistics_collector_spec import (
-        ColumnRangeMaxValueStatisticsCollectorSpec,
-    )
-    from ..models.column_range_median_value_statistics_collector_spec import (
-        ColumnRangeMedianValueStatisticsCollectorSpec,
-    )
-    from ..models.column_range_min_value_statistics_collector_spec import (
-        ColumnRangeMinValueStatisticsCollectorSpec,
-    )
-    from ..models.column_range_sum_value_statistics_collector_spec import (
-        ColumnRangeSumValueStatisticsCollectorSpec,
-    )
+  from ..models.column_range_sum_value_statistics_collector_spec import ColumnRangeSumValueStatisticsCollectorSpec
+  from ..models.column_range_max_value_statistics_collector_spec import ColumnRangeMaxValueStatisticsCollectorSpec
+  from ..models.column_range_min_value_statistics_collector_spec import ColumnRangeMinValueStatisticsCollectorSpec
+  from ..models.column_range_median_value_statistics_collector_spec import ColumnRangeMedianValueStatisticsCollectorSpec
+
+
+
 
 
 T = TypeVar("T", bound="ColumnRangeStatisticsCollectorsSpec")
@@ -24,21 +27,26 @@ T = TypeVar("T", bound="ColumnRangeStatisticsCollectorsSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnRangeStatisticsCollectorsSpec:
-    """
-    Attributes:
-        min_value (Union[Unset, ColumnRangeMinValueStatisticsCollectorSpec]):
-        median_value (Union[Unset, ColumnRangeMedianValueStatisticsCollectorSpec]):
-        max_value (Union[Unset, ColumnRangeMaxValueStatisticsCollectorSpec]):
-        sum_value (Union[Unset, ColumnRangeSumValueStatisticsCollectorSpec]):
-    """
+    """ 
+        Attributes:
+            min_value (Union[Unset, ColumnRangeMinValueStatisticsCollectorSpec]):
+            median_value (Union[Unset, ColumnRangeMedianValueStatisticsCollectorSpec]):
+            max_value (Union[Unset, ColumnRangeMaxValueStatisticsCollectorSpec]):
+            sum_value (Union[Unset, ColumnRangeSumValueStatisticsCollectorSpec]):
+     """
 
-    min_value: Union[Unset, "ColumnRangeMinValueStatisticsCollectorSpec"] = UNSET
-    median_value: Union[Unset, "ColumnRangeMedianValueStatisticsCollectorSpec"] = UNSET
-    max_value: Union[Unset, "ColumnRangeMaxValueStatisticsCollectorSpec"] = UNSET
-    sum_value: Union[Unset, "ColumnRangeSumValueStatisticsCollectorSpec"] = UNSET
+    min_value: Union[Unset, 'ColumnRangeMinValueStatisticsCollectorSpec'] = UNSET
+    median_value: Union[Unset, 'ColumnRangeMedianValueStatisticsCollectorSpec'] = UNSET
+    max_value: Union[Unset, 'ColumnRangeMaxValueStatisticsCollectorSpec'] = UNSET
+    sum_value: Union[Unset, 'ColumnRangeSumValueStatisticsCollectorSpec'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.column_range_sum_value_statistics_collector_spec import ColumnRangeSumValueStatisticsCollectorSpec
+        from ..models.column_range_max_value_statistics_collector_spec import ColumnRangeMaxValueStatisticsCollectorSpec
+        from ..models.column_range_min_value_statistics_collector_spec import ColumnRangeMinValueStatisticsCollectorSpec
+        from ..models.column_range_median_value_statistics_collector_spec import ColumnRangeMedianValueStatisticsCollectorSpec
         min_value: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.min_value, Unset):
             min_value = self.min_value.to_dict()
@@ -55,9 +63,11 @@ class ColumnRangeStatisticsCollectorsSpec:
         if not isinstance(self.sum_value, Unset):
             sum_value = self.sum_value.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if min_value is not UNSET:
             field_dict["min_value"] = min_value
         if median_value is not UNSET:
@@ -69,51 +79,54 @@ class ColumnRangeStatisticsCollectorsSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_range_max_value_statistics_collector_spec import (
-            ColumnRangeMaxValueStatisticsCollectorSpec,
-        )
-        from ..models.column_range_median_value_statistics_collector_spec import (
-            ColumnRangeMedianValueStatisticsCollectorSpec,
-        )
-        from ..models.column_range_min_value_statistics_collector_spec import (
-            ColumnRangeMinValueStatisticsCollectorSpec,
-        )
-        from ..models.column_range_sum_value_statistics_collector_spec import (
-            ColumnRangeSumValueStatisticsCollectorSpec,
-        )
-
+        from ..models.column_range_sum_value_statistics_collector_spec import ColumnRangeSumValueStatisticsCollectorSpec
+        from ..models.column_range_max_value_statistics_collector_spec import ColumnRangeMaxValueStatisticsCollectorSpec
+        from ..models.column_range_min_value_statistics_collector_spec import ColumnRangeMinValueStatisticsCollectorSpec
+        from ..models.column_range_median_value_statistics_collector_spec import ColumnRangeMedianValueStatisticsCollectorSpec
         d = src_dict.copy()
         _min_value = d.pop("min_value", UNSET)
         min_value: Union[Unset, ColumnRangeMinValueStatisticsCollectorSpec]
-        if isinstance(_min_value, Unset):
+        if isinstance(_min_value,  Unset):
             min_value = UNSET
         else:
             min_value = ColumnRangeMinValueStatisticsCollectorSpec.from_dict(_min_value)
 
+
+
+
         _median_value = d.pop("median_value", UNSET)
         median_value: Union[Unset, ColumnRangeMedianValueStatisticsCollectorSpec]
-        if isinstance(_median_value, Unset):
+        if isinstance(_median_value,  Unset):
             median_value = UNSET
         else:
-            median_value = ColumnRangeMedianValueStatisticsCollectorSpec.from_dict(
-                _median_value
-            )
+            median_value = ColumnRangeMedianValueStatisticsCollectorSpec.from_dict(_median_value)
+
+
+
 
         _max_value = d.pop("max_value", UNSET)
         max_value: Union[Unset, ColumnRangeMaxValueStatisticsCollectorSpec]
-        if isinstance(_max_value, Unset):
+        if isinstance(_max_value,  Unset):
             max_value = UNSET
         else:
             max_value = ColumnRangeMaxValueStatisticsCollectorSpec.from_dict(_max_value)
 
+
+
+
         _sum_value = d.pop("sum_value", UNSET)
         sum_value: Union[Unset, ColumnRangeSumValueStatisticsCollectorSpec]
-        if isinstance(_sum_value, Unset):
+        if isinstance(_sum_value,  Unset):
             sum_value = UNSET
         else:
             sum_value = ColumnRangeSumValueStatisticsCollectorSpec.from_dict(_sum_value)
+
+
+
 
         column_range_statistics_collectors_spec = cls(
             min_value=min_value,

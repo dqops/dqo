@@ -1,25 +1,39 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
+
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
+
+
+
+
 
 T = TypeVar("T", bound="DqoQueueJobId")
 
 
 @attr.s(auto_attribs=True)
 class DqoQueueJobId:
-    """
-    Attributes:
-        job_id (Union[Unset, int]):
-        parent_job_id (Union[Unset, DqoQueueJobId]):
-        created_at (Union[Unset, int]):
-    """
+    """ 
+        Attributes:
+            job_id (Union[Unset, int]):
+            parent_job_id (Union[Unset, DqoQueueJobId]):
+            created_at (Union[Unset, int]):
+     """
 
     job_id: Union[Unset, int] = UNSET
-    parent_job_id: Union[Unset, "DqoQueueJobId"] = UNSET
+    parent_job_id: Union[Unset, 'DqoQueueJobId'] = UNSET
     created_at: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
 
     def to_dict(self) -> Dict[str, Any]:
         job_id = self.job_id
@@ -31,7 +45,8 @@ class DqoQueueJobId:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if job_id is not UNSET:
             field_dict["jobId"] = job_id
         if parent_job_id is not UNSET:
@@ -41,6 +56,8 @@ class DqoQueueJobId:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
@@ -48,10 +65,13 @@ class DqoQueueJobId:
 
         _parent_job_id = d.pop("parentJobId", UNSET)
         parent_job_id: Union[Unset, DqoQueueJobId]
-        if isinstance(_parent_job_id, Unset):
+        if isinstance(_parent_job_id,  Unset):
             parent_job_id = UNSET
         else:
             parent_job_id = DqoQueueJobId.from_dict(_parent_job_id)
+
+
+
 
         created_at = d.pop("createdAt", UNSET)
 

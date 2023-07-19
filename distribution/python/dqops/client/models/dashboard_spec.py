@@ -1,11 +1,22 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import Union
+from typing import cast
+from ..types import UNSET, Unset
+from typing import Dict
+
 if TYPE_CHECKING:
-    from ..models.dashboard_spec_parameters import DashboardSpecParameters
+  from ..models.dashboard_spec_parameters import DashboardSpecParameters
+
+
+
 
 
 T = TypeVar("T", bound="DashboardSpec")
@@ -13,24 +24,26 @@ T = TypeVar("T", bound="DashboardSpec")
 
 @attr.s(auto_attribs=True)
 class DashboardSpec:
-    """
-    Attributes:
-        dashboard_name (Union[Unset, str]): Dashboard name
-        url (Union[Unset, str]): Dashboard url
-        width (Union[Unset, int]): Dashboard width (px)
-        height (Union[Unset, int]): Dashboard height (px)
-        parameters (Union[Unset, DashboardSpecParameters]): Key/value dictionary of additional parameters to be passed
-            to the dashboard
-    """
+    """ 
+        Attributes:
+            dashboard_name (Union[Unset, str]): Dashboard name
+            url (Union[Unset, str]): Dashboard url
+            width (Union[Unset, int]): Dashboard width (px)
+            height (Union[Unset, int]): Dashboard height (px)
+            parameters (Union[Unset, DashboardSpecParameters]): Key/value dictionary of additional parameters to be passed
+                to the dashboard
+     """
 
     dashboard_name: Union[Unset, str] = UNSET
     url: Union[Unset, str] = UNSET
     width: Union[Unset, int] = UNSET
     height: Union[Unset, int] = UNSET
-    parameters: Union[Unset, "DashboardSpecParameters"] = UNSET
+    parameters: Union[Unset, 'DashboardSpecParameters'] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.dashboard_spec_parameters import DashboardSpecParameters
         dashboard_name = self.dashboard_name
         url = self.url
         width = self.width
@@ -39,9 +52,11 @@ class DashboardSpec:
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
 
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if dashboard_name is not UNSET:
             field_dict["dashboard_name"] = dashboard_name
         if url is not UNSET:
@@ -55,10 +70,11 @@ class DashboardSpec:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.dashboard_spec_parameters import DashboardSpecParameters
-
         d = src_dict.copy()
         dashboard_name = d.pop("dashboard_name", UNSET)
 
@@ -70,10 +86,13 @@ class DashboardSpec:
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, DashboardSpecParameters]
-        if isinstance(_parameters, Unset):
+        if isinstance(_parameters,  Unset):
             parameters = UNSET
         else:
             parameters = DashboardSpecParameters.from_dict(_parameters)
+
+
+
 
         dashboard_spec = cls(
             dashboard_name=dashboard_name,

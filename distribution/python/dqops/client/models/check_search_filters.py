@@ -1,14 +1,26 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
-from ..models.check_search_filters_check_target import CheckSearchFiltersCheckTarget
-from ..models.check_search_filters_check_type import CheckSearchFiltersCheckType
-from ..models.check_search_filters_time_scale import CheckSearchFiltersTimeScale
 from ..types import UNSET, Unset
 
+from ..models.check_search_filters_check_type import CheckSearchFiltersCheckType
+from ..models.check_search_filters_time_scale import CheckSearchFiltersTimeScale
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+from ..models.check_search_filters_check_target import CheckSearchFiltersCheckTarget
+
 if TYPE_CHECKING:
-    from ..models.hierarchy_id_model import HierarchyIdModel
+  from ..models.hierarchy_id_model import HierarchyIdModel
+
+
+
 
 
 T = TypeVar("T", bound="CheckSearchFilters")
@@ -16,26 +28,27 @@ T = TypeVar("T", bound="CheckSearchFilters")
 
 @attr.s(auto_attribs=True)
 class CheckSearchFilters:
-    """Target data quality checks filter, identifies which checks on which tables and columns should be executed.
+    """ Target data quality checks filter, identifies which checks on which tables and columns should be executed.
 
-    Attributes:
-        connection_name (Union[Unset, str]):
-        schema_table_name (Union[Unset, str]):
-        enabled (Union[Unset, bool]):
-        tags (Union[Unset, List[str]]):
-        labels (Union[Unset, List[str]]):
-        column_name (Union[Unset, str]):
-        column_data_type (Union[Unset, str]):
-        column_nullable (Union[Unset, bool]):
-        check_target (Union[Unset, CheckSearchFiltersCheckTarget]):
-        check_type (Union[Unset, CheckSearchFiltersCheckType]):
-        time_scale (Union[Unset, CheckSearchFiltersTimeScale]):
-        check_category (Union[Unset, str]):
-        check_name (Union[Unset, str]):
-        sensor_name (Union[Unset, str]):
-        check_configured (Union[Unset, bool]):
-        check_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
-    """
+        Attributes:
+            connection_name (Union[Unset, str]):
+            schema_table_name (Union[Unset, str]):
+            enabled (Union[Unset, bool]):
+            tags (Union[Unset, List[str]]):
+            labels (Union[Unset, List[str]]):
+            column_name (Union[Unset, str]):
+            column_data_type (Union[Unset, str]):
+            column_nullable (Union[Unset, bool]):
+            check_target (Union[Unset, CheckSearchFiltersCheckTarget]):
+            check_type (Union[Unset, CheckSearchFiltersCheckType]):
+            time_scale (Union[Unset, CheckSearchFiltersTimeScale]):
+            check_category (Union[Unset, str]):
+            table_comparison_name (Union[Unset, str]):
+            check_name (Union[Unset, str]):
+            sensor_name (Union[Unset, str]):
+            check_configured (Union[Unset, bool]):
+            check_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
+     """
 
     connection_name: Union[Unset, str] = UNSET
     schema_table_name: Union[Unset, str] = UNSET
@@ -49,13 +62,16 @@ class CheckSearchFilters:
     check_type: Union[Unset, CheckSearchFiltersCheckType] = UNSET
     time_scale: Union[Unset, CheckSearchFiltersTimeScale] = UNSET
     check_category: Union[Unset, str] = UNSET
+    table_comparison_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     check_configured: Union[Unset, bool] = UNSET
-    check_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
+    check_hierarchy_ids_models: Union[Unset, List['HierarchyIdModel']] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.hierarchy_id_model import HierarchyIdModel
         connection_name = self.connection_name
         schema_table_name = self.schema_table_name
         enabled = self.enabled
@@ -63,9 +79,15 @@ class CheckSearchFilters:
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
+
+
+
         labels: Union[Unset, List[str]] = UNSET
         if not isinstance(self.labels, Unset):
             labels = self.labels
+
+
+
 
         column_name = self.column_name
         column_data_type = self.column_data_type
@@ -83,6 +105,7 @@ class CheckSearchFilters:
             time_scale = self.time_scale.value
 
         check_category = self.check_category
+        table_comparison_name = self.table_comparison_name
         check_name = self.check_name
         sensor_name = self.sensor_name
         check_configured = self.check_configured
@@ -90,15 +113,18 @@ class CheckSearchFilters:
         if not isinstance(self.check_hierarchy_ids_models, Unset):
             check_hierarchy_ids_models = []
             for check_hierarchy_ids_models_item_data in self.check_hierarchy_ids_models:
-                check_hierarchy_ids_models_item = (
-                    check_hierarchy_ids_models_item_data.to_dict()
-                )
+                check_hierarchy_ids_models_item = check_hierarchy_ids_models_item_data.to_dict()
 
                 check_hierarchy_ids_models.append(check_hierarchy_ids_models_item)
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if connection_name is not UNSET:
             field_dict["connectionName"] = connection_name
         if schema_table_name is not UNSET:
@@ -123,6 +149,8 @@ class CheckSearchFilters:
             field_dict["timeScale"] = time_scale
         if check_category is not UNSET:
             field_dict["checkCategory"] = check_category
+        if table_comparison_name is not UNSET:
+            field_dict["tableComparisonName"] = table_comparison_name
         if check_name is not UNSET:
             field_dict["checkName"] = check_name
         if sensor_name is not UNSET:
@@ -134,10 +162,11 @@ class CheckSearchFilters:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.hierarchy_id_model import HierarchyIdModel
-
         d = src_dict.copy()
         connection_name = d.pop("connectionName", UNSET)
 
@@ -147,7 +176,9 @@ class CheckSearchFilters:
 
         tags = cast(List[str], d.pop("tags", UNSET))
 
+
         labels = cast(List[str], d.pop("labels", UNSET))
+
 
         column_name = d.pop("columnName", UNSET)
 
@@ -157,26 +188,37 @@ class CheckSearchFilters:
 
         _check_target = d.pop("checkTarget", UNSET)
         check_target: Union[Unset, CheckSearchFiltersCheckTarget]
-        if isinstance(_check_target, Unset):
+        if isinstance(_check_target,  Unset):
             check_target = UNSET
         else:
             check_target = CheckSearchFiltersCheckTarget(_check_target)
 
+
+
+
         _check_type = d.pop("checkType", UNSET)
         check_type: Union[Unset, CheckSearchFiltersCheckType]
-        if isinstance(_check_type, Unset):
+        if isinstance(_check_type,  Unset):
             check_type = UNSET
         else:
             check_type = CheckSearchFiltersCheckType(_check_type)
 
+
+
+
         _time_scale = d.pop("timeScale", UNSET)
         time_scale: Union[Unset, CheckSearchFiltersTimeScale]
-        if isinstance(_time_scale, Unset):
+        if isinstance(_time_scale,  Unset):
             time_scale = UNSET
         else:
             time_scale = CheckSearchFiltersTimeScale(_time_scale)
 
+
+
+
         check_category = d.pop("checkCategory", UNSET)
+
+        table_comparison_name = d.pop("tableComparisonName", UNSET)
 
         check_name = d.pop("checkName", UNSET)
 
@@ -186,12 +228,13 @@ class CheckSearchFilters:
 
         check_hierarchy_ids_models = []
         _check_hierarchy_ids_models = d.pop("checkHierarchyIdsModels", UNSET)
-        for check_hierarchy_ids_models_item_data in _check_hierarchy_ids_models or []:
-            check_hierarchy_ids_models_item = HierarchyIdModel.from_dict(
-                check_hierarchy_ids_models_item_data
-            )
+        for check_hierarchy_ids_models_item_data in (_check_hierarchy_ids_models or []):
+            check_hierarchy_ids_models_item = HierarchyIdModel.from_dict(check_hierarchy_ids_models_item_data)
+
+
 
             check_hierarchy_ids_models.append(check_hierarchy_ids_models_item)
+
 
         check_search_filters = cls(
             connection_name=connection_name,
@@ -206,6 +249,7 @@ class CheckSearchFilters:
             check_type=check_type,
             time_scale=time_scale,
             check_category=check_category,
+            table_comparison_name=table_comparison_name,
             check_name=check_name,
             sensor_name=sensor_name,
             check_configured=check_configured,

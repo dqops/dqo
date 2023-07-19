@@ -1,11 +1,23 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
+
+from typing import List
+
 
 import attr
 
 from ..types import UNSET, Unset
 
+from typing import cast
+from typing import Dict
+from typing import Union
+from ..types import UNSET, Unset
+from typing import cast, List
+
 if TYPE_CHECKING:
-    from ..models.provider_sensor_basic_model import ProviderSensorBasicModel
+  from ..models.provider_sensor_basic_model import ProviderSensorBasicModel
+
+
+
 
 
 T = TypeVar("T", bound="SensorBasicModel")
@@ -13,24 +25,26 @@ T = TypeVar("T", bound="SensorBasicModel")
 
 @attr.s(auto_attribs=True)
 class SensorBasicModel:
-    """Sensor basic model
+    """ Sensor basic model
 
-    Attributes:
-        sensor_name (Union[Unset, str]): Sensor name
-        full_sensor_name (Union[Unset, str]): Full sensor name
-        custom (Union[Unset, bool]): This sensor has is a custom sensor or was customized by the user.
-        built_in (Union[Unset, bool]): This sensor is provided with DQO as a built-in sensor.
-        provider_sensor_basic_models (Union[Unset, List['ProviderSensorBasicModel']]): Provider sensor basic model list
-    """
+        Attributes:
+            sensor_name (Union[Unset, str]): Sensor name
+            full_sensor_name (Union[Unset, str]): Full sensor name
+            custom (Union[Unset, bool]): This sensor has is a custom sensor or was customized by the user.
+            built_in (Union[Unset, bool]): This sensor is provided with DQO as a built-in sensor.
+            provider_sensor_basic_models (Union[Unset, List['ProviderSensorBasicModel']]): Provider sensor basic model list
+     """
 
     sensor_name: Union[Unset, str] = UNSET
     full_sensor_name: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
-    provider_sensor_basic_models: Union[Unset, List["ProviderSensorBasicModel"]] = UNSET
+    provider_sensor_basic_models: Union[Unset, List['ProviderSensorBasicModel']] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
+
     def to_dict(self) -> Dict[str, Any]:
+        from ..models.provider_sensor_basic_model import ProviderSensorBasicModel
         sensor_name = self.sensor_name
         full_sensor_name = self.full_sensor_name
         custom = self.custom
@@ -38,18 +52,19 @@ class SensorBasicModel:
         provider_sensor_basic_models: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.provider_sensor_basic_models, Unset):
             provider_sensor_basic_models = []
-            for (
-                provider_sensor_basic_models_item_data
-            ) in self.provider_sensor_basic_models:
-                provider_sensor_basic_models_item = (
-                    provider_sensor_basic_models_item_data.to_dict()
-                )
+            for provider_sensor_basic_models_item_data in self.provider_sensor_basic_models:
+                provider_sensor_basic_models_item = provider_sensor_basic_models_item_data.to_dict()
 
                 provider_sensor_basic_models.append(provider_sensor_basic_models_item)
 
+
+
+
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update({
+        })
         if sensor_name is not UNSET:
             field_dict["sensor_name"] = sensor_name
         if full_sensor_name is not UNSET:
@@ -63,10 +78,11 @@ class SensorBasicModel:
 
         return field_dict
 
+
+
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.provider_sensor_basic_model import ProviderSensorBasicModel
-
         d = src_dict.copy()
         sensor_name = d.pop("sensor_name", UNSET)
 
@@ -78,14 +94,13 @@ class SensorBasicModel:
 
         provider_sensor_basic_models = []
         _provider_sensor_basic_models = d.pop("provider_sensor_basic_models", UNSET)
-        for provider_sensor_basic_models_item_data in (
-            _provider_sensor_basic_models or []
-        ):
-            provider_sensor_basic_models_item = ProviderSensorBasicModel.from_dict(
-                provider_sensor_basic_models_item_data
-            )
+        for provider_sensor_basic_models_item_data in (_provider_sensor_basic_models or []):
+            provider_sensor_basic_models_item = ProviderSensorBasicModel.from_dict(provider_sensor_basic_models_item_data)
+
+
 
             provider_sensor_basic_models.append(provider_sensor_basic_models_item)
+
 
         sensor_basic_model = cls(
             sensor_name=sensor_name,
