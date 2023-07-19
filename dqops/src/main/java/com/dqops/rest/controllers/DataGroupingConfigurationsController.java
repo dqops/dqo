@@ -274,7 +274,8 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Data grouping configuration name or null to disable data grouping") @PathVariable String dataGroupingConfigurationName) {
+            @ApiParam(name = "dataGroupingConfigurationName", value = "Data grouping configuration name or empty to disable data grouping", required = true)
+            @RequestParam(required = true) String dataGroupingConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
