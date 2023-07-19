@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGroupingConfigurationBasicModel } from '../../../api';
 import Button from '../../Button';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
-import SvgIcon from '../../SvgIcon';
 import RadioButton from '../../RadioButton';
+import SetDefaultDialog from './SetDefaultDialog';
 
 interface IDataGroupingConfigurationListViewProps {
   dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
@@ -20,17 +20,19 @@ const DataGroupingConfigurationListView = ({
   onEdit
 }: IDataGroupingConfigurationListViewProps) => {
   const [open, setOpen] = useState(false);
+  const [defaultOpen, setDefaultOpen ] = useState(false)
   const [selectedGroupingConfiguration, setSelectedGroupingConfiguration] =
     useState<DataGroupingConfigurationBasicModel>();
+  const [messageBox, setMessageBox] = useState<boolean>(false)  
   const setDefaultGroupingConfiguration = async (
-    groupingConfiguration: DataGroupingConfigurationBasicModel
+    groupingConfiguration: DataGroupingConfigurationBasicModel, nameOfGrouping ?: string
   ) => {
     try {
       await DataGroupingConfigurationsApi.setTableDefaultGroupingConfiguration(
         groupingConfiguration.connection_name || '',
         groupingConfiguration.schema_name || '',
         groupingConfiguration.table_name || '',
-        groupingConfiguration.data_grouping_configuration_name || ''
+        nameOfGrouping || ''
       );
       getDataGroupingConfigurations();
     } catch (err) {
@@ -57,6 +59,7 @@ const DataGroupingConfigurationListView = ({
       console.error(err);
     }
   };
+  
   const openConfirmDeleteModal = (
     groupingConfiguration: DataGroupingConfigurationBasicModel
   ) => {
@@ -64,10 +67,36 @@ const DataGroupingConfigurationListView = ({
     setSelectedGroupingConfiguration(groupingConfiguration);
   };
 
+  const openConfirmDefaultModal = (
+    groupingConfiguration: DataGroupingConfigurationBasicModel
+  ) => {
+    setDefaultOpen(true);
+    setSelectedGroupingConfiguration(groupingConfiguration);
+  };
+
+
+
+  useEffect(() => {
+    if(isDisableDataGrouping() ===true){
+      setMessageBox(true)
+    }else{
+      setMessageBox(false)
+    }
+  }, [dataGroupingConfigurations])
+
+
+
+
   const elem: DataGroupingConfigurationBasicModel | undefined =
     dataGroupingConfigurations.find(
       (x) => x.default_data_grouping_configuration === true
     );
+
+  const isDisableDataGrouping = () =>{
+    return  dataGroupingConfigurations.find((x) =>x.default_data_grouping_configuration === true && x.data_grouping_configuration_name!=="" ) ? false : true
+  }    
+
+console.log(messageBox)
 
   return (
     <div className="px-8 py-4 text-sm">
@@ -112,7 +141,7 @@ const DataGroupingConfigurationListView = ({
                       groupingConfiguration.default_data_grouping_configuration
                     }
                     onClick={() =>
-                      setDefaultGroupingConfiguration(groupingConfiguration)
+                      messageBox ? openConfirmDefaultModal(groupingConfiguration): setDefaultGroupingConfiguration(groupingConfiguration, groupingConfiguration.data_grouping_configuration_name) 
                     }
                   />
                 </div>
@@ -138,21 +167,6 @@ const DataGroupingConfigurationListView = ({
                   onClick={() => openConfirmDeleteModal(groupingConfiguration)}
                 />
               </td>
-              <td className="px-2 py-2">
-                {!groupingConfiguration.default_data_grouping_configuration ? (
-                  <Button
-                    label="Make Default"
-                    color="primary"
-                    variant="text"
-                    className="!py-0"
-                    onClick={() =>
-                      setDefaultGroupingConfiguration(groupingConfiguration)
-                    }
-                  />
-                ) : (
-                  ''
-                )}
-              </td>
             </tr>
           ))}
         </tbody>
@@ -169,6 +183,14 @@ const DataGroupingConfigurationListView = ({
         message={`Are you sure to delete the data grouping configuration ${selectedGroupingConfiguration?.data_grouping_configuration_name}?`}
         onConfirm={() =>
           deleteGroupingConfiguration(selectedGroupingConfiguration)
+        }
+      />
+       <SetDefaultDialog
+        open={defaultOpen}
+        onClose={() => setDefaultOpen(false)}
+        message={"Data grouping is an advanced functionality of DQO that requires planning. DQO will add a GROUP BY clause to every data quality check query, generating a lot of data quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality check results tracked by DQO and will impact data quality KPIs."}
+        onConfirm={() =>
+          setDefaultGroupingConfiguration(selectedGroupingConfiguration ?? {}, selectedGroupingConfiguration &&  selectedGroupingConfiguration.data_grouping_configuration_name )
         }
       />
     </div>

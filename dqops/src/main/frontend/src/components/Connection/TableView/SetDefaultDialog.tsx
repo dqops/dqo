@@ -5,48 +5,50 @@ import Button from '../../Button';
 interface ConfirmDialogProps {
   open: boolean;
   onClose: () => void;
-  columnPath?: string;
-  onConfirm: () => void;
+  message: string;
+  onConfirm: () => Promise<void>;
 }
 
-const ConfirmDialog = ({
+const SetDefaultDialog = ({
   open,
   onClose,
-  columnPath,
-  onConfirm
+  onConfirm,
+  message
 }: ConfirmDialogProps) => {
-  const handleSubmit = () => {
-    onConfirm();
+  const handleSubmit = async () => {
+    await onConfirm();
     onClose();
   };
 
   return (
-    <div>
-      <Dialog open={open} handler={onClose}>
-        <DialogBody className="pt-10 pb-2 px-8">
-          <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
-            Are you sure you want to delete the column {columnPath}?
-          </div>
-        </DialogBody>
-        <DialogFooter className="justify-center space-x-6 pb-8">
-          <Button
-            color="primary"
-            variant="contained"
-            className="px-8"
-            onClick={onClose}
-            label="No"
-          />
-          <Button
-            color="primary"
-            variant="outlined"
-            className="px-8"
-            onClick={handleSubmit}
-            label="Yes"
-          />
-        </DialogFooter>
-      </Dialog>
-    </div>
+    <Dialog open={open} handler={onClose}>
+      <DialogBody className="pt-10 pb-2 px-8">
+        <div className="text-2xl text-gray-700 text-center whitespace-normal ">
+          {message}
+          <br></br><br></br>
+          Please review DQO documentation before turning on a custom data grouping configuration.
+          <br></br><br></br>
+          Do you want to enable data grouping?
+        </div>
+      </DialogBody>
+      <DialogFooter className="justify-center space-x-6 pb-8">
+        <Button
+          color="primary"
+          
+          className="px-8"
+          onClick={onClose}
+          label="No"
+        />
+        <Button
+          color="primary"
+          variant="outlined"
+          className="px-8"
+          onClick={handleSubmit}
+          label="Yes"
+        />
+      </DialogFooter>
+    </Dialog>
   );
 };
 
-export default ConfirmDialog;
+export default SetDefaultDialog;
