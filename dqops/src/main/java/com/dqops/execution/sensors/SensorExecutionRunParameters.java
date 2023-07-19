@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -527,5 +528,20 @@ public class SensorExecutionRunParameters {
         }
 
         return this.timeSeries.getTimeGradient();
+    }
+
+    /**
+     * Appends an extra additional filter.
+     * @param filter Extra additional filter.
+     */
+    public void appendAdditionalFilter(String filter) {
+        if (Strings.isNullOrEmpty(filter)) {
+            return;
+        }
+
+        if (this.additionalFilters == null) {
+            this.additionalFilters = new ArrayList<>();
+        }
+        this.additionalFilters.add(filter);
     }
 }

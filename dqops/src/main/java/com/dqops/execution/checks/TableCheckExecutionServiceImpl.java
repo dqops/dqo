@@ -832,6 +832,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     .filter(n -> n instanceof AbstractComparisonCheckCategorySpec)
                     .findFirst();
             DataGroupingConfigurationSpec dataGroupingConfigurationForComparison = null;
+            String extraComparisonFilter = null;
             if (comparisonCheckCategory.isPresent()) {
                 AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec) comparisonCheckCategory.get();
                 String referenceTableConfigurationName = comparisonCheckCategorySpec.getComparisonName();
@@ -849,11 +850,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableSpec.toString() +
                             " because the data grouping configuration " + comparedTableGroupingName + " is not configured on the table.");
                 }
+
+                extraComparisonFilter = tableComparisonConfigurationSpec.getComparedTableFilter();
             }
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                     connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType, dataGroupingConfigurationForComparison,
                     timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+            sensorRunParameters.appendAdditionalFilter(extraComparisonFilter);
             return sensorRunParameters;
         }
         catch (Throwable ex) {
@@ -964,6 +968,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
             sensorRunParameters.setTableComparisonConfiguration(tableComparisonConfigurationSpec);
             sensorRunParameters.setReferenceColumnName(referencedColumnName);
+            sensorRunParameters.appendAdditionalFilter(tableComparisonConfigurationSpec.getReferenceTableFilter());
 
             return sensorRunParameters;
         }

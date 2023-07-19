@@ -64,6 +64,15 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     @JsonPropertyDescription("The name of the reference table that is imported into DQO. The reference table's metadata must be imported into DQO.")
     private String referenceTableName;
 
+    @JsonPropertyDescription("Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. " +
+            "This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.")
+    private String comparedTableFilter;
+
+    @JsonPropertyDescription("Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). " +
+            "This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.")
+    private String referenceTableFilter;
+
+
     /**
      * Returns the data grouping configuration name on the parent table.
      * @return Grouping configuration name.
@@ -147,6 +156,40 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     public void setReferenceTableName(String referenceTableName) {
         this.setDirtyIf(!Objects.equals(this.referenceTableName, referenceTableName));
         this.referenceTableName = referenceTableName;
+    }
+
+    /**
+     * Returns the SQL expression that is added to the sensor query on the compared table.
+     * @return SQL filter for the compared table.
+     */
+    public String getComparedTableFilter() {
+        return comparedTableFilter;
+    }
+
+    /**
+     * Sets the sql query that is applied on the compared table.
+     * @param comparedTableFilter SQL filter applied on the compared table.
+     */
+    public void setComparedTableFilter(String comparedTableFilter) {
+        this.setDirtyIf(!Objects.equals(this.comparedTableFilter, comparedTableFilter));
+        this.comparedTableFilter = comparedTableFilter;
+    }
+
+    /**
+     * Returns the SQL expression that is added to the sensor query on the reference table.
+     * @return SQL filter for the reference table.
+     */
+    public String getReferenceTableFilter() {
+        return referenceTableFilter;
+    }
+
+    /**
+     * Sets the SQL query added to the query on the reference table.
+     * @param referenceTableFilter SQL query for the reference table.
+     */
+    public void setReferenceTableFilter(String referenceTableFilter) {
+        this.setDirtyIf(!Objects.equals(this.referenceTableFilter, referenceTableFilter));
+        this.referenceTableFilter = referenceTableFilter;
     }
 
     /**
