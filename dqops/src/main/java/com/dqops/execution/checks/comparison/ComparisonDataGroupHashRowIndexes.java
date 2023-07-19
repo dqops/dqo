@@ -45,7 +45,7 @@ public class ComparisonDataGroupHashRowIndexes {
      * @param rowIndex Row index.
      */
     public void addRowIndex(long dataGroupHash, int rowIndex) {
-        this.rowIndexesPerGroupHash.addTo(dataGroupHash, rowIndex);
+        this.rowIndexesPerGroupHash.put(dataGroupHash, rowIndex);
     }
 
     /**
@@ -82,7 +82,10 @@ public class ComparisonDataGroupHashRowIndexes {
     public Stream<ComparedValue> streamValues() {
         return this.rowIndexesPerGroupHash.long2IntEntrySet()
                 .stream()
-                .map(entry -> new ComparedValue(timePeriod, entry.getLongKey(), valueColumn.get(entry.getIntValue()), entry.getIntValue()));
+                .map(entry -> {
+                    int rowIndex = entry.getIntValue();
+                    return new ComparedValue(timePeriod, entry.getLongKey(), valueColumn.get(rowIndex), rowIndex);
+                });
     }
 
     /**

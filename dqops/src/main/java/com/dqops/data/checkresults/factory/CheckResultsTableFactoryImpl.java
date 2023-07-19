@@ -48,6 +48,7 @@ public class CheckResultsTableFactoryImpl implements CheckResultsTableFactory {
         table.addColumns(
                 IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME),
                 LongColumn.create(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME),
+                TextColumn.create(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME),
                 TextColumn.create(CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME),
                 TextColumn.create(CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME),
                 TextColumn.create(CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME),

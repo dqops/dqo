@@ -84,6 +84,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 null, // time series
                 new TimeWindowFilterParameters(),
                 tableSpec.getDefaultDataGroupingConfiguration(),
+                null,
+                null,
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 null,

@@ -75,6 +75,16 @@ public class HierarchyId {
     }
 
     /**
+     * Creates a new hierarchy id for a connection node.
+     * @param connectionName Connection name.
+     * @return Hierarchy id for a connection.
+     */
+    public static HierarchyId makeHierarchyIdForConnection(String connectionName) {
+        HierarchyId hierarchyId = new HierarchyId("connections", connectionName);
+        return hierarchyId;
+    }
+
+    /**
      * Creates a new hierarchy id for a table node.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.

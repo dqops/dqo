@@ -23,7 +23,7 @@ import com.dqops.checks.column.profiling.ColumnComparisonProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import com.dqops.checks.table.profiling.TableComparisonProfilingChecksSpec;
-import com.dqops.metadata.comparisons.ReferenceTableSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -41,7 +41,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableComparisonModelTests extends BaseTest {
     private TableComparisonModel sut;
     private TableSpec comparedTableSpec;
-    private ReferenceTableSpec referenceTableConfigSpec;
+    private TableComparisonConfigurationSpec referenceTableConfigSpec;
     private TableSpec referencedTableSpec;
 
     @BeforeEach
@@ -56,14 +56,14 @@ public class TableComparisonModelTests extends BaseTest {
         this.comparedTableSpec.getColumns().put("col1", new ColumnSpec());
         this.comparedTableSpec.getColumns().put("col2", new ColumnSpec());
         this.comparedTableSpec.getGroupings().put("mygrouping", new DataGroupingConfigurationSpec());
-        this.referenceTableConfigSpec = new ReferenceTableSpec();
+        this.referenceTableConfigSpec = new TableComparisonConfigurationSpec();
         this.referenceTableConfigSpec.setComparedTableGroupingName("mygrouping");
         this.referenceTableConfigSpec.setReferenceTableGroupingName("refgrouping");
         this.referenceTableConfigSpec.setReferenceTableConnectionName("refconn");
         this.referenceTableConfigSpec.setReferenceTableSchemaName("refsch");
         this.referenceTableConfigSpec.setReferenceTableName("reftab");
-        this.comparedTableSpec.getReferenceTables().put("reftable", referenceTableConfigSpec);
-        this.sut.setReferenceTableConfigurationName("reftable");
+        this.comparedTableSpec.getTableComparisons().put("reftable", referenceTableConfigSpec);
+        this.sut.setTableComparisonConfigurationName("reftable");
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TableComparisonModelTests extends BaseTest {
         TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec,"reftable", CheckType.PROFILING, null);
         Assertions.assertEquals(2, sut.getColumns().size());
         Assertions.assertNotNull(sut.getDefaultCompareThresholds());
-        Assertions.assertEquals("reftable", sut.getReferenceTableConfigurationName());
+        Assertions.assertEquals("reftable", sut.getTableComparisonConfigurationName());
         Assertions.assertNull(sut.getCompareRowCount());
     }
 

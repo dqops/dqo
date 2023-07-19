@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { TableComparisonsApi } from '../../../services/apiClient';
-import { ReferenceTableModel } from '../../../api';
+import { TableComparisonModel } from '../../../api';
 import Button from '../../Button';
 
 type ReferenceTableListProps = {
-  references: ReferenceTableModel[];
+  references: TableComparisonModel[];
   onCreate: () => void;
   refetch: () => void;
-  onEditReferenceTable: (reference: ReferenceTableModel) => void;
+  onEditReferenceTable: (reference: TableComparisonModel) => void;
 };
 
 const ReferenceTableList = ({
@@ -17,14 +17,14 @@ const ReferenceTableList = ({
   onEditReferenceTable
 }: ReferenceTableListProps) => {
   const [deletingReference, setDeletingReference] =
-    useState<ReferenceTableModel>();
-  const deleteReferenceTable = (reference: ReferenceTableModel) => {
+    useState<TableComparisonModel>();
+  const deleteReferenceTable = (reference: TableComparisonModel) => {
     setDeletingReference(reference);
-    TableComparisonsApi.deleteReferenceTable(
+    TableComparisonsApi.deleteTableComparisonConfiguration(
       reference.compared_connection ?? '',
       reference.compared_table?.schema_name ?? '',
       reference.compared_table?.table_name ?? '',
-      reference.reference_table_configuration_name ?? ''
+      reference.table_comparison_configuration_name ?? ''
     )
       .then(() => {
         refetch();
@@ -40,7 +40,7 @@ const ReferenceTableList = ({
         <thead>
           <tr>
             <th className="text-left  py-2">
-              Reference table configuration name
+              Table comparison configuration name
             </th>
             <th className="text-left px-2 py-2">Connection</th>
             <th className="text-left px-2 py-2">Schema</th>
@@ -59,7 +59,7 @@ const ReferenceTableList = ({
                   className="text-sm px-0"
                   variant="text"
                   color="primary"
-                  label={reference.reference_table_configuration_name}
+                  label={reference.table_comparison_configuration_name}
                   onClick={() => onEditReferenceTable(reference)}
                 />
               </td>
@@ -78,8 +78,8 @@ const ReferenceTableList = ({
                   color="primary"
                   label="Delete"
                   loading={
-                    deletingReference?.reference_table_configuration_name ===
-                    reference.reference_table_configuration_name
+                    deletingReference?.table_comparison_configuration_name ===
+                    reference.table_comparison_configuration_name
                   }
                   onClick={() => deleteReferenceTable(reference)}
                 />
@@ -92,7 +92,7 @@ const ReferenceTableList = ({
       <Button
         className="text-sm"
         color="primary"
-        label="New reference table for comparison"
+        label="New table comparison configuration"
         onClick={onCreate}
       />
     </div>

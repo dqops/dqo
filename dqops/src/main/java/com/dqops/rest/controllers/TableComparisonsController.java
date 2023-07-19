@@ -17,13 +17,15 @@ package com.dqops.rest.controllers;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.metadata.comparisons.ReferenceTableSpec;
-import com.dqops.metadata.comparisons.ReferenceTableSpecMap;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
+import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.comparison.ReferenceTableModel;
+import com.dqops.rest.models.comparison.TableComparisonConfigurationModel;
 import com.dqops.rest.models.comparison.TableComparisonModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
@@ -43,185 +45,190 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "TableComparisons", description = "Manages the configuration of table comparisons between data sources")
+@Api(value = "TableComparisons", description = "Manages the configuration of table comparisons between tables on the same or different data sources")
 public class TableComparisonsController {
-    private UserHomeContextFactory userHomeContextFactory;
+    private final UserHomeContextFactory userHomeContextFactory;
+    private final HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
      * @param userHomeContextFactory      User home context factory.
+     * @param hierarchyNodeTreeSearcher   Node searcher.
      */
     @Autowired
-    public TableComparisonsController(UserHomeContextFactory userHomeContextFactory) {
+    public TableComparisonsController(UserHomeContextFactory userHomeContextFactory,
+                                      HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher) {
         this.userHomeContextFactory = userHomeContextFactory;
+        this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
     }
 
     /**
-     * Returns a list of reference tables (the source of truth) on a table.
+     * Returns a list of table comparison configurations on a table.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @return List of reference tables.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/referencetables", produces = "application/json")
-    @ApiOperation(value = "getReferenceTables", notes = "Returns the list of reference tables on a compared table", response = ReferenceTableModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonConfigurations", notes = "Returns the list of table comparison configurations on a compared table", response = TableComparisonConfigurationModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = ReferenceTableModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = TableComparisonConfigurationModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ReferenceTableModel>> getReferenceTables(
+    public ResponseEntity<Flux<TableComparisonConfigurationModel>> getTableComparisonConfigurations(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        List<ReferenceTableModel> result = new LinkedList<>();
-        for (ReferenceTableSpec referenceTableSpec : referenceTableSpecMap.values()) {
-            ReferenceTableModel referenceTableModel = ReferenceTableModel.fromReferenceTableComparisonSpec(referenceTableSpec);
-            result.add(referenceTableModel);
+        List<TableComparisonConfigurationModel> result = new LinkedList<>();
+        for (TableComparisonConfigurationSpec tableComparisonConfigurationSpec : tableComparisonConfigurationSpecMap.values()) {
+            TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
+            result.add(tableComparisonConfigurationModel);
         }
 
         return new ResponseEntity<>(Flux.fromIterable(result), HttpStatus.OK); // 200
     }
 
     /**
-     * Returns the configuration of a reference table.
+     * Returns the configuration of a table comparison.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param referenceTableConfigurationName Reference table.
-     * @return Reference table model.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
+     * @return Table comparison model.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/referencetables/{referenceTableConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "getReferenceTable", notes = "Returns a model of the reference table", response = ReferenceTableModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonConfiguration", notes = "Returns a model of the table comparison configuration", response = TableComparisonConfigurationModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = ReferenceTableModel.class),
+            @ApiResponse(code = 200, message = "OK", response = TableComparisonConfigurationModel.class),
             @ApiResponse(code = 404, message = "Connection, table or reference table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ReferenceTableModel>> getTableComparisonConfiguration(
+    public ResponseEntity<Mono<TableComparisonConfigurationModel>> getTableComparisonConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName) {
+            @ApiParam("Reference table configuration name") @PathVariable String tableComparisonConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = referenceTableSpecMap.get(referenceTableConfigurationName);
-        if (referenceTableSpec == null) {
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+        if (tableComparisonConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableModel referenceTableModel = ReferenceTableModel.fromReferenceTableComparisonSpec(referenceTableSpec);
-        return new ResponseEntity<>(Mono.just(referenceTableModel), HttpStatus.OK); // 200
+        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
+        return new ResponseEntity<>(Mono.just(tableComparisonConfigurationModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Update a specific reference table configuration using a new model.
-     * Remark: PUT method is used, because renaming the reference table configuration would break idempotence.
+     * Update a specific table comparison configuration using a new model.
+     * Remark: PUT method is used, because renaming the table comparison configuration would break idempotence.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param referenceTableConfigurationName  Reference table configuration name up until now.
-     * @param referenceTableModel Reference table model.
+     * @param tableComparisonConfigurationName  Table comparison configuration name up until now.
+     * @param tableComparisonConfigurationModel Table comparison configuration model.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/referencetables/{referenceTableConfigurationName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateReferenceTable", notes = "Updates a reference table configuration")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}",
+            consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableComparisonConfiguration", notes = "Updates a table configuration configuration")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Reference table configuration successfully updated"),
-            @ApiResponse(code = 404, message = "Connection, table or reference table not found"),
+            @ApiResponse(code = 204, message = "Table comparison configuration successfully updated"),
+            @ApiResponse(code = 404, message = "Connection, table or table comparison on the table not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
-            @ApiResponse(code = 409, message = "Reference table configuration with the same name already exists"),
+            @ApiResponse(code = 409, message = "Table comparison configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateReferenceTable(
+    public ResponseEntity<Mono<?>> updateTableComparisonConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName,
-            @ApiParam("Reference table model with the selection of the tables to compare")
-                @RequestBody ReferenceTableModel referenceTableModel) {
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
+            @ApiParam("Table comparison model with the configuration of the tables to compare")
+                @RequestBody TableComparisonConfigurationModel tableComparisonConfigurationModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(referenceTableConfigurationName) ||
-                referenceTableModel == null) {
+                Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
+                tableComparisonConfigurationModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = referenceTableSpecMap.get(referenceTableConfigurationName);
-        if (referenceTableSpec == null) {
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+        if (tableComparisonConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String newName = referenceTableModel.getReferenceTableConfigurationName();
+        String newName = tableComparisonConfigurationModel.getTableComparisonConfigurationName();
         if (Strings.isNullOrEmpty(newName)) {
-            newName = referenceTableConfigurationName;
+            newName = tableComparisonConfigurationName;
         }
 
-        if (!Objects.equals(newName, referenceTableConfigurationName) && referenceTableSpecMap.containsKey(newName)) {
+        if (!Objects.equals(newName, tableComparisonConfigurationName) && tableComparisonConfigurationSpecMap.containsKey(newName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a reference table configuration with this name already exists
         }
 
-        if (!newName.equals(referenceTableConfigurationName)) {
+        if (!newName.equals(tableComparisonConfigurationName)) {
             // If renaming actually happened.
-            referenceTableSpecMap.remove(referenceTableConfigurationName);
-            referenceTableSpec.setHierarchyId(null);
-            referenceTableSpecMap.put(newName, referenceTableSpec);
+            tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
+            tableComparisonConfigurationSpec.setHierarchyId(null);
+            tableComparisonConfigurationSpecMap.put(newName, tableComparisonConfigurationSpec);
         }
 
-        referenceTableModel.copyToReferenceTableComparisonSpec(referenceTableSpec);
+        tableComparisonConfigurationModel.copyToReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
     /**
-     * Creates (adds) a new named reference table configuration.
+     * Creates (adds) a new named reference table comparison configuration.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param referenceTableModel Table comparison configuration model.
+     * @param tableComparisonConfigurationModel Table comparison configuration model.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/referencetables", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createReferenceTable", notes = "Creates a new reference table configuration added to the compared table")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createTableComparisonConfiguration", notes = "Creates a new table comparison configuration added to the compared table")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New reference table configuration successfully created"),
+            @ApiResponse(code = 201, message = "New table comparison configuration successfully created"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
-            @ApiResponse(code = 409, message = "Reference table configuration with the same name already exists"),
+            @ApiResponse(code = 409, message = "Table comparison configuration with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createReferenceTable(
+    public ResponseEntity<Mono<?>> createTableComparisonConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration model") @RequestBody ReferenceTableModel referenceTableModel) {
+            @ApiParam("Table comparison configuration model") @RequestBody TableComparisonConfigurationModel tableComparisonConfigurationModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                referenceTableModel == null               ||
-                Strings.isNullOrEmpty(referenceTableModel.getReferenceTableConfigurationName())) {
+                tableComparisonConfigurationModel == null               ||
+                Strings.isNullOrEmpty(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -231,57 +238,65 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        if (tableSpec.getReferenceTables().containsKey(referenceTableModel.getReferenceTableConfigurationName())) {
+        if (tableSpec.getTableComparisons().containsKey(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table comparison configuration with this name already exists
         }
 
-        ReferenceTableSpec referenceTableSpec = new ReferenceTableSpec();
-        referenceTableModel.copyToReferenceTableComparisonSpec(referenceTableSpec);
-        tableSpec.getReferenceTables().put(referenceTableModel.getReferenceTableConfigurationName(), referenceTableSpec);
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
+        tableComparisonConfigurationModel.copyToReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
+        tableSpec.getTableComparisons().put(tableComparisonConfigurationModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
     }
 
     /**
-     * Deletes a specific reference table configuration.
+     * Deletes a specific table comparison configuration. Deactivates also all configured comparison checks.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param referenceTableConfigurationName Reference table  configuration name.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/referencetables/{referenceTableConfigurationName}", produces = "application/json")
-    @ApiOperation(value = "deleteReferenceTable", notes = "Deletes a reference table configuration from a compared table")
+    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons/{tableComparisonConfigurationName}", produces = "application/json")
+    @ApiOperation(value = "deleteTableComparisonConfiguration", notes = "Deletes a table comparison configuration from a compared table")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Reference table configuration removed"),
+            @ApiResponse(code = 204, message = "Table comparison configuration removed"),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 406, message = "Invalid request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> deleteReferenceTable(
+    public ResponseEntity<Mono<?>> deleteTableComparisonConfiguration(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName) {
+            @ApiParam("Reference table configuration name") @PathVariable String tableComparisonConfigurationName) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(referenceTableConfigurationName)) {
+                Strings.isNullOrEmpty(tableComparisonConfigurationName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = tableSpec.getTableComparisons();
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
         // If reference table configuration is not found, return success (idempotence).
-        referenceTableSpecMap.remove(referenceTableConfigurationName);
+        tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
 
-        // TODO: We can also disable the configuration of all comparison checks in all check types that are using the deleted comparison, it should be defined in the TableSpec class
+        Collection<AbstractComparisonCheckCategorySpecMap<?>> comparisonCheckCategoryMaps = this.hierarchyNodeTreeSearcher.findComparisonCheckCategoryMaps(tableSpec);
+        for (AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap : comparisonCheckCategoryMaps) {
+            comparisonCheckCategorySpecMap.remove(tableComparisonConfigurationName);
+        }
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -292,10 +307,10 @@ public class TableComparisonsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param referenceTableConfigurationName Reference table configuration name.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return Model of the table comparison using profiling checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{referenceTableConfigurationName}/profiling", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{tableComparisonConfigurationName}/profiling", produces = "application/json")
     @ApiOperation(value = "getTableComparisonProfiling", notes = "Returns a model of the table comparison using advanced profiling checks (comparison at any time)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -307,14 +322,14 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName) {
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableConfigurationSpec = tableSpec.getReferenceTables().get(referenceTableConfigurationName);
+        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
         if (referenceTableConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -324,7 +339,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, referenceTableConfigurationName, CheckType.PROFILING, null);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.PROFILING, null);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -333,10 +348,10 @@ public class TableComparisonsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param referenceTableConfigurationName Reference table configuration name.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return Model of the table comparison using daily recurring checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{referenceTableConfigurationName}/recurring/daily", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{tableComparisonConfigurationName}/recurring/daily", produces = "application/json")
     @ApiOperation(value = "getTableComparisonRecurringDaily", notes = "Returns a model of the table comparison using daily recurring checks (comparison once a day)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -348,14 +363,14 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName) {
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableConfigurationSpec = tableSpec.getReferenceTables().get(referenceTableConfigurationName);
+        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
         if (referenceTableConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -365,7 +380,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, referenceTableConfigurationName, CheckType.RECURRING, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.RECURRING, CheckTimeScale.daily);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -374,10 +389,10 @@ public class TableComparisonsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param referenceTableConfigurationName Reference table configuration name.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return Model of the table comparison using monthly recurring checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{referenceTableConfigurationName}/recurring/monthly", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{tableComparisonConfigurationName}/recurring/monthly", produces = "application/json")
     @ApiOperation(value = "getTableComparisonRecurringMonthly", notes = "Returns a model of the table comparison using monthly recurring checks (comparison once a month)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -389,14 +404,14 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName) {
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableConfigurationSpec = tableSpec.getReferenceTables().get(referenceTableConfigurationName);
+        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
         if (referenceTableConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -406,7 +421,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, referenceTableConfigurationName, CheckType.RECURRING, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.RECURRING, CheckTimeScale.monthly);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -415,10 +430,10 @@ public class TableComparisonsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param referenceTableConfigurationName Reference table configuration name.
+     * @param tableComparisonConfigurationName Reference table configuration name.
      * @return Model of the table comparison using daily partitioned checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{referenceTableConfigurationName}/partitioned/daily", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{tableComparisonConfigurationName}/partitioned/daily", produces = "application/json")
     @ApiOperation(value = "getTableComparisonPartitionedDaily", notes = "Returns a model of the table comparison using daily partition checks (comparing day to day)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -430,14 +445,14 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName) {
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableConfigurationSpec = tableSpec.getReferenceTables().get(referenceTableConfigurationName);
+        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
         if (referenceTableConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -447,7 +462,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, referenceTableConfigurationName, CheckType.PARTITIONED, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.PARTITIONED, CheckTimeScale.daily);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -456,10 +471,10 @@ public class TableComparisonsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param referenceTableConfigurationName Reference table configuration name.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return Model of the table comparison using monthly partitioned checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{referenceTableConfigurationName}/partitioned/monthly", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{tableComparisonConfigurationName}/partitioned/monthly", produces = "application/json")
     @ApiOperation(value = "getTableComparisonPartitionedMonthly", notes = "Returns a model of the table comparison using monthly partition checks (comparing month to month)", response = TableComparisonModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -471,14 +486,14 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName) {
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableConfigurationSpec = tableSpec.getReferenceTables().get(referenceTableConfigurationName);
+        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
         if (referenceTableConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -488,7 +503,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, referenceTableConfigurationName, CheckType.PARTITIONED, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.PARTITIONED, CheckTimeScale.monthly);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -497,11 +512,11 @@ public class TableComparisonsController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param referenceTableConfigurationName  Reference table configuration name.
+     * @param tableComparisonConfigurationName  Table comparison configuration name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{referenceTableConfigurationName}/profiling", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{tableComparisonConfigurationName}/profiling", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateTableComparisonProfiling", notes = "Updates a table comparison profiling checks")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -514,13 +529,13 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName,
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(referenceTableConfigurationName) ||
+                Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
                 tableComparisonModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
@@ -531,17 +546,17 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = referenceTableSpecMap.get(referenceTableConfigurationName);
-        if (referenceTableSpec == null) {
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+        if (tableComparisonConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        tableComparisonModel.copyToTableSpec(tableSpec, referenceTableConfigurationName, CheckType.PROFILING, null);
+        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonConfigurationName, CheckType.PROFILING, null);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -552,11 +567,11 @@ public class TableComparisonsController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param referenceTableConfigurationName  Reference table configuration name.
+     * @param tableComparisonConfigurationName  Table comparison configuration name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{referenceTableConfigurationName}/recurring/daily", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{tableComparisonConfigurationName}/recurring/daily", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateTableComparisonRecurringDaily", notes = "Updates a table comparison checks recurring daily")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -569,13 +584,13 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName,
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(referenceTableConfigurationName) ||
+                Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
                 tableComparisonModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
@@ -586,17 +601,17 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = referenceTableSpecMap.get(referenceTableConfigurationName);
-        if (referenceTableSpec == null) {
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+        if (tableComparisonConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        tableComparisonModel.copyToTableSpec(tableSpec, referenceTableConfigurationName, CheckType.RECURRING, CheckTimeScale.daily);
+        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonConfigurationName, CheckType.RECURRING, CheckTimeScale.daily);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -607,11 +622,11 @@ public class TableComparisonsController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param referenceTableConfigurationName  Reference table configuration name.
+     * @param tableComparisonConfigurationName  Table comparison configuration name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{referenceTableConfigurationName}/recurring/monthly", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{tableComparisonConfigurationName}/recurring/monthly", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateTableComparisonRecurringMonthly", notes = "Updates a table comparison checks recurring monthly")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -624,13 +639,13 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName,
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(referenceTableConfigurationName) ||
+                Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
                 tableComparisonModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
@@ -641,17 +656,17 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = referenceTableSpecMap.get(referenceTableConfigurationName);
-        if (referenceTableSpec == null) {
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+        if (tableComparisonConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        tableComparisonModel.copyToTableSpec(tableSpec, referenceTableConfigurationName, CheckType.RECURRING, CheckTimeScale.monthly);
+        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonConfigurationName, CheckType.RECURRING, CheckTimeScale.monthly);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -662,11 +677,11 @@ public class TableComparisonsController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param referenceTableConfigurationName  Reference table configuration name.
+     * @param tableComparisonConfigurationName  Table comparison configuration name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{referenceTableConfigurationName}/partitioned/daily", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{tableComparisonConfigurationName}/partitioned/daily", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateTableComparisonPartitionedDaily", notes = "Updates a table comparison checks partitioned daily (comparing day to day)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -679,13 +694,13 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName,
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(referenceTableConfigurationName) ||
+                Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
                 tableComparisonModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
@@ -696,17 +711,17 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = referenceTableSpecMap.get(referenceTableConfigurationName);
-        if (referenceTableSpec == null) {
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+        if (tableComparisonConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        tableComparisonModel.copyToTableSpec(tableSpec, referenceTableConfigurationName, CheckType.PARTITIONED, CheckTimeScale.daily);
+        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonConfigurationName, CheckType.PARTITIONED, CheckTimeScale.daily);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -717,11 +732,11 @@ public class TableComparisonsController {
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
-     * @param referenceTableConfigurationName  Reference table configuration name.
+     * @param tableComparisonConfigurationName  Table comparison configuration name.
      * @param tableComparisonModel Table comparison model with all checks to enable or disable.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{referenceTableConfigurationName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{tableComparisonConfigurationName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateTableComparisonPartitionedMonthly", notes = "Updates a table comparison checks partitioned monthly (comparing month to month)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -734,13 +749,13 @@ public class TableComparisonsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Reference table configuration name") @PathVariable String referenceTableConfigurationName,
+            @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(referenceTableConfigurationName) ||
+                Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
                 tableComparisonModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
@@ -751,17 +766,17 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpecMap referenceTableSpecMap = this.readReferenceTablesMap(userHomeContext, connectionName, schemaName, tableName);
-        if (referenceTableSpecMap == null) {
+        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+        if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ReferenceTableSpec referenceTableSpec = referenceTableSpecMap.get(referenceTableConfigurationName);
-        if (referenceTableSpec == null) {
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+        if (tableComparisonConfigurationSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        tableComparisonModel.copyToTableSpec(tableSpec, referenceTableConfigurationName, CheckType.PARTITIONED, CheckTimeScale.monthly);
+        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonConfigurationName, CheckType.PARTITIONED, CheckTimeScale.monthly);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -801,11 +816,12 @@ public class TableComparisonsController {
      * @param tableName       Table name.
      * @return Data comparisons configuration on the requested table. Null if not found.
      */
-    protected ReferenceTableSpecMap readReferenceTablesMap(UserHomeContext userHomeContext, String connectionName, String schemaName, String tableName) {
+    protected TableComparisonConfigurationSpecMap readTableComparisonConfigurationMap(UserHomeContext userHomeContext,
+                                                                                      String connectionName, String schemaName, String tableName) {
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return null;
         }
-        return tableSpec.getReferenceTables();
+        return tableSpec.getTableComparisons();
     }
 }

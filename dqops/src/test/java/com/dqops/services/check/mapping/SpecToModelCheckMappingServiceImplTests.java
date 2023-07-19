@@ -23,7 +23,7 @@ import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import com.dqops.metadata.comparisons.ReferenceTableSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -97,7 +97,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenTableChecksProfilingModelGivenAndOneReferenceTableWithNoChecks_thenCreatesUiModel() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
-        this.tableSpec.getReferenceTables().put("comparison1", new ReferenceTableSpec());
+        this.tableSpec.getTableComparisons().put("comparison1", new TableComparisonConfigurationSpec());
         CheckContainerModel uiModel = this.sut.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 

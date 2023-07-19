@@ -27,6 +27,7 @@ import com.dqops.execution.rules.*;
 import com.dqops.execution.rules.finder.RuleDefinitionFindResult;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.EffectiveIncidentGroupingConfiguration;
@@ -99,6 +100,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
         RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
         RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
+        TableComparisonConfigurationSpec tableComparisonConfiguration = sensorRunParameters.getTableComparisonConfiguration();
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
@@ -180,6 +182,14 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
                 result.getIncludeInKpiColumn().set(targetRowIndex, !checkSpec.isExcludeFromKpi());
                 result.getIncludeInSlaColumn().set(targetRowIndex, checkSpec.isIncludeInSla());
+
+                if (tableComparisonConfiguration != null) {
+                    result.getTableComparisonNameColumn().set(targetRowIndex, tableComparisonConfiguration.getComparisonName());
+                    result.getReferenceConnectionColumn().set(targetRowIndex, tableComparisonConfiguration.getReferenceTableConnectionName());
+                    result.getReferenceSchemaColumn().set(targetRowIndex, tableComparisonConfiguration.getReferenceTableSchemaName());
+                    result.getReferenceTableColumn().set(targetRowIndex, tableComparisonConfiguration.getReferenceTableName());
+                    result.getReferenceColumnColumn().set(targetRowIndex, sensorRunParameters.getReferenceColumnName());
+                }
 
                 AbstractRuleParametersSpec fatalRule = checkSpec.getFatal();
                 AbstractRuleParametersSpec errorRule = checkSpec.getError();

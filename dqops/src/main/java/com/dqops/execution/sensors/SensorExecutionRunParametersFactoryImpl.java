@@ -129,9 +129,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 this.sensorLimitsConfigurationProperties.getSensorReadoutLimit();
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
-                dataGroupingConfiguration, sensorParameters, dialectSettings, exactCheckSearchFilters,
-                rowCountLimit,
-                this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded());
+                dataGroupingConfiguration, null, null, sensorParameters, dialectSettings, exactCheckSearchFilters,
+                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded());
     }
 
     /**
@@ -160,7 +159,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
-        DataGroupingConfigurationSpec dataStreams = statisticsDataScope == StatisticsDataScope.table ? null :
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = statisticsDataScope == StatisticsDataScope.table ? null :
                 expandedTable.getDefaultDataGroupingConfiguration();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
@@ -169,7 +168,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
-                dataStreams, sensorParameters, dialectSettings, null,
+                dataGroupingConfigurationSpec, null, null, sensorParameters, dialectSettings, null,
                 this.sensorLimitsConfigurationProperties.getSensorReadoutLimit(),
                 false); // statistics is opportunistic, we do not fail, we just collect something for data groups
     }

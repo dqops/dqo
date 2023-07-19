@@ -16,6 +16,7 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.id.HierarchyNode;
@@ -115,4 +116,11 @@ public interface HierarchyNodeTreeSearcher {
      * @return Collection of check nodes that passed the filter.
      */
     Collection<AbstractCheckSpec<?,?,?,?>> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters);
+
+    /**
+     * Finds all maps of table comparison check maps on the table (for all check types) and on columns (also for all check types).
+     * @param startNode Start node.
+     * @return Connection of comparison check category maps.
+     */
+    Collection<AbstractComparisonCheckCategorySpecMap<?>> findComparisonCheckCategoryMaps(HierarchyNode startNode);
 }
