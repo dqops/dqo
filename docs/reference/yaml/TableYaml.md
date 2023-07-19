@@ -51,7 +51,7 @@ Table specification that defines data quality tests that are enabled on a table 
 |[incremental_time_window](#partitionincrementaltimewindowspec)|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|[PartitionIncrementalTimeWindowSpec](#partitionincrementaltimewindowspec)| | | |
 |default_grouping_name|The name of the default data grouping configuration that is applied on data quality checks. When a default data grouping is selected, all data quality checks run SQL queries with a GROUP BY clause, calculating separate data quality checks for each group of data. The data groupings are defined in the &#x27;groupings&#x27; dictionary (indexed by the data grouping name).|string| | | |
 |[groupings](#datagroupingconfigurationspecmap)|Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a tag is assigned to a table (within a data grouping level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.).|[DataGroupingConfigurationSpecMap](#datagroupingconfigurationspecmap)| | | |
-|[reference_tables](#referencetablespecmap)|Dictionary of reference table configurations. Reference tables are ued for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The reference table&#x27;s metadata must be imported into DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.|[ReferenceTableSpecMap](#referencetablespecmap)| | | |
+|[table_comparisons](#tablecomparisonconfigurationspecmap)|Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The reference table&#x27;s metadata must be imported into DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.|[TableComparisonConfigurationSpecMap](#tablecomparisonconfigurationspecmap)| | | |
 |[incident_grouping](#tableincidentgroupingspec)|Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.|[TableIncidentGroupingSpec](#tableincidentgroupingspec)| | | |
 |[owner](#tableownerspec)|Table owner information like the data steward name or the business application name.|[TableOwnerSpec](#tableownerspec)| | | |
 |[profiling_checks](#tableprofilingcheckcategoriesspec)|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|[TableProfilingCheckCategoriesSpec](#tableprofilingcheckcategoriesspec)| | | |
@@ -232,8 +232,8 @@ Single data grouping dimension configuration. A data grouping dimension may be c
 
 ___  
 
-## ReferenceTableSpecMap  
-Dictionary of comparisons of the current table (the parent of this node) and another reference table (the source of truth)
+## TableComparisonConfigurationSpecMap  
+Dictionary of data comparison configurations between the current table (the parent of this node) and another reference table (the source of truth)
  to which we are comparing the tables to measure the accuracy of the data.  
   
 
@@ -263,8 +263,8 @@ Dictionary of comparisons of the current table (the parent of this node) and ano
 
 ___  
 
-## ReferenceTableSpec  
-Identifies a target table from another data source (a reference table) that is compared to the current table (the parent table for this object).  
+## TableComparisonConfigurationSpec  
+Identifies a data comparison configuration between a parent table (the compared table) and the target table from another data source (a reference table).  
   
 
 
@@ -278,11 +278,13 @@ Identifies a target table from another data source (a reference table) that is c
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|compared_table_grouping_name|The name of the data grouping configuration on the parent table that will be used for comparison. When not provided, uses the &#x27;default&#x27; grouping name. When the parent table has no data grouping configurations, compares the whole table without grouping.|string| | | |
-|reference_table_grouping_name|The name of the data grouping configuration on the referenced name that will be used for comparison. When not provided, uses the &#x27;default&#x27; grouping name. When the reference table has no data grouping configurations, compares the whole table without grouping. The data grouping configurations on the parent table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.|string| | | |
+|compared_table_grouping_name|The name of the data grouping configuration on the parent table (the compared table) that will be used for comparison. When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table).|string| | | |
+|reference_table_grouping_name|The name of the data grouping configuration on the referenced name that will be used for comparison. When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table). The data grouping configurations on the parent table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.|string| | | |
 |reference_table_connection_name|The name of the connection in DQO where the reference table (the source of truth) is configured. When the connection name is not provided, DQO will find the reference table on the connection of the parent table.|string| | | |
 |reference_table_schema_name|The name of the schema where the reference table is imported into DQO. The reference table&#x27;s metadata must be imported into DQO.|string| | | |
 |reference_table_name|The name of the reference table that is imported into DQO. The reference table&#x27;s metadata must be imported into DQO.|string| | | |
+|compared_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.|string| | | |
+|reference_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.|string| | | |
 
 
 

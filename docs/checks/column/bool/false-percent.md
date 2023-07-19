@@ -341,7 +341,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 39-44"
+    ```yaml hl_lines="11-21 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1002,7 +1002,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 40-45"
+    ```yaml hl_lines="11-21 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1664,7 +1664,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 40-45"
+    ```yaml hl_lines="11-21 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2318,11 +2318,11 @@ spec:
                 END
             ) / COUNT_BIG (*)
         END AS actual_value,
-        CAST([] AS date) AS time_period,
-        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST([] AS date), CAST([] AS date)
-    ORDER BY CAST([] AS date)
+    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
+    ORDER BY CAST(analyzed_table.[] AS date)
     
         
     ```
@@ -2330,7 +2330,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 40-45"
+    ```yaml hl_lines="11-21 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2635,11 +2635,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            CAST([] AS date) AS time_period,
-            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
-        ORDER BY level_1, level_2CAST([] AS date)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
+        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
         
             
         ```
@@ -2982,11 +2982,11 @@ spec:
                 END
             ) / COUNT_BIG (*)
         END AS actual_value,
-        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
     
         
     ```
@@ -2994,7 +2994,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 40-45"
+    ```yaml hl_lines="11-21 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3299,11 +3299,11 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
         
             
         ```

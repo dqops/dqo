@@ -46,13 +46,13 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     };
 
     @JsonPropertyDescription("The name of the data grouping configuration on the parent table (the compared table) that will be used for comparison. " +
-            "When not provided, uses the 'default' grouping name. When the parent table has no data grouping configurations, compares the whole table without grouping.")
-    private String comparedTableGroupingName = DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME;
+            "When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table).")
+    private String comparedTableGroupingName;
 
     @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
-            "When not provided, uses the 'default' grouping name. When the reference table has no data grouping configurations, compares the whole table without grouping. " +
+            "When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table). " +
             "The data grouping configurations on the parent table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
-    private String referenceTableGroupingName = DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME;
+    private String referenceTableGroupingName;
 
     @JsonPropertyDescription("The name of the connection in DQO where the reference table (the source of truth) is configured. " +
                              "When the connection name is not provided, DQO will find the reference table on the connection of the parent table.")

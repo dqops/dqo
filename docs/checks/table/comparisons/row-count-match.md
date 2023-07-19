@@ -50,7 +50,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_m
             max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="11-20"
+```yaml hl_lines="16-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -61,6 +61,11 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
+  table_comparisons:
+    compare_to_source_of_truth_table:
+      reference_table_connection_name: <source_of_truth_connection_name>
+      reference_table_schema_name: <source_of_truth_schema_name>
+      reference_table_name: <source_of_truth_table_name>
   profiling_checks:
     comparisons:
       compare_to_source_of_truth_table:
@@ -266,7 +271,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 37-42"
+    ```yaml hl_lines="11-19 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -286,6 +291,13 @@ spec:
           level_2:
             source: column_value
             column: state
+      table_comparisons:
+        compare_to_source_of_truth_table:
+          compared_table_grouping_name: group_by_country_and_state
+          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
+          reference_table_connection_name: <source_of_truth_connection_name>
+          reference_table_schema_name: <source_of_truth_schema_name>
+          reference_table_name: <source_of_truth_table_name>
       profiling_checks:
         comparisons:
           compare_to_source_of_truth_table:
@@ -565,7 +577,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="11-21"
+```yaml hl_lines="16-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -576,6 +588,11 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
+  table_comparisons:
+    compare_to_source_of_truth_table:
+      reference_table_connection_name: <source_of_truth_connection_name>
+      reference_table_schema_name: <source_of_truth_schema_name>
+      reference_table_name: <source_of_truth_table_name>
   recurring_checks:
     daily:
       comparisons:
@@ -782,7 +799,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 38-43"
+    ```yaml hl_lines="11-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -802,6 +819,13 @@ spec:
           level_2:
             source: column_value
             column: state
+      table_comparisons:
+        compare_to_source_of_truth_table:
+          compared_table_grouping_name: group_by_country_and_state
+          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
+          reference_table_connection_name: <source_of_truth_connection_name>
+          reference_table_schema_name: <source_of_truth_schema_name>
+          reference_table_name: <source_of_truth_table_name>
       recurring_checks:
         daily:
           comparisons:
@@ -1082,7 +1106,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="11-21"
+```yaml hl_lines="16-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1093,6 +1117,11 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
+  table_comparisons:
+    compare_to_source_of_truth_table:
+      reference_table_connection_name: <source_of_truth_connection_name>
+      reference_table_schema_name: <source_of_truth_schema_name>
+      reference_table_name: <source_of_truth_table_name>
   recurring_checks:
     monthly:
       comparisons:
@@ -1299,7 +1328,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 38-43"
+    ```yaml hl_lines="11-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1319,6 +1348,13 @@ spec:
           level_2:
             source: column_value
             column: state
+      table_comparisons:
+        compare_to_source_of_truth_table:
+          compared_table_grouping_name: group_by_country_and_state
+          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
+          reference_table_connection_name: <source_of_truth_connection_name>
+          reference_table_schema_name: <source_of_truth_schema_name>
+          reference_table_name: <source_of_truth_table_name>
       recurring_checks:
         monthly:
           comparisons:
@@ -1599,7 +1635,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="11-21"
+```yaml hl_lines="16-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1610,6 +1646,11 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
+  table_comparisons:
+    compare_to_source_of_truth_table:
+      reference_table_connection_name: <source_of_truth_connection_name>
+      reference_table_schema_name: <source_of_truth_schema_name>
+      reference_table_name: <source_of_truth_table_name>
   partitioned_checks:
     daily:
       comparisons:
@@ -1808,11 +1849,11 @@ spec:
     ```sql
     SELECT
         COUNT_BIG(*) AS actual_value,
-        CAST([] AS date) AS time_period,
-        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST([] AS date), CAST([] AS date)
-    ORDER BY CAST([] AS date)
+    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
+    ORDER BY CAST(analyzed_table.[] AS date)
     
         
     ```
@@ -1820,7 +1861,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 38-43"
+    ```yaml hl_lines="11-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1840,6 +1881,13 @@ spec:
           level_2:
             source: column_value
             column: state
+      table_comparisons:
+        compare_to_source_of_truth_table:
+          compared_table_grouping_name: group_by_country_and_state
+          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
+          reference_table_connection_name: <source_of_truth_connection_name>
+          reference_table_schema_name: <source_of_truth_schema_name>
+          reference_table_name: <source_of_truth_table_name>
       partitioned_checks:
         daily:
           comparisons:
@@ -2055,11 +2103,11 @@ spec:
             COUNT_BIG(*) AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            CAST([] AS date) AS time_period,
-            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
-        ORDER BY level_1, level_2CAST([] AS date)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
+        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
         
             
         ```
@@ -2118,7 +2166,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="11-21"
+```yaml hl_lines="16-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2129,6 +2177,11 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
+  table_comparisons:
+    compare_to_source_of_truth_table:
+      reference_table_connection_name: <source_of_truth_connection_name>
+      reference_table_schema_name: <source_of_truth_schema_name>
+      reference_table_name: <source_of_truth_table_name>
   partitioned_checks:
     monthly:
       comparisons:
@@ -2327,11 +2380,11 @@ spec:
     ```sql
     SELECT
         COUNT_BIG(*) AS actual_value,
-        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
     
         
     ```
@@ -2339,7 +2392,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 38-43"
+    ```yaml hl_lines="11-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2359,6 +2412,13 @@ spec:
           level_2:
             source: column_value
             column: state
+      table_comparisons:
+        compare_to_source_of_truth_table:
+          compared_table_grouping_name: group_by_country_and_state
+          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
+          reference_table_connection_name: <source_of_truth_connection_name>
+          reference_table_schema_name: <source_of_truth_schema_name>
+          reference_table_name: <source_of_truth_table_name>
       partitioned_checks:
         monthly:
           comparisons:
@@ -2574,11 +2634,11 @@ spec:
             COUNT_BIG(*) AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
         
             
         ```

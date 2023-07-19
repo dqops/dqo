@@ -315,7 +315,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 41-46"
+    ```yaml hl_lines="11-21 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -921,7 +921,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 42-47"
+    ```yaml hl_lines="11-21 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1528,7 +1528,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 42-47"
+    ```yaml hl_lines="11-21 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2121,12 +2121,12 @@ spec:
             WITHIN GROUP (ORDER BY analyzed_table.[target_column])
             OVER (PARTITION BY
                 
-        CAST([] AS date),
-        CAST((CAST([] AS date)) AS DATETIME)
+        CAST(analyzed_table.[] AS date),
+        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME)
                 
             ) AS actual_value,
-        CAST([] AS date) AS time_period,
-        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
@@ -2135,7 +2135,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 42-47"
+    ```yaml hl_lines="11-21 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2407,12 +2407,12 @@ spec:
                 WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                 OVER (PARTITION BY
                     
-            CAST([] AS date),
-            CAST((CAST([] AS date)) AS DATETIME)
+            CAST(analyzed_table.[] AS date),
+            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME)
                     
                 ) AS actual_value,
-            CAST([] AS date) AS time_period,
-            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS grouping_level_1,
@@ -2728,12 +2728,12 @@ spec:
             WITHIN GROUP (ORDER BY analyzed_table.[target_column])
             OVER (PARTITION BY
                 
-        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1),
-        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME)
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1),
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME)
                 
             ) AS actual_value,
-        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
@@ -2742,7 +2742,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 42-47"
+    ```yaml hl_lines="11-21 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3014,12 +3014,12 @@ spec:
                 WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                 OVER (PARTITION BY
                     
-            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1),
-            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME)
+            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1),
+            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME)
                     
                 ) AS actual_value,
-            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS grouping_level_1,

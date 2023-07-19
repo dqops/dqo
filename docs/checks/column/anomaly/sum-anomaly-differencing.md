@@ -233,7 +233,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 39-44"
+    ```yaml hl_lines="11-21 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -678,7 +678,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 40-45"
+    ```yaml hl_lines="11-21 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

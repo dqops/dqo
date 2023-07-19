@@ -227,11 +227,11 @@ spec:
     ```sql
     SELECT
         SUM(analyzed_table.[target_column]) AS actual_value,
-        CAST([] AS date) AS time_period,
-        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+        CAST(analyzed_table.[] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST([] AS date), CAST([] AS date)
-    ORDER BY CAST([] AS date)
+    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
+    ORDER BY CAST(analyzed_table.[] AS date)
     
         
     ```
@@ -239,7 +239,7 @@ spec:
 ### **Configuration with data grouping**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 40-45"
+    ```yaml hl_lines="11-21 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -436,11 +436,11 @@ spec:
             SUM(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            CAST([] AS date) AS time_period,
-            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+            CAST(analyzed_table.[] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
-        ORDER BY level_1, level_2CAST([] AS date)
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
+        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
         
             
         ```

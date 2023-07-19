@@ -845,10 +845,12 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 }
 
                 String comparedTableGroupingName = tableComparisonConfigurationSpec.getComparedTableGroupingName();
-                dataGroupingConfigurationForComparison = tableSpec.getGroupings().get(comparedTableGroupingName);
-                if (dataGroupingConfigurationForComparison == null) {
-                    throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableSpec.toString() +
-                            " because the data grouping configuration " + comparedTableGroupingName + " is not configured on the table.");
+                if (!Strings.isNullOrEmpty(comparedTableGroupingName)) {
+                    dataGroupingConfigurationForComparison = tableSpec.getGroupings().get(comparedTableGroupingName);
+                    if (dataGroupingConfigurationForComparison == null) {
+                        throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableSpec.toString() +
+                                " because the data grouping configuration " + comparedTableGroupingName + " is not configured on the table.");
+                    }
                 }
 
                 extraComparisonFilter = tableComparisonConfigurationSpec.getComparedTableFilter();
@@ -929,10 +931,15 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 }
             }
 
-            DataGroupingConfigurationSpec referencedTableGroupingConfiguration = referencedTableSpec.getGroupings().get(tableComparisonConfigurationSpec.getReferenceTableGroupingName());
-            if (referencedTableGroupingConfiguration == null) {
-                throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableComparisonConfigurationSpec.toString() +
-                        " because the data grouping configuration " + tableComparisonConfigurationSpec.getReferenceTableGroupingName() + " is not configured on the table.");
+            DataGroupingConfigurationSpec referencedTableGroupingConfiguration = null;
+            if (!Strings.isNullOrEmpty(tableComparisonConfigurationSpec.getReferenceTableGroupingName())) {
+                referencedTableGroupingConfiguration = referencedTableSpec.getGroupings().get(
+                        tableComparisonConfigurationSpec.getReferenceTableGroupingName());
+
+                if (referencedTableGroupingConfiguration == null) {
+                    throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableComparisonConfigurationSpec.toString() +
+                            " because the data grouping configuration " + tableComparisonConfigurationSpec.getReferenceTableGroupingName() + " is not configured on the table.");
+                }
             }
 
             Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)

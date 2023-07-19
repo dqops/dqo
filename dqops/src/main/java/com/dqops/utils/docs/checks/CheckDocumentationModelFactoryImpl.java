@@ -18,6 +18,7 @@ package com.dqops.utils.docs.checks;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
+import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.connectors.ProviderDialectSettings;
@@ -41,6 +42,8 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderService;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
@@ -350,15 +353,26 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             System.err.println("Sorry but check root container: " + checkRootContainer.getClass().getName() + " has no category " + checkCategoryName);
         }
 
+        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = null;
         if (checkCategoryContainer instanceof AbstractComparisonCheckCategorySpecMap) {
             AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec> comparisonCategoryMap =
                     (AbstractComparisonCheckCategorySpecMap<? extends AbstractComparisonCheckCategorySpec>)checkCategoryContainer;
             AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = comparisonCategoryMap.getAt(0);
             checkCategoryContainer = comparisonCheckCategorySpec;
             uiCategoryModel.setComparisonName(comparisonCheckCategorySpec.getComparisonName());
-            uiCategoryModel.setCompareToColumn("source_of_truth_column_name");
 
-            // TODO: add a definition of a table comparison (the reference table) to trimmedTableSpec
+            if (comparisonCheckCategorySpec instanceof AbstractColumnComparisonCheckCategorySpec) {
+                AbstractColumnComparisonCheckCategorySpec columnComparisonCheckCategorySpec =
+                        (AbstractColumnComparisonCheckCategorySpec)comparisonCheckCategorySpec;
+                columnComparisonCheckCategorySpec.setReferenceColumn("source_of_truth_column_name");
+            }
+
+            tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
+            tableComparisonConfigurationSpec.setReferenceTableConnectionName("<source_of_truth_connection_name>");
+            tableComparisonConfigurationSpec.setReferenceTableSchemaName("<source_of_truth_schema_name>");
+            tableComparisonConfigurationSpec.setReferenceTableName("<source_of_truth_table_name>");
+            trimmedTableSpec.setTableComparisons(new TableComparisonConfigurationSpecMap());
+            trimmedTableSpec.getTableComparisons().put(comparisonCheckCategorySpec.getComparisonName(), tableComparisonConfigurationSpec);
         }
 
         AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());
@@ -389,11 +403,16 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             trimmedTableSpec.getGroupings().put(groupingName, groupingConfigurationSpec);
             trimmedTableSpec.setDefaultGroupingName(groupingName);
 
-            TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
-            String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
-            checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
-            checkDocumentationModel.setSplitSampleYamlWithDataStreams(splitStringByEndOfLine(yamlSampleWithDataStreams));
-            createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
+            if (tableComparisonConfigurationSpec != null) {
+                tableComparisonConfigurationSpec.setComparedTableGroupingName(groupingName);
+                tableComparisonConfigurationSpec.setReferenceTableGroupingName("<matching_grouping_name_on_the_reference_table>");
+            }
+
+            TableYaml tableYamlWithDataGroupings = new TableYaml(trimmedTableSpec);
+            String yamlSampleWithDataGroupings = this.yamlSerializer.serialize(tableYamlWithDataGroupings);
+            checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataGroupings);
+            checkDocumentationModel.setSplitSampleYamlWithDataStreams(splitStringByEndOfLine(yamlSampleWithDataGroupings));
+            createMarksForDataGroupings(checkDocumentationModel, yamlSampleWithDataGroupings);
 
             List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
             providerSamplesDataStream.sort(checkProviderRenderedSqlDocumentationModelComparator);
@@ -452,20 +471,23 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * Divides string to list of string, looks for phrase and assign position of element.
      * It's necessary for highlight data stream in yaml sample in documentation.
      * @param checkDocumentationModel Check documentation model.
-     * @param yamlSampleWithDataStreams Yaml template.
+     * @param yamlSampleWithDataGroupings Yaml template.
      */
-    private void createMarksForDataStreams(CheckDocumentationModel checkDocumentationModel, String yamlSampleWithDataStreams) {
+    private void createMarksForDataGroupings(CheckDocumentationModel checkDocumentationModel, String yamlSampleWithDataGroupings) {
 
-        List<String> splitYaml = List.of(yamlSampleWithDataStreams.split("\\r?\\n|\\r"));
+        List<String> splitYaml = List.of(yamlSampleWithDataGroupings.split("\\r?\\n|\\r"));
 
         for (int i = 0; i <= splitYaml.size(); i++) {
-            if (splitYaml.get(i).contains("default_grouping_name:")) {
+            String currentLine = splitYaml.get(i);
+            if (currentLine.contains("default_grouping_name:")) {
                 int firstSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
-                int firstSectionEndMarker = firstSectionBeginMarker + 8; // +8 because first data group section includes 9 lines
+                int firstSectionEndMarker = findFirstIndex(
+                        indexOfLineWithText(splitYaml, "table_comparisons:"),
+                        indexOfLineWithText(splitYaml, "_checks:"));
 
                 checkDocumentationModel.setFirstSectionBeginMarker(firstSectionBeginMarker);
                 checkDocumentationModel.setFirstSectionEndMarker(firstSectionEndMarker);
-            } else if (splitYaml.get(i).contains("country:")) {
+            } else if (currentLine.contains("country:")) {
                 int secondSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
                 int secondSectionEndMarker = secondSectionBeginMarker + 5; // +5 because first data stream section includes 5 lines
 
@@ -475,6 +497,45 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 break;
             }
         }
+    }
+
+    /**
+     * Finds the smallest value that is not -1.
+     * @param lineIndexes List of line indexes to find the minimum.
+     * @return Index of the line.
+     */
+    private int findFirstIndex(int... lineIndexes) {
+        int minIndex = -1;
+        for (int i = 0; i < lineIndexes.length; i++) {
+            int lineIndex = lineIndexes[i];
+            if (lineIndex < 0) {
+                continue;
+            }
+
+            if (minIndex < 0) {
+                minIndex = lineIndex;
+            } else if (minIndex > lineIndex) {
+                minIndex = lineIndex;
+            }
+        }
+
+        return minIndex;
+    }
+
+    /**
+     * Finds the 0-based index of the first line that contains the given text or returns -1 when the text was not found.
+     * @param lines List with lines.
+     * @param text Text to find.
+     * @return 0-based line index or -1 when not found.
+     */
+    private int indexOfLineWithText(List<String> lines, String text) {
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines.get(i).contains(text)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     /**
