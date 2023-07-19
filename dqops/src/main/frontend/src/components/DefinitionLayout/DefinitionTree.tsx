@@ -124,7 +124,10 @@ export const DefinitionTree = () => {
                   setSelected(sensor.sensor_name ? sensor.sensor_name : '');
               }}
             >
-              <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
+              <SvgIcon
+                name="definitionssensors"
+                className="w-4 h-4 min-w-4 shrink-0"
+              />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {sensor.sensor_name}
               </div>
@@ -187,7 +190,10 @@ export const DefinitionTree = () => {
                   setSelected(rule.rule_name ? rule.rule_name : '');
               }}
             >
-              <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
+              <SvgIcon
+                name="definitionsrules"
+                className="w-4 h-4 min-w-4 shrink-0"
+              />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {rule.rule_name}
               </div>

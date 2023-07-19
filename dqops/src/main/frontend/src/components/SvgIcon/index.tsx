@@ -87,6 +87,8 @@ import { ReactComponent as BoxPlotSvg } from './svg/box-plot.svg';
 import { ReactComponent as CancelJobsSvg } from './svg/cancel-job.svg';
 import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 import { ReactComponent as NotEqualSvg } from './svg/not-equal.svg';
+import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
+import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-sensors.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -182,6 +184,8 @@ const iconsMap: any = {
   canceljobs: CancelJobsSvg,
   oracle: OracleSvg,
   'not-equal': NotEqualSvg,
+  definitionsrules: DefinitionsRulesSvg,
+  definitionssensors: DefinitionsSensorsSvg
 };
 
 interface SvgIconProps {
