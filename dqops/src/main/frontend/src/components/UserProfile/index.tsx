@@ -51,7 +51,6 @@ export default function UserProfile({ name, email }: UserProfile) {
     );
   }, [name, email]);
 
-  console.log(`${(10 / 14) * 100}%`);
 
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
