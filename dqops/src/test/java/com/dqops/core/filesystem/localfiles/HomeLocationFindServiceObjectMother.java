@@ -22,6 +22,8 @@ import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
 
+import java.nio.file.Path;
+
 /**
  * Object mother for HomeLocationFindService.
  */
@@ -57,5 +59,18 @@ public class HomeLocationFindServiceObjectMother {
                 DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(recreateUserHomeDirectory);
         DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
         return new HomeLocationFindServiceImpl(configurationWithTemporaryUserHome, dqoConfigurationProperties);
+    }
+
+    /**
+     * Returns a user home finder for a user home in the given path.
+     * @param userHomePath Absolute path to the user home.
+     * @return Home finder for the test user home.
+     */
+    public static HomeLocationFindServiceImpl getCustomUserHome(Path userHomePath) {
+        DqoUserConfigurationProperties userConfigurationProperties =
+                DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
+        userConfigurationProperties.setHome(userHomePath.toString());
+        DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
+        return new HomeLocationFindServiceImpl(userConfigurationProperties, dqoConfigurationProperties);
     }
 }

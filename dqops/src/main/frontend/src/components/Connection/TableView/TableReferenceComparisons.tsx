@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { TableComparisonsApi } from '../../../services/apiClient';
-import { ReferenceTableModel } from '../../../api';
+import { TableComparisonConfigurationModel } from '../../../api';
 import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
@@ -24,7 +24,7 @@ export const TableReferenceComparisons = ({
     schema,
     table
   }: { connection: string; schema: string; table: string } = useParams();
-  const [references, setReferences] = useState<ReferenceTableModel[]>([]);
+  const [references, setReferences] = useState<TableComparisonConfigurationModel[]>([]);
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
@@ -42,7 +42,7 @@ export const TableReferenceComparisons = ({
   }, []);
 
   const getReferenceComparisons = () => {
-    TableComparisonsApi.getReferenceTables(connection, schema, table).then(
+    TableComparisonsApi.getTableComparisonConfigurations(connection, schema, table).then(
       (res) => {
         setReferences(res.data);
       }
@@ -74,7 +74,7 @@ export const TableReferenceComparisons = ({
     history.push(url);
   };
 
-  const onEditReference = (reference: ReferenceTableModel) => {
+  const onEditReference = (reference: TableComparisonConfigurationModel) => {
     const url = `${ROUTES.TABLE_LEVEL_PAGE(
       CheckTypes.SOURCES,
       connection,
@@ -82,7 +82,7 @@ export const TableReferenceComparisons = ({
       table,
       'reference-tables'
     )}?isEditing=true&reference=${
-      reference.reference_table_configuration_name
+      reference.table_comparison_configuration_name
     }`;
 
     dispatch(
@@ -113,9 +113,9 @@ export const TableReferenceComparisons = ({
     history.replace(`${location.pathname}?${qs.stringify(parsed)}`);
   };
 
-  const onEditProfilingReference = (reference: ReferenceTableModel) => {
-    setSelectedReference(reference.reference_table_configuration_name);
-    onChangeEditing(true, reference.reference_table_configuration_name);
+  const onEditProfilingReference = (reference: TableComparisonConfigurationModel) => {
+    setSelectedReference(reference.table_comparison_configuration_name);
+    onChangeEditing(true, reference.table_comparison_configuration_name);
   };
 
   const onBack = (stayOnSamePage?: boolean | undefined) => {

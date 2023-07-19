@@ -74,6 +74,7 @@
     "@types/lodash": "^4.14.195",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint": "^7.24.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-config-google": "^0.9.1",

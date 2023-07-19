@@ -79,7 +79,7 @@ const EditReferenceTable = ({
         table,
         selectedReference
       ).then((res) => {
-        setName(res.data?.reference_table_configuration_name ?? '');
+        setName(res.data?.table_comparison_configuration_name ?? '');
         setRefConnection(res.data?.reference_connection ?? '');
         setRefSchema(res.data?.reference_table?.schema_name ?? '');
         setRefTable(res.data?.reference_table?.table_name ?? '');
@@ -182,13 +182,13 @@ const EditReferenceTable = ({
   const onUpdate = () => {
     setIsUpdating(true);
     if (selectedReference) {
-      TableComparisonsApi.updateReferenceTable(
+      TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
         schema,
         table,
         selectedReference ?? '',
         {
-          reference_table_configuration_name: name,
+          table_comparison_configuration_name: name,
           compared_connection: connection,
           compared_table: {
             schema_name: schema,
@@ -215,8 +215,8 @@ const EditReferenceTable = ({
           setIsUpdating(false);
         });
     } else {
-      TableComparisonsApi.createReferenceTable(connection, schema, table, {
-        reference_table_configuration_name: name,
+      TableComparisonsApi.createTableComparisonConfiguration(connection, schema, table, {
+        table_comparison_configuration_name: name,
         compared_connection: connection,
         compared_table: {
           schema_name: schema,

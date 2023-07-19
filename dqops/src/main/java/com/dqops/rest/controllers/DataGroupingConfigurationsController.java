@@ -262,7 +262,7 @@ public class DataGroupingConfigurationsController {
      * @param dataGroupingConfigurationName  Data grouping configuration name.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}/setdefault", produces = "application/json")
+    @PatchMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault", produces = "application/json")
     @ApiOperation(value = "setTableDefaultGroupingConfiguration", notes = "Sets a table's grouping configuration as the default or disables data grouping")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -274,7 +274,8 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Data grouping configuration name or null to disable data grouping") @PathVariable String dataGroupingConfigurationName) {
+            @ApiParam(name = "dataGroupingConfigurationName", value = "Data grouping configuration name or empty to disable data grouping", required = true)
+            @RequestParam(required = true) String dataGroupingConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {

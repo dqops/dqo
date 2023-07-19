@@ -87,8 +87,14 @@ public class LocalDateTimePeriodUtility {
         LocalDateTime result = first;
         for (int i = 0; i < other.length; i++) {
             LocalDateTime otherDateTime = other[i];
-            if (otherDateTime.isBefore(result)) {
-                result = otherDateTime;
+            if (otherDateTime != null) {
+                if (result != null ) {
+                    if (otherDateTime.isBefore(result)) {
+                        result = otherDateTime;
+                    }
+                } else {
+                    result = otherDateTime;
+                }
             }
         }
 
@@ -105,8 +111,14 @@ public class LocalDateTimePeriodUtility {
         LocalDateTime result = first;
         for (int i = 0; i < other.length; i++) {
             LocalDateTime otherDateTime = other[i];
-            if (otherDateTime.isAfter(result)) {
-                result = otherDateTime;
+            if (otherDateTime != null) {
+                if (result != null ) {
+                    if (otherDateTime.isAfter(result)) {
+                        result = otherDateTime;
+                    }
+                } else {
+                    result = otherDateTime;
+                }
             }
         }
 

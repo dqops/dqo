@@ -219,6 +219,16 @@ public class CheckExecutionSummary {
     }
 
     /**
+     * Returns the total number of check results that did not fail to run (due to execution errors).
+     * Counts check results at all severity levels.
+     * @return Total count of results.
+     */
+    public int getTotalCheckResultsCount() {
+        return this.getValidResultsCount() + getWarningSeverityIssuesCount() +
+                this.getErrorSeverityIssuesCount() + this.getFatalSeverityIssuesCount();
+    }
+
+    /**
      * Returns the total count of checks that failed to execute.
      * @return Total count of execution errors (checks failed to execute).
      */

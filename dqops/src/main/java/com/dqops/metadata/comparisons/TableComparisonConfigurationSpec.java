@@ -33,19 +33,19 @@ import lombok.ToString;
 import java.util.Objects;
 
 /**
- * Identifies a target table from another data source (a reference table) that is compared to the current table (the parent table for this object).
+ * Identifies a data comparison configuration between a parent table (the compared table) and the target table from another data source (a reference table).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class ReferenceTableSpec extends AbstractSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<ReferenceTableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class TableComparisonConfigurationSpec extends AbstractSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<TableComparisonConfigurationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("The name of the data grouping configuration on the parent table that will be used for comparison. " +
+    @JsonPropertyDescription("The name of the data grouping configuration on the parent table (the compared table) that will be used for comparison. " +
             "When not provided, uses the 'default' grouping name. When the parent table has no data grouping configurations, compares the whole table without grouping.")
     private String comparedTableGroupingName = DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME;
 
@@ -189,8 +189,8 @@ public class ReferenceTableSpec extends AbstractSpec {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ReferenceTableSpec deepClone() {
-        ReferenceTableSpec cloned = (ReferenceTableSpec) super.deepClone();
+    public TableComparisonConfigurationSpec deepClone() {
+        TableComparisonConfigurationSpec cloned = (TableComparisonConfigurationSpec) super.deepClone();
         return cloned;
     }
 }

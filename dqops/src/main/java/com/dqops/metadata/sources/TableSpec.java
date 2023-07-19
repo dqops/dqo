@@ -28,7 +28,7 @@ import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
-import com.dqops.metadata.comparisons.ReferenceTableSpecMap;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -65,7 +65,7 @@ public class TableSpec extends AbstractSpec {
             put("timestamp_columns", o -> o.timestampColumns);
             put("incremental_time_window", o -> o.incrementalTimeWindow);
 			put("groupings", o -> o.groupings);
-            put("reference_tables", o -> o.referenceTables);
+            put("table_comparisons", o -> o.tableComparisons);
             put("incident_grouping", o -> o.incidentGrouping);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
@@ -130,14 +130,14 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DataGroupingConfigurationSpecMap groupings = new DataGroupingConfigurationSpecMap();
 
-    @JsonPropertyDescription("Dictionary of reference table configurations. Reference tables are ued for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). " +
+    @JsonPropertyDescription("Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). " +
                              "The reference table's metadata must be imported into DQO, but the reference table could be located on a different data source. " +
                              "DQO will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
                              "The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. " +
                              "DQO will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ReferenceTableSpecMap referenceTables = new ReferenceTableSpecMap();
+    private TableComparisonConfigurationSpecMap tableComparisons = new TableComparisonConfigurationSpecMap();
 
     @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -330,18 +330,18 @@ public class TableSpec extends AbstractSpec {
      * Returns the map of named comparisons to reference tables.
      * @return Dictionary of comparisons to reference tables.
      */
-    public ReferenceTableSpecMap getReferenceTables() {
-        return referenceTables;
+    public TableComparisonConfigurationSpecMap getTableComparisons() {
+        return tableComparisons;
     }
 
     /**
      * Sets the dictionary of comparisons to reference tables.
-     * @param referenceTables Dictionary of comparisons to reference tables.
+     * @param tableComparisons Dictionary of comparisons to reference tables.
      */
-    public void setReferenceTables(ReferenceTableSpecMap referenceTables) {
-        setDirtyIf(!Objects.equals(this.referenceTables, referenceTables));
-        this.referenceTables = referenceTables;
-        propagateHierarchyIdToField(referenceTables, "reference_tables");
+    public void setTableComparisons(TableComparisonConfigurationSpecMap tableComparisons) {
+        setDirtyIf(!Objects.equals(this.tableComparisons, tableComparisons));
+        this.tableComparisons = tableComparisons;
+        propagateHierarchyIdToField(tableComparisons, "table_comparisons");
     }
 
     /**
@@ -810,7 +810,7 @@ public class TableSpec extends AbstractSpec {
             cloned.owner = null;
             cloned.comments = null;
             cloned.statistics = null;
-            cloned.referenceTables = null;
+            cloned.tableComparisons = null;
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
@@ -850,7 +850,7 @@ public class TableSpec extends AbstractSpec {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.groupings = null;
-            cloned.referenceTables = null;
+            cloned.tableComparisons = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.statistics = null;
@@ -878,7 +878,7 @@ public class TableSpec extends AbstractSpec {
             cloned.timestampColumns = null;
             cloned.incrementalTimeWindow = null;
             cloned.groupings = null;
-            cloned.referenceTables = null;
+            cloned.tableComparisons = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.columns = null;

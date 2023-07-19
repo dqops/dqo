@@ -27,8 +27,8 @@ import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import com.dqops.metadata.comparisons.ReferenceTableSpec;
-import com.dqops.metadata.comparisons.ReferenceTableSpecMap;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.metadata.comments.CommentSpec;
@@ -586,19 +586,19 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a description of the reference table to which the current table is compared.
-     * @param referenceTableSpec Reference table specification.
+     * @param tableComparisonConfigurationSpec Reference table specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(ReferenceTableSpec referenceTableSpec, P parameter);
+    R accept(TableComparisonConfigurationSpec tableComparisonConfigurationSpec, P parameter);
 
     /**
      * Accepts a dictionary of reference table comparisons.
-     * @param referenceTableSpecMap Dictionary of reference table comparisons.
+     * @param tableComparisonConfigurationSpecMap Dictionary of reference table comparisons.
      * @param parameter Visitor's parameter.
      * @return Accept's result.
      */
-    R accept(ReferenceTableSpecMap referenceTableSpecMap, P parameter);
+    R accept(TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap, P parameter);
 
     /**
      * Accepts a map of comparison checks for a named comparison.

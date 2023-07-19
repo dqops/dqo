@@ -22,10 +22,10 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import java.util.Map;
 
 /**
- * Dictionary of comparisons of the current table (the parent of this node) and another reference table (the source of truth)
+ * Dictionary of data comparison configurations between the current table (the parent of this node) and another reference table (the source of truth)
  * to which we are comparing the tables to measure the accuracy of the data.
  */
-public class ReferenceTableSpecMap extends AbstractDirtyTrackingSpecMap<ReferenceTableSpec> {
+public class TableComparisonConfigurationSpecMap extends AbstractDirtyTrackingSpecMap<TableComparisonConfigurationSpec> {
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
@@ -42,13 +42,13 @@ public class ReferenceTableSpecMap extends AbstractDirtyTrackingSpecMap<Referenc
      * Creates and returns a copy of this object.
      */
     @Override
-    public ReferenceTableSpecMap deepClone() {
-        ReferenceTableSpecMap cloned = new ReferenceTableSpecMap();
+    public TableComparisonConfigurationSpecMap deepClone() {
+        TableComparisonConfigurationSpecMap cloned = new TableComparisonConfigurationSpecMap();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
-        for (Map.Entry<String, ReferenceTableSpec> keyPair : this.entrySet()) {
+        for (Map.Entry<String, TableComparisonConfigurationSpec> keyPair : this.entrySet()) {
             cloned.put(keyPair.getKey(), keyPair.getValue().deepClone());
         }
 

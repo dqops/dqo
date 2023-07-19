@@ -20,6 +20,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -60,6 +61,8 @@ public class SensorExecutionRunParameters {
     private DataGroupingConfigurationSpec dataGroupings;
     private AbstractSensorParametersSpec sensorParameters;
     private ProviderDialectSettings dialectSettings;
+    private TableComparisonConfigurationSpec tableComparisonConfiguration;
+    private String referenceColumnName;
     @JsonIgnore
     private Instant startedAt = Instant.now();
     @JsonIgnore
@@ -98,6 +101,8 @@ public class SensorExecutionRunParameters {
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
      * @param dataGroupings Effective data groupings configuration.
+     * @param tableComparisonConfiguration Optional table comparison configuration.
+     * @param referenceColumnName Optional name of the reference column to which we are comparing.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
      * @param checkSearchFilter Check search filter to find this particular check.
@@ -115,6 +120,8 @@ public class SensorExecutionRunParameters {
             TimeSeriesConfigurationSpec timeSeries,
             TimeWindowFilterParameters timeWindowFilter,
             DataGroupingConfigurationSpec dataGroupings,
+            TableComparisonConfigurationSpec tableComparisonConfiguration,
+            String referenceColumnName,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings,
             CheckSearchFilters checkSearchFilter,
@@ -131,6 +138,8 @@ public class SensorExecutionRunParameters {
         this.timeSeries = timeSeries;
         this.timeWindowFilter = timeWindowFilter;
         this.dataGroupings = dataGroupings;
+        this.tableComparisonConfiguration = tableComparisonConfiguration;
+        this.referenceColumnName = referenceColumnName;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
         this.checkSearchFilter = checkSearchFilter;
@@ -328,6 +337,38 @@ public class SensorExecutionRunParameters {
      */
     public void setDataGroupings(DataGroupingConfigurationSpec dataGroupings) {
         this.dataGroupings = dataGroupings;
+    }
+
+    /**
+     * Returns the table comparison configuration, only for table comparison checks.
+     * @return Table comparison configuration or null when it is not a table comparison check.
+     */
+    public TableComparisonConfigurationSpec getTableComparisonConfiguration() {
+        return tableComparisonConfiguration;
+    }
+
+    /**
+     * Sets a reference to the table comparison configuration.
+     * @param tableComparisonConfiguration Table comparison configuration.
+     */
+    public void setTableComparisonConfiguration(TableComparisonConfigurationSpec tableComparisonConfiguration) {
+        this.tableComparisonConfiguration = tableComparisonConfiguration;
+    }
+
+    /**
+     * Returns the name of the reference column from the reference table (the source of truth) to which we are comparing the current column.
+     * @return Reference column name.
+     */
+    public String getReferenceColumnName() {
+        return referenceColumnName;
+    }
+
+    /**
+     * Sets the name of the reference column from the reference table (the source of truth) to which we are comparing the current column.
+     * @param referenceColumnName Reference column name.
+     */
+    public void setReferenceColumnName(String referenceColumnName) {
+        this.referenceColumnName = referenceColumnName;
     }
 
     /**

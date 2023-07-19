@@ -62,12 +62,20 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'expected_value') and hasattr(rule_parameters, 'actual_value'):
+    has_expected_value = hasattr(rule_parameters, 'expected_value')
+    has_actual_value = hasattr(rule_parameters, 'actual_value')
+    if not has_expected_value and not has_actual_value:
         return RuleExecutionResult()
+
+    if not has_expected_value:
+        return RuleExecutionResult(False, None, None, None)
 
     expected_value = rule_parameters.expected_value
     lower_bound = rule_parameters.expected_value - (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
     upper_bound = rule_parameters.expected_value + (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    if has_actual_value:
+        passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    else:
+        passed = False
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

@@ -33,7 +33,7 @@ public final class DqoUserConfigurationPropertiesObjectMother {
      * @return Default configuration that uses a testable home.
      */
     public static DqoUserConfigurationProperties createDefaultUserConfiguration() {
-        DqoUserConfigurationProperties configurationProperties = BeanFactoryObjectMother.getBeanFactory().getBean(DqoUserConfigurationProperties.class);
+        DqoUserConfigurationProperties configurationProperties = BeanFactoryObjectMother.getBeanFactory().getBean(DqoUserConfigurationProperties.class).clone();
         return configurationProperties;
     }
 

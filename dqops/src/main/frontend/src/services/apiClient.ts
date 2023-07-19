@@ -36,7 +36,8 @@ import {
   IncidentsApiFactory,
   LogShippingApiFactory,
   EnvironmentApiFactory,
-  ChecksApiFactory, TableComparisonsApiFactory
+  ChecksApiFactory,
+  TableComparisonsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
