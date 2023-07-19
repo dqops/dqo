@@ -16,6 +16,7 @@
 package com.dqops.utils.tables;
 
 import com.dqops.utils.conversion.NumericTypeConverter;
+import com.dqops.utils.string.UniqueStringSet;
 import org.apache.commons.lang3.StringUtils;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
@@ -84,18 +85,20 @@ public final class TableColumnUtility {
             }
         }
         else {
+            UniqueStringSet uniqueStringSet = new UniqueStringSet();
+
             if (sourceColumn instanceof NumberColumn<?,?>) {
                 NumberColumn<?,?> numberColumn = (NumberColumn<?,?>) sourceColumn;
                 for (int i = 0; i < size; i++) {
                     if (!numberColumn.isMissing(i)) {
                         double doubleValue = numberColumn.getDouble(i);
-                        targetColumn.set(i, Double.toString(doubleValue));
+                        targetColumn.set(i, uniqueStringSet.deduplicate(Double.toString(doubleValue)));
                     }
                 }
             } else {
                 for (int i = 0; i < size; i++) {
                     if (!sourceColumn.isMissing(i)) {
-                        targetColumn.set(i, sourceColumn.get(i).toString());
+                        targetColumn.set(i, uniqueStringSet.deduplicate(sourceColumn.get(i).toString()));
                     }
                 }
             }
