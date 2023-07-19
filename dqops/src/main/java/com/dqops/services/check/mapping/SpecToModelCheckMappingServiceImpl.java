@@ -329,7 +329,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 AbstractColumnComparisonCheckCategorySpec columnComparisonCheckCategorySpec = (AbstractColumnComparisonCheckCategorySpec)comparisonCheckCategorySpec;
                 categoryModel.setCompareToColumn(columnComparisonCheckCategorySpec.getReferenceColumn());
             }
-            runChecksCategoryTemplate.setDataComparisonName(comparisonName);
+            runChecksCategoryTemplate.setTableComparisonName(comparisonName);
         } else {
             categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
         }

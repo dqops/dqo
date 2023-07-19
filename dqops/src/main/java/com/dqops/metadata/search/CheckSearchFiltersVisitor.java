@@ -382,7 +382,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
     public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, SearchParameterObject parameter) {
         if (abstractCheckCategorySpec instanceof AbstractComparisonCheckCategorySpec) {
             AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec)abstractCheckCategorySpec;
-            String dataComparisonNameFilter = this.filters.getDataComparisonName();
+            String dataComparisonNameFilter = this.filters.getTableComparisonName();
             if (!Strings.isNullOrEmpty(dataComparisonNameFilter)) {
                 String comparisonName = comparisonCheckCategorySpec.getComparisonName();
                 if (!StringPatternComparer.matchSearchPattern(comparisonName, dataComparisonNameFilter)) {
@@ -419,7 +419,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             }
         }
 
-        String dataComparisonName = this.filters.getDataComparisonName();
+        String dataComparisonName = this.filters.getTableComparisonName();
         if (!Strings.isNullOrEmpty(dataComparisonName)) {
             if (StringPatternComparer.isSearchPattern(dataComparisonName)) {
                 return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
