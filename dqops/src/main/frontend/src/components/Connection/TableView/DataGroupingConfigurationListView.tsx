@@ -5,6 +5,8 @@ import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 import RadioButton from '../../RadioButton';
 import SetDefaultDialog from './SetDefaultDialog';
+import SvgIcon from '../../SvgIcon';
+import { IconButton } from '@material-tailwind/react';
 
 interface IDataGroupingConfigurationListViewProps {
   dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
@@ -145,27 +147,22 @@ console.log(messageBox)
                     }
                   />
                 </div>
-                <span>
+                <span onClick={() => onEdit(groupingConfiguration)} className='cursor-pointer '>
                   {groupingConfiguration.data_grouping_configuration_name}
                 </span>
               </td>
+
               <td className="px-2 py-2">
-                <Button
-                  label="Edit"
-                  color="primary"
-                  variant="text"
-                  className="!py-0"
-                  onClick={() => onEdit(groupingConfiguration)}
-                />
-              </td>
-              <td className="px-2 py-2">
-                <Button
-                  label="Delete"
-                  color="primary"
-                  variant="text"
-                  className="!py-0"
-                  onClick={() => openConfirmDeleteModal(groupingConfiguration)}
-                />
+
+               <IconButton
+                size="sm"
+                className="group bg-teal-500 ml-3"
+                onClick={() => {
+                  openConfirmDeleteModal(groupingConfiguration)
+                }}
+              >
+                <SvgIcon name="delete" className="w-4" />
+              </IconButton>
               </td>
             </tr>
           ))}
