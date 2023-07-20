@@ -26,8 +26,8 @@ jobs:
         tags: $(date +%s),${{ steps.readversion.outputs.content }}
         addLatest: true
         enableBuildKit: true
-#        multiPlatform: true
-#        platform: linux/amd64,linux/arm64
+        multiPlatform: true
+        platform: linux/amd64,linux/arm64
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
