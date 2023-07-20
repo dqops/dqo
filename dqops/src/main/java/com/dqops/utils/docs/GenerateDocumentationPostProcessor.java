@@ -43,7 +43,7 @@ import com.dqops.metadata.storage.localfiles.sources.ConnectionYaml;
 import com.dqops.metadata.storage.localfiles.sources.TableYaml;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
-import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
+import com.dqops.services.check.matching.*;
 import com.dqops.utils.docs.checks.CheckDocumentationGenerator;
 import com.dqops.utils.docs.checks.CheckDocumentationGeneratorImpl;
 import com.dqops.utils.docs.checks.CheckDocumentationModelFactory;
@@ -70,13 +70,14 @@ import com.dqops.utils.docs.yaml.YamlDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.yaml.YamlDocumentationSchemaNode;
 import com.dqops.utils.python.PythonCallerServiceImpl;
 import com.dqops.utils.python.PythonVirtualEnvServiceImpl;
+import com.dqops.utils.reflection.ReflectionService;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.dqops.utils.serialization.JsonSerializerImpl;
 import com.dqops.utils.serialization.YamlSerializerImpl;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class called from the maven build. Generates documentation.
@@ -106,7 +107,7 @@ public class GenerateDocumentationPostProcessor {
             generateDocumentationForRules(projectDir, dqoHomeContext);
             generateDocumentationForCliCommands(projectDir);
             generateDocumentationForChecks(projectDir, dqoHomeContext);
-            generateDocumentationForYaml(projectDir);
+            generateDocumentationForYaml(projectDir, dqoHomeContext);
             generateDocumentationForParquetFiles(projectDir);
 
         } catch (Exception e) {
@@ -224,8 +225,6 @@ public class GenerateDocumentationPostProcessor {
      */
     public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, final DqoHomeContext dqoHomeContext){
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                reflectionService, new SensorDefinitionFindServiceImpl());
         DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
         configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
         DqoUserConfigurationProperties dqoUserConfigurationProperties = new DqoUserConfigurationProperties();
@@ -238,12 +237,7 @@ public class GenerateDocumentationPostProcessor {
                 configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
 
         CheckDocumentationModelFactory checkDocumentationModelFactory = new CheckDocumentationModelFactoryImpl(
-                new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, new DqoHomeContextFactory() {
-                    @Override
-                    public DqoHomeContext openLocalDqoHome() {
-                        return dqoHomeContext;
-                    }
-                }),
+                createSimilarCheckMatchingService(reflectionService, dqoHomeContext),
                 createSensorDocumentationModelFactory(dqoHomeContext),
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
                 new ModelToSpecCheckMappingServiceImpl(reflectionService),
@@ -252,16 +246,27 @@ public class GenerateDocumentationPostProcessor {
         return checkDocumentationModelFactory;
     }
 
+    public static SimilarCheckMatchingService createSimilarCheckMatchingService(ReflectionService reflectionService, DqoHomeContext dqoHomeContext) {
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                reflectionService, new SensorDefinitionFindServiceImpl());
+        return new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, new DqoHomeContextFactory() {
+            @Override
+            public DqoHomeContext openLocalDqoHome() {
+                return dqoHomeContext;
+            }
+        });
+    }
+
     /**
      * Generates documentation for yaml classes.
      * @param projectRoot Path to the project root.
      */
-    public static void generateDocumentationForYaml(Path projectRoot) {
+    public static void generateDocumentationForYaml(Path projectRoot, DqoHomeContext dqoHomeContext) {
         Path yamlDocPath = projectRoot.resolve("../docs/reference/yaml").toAbsolutePath().normalize();
         DocumentationFolder currentYamlDocFiles = DocumentationFolderFactory.loadCurrentFiles(yamlDocPath);
         YamlDocumentationGenerator yamlDocumentationGenerator = new YamlDocumentationGeneratorImpl(new YamlDocumentationModelFactoryImpl());
 
-        List<YamlDocumentationSchemaNode> yamlDocumentationSchema = getYamlDocumentationSchema();
+        List<YamlDocumentationSchemaNode> yamlDocumentationSchema = getYamlDocumentationSchema(dqoHomeContext);
         DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot, yamlDocumentationSchema);
         renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
 
@@ -276,8 +281,12 @@ public class GenerateDocumentationPostProcessor {
      * Gets the schema describing the layout of files in documentation for Yaml.
      * @return List of Yaml documentation schema nodes, containing data about the layout.
      */
-    protected static List<YamlDocumentationSchemaNode> getYamlDocumentationSchema() {
-        List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = new ArrayList<>();
+    protected static List<YamlDocumentationSchemaNode> getYamlDocumentationSchema(DqoHomeContext dqoHomeContext) {
+        ReflectionService reflectionService = new ReflectionServiceImpl();
+        SimilarCheckMatchingService similarCheckMatchingService = createSimilarCheckMatchingService(
+                reflectionService, dqoHomeContext);
+
+        List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = getYamlChecksDocumentationSchema(similarCheckMatchingService);
 
         Path profilingPath = Path.of("profiling");
         Path recurringPath = Path.of("recurring");
@@ -347,6 +356,38 @@ public class GenerateDocumentationPostProcessor {
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(TableYaml.class));
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(IncidentNotificationMessage.class)); // the incident notification message format
         return yamlDocumentationSchemaNodes;
+    }
+
+    protected static List<YamlDocumentationSchemaNode> getYamlChecksDocumentationSchema(SimilarCheckMatchingService similarCheckMatchingService) {
+        Path checksPath = Path.of("checks");
+
+        Collection<SimilarChecksGroup> tableChecks = similarCheckMatchingService.findSimilarTableChecks().getSimilarCheckGroups();
+        List<YamlDocumentationSchemaNode> tableChecksNodes = getYamlCheckGroupsSchema(tableChecks, checksPath.resolve("table"));
+
+        Collection<SimilarChecksGroup> columnChecks = similarCheckMatchingService.findSimilarColumnChecks().getSimilarCheckGroups();
+        return new ArrayList<>();
+    }
+
+    protected static List<YamlDocumentationSchemaNode> getYamlCheckGroupsSchema(Collection<SimilarChecksGroup> checksGroups, Path schemaNodePathPrefix) {
+        List<YamlDocumentationSchemaNode> nodesForChecksGroups = new ArrayList<>();
+        Set<String> handledCategories = new HashSet<>();
+        for (SimilarChecksGroup checksGroup : checksGroups) {
+            String checkCategoryName = checksGroup.getFirstCheckCategory();
+            if (handledCategories.contains(checkCategoryName)) {
+                continue;
+            }
+
+            List<SimilarCheckModel> similarCheckModels = checksGroup.getSimilarChecks();
+
+            YamlDocumentationSchemaNode schemaNode = new YamlDocumentationSchemaNode(null, schemaNodePathPrefix.resolve(checkCategoryName));
+
+            handledCategories.add(checkCategoryName);
+        }
+        List<String> r = checksGroups.stream().map(similarChecksGroup -> similarChecksGroup.getFirstCheckCategory())
+
+
+                .distinct().sorted().collect(Collectors.toList());
+        return null;
     }
 
     /**
