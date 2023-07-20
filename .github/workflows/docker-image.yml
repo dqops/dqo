@@ -17,29 +17,16 @@ jobs:
       uses: juliangruber/read-file-action@v1
       with:
         path: ./VERSION
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag dqops/dqo:$(date +%s) --tag dqops/dqo:$(steps.readversion.outputs.content) --tag dqops/dqo:latest
-
-
-  build-on-macos:
-    runs-on: macOS-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Read VERSION
-      id: readversion
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./VERSION
     - uses: docker-practice/actions-setup-docker@master
     - run: set -x
     - name: Build and Push Docker Image      
       uses: mr-smithers-excellent/docker-build-push@v4      
       with:        
-         image: dqops/dqo
-         tags: $(date +%s),$(steps.readversion.outputs.content)
-         addLatest: true
-         platform: linux/arm64/v8
-         registry: docker.io        
-         username: ${{ secrets.DOCKER_USERNAME }}        
-         password: ${{ secrets.DOCKER_PASSWORD }}
+        image: dqops/dqo
+        tags: $(date +%s),${{steps.readversion.outputs.content}}
+        addLatest: true
+#        multiPlatform: true
+#        platform: linux/amd64,linux/arm64
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}

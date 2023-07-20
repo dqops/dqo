@@ -49,7 +49,7 @@ EXPOSE 8888
 WORKDIR /dqo
 
 # install java
-RUN apt-get update && apt-get install -y openjdk-17-jre && apt-get clean
+RUN apt-get update && apt-get install -y ca-certificates-java openjdk-17-jre && apt-get clean
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH=$PATH:$JAVA_HOME/bin
 
