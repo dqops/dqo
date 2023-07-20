@@ -1,8 +1,14 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.table_comparison_grouping_columns_pair_spec import (
+        TableComparisonGroupingColumnsPairSpec,
+    )
+
 
 T = TypeVar("T", bound="TableComparisonConfigurationSpec")
 
@@ -11,15 +17,6 @@ T = TypeVar("T", bound="TableComparisonConfigurationSpec")
 class TableComparisonConfigurationSpec:
     """
     Attributes:
-        compared_table_grouping_name (Union[Unset, str]): The name of the data grouping configuration on the parent
-            table (the compared table) that will be used for comparison. When the data grouping name is not given then
-            compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a
-            whole table).
-        reference_table_grouping_name (Union[Unset, str]): The name of the data grouping configuration on the referenced
-            name that will be used for comparison. When the data grouping name is not given then compares the whole table
-            without grouping (i.e. the row count of the whole table, the sum of column values for a whole table). The data
-            grouping configurations on the parent table and the reference table must have the same grouping dimension levels
-            configured, but the configuration (the names of the columns) could be different.
         reference_table_connection_name (Union[Unset, str]): The name of the connection in DQO where the reference table
             (the source of truth) is configured. When the connection name is not provided, DQO will find the reference table
             on the connection of the parent table.
@@ -33,33 +30,40 @@ class TableComparisonConfigurationSpec:
         reference_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
             that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression
             that will be added to the WHERE clause when querying the reference table.
+        grouping_columns (Union[Unset, List['TableComparisonGroupingColumnsPairSpec']]): List of column pairs from both
+            the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
+            table and the reference table (the source of truth). The columns are used in the next of the table comparison to
+            join the results of data groups (row counts, sums of columns) between the compared table and the reference table
+            to compare the differences.
     """
 
-    compared_table_grouping_name: Union[Unset, str] = UNSET
-    reference_table_grouping_name: Union[Unset, str] = UNSET
     reference_table_connection_name: Union[Unset, str] = UNSET
     reference_table_schema_name: Union[Unset, str] = UNSET
     reference_table_name: Union[Unset, str] = UNSET
     compared_table_filter: Union[Unset, str] = UNSET
     reference_table_filter: Union[Unset, str] = UNSET
+    grouping_columns: Union[
+        Unset, List["TableComparisonGroupingColumnsPairSpec"]
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        compared_table_grouping_name = self.compared_table_grouping_name
-        reference_table_grouping_name = self.reference_table_grouping_name
         reference_table_connection_name = self.reference_table_connection_name
         reference_table_schema_name = self.reference_table_schema_name
         reference_table_name = self.reference_table_name
         compared_table_filter = self.compared_table_filter
         reference_table_filter = self.reference_table_filter
+        grouping_columns: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.grouping_columns, Unset):
+            grouping_columns = []
+            for grouping_columns_item_data in self.grouping_columns:
+                grouping_columns_item = grouping_columns_item_data.to_dict()
+
+                grouping_columns.append(grouping_columns_item)
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if compared_table_grouping_name is not UNSET:
-            field_dict["compared_table_grouping_name"] = compared_table_grouping_name
-        if reference_table_grouping_name is not UNSET:
-            field_dict["reference_table_grouping_name"] = reference_table_grouping_name
         if reference_table_connection_name is not UNSET:
             field_dict[
                 "reference_table_connection_name"
@@ -72,16 +76,18 @@ class TableComparisonConfigurationSpec:
             field_dict["compared_table_filter"] = compared_table_filter
         if reference_table_filter is not UNSET:
             field_dict["reference_table_filter"] = reference_table_filter
+        if grouping_columns is not UNSET:
+            field_dict["grouping_columns"] = grouping_columns
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.table_comparison_grouping_columns_pair_spec import (
+            TableComparisonGroupingColumnsPairSpec,
+        )
+
         d = src_dict.copy()
-        compared_table_grouping_name = d.pop("compared_table_grouping_name", UNSET)
-
-        reference_table_grouping_name = d.pop("reference_table_grouping_name", UNSET)
-
         reference_table_connection_name = d.pop(
             "reference_table_connection_name", UNSET
         )
@@ -94,14 +100,22 @@ class TableComparisonConfigurationSpec:
 
         reference_table_filter = d.pop("reference_table_filter", UNSET)
 
+        grouping_columns = []
+        _grouping_columns = d.pop("grouping_columns", UNSET)
+        for grouping_columns_item_data in _grouping_columns or []:
+            grouping_columns_item = TableComparisonGroupingColumnsPairSpec.from_dict(
+                grouping_columns_item_data
+            )
+
+            grouping_columns.append(grouping_columns_item)
+
         table_comparison_configuration_spec = cls(
-            compared_table_grouping_name=compared_table_grouping_name,
-            reference_table_grouping_name=reference_table_grouping_name,
             reference_table_connection_name=reference_table_connection_name,
             reference_table_schema_name=reference_table_schema_name,
             reference_table_name=reference_table_name,
             compared_table_filter=compared_table_filter,
             reference_table_filter=reference_table_filter,
+            grouping_columns=grouping_columns,
         )
 
         table_comparison_configuration_spec.additional_properties = d

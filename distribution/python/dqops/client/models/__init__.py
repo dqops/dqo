@@ -1076,6 +1076,7 @@ from .column_values_in_range_numeric_percent_check_spec import (
 from .comment_spec import CommentSpec
 from .common_column_model import CommonColumnModel
 from .compare_thresholds_model import CompareThresholdsModel
+from .comparison_check_result_model import ComparisonCheckResultModel
 from .connection_basic_model import ConnectionBasicModel
 from .connection_basic_model_provider_type import ConnectionBasicModelProviderType
 from .connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
@@ -1221,6 +1222,12 @@ from .get_table_columns_partitioned_checks_model_time_scale import (
 )
 from .get_table_columns_recurring_checks_model_time_scale import (
     GetTableColumnsRecurringChecksModelTimeScale,
+)
+from .get_table_comparison_partitioned_results_time_scale import (
+    GetTableComparisonPartitionedResultsTimeScale,
+)
+from .get_table_comparison_recurring_results_time_scale import (
+    GetTableComparisonRecurringResultsTimeScale,
 )
 from .get_table_partitioned_checks_basic_model_time_scale import (
     GetTablePartitionedChecksBasicModelTimeScale,
@@ -1522,6 +1529,12 @@ from .table_comparison_daily_partitioned_checks_spec import (
 from .table_comparison_daily_recurring_checks_spec import (
     TableComparisonDailyRecurringChecksSpec,
 )
+from .table_comparison_grouping_column_pair_model import (
+    TableComparisonGroupingColumnPairModel,
+)
+from .table_comparison_grouping_columns_pair_spec import (
+    TableComparisonGroupingColumnsPairSpec,
+)
 from .table_comparison_model import TableComparisonModel
 from .table_comparison_monthly_partitioned_checks_spec import (
     TableComparisonMonthlyPartitionedChecksSpec,
@@ -1530,6 +1543,16 @@ from .table_comparison_monthly_recurring_checks_spec import (
     TableComparisonMonthlyRecurringChecksSpec,
 )
 from .table_comparison_profiling_checks_spec import TableComparisonProfilingChecksSpec
+from .table_comparison_results_model import TableComparisonResultsModel
+from .table_comparison_results_model_column_comparison_results import (
+    TableComparisonResultsModelColumnComparisonResults,
+)
+from .table_comparison_results_model_column_comparison_results_additional_property import (
+    TableComparisonResultsModelColumnComparisonResultsAdditionalProperty,
+)
+from .table_comparison_results_model_table_comparison_results import (
+    TableComparisonResultsModelTableComparisonResults,
+)
 from .table_comparison_row_count_match_check_spec import (
     TableComparisonRowCountMatchCheckSpec,
 )
@@ -2142,6 +2165,7 @@ __all__ = (
     "CommentSpec",
     "CommonColumnModel",
     "CompareThresholdsModel",
+    "ComparisonCheckResultModel",
     "ConnectionBasicModel",
     "ConnectionBasicModelProviderType",
     "ConnectionIncidentGroupingSpec",
@@ -2220,6 +2244,8 @@ __all__ = (
     "GetSchemaRecurringChecksTemplatesTimeScale",
     "GetTableColumnsPartitionedChecksModelTimeScale",
     "GetTableColumnsRecurringChecksModelTimeScale",
+    "GetTableComparisonPartitionedResultsTimeScale",
+    "GetTableComparisonRecurringResultsTimeScale",
     "GetTablePartitionedChecksBasicModelTimeScale",
     "GetTablePartitionedChecksModelFilterTimeScale",
     "GetTablePartitionedChecksModelTimeScale",
@@ -2402,10 +2428,16 @@ __all__ = (
     "TableComparisonConfigurationSpec",
     "TableComparisonDailyPartitionedChecksSpec",
     "TableComparisonDailyRecurringChecksSpec",
+    "TableComparisonGroupingColumnPairModel",
+    "TableComparisonGroupingColumnsPairSpec",
     "TableComparisonModel",
     "TableComparisonMonthlyPartitionedChecksSpec",
     "TableComparisonMonthlyRecurringChecksSpec",
     "TableComparisonProfilingChecksSpec",
+    "TableComparisonResultsModel",
+    "TableComparisonResultsModelColumnComparisonResults",
+    "TableComparisonResultsModelColumnComparisonResultsAdditionalProperty",
+    "TableComparisonResultsModelTableComparisonResults",
     "TableComparisonRowCountMatchCheckSpec",
     "TableDailyPartitionedCheckCategoriesSpec",
     "TableDailyPartitionedCheckCategoriesSpecComparisons",

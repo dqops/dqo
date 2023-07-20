@@ -18,7 +18,7 @@ T = TypeVar("T", bound="DqoJobHistoryEntryModel")
 class DqoJobHistoryEntryModel:
     """
     Attributes:
-        job_id (Union[Unset, DqoQueueJobId]):
+        job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
         job_type (Union[Unset, DqoJobHistoryEntryModelJobType]):
         parameters (Union[Unset, DqoJobEntryParametersModel]):
         status (Union[Unset, DqoJobHistoryEntryModelStatus]):

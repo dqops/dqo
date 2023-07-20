@@ -6,6 +6,9 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.physical_table_name import PhysicalTableName
+    from ..models.table_comparison_grouping_column_pair_model import (
+        TableComparisonGroupingColumnPairModel,
+    )
 
 
 T = TypeVar("T", bound="TableComparisonConfigurationModel")
@@ -33,6 +36,11 @@ class TableComparisonConfigurationModel:
                 the whole table without grouping. The data grouping configurations on the compared table and the reference table
                 must have the same grouping dimension levels configured, but the configuration (the names of the columns) could
                 be different.
+            grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
+                the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
+                table and the reference table (the source of truth). The columns are used in the next of the table comparison to
+                join the results of data groups (row counts, sums of columns) between the compared table and the reference table
+                to compare the differences.
     """
 
     table_comparison_configuration_name: Union[Unset, str] = UNSET
@@ -42,6 +50,9 @@ class TableComparisonConfigurationModel:
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
     compared_table_grouping_name: Union[Unset, str] = UNSET
     reference_table_grouping_name: Union[Unset, str] = UNSET
+    grouping_columns: Union[
+        Unset, List["TableComparisonGroupingColumnPairModel"]
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -58,6 +69,13 @@ class TableComparisonConfigurationModel:
 
         compared_table_grouping_name = self.compared_table_grouping_name
         reference_table_grouping_name = self.reference_table_grouping_name
+        grouping_columns: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.grouping_columns, Unset):
+            grouping_columns = []
+            for grouping_columns_item_data in self.grouping_columns:
+                grouping_columns_item = grouping_columns_item_data.to_dict()
+
+                grouping_columns.append(grouping_columns_item)
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -78,12 +96,17 @@ class TableComparisonConfigurationModel:
             field_dict["compared_table_grouping_name"] = compared_table_grouping_name
         if reference_table_grouping_name is not UNSET:
             field_dict["reference_table_grouping_name"] = reference_table_grouping_name
+        if grouping_columns is not UNSET:
+            field_dict["grouping_columns"] = grouping_columns
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.physical_table_name import PhysicalTableName
+        from ..models.table_comparison_grouping_column_pair_model import (
+            TableComparisonGroupingColumnPairModel,
+        )
 
         d = src_dict.copy()
         table_comparison_configuration_name = d.pop(
@@ -112,6 +135,15 @@ class TableComparisonConfigurationModel:
 
         reference_table_grouping_name = d.pop("reference_table_grouping_name", UNSET)
 
+        grouping_columns = []
+        _grouping_columns = d.pop("grouping_columns", UNSET)
+        for grouping_columns_item_data in _grouping_columns or []:
+            grouping_columns_item = TableComparisonGroupingColumnPairModel.from_dict(
+                grouping_columns_item_data
+            )
+
+            grouping_columns.append(grouping_columns_item)
+
         table_comparison_configuration_model = cls(
             table_comparison_configuration_name=table_comparison_configuration_name,
             compared_connection=compared_connection,
@@ -120,6 +152,7 @@ class TableComparisonConfigurationModel:
             reference_table=reference_table,
             compared_table_grouping_name=compared_table_grouping_name,
             reference_table_grouping_name=reference_table_grouping_name,
+            grouping_columns=grouping_columns,
         )
 
         table_comparison_configuration_model.additional_properties = d

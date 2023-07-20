@@ -9,11 +9,12 @@ T = TypeVar("T", bound="DqoQueueJobId")
 
 @attr.s(auto_attribs=True)
 class DqoQueueJobId:
-    """
+    """Identifies a single job that was pushed to the job queue.
+
     Attributes:
-        job_id (Union[Unset, int]):
-        parent_job_id (Union[Unset, DqoQueueJobId]):
-        created_at (Union[Unset, int]):
+        job_id (Union[Unset, int]): Job id.
+        parent_job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
+        created_at (Union[Unset, int]): The timestamp when the job was created.
     """
 
     job_id: Union[Unset, int] = UNSET

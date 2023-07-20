@@ -18,7 +18,7 @@ class DqoJobChangeModel:
     """
     Attributes:
         status (Union[Unset, DqoJobChangeModelStatus]):
-        job_id (Union[Unset, DqoQueueJobId]):
+        job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
         change_sequence (Union[Unset, int]):
         updated_model (Union[Unset, DqoJobHistoryEntryModel]):
         status_changed_at (Union[Unset, int]):

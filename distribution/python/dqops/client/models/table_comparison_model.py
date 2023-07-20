@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..models.column_comparison_model import ColumnComparisonModel
     from ..models.compare_thresholds_model import CompareThresholdsModel
     from ..models.physical_table_name import PhysicalTableName
+    from ..models.table_comparison_grouping_column_pair_model import (
+        TableComparisonGroupingColumnPairModel,
+    )
 
 
 T = TypeVar("T", bound="TableComparisonModel")
@@ -35,6 +38,11 @@ class TableComparisonModel:
             the whole table without grouping. The data grouping configurations on the compared table and the reference table
             must have the same grouping dimension levels configured, but the configuration (the names of the columns) could
             be different.
+        grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
+            the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
+            table and the reference table (the source of truth). The columns are used in the next of the table comparison to
+            join the results of data groups (row counts, sums of columns) between the compared table and the reference table
+            to compare the differences.
         default_compare_thresholds (Union[Unset, CompareThresholdsModel]): Model with the compare threshold levels for
             raising data quality issues at different severity levels when the difference between the compared (tested) table
             and the reference table (the source of truth) exceed given thresholds as a percentage of difference between the
@@ -56,6 +64,9 @@ class TableComparisonModel:
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
     compared_table_grouping_name: Union[Unset, str] = UNSET
     reference_table_grouping_name: Union[Unset, str] = UNSET
+    grouping_columns: Union[
+        Unset, List["TableComparisonGroupingColumnPairModel"]
+    ] = UNSET
     default_compare_thresholds: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_row_count: Union[Unset, "CompareThresholdsModel"] = UNSET
     columns: Union[Unset, List["ColumnComparisonModel"]] = UNSET
@@ -76,6 +87,14 @@ class TableComparisonModel:
 
         compared_table_grouping_name = self.compared_table_grouping_name
         reference_table_grouping_name = self.reference_table_grouping_name
+        grouping_columns: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.grouping_columns, Unset):
+            grouping_columns = []
+            for grouping_columns_item_data in self.grouping_columns:
+                grouping_columns_item = grouping_columns_item_data.to_dict()
+
+                grouping_columns.append(grouping_columns_item)
+
         default_compare_thresholds: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_compare_thresholds, Unset):
             default_compare_thresholds = self.default_compare_thresholds.to_dict()
@@ -117,6 +136,8 @@ class TableComparisonModel:
             field_dict["compared_table_grouping_name"] = compared_table_grouping_name
         if reference_table_grouping_name is not UNSET:
             field_dict["reference_table_grouping_name"] = reference_table_grouping_name
+        if grouping_columns is not UNSET:
+            field_dict["grouping_columns"] = grouping_columns
         if default_compare_thresholds is not UNSET:
             field_dict["default_compare_thresholds"] = default_compare_thresholds
         if compare_row_count is not UNSET:
@@ -136,6 +157,9 @@ class TableComparisonModel:
         from ..models.column_comparison_model import ColumnComparisonModel
         from ..models.compare_thresholds_model import CompareThresholdsModel
         from ..models.physical_table_name import PhysicalTableName
+        from ..models.table_comparison_grouping_column_pair_model import (
+            TableComparisonGroupingColumnPairModel,
+        )
 
         d = src_dict.copy()
         table_comparison_configuration_name = d.pop(
@@ -163,6 +187,15 @@ class TableComparisonModel:
         compared_table_grouping_name = d.pop("compared_table_grouping_name", UNSET)
 
         reference_table_grouping_name = d.pop("reference_table_grouping_name", UNSET)
+
+        grouping_columns = []
+        _grouping_columns = d.pop("grouping_columns", UNSET)
+        for grouping_columns_item_data in _grouping_columns or []:
+            grouping_columns_item = TableComparisonGroupingColumnPairModel.from_dict(
+                grouping_columns_item_data
+            )
+
+            grouping_columns.append(grouping_columns_item)
 
         _default_compare_thresholds = d.pop("default_compare_thresholds", UNSET)
         default_compare_thresholds: Union[Unset, CompareThresholdsModel]
@@ -206,6 +239,7 @@ class TableComparisonModel:
             reference_table=reference_table,
             compared_table_grouping_name=compared_table_grouping_name,
             reference_table_grouping_name=reference_table_grouping_name,
+            grouping_columns=grouping_columns,
             default_compare_thresholds=default_compare_thresholds,
             compare_row_count=compare_row_count,
             columns=columns,
