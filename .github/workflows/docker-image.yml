@@ -18,6 +18,7 @@ jobs:
       with:
         path: ./VERSION
     - uses: docker-practice/actions-setup-docker@master
+    - run: export DOCKER_BUILDKIT=1
     - run: set -x
     - name: Build and Push Docker Image      
       uses: mr-smithers-excellent/docker-build-push@v4      
