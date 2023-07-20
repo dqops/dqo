@@ -1,24 +1,15 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.table_data_freshness_check_spec import TableDataFreshnessCheckSpec
-  from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
-  from ..models.table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
-
-
-
+    from ..models.table_data_freshness_check_spec import TableDataFreshnessCheckSpec
+    from ..models.table_data_ingestion_delay_check_spec import (
+        TableDataIngestionDelayCheckSpec,
+    )
+    from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
 
 
 T = TypeVar("T", bound="TableTimelinessDailyRecurringChecksSpec")
@@ -26,23 +17,19 @@ T = TypeVar("T", bound="TableTimelinessDailyRecurringChecksSpec")
 
 @attr.s(auto_attribs=True)
 class TableTimelinessDailyRecurringChecksSpec:
-    """ 
-        Attributes:
-            daily_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
-            daily_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
-            daily_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
-     """
+    """
+    Attributes:
+        daily_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
+        daily_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
+        daily_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
+    """
 
-    daily_data_freshness: Union[Unset, 'TableDataFreshnessCheckSpec'] = UNSET
-    daily_data_staleness: Union[Unset, 'TableDataStalenessCheckSpec'] = UNSET
-    daily_data_ingestion_delay: Union[Unset, 'TableDataIngestionDelayCheckSpec'] = UNSET
+    daily_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
+    daily_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
+    daily_data_ingestion_delay: Union[Unset, "TableDataIngestionDelayCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.table_data_freshness_check_spec import TableDataFreshnessCheckSpec
-        from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
-        from ..models.table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
         daily_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_data_freshness, Unset):
             daily_data_freshness = self.daily_data_freshness.to_dict()
@@ -55,11 +42,9 @@ class TableTimelinessDailyRecurringChecksSpec:
         if not isinstance(self.daily_data_ingestion_delay, Unset):
             daily_data_ingestion_delay = self.daily_data_ingestion_delay.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if daily_data_freshness is not UNSET:
             field_dict["daily_data_freshness"] = daily_data_freshness
         if daily_data_staleness is not UNSET:
@@ -69,43 +54,41 @@ class TableTimelinessDailyRecurringChecksSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.table_data_freshness_check_spec import TableDataFreshnessCheckSpec
+        from ..models.table_data_ingestion_delay_check_spec import (
+            TableDataIngestionDelayCheckSpec,
+        )
         from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
-        from ..models.table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
+
         d = src_dict.copy()
         _daily_data_freshness = d.pop("daily_data_freshness", UNSET)
         daily_data_freshness: Union[Unset, TableDataFreshnessCheckSpec]
-        if isinstance(_daily_data_freshness,  Unset):
+        if isinstance(_daily_data_freshness, Unset):
             daily_data_freshness = UNSET
         else:
-            daily_data_freshness = TableDataFreshnessCheckSpec.from_dict(_daily_data_freshness)
-
-
-
+            daily_data_freshness = TableDataFreshnessCheckSpec.from_dict(
+                _daily_data_freshness
+            )
 
         _daily_data_staleness = d.pop("daily_data_staleness", UNSET)
         daily_data_staleness: Union[Unset, TableDataStalenessCheckSpec]
-        if isinstance(_daily_data_staleness,  Unset):
+        if isinstance(_daily_data_staleness, Unset):
             daily_data_staleness = UNSET
         else:
-            daily_data_staleness = TableDataStalenessCheckSpec.from_dict(_daily_data_staleness)
-
-
-
+            daily_data_staleness = TableDataStalenessCheckSpec.from_dict(
+                _daily_data_staleness
+            )
 
         _daily_data_ingestion_delay = d.pop("daily_data_ingestion_delay", UNSET)
         daily_data_ingestion_delay: Union[Unset, TableDataIngestionDelayCheckSpec]
-        if isinstance(_daily_data_ingestion_delay,  Unset):
+        if isinstance(_daily_data_ingestion_delay, Unset):
             daily_data_ingestion_delay = UNSET
         else:
-            daily_data_ingestion_delay = TableDataIngestionDelayCheckSpec.from_dict(_daily_data_ingestion_delay)
-
-
-
+            daily_data_ingestion_delay = TableDataIngestionDelayCheckSpec.from_dict(
+                _daily_data_ingestion_delay
+            )
 
         table_timeliness_daily_recurring_checks_spec = cls(
             daily_data_freshness=daily_data_freshness,

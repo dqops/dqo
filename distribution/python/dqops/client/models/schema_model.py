@@ -1,25 +1,20 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-  from ..models.import_tables_queue_job_parameters import ImportTablesQueueJobParameters
-  from ..models.delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
-  from ..models.check_search_filters import CheckSearchFilters
-
-
-
+    from ..models.check_search_filters import CheckSearchFilters
+    from ..models.delete_stored_data_queue_job_parameters import (
+        DeleteStoredDataQueueJobParameters,
+    )
+    from ..models.import_tables_queue_job_parameters import (
+        ImportTablesQueueJobParameters,
+    )
+    from ..models.statistics_collector_search_filters import (
+        StatisticsCollectorSearchFilters,
+    )
 
 
 T = TypeVar("T", bound="SchemaModel")
@@ -27,41 +22,38 @@ T = TypeVar("T", bound="SchemaModel")
 
 @attr.s(auto_attribs=True)
 class SchemaModel:
-    """ Schema model
+    """Schema model
 
-        Attributes:
-            connection_name (Union[Unset, str]): Connection name.
-            schema_name (Union[Unset, str]): Schema name.
-            run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
-                checks on which tables and columns should be executed.
-            run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
-                identifies which checks on which tables and columns should be executed.
-            run_recurring_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
-                identifies which checks on which tables and columns should be executed.
-            run_partition_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
-                identifies which checks on which tables and columns should be executed.
-            collect_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
-            import_table_job_parameters (Union[Unset, ImportTablesQueueJobParameters]):
-            data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
-     """
+    Attributes:
+        connection_name (Union[Unset, str]): Connection name.
+        schema_name (Union[Unset, str]): Schema name.
+        run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
+            checks on which tables and columns should be executed.
+        run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
+            identifies which checks on which tables and columns should be executed.
+        run_recurring_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
+            identifies which checks on which tables and columns should be executed.
+        run_partition_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
+            identifies which checks on which tables and columns should be executed.
+        collect_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
+        import_table_job_parameters (Union[Unset, ImportTablesQueueJobParameters]):
+        data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
+    """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
-    run_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    run_profiling_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    run_recurring_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    run_partition_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    collect_statistics_job_template: Union[Unset, 'StatisticsCollectorSearchFilters'] = UNSET
-    import_table_job_parameters: Union[Unset, 'ImportTablesQueueJobParameters'] = UNSET
-    data_clean_job_template: Union[Unset, 'DeleteStoredDataQueueJobParameters'] = UNSET
+    run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_recurring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_partition_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    collect_statistics_job_template: Union[
+        Unset, "StatisticsCollectorSearchFilters"
+    ] = UNSET
+    import_table_job_parameters: Union[Unset, "ImportTablesQueueJobParameters"] = UNSET
+    data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-        from ..models.import_tables_queue_job_parameters import ImportTablesQueueJobParameters
-        from ..models.delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
-        from ..models.check_search_filters import CheckSearchFilters
         connection_name = self.connection_name
         schema_name = self.schema_name
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
@@ -70,19 +62,27 @@ class SchemaModel:
 
         run_profiling_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_profiling_checks_job_template, Unset):
-            run_profiling_checks_job_template = self.run_profiling_checks_job_template.to_dict()
+            run_profiling_checks_job_template = (
+                self.run_profiling_checks_job_template.to_dict()
+            )
 
         run_recurring_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_recurring_checks_job_template, Unset):
-            run_recurring_checks_job_template = self.run_recurring_checks_job_template.to_dict()
+            run_recurring_checks_job_template = (
+                self.run_recurring_checks_job_template.to_dict()
+            )
 
         run_partition_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_partition_checks_job_template, Unset):
-            run_partition_checks_job_template = self.run_partition_checks_job_template.to_dict()
+            run_partition_checks_job_template = (
+                self.run_partition_checks_job_template.to_dict()
+            )
 
         collect_statistics_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.collect_statistics_job_template, Unset):
-            collect_statistics_job_template = self.collect_statistics_job_template.to_dict()
+            collect_statistics_job_template = (
+                self.collect_statistics_job_template.to_dict()
+            )
 
         import_table_job_parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.import_table_job_parameters, Unset):
@@ -92,11 +92,9 @@ class SchemaModel:
         if not isinstance(self.data_clean_job_template, Unset):
             data_clean_job_template = self.data_clean_job_template.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if schema_name is not UNSET:
@@ -104,13 +102,21 @@ class SchemaModel:
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
-            field_dict["run_profiling_checks_job_template"] = run_profiling_checks_job_template
+            field_dict[
+                "run_profiling_checks_job_template"
+            ] = run_profiling_checks_job_template
         if run_recurring_checks_job_template is not UNSET:
-            field_dict["run_recurring_checks_job_template"] = run_recurring_checks_job_template
+            field_dict[
+                "run_recurring_checks_job_template"
+            ] = run_recurring_checks_job_template
         if run_partition_checks_job_template is not UNSET:
-            field_dict["run_partition_checks_job_template"] = run_partition_checks_job_template
+            field_dict[
+                "run_partition_checks_job_template"
+            ] = run_partition_checks_job_template
         if collect_statistics_job_template is not UNSET:
-            field_dict["collect_statistics_job_template"] = collect_statistics_job_template
+            field_dict[
+                "collect_statistics_job_template"
+            ] = collect_statistics_job_template
         if import_table_job_parameters is not UNSET:
             field_dict["import_table_job_parameters"] = import_table_job_parameters
         if data_clean_job_template is not UNSET:
@@ -118,14 +124,19 @@ class SchemaModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-        from ..models.import_tables_queue_job_parameters import ImportTablesQueueJobParameters
-        from ..models.delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
         from ..models.check_search_filters import CheckSearchFilters
+        from ..models.delete_stored_data_queue_job_parameters import (
+            DeleteStoredDataQueueJobParameters,
+        )
+        from ..models.import_tables_queue_job_parameters import (
+            ImportTablesQueueJobParameters,
+        )
+        from ..models.statistics_collector_search_filters import (
+            StatisticsCollectorSearchFilters,
+        )
+
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
@@ -133,73 +144,76 @@ class SchemaModel:
 
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_checks_job_template,  Unset):
+        if isinstance(_run_checks_job_template, Unset):
             run_checks_job_template = UNSET
         else:
-            run_checks_job_template = CheckSearchFilters.from_dict(_run_checks_job_template)
+            run_checks_job_template = CheckSearchFilters.from_dict(
+                _run_checks_job_template
+            )
 
-
-
-
-        _run_profiling_checks_job_template = d.pop("run_profiling_checks_job_template", UNSET)
+        _run_profiling_checks_job_template = d.pop(
+            "run_profiling_checks_job_template", UNSET
+        )
         run_profiling_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_profiling_checks_job_template,  Unset):
+        if isinstance(_run_profiling_checks_job_template, Unset):
             run_profiling_checks_job_template = UNSET
         else:
-            run_profiling_checks_job_template = CheckSearchFilters.from_dict(_run_profiling_checks_job_template)
+            run_profiling_checks_job_template = CheckSearchFilters.from_dict(
+                _run_profiling_checks_job_template
+            )
 
-
-
-
-        _run_recurring_checks_job_template = d.pop("run_recurring_checks_job_template", UNSET)
+        _run_recurring_checks_job_template = d.pop(
+            "run_recurring_checks_job_template", UNSET
+        )
         run_recurring_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_recurring_checks_job_template,  Unset):
+        if isinstance(_run_recurring_checks_job_template, Unset):
             run_recurring_checks_job_template = UNSET
         else:
-            run_recurring_checks_job_template = CheckSearchFilters.from_dict(_run_recurring_checks_job_template)
+            run_recurring_checks_job_template = CheckSearchFilters.from_dict(
+                _run_recurring_checks_job_template
+            )
 
-
-
-
-        _run_partition_checks_job_template = d.pop("run_partition_checks_job_template", UNSET)
+        _run_partition_checks_job_template = d.pop(
+            "run_partition_checks_job_template", UNSET
+        )
         run_partition_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_partition_checks_job_template,  Unset):
+        if isinstance(_run_partition_checks_job_template, Unset):
             run_partition_checks_job_template = UNSET
         else:
-            run_partition_checks_job_template = CheckSearchFilters.from_dict(_run_partition_checks_job_template)
+            run_partition_checks_job_template = CheckSearchFilters.from_dict(
+                _run_partition_checks_job_template
+            )
 
-
-
-
-        _collect_statistics_job_template = d.pop("collect_statistics_job_template", UNSET)
+        _collect_statistics_job_template = d.pop(
+            "collect_statistics_job_template", UNSET
+        )
         collect_statistics_job_template: Union[Unset, StatisticsCollectorSearchFilters]
-        if isinstance(_collect_statistics_job_template,  Unset):
+        if isinstance(_collect_statistics_job_template, Unset):
             collect_statistics_job_template = UNSET
         else:
-            collect_statistics_job_template = StatisticsCollectorSearchFilters.from_dict(_collect_statistics_job_template)
-
-
-
+            collect_statistics_job_template = (
+                StatisticsCollectorSearchFilters.from_dict(
+                    _collect_statistics_job_template
+                )
+            )
 
         _import_table_job_parameters = d.pop("import_table_job_parameters", UNSET)
         import_table_job_parameters: Union[Unset, ImportTablesQueueJobParameters]
-        if isinstance(_import_table_job_parameters,  Unset):
+        if isinstance(_import_table_job_parameters, Unset):
             import_table_job_parameters = UNSET
         else:
-            import_table_job_parameters = ImportTablesQueueJobParameters.from_dict(_import_table_job_parameters)
-
-
-
+            import_table_job_parameters = ImportTablesQueueJobParameters.from_dict(
+                _import_table_job_parameters
+            )
 
         _data_clean_job_template = d.pop("data_clean_job_template", UNSET)
         data_clean_job_template: Union[Unset, DeleteStoredDataQueueJobParameters]
-        if isinstance(_data_clean_job_template,  Unset):
+        if isinstance(_data_clean_job_template, Unset):
             data_clean_job_template = UNSET
         else:
-            data_clean_job_template = DeleteStoredDataQueueJobParameters.from_dict(_data_clean_job_template)
-
-
-
+            data_clean_job_template = DeleteStoredDataQueueJobParameters.from_dict(
+                _data_clean_job_template
+            )
 
         schema_model = cls(
             connection_name=connection_name,

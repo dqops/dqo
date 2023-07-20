@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class GetSchemaRecurringChecksTemplatesTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

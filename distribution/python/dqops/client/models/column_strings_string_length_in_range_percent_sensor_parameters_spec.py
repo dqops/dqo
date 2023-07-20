@@ -1,38 +1,26 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="ColumnStringsStringLengthInRangePercentSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class ColumnStringsStringLengthInRangePercentSensorParametersSpec:
-    """ 
-        Attributes:
-            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-                sensor query filter are added, separated by an AND operator.
-            min_length (Union[Unset, int]): Sets a minimal string length
-            max_length (Union[Unset, int]): Sets a maximal string length.
-     """
+    """
+    Attributes:
+        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+            sensor query filter are added, separated by an AND operator.
+        min_length (Union[Unset, int]): Sets a minimal string length
+        max_length (Union[Unset, int]): Sets a maximal string length.
+    """
 
     filter_: Union[Unset, str] = UNSET
     min_length: Union[Unset, int] = UNSET
     max_length: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -41,8 +29,7 @@ class ColumnStringsStringLengthInRangePercentSensorParametersSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if min_length is not UNSET:
@@ -51,8 +38,6 @@ class ColumnStringsStringLengthInRangePercentSensorParametersSpec:
             field_dict["max_length"] = max_length
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -69,7 +54,9 @@ class ColumnStringsStringLengthInRangePercentSensorParametersSpec:
             max_length=max_length,
         )
 
-        column_strings_string_length_in_range_percent_sensor_parameters_spec.additional_properties = d
+        column_strings_string_length_in_range_percent_sensor_parameters_spec.additional_properties = (
+            d
+        )
         return column_strings_string_length_in_range_percent_sensor_parameters_spec
 
     @property

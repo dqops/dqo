@@ -1,22 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.table_volume_row_count_statistics_collector_spec import TableVolumeRowCountStatisticsCollectorSpec
-
-
-
+    from ..models.table_volume_row_count_statistics_collector_spec import (
+        TableVolumeRowCountStatisticsCollectorSpec,
+    )
 
 
 T = TypeVar("T", bound="TableVolumeStatisticsCollectorsSpec")
@@ -24,46 +15,40 @@ T = TypeVar("T", bound="TableVolumeStatisticsCollectorsSpec")
 
 @attr.s(auto_attribs=True)
 class TableVolumeStatisticsCollectorsSpec:
-    """ 
-        Attributes:
-            row_count (Union[Unset, TableVolumeRowCountStatisticsCollectorSpec]):
-     """
+    """
+    Attributes:
+        row_count (Union[Unset, TableVolumeRowCountStatisticsCollectorSpec]):
+    """
 
-    row_count: Union[Unset, 'TableVolumeRowCountStatisticsCollectorSpec'] = UNSET
+    row_count: Union[Unset, "TableVolumeRowCountStatisticsCollectorSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.table_volume_row_count_statistics_collector_spec import TableVolumeRowCountStatisticsCollectorSpec
         row_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.row_count, Unset):
             row_count = self.row_count.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if row_count is not UNSET:
             field_dict["row_count"] = row_count
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_volume_row_count_statistics_collector_spec import TableVolumeRowCountStatisticsCollectorSpec
+        from ..models.table_volume_row_count_statistics_collector_spec import (
+            TableVolumeRowCountStatisticsCollectorSpec,
+        )
+
         d = src_dict.copy()
         _row_count = d.pop("row_count", UNSET)
         row_count: Union[Unset, TableVolumeRowCountStatisticsCollectorSpec]
-        if isinstance(_row_count,  Unset):
+        if isinstance(_row_count, Unset):
             row_count = UNSET
         else:
             row_count = TableVolumeRowCountStatisticsCollectorSpec.from_dict(_row_count)
-
-
-
 
         table_volume_statistics_collectors_spec = cls(
             row_count=row_count,

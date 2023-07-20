@@ -1,17 +1,14 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import Dict
-from typing import cast, List
-from typing import cast
-from ...models.data_grouping_configuration_basic_model import DataGroupingConfigurationBasicModel
-
+from ...client import Client
+from ...models.data_grouping_configuration_basic_model import (
+    DataGroupingConfigurationBasicModel,
+)
+from ...types import Response
 
 
 def _get_kwargs(
@@ -20,26 +17,19 @@ def _get_kwargs(
     table_name: str,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name,tableName=table_name)
+        client.base_url,
+        connectionName=connection_name,
+        schemaName=schema_name,
+        tableName=table_name,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -48,14 +38,16 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List['DataGroupingConfigurationBasicModel']]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
-        for response_200_item_data in (_response_200):
-            response_200_item = DataGroupingConfigurationBasicModel.from_dict(response_200_item_data)
-
-
+        for response_200_item_data in _response_200:
+            response_200_item = DataGroupingConfigurationBasicModel.from_dict(
+                response_200_item_data
+            )
 
             response_200.append(response_200_item)
 
@@ -66,7 +58,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List['DataGroupingConfigurationBasicModel']]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[List["DataGroupingConfigurationBasicModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -81,9 +75,8 @@ def sync_detailed(
     table_name: str,
     *,
     client: Client,
-
-) -> Response[List['DataGroupingConfigurationBasicModel']]:
-    """ getTableGroupingConfigurations
+) -> Response[List["DataGroupingConfigurationBasicModel"]]:
+    """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
 
@@ -98,15 +91,13 @@ def sync_detailed(
 
     Returns:
         Response[List['DataGroupingConfigurationBasicModel']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        client=client,
     )
 
     response = httpx.request(
@@ -116,15 +107,15 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     schema_name: str,
     table_name: str,
     *,
     client: Client,
-
-) -> Optional[List['DataGroupingConfigurationBasicModel']]:
-    """ getTableGroupingConfigurations
+) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
+    """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
 
@@ -139,16 +130,15 @@ def sync(
 
     Returns:
         List['DataGroupingConfigurationBasicModel']
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -156,9 +146,8 @@ async def asyncio_detailed(
     table_name: str,
     *,
     client: Client,
-
-) -> Response[List['DataGroupingConfigurationBasicModel']]:
-    """ getTableGroupingConfigurations
+) -> Response[List["DataGroupingConfigurationBasicModel"]]:
+    """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
 
@@ -173,23 +162,20 @@ async def asyncio_detailed(
 
     Returns:
         Response[List['DataGroupingConfigurationBasicModel']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -197,9 +183,8 @@ async def asyncio(
     table_name: str,
     *,
     client: Client,
-
-) -> Optional[List['DataGroupingConfigurationBasicModel']]:
-    """ getTableGroupingConfigurations
+) -> Optional[List["DataGroupingConfigurationBasicModel"]]:
+    """getTableGroupingConfigurations
 
      Returns the list of data grouping configurations on a table
 
@@ -214,13 +199,13 @@ async def asyncio(
 
     Returns:
         List['DataGroupingConfigurationBasicModel']
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            table_name=table_name,
+            client=client,
+        )
+    ).parsed

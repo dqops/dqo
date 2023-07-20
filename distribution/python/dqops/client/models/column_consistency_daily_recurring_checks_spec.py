@@ -1,23 +1,16 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.column_consistency_date_match_format_percent_check_spec import ColumnConsistencyDateMatchFormatPercentCheckSpec
-  from ..models.column_string_datatype_changed_check_spec import ColumnStringDatatypeChangedCheckSpec
-
-
-
+    from ..models.column_consistency_date_match_format_percent_check_spec import (
+        ColumnConsistencyDateMatchFormatPercentCheckSpec,
+    )
+    from ..models.column_string_datatype_changed_check_spec import (
+        ColumnStringDatatypeChangedCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnConsistencyDailyRecurringChecksSpec")
@@ -25,66 +18,80 @@ T = TypeVar("T", bound="ColumnConsistencyDailyRecurringChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnConsistencyDailyRecurringChecksSpec:
-    """ 
-        Attributes:
-            daily_date_match_format_percent (Union[Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec]):
-            daily_string_datatype_changed (Union[Unset, ColumnStringDatatypeChangedCheckSpec]):
-     """
+    """
+    Attributes:
+        daily_date_match_format_percent (Union[Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec]):
+        daily_string_datatype_changed (Union[Unset, ColumnStringDatatypeChangedCheckSpec]):
+    """
 
-    daily_date_match_format_percent: Union[Unset, 'ColumnConsistencyDateMatchFormatPercentCheckSpec'] = UNSET
-    daily_string_datatype_changed: Union[Unset, 'ColumnStringDatatypeChangedCheckSpec'] = UNSET
+    daily_date_match_format_percent: Union[
+        Unset, "ColumnConsistencyDateMatchFormatPercentCheckSpec"
+    ] = UNSET
+    daily_string_datatype_changed: Union[
+        Unset, "ColumnStringDatatypeChangedCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.column_consistency_date_match_format_percent_check_spec import ColumnConsistencyDateMatchFormatPercentCheckSpec
-        from ..models.column_string_datatype_changed_check_spec import ColumnStringDatatypeChangedCheckSpec
         daily_date_match_format_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_date_match_format_percent, Unset):
-            daily_date_match_format_percent = self.daily_date_match_format_percent.to_dict()
+            daily_date_match_format_percent = (
+                self.daily_date_match_format_percent.to_dict()
+            )
 
         daily_string_datatype_changed: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_string_datatype_changed, Unset):
             daily_string_datatype_changed = self.daily_string_datatype_changed.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if daily_date_match_format_percent is not UNSET:
-            field_dict["daily_date_match_format_percent"] = daily_date_match_format_percent
+            field_dict[
+                "daily_date_match_format_percent"
+            ] = daily_date_match_format_percent
         if daily_string_datatype_changed is not UNSET:
             field_dict["daily_string_datatype_changed"] = daily_string_datatype_changed
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_consistency_date_match_format_percent_check_spec import ColumnConsistencyDateMatchFormatPercentCheckSpec
-        from ..models.column_string_datatype_changed_check_spec import ColumnStringDatatypeChangedCheckSpec
+        from ..models.column_consistency_date_match_format_percent_check_spec import (
+            ColumnConsistencyDateMatchFormatPercentCheckSpec,
+        )
+        from ..models.column_string_datatype_changed_check_spec import (
+            ColumnStringDatatypeChangedCheckSpec,
+        )
+
         d = src_dict.copy()
-        _daily_date_match_format_percent = d.pop("daily_date_match_format_percent", UNSET)
-        daily_date_match_format_percent: Union[Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec]
-        if isinstance(_daily_date_match_format_percent,  Unset):
+        _daily_date_match_format_percent = d.pop(
+            "daily_date_match_format_percent", UNSET
+        )
+        daily_date_match_format_percent: Union[
+            Unset, ColumnConsistencyDateMatchFormatPercentCheckSpec
+        ]
+        if isinstance(_daily_date_match_format_percent, Unset):
             daily_date_match_format_percent = UNSET
         else:
-            daily_date_match_format_percent = ColumnConsistencyDateMatchFormatPercentCheckSpec.from_dict(_daily_date_match_format_percent)
-
-
-
+            daily_date_match_format_percent = (
+                ColumnConsistencyDateMatchFormatPercentCheckSpec.from_dict(
+                    _daily_date_match_format_percent
+                )
+            )
 
         _daily_string_datatype_changed = d.pop("daily_string_datatype_changed", UNSET)
-        daily_string_datatype_changed: Union[Unset, ColumnStringDatatypeChangedCheckSpec]
-        if isinstance(_daily_string_datatype_changed,  Unset):
+        daily_string_datatype_changed: Union[
+            Unset, ColumnStringDatatypeChangedCheckSpec
+        ]
+        if isinstance(_daily_string_datatype_changed, Unset):
             daily_string_datatype_changed = UNSET
         else:
-            daily_string_datatype_changed = ColumnStringDatatypeChangedCheckSpec.from_dict(_daily_string_datatype_changed)
-
-
-
+            daily_string_datatype_changed = (
+                ColumnStringDatatypeChangedCheckSpec.from_dict(
+                    _daily_string_datatype_changed
+                )
+            )
 
         column_consistency_daily_recurring_checks_spec = cls(
             daily_date_match_format_percent=daily_date_match_format_percent,

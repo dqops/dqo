@@ -1,19 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
+from ...client import Client
 from ...models.authenticated_dashboard_model import AuthenticatedDashboardModel
-from typing import cast
-from typing import Dict
-from ...types import UNSET, Unset
-from typing import Union
-from typing import Optional
-
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
@@ -25,32 +18,26 @@ def _get_kwargs(
     *,
     client: Client,
     window_location_origin: Union[Unset, None, str] = UNSET,
-
 ) -> Dict[str, Any]:
     url = "{}/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}".format(
-        client.base_url,folder1=folder1,folder2=folder2,folder3=folder3,folder4=folder4,dashboardName=dashboard_name)
+        client.base_url,
+        folder1=folder1,
+        folder2=folder2,
+        folder3=folder3,
+        folder4=folder4,
+        dashboardName=dashboard_name,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
     params: Dict[str, Any] = {}
     params["windowLocationOrigin"] = window_location_origin
 
-
-
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -60,11 +47,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[AuthenticatedDashboardModel]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[AuthenticatedDashboardModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = AuthenticatedDashboardModel.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -73,7 +60,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Aut
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[AuthenticatedDashboardModel]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[AuthenticatedDashboardModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -91,9 +80,8 @@ def sync_detailed(
     *,
     client: Client,
     window_location_origin: Union[Unset, None, str] = UNSET,
-
 ) -> Response[AuthenticatedDashboardModel]:
-    """ getDashboardLevel4
+    """getDashboardLevel4
 
      Returns a single dashboard in three folders with a temporary authenticated url
 
@@ -111,18 +99,16 @@ def sync_detailed(
 
     Returns:
         Response[AuthenticatedDashboardModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         folder1=folder1,
-folder2=folder2,
-folder3=folder3,
-folder4=folder4,
-dashboard_name=dashboard_name,
-client=client,
-window_location_origin=window_location_origin,
-
+        folder2=folder2,
+        folder3=folder3,
+        folder4=folder4,
+        dashboard_name=dashboard_name,
+        client=client,
+        window_location_origin=window_location_origin,
     )
 
     response = httpx.request(
@@ -131,6 +117,7 @@ window_location_origin=window_location_origin,
     )
 
     return _build_response(client=client, response=response)
+
 
 def sync(
     folder1: str,
@@ -141,9 +128,8 @@ def sync(
     *,
     client: Client,
     window_location_origin: Union[Unset, None, str] = UNSET,
-
 ) -> Optional[AuthenticatedDashboardModel]:
-    """ getDashboardLevel4
+    """getDashboardLevel4
 
      Returns a single dashboard in three folders with a temporary authenticated url
 
@@ -161,19 +147,18 @@ def sync(
 
     Returns:
         AuthenticatedDashboardModel
-     """
-
+    """
 
     return sync_detailed(
         folder1=folder1,
-folder2=folder2,
-folder3=folder3,
-folder4=folder4,
-dashboard_name=dashboard_name,
-client=client,
-window_location_origin=window_location_origin,
-
+        folder2=folder2,
+        folder3=folder3,
+        folder4=folder4,
+        dashboard_name=dashboard_name,
+        client=client,
+        window_location_origin=window_location_origin,
     ).parsed
+
 
 async def asyncio_detailed(
     folder1: str,
@@ -184,9 +169,8 @@ async def asyncio_detailed(
     *,
     client: Client,
     window_location_origin: Union[Unset, None, str] = UNSET,
-
 ) -> Response[AuthenticatedDashboardModel]:
-    """ getDashboardLevel4
+    """getDashboardLevel4
 
      Returns a single dashboard in three folders with a temporary authenticated url
 
@@ -204,26 +188,23 @@ async def asyncio_detailed(
 
     Returns:
         Response[AuthenticatedDashboardModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         folder1=folder1,
-folder2=folder2,
-folder3=folder3,
-folder4=folder4,
-dashboard_name=dashboard_name,
-client=client,
-window_location_origin=window_location_origin,
-
+        folder2=folder2,
+        folder3=folder3,
+        folder4=folder4,
+        dashboard_name=dashboard_name,
+        client=client,
+        window_location_origin=window_location_origin,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     folder1: str,
@@ -234,9 +215,8 @@ async def asyncio(
     *,
     client: Client,
     window_location_origin: Union[Unset, None, str] = UNSET,
-
 ) -> Optional[AuthenticatedDashboardModel]:
-    """ getDashboardLevel4
+    """getDashboardLevel4
 
      Returns a single dashboard in three folders with a temporary authenticated url
 
@@ -254,16 +234,16 @@ async def asyncio(
 
     Returns:
         AuthenticatedDashboardModel
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        folder1=folder1,
-folder2=folder2,
-folder3=folder3,
-folder4=folder4,
-dashboard_name=dashboard_name,
-client=client,
-window_location_origin=window_location_origin,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            folder1=folder1,
+            folder2=folder2,
+            folder3=folder3,
+            folder4=folder4,
+            dashboard_name=dashboard_name,
+            client=client,
+            window_location_origin=window_location_origin,
+        )
+    ).parsed

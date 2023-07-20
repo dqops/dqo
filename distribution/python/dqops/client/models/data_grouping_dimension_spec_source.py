@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class DataGroupingDimensionSpecSource(str, Enum):
     COLUMN_VALUE = "column_value"
     TAG = "tag"

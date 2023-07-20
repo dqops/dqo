@@ -1,47 +1,35 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="IncidentWebhookNotificationsSpec")
 
 
 @attr.s(auto_attribs=True)
 class IncidentWebhookNotificationsSpec:
-    """ 
-        Attributes:
-            incident_opened_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing new
-                incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the
-                IncidentNotificationMessage object.
-            incident_acknowledged_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing
-                acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the
-                IncidentNotificationMessage object.
-            incident_resolved_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing
-                resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the
-                IncidentNotificationMessage object.
-            incident_muted_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing muted
-                messages are pushed using a HTTP POST request. The format of the JSON message is documented in the
-                IncidentNotificationMessage object.
-     """
+    """
+    Attributes:
+        incident_opened_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing new
+            incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the
+            IncidentNotificationMessage object.
+        incident_acknowledged_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing
+            acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the
+            IncidentNotificationMessage object.
+        incident_resolved_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing
+            resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the
+            IncidentNotificationMessage object.
+        incident_muted_webhook_url (Union[Unset, str]): Webhook URL where the notification messages describing muted
+            messages are pushed using a HTTP POST request. The format of the JSON message is documented in the
+            IncidentNotificationMessage object.
+    """
 
     incident_opened_webhook_url: Union[Unset, str] = UNSET
     incident_acknowledged_webhook_url: Union[Unset, str] = UNSET
     incident_resolved_webhook_url: Union[Unset, str] = UNSET
     incident_muted_webhook_url: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         incident_opened_webhook_url = self.incident_opened_webhook_url
@@ -51,12 +39,13 @@ class IncidentWebhookNotificationsSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if incident_opened_webhook_url is not UNSET:
             field_dict["incident_opened_webhook_url"] = incident_opened_webhook_url
         if incident_acknowledged_webhook_url is not UNSET:
-            field_dict["incident_acknowledged_webhook_url"] = incident_acknowledged_webhook_url
+            field_dict[
+                "incident_acknowledged_webhook_url"
+            ] = incident_acknowledged_webhook_url
         if incident_resolved_webhook_url is not UNSET:
             field_dict["incident_resolved_webhook_url"] = incident_resolved_webhook_url
         if incident_muted_webhook_url is not UNSET:
@@ -64,14 +53,14 @@ class IncidentWebhookNotificationsSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         incident_opened_webhook_url = d.pop("incident_opened_webhook_url", UNSET)
 
-        incident_acknowledged_webhook_url = d.pop("incident_acknowledged_webhook_url", UNSET)
+        incident_acknowledged_webhook_url = d.pop(
+            "incident_acknowledged_webhook_url", UNSET
+        )
 
         incident_resolved_webhook_url = d.pop("incident_resolved_webhook_url", UNSET)
 

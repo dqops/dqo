@@ -1,27 +1,21 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.check_configuration_model_check_target import (
+    CheckConfigurationModelCheckTarget,
+)
+from ..models.check_configuration_model_check_time_scale import (
+    CheckConfigurationModelCheckTimeScale,
+)
+from ..models.check_configuration_model_check_type import (
+    CheckConfigurationModelCheckType,
+)
 from ..types import UNSET, Unset
-
-from ..models.check_configuration_model_check_type import CheckConfigurationModelCheckType
-from ..models.check_configuration_model_check_target import CheckConfigurationModelCheckTarget
-from typing import cast
-from typing import Dict
-from ..models.check_configuration_model_check_time_scale import CheckConfigurationModelCheckTimeScale
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
 
 if TYPE_CHECKING:
-  from ..models.rule_parameters_model import RuleParametersModel
-  from ..models.field_model import FieldModel
-
-
-
+    from ..models.field_model import FieldModel
+    from ..models.rule_parameters_model import RuleParametersModel
 
 
 T = TypeVar("T", bound="CheckConfigurationModel")
@@ -29,31 +23,31 @@ T = TypeVar("T", bound="CheckConfigurationModel")
 
 @attr.s(auto_attribs=True)
 class CheckConfigurationModel:
-    """ Model containing fundamental configuration of a single data quality check.
+    """Model containing fundamental configuration of a single data quality check.
 
-        Attributes:
-            connection_name (Union[Unset, str]): Connection name.
-            schema_name (Union[Unset, str]): Schema name.
-            table_name (Union[Unset, str]): Table name.
-            column_name (Union[Unset, str]): Column name, if the check is set up on a column.
-            check_target (Union[Unset, CheckConfigurationModelCheckTarget]): Check target (table or column).
-            check_type (Union[Unset, CheckConfigurationModelCheckType]): Check type (profiling, recurring, partitioned).
-            check_time_scale (Union[Unset, CheckConfigurationModelCheckTimeScale]): Category to which this check belongs.
-            category_name (Union[Unset, str]): Category to which this check belongs.
-            check_name (Union[Unset, str]): Check name that is used in YAML file.
-            sensor_parameters (Union[Unset, List['FieldModel']]): List of fields for editing the sensor parameters.
-            table_level_filter (Union[Unset, str]): SQL WHERE clause added to the sensor query for every check on this
-                table.
-            sensor_level_filter (Union[Unset, str]): SQL WHERE clause added to the sensor query for this check.
-            warning (Union[Unset, RuleParametersModel]): Model that returns the form definition and the form data to edit
-                parameters (thresholds) for a rule at a single severity level (low, medium, high).
-            error (Union[Unset, RuleParametersModel]): Model that returns the form definition and the form data to edit
-                parameters (thresholds) for a rule at a single severity level (low, medium, high).
-            fatal (Union[Unset, RuleParametersModel]): Model that returns the form definition and the form data to edit
-                parameters (thresholds) for a rule at a single severity level (low, medium, high).
-            disabled (Union[Unset, bool]): Whether the check has been disabled.
-            configured (Union[Unset, bool]): Whether the check is configured (not null).
-     """
+    Attributes:
+        connection_name (Union[Unset, str]): Connection name.
+        schema_name (Union[Unset, str]): Schema name.
+        table_name (Union[Unset, str]): Table name.
+        column_name (Union[Unset, str]): Column name, if the check is set up on a column.
+        check_target (Union[Unset, CheckConfigurationModelCheckTarget]): Check target (table or column).
+        check_type (Union[Unset, CheckConfigurationModelCheckType]): Check type (profiling, recurring, partitioned).
+        check_time_scale (Union[Unset, CheckConfigurationModelCheckTimeScale]): Category to which this check belongs.
+        category_name (Union[Unset, str]): Category to which this check belongs.
+        check_name (Union[Unset, str]): Check name that is used in YAML file.
+        sensor_parameters (Union[Unset, List['FieldModel']]): List of fields for editing the sensor parameters.
+        table_level_filter (Union[Unset, str]): SQL WHERE clause added to the sensor query for every check on this
+            table.
+        sensor_level_filter (Union[Unset, str]): SQL WHERE clause added to the sensor query for this check.
+        warning (Union[Unset, RuleParametersModel]): Model that returns the form definition and the form data to edit
+            parameters (thresholds) for a rule at a single severity level (low, medium, high).
+        error (Union[Unset, RuleParametersModel]): Model that returns the form definition and the form data to edit
+            parameters (thresholds) for a rule at a single severity level (low, medium, high).
+        fatal (Union[Unset, RuleParametersModel]): Model that returns the form definition and the form data to edit
+            parameters (thresholds) for a rule at a single severity level (low, medium, high).
+        disabled (Union[Unset, bool]): Whether the check has been disabled.
+        configured (Union[Unset, bool]): Whether the check is configured (not null).
+    """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
@@ -64,20 +58,17 @@ class CheckConfigurationModel:
     check_time_scale: Union[Unset, CheckConfigurationModelCheckTimeScale] = UNSET
     category_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
-    sensor_parameters: Union[Unset, List['FieldModel']] = UNSET
+    sensor_parameters: Union[Unset, List["FieldModel"]] = UNSET
     table_level_filter: Union[Unset, str] = UNSET
     sensor_level_filter: Union[Unset, str] = UNSET
-    warning: Union[Unset, 'RuleParametersModel'] = UNSET
-    error: Union[Unset, 'RuleParametersModel'] = UNSET
-    fatal: Union[Unset, 'RuleParametersModel'] = UNSET
+    warning: Union[Unset, "RuleParametersModel"] = UNSET
+    error: Union[Unset, "RuleParametersModel"] = UNSET
+    fatal: Union[Unset, "RuleParametersModel"] = UNSET
     disabled: Union[Unset, bool] = UNSET
     configured: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.rule_parameters_model import RuleParametersModel
-        from ..models.field_model import FieldModel
         connection_name = self.connection_name
         schema_name = self.schema_name
         table_name = self.table_name
@@ -104,9 +95,6 @@ class CheckConfigurationModel:
 
                 sensor_parameters.append(sensor_parameters_item)
 
-
-
-
         table_level_filter = self.table_level_filter
         sensor_level_filter = self.sensor_level_filter
         warning: Union[Unset, Dict[str, Any]] = UNSET
@@ -126,8 +114,7 @@ class CheckConfigurationModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if schema_name is not UNSET:
@@ -165,12 +152,11 @@ class CheckConfigurationModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.rule_parameters_model import RuleParametersModel
         from ..models.field_model import FieldModel
+        from ..models.rule_parameters_model import RuleParametersModel
+
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
@@ -182,33 +168,24 @@ class CheckConfigurationModel:
 
         _check_target = d.pop("check_target", UNSET)
         check_target: Union[Unset, CheckConfigurationModelCheckTarget]
-        if isinstance(_check_target,  Unset):
+        if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
             check_target = CheckConfigurationModelCheckTarget(_check_target)
 
-
-
-
         _check_type = d.pop("check_type", UNSET)
         check_type: Union[Unset, CheckConfigurationModelCheckType]
-        if isinstance(_check_type,  Unset):
+        if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
             check_type = CheckConfigurationModelCheckType(_check_type)
 
-
-
-
         _check_time_scale = d.pop("check_time_scale", UNSET)
         check_time_scale: Union[Unset, CheckConfigurationModelCheckTimeScale]
-        if isinstance(_check_time_scale,  Unset):
+        if isinstance(_check_time_scale, Unset):
             check_time_scale = UNSET
         else:
             check_time_scale = CheckConfigurationModelCheckTimeScale(_check_time_scale)
-
-
-
 
         category_name = d.pop("category_name", UNSET)
 
@@ -216,13 +193,10 @@ class CheckConfigurationModel:
 
         sensor_parameters = []
         _sensor_parameters = d.pop("sensor_parameters", UNSET)
-        for sensor_parameters_item_data in (_sensor_parameters or []):
+        for sensor_parameters_item_data in _sensor_parameters or []:
             sensor_parameters_item = FieldModel.from_dict(sensor_parameters_item_data)
 
-
-
             sensor_parameters.append(sensor_parameters_item)
-
 
         table_level_filter = d.pop("table_level_filter", UNSET)
 
@@ -230,33 +204,24 @@ class CheckConfigurationModel:
 
         _warning = d.pop("warning", UNSET)
         warning: Union[Unset, RuleParametersModel]
-        if isinstance(_warning,  Unset):
+        if isinstance(_warning, Unset):
             warning = UNSET
         else:
             warning = RuleParametersModel.from_dict(_warning)
 
-
-
-
         _error = d.pop("error", UNSET)
         error: Union[Unset, RuleParametersModel]
-        if isinstance(_error,  Unset):
+        if isinstance(_error, Unset):
             error = UNSET
         else:
             error = RuleParametersModel.from_dict(_error)
 
-
-
-
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, RuleParametersModel]
-        if isinstance(_fatal,  Unset):
+        if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
             fatal = RuleParametersModel.from_dict(_fatal)
-
-
-
 
         disabled = d.pop("disabled", UNSET)
 

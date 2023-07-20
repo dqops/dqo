@@ -1,6 +1,9 @@
 from enum import Enum
 
-class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats(str, Enum):
+
+class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats(
+    str, Enum
+):
     DDMMYYYY = "DD/MM/YYYY"
     MMDDYYYY = "MM/DD/YYYY"
     MONTH_D_YYYY = "Month D, YYYY"

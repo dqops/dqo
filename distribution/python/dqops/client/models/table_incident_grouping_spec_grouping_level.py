@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TableIncidentGroupingSpecGroupingLevel(str, Enum):
     TABLE = "table"
     TABLE_DIMENSION = "table_dimension"

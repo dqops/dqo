@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class DqoJobHistoryEntryModelStatus(str, Enum):
     CANCELLED = "cancelled"
     CANCEL_REQUESTED = "cancel_requested"

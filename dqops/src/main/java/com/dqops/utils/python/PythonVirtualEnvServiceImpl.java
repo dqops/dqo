@@ -146,7 +146,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
             if (SystemUtils.IS_OS_WINDOWS) {
                 environmentVariables.put("VIRTUAL_ENV", vEnvPath.toString());
                 Path binPath = vEnvPath.resolve("Scripts");
-                environmentVariables.put("PATH", binPath + ";" + System.getenv("PATH"));
+                environmentVariables.put("Path", binPath + ";" + System.getenv("Path"));
                 Path interpreterPath = findInterpreterPath(binPath);
                 pythonVirtualEnv.setPythonInterpreterPath(interpreterPath.toString());
             } else {

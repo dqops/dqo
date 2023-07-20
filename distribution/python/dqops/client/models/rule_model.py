@@ -1,27 +1,15 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..types import UNSET, Unset
-
-from typing import cast
-from typing import Dict
-from ..models.rule_model_type import RuleModelType
 from ..models.rule_model_mode import RuleModelMode
-from typing import Union
+from ..models.rule_model_type import RuleModelType
 from ..types import UNSET, Unset
-from typing import cast, List
 
 if TYPE_CHECKING:
-  from ..models.rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
-  from ..models.rule_model_parameters import RuleModelParameters
-  from ..models.parameter_definition_spec import ParameterDefinitionSpec
-
-
-
+    from ..models.parameter_definition_spec import ParameterDefinitionSpec
+    from ..models.rule_model_parameters import RuleModelParameters
+    from ..models.rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
 
 
 T = TypeVar("T", bound="RuleModel")
@@ -29,43 +17,39 @@ T = TypeVar("T", bound="RuleModel")
 
 @attr.s(auto_attribs=True)
 class RuleModel:
-    """ Rule model
+    """Rule model
 
-        Attributes:
-            rule_name (Union[Unset, str]): Rule name
-            rule_python_module_content (Union[Unset, str]): Rule Python module content
-            type (Union[Unset, RuleModelType]): Rule runner type
-            java_class_name (Union[Unset, str]): Java class name for a rule runner that will execute the sensor. The "type"
-                must be "java_class".
-            mode (Union[Unset, RuleModelMode]): Rule historic (past) values mode. A rule may require just the current sensor
-                readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured
-                in the time_window setting.
-            time_window (Union[Unset, RuleTimeWindowSettingsSpec]):
-            fields (Union[Unset, List['ParameterDefinitionSpec']]): List of fields that are parameters of a custom rule.
-                Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls
-                for all required fields.
-            parameters (Union[Unset, RuleModelParameters]): Additional rule parameters
-            custom (Union[Unset, bool]): This rule has a custom (user level) definition.
-            built_in (Union[Unset, bool]): This rule has is a built-in rule.
-     """
+    Attributes:
+        rule_name (Union[Unset, str]): Rule name
+        rule_python_module_content (Union[Unset, str]): Rule Python module content
+        type (Union[Unset, RuleModelType]): Rule runner type
+        java_class_name (Union[Unset, str]): Java class name for a rule runner that will execute the sensor. The "type"
+            must be "java_class".
+        mode (Union[Unset, RuleModelMode]): Rule historic (past) values mode. A rule may require just the current sensor
+            readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured
+            in the time_window setting.
+        time_window (Union[Unset, RuleTimeWindowSettingsSpec]):
+        fields (Union[Unset, List['ParameterDefinitionSpec']]): List of fields that are parameters of a custom rule.
+            Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls
+            for all required fields.
+        parameters (Union[Unset, RuleModelParameters]): Additional rule parameters
+        custom (Union[Unset, bool]): This rule has a custom (user level) definition.
+        built_in (Union[Unset, bool]): This rule has is a built-in rule.
+    """
 
     rule_name: Union[Unset, str] = UNSET
     rule_python_module_content: Union[Unset, str] = UNSET
     type: Union[Unset, RuleModelType] = UNSET
     java_class_name: Union[Unset, str] = UNSET
     mode: Union[Unset, RuleModelMode] = UNSET
-    time_window: Union[Unset, 'RuleTimeWindowSettingsSpec'] = UNSET
-    fields: Union[Unset, List['ParameterDefinitionSpec']] = UNSET
-    parameters: Union[Unset, 'RuleModelParameters'] = UNSET
+    time_window: Union[Unset, "RuleTimeWindowSettingsSpec"] = UNSET
+    fields: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
+    parameters: Union[Unset, "RuleModelParameters"] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
-        from ..models.rule_model_parameters import RuleModelParameters
-        from ..models.parameter_definition_spec import ParameterDefinitionSpec
         rule_name = self.rule_name
         rule_python_module_content = self.rule_python_module_content
         type: Union[Unset, str] = UNSET
@@ -89,9 +73,6 @@ class RuleModel:
 
                 fields.append(fields_item)
 
-
-
-
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -101,8 +82,7 @@ class RuleModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if rule_name is not UNSET:
             field_dict["rule_name"] = rule_name
         if rule_python_module_content is not UNSET:
@@ -126,13 +106,12 @@ class RuleModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
-        from ..models.rule_model_parameters import RuleModelParameters
         from ..models.parameter_definition_spec import ParameterDefinitionSpec
+        from ..models.rule_model_parameters import RuleModelParameters
+        from ..models.rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
+
         d = src_dict.copy()
         rule_name = d.pop("rule_name", UNSET)
 
@@ -140,55 +119,40 @@ class RuleModel:
 
         _type = d.pop("type", UNSET)
         type: Union[Unset, RuleModelType]
-        if isinstance(_type,  Unset):
+        if isinstance(_type, Unset):
             type = UNSET
         else:
             type = RuleModelType(_type)
-
-
-
 
         java_class_name = d.pop("java_class_name", UNSET)
 
         _mode = d.pop("mode", UNSET)
         mode: Union[Unset, RuleModelMode]
-        if isinstance(_mode,  Unset):
+        if isinstance(_mode, Unset):
             mode = UNSET
         else:
             mode = RuleModelMode(_mode)
 
-
-
-
         _time_window = d.pop("time_window", UNSET)
         time_window: Union[Unset, RuleTimeWindowSettingsSpec]
-        if isinstance(_time_window,  Unset):
+        if isinstance(_time_window, Unset):
             time_window = UNSET
         else:
             time_window = RuleTimeWindowSettingsSpec.from_dict(_time_window)
 
-
-
-
         fields = []
         _fields = d.pop("fields", UNSET)
-        for fields_item_data in (_fields or []):
+        for fields_item_data in _fields or []:
             fields_item = ParameterDefinitionSpec.from_dict(fields_item_data)
-
-
 
             fields.append(fields_item)
 
-
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, RuleModelParameters]
-        if isinstance(_parameters,  Unset):
+        if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
             parameters = RuleModelParameters.from_dict(_parameters)
-
-
-
 
         custom = d.pop("custom", UNSET)
 

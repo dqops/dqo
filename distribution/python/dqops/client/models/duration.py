@@ -1,23 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.temporal_unit import TemporalUnit
-
-
-
+    from ..models.temporal_unit import TemporalUnit
 
 
 T = TypeVar("T", bound="Duration")
@@ -25,25 +13,23 @@ T = TypeVar("T", bound="Duration")
 
 @attr.s(auto_attribs=True)
 class Duration:
-    """ 
-        Attributes:
-            seconds (Union[Unset, int]):
-            nano (Union[Unset, int]):
-            negative (Union[Unset, bool]):
-            zero (Union[Unset, bool]):
-            units (Union[Unset, List['TemporalUnit']]):
-     """
+    """
+    Attributes:
+        seconds (Union[Unset, int]):
+        nano (Union[Unset, int]):
+        negative (Union[Unset, bool]):
+        zero (Union[Unset, bool]):
+        units (Union[Unset, List['TemporalUnit']]):
+    """
 
     seconds: Union[Unset, int] = UNSET
     nano: Union[Unset, int] = UNSET
     negative: Union[Unset, bool] = UNSET
     zero: Union[Unset, bool] = UNSET
-    units: Union[Unset, List['TemporalUnit']] = UNSET
+    units: Union[Unset, List["TemporalUnit"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.temporal_unit import TemporalUnit
         seconds = self.seconds
         nano = self.nano
         negative = self.negative
@@ -56,14 +42,9 @@ class Duration:
 
                 units.append(units_item)
 
-
-
-
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if seconds is not UNSET:
             field_dict["seconds"] = seconds
         if nano is not UNSET:
@@ -77,11 +58,10 @@ class Duration:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.temporal_unit import TemporalUnit
+
         d = src_dict.copy()
         seconds = d.pop("seconds", UNSET)
 
@@ -93,13 +73,10 @@ class Duration:
 
         units = []
         _units = d.pop("units", UNSET)
-        for units_item_data in (_units or []):
+        for units_item_data in _units or []:
             units_item = TemporalUnit.from_dict(units_item_data)
 
-
-
             units.append(units_item)
-
 
         duration = cls(
             seconds=seconds,

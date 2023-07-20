@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class FindRecentIncidentsOnConnectionOrder(str, Enum):
     CHECKNAME = "checkName"
     DATAGROUP = "dataGroup"

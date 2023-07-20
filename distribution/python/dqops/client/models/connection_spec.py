@@ -1,34 +1,24 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
-from ..types import UNSET, Unset
-
 from ..models.connection_spec_provider_type import ConnectionSpecProviderType
-from typing import cast
-from typing import Dict
-from typing import Union
 from ..types import UNSET, Unset
-from typing import cast, List
 
 if TYPE_CHECKING:
-  from ..models.recurring_schedules_spec import RecurringSchedulesSpec
-  from ..models.sql_server_parameters_spec import SqlServerParametersSpec
-  from ..models.connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
-  from ..models.mysql_parameters_spec import MysqlParametersSpec
-  from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
-  from ..models.redshift_parameters_spec import RedshiftParametersSpec
-  from ..models.oracle_parameters_spec import OracleParametersSpec
-  from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
-  from ..models.comment_spec import CommentSpec
-  from ..models.big_query_parameters_spec import BigQueryParametersSpec
-  from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
-
-
-
+    from ..models.big_query_parameters_spec import BigQueryParametersSpec
+    from ..models.comment_spec import CommentSpec
+    from ..models.connection_incident_grouping_spec import (
+        ConnectionIncidentGroupingSpec,
+    )
+    from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
+    from ..models.mysql_parameters_spec import MysqlParametersSpec
+    from ..models.oracle_parameters_spec import OracleParametersSpec
+    from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
+    from ..models.recurring_schedules_spec import RecurringSchedulesSpec
+    from ..models.redshift_parameters_spec import RedshiftParametersSpec
+    from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
+    from ..models.sql_server_parameters_spec import SqlServerParametersSpec
 
 
 T = TypeVar("T", bound="ConnectionSpec")
@@ -36,57 +26,47 @@ T = TypeVar("T", bound="ConnectionSpec")
 
 @attr.s(auto_attribs=True)
 class ConnectionSpec:
-    """ 
-        Attributes:
-            provider_type (Union[Unset, ConnectionSpecProviderType]): Database provider type (required).
-            bigquery (Union[Unset, BigQueryParametersSpec]):
-            snowflake (Union[Unset, SnowflakeParametersSpec]):
-            postgresql (Union[Unset, PostgresqlParametersSpec]):
-            redshift (Union[Unset, RedshiftParametersSpec]):
-            sqlserver (Union[Unset, SqlServerParametersSpec]):
-            mysql (Union[Unset, MysqlParametersSpec]):
-            oracle (Union[Unset, OracleParametersSpec]):
-            parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
-                executed on this connection.
-            default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
-            schedules (Union[Unset, RecurringSchedulesSpec]):
-            incident_grouping (Union[Unset, ConnectionIncidentGroupingSpec]):
-            comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
-                collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
-                deserialization will remove non tracked comments).
-            labels (Union[Unset, List[str]]): Custom labels that were assigned to the connection. Labels are used for
-                searching for tables when filtered data quality checks are executed.
-     """
+    """
+    Attributes:
+        provider_type (Union[Unset, ConnectionSpecProviderType]): Database provider type (required).
+        bigquery (Union[Unset, BigQueryParametersSpec]):
+        snowflake (Union[Unset, SnowflakeParametersSpec]):
+        postgresql (Union[Unset, PostgresqlParametersSpec]):
+        redshift (Union[Unset, RedshiftParametersSpec]):
+        sqlserver (Union[Unset, SqlServerParametersSpec]):
+        mysql (Union[Unset, MysqlParametersSpec]):
+        oracle (Union[Unset, OracleParametersSpec]):
+        parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
+            executed on this connection.
+        default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
+        schedules (Union[Unset, RecurringSchedulesSpec]):
+        incident_grouping (Union[Unset, ConnectionIncidentGroupingSpec]):
+        comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
+            collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
+            deserialization will remove non tracked comments).
+        labels (Union[Unset, List[str]]): Custom labels that were assigned to the connection. Labels are used for
+            searching for tables when filtered data quality checks are executed.
+    """
 
     provider_type: Union[Unset, ConnectionSpecProviderType] = UNSET
-    bigquery: Union[Unset, 'BigQueryParametersSpec'] = UNSET
-    snowflake: Union[Unset, 'SnowflakeParametersSpec'] = UNSET
-    postgresql: Union[Unset, 'PostgresqlParametersSpec'] = UNSET
-    redshift: Union[Unset, 'RedshiftParametersSpec'] = UNSET
-    sqlserver: Union[Unset, 'SqlServerParametersSpec'] = UNSET
-    mysql: Union[Unset, 'MysqlParametersSpec'] = UNSET
-    oracle: Union[Unset, 'OracleParametersSpec'] = UNSET
+    bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
+    snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
+    postgresql: Union[Unset, "PostgresqlParametersSpec"] = UNSET
+    redshift: Union[Unset, "RedshiftParametersSpec"] = UNSET
+    sqlserver: Union[Unset, "SqlServerParametersSpec"] = UNSET
+    mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
+    oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     parallel_runs_limit: Union[Unset, int] = UNSET
-    default_grouping_configuration: Union[Unset, 'DataGroupingConfigurationSpec'] = UNSET
-    schedules: Union[Unset, 'RecurringSchedulesSpec'] = UNSET
-    incident_grouping: Union[Unset, 'ConnectionIncidentGroupingSpec'] = UNSET
-    comments: Union[Unset, List['CommentSpec']] = UNSET
+    default_grouping_configuration: Union[
+        Unset, "DataGroupingConfigurationSpec"
+    ] = UNSET
+    schedules: Union[Unset, "RecurringSchedulesSpec"] = UNSET
+    incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
+    comments: Union[Unset, List["CommentSpec"]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
-        from ..models.sql_server_parameters_spec import SqlServerParametersSpec
-        from ..models.connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
-        from ..models.mysql_parameters_spec import MysqlParametersSpec
-        from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
-        from ..models.redshift_parameters_spec import RedshiftParametersSpec
-        from ..models.oracle_parameters_spec import OracleParametersSpec
-        from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
-        from ..models.comment_spec import CommentSpec
-        from ..models.big_query_parameters_spec import BigQueryParametersSpec
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
         provider_type: Union[Unset, str] = UNSET
         if not isinstance(self.provider_type, Unset):
             provider_type = self.provider_type.value
@@ -122,7 +102,9 @@ class ConnectionSpec:
         parallel_runs_limit = self.parallel_runs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
-            default_grouping_configuration = self.default_grouping_configuration.to_dict()
+            default_grouping_configuration = (
+                self.default_grouping_configuration.to_dict()
+            )
 
         schedules: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.schedules, Unset):
@@ -140,21 +122,13 @@ class ConnectionSpec:
 
                 comments.append(comments_item)
 
-
-
-
         labels: Union[Unset, List[str]] = UNSET
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
-
-
-
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if provider_type is not UNSET:
             field_dict["provider_type"] = provider_type
         if bigquery is not UNSET:
@@ -174,7 +148,9 @@ class ConnectionSpec:
         if parallel_runs_limit is not UNSET:
             field_dict["parallel_runs_limit"] = parallel_runs_limit
         if default_grouping_configuration is not UNSET:
-            field_dict["default_grouping_configuration"] = default_grouping_configuration
+            field_dict[
+                "default_grouping_configuration"
+            ] = default_grouping_configuration
         if schedules is not UNSET:
             field_dict["schedules"] = schedules
         if incident_grouping is not UNSET:
@@ -186,146 +162,116 @@ class ConnectionSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
-        from ..models.sql_server_parameters_spec import SqlServerParametersSpec
-        from ..models.connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
+        from ..models.big_query_parameters_spec import BigQueryParametersSpec
+        from ..models.comment_spec import CommentSpec
+        from ..models.connection_incident_grouping_spec import (
+            ConnectionIncidentGroupingSpec,
+        )
+        from ..models.data_grouping_configuration_spec import (
+            DataGroupingConfigurationSpec,
+        )
         from ..models.mysql_parameters_spec import MysqlParametersSpec
-        from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
-        from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
-        from ..models.comment_spec import CommentSpec
-        from ..models.big_query_parameters_spec import BigQueryParametersSpec
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
+        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
+        from ..models.redshift_parameters_spec import RedshiftParametersSpec
+        from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
+        from ..models.sql_server_parameters_spec import SqlServerParametersSpec
+
         d = src_dict.copy()
         _provider_type = d.pop("provider_type", UNSET)
         provider_type: Union[Unset, ConnectionSpecProviderType]
-        if isinstance(_provider_type,  Unset):
+        if isinstance(_provider_type, Unset):
             provider_type = UNSET
         else:
             provider_type = ConnectionSpecProviderType(_provider_type)
 
-
-
-
         _bigquery = d.pop("bigquery", UNSET)
         bigquery: Union[Unset, BigQueryParametersSpec]
-        if isinstance(_bigquery,  Unset):
+        if isinstance(_bigquery, Unset):
             bigquery = UNSET
         else:
             bigquery = BigQueryParametersSpec.from_dict(_bigquery)
 
-
-
-
         _snowflake = d.pop("snowflake", UNSET)
         snowflake: Union[Unset, SnowflakeParametersSpec]
-        if isinstance(_snowflake,  Unset):
+        if isinstance(_snowflake, Unset):
             snowflake = UNSET
         else:
             snowflake = SnowflakeParametersSpec.from_dict(_snowflake)
 
-
-
-
         _postgresql = d.pop("postgresql", UNSET)
         postgresql: Union[Unset, PostgresqlParametersSpec]
-        if isinstance(_postgresql,  Unset):
+        if isinstance(_postgresql, Unset):
             postgresql = UNSET
         else:
             postgresql = PostgresqlParametersSpec.from_dict(_postgresql)
 
-
-
-
         _redshift = d.pop("redshift", UNSET)
         redshift: Union[Unset, RedshiftParametersSpec]
-        if isinstance(_redshift,  Unset):
+        if isinstance(_redshift, Unset):
             redshift = UNSET
         else:
             redshift = RedshiftParametersSpec.from_dict(_redshift)
 
-
-
-
         _sqlserver = d.pop("sqlserver", UNSET)
         sqlserver: Union[Unset, SqlServerParametersSpec]
-        if isinstance(_sqlserver,  Unset):
+        if isinstance(_sqlserver, Unset):
             sqlserver = UNSET
         else:
             sqlserver = SqlServerParametersSpec.from_dict(_sqlserver)
 
-
-
-
         _mysql = d.pop("mysql", UNSET)
         mysql: Union[Unset, MysqlParametersSpec]
-        if isinstance(_mysql,  Unset):
+        if isinstance(_mysql, Unset):
             mysql = UNSET
         else:
             mysql = MysqlParametersSpec.from_dict(_mysql)
 
-
-
-
         _oracle = d.pop("oracle", UNSET)
         oracle: Union[Unset, OracleParametersSpec]
-        if isinstance(_oracle,  Unset):
+        if isinstance(_oracle, Unset):
             oracle = UNSET
         else:
             oracle = OracleParametersSpec.from_dict(_oracle)
-
-
-
 
         parallel_runs_limit = d.pop("parallel_runs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
         default_grouping_configuration: Union[Unset, DataGroupingConfigurationSpec]
-        if isinstance(_default_grouping_configuration,  Unset):
+        if isinstance(_default_grouping_configuration, Unset):
             default_grouping_configuration = UNSET
         else:
-            default_grouping_configuration = DataGroupingConfigurationSpec.from_dict(_default_grouping_configuration)
-
-
-
+            default_grouping_configuration = DataGroupingConfigurationSpec.from_dict(
+                _default_grouping_configuration
+            )
 
         _schedules = d.pop("schedules", UNSET)
         schedules: Union[Unset, RecurringSchedulesSpec]
-        if isinstance(_schedules,  Unset):
+        if isinstance(_schedules, Unset):
             schedules = UNSET
         else:
             schedules = RecurringSchedulesSpec.from_dict(_schedules)
 
-
-
-
         _incident_grouping = d.pop("incident_grouping", UNSET)
         incident_grouping: Union[Unset, ConnectionIncidentGroupingSpec]
-        if isinstance(_incident_grouping,  Unset):
+        if isinstance(_incident_grouping, Unset):
             incident_grouping = UNSET
         else:
-            incident_grouping = ConnectionIncidentGroupingSpec.from_dict(_incident_grouping)
-
-
-
+            incident_grouping = ConnectionIncidentGroupingSpec.from_dict(
+                _incident_grouping
+            )
 
         comments = []
         _comments = d.pop("comments", UNSET)
-        for comments_item_data in (_comments or []):
+        for comments_item_data in _comments or []:
             comments_item = CommentSpec.from_dict(comments_item_data)
-
-
 
             comments.append(comments_item)
 
-
         labels = cast(List[str], d.pop("labels", UNSET))
-
 
         connection_spec = cls(
             provider_type=provider_type,

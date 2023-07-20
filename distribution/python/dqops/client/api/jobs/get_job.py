@@ -1,42 +1,26 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
+from ...client import Client
 from ...models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
-from typing import cast
-from typing import Dict
-
+from ...types import Response
 
 
 def _get_kwargs(
     job_id: int,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/jobs/{jobId}".format(
-        client.base_url,jobId=job_id)
+    url = "{}/api/jobs/jobs/{jobId}".format(client.base_url, jobId=job_id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -45,11 +29,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[DqoJobHistoryEntryModel]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[DqoJobHistoryEntryModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = DqoJobHistoryEntryModel.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -58,7 +42,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Dqo
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[DqoJobHistoryEntryModel]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[DqoJobHistoryEntryModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -71,9 +57,8 @@ def sync_detailed(
     job_id: int,
     *,
     client: Client,
-
 ) -> Response[DqoJobHistoryEntryModel]:
-    """ getJob
+    """getJob
 
      Retrieves the current status of a single job, identified by a job id.
 
@@ -86,13 +71,11 @@ def sync_detailed(
 
     Returns:
         Response[DqoJobHistoryEntryModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         job_id=job_id,
-client=client,
-
+        client=client,
     )
 
     response = httpx.request(
@@ -102,13 +85,13 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     job_id: int,
     *,
     client: Client,
-
 ) -> Optional[DqoJobHistoryEntryModel]:
-    """ getJob
+    """getJob
 
      Retrieves the current status of a single job, identified by a job id.
 
@@ -121,22 +104,20 @@ def sync(
 
     Returns:
         DqoJobHistoryEntryModel
-     """
-
+    """
 
     return sync_detailed(
         job_id=job_id,
-client=client,
-
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     job_id: int,
     *,
     client: Client,
-
 ) -> Response[DqoJobHistoryEntryModel]:
-    """ getJob
+    """getJob
 
      Retrieves the current status of a single job, identified by a job id.
 
@@ -149,29 +130,25 @@ async def asyncio_detailed(
 
     Returns:
         Response[DqoJobHistoryEntryModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         job_id=job_id,
-client=client,
-
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     job_id: int,
     *,
     client: Client,
-
 ) -> Optional[DqoJobHistoryEntryModel]:
-    """ getJob
+    """getJob
 
      Retrieves the current status of a single job, identified by a job id.
 
@@ -184,11 +161,11 @@ async def asyncio(
 
     Returns:
         DqoJobHistoryEntryModel
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        job_id=job_id,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            job_id=job_id,
+            client=client,
+        )
+    ).parsed

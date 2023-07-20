@@ -1,22 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.dashboard_spec import DashboardSpec
-
-
-
+    from ..models.dashboard_spec import DashboardSpec
 
 
 T = TypeVar("T", bound="AuthenticatedDashboardModel")
@@ -24,22 +13,20 @@ T = TypeVar("T", bound="AuthenticatedDashboardModel")
 
 @attr.s(auto_attribs=True)
 class AuthenticatedDashboardModel:
-    """ Describes a single authenticated dashboard.
+    """Describes a single authenticated dashboard.
 
-        Attributes:
-            folder_path (Union[Unset, str]): Folder path
-            dashboard (Union[Unset, DashboardSpec]):
-            authenticated_dashboard_url (Union[Unset, str]): Dashboard authenticated url with a short lived refresh token
-     """
+    Attributes:
+        folder_path (Union[Unset, str]): Folder path
+        dashboard (Union[Unset, DashboardSpec]):
+        authenticated_dashboard_url (Union[Unset, str]): Dashboard authenticated url with a short lived refresh token
+    """
 
     folder_path: Union[Unset, str] = UNSET
-    dashboard: Union[Unset, 'DashboardSpec'] = UNSET
+    dashboard: Union[Unset, "DashboardSpec"] = UNSET
     authenticated_dashboard_url: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.dashboard_spec import DashboardSpec
         folder_path = self.folder_path
         dashboard: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.dashboard, Unset):
@@ -49,8 +36,7 @@ class AuthenticatedDashboardModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if folder_path is not UNSET:
             field_dict["folder_path"] = folder_path
         if dashboard is not UNSET:
@@ -60,23 +46,19 @@ class AuthenticatedDashboardModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.dashboard_spec import DashboardSpec
+
         d = src_dict.copy()
         folder_path = d.pop("folder_path", UNSET)
 
         _dashboard = d.pop("dashboard", UNSET)
         dashboard: Union[Unset, DashboardSpec]
-        if isinstance(_dashboard,  Unset):
+        if isinstance(_dashboard, Unset):
             dashboard = UNSET
         else:
             dashboard = DashboardSpec.from_dict(_dashboard)
-
-
-
 
         authenticated_dashboard_url = d.pop("authenticated_dashboard_url", UNSET)
 

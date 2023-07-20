@@ -1,25 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..types import UNSET, Unset
-
-from typing import cast
-from typing import Dict
 from ..models.check_template_check_target import CheckTemplateCheckTarget
-from typing import Union
 from ..types import UNSET, Unset
-from typing import cast, List
 
 if TYPE_CHECKING:
-  from ..models.parameter_definition_spec import ParameterDefinitionSpec
-  from ..models.check_container_type_model import CheckContainerTypeModel
-
-
-
+    from ..models.check_container_type_model import CheckContainerTypeModel
+    from ..models.parameter_definition_spec import ParameterDefinitionSpec
 
 
 T = TypeVar("T", bound="CheckTemplate")
@@ -27,7 +15,7 @@ T = TypeVar("T", bound="CheckTemplate")
 
 @attr.s(auto_attribs=True)
 class CheckTemplate:
-    """ Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy
+    """Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy
     tree.
 
         Attributes:
@@ -42,22 +30,19 @@ class CheckTemplate:
                 definitions.
             rule_parameters_definitions (Union[Unset, List['ParameterDefinitionSpec']]): List of threshold (alerting) rule's
                 parameters definitions (for a single rule, regardless of severity).
-     """
+    """
 
     check_target: Union[Unset, CheckTemplateCheckTarget] = UNSET
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
-    check_container_type: Union[Unset, 'CheckContainerTypeModel'] = UNSET
+    check_container_type: Union[Unset, "CheckContainerTypeModel"] = UNSET
     sensor_name: Union[Unset, str] = UNSET
-    sensor_parameters_definitions: Union[Unset, List['ParameterDefinitionSpec']] = UNSET
-    rule_parameters_definitions: Union[Unset, List['ParameterDefinitionSpec']] = UNSET
+    sensor_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
+    rule_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.parameter_definition_spec import ParameterDefinitionSpec
-        from ..models.check_container_type_model import CheckContainerTypeModel
         check_target: Union[Unset, str] = UNSET
         if not isinstance(self.check_target, Unset):
             check_target = self.check_target.value
@@ -73,30 +58,30 @@ class CheckTemplate:
         sensor_parameters_definitions: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.sensor_parameters_definitions, Unset):
             sensor_parameters_definitions = []
-            for sensor_parameters_definitions_item_data in self.sensor_parameters_definitions:
-                sensor_parameters_definitions_item = sensor_parameters_definitions_item_data.to_dict()
+            for (
+                sensor_parameters_definitions_item_data
+            ) in self.sensor_parameters_definitions:
+                sensor_parameters_definitions_item = (
+                    sensor_parameters_definitions_item_data.to_dict()
+                )
 
                 sensor_parameters_definitions.append(sensor_parameters_definitions_item)
-
-
-
 
         rule_parameters_definitions: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.rule_parameters_definitions, Unset):
             rule_parameters_definitions = []
-            for rule_parameters_definitions_item_data in self.rule_parameters_definitions:
-                rule_parameters_definitions_item = rule_parameters_definitions_item_data.to_dict()
+            for (
+                rule_parameters_definitions_item_data
+            ) in self.rule_parameters_definitions:
+                rule_parameters_definitions_item = (
+                    rule_parameters_definitions_item_data.to_dict()
+                )
 
                 rule_parameters_definitions.append(rule_parameters_definitions_item)
 
-
-
-
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if check_target is not UNSET:
             field_dict["check_target"] = check_target
         if check_category is not UNSET:
@@ -116,22 +101,18 @@ class CheckTemplate:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.parameter_definition_spec import ParameterDefinitionSpec
         from ..models.check_container_type_model import CheckContainerTypeModel
+        from ..models.parameter_definition_spec import ParameterDefinitionSpec
+
         d = src_dict.copy()
         _check_target = d.pop("check_target", UNSET)
         check_target: Union[Unset, CheckTemplateCheckTarget]
-        if isinstance(_check_target,  Unset):
+        if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
             check_target = CheckTemplateCheckTarget(_check_target)
-
-
-
 
         check_category = d.pop("check_category", UNSET)
 
@@ -141,35 +122,34 @@ class CheckTemplate:
 
         _check_container_type = d.pop("check_container_type", UNSET)
         check_container_type: Union[Unset, CheckContainerTypeModel]
-        if isinstance(_check_container_type,  Unset):
+        if isinstance(_check_container_type, Unset):
             check_container_type = UNSET
         else:
-            check_container_type = CheckContainerTypeModel.from_dict(_check_container_type)
-
-
-
+            check_container_type = CheckContainerTypeModel.from_dict(
+                _check_container_type
+            )
 
         sensor_name = d.pop("sensor_name", UNSET)
 
         sensor_parameters_definitions = []
         _sensor_parameters_definitions = d.pop("sensor_parameters_definitions", UNSET)
-        for sensor_parameters_definitions_item_data in (_sensor_parameters_definitions or []):
-            sensor_parameters_definitions_item = ParameterDefinitionSpec.from_dict(sensor_parameters_definitions_item_data)
-
-
+        for sensor_parameters_definitions_item_data in (
+            _sensor_parameters_definitions or []
+        ):
+            sensor_parameters_definitions_item = ParameterDefinitionSpec.from_dict(
+                sensor_parameters_definitions_item_data
+            )
 
             sensor_parameters_definitions.append(sensor_parameters_definitions_item)
 
-
         rule_parameters_definitions = []
         _rule_parameters_definitions = d.pop("rule_parameters_definitions", UNSET)
-        for rule_parameters_definitions_item_data in (_rule_parameters_definitions or []):
-            rule_parameters_definitions_item = ParameterDefinitionSpec.from_dict(rule_parameters_definitions_item_data)
-
-
+        for rule_parameters_definitions_item_data in _rule_parameters_definitions or []:
+            rule_parameters_definitions_item = ParameterDefinitionSpec.from_dict(
+                rule_parameters_definitions_item_data
+            )
 
             rule_parameters_definitions.append(rule_parameters_definitions_item)
-
 
         check_template = cls(
             check_target=check_target,

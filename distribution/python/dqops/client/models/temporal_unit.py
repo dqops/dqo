@@ -1,22 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.duration import Duration
-
-
-
+    from ..models.duration import Duration
 
 
 T = TypeVar("T", bound="TemporalUnit")
@@ -24,23 +13,21 @@ T = TypeVar("T", bound="TemporalUnit")
 
 @attr.s(auto_attribs=True)
 class TemporalUnit:
-    """ 
-        Attributes:
-            date_based (Union[Unset, bool]):
-            time_based (Union[Unset, bool]):
-            duration (Union[Unset, Duration]):
-            duration_estimated (Union[Unset, bool]):
-     """
+    """
+    Attributes:
+        date_based (Union[Unset, bool]):
+        time_based (Union[Unset, bool]):
+        duration (Union[Unset, Duration]):
+        duration_estimated (Union[Unset, bool]):
+    """
 
     date_based: Union[Unset, bool] = UNSET
     time_based: Union[Unset, bool] = UNSET
-    duration: Union[Unset, 'Duration'] = UNSET
+    duration: Union[Unset, "Duration"] = UNSET
     duration_estimated: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.duration import Duration
         date_based = self.date_based
         time_based = self.time_based
         duration: Union[Unset, Dict[str, Any]] = UNSET
@@ -51,8 +38,7 @@ class TemporalUnit:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if date_based is not UNSET:
             field_dict["dateBased"] = date_based
         if time_based is not UNSET:
@@ -64,11 +50,10 @@ class TemporalUnit:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.duration import Duration
+
         d = src_dict.copy()
         date_based = d.pop("dateBased", UNSET)
 
@@ -76,13 +61,10 @@ class TemporalUnit:
 
         _duration = d.pop("duration", UNSET)
         duration: Union[Unset, Duration]
-        if isinstance(_duration,  Unset):
+        if isinstance(_duration, Unset):
             duration = UNSET
         else:
             duration = Duration.from_dict(_duration)
-
-
-
 
         duration_estimated = d.pop("durationEstimated", UNSET)
 

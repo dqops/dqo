@@ -1,22 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.import_tables_queue_job_parameters import ImportTablesQueueJobParameters
-
-
-
+    from ..models.import_tables_queue_job_parameters import (
+        ImportTablesQueueJobParameters,
+    )
 
 
 T = TypeVar("T", bound="SchemaRemoteModel")
@@ -24,24 +15,22 @@ T = TypeVar("T", bound="SchemaRemoteModel")
 
 @attr.s(auto_attribs=True)
 class SchemaRemoteModel:
-    """ Schema remote model
+    """Schema remote model
 
-        Attributes:
-            connection_name (Union[Unset, str]): Connection name.
-            schema_name (Union[Unset, str]): Schema name.
-            already_imported (Union[Unset, bool]): Has the schema been imported.
-            import_table_job_parameters (Union[Unset, ImportTablesQueueJobParameters]):
-     """
+    Attributes:
+        connection_name (Union[Unset, str]): Connection name.
+        schema_name (Union[Unset, str]): Schema name.
+        already_imported (Union[Unset, bool]): Has the schema been imported.
+        import_table_job_parameters (Union[Unset, ImportTablesQueueJobParameters]):
+    """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     already_imported: Union[Unset, bool] = UNSET
-    import_table_job_parameters: Union[Unset, 'ImportTablesQueueJobParameters'] = UNSET
+    import_table_job_parameters: Union[Unset, "ImportTablesQueueJobParameters"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.import_tables_queue_job_parameters import ImportTablesQueueJobParameters
         connection_name = self.connection_name
         schema_name = self.schema_name
         already_imported = self.already_imported
@@ -49,11 +38,9 @@ class SchemaRemoteModel:
         if not isinstance(self.import_table_job_parameters, Unset):
             import_table_job_parameters = self.import_table_job_parameters.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connectionName"] = connection_name
         if schema_name is not UNSET:
@@ -65,11 +52,12 @@ class SchemaRemoteModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.import_tables_queue_job_parameters import ImportTablesQueueJobParameters
+        from ..models.import_tables_queue_job_parameters import (
+            ImportTablesQueueJobParameters,
+        )
+
         d = src_dict.copy()
         connection_name = d.pop("connectionName", UNSET)
 
@@ -79,13 +67,12 @@ class SchemaRemoteModel:
 
         _import_table_job_parameters = d.pop("importTableJobParameters", UNSET)
         import_table_job_parameters: Union[Unset, ImportTablesQueueJobParameters]
-        if isinstance(_import_table_job_parameters,  Unset):
+        if isinstance(_import_table_job_parameters, Unset):
             import_table_job_parameters = UNSET
         else:
-            import_table_job_parameters = ImportTablesQueueJobParameters.from_dict(_import_table_job_parameters)
-
-
-
+            import_table_job_parameters = ImportTablesQueueJobParameters.from_dict(
+                _import_table_job_parameters
+            )
 
         schema_remote_model = cls(
             connection_name=connection_name,

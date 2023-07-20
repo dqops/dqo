@@ -1,26 +1,19 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-  from ..models.delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
-  from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
-  from ..models.check_search_filters import CheckSearchFilters
-  from ..models.physical_table_name import PhysicalTableName
-
-
-
+    from ..models.check_search_filters import CheckSearchFilters
+    from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
+    from ..models.delete_stored_data_queue_job_parameters import (
+        DeleteStoredDataQueueJobParameters,
+    )
+    from ..models.physical_table_name import PhysicalTableName
+    from ..models.statistics_collector_search_filters import (
+        StatisticsCollectorSearchFilters,
+    )
 
 
 T = TypeVar("T", bound="ColumnBasicModel")
@@ -28,7 +21,7 @@ T = TypeVar("T", bound="ColumnBasicModel")
 
 @attr.s(auto_attribs=True)
 class ColumnBasicModel:
-    """ Basic column model that returns the basic fields from a column specification, excluding nested nodes like a list of
+    """Basic column model that returns the basic fields from a column specification, excluding nested nodes like a list of
     activated checks.
 
         Attributes:
@@ -57,10 +50,10 @@ class ColumnBasicModel:
                 identifies which checks on which tables and columns should be executed.
             collect_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
             data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
-     """
+    """
 
     connection_name: Union[Unset, str] = UNSET
-    table: Union[Unset, 'PhysicalTableName'] = UNSET
+    table: Union[Unset, "PhysicalTableName"] = UNSET
     column_name: Union[Unset, str] = UNSET
     sql_expression: Union[Unset, str] = UNSET
     column_hash: Union[Unset, int] = UNSET
@@ -69,22 +62,18 @@ class ColumnBasicModel:
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
     has_any_configured_recurring_checks: Union[Unset, bool] = UNSET
     has_any_configured_partition_checks: Union[Unset, bool] = UNSET
-    type_snapshot: Union[Unset, 'ColumnTypeSnapshotSpec'] = UNSET
-    run_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    run_profiling_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    run_recurring_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    run_partition_checks_job_template: Union[Unset, 'CheckSearchFilters'] = UNSET
-    collect_statistics_job_template: Union[Unset, 'StatisticsCollectorSearchFilters'] = UNSET
-    data_clean_job_template: Union[Unset, 'DeleteStoredDataQueueJobParameters'] = UNSET
+    type_snapshot: Union[Unset, "ColumnTypeSnapshotSpec"] = UNSET
+    run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_recurring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    run_partition_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    collect_statistics_job_template: Union[
+        Unset, "StatisticsCollectorSearchFilters"
+    ] = UNSET
+    data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-        from ..models.delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
-        from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
-        from ..models.check_search_filters import CheckSearchFilters
-        from ..models.physical_table_name import PhysicalTableName
         connection_name = self.connection_name
         table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.table, Unset):
@@ -108,29 +97,35 @@ class ColumnBasicModel:
 
         run_profiling_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_profiling_checks_job_template, Unset):
-            run_profiling_checks_job_template = self.run_profiling_checks_job_template.to_dict()
+            run_profiling_checks_job_template = (
+                self.run_profiling_checks_job_template.to_dict()
+            )
 
         run_recurring_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_recurring_checks_job_template, Unset):
-            run_recurring_checks_job_template = self.run_recurring_checks_job_template.to_dict()
+            run_recurring_checks_job_template = (
+                self.run_recurring_checks_job_template.to_dict()
+            )
 
         run_partition_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_partition_checks_job_template, Unset):
-            run_partition_checks_job_template = self.run_partition_checks_job_template.to_dict()
+            run_partition_checks_job_template = (
+                self.run_partition_checks_job_template.to_dict()
+            )
 
         collect_statistics_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.collect_statistics_job_template, Unset):
-            collect_statistics_job_template = self.collect_statistics_job_template.to_dict()
+            collect_statistics_job_template = (
+                self.collect_statistics_job_template.to_dict()
+            )
 
         data_clean_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.data_clean_job_template, Unset):
             data_clean_job_template = self.data_clean_job_template.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if table is not UNSET:
@@ -146,49 +141,63 @@ class ColumnBasicModel:
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
-            field_dict["has_any_configured_profiling_checks"] = has_any_configured_profiling_checks
+            field_dict[
+                "has_any_configured_profiling_checks"
+            ] = has_any_configured_profiling_checks
         if has_any_configured_recurring_checks is not UNSET:
-            field_dict["has_any_configured_recurring_checks"] = has_any_configured_recurring_checks
+            field_dict[
+                "has_any_configured_recurring_checks"
+            ] = has_any_configured_recurring_checks
         if has_any_configured_partition_checks is not UNSET:
-            field_dict["has_any_configured_partition_checks"] = has_any_configured_partition_checks
+            field_dict[
+                "has_any_configured_partition_checks"
+            ] = has_any_configured_partition_checks
         if type_snapshot is not UNSET:
             field_dict["type_snapshot"] = type_snapshot
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
-            field_dict["run_profiling_checks_job_template"] = run_profiling_checks_job_template
+            field_dict[
+                "run_profiling_checks_job_template"
+            ] = run_profiling_checks_job_template
         if run_recurring_checks_job_template is not UNSET:
-            field_dict["run_recurring_checks_job_template"] = run_recurring_checks_job_template
+            field_dict[
+                "run_recurring_checks_job_template"
+            ] = run_recurring_checks_job_template
         if run_partition_checks_job_template is not UNSET:
-            field_dict["run_partition_checks_job_template"] = run_partition_checks_job_template
+            field_dict[
+                "run_partition_checks_job_template"
+            ] = run_partition_checks_job_template
         if collect_statistics_job_template is not UNSET:
-            field_dict["collect_statistics_job_template"] = collect_statistics_job_template
+            field_dict[
+                "collect_statistics_job_template"
+            ] = collect_statistics_job_template
         if data_clean_job_template is not UNSET:
             field_dict["data_clean_job_template"] = data_clean_job_template
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-        from ..models.delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
-        from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
         from ..models.check_search_filters import CheckSearchFilters
+        from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
+        from ..models.delete_stored_data_queue_job_parameters import (
+            DeleteStoredDataQueueJobParameters,
+        )
         from ..models.physical_table_name import PhysicalTableName
+        from ..models.statistics_collector_search_filters import (
+            StatisticsCollectorSearchFilters,
+        )
+
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
         _table = d.pop("table", UNSET)
         table: Union[Unset, PhysicalTableName]
-        if isinstance(_table,  Unset):
+        if isinstance(_table, Unset):
             table = UNSET
         else:
             table = PhysicalTableName.from_dict(_table)
-
-
-
 
         column_name = d.pop("column_name", UNSET)
 
@@ -200,81 +209,88 @@ class ColumnBasicModel:
 
         has_any_configured_checks = d.pop("has_any_configured_checks", UNSET)
 
-        has_any_configured_profiling_checks = d.pop("has_any_configured_profiling_checks", UNSET)
+        has_any_configured_profiling_checks = d.pop(
+            "has_any_configured_profiling_checks", UNSET
+        )
 
-        has_any_configured_recurring_checks = d.pop("has_any_configured_recurring_checks", UNSET)
+        has_any_configured_recurring_checks = d.pop(
+            "has_any_configured_recurring_checks", UNSET
+        )
 
-        has_any_configured_partition_checks = d.pop("has_any_configured_partition_checks", UNSET)
+        has_any_configured_partition_checks = d.pop(
+            "has_any_configured_partition_checks", UNSET
+        )
 
         _type_snapshot = d.pop("type_snapshot", UNSET)
         type_snapshot: Union[Unset, ColumnTypeSnapshotSpec]
-        if isinstance(_type_snapshot,  Unset):
+        if isinstance(_type_snapshot, Unset):
             type_snapshot = UNSET
         else:
             type_snapshot = ColumnTypeSnapshotSpec.from_dict(_type_snapshot)
 
-
-
-
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_checks_job_template,  Unset):
+        if isinstance(_run_checks_job_template, Unset):
             run_checks_job_template = UNSET
         else:
-            run_checks_job_template = CheckSearchFilters.from_dict(_run_checks_job_template)
+            run_checks_job_template = CheckSearchFilters.from_dict(
+                _run_checks_job_template
+            )
 
-
-
-
-        _run_profiling_checks_job_template = d.pop("run_profiling_checks_job_template", UNSET)
+        _run_profiling_checks_job_template = d.pop(
+            "run_profiling_checks_job_template", UNSET
+        )
         run_profiling_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_profiling_checks_job_template,  Unset):
+        if isinstance(_run_profiling_checks_job_template, Unset):
             run_profiling_checks_job_template = UNSET
         else:
-            run_profiling_checks_job_template = CheckSearchFilters.from_dict(_run_profiling_checks_job_template)
+            run_profiling_checks_job_template = CheckSearchFilters.from_dict(
+                _run_profiling_checks_job_template
+            )
 
-
-
-
-        _run_recurring_checks_job_template = d.pop("run_recurring_checks_job_template", UNSET)
+        _run_recurring_checks_job_template = d.pop(
+            "run_recurring_checks_job_template", UNSET
+        )
         run_recurring_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_recurring_checks_job_template,  Unset):
+        if isinstance(_run_recurring_checks_job_template, Unset):
             run_recurring_checks_job_template = UNSET
         else:
-            run_recurring_checks_job_template = CheckSearchFilters.from_dict(_run_recurring_checks_job_template)
+            run_recurring_checks_job_template = CheckSearchFilters.from_dict(
+                _run_recurring_checks_job_template
+            )
 
-
-
-
-        _run_partition_checks_job_template = d.pop("run_partition_checks_job_template", UNSET)
+        _run_partition_checks_job_template = d.pop(
+            "run_partition_checks_job_template", UNSET
+        )
         run_partition_checks_job_template: Union[Unset, CheckSearchFilters]
-        if isinstance(_run_partition_checks_job_template,  Unset):
+        if isinstance(_run_partition_checks_job_template, Unset):
             run_partition_checks_job_template = UNSET
         else:
-            run_partition_checks_job_template = CheckSearchFilters.from_dict(_run_partition_checks_job_template)
+            run_partition_checks_job_template = CheckSearchFilters.from_dict(
+                _run_partition_checks_job_template
+            )
 
-
-
-
-        _collect_statistics_job_template = d.pop("collect_statistics_job_template", UNSET)
+        _collect_statistics_job_template = d.pop(
+            "collect_statistics_job_template", UNSET
+        )
         collect_statistics_job_template: Union[Unset, StatisticsCollectorSearchFilters]
-        if isinstance(_collect_statistics_job_template,  Unset):
+        if isinstance(_collect_statistics_job_template, Unset):
             collect_statistics_job_template = UNSET
         else:
-            collect_statistics_job_template = StatisticsCollectorSearchFilters.from_dict(_collect_statistics_job_template)
-
-
-
+            collect_statistics_job_template = (
+                StatisticsCollectorSearchFilters.from_dict(
+                    _collect_statistics_job_template
+                )
+            )
 
         _data_clean_job_template = d.pop("data_clean_job_template", UNSET)
         data_clean_job_template: Union[Unset, DeleteStoredDataQueueJobParameters]
-        if isinstance(_data_clean_job_template,  Unset):
+        if isinstance(_data_clean_job_template, Unset):
             data_clean_job_template = UNSET
         else:
-            data_clean_job_template = DeleteStoredDataQueueJobParameters.from_dict(_data_clean_job_template)
-
-
-
+            data_clean_job_template = DeleteStoredDataQueueJobParameters.from_dict(
+                _data_clean_job_template
+            )
 
         column_basic_model = cls(
             connection_name=connection_name,

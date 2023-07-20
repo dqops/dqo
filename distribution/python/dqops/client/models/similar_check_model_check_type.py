@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class SimilarCheckModelCheckType(str, Enum):
     PARTITIONED = "partitioned"
     PROFILING = "profiling"

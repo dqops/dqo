@@ -1,37 +1,25 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="RecurringScheduleSpec")
 
 
 @attr.s(auto_attribs=True)
 class RecurringScheduleSpec:
-    """ 
-        Attributes:
-            cron_expression (Union[Unset, str]): Unix style cron expression that specifies when to execute scheduled
-                operations like running data quality checks or synchronizing the configuration with the cloud.
-            disabled (Union[Unset, bool]): Disables the schedule. When the value of this 'disable' field is false, the
-                schedule is stored in the metadata but it is not activated to run data quality checks.
-     """
+    """
+    Attributes:
+        cron_expression (Union[Unset, str]): Unix style cron expression that specifies when to execute scheduled
+            operations like running data quality checks or synchronizing the configuration with the cloud.
+        disabled (Union[Unset, bool]): Disables the schedule. When the value of this 'disable' field is false, the
+            schedule is stored in the metadata but it is not activated to run data quality checks.
+    """
 
     cron_expression: Union[Unset, str] = UNSET
     disabled: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         cron_expression = self.cron_expression
@@ -39,16 +27,13 @@ class RecurringScheduleSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if cron_expression is not UNSET:
             field_dict["cron_expression"] = cron_expression
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

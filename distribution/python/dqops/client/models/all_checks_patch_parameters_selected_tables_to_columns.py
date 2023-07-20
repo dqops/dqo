@@ -1,54 +1,32 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, cast
 
 import attr
-
-from ..types import UNSET, Unset
-
-from typing import cast, List
-
-
-
-
-
 
 T = TypeVar("T", bound="AllChecksPatchParametersSelectedTablesToColumns")
 
 
 @attr.s(auto_attribs=True)
 class AllChecksPatchParametersSelectedTablesToColumns:
-    """ List of concrete table and column names which will be the target. Column mappings are ignored for table level
+    """List of concrete table and column names which will be the target. Column mappings are ignored for table level
     checks. This filter is applied at the end.
 
-     """
+    """
 
     additional_properties: Dict[str, List[str]] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        
         field_dict: Dict[str, Any] = {}
         for prop_name, prop in self.additional_properties.items():
             field_dict[prop_name] = prop
 
-
-
-
-        field_dict.update({
-        })
+        field_dict.update({})
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        all_checks_patch_parameters_selected_tables_to_columns = cls(
-        )
-
+        all_checks_patch_parameters_selected_tables_to_columns = cls()
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
@@ -56,7 +34,9 @@ class AllChecksPatchParametersSelectedTablesToColumns:
 
             additional_properties[prop_name] = additional_property
 
-        all_checks_patch_parameters_selected_tables_to_columns.additional_properties = additional_properties
+        all_checks_patch_parameters_selected_tables_to_columns.additional_properties = (
+            additional_properties
+        )
         return all_checks_patch_parameters_selected_tables_to_columns
 
     @property

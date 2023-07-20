@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class GetTablePartitionedChecksTemplatesTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

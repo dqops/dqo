@@ -1,20 +1,13 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import cast
-from typing import Dict
+from ...client import Client
 from ...models.connection_basic_model import ConnectionBasicModel
-from ...types import UNSET, Unset
 from ...models.connection_remote_model import ConnectionRemoteModel
-from typing import Union
-from typing import Optional
-
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
@@ -22,34 +15,21 @@ def _get_kwargs(
     client: Client,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-
 ) -> Dict[str, Any]:
-    url = "{}/api/datasource/testconnection".format(
-        client.base_url)
+    url = "{}/api/datasource/testconnection".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
     params: Dict[str, Any] = {}
     params["verifyNameUniqueness"] = verify_name_uniqueness
 
-
-
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
-
 
     json_json_body = json_body.to_dict()
 
-
-
-    
-
     return {
-	    "method": "post",
+        "method": "post",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -60,11 +40,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[ConnectionRemoteModel]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[ConnectionRemoteModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ConnectionRemoteModel.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -73,7 +53,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Con
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[ConnectionRemoteModel]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[ConnectionRemoteModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -87,9 +69,8 @@ def sync_detailed(
     client: Client,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-
 ) -> Response[ConnectionRemoteModel]:
-    """ testConnection
+    """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
@@ -104,14 +85,12 @@ def sync_detailed(
 
     Returns:
         Response[ConnectionRemoteModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         client=client,
-json_body=json_body,
-verify_name_uniqueness=verify_name_uniqueness,
-
+        json_body=json_body,
+        verify_name_uniqueness=verify_name_uniqueness,
     )
 
     response = httpx.request(
@@ -121,14 +100,14 @@ verify_name_uniqueness=verify_name_uniqueness,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     *,
     client: Client,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-
 ) -> Optional[ConnectionRemoteModel]:
-    """ testConnection
+    """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
@@ -143,24 +122,22 @@ def sync(
 
     Returns:
         ConnectionRemoteModel
-     """
-
+    """
 
     return sync_detailed(
         client=client,
-json_body=json_body,
-verify_name_uniqueness=verify_name_uniqueness,
-
+        json_body=json_body,
+        verify_name_uniqueness=verify_name_uniqueness,
     ).parsed
+
 
 async def asyncio_detailed(
     *,
     client: Client,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-
 ) -> Response[ConnectionRemoteModel]:
-    """ testConnection
+    """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
@@ -175,31 +152,27 @@ async def asyncio_detailed(
 
     Returns:
         Response[ConnectionRemoteModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         client=client,
-json_body=json_body,
-verify_name_uniqueness=verify_name_uniqueness,
-
+        json_body=json_body,
+        verify_name_uniqueness=verify_name_uniqueness,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     *,
     client: Client,
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
-
 ) -> Optional[ConnectionRemoteModel]:
-    """ testConnection
+    """testConnection
 
      Checks if the given remote connection could be opened and the credentials are valid
 
@@ -214,12 +187,12 @@ async def asyncio(
 
     Returns:
         ConnectionRemoteModel
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        client=client,
-json_body=json_body,
-verify_name_uniqueness=verify_name_uniqueness,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            client=client,
+            json_body=json_body,
+            verify_name_uniqueness=verify_name_uniqueness,
+        )
+    ).parsed

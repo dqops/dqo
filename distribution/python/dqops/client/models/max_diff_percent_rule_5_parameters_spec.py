@@ -1,48 +1,33 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="MaxDiffPercentRule5ParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class MaxDiffPercentRule5ParametersSpec:
-    """ 
-        Attributes:
-            max_diff_percent (Union[Unset, float]): Maximum accepted value for the percentage of difference between
-                expected_value and actual_value returned by the sensor (inclusive).
-     """
+    """
+    Attributes:
+        max_diff_percent (Union[Unset, float]): Maximum accepted value for the percentage of difference between
+            expected_value and actual_value returned by the sensor (inclusive).
+    """
 
     max_diff_percent: Union[Unset, float] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         max_diff_percent = self.max_diff_percent
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if max_diff_percent is not UNSET:
             field_dict["max_diff_percent"] = max_diff_percent
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class CheckModelCheckTarget(str, Enum):
     COLUMN = "column"
     TABLE = "table"

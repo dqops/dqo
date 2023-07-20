@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class SynchronizeMultipleFoldersDqoQueueJobParametersDirection(str, Enum):
     DOWNLOAD = "download"
     FULL = "full"

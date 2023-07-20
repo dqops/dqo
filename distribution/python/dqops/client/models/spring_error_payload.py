@@ -1,26 +1,15 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="SpringErrorPayload")
 
 
 @attr.s(auto_attribs=True)
 class SpringErrorPayload:
-    """ Spring error payload that identifies the fields in the error returned by the REST API in case of unexpected errors
+    """Spring error payload that identifies the fields in the error returned by the REST API in case of unexpected errors
     (exceptions).
 
         Attributes:
@@ -30,7 +19,7 @@ class SpringErrorPayload:
             exception (Union[Unset, str]): Optional exception.
             message (Union[Unset, str]): Exception's message.
             path (Union[Unset, str]): Exception's stack trace (optional).
-     """
+    """
 
     timestamp: Union[Unset, int] = UNSET
     status: Union[Unset, int] = UNSET
@@ -39,7 +28,6 @@ class SpringErrorPayload:
     message: Union[Unset, str] = UNSET
     path: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         timestamp = self.timestamp
@@ -51,8 +39,7 @@ class SpringErrorPayload:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if timestamp is not UNSET:
             field_dict["timestamp"] = timestamp
         if status is not UNSET:
@@ -67,8 +54,6 @@ class SpringErrorPayload:
             field_dict["path"] = path
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

@@ -1,23 +1,16 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
-  from ..models.column_schema_column_exists_check_spec import ColumnSchemaColumnExistsCheckSpec
-
-
-
+    from ..models.column_schema_column_exists_check_spec import (
+        ColumnSchemaColumnExistsCheckSpec,
+    )
+    from ..models.column_schema_type_changed_check_spec import (
+        ColumnSchemaTypeChangedCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnSchemaMonthlyRecurringChecksSpec")
@@ -25,20 +18,19 @@ T = TypeVar("T", bound="ColumnSchemaMonthlyRecurringChecksSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnSchemaMonthlyRecurringChecksSpec:
-    """ 
-        Attributes:
-            monthly_column_exists (Union[Unset, ColumnSchemaColumnExistsCheckSpec]):
-            monthly_column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
-     """
+    """
+    Attributes:
+        monthly_column_exists (Union[Unset, ColumnSchemaColumnExistsCheckSpec]):
+        monthly_column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
+    """
 
-    monthly_column_exists: Union[Unset, 'ColumnSchemaColumnExistsCheckSpec'] = UNSET
-    monthly_column_type_changed: Union[Unset, 'ColumnSchemaTypeChangedCheckSpec'] = UNSET
+    monthly_column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
+    monthly_column_type_changed: Union[
+        Unset, "ColumnSchemaTypeChangedCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
-        from ..models.column_schema_column_exists_check_spec import ColumnSchemaColumnExistsCheckSpec
         monthly_column_exists: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_column_exists, Unset):
             monthly_column_exists = self.monthly_column_exists.to_dict()
@@ -47,11 +39,9 @@ class ColumnSchemaMonthlyRecurringChecksSpec:
         if not isinstance(self.monthly_column_type_changed, Unset):
             monthly_column_type_changed = self.monthly_column_type_changed.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if monthly_column_exists is not UNSET:
             field_dict["monthly_column_exists"] = monthly_column_exists
         if monthly_column_type_changed is not UNSET:
@@ -59,32 +49,33 @@ class ColumnSchemaMonthlyRecurringChecksSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
-        from ..models.column_schema_column_exists_check_spec import ColumnSchemaColumnExistsCheckSpec
+        from ..models.column_schema_column_exists_check_spec import (
+            ColumnSchemaColumnExistsCheckSpec,
+        )
+        from ..models.column_schema_type_changed_check_spec import (
+            ColumnSchemaTypeChangedCheckSpec,
+        )
+
         d = src_dict.copy()
         _monthly_column_exists = d.pop("monthly_column_exists", UNSET)
         monthly_column_exists: Union[Unset, ColumnSchemaColumnExistsCheckSpec]
-        if isinstance(_monthly_column_exists,  Unset):
+        if isinstance(_monthly_column_exists, Unset):
             monthly_column_exists = UNSET
         else:
-            monthly_column_exists = ColumnSchemaColumnExistsCheckSpec.from_dict(_monthly_column_exists)
-
-
-
+            monthly_column_exists = ColumnSchemaColumnExistsCheckSpec.from_dict(
+                _monthly_column_exists
+            )
 
         _monthly_column_type_changed = d.pop("monthly_column_type_changed", UNSET)
         monthly_column_type_changed: Union[Unset, ColumnSchemaTypeChangedCheckSpec]
-        if isinstance(_monthly_column_type_changed,  Unset):
+        if isinstance(_monthly_column_type_changed, Unset):
             monthly_column_type_changed = UNSET
         else:
-            monthly_column_type_changed = ColumnSchemaTypeChangedCheckSpec.from_dict(_monthly_column_type_changed)
-
-
-
+            monthly_column_type_changed = ColumnSchemaTypeChangedCheckSpec.from_dict(
+                _monthly_column_type_changed
+            )
 
         column_schema_monthly_recurring_checks_spec = cls(
             monthly_column_exists=monthly_column_exists,

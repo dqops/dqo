@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class GetColumnRecurringSensorReadoutsTimeScale(str, Enum):
     DAILY = "daily"
     MONTHLY = "monthly"

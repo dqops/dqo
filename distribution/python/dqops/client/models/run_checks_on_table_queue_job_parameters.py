@@ -1,25 +1,14 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
-  from ..models.check_search_filters import CheckSearchFilters
-  from ..models.physical_table_name import PhysicalTableName
-  from ..models.time_window_filter_parameters import TimeWindowFilterParameters
-
-
-
+    from ..models.check_search_filters import CheckSearchFilters
+    from ..models.physical_table_name import PhysicalTableName
+    from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
+    from ..models.time_window_filter_parameters import TimeWindowFilterParameters
 
 
 T = TypeVar("T", bound="RunChecksOnTableQueueJobParameters")
@@ -27,7 +16,7 @@ T = TypeVar("T", bound="RunChecksOnTableQueueJobParameters")
 
 @attr.s(auto_attribs=True)
 class RunChecksOnTableQueueJobParameters:
-    """ Run checks configuration for a job that will run checks on a single table, specifies the target table and the target
+    """Run checks configuration for a job that will run checks on a single table, specifies the target table and the target
     checks that should be executed and an optional time window.
 
         Attributes:
@@ -44,23 +33,18 @@ class RunChecksOnTableQueueJobParameters:
                 be rendered.
             run_checks_result (Union[Unset, RunChecksQueueJobResult]): Returns the result (highest data quality check
                 severity and the finished checks count) for the checks that were recently executed.
-     """
+    """
 
     connection: Union[Unset, str] = UNSET
     max_jobs_per_connection: Union[Unset, int] = UNSET
-    table: Union[Unset, 'PhysicalTableName'] = UNSET
-    check_search_filters: Union[Unset, 'CheckSearchFilters'] = UNSET
-    time_window_filter: Union[Unset, 'TimeWindowFilterParameters'] = UNSET
+    table: Union[Unset, "PhysicalTableName"] = UNSET
+    check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
+    time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
-    run_checks_result: Union[Unset, 'RunChecksQueueJobResult'] = UNSET
+    run_checks_result: Union[Unset, "RunChecksQueueJobResult"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
-        from ..models.check_search_filters import CheckSearchFilters
-        from ..models.physical_table_name import PhysicalTableName
-        from ..models.time_window_filter_parameters import TimeWindowFilterParameters
         connection = self.connection
         max_jobs_per_connection = self.max_jobs_per_connection
         table: Union[Unset, Dict[str, Any]] = UNSET
@@ -80,11 +64,9 @@ class RunChecksOnTableQueueJobParameters:
         if not isinstance(self.run_checks_result, Unset):
             run_checks_result = self.run_checks_result.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection is not UNSET:
             field_dict["connection"] = connection
         if max_jobs_per_connection is not UNSET:
@@ -102,14 +84,13 @@ class RunChecksOnTableQueueJobParameters:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
         from ..models.check_search_filters import CheckSearchFilters
         from ..models.physical_table_name import PhysicalTableName
+        from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
         from ..models.time_window_filter_parameters import TimeWindowFilterParameters
+
         d = src_dict.copy()
         connection = d.pop("connection", UNSET)
 
@@ -117,45 +98,35 @@ class RunChecksOnTableQueueJobParameters:
 
         _table = d.pop("table", UNSET)
         table: Union[Unset, PhysicalTableName]
-        if isinstance(_table,  Unset):
+        if isinstance(_table, Unset):
             table = UNSET
         else:
             table = PhysicalTableName.from_dict(_table)
 
-
-
-
         _check_search_filters = d.pop("checkSearchFilters", UNSET)
         check_search_filters: Union[Unset, CheckSearchFilters]
-        if isinstance(_check_search_filters,  Unset):
+        if isinstance(_check_search_filters, Unset):
             check_search_filters = UNSET
         else:
             check_search_filters = CheckSearchFilters.from_dict(_check_search_filters)
 
-
-
-
         _time_window_filter = d.pop("timeWindowFilter", UNSET)
         time_window_filter: Union[Unset, TimeWindowFilterParameters]
-        if isinstance(_time_window_filter,  Unset):
+        if isinstance(_time_window_filter, Unset):
             time_window_filter = UNSET
         else:
-            time_window_filter = TimeWindowFilterParameters.from_dict(_time_window_filter)
-
-
-
+            time_window_filter = TimeWindowFilterParameters.from_dict(
+                _time_window_filter
+            )
 
         dummy_execution = d.pop("dummyExecution", UNSET)
 
         _run_checks_result = d.pop("runChecksResult", UNSET)
         run_checks_result: Union[Unset, RunChecksQueueJobResult]
-        if isinstance(_run_checks_result,  Unset):
+        if isinstance(_run_checks_result, Unset):
             run_checks_result = UNSET
         else:
             run_checks_result = RunChecksQueueJobResult.from_dict(_run_checks_result)
-
-
-
 
         run_checks_on_table_queue_job_parameters = cls(
             connection=connection,

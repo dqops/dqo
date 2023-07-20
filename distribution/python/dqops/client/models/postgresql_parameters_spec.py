@@ -1,22 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
-
-
-
+    from ..models.postgresql_parameters_spec_properties import (
+        PostgresqlParametersSpecProperties,
+    )
 
 
 T = TypeVar("T", bound="PostgresqlParametersSpec")
@@ -24,24 +15,24 @@ T = TypeVar("T", bound="PostgresqlParametersSpec")
 
 @attr.s(auto_attribs=True)
 class PostgresqlParametersSpec:
-    """ 
-        Attributes:
-            host (Union[Unset, str]): PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom
-                environment variable.
-            port (Union[Unset, str]): PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT}
-                configuration with a custom environment variable.
-            database (Union[Unset, str]): PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-                format to use dynamic substitution.
-            user (Union[Unset, str]): PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to
-                use dynamic substitution.
-            password (Union[Unset, str]): PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-                format to use dynamic substitution.
-            options (Union[Unset, str]): PostgreSQL connection 'options' initialization parameter. For example setting this
-                to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
-                also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.
-            ssl (Union[Unset, bool]): Connect to PostgreSQL using SSL. The default value is false.
-            properties (Union[Unset, PostgresqlParametersSpecProperties]):
-     """
+    """
+    Attributes:
+        host (Union[Unset, str]): PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom
+            environment variable.
+        port (Union[Unset, str]): PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT}
+            configuration with a custom environment variable.
+        database (Union[Unset, str]): PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+            format to use dynamic substitution.
+        user (Union[Unset, str]): PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to
+            use dynamic substitution.
+        password (Union[Unset, str]): PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+            format to use dynamic substitution.
+        options (Union[Unset, str]): PostgreSQL connection 'options' initialization parameter. For example setting this
+            to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
+            also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.
+        ssl (Union[Unset, bool]): Connect to PostgreSQL using SSL. The default value is false.
+        properties (Union[Unset, PostgresqlParametersSpecProperties]):
+    """
 
     host: Union[Unset, str] = UNSET
     port: Union[Unset, str] = UNSET
@@ -50,12 +41,10 @@ class PostgresqlParametersSpec:
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     ssl: Union[Unset, bool] = UNSET
-    properties: Union[Unset, 'PostgresqlParametersSpecProperties'] = UNSET
+    properties: Union[Unset, "PostgresqlParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
         host = self.host
         port = self.port
         database = self.database
@@ -67,11 +56,9 @@ class PostgresqlParametersSpec:
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if host is not UNSET:
             field_dict["host"] = host
         if port is not UNSET:
@@ -91,11 +78,12 @@ class PostgresqlParametersSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
+        from ..models.postgresql_parameters_spec_properties import (
+            PostgresqlParametersSpecProperties,
+        )
+
         d = src_dict.copy()
         host = d.pop("host", UNSET)
 
@@ -113,13 +101,10 @@ class PostgresqlParametersSpec:
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, PostgresqlParametersSpecProperties]
-        if isinstance(_properties,  Unset):
+        if isinstance(_properties, Unset):
             properties = UNSET
         else:
             properties = PostgresqlParametersSpecProperties.from_dict(_properties)
-
-
-
 
         postgresql_parameters_spec = cls(
             host=host,

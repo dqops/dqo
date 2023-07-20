@@ -1,45 +1,34 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="DqoUserProfileModel")
 
 
 @attr.s(auto_attribs=True)
 class DqoUserProfileModel:
-    """ The model that describes the current user and his access rights.
+    """The model that describes the current user and his access rights.
 
-        Attributes:
-            user (Union[Unset, str]): User email.
-            tenant (Union[Unset, str]): DQO Cloud tenant.
-            license_type (Union[Unset, str]): DQO Cloud license type.
-            trial_period_expires_at (Union[Unset, int]): The date and time when the trial period of a PERSONAL DQO license
-                expires and the account is downgraded to a FREE license.
-            connections_limit (Union[Unset, int]): Limit of the number of connections that could be synchronized to the DQO
-                Cloud data quality warehouse.
-            users_limit (Union[Unset, int]): Limit of the number of users that could be added to a DQO environment.
-            months_limit (Union[Unset, int]): Limit of the number of recent months (excluding the current month) that could
-                be synchronized to the DQO Cloud data quality warehouse.
-            connection_tables_limit (Union[Unset, int]): Limit of the number of tables inside each connection that could be
-                synchronized to the DQO Cloud data quality warehouse.
-            tables_limit (Union[Unset, int]): Limit of the total number of tables that could be synchronized to the DQO
-                Cloud data quality warehouse.
-            jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQO can run in parallel on
-                this instance.
-     """
+    Attributes:
+        user (Union[Unset, str]): User email.
+        tenant (Union[Unset, str]): DQO Cloud tenant.
+        license_type (Union[Unset, str]): DQO Cloud license type.
+        trial_period_expires_at (Union[Unset, int]): The date and time when the trial period of a PERSONAL DQO license
+            expires and the account is downgraded to a FREE license.
+        connections_limit (Union[Unset, int]): Limit of the number of connections that could be synchronized to the DQO
+            Cloud data quality warehouse.
+        users_limit (Union[Unset, int]): Limit of the number of users that could be added to a DQO environment.
+        months_limit (Union[Unset, int]): Limit of the number of recent months (excluding the current month) that could
+            be synchronized to the DQO Cloud data quality warehouse.
+        connection_tables_limit (Union[Unset, int]): Limit of the number of tables inside each connection that could be
+            synchronized to the DQO Cloud data quality warehouse.
+        tables_limit (Union[Unset, int]): Limit of the total number of tables that could be synchronized to the DQO
+            Cloud data quality warehouse.
+        jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQO can run in parallel on
+            this instance.
+    """
 
     user: Union[Unset, str] = UNSET
     tenant: Union[Unset, str] = UNSET
@@ -52,7 +41,6 @@ class DqoUserProfileModel:
     tables_limit: Union[Unset, int] = UNSET
     jobs_limit: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         user = self.user
@@ -68,8 +56,7 @@ class DqoUserProfileModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if user is not UNSET:
             field_dict["user"] = user
         if tenant is not UNSET:
@@ -92,8 +79,6 @@ class DqoUserProfileModel:
             field_dict["jobs_limit"] = jobs_limit
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

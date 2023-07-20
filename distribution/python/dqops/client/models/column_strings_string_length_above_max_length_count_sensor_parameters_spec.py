@@ -1,37 +1,27 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
-
-T = TypeVar("T", bound="ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec")
+T = TypeVar(
+    "T", bound="ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec"
+)
 
 
 @attr.s(auto_attribs=True)
 class ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec:
-    """ 
-        Attributes:
-            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-                sensor query filter are added, separated by an AND operator.
-            max_length (Union[Unset, int]): This field can be used to define custom length. In order to define custom
-                length, user should write correct length as a integer. If length is not defined by user then default length is 0
-     """
+    """
+    Attributes:
+        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+            sensor query filter are added, separated by an AND operator.
+        max_length (Union[Unset, int]): This field can be used to define custom length. In order to define custom
+            length, user should write correct length as a integer. If length is not defined by user then default length is 0
+    """
 
     filter_: Union[Unset, str] = UNSET
     max_length: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -39,16 +29,13 @@ class ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if max_length is not UNSET:
             field_dict["max_length"] = max_length
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -57,13 +44,19 @@ class ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec:
 
         max_length = d.pop("max_length", UNSET)
 
-        column_strings_string_length_above_max_length_count_sensor_parameters_spec = cls(
-            filter_=filter_,
-            max_length=max_length,
+        column_strings_string_length_above_max_length_count_sensor_parameters_spec = (
+            cls(
+                filter_=filter_,
+                max_length=max_length,
+            )
         )
 
-        column_strings_string_length_above_max_length_count_sensor_parameters_spec.additional_properties = d
-        return column_strings_string_length_above_max_length_count_sensor_parameters_spec
+        column_strings_string_length_above_max_length_count_sensor_parameters_spec.additional_properties = (
+            d
+        )
+        return (
+            column_strings_string_length_above_max_length_count_sensor_parameters_spec
+        )
 
     @property
     def additional_keys(self) -> List[str]:

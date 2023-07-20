@@ -1,24 +1,14 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
-  from ..models.cloud_synchronization_folders_status_model import CloudSynchronizationFoldersStatusModel
-
-
-
+    from ..models.cloud_synchronization_folders_status_model import (
+        CloudSynchronizationFoldersStatusModel,
+    )
+    from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
 
 
 T = TypeVar("T", bound="DqoJobQueueInitialSnapshotModel")
@@ -26,22 +16,21 @@ T = TypeVar("T", bound="DqoJobQueueInitialSnapshotModel")
 
 @attr.s(auto_attribs=True)
 class DqoJobQueueInitialSnapshotModel:
-    """ 
-        Attributes:
-            jobs (Union[Unset, List['DqoJobHistoryEntryModel']]):
-            folder_synchronization_status (Union[Unset, CloudSynchronizationFoldersStatusModel]):
-            last_sequence_number (Union[Unset, int]):
-     """
+    """
+    Attributes:
+        jobs (Union[Unset, List['DqoJobHistoryEntryModel']]):
+        folder_synchronization_status (Union[Unset, CloudSynchronizationFoldersStatusModel]):
+        last_sequence_number (Union[Unset, int]):
+    """
 
-    jobs: Union[Unset, List['DqoJobHistoryEntryModel']] = UNSET
-    folder_synchronization_status: Union[Unset, 'CloudSynchronizationFoldersStatusModel'] = UNSET
+    jobs: Union[Unset, List["DqoJobHistoryEntryModel"]] = UNSET
+    folder_synchronization_status: Union[
+        Unset, "CloudSynchronizationFoldersStatusModel"
+    ] = UNSET
     last_sequence_number: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
-        from ..models.cloud_synchronization_folders_status_model import CloudSynchronizationFoldersStatusModel
         jobs: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.jobs, Unset):
             jobs = []
@@ -49,9 +38,6 @@ class DqoJobQueueInitialSnapshotModel:
                 jobs_item = jobs_item_data.to_dict()
 
                 jobs.append(jobs_item)
-
-
-
 
         folder_synchronization_status: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.folder_synchronization_status, Unset):
@@ -61,8 +47,7 @@ class DqoJobQueueInitialSnapshotModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if jobs is not UNSET:
             field_dict["jobs"] = jobs
         if folder_synchronization_status is not UNSET:
@@ -72,32 +57,33 @@ class DqoJobQueueInitialSnapshotModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.cloud_synchronization_folders_status_model import (
+            CloudSynchronizationFoldersStatusModel,
+        )
         from ..models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
-        from ..models.cloud_synchronization_folders_status_model import CloudSynchronizationFoldersStatusModel
+
         d = src_dict.copy()
         jobs = []
         _jobs = d.pop("jobs", UNSET)
-        for jobs_item_data in (_jobs or []):
+        for jobs_item_data in _jobs or []:
             jobs_item = DqoJobHistoryEntryModel.from_dict(jobs_item_data)
-
-
 
             jobs.append(jobs_item)
 
-
         _folder_synchronization_status = d.pop("folderSynchronizationStatus", UNSET)
-        folder_synchronization_status: Union[Unset, CloudSynchronizationFoldersStatusModel]
-        if isinstance(_folder_synchronization_status,  Unset):
+        folder_synchronization_status: Union[
+            Unset, CloudSynchronizationFoldersStatusModel
+        ]
+        if isinstance(_folder_synchronization_status, Unset):
             folder_synchronization_status = UNSET
         else:
-            folder_synchronization_status = CloudSynchronizationFoldersStatusModel.from_dict(_folder_synchronization_status)
-
-
-
+            folder_synchronization_status = (
+                CloudSynchronizationFoldersStatusModel.from_dict(
+                    _folder_synchronization_status
+                )
+            )
 
         last_sequence_number = d.pop("lastSequenceNumber", UNSET)
 

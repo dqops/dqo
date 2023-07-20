@@ -1,16 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import cast
+from ...client import Client
 from ...models.incident_model import IncidentModel
-from typing import Dict
-
+from ...types import Response
 
 
 def _get_kwargs(
@@ -20,26 +16,20 @@ def _get_kwargs(
     incident_id: str,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
     url = "{}/api/incidents/{connectionName}/{year}/{month}/{incidentId}".format(
-        client.base_url,connectionName=connection_name,year=year,month=month,incidentId=incident_id)
+        client.base_url,
+        connectionName=connection_name,
+        year=year,
+        month=month,
+        incidentId=incident_id,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -48,11 +38,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[IncidentModel]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[IncidentModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = IncidentModel.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -61,7 +51,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Inc
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[IncidentModel]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[IncidentModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -77,9 +69,8 @@ def sync_detailed(
     incident_id: str,
     *,
     client: Client,
-
 ) -> Response[IncidentModel]:
-    """ getIncident
+    """getIncident
 
      Return a single data quality incident's details.
 
@@ -95,16 +86,14 @@ def sync_detailed(
 
     Returns:
         Response[IncidentModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-
+        year=year,
+        month=month,
+        incident_id=incident_id,
+        client=client,
     )
 
     response = httpx.request(
@@ -114,6 +103,7 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     year: int,
@@ -121,9 +111,8 @@ def sync(
     incident_id: str,
     *,
     client: Client,
-
 ) -> Optional[IncidentModel]:
-    """ getIncident
+    """getIncident
 
      Return a single data quality incident's details.
 
@@ -139,17 +128,16 @@ def sync(
 
     Returns:
         IncidentModel
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-
+        year=year,
+        month=month,
+        incident_id=incident_id,
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -158,9 +146,8 @@ async def asyncio_detailed(
     incident_id: str,
     *,
     client: Client,
-
 ) -> Response[IncidentModel]:
-    """ getIncident
+    """getIncident
 
      Return a single data quality incident's details.
 
@@ -176,24 +163,21 @@ async def asyncio_detailed(
 
     Returns:
         Response[IncidentModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-
+        year=year,
+        month=month,
+        incident_id=incident_id,
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -202,9 +186,8 @@ async def asyncio(
     incident_id: str,
     *,
     client: Client,
-
 ) -> Optional[IncidentModel]:
-    """ getIncident
+    """getIncident
 
      Return a single data quality incident's details.
 
@@ -220,14 +203,14 @@ async def asyncio(
 
     Returns:
         IncidentModel
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            year=year,
+            month=month,
+            incident_id=incident_id,
+            client=client,
+        )
+    ).parsed

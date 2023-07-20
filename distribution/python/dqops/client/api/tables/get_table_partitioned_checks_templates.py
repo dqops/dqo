@@ -1,21 +1,15 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import cast
-from typing import Dict
-from ...models.get_table_partitioned_checks_templates_time_scale import GetTablePartitionedChecksTemplatesTimeScale
-from ...types import UNSET, Unset
-from typing import Union
+from ...client import Client
 from ...models.check_template import CheckTemplate
-from typing import cast, List
-from typing import Optional
-
+from ...models.get_table_partitioned_checks_templates_time_scale import (
+    GetTablePartitionedChecksTemplatesTimeScale,
+)
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
@@ -27,35 +21,27 @@ def _get_kwargs(
     client: Client,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name,tableName=table_name,timeScale=time_scale)
+        client.base_url,
+        connectionName=connection_name,
+        schemaName=schema_name,
+        tableName=table_name,
+        timeScale=time_scale,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
     params: Dict[str, Any] = {}
     params["checkCategory"] = check_category
 
-
     params["checkName"] = check_name
-
-
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -65,14 +51,14 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List['CheckTemplate']]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[List["CheckTemplate"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
-        for response_200_item_data in (_response_200):
+        for response_200_item_data in _response_200:
             response_200_item = CheckTemplate.from_dict(response_200_item_data)
-
-
 
             response_200.append(response_200_item)
 
@@ -83,7 +69,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List['CheckTemplate']]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[List["CheckTemplate"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -101,9 +89,8 @@ def sync_detailed(
     client: Client,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-
-) -> Response[List['CheckTemplate']]:
-    """ getTablePartitionedChecksTemplates
+) -> Response[List["CheckTemplate"]]:
+    """getTablePartitionedChecksTemplates
 
      Return available data quality checks on a requested table.
 
@@ -121,18 +108,16 @@ def sync_detailed(
 
     Returns:
         Response[List['CheckTemplate']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-time_scale=time_scale,
-client=client,
-check_category=check_category,
-check_name=check_name,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        time_scale=time_scale,
+        client=client,
+        check_category=check_category,
+        check_name=check_name,
     )
 
     response = httpx.request(
@@ -141,6 +126,7 @@ check_name=check_name,
     )
 
     return _build_response(client=client, response=response)
+
 
 def sync(
     connection_name: str,
@@ -151,9 +137,8 @@ def sync(
     client: Client,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-
-) -> Optional[List['CheckTemplate']]:
-    """ getTablePartitionedChecksTemplates
+) -> Optional[List["CheckTemplate"]]:
+    """getTablePartitionedChecksTemplates
 
      Return available data quality checks on a requested table.
 
@@ -171,19 +156,18 @@ def sync(
 
     Returns:
         List['CheckTemplate']
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-time_scale=time_scale,
-client=client,
-check_category=check_category,
-check_name=check_name,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        time_scale=time_scale,
+        client=client,
+        check_category=check_category,
+        check_name=check_name,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -194,9 +178,8 @@ async def asyncio_detailed(
     client: Client,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-
-) -> Response[List['CheckTemplate']]:
-    """ getTablePartitionedChecksTemplates
+) -> Response[List["CheckTemplate"]]:
+    """getTablePartitionedChecksTemplates
 
      Return available data quality checks on a requested table.
 
@@ -214,26 +197,23 @@ async def asyncio_detailed(
 
     Returns:
         Response[List['CheckTemplate']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-time_scale=time_scale,
-client=client,
-check_category=check_category,
-check_name=check_name,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        time_scale=time_scale,
+        client=client,
+        check_category=check_category,
+        check_name=check_name,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -244,9 +224,8 @@ async def asyncio(
     client: Client,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-
-) -> Optional[List['CheckTemplate']]:
-    """ getTablePartitionedChecksTemplates
+) -> Optional[List["CheckTemplate"]]:
+    """getTablePartitionedChecksTemplates
 
      Return available data quality checks on a requested table.
 
@@ -264,16 +243,16 @@ async def asyncio(
 
     Returns:
         List['CheckTemplate']
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-time_scale=time_scale,
-client=client,
-check_category=check_category,
-check_name=check_name,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            table_name=table_name,
+            time_scale=time_scale,
+            client=client,
+            check_category=check_category,
+            check_name=check_name,
+        )
+    ).parsed

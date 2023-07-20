@@ -1,37 +1,25 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="TableAccuracyTotalRowCountMatchPercentSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class TableAccuracyTotalRowCountMatchPercentSensorParametersSpec:
-    """ 
-        Attributes:
-            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-                sensor query filter are added, separated by an AND operator.
-            referenced_table (Union[Unset, str]): This field can be used to define the name of the table to be compared to.
-                In order to define the name of the table, user should write correct name as a String.
-     """
+    """
+    Attributes:
+        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+            sensor query filter are added, separated by an AND operator.
+        referenced_table (Union[Unset, str]): This field can be used to define the name of the table to be compared to.
+            In order to define the name of the table, user should write correct name as a String.
+    """
 
     filter_: Union[Unset, str] = UNSET
     referenced_table: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -39,16 +27,13 @@ class TableAccuracyTotalRowCountMatchPercentSensorParametersSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if referenced_table is not UNSET:
             field_dict["referenced_table"] = referenced_table
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -62,7 +47,9 @@ class TableAccuracyTotalRowCountMatchPercentSensorParametersSpec:
             referenced_table=referenced_table,
         )
 
-        table_accuracy_total_row_count_match_percent_sensor_parameters_spec.additional_properties = d
+        table_accuracy_total_row_count_match_percent_sensor_parameters_spec.additional_properties = (
+            d
+        )
         return table_accuracy_total_row_count_match_percent_sensor_parameters_spec
 
     @property

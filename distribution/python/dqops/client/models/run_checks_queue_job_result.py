@@ -1,27 +1,18 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.run_checks_queue_job_result_highest_severity import (
+    RunChecksQueueJobResultHighestSeverity,
+)
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..models.run_checks_queue_job_result_highest_severity import RunChecksQueueJobResultHighestSeverity
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="RunChecksQueueJobResult")
 
 
 @attr.s(auto_attribs=True)
 class RunChecksQueueJobResult:
-    """ Returns the result (highest data quality check severity and the finished checks count) for the checks that were
+    """Returns the result (highest data quality check severity and the finished checks count) for the checks that were
     recently executed.
 
         Attributes:
@@ -37,7 +28,7 @@ class RunChecksQueueJobResult:
                 error.
             execution_errors (Union[Unset, int]): The total number of checks that failed to execute due to some execution
                 errors.
-     """
+    """
 
     highest_severity: Union[Unset, RunChecksQueueJobResultHighestSeverity] = UNSET
     executed_checks: Union[Unset, int] = UNSET
@@ -47,7 +38,6 @@ class RunChecksQueueJobResult:
     fatals: Union[Unset, int] = UNSET
     execution_errors: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         highest_severity: Union[Unset, str] = UNSET
@@ -63,8 +53,7 @@ class RunChecksQueueJobResult:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if highest_severity is not UNSET:
             field_dict["highestSeverity"] = highest_severity
         if executed_checks is not UNSET:
@@ -82,20 +71,15 @@ class RunChecksQueueJobResult:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _highest_severity = d.pop("highestSeverity", UNSET)
         highest_severity: Union[Unset, RunChecksQueueJobResultHighestSeverity]
-        if isinstance(_highest_severity,  Unset):
+        if isinstance(_highest_severity, Unset):
             highest_severity = UNSET
         else:
             highest_severity = RunChecksQueueJobResultHighestSeverity(_highest_severity)
-
-
-
 
         executed_checks = d.pop("executedChecks", UNSET)
 

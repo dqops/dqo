@@ -1,22 +1,15 @@
+import datetime
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import cast
-from dateutil.parser import isoparse
-from typing import Dict
-from ...types import UNSET, Unset
-from typing import Union
-from ...models.sensor_readouts_detailed_data_model import SensorReadoutsDetailedDataModel
-from typing import cast, List
-import datetime
-from typing import Optional
-
+from ...client import Client
+from ...models.sensor_readouts_detailed_data_model import (
+    SensorReadoutsDetailedDataModel,
+)
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
@@ -28,21 +21,19 @@ def _get_kwargs(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
-
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name,tableName=table_name)
+        client.base_url,
+        connectionName=connection_name,
+        schemaName=schema_name,
+        tableName=table_name,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
     params: Dict[str, Any] = {}
     params["dataGroup"] = data_group
-
 
     json_month_start: Union[Unset, None, str] = UNSET
     if not isinstance(month_start, Unset):
@@ -50,24 +41,16 @@ def _get_kwargs(
 
     params["monthStart"] = json_month_start
 
-
     json_month_end: Union[Unset, None, str] = UNSET
     if not isinstance(month_end, Unset):
         json_month_end = month_end.isoformat() if month_end else None
 
     params["monthEnd"] = json_month_end
 
-
-
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -77,14 +60,16 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List['SensorReadoutsDetailedDataModel']]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
-        for response_200_item_data in (_response_200):
-            response_200_item = SensorReadoutsDetailedDataModel.from_dict(response_200_item_data)
-
-
+        for response_200_item_data in _response_200:
+            response_200_item = SensorReadoutsDetailedDataModel.from_dict(
+                response_200_item_data
+            )
 
             response_200.append(response_200_item)
 
@@ -95,7 +80,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List['SensorReadoutsDetailedDataModel']]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[List["SensorReadoutsDetailedDataModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -113,9 +100,8 @@ def sync_detailed(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
-
-) -> Response[List['SensorReadoutsDetailedDataModel']]:
-    """ getTableProfilingSensorReadouts
+) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+    """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
     profiling checks on a table
@@ -134,18 +120,16 @@ def sync_detailed(
 
     Returns:
         Response[List['SensorReadoutsDetailedDataModel']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-data_group=data_group,
-month_start=month_start,
-month_end=month_end,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        client=client,
+        data_group=data_group,
+        month_start=month_start,
+        month_end=month_end,
     )
 
     response = httpx.request(
@@ -154,6 +138,7 @@ month_end=month_end,
     )
 
     return _build_response(client=client, response=response)
+
 
 def sync(
     connection_name: str,
@@ -164,9 +149,8 @@ def sync(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
-
-) -> Optional[List['SensorReadoutsDetailedDataModel']]:
-    """ getTableProfilingSensorReadouts
+) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+    """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
     profiling checks on a table
@@ -185,19 +169,18 @@ def sync(
 
     Returns:
         List['SensorReadoutsDetailedDataModel']
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-data_group=data_group,
-month_start=month_start,
-month_end=month_end,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        client=client,
+        data_group=data_group,
+        month_start=month_start,
+        month_end=month_end,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -208,9 +191,8 @@ async def asyncio_detailed(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
-
-) -> Response[List['SensorReadoutsDetailedDataModel']]:
-    """ getTableProfilingSensorReadouts
+) -> Response[List["SensorReadoutsDetailedDataModel"]]:
+    """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
     profiling checks on a table
@@ -229,26 +211,23 @@ async def asyncio_detailed(
 
     Returns:
         Response[List['SensorReadoutsDetailedDataModel']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-data_group=data_group,
-month_start=month_start,
-month_end=month_end,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        client=client,
+        data_group=data_group,
+        month_start=month_start,
+        month_end=month_end,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -259,9 +238,8 @@ async def asyncio(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
-
-) -> Optional[List['SensorReadoutsDetailedDataModel']]:
-    """ getTableProfilingSensorReadouts
+) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
+    """getTableProfilingSensorReadouts
 
      Returns the complete results of the most recent check executions for all table level data quality
     profiling checks on a table
@@ -280,16 +258,16 @@ async def asyncio(
 
     Returns:
         List['SensorReadoutsDetailedDataModel']
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-client=client,
-data_group=data_group,
-month_start=month_start,
-month_end=month_end,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            table_name=table_name,
+            client=client,
+            data_group=data_group,
+            month_start=month_start,
+            month_end=month_end,
+        )
+    ).parsed

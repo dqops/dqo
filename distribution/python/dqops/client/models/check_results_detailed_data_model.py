@@ -1,23 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.check_result_detailed_single_model import CheckResultDetailedSingleModel
-
-
-
+    from ..models.check_result_detailed_single_model import (
+        CheckResultDetailedSingleModel,
+    )
 
 
 T = TypeVar("T", bound="CheckResultsDetailedDataModel")
@@ -25,17 +15,17 @@ T = TypeVar("T", bound="CheckResultsDetailedDataModel")
 
 @attr.s(auto_attribs=True)
 class CheckResultsDetailedDataModel:
-    """ 
-        Attributes:
-            check_hash (Union[Unset, int]): Check hash.
-            check_category (Union[Unset, str]): Check category name.
-            check_name (Union[Unset, str]): Check name.
-            check_display_name (Union[Unset, str]): Check display name.
-            check_type (Union[Unset, str]): Check type.
-            data_groups (Union[Unset, List[str]]): Data groups list.
-            data_group (Union[Unset, str]): Selected data group.
-            single_check_results (Union[Unset, List['CheckResultDetailedSingleModel']]): Single check results
-     """
+    """
+    Attributes:
+        check_hash (Union[Unset, int]): Check hash.
+        check_category (Union[Unset, str]): Check category name.
+        check_name (Union[Unset, str]): Check name.
+        check_display_name (Union[Unset, str]): Check display name.
+        check_type (Union[Unset, str]): Check type.
+        data_groups (Union[Unset, List[str]]): Data groups list.
+        data_group (Union[Unset, str]): Selected data group.
+        single_check_results (Union[Unset, List['CheckResultDetailedSingleModel']]): Single check results
+    """
 
     check_hash: Union[Unset, int] = UNSET
     check_category: Union[Unset, str] = UNSET
@@ -44,12 +34,10 @@ class CheckResultsDetailedDataModel:
     check_type: Union[Unset, str] = UNSET
     data_groups: Union[Unset, List[str]] = UNSET
     data_group: Union[Unset, str] = UNSET
-    single_check_results: Union[Unset, List['CheckResultDetailedSingleModel']] = UNSET
+    single_check_results: Union[Unset, List["CheckResultDetailedSingleModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.check_result_detailed_single_model import CheckResultDetailedSingleModel
         check_hash = self.check_hash
         check_category = self.check_category
         check_name = self.check_name
@@ -58,9 +46,6 @@ class CheckResultsDetailedDataModel:
         data_groups: Union[Unset, List[str]] = UNSET
         if not isinstance(self.data_groups, Unset):
             data_groups = self.data_groups
-
-
-
 
         data_group = self.data_group
         single_check_results: Union[Unset, List[Dict[str, Any]]] = UNSET
@@ -71,14 +56,9 @@ class CheckResultsDetailedDataModel:
 
                 single_check_results.append(single_check_results_item)
 
-
-
-
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if check_hash is not UNSET:
             field_dict["checkHash"] = check_hash
         if check_category is not UNSET:
@@ -98,11 +78,12 @@ class CheckResultsDetailedDataModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.check_result_detailed_single_model import CheckResultDetailedSingleModel
+        from ..models.check_result_detailed_single_model import (
+            CheckResultDetailedSingleModel,
+        )
+
         d = src_dict.copy()
         check_hash = d.pop("checkHash", UNSET)
 
@@ -116,18 +97,16 @@ class CheckResultsDetailedDataModel:
 
         data_groups = cast(List[str], d.pop("dataGroups", UNSET))
 
-
         data_group = d.pop("dataGroup", UNSET)
 
         single_check_results = []
         _single_check_results = d.pop("singleCheckResults", UNSET)
-        for single_check_results_item_data in (_single_check_results or []):
-            single_check_results_item = CheckResultDetailedSingleModel.from_dict(single_check_results_item_data)
-
-
+        for single_check_results_item_data in _single_check_results or []:
+            single_check_results_item = CheckResultDetailedSingleModel.from_dict(
+                single_check_results_item_data
+            )
 
             single_check_results.append(single_check_results_item)
-
 
         check_results_detailed_data_model = cls(
             check_hash=check_hash,

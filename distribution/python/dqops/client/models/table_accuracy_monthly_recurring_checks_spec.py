@@ -1,22 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.table_accuracy_total_row_count_match_percent_check_spec import TableAccuracyTotalRowCountMatchPercentCheckSpec
-
-
-
+    from ..models.table_accuracy_total_row_count_match_percent_check_spec import (
+        TableAccuracyTotalRowCountMatchPercentCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableAccuracyMonthlyRecurringChecksSpec")
@@ -24,46 +15,54 @@ T = TypeVar("T", bound="TableAccuracyMonthlyRecurringChecksSpec")
 
 @attr.s(auto_attribs=True)
 class TableAccuracyMonthlyRecurringChecksSpec:
-    """ 
-        Attributes:
-            monthly_total_row_count_match_percent (Union[Unset, TableAccuracyTotalRowCountMatchPercentCheckSpec]):
-     """
+    """
+    Attributes:
+        monthly_total_row_count_match_percent (Union[Unset, TableAccuracyTotalRowCountMatchPercentCheckSpec]):
+    """
 
-    monthly_total_row_count_match_percent: Union[Unset, 'TableAccuracyTotalRowCountMatchPercentCheckSpec'] = UNSET
+    monthly_total_row_count_match_percent: Union[
+        Unset, "TableAccuracyTotalRowCountMatchPercentCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.table_accuracy_total_row_count_match_percent_check_spec import TableAccuracyTotalRowCountMatchPercentCheckSpec
         monthly_total_row_count_match_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_total_row_count_match_percent, Unset):
-            monthly_total_row_count_match_percent = self.monthly_total_row_count_match_percent.to_dict()
-
+            monthly_total_row_count_match_percent = (
+                self.monthly_total_row_count_match_percent.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if monthly_total_row_count_match_percent is not UNSET:
-            field_dict["monthly_total_row_count_match_percent"] = monthly_total_row_count_match_percent
+            field_dict[
+                "monthly_total_row_count_match_percent"
+            ] = monthly_total_row_count_match_percent
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_accuracy_total_row_count_match_percent_check_spec import TableAccuracyTotalRowCountMatchPercentCheckSpec
+        from ..models.table_accuracy_total_row_count_match_percent_check_spec import (
+            TableAccuracyTotalRowCountMatchPercentCheckSpec,
+        )
+
         d = src_dict.copy()
-        _monthly_total_row_count_match_percent = d.pop("monthly_total_row_count_match_percent", UNSET)
-        monthly_total_row_count_match_percent: Union[Unset, TableAccuracyTotalRowCountMatchPercentCheckSpec]
-        if isinstance(_monthly_total_row_count_match_percent,  Unset):
+        _monthly_total_row_count_match_percent = d.pop(
+            "monthly_total_row_count_match_percent", UNSET
+        )
+        monthly_total_row_count_match_percent: Union[
+            Unset, TableAccuracyTotalRowCountMatchPercentCheckSpec
+        ]
+        if isinstance(_monthly_total_row_count_match_percent, Unset):
             monthly_total_row_count_match_percent = UNSET
         else:
-            monthly_total_row_count_match_percent = TableAccuracyTotalRowCountMatchPercentCheckSpec.from_dict(_monthly_total_row_count_match_percent)
-
-
-
+            monthly_total_row_count_match_percent = (
+                TableAccuracyTotalRowCountMatchPercentCheckSpec.from_dict(
+                    _monthly_total_row_count_match_percent
+                )
+            )
 
         table_accuracy_monthly_recurring_checks_spec = cls(
             monthly_total_row_count_match_percent=monthly_total_row_count_match_percent,

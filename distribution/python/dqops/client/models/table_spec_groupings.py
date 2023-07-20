@@ -1,20 +1,9 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
 import attr
 
-from ..types import UNSET, Unset
-
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
-
-
-
+    from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
 
 
 T = TypeVar("T", bound="TableSpecGroupings")
@@ -22,45 +11,41 @@ T = TypeVar("T", bound="TableSpecGroupings")
 
 @attr.s(auto_attribs=True)
 class TableSpecGroupings:
-    """ Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the
+    """Data grouping configurations list. Data grouping configurations are configured in two cases: (1) the data in the
     table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for
     example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a
     tag is assigned to a table (within a data grouping level hierarchy), when the data is segmented at a table level
     (similar tables store the same information, but for different countries, etc.).
 
-     """
+    """
 
-    additional_properties: Dict[str, 'DataGroupingConfigurationSpec'] = attr.ib(init=False, factory=dict)
-
+    additional_properties: Dict[str, "DataGroupingConfigurationSpec"] = attr.ib(
+        init=False, factory=dict
+    )
 
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
-        
+        pass
+
         field_dict: Dict[str, Any] = {}
         for prop_name, prop in self.additional_properties.items():
             field_dict[prop_name] = prop.to_dict()
 
-        field_dict.update({
-        })
+        field_dict.update({})
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
-        d = src_dict.copy()
-        table_spec_groupings = cls(
+        from ..models.data_grouping_configuration_spec import (
+            DataGroupingConfigurationSpec,
         )
 
+        d = src_dict.copy()
+        table_spec_groupings = cls()
 
-        from ..models.data_grouping_dimension_spec import DataGroupingDimensionSpec
         additional_properties = {}
         for prop_name, prop_dict in d.items():
             additional_property = DataGroupingConfigurationSpec.from_dict(prop_dict)
-
-
 
             additional_properties[prop_name] = additional_property
 
@@ -71,10 +56,10 @@ class TableSpecGroupings:
     def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
-    def __getitem__(self, key: str) -> 'DataGroupingConfigurationSpec':
+    def __getitem__(self, key: str) -> "DataGroupingConfigurationSpec":
         return self.additional_properties[key]
 
-    def __setitem__(self, key: str, value: 'DataGroupingConfigurationSpec') -> None:
+    def __setitem__(self, key: str, value: "DataGroupingConfigurationSpec") -> None:
         self.additional_properties[key] = value
 
     def __delitem__(self, key: str) -> None:

@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class GetSchemaPartitionedChecksModelCheckTarget(str, Enum):
     COLUMN = "column"
     TABLE = "table"

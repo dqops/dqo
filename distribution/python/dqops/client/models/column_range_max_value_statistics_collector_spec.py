@@ -1,22 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.column_range_max_value_sensor_parameters_spec import ColumnRangeMaxValueSensorParametersSpec
-
-
-
+    from ..models.column_range_max_value_sensor_parameters_spec import (
+        ColumnRangeMaxValueSensorParametersSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnRangeMaxValueStatisticsCollectorSpec")
@@ -24,30 +15,26 @@ T = TypeVar("T", bound="ColumnRangeMaxValueStatisticsCollectorSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnRangeMaxValueStatisticsCollectorSpec:
-    """ 
-        Attributes:
-            disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
-                process.
-            parameters (Union[Unset, ColumnRangeMaxValueSensorParametersSpec]):
-     """
+    """
+    Attributes:
+        disabled (Union[Unset, bool]): Disables this profiler. Only enabled profilers are executed during a profiling
+            process.
+        parameters (Union[Unset, ColumnRangeMaxValueSensorParametersSpec]):
+    """
 
     disabled: Union[Unset, bool] = UNSET
-    parameters: Union[Unset, 'ColumnRangeMaxValueSensorParametersSpec'] = UNSET
+    parameters: Union[Unset, "ColumnRangeMaxValueSensorParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.column_range_max_value_sensor_parameters_spec import ColumnRangeMaxValueSensorParametersSpec
         disabled = self.disabled
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
         if parameters is not UNSET:
@@ -55,23 +42,21 @@ class ColumnRangeMaxValueStatisticsCollectorSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_range_max_value_sensor_parameters_spec import ColumnRangeMaxValueSensorParametersSpec
+        from ..models.column_range_max_value_sensor_parameters_spec import (
+            ColumnRangeMaxValueSensorParametersSpec,
+        )
+
         d = src_dict.copy()
         disabled = d.pop("disabled", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, ColumnRangeMaxValueSensorParametersSpec]
-        if isinstance(_parameters,  Unset):
+        if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
             parameters = ColumnRangeMaxValueSensorParametersSpec.from_dict(_parameters)
-
-
-
 
         column_range_max_value_statistics_collector_spec = cls(
             disabled=disabled,

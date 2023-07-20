@@ -1,23 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.error_detailed_single_model import ErrorDetailedSingleModel
-
-
-
+    from ..models.error_detailed_single_model import ErrorDetailedSingleModel
 
 
 T = TypeVar("T", bound="ErrorsDetailedDataModel")
@@ -25,17 +13,17 @@ T = TypeVar("T", bound="ErrorsDetailedDataModel")
 
 @attr.s(auto_attribs=True)
 class ErrorsDetailedDataModel:
-    """ 
-        Attributes:
-            check_name (Union[Unset, str]): Check name.
-            check_display_name (Union[Unset, str]): Check display name.
-            check_type (Union[Unset, str]): Check type.
-            check_hash (Union[Unset, int]): Check hash.
-            check_category (Union[Unset, str]): Check category name.
-            data_groups_names (Union[Unset, List[str]]): Data groups list.
-            data_group (Union[Unset, str]): Selected data group.
-            single_errors (Union[Unset, List['ErrorDetailedSingleModel']]): Single error statuses
-     """
+    """
+    Attributes:
+        check_name (Union[Unset, str]): Check name.
+        check_display_name (Union[Unset, str]): Check display name.
+        check_type (Union[Unset, str]): Check type.
+        check_hash (Union[Unset, int]): Check hash.
+        check_category (Union[Unset, str]): Check category name.
+        data_groups_names (Union[Unset, List[str]]): Data groups list.
+        data_group (Union[Unset, str]): Selected data group.
+        single_errors (Union[Unset, List['ErrorDetailedSingleModel']]): Single error statuses
+    """
 
     check_name: Union[Unset, str] = UNSET
     check_display_name: Union[Unset, str] = UNSET
@@ -44,12 +32,10 @@ class ErrorsDetailedDataModel:
     check_category: Union[Unset, str] = UNSET
     data_groups_names: Union[Unset, List[str]] = UNSET
     data_group: Union[Unset, str] = UNSET
-    single_errors: Union[Unset, List['ErrorDetailedSingleModel']] = UNSET
+    single_errors: Union[Unset, List["ErrorDetailedSingleModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.error_detailed_single_model import ErrorDetailedSingleModel
         check_name = self.check_name
         check_display_name = self.check_display_name
         check_type = self.check_type
@@ -58,9 +44,6 @@ class ErrorsDetailedDataModel:
         data_groups_names: Union[Unset, List[str]] = UNSET
         if not isinstance(self.data_groups_names, Unset):
             data_groups_names = self.data_groups_names
-
-
-
 
         data_group = self.data_group
         single_errors: Union[Unset, List[Dict[str, Any]]] = UNSET
@@ -71,14 +54,9 @@ class ErrorsDetailedDataModel:
 
                 single_errors.append(single_errors_item)
 
-
-
-
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if check_name is not UNSET:
             field_dict["checkName"] = check_name
         if check_display_name is not UNSET:
@@ -98,11 +76,10 @@ class ErrorsDetailedDataModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.error_detailed_single_model import ErrorDetailedSingleModel
+
         d = src_dict.copy()
         check_name = d.pop("checkName", UNSET)
 
@@ -116,18 +93,16 @@ class ErrorsDetailedDataModel:
 
         data_groups_names = cast(List[str], d.pop("dataGroupsNames", UNSET))
 
-
         data_group = d.pop("dataGroup", UNSET)
 
         single_errors = []
         _single_errors = d.pop("singleErrors", UNSET)
-        for single_errors_item_data in (_single_errors or []):
-            single_errors_item = ErrorDetailedSingleModel.from_dict(single_errors_item_data)
-
-
+        for single_errors_item_data in _single_errors or []:
+            single_errors_item = ErrorDetailedSingleModel.from_dict(
+                single_errors_item_data
+            )
 
             single_errors.append(single_errors_item)
-
 
         errors_detailed_data_model = cls(
             check_name=check_name,

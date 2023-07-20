@@ -1,47 +1,27 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar
 
 import attr
-
-from ..types import UNSET, Unset
-
-
-
-
-
-
 
 T = TypeVar("T", bound="DashboardSpecParameters")
 
 
 @attr.s(auto_attribs=True)
 class DashboardSpecParameters:
-    """ Key/value dictionary of additional parameters to be passed to the dashboard
-
-     """
+    """Key/value dictionary of additional parameters to be passed to the dashboard"""
 
     additional_properties: Dict[str, str] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        dashboard_spec_parameters = cls(
-        )
-
+        dashboard_spec_parameters = cls()
 
         dashboard_spec_parameters.additional_properties = d
         return dashboard_spec_parameters

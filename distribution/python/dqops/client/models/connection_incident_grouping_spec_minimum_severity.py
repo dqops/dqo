@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ConnectionIncidentGroupingSpecMinimumSeverity(str, Enum):
     ERROR = "error"
     FATAL = "fatal"

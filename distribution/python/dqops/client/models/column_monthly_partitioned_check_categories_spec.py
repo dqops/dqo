@@ -1,35 +1,52 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.column_nulls_monthly_partitioned_checks_spec import ColumnNullsMonthlyPartitionedChecksSpec
-  from ..models.column_integrity_monthly_partitioned_checks_spec import ColumnIntegrityMonthlyPartitionedChecksSpec
-  from ..models.column_bool_monthly_partitioned_checks_spec import ColumnBoolMonthlyPartitionedChecksSpec
-  from ..models.column_accuracy_monthly_partitioned_checks_spec import ColumnAccuracyMonthlyPartitionedChecksSpec
-  from ..models.column_pii_monthly_partitioned_checks_spec import ColumnPiiMonthlyPartitionedChecksSpec
-  from ..models.column_consistency_monthly_partitioned_checks_spec import ColumnConsistencyMonthlyPartitionedChecksSpec
-  from ..models.column_uniqueness_monthly_partitioned_checks_spec import ColumnUniquenessMonthlyPartitionedChecksSpec
-  from ..models.column_datetime_monthly_partitioned_checks_spec import ColumnDatetimeMonthlyPartitionedChecksSpec
-  from ..models.column_anomaly_monthly_partitioned_checks_spec import ColumnAnomalyMonthlyPartitionedChecksSpec
-  from ..models.column_numeric_monthly_partitioned_checks_spec import ColumnNumericMonthlyPartitionedChecksSpec
-  from ..models.column_sql_monthly_partitioned_checks_spec import ColumnSqlMonthlyPartitionedChecksSpec
-  from ..models.column_monthly_partitioned_check_categories_spec_custom import ColumnMonthlyPartitionedCheckCategoriesSpecCustom
-  from ..models.column_strings_monthly_partitioned_checks_spec import ColumnStringsMonthlyPartitionedChecksSpec
-  from ..models.column_monthly_partitioned_check_categories_spec_comparisons import ColumnMonthlyPartitionedCheckCategoriesSpecComparisons
-
-
-
+    from ..models.column_accuracy_monthly_partitioned_checks_spec import (
+        ColumnAccuracyMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_anomaly_monthly_partitioned_checks_spec import (
+        ColumnAnomalyMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_bool_monthly_partitioned_checks_spec import (
+        ColumnBoolMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_consistency_monthly_partitioned_checks_spec import (
+        ColumnConsistencyMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_datetime_monthly_partitioned_checks_spec import (
+        ColumnDatetimeMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_integrity_monthly_partitioned_checks_spec import (
+        ColumnIntegrityMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_monthly_partitioned_check_categories_spec_comparisons import (
+        ColumnMonthlyPartitionedCheckCategoriesSpecComparisons,
+    )
+    from ..models.column_monthly_partitioned_check_categories_spec_custom import (
+        ColumnMonthlyPartitionedCheckCategoriesSpecCustom,
+    )
+    from ..models.column_nulls_monthly_partitioned_checks_spec import (
+        ColumnNullsMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_numeric_monthly_partitioned_checks_spec import (
+        ColumnNumericMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_pii_monthly_partitioned_checks_spec import (
+        ColumnPiiMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_sql_monthly_partitioned_checks_spec import (
+        ColumnSqlMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_strings_monthly_partitioned_checks_spec import (
+        ColumnStringsMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_uniqueness_monthly_partitioned_checks_spec import (
+        ColumnUniquenessMonthlyPartitionedChecksSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnMonthlyPartitionedCheckCategoriesSpec")
@@ -37,59 +54,46 @@ T = TypeVar("T", bound="ColumnMonthlyPartitionedCheckCategoriesSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnMonthlyPartitionedCheckCategoriesSpec:
-    """ 
-        Attributes:
-            custom (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
-                are check names.
-            nulls (Union[Unset, ColumnNullsMonthlyPartitionedChecksSpec]):
-            numeric (Union[Unset, ColumnNumericMonthlyPartitionedChecksSpec]):
-            strings (Union[Unset, ColumnStringsMonthlyPartitionedChecksSpec]):
-            uniqueness (Union[Unset, ColumnUniquenessMonthlyPartitionedChecksSpec]):
-            datetime_ (Union[Unset, ColumnDatetimeMonthlyPartitionedChecksSpec]):
-            pii (Union[Unset, ColumnPiiMonthlyPartitionedChecksSpec]):
-            sql (Union[Unset, ColumnSqlMonthlyPartitionedChecksSpec]):
-            bool_ (Union[Unset, ColumnBoolMonthlyPartitionedChecksSpec]):
-            integrity (Union[Unset, ColumnIntegrityMonthlyPartitionedChecksSpec]):
-            accuracy (Union[Unset, ColumnAccuracyMonthlyPartitionedChecksSpec]):
-            consistency (Union[Unset, ColumnConsistencyMonthlyPartitionedChecksSpec]):
-            anomaly (Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]):
-            comparisons (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecComparisons]): Dictionary of configuration
-                of checks for table comparisons at a column level. The key that identifies each comparison must match the name
-                of a data comparison that is configured on the parent table.
-     """
+    """
+    Attributes:
+        custom (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys
+            are check names.
+        nulls (Union[Unset, ColumnNullsMonthlyPartitionedChecksSpec]):
+        numeric (Union[Unset, ColumnNumericMonthlyPartitionedChecksSpec]):
+        strings (Union[Unset, ColumnStringsMonthlyPartitionedChecksSpec]):
+        uniqueness (Union[Unset, ColumnUniquenessMonthlyPartitionedChecksSpec]):
+        datetime_ (Union[Unset, ColumnDatetimeMonthlyPartitionedChecksSpec]):
+        pii (Union[Unset, ColumnPiiMonthlyPartitionedChecksSpec]):
+        sql (Union[Unset, ColumnSqlMonthlyPartitionedChecksSpec]):
+        bool_ (Union[Unset, ColumnBoolMonthlyPartitionedChecksSpec]):
+        integrity (Union[Unset, ColumnIntegrityMonthlyPartitionedChecksSpec]):
+        accuracy (Union[Unset, ColumnAccuracyMonthlyPartitionedChecksSpec]):
+        consistency (Union[Unset, ColumnConsistencyMonthlyPartitionedChecksSpec]):
+        anomaly (Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]):
+        comparisons (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecComparisons]): Dictionary of configuration
+            of checks for table comparisons at a column level. The key that identifies each comparison must match the name
+            of a data comparison that is configured on the parent table.
+    """
 
-    custom: Union[Unset, 'ColumnMonthlyPartitionedCheckCategoriesSpecCustom'] = UNSET
-    nulls: Union[Unset, 'ColumnNullsMonthlyPartitionedChecksSpec'] = UNSET
-    numeric: Union[Unset, 'ColumnNumericMonthlyPartitionedChecksSpec'] = UNSET
-    strings: Union[Unset, 'ColumnStringsMonthlyPartitionedChecksSpec'] = UNSET
-    uniqueness: Union[Unset, 'ColumnUniquenessMonthlyPartitionedChecksSpec'] = UNSET
-    datetime_: Union[Unset, 'ColumnDatetimeMonthlyPartitionedChecksSpec'] = UNSET
-    pii: Union[Unset, 'ColumnPiiMonthlyPartitionedChecksSpec'] = UNSET
-    sql: Union[Unset, 'ColumnSqlMonthlyPartitionedChecksSpec'] = UNSET
-    bool_: Union[Unset, 'ColumnBoolMonthlyPartitionedChecksSpec'] = UNSET
-    integrity: Union[Unset, 'ColumnIntegrityMonthlyPartitionedChecksSpec'] = UNSET
-    accuracy: Union[Unset, 'ColumnAccuracyMonthlyPartitionedChecksSpec'] = UNSET
-    consistency: Union[Unset, 'ColumnConsistencyMonthlyPartitionedChecksSpec'] = UNSET
-    anomaly: Union[Unset, 'ColumnAnomalyMonthlyPartitionedChecksSpec'] = UNSET
-    comparisons: Union[Unset, 'ColumnMonthlyPartitionedCheckCategoriesSpecComparisons'] = UNSET
+    custom: Union[Unset, "ColumnMonthlyPartitionedCheckCategoriesSpecCustom"] = UNSET
+    nulls: Union[Unset, "ColumnNullsMonthlyPartitionedChecksSpec"] = UNSET
+    numeric: Union[Unset, "ColumnNumericMonthlyPartitionedChecksSpec"] = UNSET
+    strings: Union[Unset, "ColumnStringsMonthlyPartitionedChecksSpec"] = UNSET
+    uniqueness: Union[Unset, "ColumnUniquenessMonthlyPartitionedChecksSpec"] = UNSET
+    datetime_: Union[Unset, "ColumnDatetimeMonthlyPartitionedChecksSpec"] = UNSET
+    pii: Union[Unset, "ColumnPiiMonthlyPartitionedChecksSpec"] = UNSET
+    sql: Union[Unset, "ColumnSqlMonthlyPartitionedChecksSpec"] = UNSET
+    bool_: Union[Unset, "ColumnBoolMonthlyPartitionedChecksSpec"] = UNSET
+    integrity: Union[Unset, "ColumnIntegrityMonthlyPartitionedChecksSpec"] = UNSET
+    accuracy: Union[Unset, "ColumnAccuracyMonthlyPartitionedChecksSpec"] = UNSET
+    consistency: Union[Unset, "ColumnConsistencyMonthlyPartitionedChecksSpec"] = UNSET
+    anomaly: Union[Unset, "ColumnAnomalyMonthlyPartitionedChecksSpec"] = UNSET
+    comparisons: Union[
+        Unset, "ColumnMonthlyPartitionedCheckCategoriesSpecComparisons"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.column_nulls_monthly_partitioned_checks_spec import ColumnNullsMonthlyPartitionedChecksSpec
-        from ..models.column_integrity_monthly_partitioned_checks_spec import ColumnIntegrityMonthlyPartitionedChecksSpec
-        from ..models.column_bool_monthly_partitioned_checks_spec import ColumnBoolMonthlyPartitionedChecksSpec
-        from ..models.column_accuracy_monthly_partitioned_checks_spec import ColumnAccuracyMonthlyPartitionedChecksSpec
-        from ..models.column_pii_monthly_partitioned_checks_spec import ColumnPiiMonthlyPartitionedChecksSpec
-        from ..models.column_consistency_monthly_partitioned_checks_spec import ColumnConsistencyMonthlyPartitionedChecksSpec
-        from ..models.column_uniqueness_monthly_partitioned_checks_spec import ColumnUniquenessMonthlyPartitionedChecksSpec
-        from ..models.column_datetime_monthly_partitioned_checks_spec import ColumnDatetimeMonthlyPartitionedChecksSpec
-        from ..models.column_anomaly_monthly_partitioned_checks_spec import ColumnAnomalyMonthlyPartitionedChecksSpec
-        from ..models.column_numeric_monthly_partitioned_checks_spec import ColumnNumericMonthlyPartitionedChecksSpec
-        from ..models.column_sql_monthly_partitioned_checks_spec import ColumnSqlMonthlyPartitionedChecksSpec
-        from ..models.column_monthly_partitioned_check_categories_spec_custom import ColumnMonthlyPartitionedCheckCategoriesSpecCustom
-        from ..models.column_strings_monthly_partitioned_checks_spec import ColumnStringsMonthlyPartitionedChecksSpec
-        from ..models.column_monthly_partitioned_check_categories_spec_comparisons import ColumnMonthlyPartitionedCheckCategoriesSpecComparisons
         custom: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.custom, Unset):
             custom = self.custom.to_dict()
@@ -146,11 +150,9 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         if not isinstance(self.comparisons, Unset):
             comparisons = self.comparisons.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if custom is not UNSET:
             field_dict["custom"] = custom
         if nulls is not UNSET:
@@ -182,164 +184,163 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_nulls_monthly_partitioned_checks_spec import ColumnNullsMonthlyPartitionedChecksSpec
-        from ..models.column_integrity_monthly_partitioned_checks_spec import ColumnIntegrityMonthlyPartitionedChecksSpec
-        from ..models.column_bool_monthly_partitioned_checks_spec import ColumnBoolMonthlyPartitionedChecksSpec
-        from ..models.column_accuracy_monthly_partitioned_checks_spec import ColumnAccuracyMonthlyPartitionedChecksSpec
-        from ..models.column_pii_monthly_partitioned_checks_spec import ColumnPiiMonthlyPartitionedChecksSpec
-        from ..models.column_consistency_monthly_partitioned_checks_spec import ColumnConsistencyMonthlyPartitionedChecksSpec
-        from ..models.column_uniqueness_monthly_partitioned_checks_spec import ColumnUniquenessMonthlyPartitionedChecksSpec
-        from ..models.column_datetime_monthly_partitioned_checks_spec import ColumnDatetimeMonthlyPartitionedChecksSpec
-        from ..models.column_anomaly_monthly_partitioned_checks_spec import ColumnAnomalyMonthlyPartitionedChecksSpec
-        from ..models.column_numeric_monthly_partitioned_checks_spec import ColumnNumericMonthlyPartitionedChecksSpec
-        from ..models.column_sql_monthly_partitioned_checks_spec import ColumnSqlMonthlyPartitionedChecksSpec
-        from ..models.column_monthly_partitioned_check_categories_spec_custom import ColumnMonthlyPartitionedCheckCategoriesSpecCustom
-        from ..models.column_strings_monthly_partitioned_checks_spec import ColumnStringsMonthlyPartitionedChecksSpec
-        from ..models.column_monthly_partitioned_check_categories_spec_comparisons import ColumnMonthlyPartitionedCheckCategoriesSpecComparisons
+        from ..models.column_accuracy_monthly_partitioned_checks_spec import (
+            ColumnAccuracyMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_anomaly_monthly_partitioned_checks_spec import (
+            ColumnAnomalyMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_bool_monthly_partitioned_checks_spec import (
+            ColumnBoolMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_consistency_monthly_partitioned_checks_spec import (
+            ColumnConsistencyMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_datetime_monthly_partitioned_checks_spec import (
+            ColumnDatetimeMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_integrity_monthly_partitioned_checks_spec import (
+            ColumnIntegrityMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_monthly_partitioned_check_categories_spec_comparisons import (
+            ColumnMonthlyPartitionedCheckCategoriesSpecComparisons,
+        )
+        from ..models.column_monthly_partitioned_check_categories_spec_custom import (
+            ColumnMonthlyPartitionedCheckCategoriesSpecCustom,
+        )
+        from ..models.column_nulls_monthly_partitioned_checks_spec import (
+            ColumnNullsMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_numeric_monthly_partitioned_checks_spec import (
+            ColumnNumericMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_pii_monthly_partitioned_checks_spec import (
+            ColumnPiiMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_sql_monthly_partitioned_checks_spec import (
+            ColumnSqlMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_strings_monthly_partitioned_checks_spec import (
+            ColumnStringsMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_uniqueness_monthly_partitioned_checks_spec import (
+            ColumnUniquenessMonthlyPartitionedChecksSpec,
+        )
+
         d = src_dict.copy()
         _custom = d.pop("custom", UNSET)
         custom: Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecCustom]
-        if isinstance(_custom,  Unset):
+        if isinstance(_custom, Unset):
             custom = UNSET
         else:
-            custom = ColumnMonthlyPartitionedCheckCategoriesSpecCustom.from_dict(_custom)
-
-
-
+            custom = ColumnMonthlyPartitionedCheckCategoriesSpecCustom.from_dict(
+                _custom
+            )
 
         _nulls = d.pop("nulls", UNSET)
         nulls: Union[Unset, ColumnNullsMonthlyPartitionedChecksSpec]
-        if isinstance(_nulls,  Unset):
+        if isinstance(_nulls, Unset):
             nulls = UNSET
         else:
             nulls = ColumnNullsMonthlyPartitionedChecksSpec.from_dict(_nulls)
 
-
-
-
         _numeric = d.pop("numeric", UNSET)
         numeric: Union[Unset, ColumnNumericMonthlyPartitionedChecksSpec]
-        if isinstance(_numeric,  Unset):
+        if isinstance(_numeric, Unset):
             numeric = UNSET
         else:
             numeric = ColumnNumericMonthlyPartitionedChecksSpec.from_dict(_numeric)
 
-
-
-
         _strings = d.pop("strings", UNSET)
         strings: Union[Unset, ColumnStringsMonthlyPartitionedChecksSpec]
-        if isinstance(_strings,  Unset):
+        if isinstance(_strings, Unset):
             strings = UNSET
         else:
             strings = ColumnStringsMonthlyPartitionedChecksSpec.from_dict(_strings)
 
-
-
-
         _uniqueness = d.pop("uniqueness", UNSET)
         uniqueness: Union[Unset, ColumnUniquenessMonthlyPartitionedChecksSpec]
-        if isinstance(_uniqueness,  Unset):
+        if isinstance(_uniqueness, Unset):
             uniqueness = UNSET
         else:
-            uniqueness = ColumnUniquenessMonthlyPartitionedChecksSpec.from_dict(_uniqueness)
-
-
-
+            uniqueness = ColumnUniquenessMonthlyPartitionedChecksSpec.from_dict(
+                _uniqueness
+            )
 
         _datetime_ = d.pop("datetime", UNSET)
         datetime_: Union[Unset, ColumnDatetimeMonthlyPartitionedChecksSpec]
-        if isinstance(_datetime_,  Unset):
+        if isinstance(_datetime_, Unset):
             datetime_ = UNSET
         else:
             datetime_ = ColumnDatetimeMonthlyPartitionedChecksSpec.from_dict(_datetime_)
 
-
-
-
         _pii = d.pop("pii", UNSET)
         pii: Union[Unset, ColumnPiiMonthlyPartitionedChecksSpec]
-        if isinstance(_pii,  Unset):
+        if isinstance(_pii, Unset):
             pii = UNSET
         else:
             pii = ColumnPiiMonthlyPartitionedChecksSpec.from_dict(_pii)
 
-
-
-
         _sql = d.pop("sql", UNSET)
         sql: Union[Unset, ColumnSqlMonthlyPartitionedChecksSpec]
-        if isinstance(_sql,  Unset):
+        if isinstance(_sql, Unset):
             sql = UNSET
         else:
             sql = ColumnSqlMonthlyPartitionedChecksSpec.from_dict(_sql)
 
-
-
-
         _bool_ = d.pop("bool", UNSET)
         bool_: Union[Unset, ColumnBoolMonthlyPartitionedChecksSpec]
-        if isinstance(_bool_,  Unset):
+        if isinstance(_bool_, Unset):
             bool_ = UNSET
         else:
             bool_ = ColumnBoolMonthlyPartitionedChecksSpec.from_dict(_bool_)
 
-
-
-
         _integrity = d.pop("integrity", UNSET)
         integrity: Union[Unset, ColumnIntegrityMonthlyPartitionedChecksSpec]
-        if isinstance(_integrity,  Unset):
+        if isinstance(_integrity, Unset):
             integrity = UNSET
         else:
-            integrity = ColumnIntegrityMonthlyPartitionedChecksSpec.from_dict(_integrity)
-
-
-
+            integrity = ColumnIntegrityMonthlyPartitionedChecksSpec.from_dict(
+                _integrity
+            )
 
         _accuracy = d.pop("accuracy", UNSET)
         accuracy: Union[Unset, ColumnAccuracyMonthlyPartitionedChecksSpec]
-        if isinstance(_accuracy,  Unset):
+        if isinstance(_accuracy, Unset):
             accuracy = UNSET
         else:
             accuracy = ColumnAccuracyMonthlyPartitionedChecksSpec.from_dict(_accuracy)
 
-
-
-
         _consistency = d.pop("consistency", UNSET)
         consistency: Union[Unset, ColumnConsistencyMonthlyPartitionedChecksSpec]
-        if isinstance(_consistency,  Unset):
+        if isinstance(_consistency, Unset):
             consistency = UNSET
         else:
-            consistency = ColumnConsistencyMonthlyPartitionedChecksSpec.from_dict(_consistency)
-
-
-
+            consistency = ColumnConsistencyMonthlyPartitionedChecksSpec.from_dict(
+                _consistency
+            )
 
         _anomaly = d.pop("anomaly", UNSET)
         anomaly: Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]
-        if isinstance(_anomaly,  Unset):
+        if isinstance(_anomaly, Unset):
             anomaly = UNSET
         else:
             anomaly = ColumnAnomalyMonthlyPartitionedChecksSpec.from_dict(_anomaly)
 
-
-
-
         _comparisons = d.pop("comparisons", UNSET)
-        comparisons: Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecComparisons]
-        if isinstance(_comparisons,  Unset):
+        comparisons: Union[
+            Unset, ColumnMonthlyPartitionedCheckCategoriesSpecComparisons
+        ]
+        if isinstance(_comparisons, Unset):
             comparisons = UNSET
         else:
-            comparisons = ColumnMonthlyPartitionedCheckCategoriesSpecComparisons.from_dict(_comparisons)
-
-
-
+            comparisons = (
+                ColumnMonthlyPartitionedCheckCategoriesSpecComparisons.from_dict(
+                    _comparisons
+                )
+            )
 
         column_monthly_partitioned_check_categories_spec = cls(
             custom=custom,

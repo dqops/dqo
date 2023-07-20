@@ -1,26 +1,15 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="DataGroupingConfigurationBasicModel")
 
 
 @attr.s(auto_attribs=True)
 class DataGroupingConfigurationBasicModel:
-    """ Basic data grouping configuration model not containing nested objects, but only the name of the grouping
+    """Basic data grouping configuration model not containing nested objects, but only the name of the grouping
     configuration.
 
         Attributes:
@@ -30,7 +19,7 @@ class DataGroupingConfigurationBasicModel:
             data_grouping_configuration_name (Union[Unset, str]): Data grouping configuration name.
             default_data_grouping_configuration (Union[Unset, bool]): True when this is the default data grouping
                 configuration for the table.
-     """
+    """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
@@ -38,7 +27,6 @@ class DataGroupingConfigurationBasicModel:
     data_grouping_configuration_name: Union[Unset, str] = UNSET
     default_data_grouping_configuration: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -49,8 +37,7 @@ class DataGroupingConfigurationBasicModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if schema_name is not UNSET:
@@ -58,13 +45,15 @@ class DataGroupingConfigurationBasicModel:
         if table_name is not UNSET:
             field_dict["table_name"] = table_name
         if data_grouping_configuration_name is not UNSET:
-            field_dict["data_grouping_configuration_name"] = data_grouping_configuration_name
+            field_dict[
+                "data_grouping_configuration_name"
+            ] = data_grouping_configuration_name
         if default_data_grouping_configuration is not UNSET:
-            field_dict["default_data_grouping_configuration"] = default_data_grouping_configuration
+            field_dict[
+                "default_data_grouping_configuration"
+            ] = default_data_grouping_configuration
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -75,9 +64,13 @@ class DataGroupingConfigurationBasicModel:
 
         table_name = d.pop("table_name", UNSET)
 
-        data_grouping_configuration_name = d.pop("data_grouping_configuration_name", UNSET)
+        data_grouping_configuration_name = d.pop(
+            "data_grouping_configuration_name", UNSET
+        )
 
-        default_data_grouping_configuration = d.pop("default_data_grouping_configuration", UNSET)
+        default_data_grouping_configuration = d.pop(
+            "default_data_grouping_configuration", UNSET
+        )
 
         data_grouping_configuration_basic_model = cls(
             connection_name=connection_name,

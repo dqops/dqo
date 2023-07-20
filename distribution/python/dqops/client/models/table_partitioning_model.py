@@ -1,24 +1,15 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.timestamp_columns_spec import TimestampColumnsSpec
-  from ..models.physical_table_name import PhysicalTableName
-  from ..models.partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
-
-
-
+    from ..models.partition_incremental_time_window_spec import (
+        PartitionIncrementalTimeWindowSpec,
+    )
+    from ..models.physical_table_name import PhysicalTableName
+    from ..models.timestamp_columns_spec import TimestampColumnsSpec
 
 
 T = TypeVar("T", bound="TablePartitioningModel")
@@ -26,26 +17,22 @@ T = TypeVar("T", bound="TablePartitioningModel")
 
 @attr.s(auto_attribs=True)
 class TablePartitioningModel:
-    """ Table model with objects that describe the table partitioning.
+    """Table model with objects that describe the table partitioning.
 
-        Attributes:
-            connection_name (Union[Unset, str]): Connection name.
-            target (Union[Unset, PhysicalTableName]):
-            timestamp_columns (Union[Unset, TimestampColumnsSpec]):
-            incremental_time_window (Union[Unset, PartitionIncrementalTimeWindowSpec]):
-     """
+    Attributes:
+        connection_name (Union[Unset, str]): Connection name.
+        target (Union[Unset, PhysicalTableName]):
+        timestamp_columns (Union[Unset, TimestampColumnsSpec]):
+        incremental_time_window (Union[Unset, PartitionIncrementalTimeWindowSpec]):
+    """
 
     connection_name: Union[Unset, str] = UNSET
-    target: Union[Unset, 'PhysicalTableName'] = UNSET
-    timestamp_columns: Union[Unset, 'TimestampColumnsSpec'] = UNSET
-    incremental_time_window: Union[Unset, 'PartitionIncrementalTimeWindowSpec'] = UNSET
+    target: Union[Unset, "PhysicalTableName"] = UNSET
+    timestamp_columns: Union[Unset, "TimestampColumnsSpec"] = UNSET
+    incremental_time_window: Union[Unset, "PartitionIncrementalTimeWindowSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.timestamp_columns_spec import TimestampColumnsSpec
-        from ..models.physical_table_name import PhysicalTableName
-        from ..models.partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
         connection_name = self.connection_name
         target: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.target, Unset):
@@ -59,11 +46,9 @@ class TablePartitioningModel:
         if not isinstance(self.incremental_time_window, Unset):
             incremental_time_window = self.incremental_time_window.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if target is not UNSET:
@@ -75,45 +60,39 @@ class TablePartitioningModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.timestamp_columns_spec import TimestampColumnsSpec
+        from ..models.partition_incremental_time_window_spec import (
+            PartitionIncrementalTimeWindowSpec,
+        )
         from ..models.physical_table_name import PhysicalTableName
-        from ..models.partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
+        from ..models.timestamp_columns_spec import TimestampColumnsSpec
+
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
         _target = d.pop("target", UNSET)
         target: Union[Unset, PhysicalTableName]
-        if isinstance(_target,  Unset):
+        if isinstance(_target, Unset):
             target = UNSET
         else:
             target = PhysicalTableName.from_dict(_target)
 
-
-
-
         _timestamp_columns = d.pop("timestamp_columns", UNSET)
         timestamp_columns: Union[Unset, TimestampColumnsSpec]
-        if isinstance(_timestamp_columns,  Unset):
+        if isinstance(_timestamp_columns, Unset):
             timestamp_columns = UNSET
         else:
             timestamp_columns = TimestampColumnsSpec.from_dict(_timestamp_columns)
 
-
-
-
         _incremental_time_window = d.pop("incremental_time_window", UNSET)
         incremental_time_window: Union[Unset, PartitionIncrementalTimeWindowSpec]
-        if isinstance(_incremental_time_window,  Unset):
+        if isinstance(_incremental_time_window, Unset):
             incremental_time_window = UNSET
         else:
-            incremental_time_window = PartitionIncrementalTimeWindowSpec.from_dict(_incremental_time_window)
-
-
-
+            incremental_time_window = PartitionIncrementalTimeWindowSpec.from_dict(
+                _incremental_time_window
+            )
 
         table_partitioning_model = cls(
             connection_name=connection_name,

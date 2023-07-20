@@ -1,22 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.table_comparison_row_count_match_check_spec import TableComparisonRowCountMatchCheckSpec
-
-
-
+    from ..models.table_comparison_row_count_match_check_spec import (
+        TableComparisonRowCountMatchCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableComparisonDailyPartitionedChecksSpec")
@@ -24,46 +15,54 @@ T = TypeVar("T", bound="TableComparisonDailyPartitionedChecksSpec")
 
 @attr.s(auto_attribs=True)
 class TableComparisonDailyPartitionedChecksSpec:
-    """ 
-        Attributes:
-            daily_partition_row_count_match (Union[Unset, TableComparisonRowCountMatchCheckSpec]):
-     """
+    """
+    Attributes:
+        daily_partition_row_count_match (Union[Unset, TableComparisonRowCountMatchCheckSpec]):
+    """
 
-    daily_partition_row_count_match: Union[Unset, 'TableComparisonRowCountMatchCheckSpec'] = UNSET
+    daily_partition_row_count_match: Union[
+        Unset, "TableComparisonRowCountMatchCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.table_comparison_row_count_match_check_spec import TableComparisonRowCountMatchCheckSpec
         daily_partition_row_count_match: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_row_count_match, Unset):
-            daily_partition_row_count_match = self.daily_partition_row_count_match.to_dict()
-
+            daily_partition_row_count_match = (
+                self.daily_partition_row_count_match.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if daily_partition_row_count_match is not UNSET:
-            field_dict["daily_partition_row_count_match"] = daily_partition_row_count_match
+            field_dict[
+                "daily_partition_row_count_match"
+            ] = daily_partition_row_count_match
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_comparison_row_count_match_check_spec import TableComparisonRowCountMatchCheckSpec
+        from ..models.table_comparison_row_count_match_check_spec import (
+            TableComparisonRowCountMatchCheckSpec,
+        )
+
         d = src_dict.copy()
-        _daily_partition_row_count_match = d.pop("daily_partition_row_count_match", UNSET)
-        daily_partition_row_count_match: Union[Unset, TableComparisonRowCountMatchCheckSpec]
-        if isinstance(_daily_partition_row_count_match,  Unset):
+        _daily_partition_row_count_match = d.pop(
+            "daily_partition_row_count_match", UNSET
+        )
+        daily_partition_row_count_match: Union[
+            Unset, TableComparisonRowCountMatchCheckSpec
+        ]
+        if isinstance(_daily_partition_row_count_match, Unset):
             daily_partition_row_count_match = UNSET
         else:
-            daily_partition_row_count_match = TableComparisonRowCountMatchCheckSpec.from_dict(_daily_partition_row_count_match)
-
-
-
+            daily_partition_row_count_match = (
+                TableComparisonRowCountMatchCheckSpec.from_dict(
+                    _daily_partition_row_count_match
+                )
+            )
 
         table_comparison_daily_partitioned_checks_spec = cls(
             daily_partition_row_count_match=daily_partition_row_count_match,

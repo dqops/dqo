@@ -1,49 +1,41 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.table_incident_grouping_spec_grouping_level import (
+    TableIncidentGroupingSpecGroupingLevel,
+)
+from ..models.table_incident_grouping_spec_minimum_severity import (
+    TableIncidentGroupingSpecMinimumSeverity,
+)
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..models.table_incident_grouping_spec_grouping_level import TableIncidentGroupingSpecGroupingLevel
-from ..models.table_incident_grouping_spec_minimum_severity import TableIncidentGroupingSpecMinimumSeverity
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="TableIncidentGroupingSpec")
 
 
 @attr.s(auto_attribs=True)
 class TableIncidentGroupingSpec:
-    """ 
-        Attributes:
-            grouping_level (Union[Unset, TableIncidentGroupingSpecGroupingLevel]): Grouping level of failed data quality
-                checks for creating higher level data quality incidents. The default grouping level is by a table, a data
-                quality dimension and a check category (i.e. a consistency data quality incident detected on a table X in the
-                numeric checks category).
-            minimum_severity (Union[Unset, TableIncidentGroupingSpecMinimumSeverity]): Minimum severity level of data
-                quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported
-                severity levels are 'error' and 'fatal'.
-            divide_by_data_group (Union[Unset, bool]): Create separate data quality incidents for each data group, creating
-                different incidents for different groups of rows. By default, data groups are ignored for grouping data quality
-                issues into data quality incidents.
-            disabled (Union[Unset, bool]): Disables data quality incident creation for failed data quality checks on the
-                table.
-     """
+    """
+    Attributes:
+        grouping_level (Union[Unset, TableIncidentGroupingSpecGroupingLevel]): Grouping level of failed data quality
+            checks for creating higher level data quality incidents. The default grouping level is by a table, a data
+            quality dimension and a check category (i.e. a consistency data quality incident detected on a table X in the
+            numeric checks category).
+        minimum_severity (Union[Unset, TableIncidentGroupingSpecMinimumSeverity]): Minimum severity level of data
+            quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported
+            severity levels are 'error' and 'fatal'.
+        divide_by_data_group (Union[Unset, bool]): Create separate data quality incidents for each data group, creating
+            different incidents for different groups of rows. By default, data groups are ignored for grouping data quality
+            issues into data quality incidents.
+        disabled (Union[Unset, bool]): Disables data quality incident creation for failed data quality checks on the
+            table.
+    """
 
     grouping_level: Union[Unset, TableIncidentGroupingSpecGroupingLevel] = UNSET
     minimum_severity: Union[Unset, TableIncidentGroupingSpecMinimumSeverity] = UNSET
     divide_by_data_group: Union[Unset, bool] = UNSET
     disabled: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         grouping_level: Union[Unset, str] = UNSET
@@ -59,8 +51,7 @@ class TableIncidentGroupingSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if grouping_level is not UNSET:
             field_dict["grouping_level"] = grouping_level
         if minimum_severity is not UNSET:
@@ -72,30 +63,24 @@ class TableIncidentGroupingSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _grouping_level = d.pop("grouping_level", UNSET)
         grouping_level: Union[Unset, TableIncidentGroupingSpecGroupingLevel]
-        if isinstance(_grouping_level,  Unset):
+        if isinstance(_grouping_level, Unset):
             grouping_level = UNSET
         else:
             grouping_level = TableIncidentGroupingSpecGroupingLevel(_grouping_level)
 
-
-
-
         _minimum_severity = d.pop("minimum_severity", UNSET)
         minimum_severity: Union[Unset, TableIncidentGroupingSpecMinimumSeverity]
-        if isinstance(_minimum_severity,  Unset):
+        if isinstance(_minimum_severity, Unset):
             minimum_severity = UNSET
         else:
-            minimum_severity = TableIncidentGroupingSpecMinimumSeverity(_minimum_severity)
-
-
-
+            minimum_severity = TableIncidentGroupingSpecMinimumSeverity(
+                _minimum_severity
+            )
 
         divide_by_data_group = d.pop("divide_by_data_group", UNSET)
 

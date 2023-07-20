@@ -1,39 +1,31 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.synchronize_root_folder_parameters_direction import (
+    SynchronizeRootFolderParametersDirection,
+)
+from ..models.synchronize_root_folder_parameters_folder import (
+    SynchronizeRootFolderParametersFolder,
+)
 from ..types import UNSET, Unset
-
-from ..models.synchronize_root_folder_parameters_folder import SynchronizeRootFolderParametersFolder
-from typing import Union
-from ..models.synchronize_root_folder_parameters_direction import SynchronizeRootFolderParametersDirection
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="SynchronizeRootFolderParameters")
 
 
 @attr.s(auto_attribs=True)
 class SynchronizeRootFolderParameters:
-    """ 
-        Attributes:
-            folder (Union[Unset, SynchronizeRootFolderParametersFolder]):
-            direction (Union[Unset, SynchronizeRootFolderParametersDirection]):
-            force_refresh_native_table (Union[Unset, bool]):
-     """
+    """
+    Attributes:
+        folder (Union[Unset, SynchronizeRootFolderParametersFolder]):
+        direction (Union[Unset, SynchronizeRootFolderParametersDirection]):
+        force_refresh_native_table (Union[Unset, bool]):
+    """
 
     folder: Union[Unset, SynchronizeRootFolderParametersFolder] = UNSET
     direction: Union[Unset, SynchronizeRootFolderParametersDirection] = UNSET
     force_refresh_native_table: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         folder: Union[Unset, str] = UNSET
@@ -48,8 +40,7 @@ class SynchronizeRootFolderParameters:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if folder is not UNSET:
             field_dict["folder"] = folder
         if direction is not UNSET:
@@ -59,30 +50,22 @@ class SynchronizeRootFolderParameters:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _folder = d.pop("folder", UNSET)
         folder: Union[Unset, SynchronizeRootFolderParametersFolder]
-        if isinstance(_folder,  Unset):
+        if isinstance(_folder, Unset):
             folder = UNSET
         else:
             folder = SynchronizeRootFolderParametersFolder(_folder)
 
-
-
-
         _direction = d.pop("direction", UNSET)
         direction: Union[Unset, SynchronizeRootFolderParametersDirection]
-        if isinstance(_direction,  Unset):
+        if isinstance(_direction, Unset):
             direction = UNSET
         else:
             direction = SynchronizeRootFolderParametersDirection(_direction)
-
-
-
 
         force_refresh_native_table = d.pop("forceRefreshNativeTable", UNSET)
 

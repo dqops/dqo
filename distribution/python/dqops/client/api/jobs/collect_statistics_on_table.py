@@ -1,45 +1,31 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
+from ...client import Client
 from ...models.dqo_queue_job_id import DqoQueueJobId
-from ...models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-from typing import cast
-from typing import Dict
-
+from ...models.statistics_collector_search_filters import (
+    StatisticsCollectorSearchFilters,
+)
+from ...types import Response
 
 
 def _get_kwargs(
     *,
     client: Client,
     json_body: StatisticsCollectorSearchFilters,
-
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/collectstatistics/table".format(
-        client.base_url)
+    url = "{}/api/jobs/collectstatistics/table".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
     json_json_body = json_body.to_dict()
 
-
-
-    
-
     return {
-	    "method": "post",
+        "method": "post",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -49,11 +35,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[DqoQueueJobId]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[DqoQueueJobId]:
     if response.status_code == HTTPStatus.OK:
         response_200 = DqoQueueJobId.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -62,7 +48,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Dqo
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[DqoQueueJobId]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[DqoQueueJobId]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -75,9 +63,8 @@ def sync_detailed(
     *,
     client: Client,
     json_body: StatisticsCollectorSearchFilters,
-
 ) -> Response[DqoQueueJobId]:
-    """ collectStatisticsOnTable
+    """collectStatisticsOnTable
 
      Starts a new background job that will run selected data statistics collectors on a whole table
 
@@ -90,13 +77,11 @@ def sync_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         client=client,
-json_body=json_body,
-
+        json_body=json_body,
     )
 
     response = httpx.request(
@@ -106,13 +91,13 @@ json_body=json_body,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     *,
     client: Client,
     json_body: StatisticsCollectorSearchFilters,
-
 ) -> Optional[DqoQueueJobId]:
-    """ collectStatisticsOnTable
+    """collectStatisticsOnTable
 
      Starts a new background job that will run selected data statistics collectors on a whole table
 
@@ -125,22 +110,20 @@ def sync(
 
     Returns:
         DqoQueueJobId
-     """
-
+    """
 
     return sync_detailed(
         client=client,
-json_body=json_body,
-
+        json_body=json_body,
     ).parsed
+
 
 async def asyncio_detailed(
     *,
     client: Client,
     json_body: StatisticsCollectorSearchFilters,
-
 ) -> Response[DqoQueueJobId]:
-    """ collectStatisticsOnTable
+    """collectStatisticsOnTable
 
      Starts a new background job that will run selected data statistics collectors on a whole table
 
@@ -153,29 +136,25 @@ async def asyncio_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         client=client,
-json_body=json_body,
-
+        json_body=json_body,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     *,
     client: Client,
     json_body: StatisticsCollectorSearchFilters,
-
 ) -> Optional[DqoQueueJobId]:
-    """ collectStatisticsOnTable
+    """collectStatisticsOnTable
 
      Starts a new background job that will run selected data statistics collectors on a whole table
 
@@ -188,11 +167,11 @@ async def asyncio(
 
     Returns:
         DqoQueueJobId
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        client=client,
-json_body=json_body,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            client=client,
+            json_body=json_body,
+        )
+    ).parsed

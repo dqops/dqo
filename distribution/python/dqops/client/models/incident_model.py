@@ -1,60 +1,49 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..types import UNSET, Unset
-
-from typing import Union
 from ..models.incident_model_status import IncidentModelStatus
 from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="IncidentModel")
 
 
 @attr.s(auto_attribs=True)
 class IncidentModel:
-    """ 
-        Attributes:
-            incident_id (Union[Unset, str]): Incident ID - the primary key that identifies each data quality incident.
-            connection (Union[Unset, str]): Connection name affected by a data quality incident.
-            year (Union[Unset, int]): The year when the incident was first seen. This value is required to load an
-                incident's monthly partition.
-            month (Union[Unset, int]): The month when the incident was first seen. This value is required to load an
-                incident's monthly partition.
-            schema (Union[Unset, str]): Schema name affected by a data quality incident.
-            table (Union[Unset, str]): Table name affected by a data quality incident.
-            table_priority (Union[Unset, int]): Table priority of the table that was affected by a data quality incident.
-            incident_hash (Union[Unset, int]): Data quality incident hash that identifies similar incidents on the same
-                incident grouping level.
-            first_seen (Union[Unset, int]): The UTC timestamp when the data quality incident was first seen.
-            last_seen (Union[Unset, int]): The UTC timestamp when the data quality incident was last seen.
-            incident_until (Union[Unset, int]): The UTC timestamp when the data quality incident is valid until. All new
-                failed data quality check results until that date will be included in this incident, unless the incident status
-                is changed to resolved, so a new incident must be created.
-            data_group (Union[Unset, str]): The data group that was affected by a data quality incident.
-            quality_dimension (Union[Unset, str]): The data quality dimension that was affected by a data quality incident.
-            check_category (Union[Unset, str]): The data quality check category that was affected by a data quality
-                incident.
-            check_type (Union[Unset, str]): The data quality check type that was affected by a data quality incident.
-            check_name (Union[Unset, str]): The data quality check name that was affected by a data quality incident.
-            highest_severity (Union[Unset, int]): The highest failed check severity that was detected as part of this data
-                quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.
-            minimum_severity (Union[Unset, int]): The minimum severity of the data quality incident, copied from the
-                incident configuration at a connection or table at the time when the incident was first seen. Possible values
-                are: 1 - warning, 2 - error, 3 - fatal.
-            failed_checks_count (Union[Unset, int]): The total number of failed data quality checks that were seen when the
-                incident was raised for the first time.
-            issue_url (Union[Unset, str]): The link (url) to a ticket in an external system that is tracking this incident.
-            status (Union[Unset, IncidentModelStatus]): Incident status.
-     """
+    """
+    Attributes:
+        incident_id (Union[Unset, str]): Incident ID - the primary key that identifies each data quality incident.
+        connection (Union[Unset, str]): Connection name affected by a data quality incident.
+        year (Union[Unset, int]): The year when the incident was first seen. This value is required to load an
+            incident's monthly partition.
+        month (Union[Unset, int]): The month when the incident was first seen. This value is required to load an
+            incident's monthly partition.
+        schema (Union[Unset, str]): Schema name affected by a data quality incident.
+        table (Union[Unset, str]): Table name affected by a data quality incident.
+        table_priority (Union[Unset, int]): Table priority of the table that was affected by a data quality incident.
+        incident_hash (Union[Unset, int]): Data quality incident hash that identifies similar incidents on the same
+            incident grouping level.
+        first_seen (Union[Unset, int]): The UTC timestamp when the data quality incident was first seen.
+        last_seen (Union[Unset, int]): The UTC timestamp when the data quality incident was last seen.
+        incident_until (Union[Unset, int]): The UTC timestamp when the data quality incident is valid until. All new
+            failed data quality check results until that date will be included in this incident, unless the incident status
+            is changed to resolved, so a new incident must be created.
+        data_group (Union[Unset, str]): The data group that was affected by a data quality incident.
+        quality_dimension (Union[Unset, str]): The data quality dimension that was affected by a data quality incident.
+        check_category (Union[Unset, str]): The data quality check category that was affected by a data quality
+            incident.
+        check_type (Union[Unset, str]): The data quality check type that was affected by a data quality incident.
+        check_name (Union[Unset, str]): The data quality check name that was affected by a data quality incident.
+        highest_severity (Union[Unset, int]): The highest failed check severity that was detected as part of this data
+            quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.
+        minimum_severity (Union[Unset, int]): The minimum severity of the data quality incident, copied from the
+            incident configuration at a connection or table at the time when the incident was first seen. Possible values
+            are: 1 - warning, 2 - error, 3 - fatal.
+        failed_checks_count (Union[Unset, int]): The total number of failed data quality checks that were seen when the
+            incident was raised for the first time.
+        issue_url (Union[Unset, str]): The link (url) to a ticket in an external system that is tracking this incident.
+        status (Union[Unset, IncidentModelStatus]): Incident status.
+    """
 
     incident_id: Union[Unset, str] = UNSET
     connection: Union[Unset, str] = UNSET
@@ -78,7 +67,6 @@ class IncidentModel:
     issue_url: Union[Unset, str] = UNSET
     status: Union[Unset, IncidentModelStatus] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         incident_id = self.incident_id
@@ -105,11 +93,9 @@ class IncidentModel:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if incident_id is not UNSET:
             field_dict["incidentId"] = incident_id
         if connection is not UNSET:
@@ -154,8 +140,6 @@ class IncidentModel:
             field_dict["status"] = status
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
@@ -202,13 +186,10 @@ class IncidentModel:
 
         _status = d.pop("status", UNSET)
         status: Union[Unset, IncidentModelStatus]
-        if isinstance(_status,  Unset):
+        if isinstance(_status, Unset):
             status = UNSET
         else:
             status = IncidentModelStatus(_status)
-
-
-
 
         incident_model = cls(
             incident_id=incident_id,

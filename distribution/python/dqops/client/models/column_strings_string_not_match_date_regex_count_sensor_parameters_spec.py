@@ -1,38 +1,30 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.column_strings_string_not_match_date_regex_count_sensor_parameters_spec_date_formats import (
+    ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats,
+)
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..models.column_strings_string_not_match_date_regex_count_sensor_parameters_spec_date_formats import ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec:
-    """ 
-        Attributes:
-            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-                sensor query filter are added, separated by an AND operator.
-            date_formats (Union[Unset, ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats]): Desired
-                date format. Sensor will try to parse the column records and cast the data using this format.
-     """
+    """
+    Attributes:
+        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+            sensor query filter are added, separated by an AND operator.
+        date_formats (Union[Unset, ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats]): Desired
+            date format. Sensor will try to parse the column records and cast the data using this format.
+    """
 
     filter_: Union[Unset, str] = UNSET
-    date_formats: Union[Unset, ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats] = UNSET
+    date_formats: Union[
+        Unset, ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -40,11 +32,9 @@ class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec:
         if not isinstance(self.date_formats, Unset):
             date_formats = self.date_formats.value
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if date_formats is not UNSET:
@@ -52,29 +42,31 @@ class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         filter_ = d.pop("filter", UNSET)
 
         _date_formats = d.pop("date_formats", UNSET)
-        date_formats: Union[Unset, ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats]
-        if isinstance(_date_formats,  Unset):
+        date_formats: Union[
+            Unset,
+            ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats,
+        ]
+        if isinstance(_date_formats, Unset):
             date_formats = UNSET
         else:
-            date_formats = ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats(_date_formats)
-
-
-
+            date_formats = ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecDateFormats(
+                _date_formats
+            )
 
         column_strings_string_not_match_date_regex_count_sensor_parameters_spec = cls(
             filter_=filter_,
             date_formats=date_formats,
         )
 
-        column_strings_string_not_match_date_regex_count_sensor_parameters_spec.additional_properties = d
+        column_strings_string_not_match_date_regex_count_sensor_parameters_spec.additional_properties = (
+            d
+        )
         return column_strings_string_not_match_date_regex_count_sensor_parameters_spec
 
     @property

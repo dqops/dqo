@@ -1,22 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
-
-
-
+    from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
 
 
 T = TypeVar("T", bound="DataGroupingConfigurationModel")
@@ -24,26 +13,24 @@ T = TypeVar("T", bound="DataGroupingConfigurationModel")
 
 @attr.s(auto_attribs=True)
 class DataGroupingConfigurationModel:
-    """ Data grouping configuration model containing nested objects and the configuration of grouping dimensions.
+    """Data grouping configuration model containing nested objects and the configuration of grouping dimensions.
 
-        Attributes:
-            connection_name (Union[Unset, str]): Connection name.
-            schema_name (Union[Unset, str]): Schema name.
-            table_name (Union[Unset, str]): Table name.
-            data_grouping_configuration_name (Union[Unset, str]): Data grouping configuration name.
-            spec (Union[Unset, DataGroupingConfigurationSpec]):
-     """
+    Attributes:
+        connection_name (Union[Unset, str]): Connection name.
+        schema_name (Union[Unset, str]): Schema name.
+        table_name (Union[Unset, str]): Table name.
+        data_grouping_configuration_name (Union[Unset, str]): Data grouping configuration name.
+        spec (Union[Unset, DataGroupingConfigurationSpec]):
+    """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name: Union[Unset, str] = UNSET
     data_grouping_configuration_name: Union[Unset, str] = UNSET
-    spec: Union[Unset, 'DataGroupingConfigurationSpec'] = UNSET
+    spec: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
         connection_name = self.connection_name
         schema_name = self.schema_name
         table_name = self.table_name
@@ -52,11 +39,9 @@ class DataGroupingConfigurationModel:
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if schema_name is not UNSET:
@@ -64,17 +49,20 @@ class DataGroupingConfigurationModel:
         if table_name is not UNSET:
             field_dict["table_name"] = table_name
         if data_grouping_configuration_name is not UNSET:
-            field_dict["data_grouping_configuration_name"] = data_grouping_configuration_name
+            field_dict[
+                "data_grouping_configuration_name"
+            ] = data_grouping_configuration_name
         if spec is not UNSET:
             field_dict["spec"] = spec
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
+        from ..models.data_grouping_configuration_spec import (
+            DataGroupingConfigurationSpec,
+        )
+
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
@@ -82,17 +70,16 @@ class DataGroupingConfigurationModel:
 
         table_name = d.pop("table_name", UNSET)
 
-        data_grouping_configuration_name = d.pop("data_grouping_configuration_name", UNSET)
+        data_grouping_configuration_name = d.pop(
+            "data_grouping_configuration_name", UNSET
+        )
 
         _spec = d.pop("spec", UNSET)
         spec: Union[Unset, DataGroupingConfigurationSpec]
-        if isinstance(_spec,  Unset):
+        if isinstance(_spec, Unset):
             spec = UNSET
         else:
             spec = DataGroupingConfigurationSpec.from_dict(_spec)
-
-
-
 
         data_grouping_configuration_model = cls(
             connection_name=connection_name,

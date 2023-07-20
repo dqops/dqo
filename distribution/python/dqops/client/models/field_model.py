@@ -1,25 +1,13 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+import datetime
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
-
-from ..types import UNSET, Unset
-
 from dateutil.parser import isoparse
-from typing import cast
-from typing import Dict
-from typing import Union
+
 from ..types import UNSET, Unset
-from typing import cast, List
-import datetime
 
 if TYPE_CHECKING:
-  from ..models.parameter_definition_spec import ParameterDefinitionSpec
-
-
-
+    from ..models.parameter_definition_spec import ParameterDefinitionSpec
 
 
 T = TypeVar("T", bound="FieldModel")
@@ -27,7 +15,7 @@ T = TypeVar("T", bound="FieldModel")
 
 @attr.s(auto_attribs=True)
 class FieldModel:
-    """ Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the
+    """Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the
     field and the current value.
 
         Attributes:
@@ -47,9 +35,9 @@ class FieldModel:
             integer_list_value (Union[Unset, List[int]]): Field value for an array (list) of integers, using 64 bit
                 integers.
             date_value (Union[Unset, datetime.date]): Field value for an date.
-     """
+    """
 
-    definition: Union[Unset, 'ParameterDefinitionSpec'] = UNSET
+    definition: Union[Unset, "ParameterDefinitionSpec"] = UNSET
     optional: Union[Unset, bool] = UNSET
     string_value: Union[Unset, str] = UNSET
     boolean_value: Union[Unset, bool] = UNSET
@@ -64,9 +52,7 @@ class FieldModel:
     date_value: Union[Unset, datetime.date] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.parameter_definition_spec import ParameterDefinitionSpec
         definition: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.definition, Unset):
             definition = self.definition.to_dict()
@@ -84,25 +70,17 @@ class FieldModel:
         if not isinstance(self.string_list_value, Unset):
             string_list_value = self.string_list_value
 
-
-
-
         integer_list_value: Union[Unset, List[int]] = UNSET
         if not isinstance(self.integer_list_value, Unset):
             integer_list_value = self.integer_list_value
-
-
-
 
         date_value: Union[Unset, str] = UNSET
         if not isinstance(self.date_value, Unset):
             date_value = self.date_value.isoformat()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if definition is not UNSET:
             field_dict["definition"] = definition
         if optional is not UNSET:
@@ -132,21 +110,17 @@ class FieldModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.parameter_definition_spec import ParameterDefinitionSpec
+
         d = src_dict.copy()
         _definition = d.pop("definition", UNSET)
         definition: Union[Unset, ParameterDefinitionSpec]
-        if isinstance(_definition,  Unset):
+        if isinstance(_definition, Unset):
             definition = UNSET
         else:
             definition = ParameterDefinitionSpec.from_dict(_definition)
-
-
-
 
         optional = d.pop("optional", UNSET)
 
@@ -168,19 +142,14 @@ class FieldModel:
 
         string_list_value = cast(List[str], d.pop("string_list_value", UNSET))
 
-
         integer_list_value = cast(List[int], d.pop("integer_list_value", UNSET))
-
 
         _date_value = d.pop("date_value", UNSET)
         date_value: Union[Unset, datetime.date]
-        if isinstance(_date_value,  Unset):
+        if isinstance(_date_value, Unset):
             date_value = UNSET
         else:
             date_value = isoparse(_date_value).date()
-
-
-
 
         field_model = cls(
             definition=definition,

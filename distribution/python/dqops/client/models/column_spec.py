@@ -1,28 +1,22 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.column_partitioned_checks_root_spec import ColumnPartitionedChecksRootSpec
-  from ..models.column_statistics_collectors_root_categories_spec import ColumnStatisticsCollectorsRootCategoriesSpec
-  from ..models.column_recurring_checks_root_spec import ColumnRecurringChecksRootSpec
-  from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
-  from ..models.column_profiling_check_categories_spec import ColumnProfilingCheckCategoriesSpec
-  from ..models.comment_spec import CommentSpec
-
-
-
+    from ..models.column_partitioned_checks_root_spec import (
+        ColumnPartitionedChecksRootSpec,
+    )
+    from ..models.column_profiling_check_categories_spec import (
+        ColumnProfilingCheckCategoriesSpec,
+    )
+    from ..models.column_recurring_checks_root_spec import ColumnRecurringChecksRootSpec
+    from ..models.column_statistics_collectors_root_categories_spec import (
+        ColumnStatisticsCollectorsRootCategoriesSpec,
+    )
+    from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
+    from ..models.comment_spec import CommentSpec
 
 
 T = TypeVar("T", bound="ColumnSpec")
@@ -30,48 +24,41 @@ T = TypeVar("T", bound="ColumnSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnSpec:
-    """ 
-        Attributes:
-            disabled (Union[Unset, bool]): Disables all data quality checks on the column. Data quality checks will not be
-                executed.
-            sql_expression (Union[Unset, str]): SQL expression used for calculated fields or when additional column value
-                transformation is required before the column could be used analyzed in data quality checks (data type
-                conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database
-                type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the
-                content with the table alias of an analyzed table or {column} to replace the content with the analyzed column
-                name. An example to extract a value from a string column that stores a JSON in PostgreSQL:
-                "{column}::json->'address'->'zip'".
-            type_snapshot (Union[Unset, ColumnTypeSnapshotSpec]):
-            profiling_checks (Union[Unset, ColumnProfilingCheckCategoriesSpec]):
-            recurring_checks (Union[Unset, ColumnRecurringChecksRootSpec]):
-            partitioned_checks (Union[Unset, ColumnPartitionedChecksRootSpec]):
-            statistics (Union[Unset, ColumnStatisticsCollectorsRootCategoriesSpec]):
-            labels (Union[Unset, List[str]]): Custom labels that were assigned to the column. Labels are used for searching
-                for columns when filtered data quality checks are executed.
-            comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
-                collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
-                deserialization will remove non tracked comments).
-     """
+    """
+    Attributes:
+        disabled (Union[Unset, bool]): Disables all data quality checks on the column. Data quality checks will not be
+            executed.
+        sql_expression (Union[Unset, str]): SQL expression used for calculated fields or when additional column value
+            transformation is required before the column could be used analyzed in data quality checks (data type
+            conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database
+            type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the
+            content with the table alias of an analyzed table or {column} to replace the content with the analyzed column
+            name. An example to extract a value from a string column that stores a JSON in PostgreSQL:
+            "{column}::json->'address'->'zip'".
+        type_snapshot (Union[Unset, ColumnTypeSnapshotSpec]):
+        profiling_checks (Union[Unset, ColumnProfilingCheckCategoriesSpec]):
+        recurring_checks (Union[Unset, ColumnRecurringChecksRootSpec]):
+        partitioned_checks (Union[Unset, ColumnPartitionedChecksRootSpec]):
+        statistics (Union[Unset, ColumnStatisticsCollectorsRootCategoriesSpec]):
+        labels (Union[Unset, List[str]]): Custom labels that were assigned to the column. Labels are used for searching
+            for columns when filtered data quality checks are executed.
+        comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
+            collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
+            deserialization will remove non tracked comments).
+    """
 
     disabled: Union[Unset, bool] = UNSET
     sql_expression: Union[Unset, str] = UNSET
-    type_snapshot: Union[Unset, 'ColumnTypeSnapshotSpec'] = UNSET
-    profiling_checks: Union[Unset, 'ColumnProfilingCheckCategoriesSpec'] = UNSET
-    recurring_checks: Union[Unset, 'ColumnRecurringChecksRootSpec'] = UNSET
-    partitioned_checks: Union[Unset, 'ColumnPartitionedChecksRootSpec'] = UNSET
-    statistics: Union[Unset, 'ColumnStatisticsCollectorsRootCategoriesSpec'] = UNSET
+    type_snapshot: Union[Unset, "ColumnTypeSnapshotSpec"] = UNSET
+    profiling_checks: Union[Unset, "ColumnProfilingCheckCategoriesSpec"] = UNSET
+    recurring_checks: Union[Unset, "ColumnRecurringChecksRootSpec"] = UNSET
+    partitioned_checks: Union[Unset, "ColumnPartitionedChecksRootSpec"] = UNSET
+    statistics: Union[Unset, "ColumnStatisticsCollectorsRootCategoriesSpec"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
-    comments: Union[Unset, List['CommentSpec']] = UNSET
+    comments: Union[Unset, List["CommentSpec"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.column_partitioned_checks_root_spec import ColumnPartitionedChecksRootSpec
-        from ..models.column_statistics_collectors_root_categories_spec import ColumnStatisticsCollectorsRootCategoriesSpec
-        from ..models.column_recurring_checks_root_spec import ColumnRecurringChecksRootSpec
-        from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
-        from ..models.column_profiling_check_categories_spec import ColumnProfilingCheckCategoriesSpec
-        from ..models.comment_spec import CommentSpec
         disabled = self.disabled
         sql_expression = self.sql_expression
         type_snapshot: Union[Unset, Dict[str, Any]] = UNSET
@@ -98,9 +85,6 @@ class ColumnSpec:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
-
-
-
         comments: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.comments, Unset):
             comments = []
@@ -109,14 +93,9 @@ class ColumnSpec:
 
                 comments.append(comments_item)
 
-
-
-
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
         if sql_expression is not UNSET:
@@ -138,16 +117,23 @@ class ColumnSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_partitioned_checks_root_spec import ColumnPartitionedChecksRootSpec
-        from ..models.column_statistics_collectors_root_categories_spec import ColumnStatisticsCollectorsRootCategoriesSpec
-        from ..models.column_recurring_checks_root_spec import ColumnRecurringChecksRootSpec
+        from ..models.column_partitioned_checks_root_spec import (
+            ColumnPartitionedChecksRootSpec,
+        )
+        from ..models.column_profiling_check_categories_spec import (
+            ColumnProfilingCheckCategoriesSpec,
+        )
+        from ..models.column_recurring_checks_root_spec import (
+            ColumnRecurringChecksRootSpec,
+        )
+        from ..models.column_statistics_collectors_root_categories_spec import (
+            ColumnStatisticsCollectorsRootCategoriesSpec,
+        )
         from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
-        from ..models.column_profiling_check_categories_spec import ColumnProfilingCheckCategoriesSpec
         from ..models.comment_spec import CommentSpec
+
         d = src_dict.copy()
         disabled = d.pop("disabled", UNSET)
 
@@ -155,66 +141,55 @@ class ColumnSpec:
 
         _type_snapshot = d.pop("type_snapshot", UNSET)
         type_snapshot: Union[Unset, ColumnTypeSnapshotSpec]
-        if isinstance(_type_snapshot,  Unset):
+        if isinstance(_type_snapshot, Unset):
             type_snapshot = UNSET
         else:
             type_snapshot = ColumnTypeSnapshotSpec.from_dict(_type_snapshot)
 
-
-
-
         _profiling_checks = d.pop("profiling_checks", UNSET)
         profiling_checks: Union[Unset, ColumnProfilingCheckCategoriesSpec]
-        if isinstance(_profiling_checks,  Unset):
+        if isinstance(_profiling_checks, Unset):
             profiling_checks = UNSET
         else:
-            profiling_checks = ColumnProfilingCheckCategoriesSpec.from_dict(_profiling_checks)
-
-
-
+            profiling_checks = ColumnProfilingCheckCategoriesSpec.from_dict(
+                _profiling_checks
+            )
 
         _recurring_checks = d.pop("recurring_checks", UNSET)
         recurring_checks: Union[Unset, ColumnRecurringChecksRootSpec]
-        if isinstance(_recurring_checks,  Unset):
+        if isinstance(_recurring_checks, Unset):
             recurring_checks = UNSET
         else:
-            recurring_checks = ColumnRecurringChecksRootSpec.from_dict(_recurring_checks)
-
-
-
+            recurring_checks = ColumnRecurringChecksRootSpec.from_dict(
+                _recurring_checks
+            )
 
         _partitioned_checks = d.pop("partitioned_checks", UNSET)
         partitioned_checks: Union[Unset, ColumnPartitionedChecksRootSpec]
-        if isinstance(_partitioned_checks,  Unset):
+        if isinstance(_partitioned_checks, Unset):
             partitioned_checks = UNSET
         else:
-            partitioned_checks = ColumnPartitionedChecksRootSpec.from_dict(_partitioned_checks)
-
-
-
+            partitioned_checks = ColumnPartitionedChecksRootSpec.from_dict(
+                _partitioned_checks
+            )
 
         _statistics = d.pop("statistics", UNSET)
         statistics: Union[Unset, ColumnStatisticsCollectorsRootCategoriesSpec]
-        if isinstance(_statistics,  Unset):
+        if isinstance(_statistics, Unset):
             statistics = UNSET
         else:
-            statistics = ColumnStatisticsCollectorsRootCategoriesSpec.from_dict(_statistics)
-
-
-
+            statistics = ColumnStatisticsCollectorsRootCategoriesSpec.from_dict(
+                _statistics
+            )
 
         labels = cast(List[str], d.pop("labels", UNSET))
 
-
         comments = []
         _comments = d.pop("comments", UNSET)
-        for comments_item_data in (_comments or []):
+        for comments_item_data in _comments or []:
             comments_item = CommentSpec.from_dict(comments_item_data)
 
-
-
             comments.append(comments_item)
-
 
         column_spec = cls(
             disabled=disabled,

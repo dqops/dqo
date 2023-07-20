@@ -1,41 +1,29 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="CheckBasicModel")
 
 
 @attr.s(auto_attribs=True)
 class CheckBasicModel:
-    """ Simplistic model that returns a single data quality check, it's name and "configured" flag
+    """Simplistic model that returns a single data quality check, it's name and "configured" flag
 
-        Attributes:
-            check_category (Union[Unset, str]): Check category.
-            check_name (Union[Unset, str]): Data quality check name that is used in YAML.
-            help_text (Union[Unset, str]): Help text that describes the data quality check.
-            configured (Union[Unset, bool]): True if the data quality check is configured (not null). When saving the data
-                quality check configuration, set the flag to true for storing the check.
-     """
+    Attributes:
+        check_category (Union[Unset, str]): Check category.
+        check_name (Union[Unset, str]): Data quality check name that is used in YAML.
+        help_text (Union[Unset, str]): Help text that describes the data quality check.
+        configured (Union[Unset, bool]): True if the data quality check is configured (not null). When saving the data
+            quality check configuration, set the flag to true for storing the check.
+    """
 
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
     configured: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         check_category = self.check_category
@@ -45,8 +33,7 @@ class CheckBasicModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if check_category is not UNSET:
             field_dict["check_category"] = check_category
         if check_name is not UNSET:
@@ -57,8 +44,6 @@ class CheckBasicModel:
             field_dict["configured"] = configured
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

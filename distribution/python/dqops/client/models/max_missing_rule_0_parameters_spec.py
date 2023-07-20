@@ -1,48 +1,33 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="MaxMissingRule0ParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class MaxMissingRule0ParametersSpec:
-    """ 
-        Attributes:
-            max_missing (Union[Unset, int]): The maximum number of values from the expected_values list that were not found
-                in the column (inclusive).
-     """
+    """
+    Attributes:
+        max_missing (Union[Unset, int]): The maximum number of values from the expected_values list that were not found
+            in the column (inclusive).
+    """
 
     max_missing: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         max_missing = self.max_missing
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if max_missing is not UNSET:
             field_dict["max_missing"] = max_missing
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

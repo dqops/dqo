@@ -1,41 +1,28 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+import datetime
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
-
-from ..types import UNSET, Unset
-
-from typing import cast
 from dateutil.parser import isoparse
-from typing import Union
+
 from ..types import UNSET, Unset
-import datetime
-
-
-
-
-
 
 T = TypeVar("T", bound="ColumnDatetimeValueInRangeDatePercentSensorParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec:
-    """ 
-        Attributes:
-            filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
-                sensor query filter are added, separated by an AND operator.
-            min_value (Union[Unset, datetime.date]): Lower bound range variable.
-            max_value (Union[Unset, datetime.date]): Upper bound range variable.
-     """
+    """
+    Attributes:
+        filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
+            sensor query filter are added, separated by an AND operator.
+        min_value (Union[Unset, datetime.date]): Lower bound range variable.
+        max_value (Union[Unset, datetime.date]): Upper bound range variable.
+    """
 
     filter_: Union[Unset, str] = UNSET
     min_value: Union[Unset, datetime.date] = UNSET
     max_value: Union[Unset, datetime.date] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
@@ -47,11 +34,9 @@ class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec:
         if not isinstance(self.max_value, Unset):
             max_value = self.max_value.isoformat()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
         if min_value is not UNSET:
@@ -61,8 +46,6 @@ class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
@@ -70,23 +53,17 @@ class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec:
 
         _min_value = d.pop("min_value", UNSET)
         min_value: Union[Unset, datetime.date]
-        if isinstance(_min_value,  Unset):
+        if isinstance(_min_value, Unset):
             min_value = UNSET
         else:
             min_value = isoparse(_min_value).date()
 
-
-
-
         _max_value = d.pop("max_value", UNSET)
         max_value: Union[Unset, datetime.date]
-        if isinstance(_max_value,  Unset):
+        if isinstance(_max_value, Unset):
             max_value = UNSET
         else:
             max_value = isoparse(_max_value).date()
-
-
-
 
         column_datetime_value_in_range_date_percent_sensor_parameters_spec = cls(
             filter_=filter_,
@@ -94,7 +71,9 @@ class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec:
             max_value=max_value,
         )
 
-        column_datetime_value_in_range_date_percent_sensor_parameters_spec.additional_properties = d
+        column_datetime_value_in_range_date_percent_sensor_parameters_spec.additional_properties = (
+            d
+        )
         return column_datetime_value_in_range_date_percent_sensor_parameters_spec
 
     @property

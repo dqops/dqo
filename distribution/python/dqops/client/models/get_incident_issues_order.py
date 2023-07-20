@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class GetIncidentIssuesOrder(str, Enum):
     ACTUALVALUE = "actualValue"
     CHECKCATEGORY = "checkCategory"

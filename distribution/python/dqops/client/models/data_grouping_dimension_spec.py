@@ -1,49 +1,37 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..types import UNSET, Unset
-
 from ..models.data_grouping_dimension_spec_source import DataGroupingDimensionSpecSource
-from typing import Union
 from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="DataGroupingDimensionSpec")
 
 
 @attr.s(auto_attribs=True)
 class DataGroupingDimensionSpec:
-    """ 
-        Attributes:
-            source (Union[Unset, DataGroupingDimensionSpecSource]): The source of the data grouping dimension value. The
-                default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the
-                same data for different areas (countries, etc.). This could be a country name if a table or partition stores
-                information for that country.
-            tag (Union[Unset, str]): The value assigned to a data quality grouping dimension when the source is 'tag'.
-                Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that
-                store the same data for different areas (countries, etc.). This could be a country name if a table or partition
-                stores information for that country.
-            column (Union[Unset, str]): Column name that contains a dynamic data grouping dimension value (for dynamic data-
-                driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors
-                (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will
-                be tracked for each value.
-            name (Union[Unset, str]): Data grouping dimension name.
-     """
+    """
+    Attributes:
+        source (Union[Unset, DataGroupingDimensionSpecSource]): The source of the data grouping dimension value. The
+            default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the
+            same data for different areas (countries, etc.). This could be a country name if a table or partition stores
+            information for that country.
+        tag (Union[Unset, str]): The value assigned to a data quality grouping dimension when the source is 'tag'.
+            Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that
+            store the same data for different areas (countries, etc.). This could be a country name if a table or partition
+            stores information for that country.
+        column (Union[Unset, str]): Column name that contains a dynamic data grouping dimension value (for dynamic data-
+            driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors
+            (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will
+            be tracked for each value.
+        name (Union[Unset, str]): Data grouping dimension name.
+    """
 
     source: Union[Unset, DataGroupingDimensionSpecSource] = UNSET
     tag: Union[Unset, str] = UNSET
     column: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         source: Union[Unset, str] = UNSET
@@ -56,8 +44,7 @@ class DataGroupingDimensionSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if source is not UNSET:
             field_dict["source"] = source
         if tag is not UNSET:
@@ -69,20 +56,15 @@ class DataGroupingDimensionSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _source = d.pop("source", UNSET)
         source: Union[Unset, DataGroupingDimensionSpecSource]
-        if isinstance(_source,  Unset):
+        if isinstance(_source, Unset):
             source = UNSET
         else:
             source = DataGroupingDimensionSpecSource(_source)
-
-
-
 
         tag = d.pop("tag", UNSET)
 

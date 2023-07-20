@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ProviderSensorBasicModelProviderType(str, Enum):
     BIGQUERY = "bigquery"
     MYSQL = "mysql"

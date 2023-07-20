@@ -1,45 +1,31 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import Dict
+from ...client import Client
 from ...models.dqo_queue_job_id import DqoQueueJobId
-from typing import cast
-from ...models.synchronize_multiple_folders_dqo_queue_job_parameters import SynchronizeMultipleFoldersDqoQueueJobParameters
-
+from ...models.synchronize_multiple_folders_dqo_queue_job_parameters import (
+    SynchronizeMultipleFoldersDqoQueueJobParameters,
+)
+from ...types import Response
 
 
 def _get_kwargs(
     *,
     client: Client,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
-
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/synchronize".format(
-        client.base_url)
+    url = "{}/api/jobs/synchronize".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
     json_json_body = json_body.to_dict()
 
-
-
-    
-
     return {
-	    "method": "post",
+        "method": "post",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -49,11 +35,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[DqoQueueJobId]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[DqoQueueJobId]:
     if response.status_code == HTTPStatus.OK:
         response_200 = DqoQueueJobId.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -62,7 +48,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Dqo
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[DqoQueueJobId]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[DqoQueueJobId]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -75,9 +63,8 @@ def sync_detailed(
     *,
     client: Client,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
-
 ) -> Response[DqoQueueJobId]:
-    """ synchronizeFolders
+    """synchronizeFolders
 
      Starts multiple file synchronization jobs that will synchronize files from selected DQO User home
     folders to the DQO Cloud. The default synchronization mode is a full synchronization (upload local
@@ -92,13 +79,11 @@ def sync_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         client=client,
-json_body=json_body,
-
+        json_body=json_body,
     )
 
     response = httpx.request(
@@ -108,13 +93,13 @@ json_body=json_body,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     *,
     client: Client,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
-
 ) -> Optional[DqoQueueJobId]:
-    """ synchronizeFolders
+    """synchronizeFolders
 
      Starts multiple file synchronization jobs that will synchronize files from selected DQO User home
     folders to the DQO Cloud. The default synchronization mode is a full synchronization (upload local
@@ -129,22 +114,20 @@ def sync(
 
     Returns:
         DqoQueueJobId
-     """
-
+    """
 
     return sync_detailed(
         client=client,
-json_body=json_body,
-
+        json_body=json_body,
     ).parsed
+
 
 async def asyncio_detailed(
     *,
     client: Client,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
-
 ) -> Response[DqoQueueJobId]:
-    """ synchronizeFolders
+    """synchronizeFolders
 
      Starts multiple file synchronization jobs that will synchronize files from selected DQO User home
     folders to the DQO Cloud. The default synchronization mode is a full synchronization (upload local
@@ -159,29 +142,25 @@ async def asyncio_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         client=client,
-json_body=json_body,
-
+        json_body=json_body,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     *,
     client: Client,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
-
 ) -> Optional[DqoQueueJobId]:
-    """ synchronizeFolders
+    """synchronizeFolders
 
      Starts multiple file synchronization jobs that will synchronize files from selected DQO User home
     folders to the DQO Cloud. The default synchronization mode is a full synchronization (upload local
@@ -196,11 +175,11 @@ async def asyncio(
 
     Returns:
         DqoQueueJobId
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        client=client,
-json_body=json_body,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            client=client,
+            json_body=json_body,
+        )
+    ).parsed

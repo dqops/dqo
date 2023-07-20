@@ -1,16 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import cast
+from ...client import Client
 from ...models.table_comparison_model import TableComparisonModel
-from typing import Dict
-
+from ...types import Response
 
 
 def _get_kwargs(
@@ -20,26 +16,20 @@ def _get_kwargs(
     table_comparison_configuration_name: str,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/comparisons/{tableComparisonConfigurationName}/recurring/monthly".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name,tableName=table_name,tableComparisonConfigurationName=table_comparison_configuration_name)
+        client.base_url,
+        connectionName=connection_name,
+        schemaName=schema_name,
+        tableName=table_name,
+        tableComparisonConfigurationName=table_comparison_configuration_name,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -48,11 +38,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[TableComparisonModel]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[TableComparisonModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = TableComparisonModel.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -61,7 +51,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Tab
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[TableComparisonModel]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[TableComparisonModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -77,9 +69,8 @@ def sync_detailed(
     table_comparison_configuration_name: str,
     *,
     client: Client,
-
 ) -> Response[TableComparisonModel]:
-    """ getTableComparisonRecurringMonthly
+    """getTableComparisonRecurringMonthly
 
      Returns a model of the table comparison using monthly recurring checks (comparison once a month)
 
@@ -95,16 +86,14 @@ def sync_detailed(
 
     Returns:
         Response[TableComparisonModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-table_comparison_configuration_name=table_comparison_configuration_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        table_comparison_configuration_name=table_comparison_configuration_name,
+        client=client,
     )
 
     response = httpx.request(
@@ -114,6 +103,7 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     schema_name: str,
@@ -121,9 +111,8 @@ def sync(
     table_comparison_configuration_name: str,
     *,
     client: Client,
-
 ) -> Optional[TableComparisonModel]:
-    """ getTableComparisonRecurringMonthly
+    """getTableComparisonRecurringMonthly
 
      Returns a model of the table comparison using monthly recurring checks (comparison once a month)
 
@@ -139,17 +128,16 @@ def sync(
 
     Returns:
         TableComparisonModel
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-table_comparison_configuration_name=table_comparison_configuration_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        table_comparison_configuration_name=table_comparison_configuration_name,
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -158,9 +146,8 @@ async def asyncio_detailed(
     table_comparison_configuration_name: str,
     *,
     client: Client,
-
 ) -> Response[TableComparisonModel]:
-    """ getTableComparisonRecurringMonthly
+    """getTableComparisonRecurringMonthly
 
      Returns a model of the table comparison using monthly recurring checks (comparison once a month)
 
@@ -176,24 +163,21 @@ async def asyncio_detailed(
 
     Returns:
         Response[TableComparisonModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-table_comparison_configuration_name=table_comparison_configuration_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        table_comparison_configuration_name=table_comparison_configuration_name,
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -202,9 +186,8 @@ async def asyncio(
     table_comparison_configuration_name: str,
     *,
     client: Client,
-
 ) -> Optional[TableComparisonModel]:
-    """ getTableComparisonRecurringMonthly
+    """getTableComparisonRecurringMonthly
 
      Returns a model of the table comparison using monthly recurring checks (comparison once a month)
 
@@ -220,14 +203,14 @@ async def asyncio(
 
     Returns:
         TableComparisonModel
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-table_comparison_configuration_name=table_comparison_configuration_name,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            table_name=table_name,
+            table_comparison_configuration_name=table_comparison_configuration_name,
+            client=client,
+        )
+    ).parsed

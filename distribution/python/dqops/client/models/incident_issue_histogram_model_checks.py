@@ -1,48 +1,30 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar
 
 import attr
-
-from ..types import UNSET, Unset
-
-
-
-
-
-
 
 T = TypeVar("T", bound="IncidentIssueHistogramModelChecks")
 
 
 @attr.s(auto_attribs=True)
 class IncidentIssueHistogramModelChecks:
-    """ A map of data quality check names with the most data quality issues related to the incident. The map returns the
+    """A map of data quality check names with the most data quality issues related to the incident. The map returns the
     count of issues as the value.
 
-     """
+    """
 
     additional_properties: Dict[str, int] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        incident_issue_histogram_model_checks = cls(
-        )
-
+        incident_issue_histogram_model_checks = cls()
 
         incident_issue_histogram_model_checks.additional_properties = d
         return incident_issue_histogram_model_checks

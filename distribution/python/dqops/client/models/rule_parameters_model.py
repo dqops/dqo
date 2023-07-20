@@ -1,23 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.field_model import FieldModel
-
-
-
+    from ..models.field_model import FieldModel
 
 
 T = TypeVar("T", bound="RuleParametersModel")
@@ -25,7 +13,7 @@ T = TypeVar("T", bound="RuleParametersModel")
 
 @attr.s(auto_attribs=True)
 class RuleParametersModel:
-    """ Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single
+    """Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single
     severity level (low, medium, high).
 
         Attributes:
@@ -37,17 +25,15 @@ class RuleParametersModel:
                 executed if it has no enabled rules.
             configured (Union[Unset, bool]): Returns true when the rule is configured (is not null), so it should be shown
                 in the UI as configured (having values).
-     """
+    """
 
     rule_name: Union[Unset, str] = UNSET
-    rule_parameters: Union[Unset, List['FieldModel']] = UNSET
+    rule_parameters: Union[Unset, List["FieldModel"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     configured: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.field_model import FieldModel
         rule_name = self.rule_name
         rule_parameters: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.rule_parameters, Unset):
@@ -57,16 +43,12 @@ class RuleParametersModel:
 
                 rule_parameters.append(rule_parameters_item)
 
-
-
-
         disabled = self.disabled
         configured = self.configured
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if rule_name is not UNSET:
             field_dict["rule_name"] = rule_name
         if rule_parameters is not UNSET:
@@ -78,23 +60,19 @@ class RuleParametersModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.field_model import FieldModel
+
         d = src_dict.copy()
         rule_name = d.pop("rule_name", UNSET)
 
         rule_parameters = []
         _rule_parameters = d.pop("rule_parameters", UNSET)
-        for rule_parameters_item_data in (_rule_parameters or []):
+        for rule_parameters_item_data in _rule_parameters or []:
             rule_parameters_item = FieldModel.from_dict(rule_parameters_item_data)
 
-
-
             rule_parameters.append(rule_parameters_item)
-
 
         disabled = d.pop("disabled", UNSET)
 

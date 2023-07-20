@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class RuleTimeWindowSettingsSpecHistoricDataPointGrouping(str, Enum):
     DAY = "day"
     HOUR = "hour"

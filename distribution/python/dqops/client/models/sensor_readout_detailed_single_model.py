@@ -1,45 +1,33 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+import datetime
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
-
-from ..types import UNSET, Unset
-
-from typing import cast
 from dateutil.parser import isoparse
-from typing import Union
+
 from ..types import UNSET, Unset
-import datetime
-
-
-
-
-
 
 T = TypeVar("T", bound="SensorReadoutDetailedSingleModel")
 
 
 @attr.s(auto_attribs=True)
 class SensorReadoutDetailedSingleModel:
-    """ 
-        Attributes:
-            id (Union[Unset, str]): Sensor readout ID.
-            check_name (Union[Unset, str]): Check name.
-            check_display_name (Union[Unset, str]): Check display name.
-            check_type (Union[Unset, str]): Check type.
-            actual_value (Union[Unset, float]): Actual value.
-            expected_value (Union[Unset, float]): Expected value.
-            column_name (Union[Unset, str]): Column name.
-            data_group (Union[Unset, str]): Data group.
-            duration_ms (Union[Unset, int]): Duration (ms).
-            executed_at (Union[Unset, int]): Executed at.
-            time_gradient (Union[Unset, str]): Time gradient.
-            time_period (Union[Unset, datetime.datetime]): Time period.
-            provider (Union[Unset, str]): Provider.
-            quality_dimension (Union[Unset, str]): Quality dimension.
-     """
+    """
+    Attributes:
+        id (Union[Unset, str]): Sensor readout ID.
+        check_name (Union[Unset, str]): Check name.
+        check_display_name (Union[Unset, str]): Check display name.
+        check_type (Union[Unset, str]): Check type.
+        actual_value (Union[Unset, float]): Actual value.
+        expected_value (Union[Unset, float]): Expected value.
+        column_name (Union[Unset, str]): Column name.
+        data_group (Union[Unset, str]): Data group.
+        duration_ms (Union[Unset, int]): Duration (ms).
+        executed_at (Union[Unset, int]): Executed at.
+        time_gradient (Union[Unset, str]): Time gradient.
+        time_period (Union[Unset, datetime.datetime]): Time period.
+        provider (Union[Unset, str]): Provider.
+        quality_dimension (Union[Unset, str]): Quality dimension.
+    """
 
     id: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
@@ -56,7 +44,6 @@ class SensorReadoutDetailedSingleModel:
     provider: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
@@ -79,8 +66,7 @@ class SensorReadoutDetailedSingleModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if id is not UNSET:
             field_dict["id"] = id
         if check_name is not UNSET:
@@ -112,8 +98,6 @@ class SensorReadoutDetailedSingleModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
@@ -141,13 +125,10 @@ class SensorReadoutDetailedSingleModel:
 
         _time_period = d.pop("timePeriod", UNSET)
         time_period: Union[Unset, datetime.datetime]
-        if isinstance(_time_period,  Unset):
+        if isinstance(_time_period, Unset):
             time_period = UNSET
         else:
             time_period = isoparse(_time_period)
-
-
-
 
         provider = d.pop("provider", UNSET)
 

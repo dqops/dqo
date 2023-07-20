@@ -1,21 +1,13 @@
+import datetime
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import cast
-from dateutil.parser import isoparse
-from typing import Dict
-from ...types import UNSET, Unset
-from typing import Union
+from ...client import Client
 from ...models.incident_issue_histogram_model import IncidentIssueHistogramModel
-import datetime
-from typing import Optional
-
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
@@ -30,24 +22,22 @@ def _get_kwargs(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-
 ) -> Dict[str, Any]:
     url = "{}/api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram".format(
-        client.base_url,connectionName=connection_name,year=year,month=month,incidentId=incident_id)
+        client.base_url,
+        connectionName=connection_name,
+        year=year,
+        month=month,
+        incidentId=incident_id,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
     params: Dict[str, Any] = {}
     params["filter"] = filter_
 
-
     params["days"] = days
-
 
     json_date: Union[Unset, None, str] = UNSET
     if not isinstance(date, Unset):
@@ -55,23 +45,14 @@ def _get_kwargs(
 
     params["date"] = json_date
 
-
     params["column"] = column
-
 
     params["check"] = check
 
-
-
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -81,11 +62,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[IncidentIssueHistogramModel]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[IncidentIssueHistogramModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = IncidentIssueHistogramModel.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -94,7 +75,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Inc
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[IncidentIssueHistogramModel]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[IncidentIssueHistogramModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -115,9 +98,8 @@ def sync_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-
 ) -> Response[IncidentIssueHistogramModel]:
-    """ getIncidentHistogram
+    """getIncidentHistogram
 
      Generates histograms of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
@@ -139,21 +121,19 @@ def sync_detailed(
 
     Returns:
         Response[IncidentIssueHistogramModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-filter_=filter_,
-days=days,
-date=date,
-column=column,
-check=check,
-
+        year=year,
+        month=month,
+        incident_id=incident_id,
+        client=client,
+        filter_=filter_,
+        days=days,
+        date=date,
+        column=column,
+        check=check,
     )
 
     response = httpx.request(
@@ -162,6 +142,7 @@ check=check,
     )
 
     return _build_response(client=client, response=response)
+
 
 def sync(
     connection_name: str,
@@ -175,9 +156,8 @@ def sync(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-
 ) -> Optional[IncidentIssueHistogramModel]:
-    """ getIncidentHistogram
+    """getIncidentHistogram
 
      Generates histograms of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
@@ -199,22 +179,21 @@ def sync(
 
     Returns:
         IncidentIssueHistogramModel
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-filter_=filter_,
-days=days,
-date=date,
-column=column,
-check=check,
-
+        year=year,
+        month=month,
+        incident_id=incident_id,
+        client=client,
+        filter_=filter_,
+        days=days,
+        date=date,
+        column=column,
+        check=check,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -228,9 +207,8 @@ async def asyncio_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-
 ) -> Response[IncidentIssueHistogramModel]:
-    """ getIncidentHistogram
+    """getIncidentHistogram
 
      Generates histograms of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
@@ -252,29 +230,26 @@ async def asyncio_detailed(
 
     Returns:
         Response[IncidentIssueHistogramModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-filter_=filter_,
-days=days,
-date=date,
-column=column,
-check=check,
-
+        year=year,
+        month=month,
+        incident_id=incident_id,
+        client=client,
+        filter_=filter_,
+        days=days,
+        date=date,
+        column=column,
+        check=check,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -288,9 +263,8 @@ async def asyncio(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-
 ) -> Optional[IncidentIssueHistogramModel]:
-    """ getIncidentHistogram
+    """getIncidentHistogram
 
      Generates histograms of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
@@ -312,19 +286,19 @@ async def asyncio(
 
     Returns:
         IncidentIssueHistogramModel
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-year=year,
-month=month,
-incident_id=incident_id,
-client=client,
-filter_=filter_,
-days=days,
-date=date,
-column=column,
-check=check,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            year=year,
+            month=month,
+            incident_id=incident_id,
+            client=client,
+            filter_=filter_,
+            days=days,
+            date=date,
+            column=column,
+            check=check,
+        )
+    ).parsed

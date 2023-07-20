@@ -1,40 +1,28 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="CheckSpecBasicModel")
 
 
 @attr.s(auto_attribs=True)
 class CheckSpecBasicModel:
-    """ Check spec basic model
+    """Check spec basic model
 
-        Attributes:
-            check_name (Union[Unset, str]): Check name
-            full_check_name (Union[Unset, str]): Full check name
-            custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
-            built_in (Union[Unset, bool]): This check is provided with DQO as a built-in check.
-     """
+    Attributes:
+        check_name (Union[Unset, str]): Check name
+        full_check_name (Union[Unset, str]): Full check name
+        custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
+        built_in (Union[Unset, bool]): This check is provided with DQO as a built-in check.
+    """
 
     check_name: Union[Unset, str] = UNSET
     full_check_name: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         check_name = self.check_name
@@ -44,8 +32,7 @@ class CheckSpecBasicModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if check_name is not UNSET:
             field_dict["check_name"] = check_name
         if full_check_name is not UNSET:
@@ -56,8 +43,6 @@ class CheckSpecBasicModel:
             field_dict["built_in"] = built_in
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

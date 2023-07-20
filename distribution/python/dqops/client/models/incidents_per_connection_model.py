@@ -1,35 +1,23 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="IncidentsPerConnectionModel")
 
 
 @attr.s(auto_attribs=True)
 class IncidentsPerConnectionModel:
-    """ 
-        Attributes:
-            connection (Union[Unset, str]): Connection (data source) name.
-            open_incidents (Union[Unset, int]): Count of open (new) data quality incidents.
-     """
+    """
+    Attributes:
+        connection (Union[Unset, str]): Connection (data source) name.
+        open_incidents (Union[Unset, int]): Count of open (new) data quality incidents.
+    """
 
     connection: Union[Unset, str] = UNSET
     open_incidents: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         connection = self.connection
@@ -37,16 +25,13 @@ class IncidentsPerConnectionModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection is not UNSET:
             field_dict["connection"] = connection
         if open_incidents is not UNSET:
             field_dict["openIncidents"] = open_incidents
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

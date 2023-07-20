@@ -1,25 +1,15 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.physical_table_name import PhysicalTableName
-  from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-  from ..models.column_statistics_model import ColumnStatisticsModel
-
-
-
+    from ..models.column_statistics_model import ColumnStatisticsModel
+    from ..models.physical_table_name import PhysicalTableName
+    from ..models.statistics_collector_search_filters import (
+        StatisticsCollectorSearchFilters,
+    )
 
 
 T = TypeVar("T", bound="TableColumnsStatisticsModel")
@@ -27,7 +17,7 @@ T = TypeVar("T", bound="TableColumnsStatisticsModel")
 
 @attr.s(auto_attribs=True)
 class TableColumnsStatisticsModel:
-    """ Model that returns a summary of the column statistics (the basic profiling results) for a single table, showing
+    """Model that returns a summary of the column statistics (the basic profiling results) for a single table, showing
     statistics for all columns.
 
         Attributes:
@@ -36,19 +26,17 @@ class TableColumnsStatisticsModel:
             column_statistics (Union[Unset, List['ColumnStatisticsModel']]): List of collected column level statistics for
                 all columns.
             collect_column_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
-     """
+    """
 
     connection_name: Union[Unset, str] = UNSET
-    table: Union[Unset, 'PhysicalTableName'] = UNSET
-    column_statistics: Union[Unset, List['ColumnStatisticsModel']] = UNSET
-    collect_column_statistics_job_template: Union[Unset, 'StatisticsCollectorSearchFilters'] = UNSET
+    table: Union[Unset, "PhysicalTableName"] = UNSET
+    column_statistics: Union[Unset, List["ColumnStatisticsModel"]] = UNSET
+    collect_column_statistics_job_template: Union[
+        Unset, "StatisticsCollectorSearchFilters"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.physical_table_name import PhysicalTableName
-        from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
-        from ..models.column_statistics_model import ColumnStatisticsModel
         connection_name = self.connection_name
         table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.table, Unset):
@@ -62,18 +50,15 @@ class TableColumnsStatisticsModel:
 
                 column_statistics.append(column_statistics_item)
 
-
-
-
         collect_column_statistics_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.collect_column_statistics_job_template, Unset):
-            collect_column_statistics_job_template = self.collect_column_statistics_job_template.to_dict()
-
+            collect_column_statistics_job_template = (
+                self.collect_column_statistics_job_template.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if table is not UNSET:
@@ -81,49 +66,53 @@ class TableColumnsStatisticsModel:
         if column_statistics is not UNSET:
             field_dict["column_statistics"] = column_statistics
         if collect_column_statistics_job_template is not UNSET:
-            field_dict["collect_column_statistics_job_template"] = collect_column_statistics_job_template
+            field_dict[
+                "collect_column_statistics_job_template"
+            ] = collect_column_statistics_job_template
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.physical_table_name import PhysicalTableName
-        from ..models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
         from ..models.column_statistics_model import ColumnStatisticsModel
+        from ..models.physical_table_name import PhysicalTableName
+        from ..models.statistics_collector_search_filters import (
+            StatisticsCollectorSearchFilters,
+        )
+
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
         _table = d.pop("table", UNSET)
         table: Union[Unset, PhysicalTableName]
-        if isinstance(_table,  Unset):
+        if isinstance(_table, Unset):
             table = UNSET
         else:
             table = PhysicalTableName.from_dict(_table)
 
-
-
-
         column_statistics = []
         _column_statistics = d.pop("column_statistics", UNSET)
-        for column_statistics_item_data in (_column_statistics or []):
-            column_statistics_item = ColumnStatisticsModel.from_dict(column_statistics_item_data)
-
-
+        for column_statistics_item_data in _column_statistics or []:
+            column_statistics_item = ColumnStatisticsModel.from_dict(
+                column_statistics_item_data
+            )
 
             column_statistics.append(column_statistics_item)
 
-
-        _collect_column_statistics_job_template = d.pop("collect_column_statistics_job_template", UNSET)
-        collect_column_statistics_job_template: Union[Unset, StatisticsCollectorSearchFilters]
-        if isinstance(_collect_column_statistics_job_template,  Unset):
+        _collect_column_statistics_job_template = d.pop(
+            "collect_column_statistics_job_template", UNSET
+        )
+        collect_column_statistics_job_template: Union[
+            Unset, StatisticsCollectorSearchFilters
+        ]
+        if isinstance(_collect_column_statistics_job_template, Unset):
             collect_column_statistics_job_template = UNSET
         else:
-            collect_column_statistics_job_template = StatisticsCollectorSearchFilters.from_dict(_collect_column_statistics_job_template)
-
-
-
+            collect_column_statistics_job_template = (
+                StatisticsCollectorSearchFilters.from_dict(
+                    _collect_column_statistics_job_template
+                )
+            )
 
         table_columns_statistics_model = cls(
             connection_name=connection_name,

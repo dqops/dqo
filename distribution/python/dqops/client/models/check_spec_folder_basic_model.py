@@ -1,24 +1,14 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import cast
-from typing import Dict
-from typing import Union
-from ..types import UNSET, Unset
-from typing import cast, List
-
 if TYPE_CHECKING:
-  from ..models.check_spec_basic_model import CheckSpecBasicModel
-  from ..models.check_spec_folder_basic_model_folders import CheckSpecFolderBasicModelFolders
-
-
-
+    from ..models.check_spec_basic_model import CheckSpecBasicModel
+    from ..models.check_spec_folder_basic_model_folders import (
+        CheckSpecFolderBasicModelFolders,
+    )
 
 
 T = TypeVar("T", bound="CheckSpecFolderBasicModel")
@@ -26,23 +16,20 @@ T = TypeVar("T", bound="CheckSpecFolderBasicModel")
 
 @attr.s(auto_attribs=True)
 class CheckSpecFolderBasicModel:
-    """ Check spec folder basic model
+    """Check spec folder basic model
 
-        Attributes:
-            folders (Union[Unset, CheckSpecFolderBasicModelFolders]): A map of folder-level children checks.
-            checks (Union[Unset, List['CheckSpecBasicModel']]): Check basic model list of checks defined at this level.
-            all_checks (Union[Unset, List['CheckSpecBasicModel']]):
-     """
+    Attributes:
+        folders (Union[Unset, CheckSpecFolderBasicModelFolders]): A map of folder-level children checks.
+        checks (Union[Unset, List['CheckSpecBasicModel']]): Check basic model list of checks defined at this level.
+        all_checks (Union[Unset, List['CheckSpecBasicModel']]):
+    """
 
-    folders: Union[Unset, 'CheckSpecFolderBasicModelFolders'] = UNSET
-    checks: Union[Unset, List['CheckSpecBasicModel']] = UNSET
-    all_checks: Union[Unset, List['CheckSpecBasicModel']] = UNSET
+    folders: Union[Unset, "CheckSpecFolderBasicModelFolders"] = UNSET
+    checks: Union[Unset, List["CheckSpecBasicModel"]] = UNSET
+    all_checks: Union[Unset, List["CheckSpecBasicModel"]] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.check_spec_basic_model import CheckSpecBasicModel
-        from ..models.check_spec_folder_basic_model_folders import CheckSpecFolderBasicModelFolders
         folders: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.folders, Unset):
             folders = self.folders.to_dict()
@@ -55,9 +42,6 @@ class CheckSpecFolderBasicModel:
 
                 checks.append(checks_item)
 
-
-
-
         all_checks: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.all_checks, Unset):
             all_checks = []
@@ -66,14 +50,9 @@ class CheckSpecFolderBasicModel:
 
                 all_checks.append(all_checks_item)
 
-
-
-
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if folders is not UNSET:
             field_dict["folders"] = folders
         if checks is not UNSET:
@@ -83,42 +62,34 @@ class CheckSpecFolderBasicModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_spec_basic_model import CheckSpecBasicModel
-        from ..models.check_spec_folder_basic_model_folders import CheckSpecFolderBasicModelFolders
+        from ..models.check_spec_folder_basic_model_folders import (
+            CheckSpecFolderBasicModelFolders,
+        )
+
         d = src_dict.copy()
         _folders = d.pop("folders", UNSET)
         folders: Union[Unset, CheckSpecFolderBasicModelFolders]
-        if isinstance(_folders,  Unset):
+        if isinstance(_folders, Unset):
             folders = UNSET
         else:
             folders = CheckSpecFolderBasicModelFolders.from_dict(_folders)
 
-
-
-
         checks = []
         _checks = d.pop("checks", UNSET)
-        for checks_item_data in (_checks or []):
+        for checks_item_data in _checks or []:
             checks_item = CheckSpecBasicModel.from_dict(checks_item_data)
-
-
 
             checks.append(checks_item)
 
-
         all_checks = []
         _all_checks = d.pop("all_checks", UNSET)
-        for all_checks_item_data in (_all_checks or []):
+        for all_checks_item_data in _all_checks or []:
             all_checks_item = CheckSpecBasicModel.from_dict(all_checks_item_data)
 
-
-
             all_checks.append(all_checks_item)
-
 
         check_spec_folder_basic_model = cls(
             folders=folders,

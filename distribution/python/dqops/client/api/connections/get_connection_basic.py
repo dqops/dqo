@@ -1,42 +1,28 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
+from ...client import Client
 from ...models.connection_basic_model import ConnectionBasicModel
-from typing import cast
-from typing import Dict
-
+from ...types import Response
 
 
 def _get_kwargs(
     connection_name: str,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/basic".format(
-        client.base_url,connectionName=connection_name)
+        client.base_url, connectionName=connection_name
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -45,11 +31,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[ConnectionBasicModel]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[ConnectionBasicModel]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ConnectionBasicModel.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -58,7 +44,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Con
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[ConnectionBasicModel]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[ConnectionBasicModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -71,9 +59,8 @@ def sync_detailed(
     connection_name: str,
     *,
     client: Client,
-
 ) -> Response[ConnectionBasicModel]:
-    """ getConnectionBasic
+    """getConnectionBasic
 
      Return the basic details of a connection given the connection name
 
@@ -86,13 +73,11 @@ def sync_detailed(
 
     Returns:
         Response[ConnectionBasicModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-client=client,
-
+        client=client,
     )
 
     response = httpx.request(
@@ -102,13 +87,13 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     *,
     client: Client,
-
 ) -> Optional[ConnectionBasicModel]:
-    """ getConnectionBasic
+    """getConnectionBasic
 
      Return the basic details of a connection given the connection name
 
@@ -121,22 +106,20 @@ def sync(
 
     Returns:
         ConnectionBasicModel
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-client=client,
-
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
     *,
     client: Client,
-
 ) -> Response[ConnectionBasicModel]:
-    """ getConnectionBasic
+    """getConnectionBasic
 
      Return the basic details of a connection given the connection name
 
@@ -149,29 +132,25 @@ async def asyncio_detailed(
 
     Returns:
         Response[ConnectionBasicModel]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-client=client,
-
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
     *,
     client: Client,
-
 ) -> Optional[ConnectionBasicModel]:
-    """ getConnectionBasic
+    """getConnectionBasic
 
      Return the basic details of a connection given the connection name
 
@@ -184,11 +163,11 @@ async def asyncio(
 
     Returns:
         ConnectionBasicModel
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            client=client,
+        )
+    ).parsed

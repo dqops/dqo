@@ -1,17 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import Dict
+from ...client import Client
 from ...models.comment_spec import CommentSpec
-from typing import cast
-from typing import cast, List
-
+from ...types import Response
 
 
 def _get_kwargs(
@@ -21,26 +16,20 @@ def _get_kwargs(
     column_name: str,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name,tableName=table_name,columnName=column_name)
+        client.base_url,
+        connectionName=connection_name,
+        schemaName=schema_name,
+        tableName=table_name,
+        columnName=column_name,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -49,14 +38,14 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List['CommentSpec']]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[List["CommentSpec"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
-        for response_200_item_data in (_response_200):
+        for response_200_item_data in _response_200:
             response_200_item = CommentSpec.from_dict(response_200_item_data)
-
-
 
             response_200.append(response_200_item)
 
@@ -67,7 +56,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List['CommentSpec']]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[List["CommentSpec"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -83,9 +74,8 @@ def sync_detailed(
     column_name: str,
     *,
     client: Client,
-
-) -> Response[List['CommentSpec']]:
-    """ getColumnComments
+) -> Response[List["CommentSpec"]]:
+    """getColumnComments
 
      Return the list of comments assigned to a column
 
@@ -101,16 +91,14 @@ def sync_detailed(
 
     Returns:
         Response[List['CommentSpec']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
     )
 
     response = httpx.request(
@@ -120,6 +108,7 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     schema_name: str,
@@ -127,9 +116,8 @@ def sync(
     column_name: str,
     *,
     client: Client,
-
-) -> Optional[List['CommentSpec']]:
-    """ getColumnComments
+) -> Optional[List["CommentSpec"]]:
+    """getColumnComments
 
      Return the list of comments assigned to a column
 
@@ -145,17 +133,16 @@ def sync(
 
     Returns:
         List['CommentSpec']
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -164,9 +151,8 @@ async def asyncio_detailed(
     column_name: str,
     *,
     client: Client,
-
-) -> Response[List['CommentSpec']]:
-    """ getColumnComments
+) -> Response[List["CommentSpec"]]:
+    """getColumnComments
 
      Return the list of comments assigned to a column
 
@@ -182,24 +168,21 @@ async def asyncio_detailed(
 
     Returns:
         Response[List['CommentSpec']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -208,9 +191,8 @@ async def asyncio(
     column_name: str,
     *,
     client: Client,
-
-) -> Optional[List['CommentSpec']]:
-    """ getColumnComments
+) -> Optional[List["CommentSpec"]]:
+    """getColumnComments
 
      Return the list of comments assigned to a column
 
@@ -226,14 +208,14 @@ async def asyncio(
 
     Returns:
         List['CommentSpec']
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            table_name=table_name,
+            column_name=column_name,
+            client=client,
+        )
+    ).parsed

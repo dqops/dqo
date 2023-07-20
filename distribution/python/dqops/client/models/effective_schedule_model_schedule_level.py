@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class EffectiveScheduleModelScheduleLevel(str, Enum):
     CHECK_OVERRIDE = "check_override"
     CONNECTION = "connection"

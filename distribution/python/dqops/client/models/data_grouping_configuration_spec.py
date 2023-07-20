@@ -1,22 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.data_grouping_dimension_spec import DataGroupingDimensionSpec
-
-
-
+    from ..models.data_grouping_dimension_spec import DataGroupingDimensionSpec
 
 
 T = TypeVar("T", bound="DataGroupingConfigurationSpec")
@@ -24,33 +13,31 @@ T = TypeVar("T", bound="DataGroupingConfigurationSpec")
 
 @attr.s(auto_attribs=True)
 class DataGroupingConfigurationSpec:
-    """ 
-        Attributes:
-            level_1 (Union[Unset, DataGroupingDimensionSpec]):
-            level_2 (Union[Unset, DataGroupingDimensionSpec]):
-            level_3 (Union[Unset, DataGroupingDimensionSpec]):
-            level_4 (Union[Unset, DataGroupingDimensionSpec]):
-            level_5 (Union[Unset, DataGroupingDimensionSpec]):
-            level_6 (Union[Unset, DataGroupingDimensionSpec]):
-            level_7 (Union[Unset, DataGroupingDimensionSpec]):
-            level_8 (Union[Unset, DataGroupingDimensionSpec]):
-            level_9 (Union[Unset, DataGroupingDimensionSpec]):
-     """
+    """
+    Attributes:
+        level_1 (Union[Unset, DataGroupingDimensionSpec]):
+        level_2 (Union[Unset, DataGroupingDimensionSpec]):
+        level_3 (Union[Unset, DataGroupingDimensionSpec]):
+        level_4 (Union[Unset, DataGroupingDimensionSpec]):
+        level_5 (Union[Unset, DataGroupingDimensionSpec]):
+        level_6 (Union[Unset, DataGroupingDimensionSpec]):
+        level_7 (Union[Unset, DataGroupingDimensionSpec]):
+        level_8 (Union[Unset, DataGroupingDimensionSpec]):
+        level_9 (Union[Unset, DataGroupingDimensionSpec]):
+    """
 
-    level_1: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_2: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_3: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_4: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_5: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_6: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_7: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_8: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
-    level_9: Union[Unset, 'DataGroupingDimensionSpec'] = UNSET
+    level_1: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_2: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_3: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_4: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_5: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_6: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_7: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_8: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
+    level_9: Union[Unset, "DataGroupingDimensionSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.data_grouping_dimension_spec import DataGroupingDimensionSpec
         level_1: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.level_1, Unset):
             level_1 = self.level_1.to_dict()
@@ -87,11 +74,9 @@ class DataGroupingConfigurationSpec:
         if not isinstance(self.level_9, Unset):
             level_9 = self.level_9.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if level_1 is not UNSET:
             field_dict["level_1"] = level_1
         if level_2 is not UNSET:
@@ -113,101 +98,73 @@ class DataGroupingConfigurationSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.data_grouping_dimension_spec import DataGroupingDimensionSpec
+
         d = src_dict.copy()
         _level_1 = d.pop("level_1", UNSET)
         level_1: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_1,  Unset):
+        if isinstance(_level_1, Unset):
             level_1 = UNSET
         else:
             level_1 = DataGroupingDimensionSpec.from_dict(_level_1)
 
-
-
-
         _level_2 = d.pop("level_2", UNSET)
         level_2: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_2,  Unset):
+        if isinstance(_level_2, Unset):
             level_2 = UNSET
         else:
             level_2 = DataGroupingDimensionSpec.from_dict(_level_2)
 
-
-
-
         _level_3 = d.pop("level_3", UNSET)
         level_3: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_3,  Unset):
+        if isinstance(_level_3, Unset):
             level_3 = UNSET
         else:
             level_3 = DataGroupingDimensionSpec.from_dict(_level_3)
 
-
-
-
         _level_4 = d.pop("level_4", UNSET)
         level_4: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_4,  Unset):
+        if isinstance(_level_4, Unset):
             level_4 = UNSET
         else:
             level_4 = DataGroupingDimensionSpec.from_dict(_level_4)
 
-
-
-
         _level_5 = d.pop("level_5", UNSET)
         level_5: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_5,  Unset):
+        if isinstance(_level_5, Unset):
             level_5 = UNSET
         else:
             level_5 = DataGroupingDimensionSpec.from_dict(_level_5)
 
-
-
-
         _level_6 = d.pop("level_6", UNSET)
         level_6: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_6,  Unset):
+        if isinstance(_level_6, Unset):
             level_6 = UNSET
         else:
             level_6 = DataGroupingDimensionSpec.from_dict(_level_6)
 
-
-
-
         _level_7 = d.pop("level_7", UNSET)
         level_7: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_7,  Unset):
+        if isinstance(_level_7, Unset):
             level_7 = UNSET
         else:
             level_7 = DataGroupingDimensionSpec.from_dict(_level_7)
 
-
-
-
         _level_8 = d.pop("level_8", UNSET)
         level_8: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_8,  Unset):
+        if isinstance(_level_8, Unset):
             level_8 = UNSET
         else:
             level_8 = DataGroupingDimensionSpec.from_dict(_level_8)
 
-
-
-
         _level_9 = d.pop("level_9", UNSET)
         level_9: Union[Unset, DataGroupingDimensionSpec]
-        if isinstance(_level_9,  Unset):
+        if isinstance(_level_9, Unset):
             level_9 = UNSET
         else:
             level_9 = DataGroupingDimensionSpec.from_dict(_level_9)
-
-
-
 
         data_grouping_configuration_spec = cls(
             level_1=level_1,

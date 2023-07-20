@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class CloudSynchronizationFoldersStatusModelDataStatistics(str, Enum):
     CHANGED = "changed"
     SYNCHRONIZING = "synchronizing"

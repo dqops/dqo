@@ -1,26 +1,19 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+import datetime
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
-
-from ..types import UNSET, Unset
-
-from ..models.effective_schedule_model_schedule_group import EffectiveScheduleModelScheduleGroup
-from typing import cast
 from dateutil.parser import isoparse
-from typing import Dict
-from typing import Union
+
+from ..models.effective_schedule_model_schedule_group import (
+    EffectiveScheduleModelScheduleGroup,
+)
+from ..models.effective_schedule_model_schedule_level import (
+    EffectiveScheduleModelScheduleLevel,
+)
 from ..types import UNSET, Unset
-import datetime
-from ..models.effective_schedule_model_schedule_level import EffectiveScheduleModelScheduleLevel
 
 if TYPE_CHECKING:
-  from ..models.duration import Duration
-
-
-
+    from ..models.duration import Duration
 
 
 T = TypeVar("T", bound="EffectiveScheduleModel")
@@ -28,7 +21,7 @@ T = TypeVar("T", bound="EffectiveScheduleModel")
 
 @attr.s(auto_attribs=True)
 class EffectiveScheduleModel:
-    """ Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON
+    """Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON
     expression and the time of the upcoming execution, as well as the duration until this time.
 
         Attributes:
@@ -41,19 +34,17 @@ class EffectiveScheduleModel:
                 be executed.
             time_until_execution (Union[Unset, Duration]):
             disabled (Union[Unset, bool]): Field value stating if the schedule has been explicitly disabled.
-     """
+    """
 
     schedule_group: Union[Unset, EffectiveScheduleModelScheduleGroup] = UNSET
     schedule_level: Union[Unset, EffectiveScheduleModelScheduleLevel] = UNSET
     cron_expression: Union[Unset, str] = UNSET
     time_of_execution: Union[Unset, datetime.datetime] = UNSET
-    time_until_execution: Union[Unset, 'Duration'] = UNSET
+    time_until_execution: Union[Unset, "Duration"] = UNSET
     disabled: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.duration import Duration
         schedule_group: Union[Unset, str] = UNSET
         if not isinstance(self.schedule_group, Unset):
             schedule_group = self.schedule_group.value
@@ -75,8 +66,7 @@ class EffectiveScheduleModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if schedule_group is not UNSET:
             field_dict["schedule_group"] = schedule_group
         if schedule_level is not UNSET:
@@ -92,53 +82,40 @@ class EffectiveScheduleModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.duration import Duration
+
         d = src_dict.copy()
         _schedule_group = d.pop("schedule_group", UNSET)
         schedule_group: Union[Unset, EffectiveScheduleModelScheduleGroup]
-        if isinstance(_schedule_group,  Unset):
+        if isinstance(_schedule_group, Unset):
             schedule_group = UNSET
         else:
             schedule_group = EffectiveScheduleModelScheduleGroup(_schedule_group)
 
-
-
-
         _schedule_level = d.pop("schedule_level", UNSET)
         schedule_level: Union[Unset, EffectiveScheduleModelScheduleLevel]
-        if isinstance(_schedule_level,  Unset):
+        if isinstance(_schedule_level, Unset):
             schedule_level = UNSET
         else:
             schedule_level = EffectiveScheduleModelScheduleLevel(_schedule_level)
-
-
-
 
         cron_expression = d.pop("cron_expression", UNSET)
 
         _time_of_execution = d.pop("time_of_execution", UNSET)
         time_of_execution: Union[Unset, datetime.datetime]
-        if isinstance(_time_of_execution,  Unset):
+        if isinstance(_time_of_execution, Unset):
             time_of_execution = UNSET
         else:
             time_of_execution = isoparse(_time_of_execution)
 
-
-
-
         _time_until_execution = d.pop("time_until_execution", UNSET)
         time_until_execution: Union[Unset, Duration]
-        if isinstance(_time_until_execution,  Unset):
+        if isinstance(_time_until_execution, Unset):
             time_until_execution = UNSET
         else:
             time_until_execution = Duration.from_dict(_time_until_execution)
-
-
-
 
         disabled = d.pop("disabled", UNSET)
 

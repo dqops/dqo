@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class CheckContainerModelEffectiveScheduleEnabledStatus(str, Enum):
     DISABLED = "disabled"
     ENABLED = "enabled"

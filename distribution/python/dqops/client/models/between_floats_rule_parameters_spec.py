@@ -1,35 +1,23 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="BetweenFloatsRuleParametersSpec")
 
 
 @attr.s(auto_attribs=True)
 class BetweenFloatsRuleParametersSpec:
-    """ 
-        Attributes:
-            from_ (Union[Unset, float]): Minimum accepted value for the actual_value returned by the sensor (inclusive).
-            to (Union[Unset, float]): Maximum accepted value for the actual_value returned by the sensor (inclusive).
-     """
+    """
+    Attributes:
+        from_ (Union[Unset, float]): Minimum accepted value for the actual_value returned by the sensor (inclusive).
+        to (Union[Unset, float]): Maximum accepted value for the actual_value returned by the sensor (inclusive).
+    """
 
     from_: Union[Unset, float] = UNSET
     to: Union[Unset, float] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         from_ = self.from_
@@ -37,16 +25,13 @@ class BetweenFloatsRuleParametersSpec:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if from_ is not UNSET:
             field_dict["from"] = from_
         if to is not UNSET:
             field_dict["to"] = to
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

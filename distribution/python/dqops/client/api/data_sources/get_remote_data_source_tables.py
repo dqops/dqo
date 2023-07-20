@@ -1,17 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import Dict
-from typing import cast
+from ...client import Client
 from ...models.table_remote_basic_model import TableRemoteBasicModel
-from typing import cast, List
-
+from ...types import Response
 
 
 def _get_kwargs(
@@ -19,26 +14,16 @@ def _get_kwargs(
     schema_name: str,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
     url = "{}/api/datasource/connections/{connectionName}/schemas/{schemaName}/tables".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name)
+        client.base_url, connectionName=connection_name, schemaName=schema_name
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "get",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -47,14 +32,14 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List['TableRemoteBasicModel']]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[List["TableRemoteBasicModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
-        for response_200_item_data in (_response_200):
+        for response_200_item_data in _response_200:
             response_200_item = TableRemoteBasicModel.from_dict(response_200_item_data)
-
-
 
             response_200.append(response_200_item)
 
@@ -65,7 +50,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List['TableRemoteBasicModel']]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[List["TableRemoteBasicModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -79,9 +66,8 @@ def sync_detailed(
     schema_name: str,
     *,
     client: Client,
-
-) -> Response[List['TableRemoteBasicModel']]:
-    """ getRemoteDataSourceTables
+) -> Response[List["TableRemoteBasicModel"]]:
+    """getRemoteDataSourceTables
 
      Introspects the list of columns inside a schema on a remote data source that is identified by a
     connection that was added to DQO.
@@ -96,14 +82,12 @@ def sync_detailed(
 
     Returns:
         Response[List['TableRemoteBasicModel']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-client=client,
-
+        schema_name=schema_name,
+        client=client,
     )
 
     response = httpx.request(
@@ -113,14 +97,14 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     schema_name: str,
     *,
     client: Client,
-
-) -> Optional[List['TableRemoteBasicModel']]:
-    """ getRemoteDataSourceTables
+) -> Optional[List["TableRemoteBasicModel"]]:
+    """getRemoteDataSourceTables
 
      Introspects the list of columns inside a schema on a remote data source that is identified by a
     connection that was added to DQO.
@@ -135,24 +119,22 @@ def sync(
 
     Returns:
         List['TableRemoteBasicModel']
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-client=client,
-
+        schema_name=schema_name,
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
     schema_name: str,
     *,
     client: Client,
-
-) -> Response[List['TableRemoteBasicModel']]:
-    """ getRemoteDataSourceTables
+) -> Response[List["TableRemoteBasicModel"]]:
+    """getRemoteDataSourceTables
 
      Introspects the list of columns inside a schema on a remote data source that is identified by a
     connection that was added to DQO.
@@ -167,31 +149,27 @@ async def asyncio_detailed(
 
     Returns:
         Response[List['TableRemoteBasicModel']]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-client=client,
-
+        schema_name=schema_name,
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
     schema_name: str,
     *,
     client: Client,
-
-) -> Optional[List['TableRemoteBasicModel']]:
-    """ getRemoteDataSourceTables
+) -> Optional[List["TableRemoteBasicModel"]]:
+    """getRemoteDataSourceTables
 
      Introspects the list of columns inside a schema on a remote data source that is identified by a
     connection that was added to DQO.
@@ -206,12 +184,12 @@ async def asyncio(
 
     Returns:
         List['TableRemoteBasicModel']
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            client=client,
+        )
+    ).parsed

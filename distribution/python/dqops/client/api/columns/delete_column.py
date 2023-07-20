@@ -1,16 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
+from ...client import Client
 from ...models.dqo_queue_job_id import DqoQueueJobId
-from typing import cast
-from typing import Dict
-
+from ...types import Response
 
 
 def _get_kwargs(
@@ -20,26 +16,20 @@ def _get_kwargs(
     column_name: str,
     *,
     client: Client,
-
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name,tableName=table_name,columnName=column_name)
+        client.base_url,
+        connectionName=connection_name,
+        schemaName=schema_name,
+        tableName=table_name,
+        columnName=column_name,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
-    
-
-    
-
-    
-
-    
-
-    
-
     return {
-	    "method": "delete",
+        "method": "delete",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -48,11 +38,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[DqoQueueJobId]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[DqoQueueJobId]:
     if response.status_code == HTTPStatus.OK:
         response_200 = DqoQueueJobId.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -61,7 +51,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Dqo
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[DqoQueueJobId]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[DqoQueueJobId]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -77,9 +69,8 @@ def sync_detailed(
     column_name: str,
     *,
     client: Client,
-
 ) -> Response[DqoQueueJobId]:
-    """ deleteColumn
+    """deleteColumn
 
      Deletes a column from the table
 
@@ -95,16 +86,14 @@ def sync_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
     )
 
     response = httpx.request(
@@ -114,6 +103,7 @@ client=client,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     schema_name: str,
@@ -121,9 +111,8 @@ def sync(
     column_name: str,
     *,
     client: Client,
-
 ) -> Optional[DqoQueueJobId]:
-    """ deleteColumn
+    """deleteColumn
 
      Deletes a column from the table
 
@@ -139,17 +128,16 @@ def sync(
 
     Returns:
         DqoQueueJobId
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -158,9 +146,8 @@ async def asyncio_detailed(
     column_name: str,
     *,
     client: Client,
-
 ) -> Response[DqoQueueJobId]:
-    """ deleteColumn
+    """deleteColumn
 
      Deletes a column from the table
 
@@ -176,24 +163,21 @@ async def asyncio_detailed(
 
     Returns:
         Response[DqoQueueJobId]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -202,9 +186,8 @@ async def asyncio(
     column_name: str,
     *,
     client: Client,
-
 ) -> Optional[DqoQueueJobId]:
-    """ deleteColumn
+    """deleteColumn
 
      Deletes a column from the table
 
@@ -220,14 +203,14 @@ async def asyncio(
 
     Returns:
         DqoQueueJobId
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            table_name=table_name,
+            column_name=column_name,
+            client=client,
+        )
+    ).parsed

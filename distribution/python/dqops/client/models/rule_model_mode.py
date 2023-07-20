@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class RuleModelMode(str, Enum):
     CURRENT_VALUE = "current_value"
     PREVIOUS_READOUTS = "previous_readouts"

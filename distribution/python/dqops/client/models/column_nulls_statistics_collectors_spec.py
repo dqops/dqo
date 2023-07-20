@@ -1,25 +1,22 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import Union
-from typing import cast
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.column_nulls_not_nulls_percent_statistics_collector_spec import ColumnNullsNotNullsPercentStatisticsCollectorSpec
-  from ..models.column_nulls_not_nulls_count_statistics_collector_spec import ColumnNullsNotNullsCountStatisticsCollectorSpec
-  from ..models.column_nulls_nulls_percent_statistics_collector_spec import ColumnNullsNullsPercentStatisticsCollectorSpec
-  from ..models.column_nulls_nulls_count_statistics_collector_spec import ColumnNullsNullsCountStatisticsCollectorSpec
-
-
-
+    from ..models.column_nulls_not_nulls_count_statistics_collector_spec import (
+        ColumnNullsNotNullsCountStatisticsCollectorSpec,
+    )
+    from ..models.column_nulls_not_nulls_percent_statistics_collector_spec import (
+        ColumnNullsNotNullsPercentStatisticsCollectorSpec,
+    )
+    from ..models.column_nulls_nulls_count_statistics_collector_spec import (
+        ColumnNullsNullsCountStatisticsCollectorSpec,
+    )
+    from ..models.column_nulls_nulls_percent_statistics_collector_spec import (
+        ColumnNullsNullsPercentStatisticsCollectorSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnNullsStatisticsCollectorsSpec")
@@ -27,26 +24,27 @@ T = TypeVar("T", bound="ColumnNullsStatisticsCollectorsSpec")
 
 @attr.s(auto_attribs=True)
 class ColumnNullsStatisticsCollectorsSpec:
-    """ 
-        Attributes:
-            nulls_count (Union[Unset, ColumnNullsNullsCountStatisticsCollectorSpec]):
-            nulls_percent (Union[Unset, ColumnNullsNullsPercentStatisticsCollectorSpec]):
-            not_nulls_count (Union[Unset, ColumnNullsNotNullsCountStatisticsCollectorSpec]):
-            not_nulls_percent (Union[Unset, ColumnNullsNotNullsPercentStatisticsCollectorSpec]):
-     """
+    """
+    Attributes:
+        nulls_count (Union[Unset, ColumnNullsNullsCountStatisticsCollectorSpec]):
+        nulls_percent (Union[Unset, ColumnNullsNullsPercentStatisticsCollectorSpec]):
+        not_nulls_count (Union[Unset, ColumnNullsNotNullsCountStatisticsCollectorSpec]):
+        not_nulls_percent (Union[Unset, ColumnNullsNotNullsPercentStatisticsCollectorSpec]):
+    """
 
-    nulls_count: Union[Unset, 'ColumnNullsNullsCountStatisticsCollectorSpec'] = UNSET
-    nulls_percent: Union[Unset, 'ColumnNullsNullsPercentStatisticsCollectorSpec'] = UNSET
-    not_nulls_count: Union[Unset, 'ColumnNullsNotNullsCountStatisticsCollectorSpec'] = UNSET
-    not_nulls_percent: Union[Unset, 'ColumnNullsNotNullsPercentStatisticsCollectorSpec'] = UNSET
+    nulls_count: Union[Unset, "ColumnNullsNullsCountStatisticsCollectorSpec"] = UNSET
+    nulls_percent: Union[
+        Unset, "ColumnNullsNullsPercentStatisticsCollectorSpec"
+    ] = UNSET
+    not_nulls_count: Union[
+        Unset, "ColumnNullsNotNullsCountStatisticsCollectorSpec"
+    ] = UNSET
+    not_nulls_percent: Union[
+        Unset, "ColumnNullsNotNullsPercentStatisticsCollectorSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.column_nulls_not_nulls_percent_statistics_collector_spec import ColumnNullsNotNullsPercentStatisticsCollectorSpec
-        from ..models.column_nulls_not_nulls_count_statistics_collector_spec import ColumnNullsNotNullsCountStatisticsCollectorSpec
-        from ..models.column_nulls_nulls_percent_statistics_collector_spec import ColumnNullsNullsPercentStatisticsCollectorSpec
-        from ..models.column_nulls_nulls_count_statistics_collector_spec import ColumnNullsNullsCountStatisticsCollectorSpec
         nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.nulls_count, Unset):
             nulls_count = self.nulls_count.to_dict()
@@ -63,11 +61,9 @@ class ColumnNullsStatisticsCollectorsSpec:
         if not isinstance(self.not_nulls_percent, Unset):
             not_nulls_percent = self.not_nulls_percent.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if nulls_count is not UNSET:
             field_dict["nulls_count"] = nulls_count
         if nulls_percent is not UNSET:
@@ -79,54 +75,61 @@ class ColumnNullsStatisticsCollectorsSpec:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_nulls_not_nulls_percent_statistics_collector_spec import ColumnNullsNotNullsPercentStatisticsCollectorSpec
-        from ..models.column_nulls_not_nulls_count_statistics_collector_spec import ColumnNullsNotNullsCountStatisticsCollectorSpec
-        from ..models.column_nulls_nulls_percent_statistics_collector_spec import ColumnNullsNullsPercentStatisticsCollectorSpec
-        from ..models.column_nulls_nulls_count_statistics_collector_spec import ColumnNullsNullsCountStatisticsCollectorSpec
+        from ..models.column_nulls_not_nulls_count_statistics_collector_spec import (
+            ColumnNullsNotNullsCountStatisticsCollectorSpec,
+        )
+        from ..models.column_nulls_not_nulls_percent_statistics_collector_spec import (
+            ColumnNullsNotNullsPercentStatisticsCollectorSpec,
+        )
+        from ..models.column_nulls_nulls_count_statistics_collector_spec import (
+            ColumnNullsNullsCountStatisticsCollectorSpec,
+        )
+        from ..models.column_nulls_nulls_percent_statistics_collector_spec import (
+            ColumnNullsNullsPercentStatisticsCollectorSpec,
+        )
+
         d = src_dict.copy()
         _nulls_count = d.pop("nulls_count", UNSET)
         nulls_count: Union[Unset, ColumnNullsNullsCountStatisticsCollectorSpec]
-        if isinstance(_nulls_count,  Unset):
+        if isinstance(_nulls_count, Unset):
             nulls_count = UNSET
         else:
-            nulls_count = ColumnNullsNullsCountStatisticsCollectorSpec.from_dict(_nulls_count)
-
-
-
+            nulls_count = ColumnNullsNullsCountStatisticsCollectorSpec.from_dict(
+                _nulls_count
+            )
 
         _nulls_percent = d.pop("nulls_percent", UNSET)
         nulls_percent: Union[Unset, ColumnNullsNullsPercentStatisticsCollectorSpec]
-        if isinstance(_nulls_percent,  Unset):
+        if isinstance(_nulls_percent, Unset):
             nulls_percent = UNSET
         else:
-            nulls_percent = ColumnNullsNullsPercentStatisticsCollectorSpec.from_dict(_nulls_percent)
-
-
-
+            nulls_percent = ColumnNullsNullsPercentStatisticsCollectorSpec.from_dict(
+                _nulls_percent
+            )
 
         _not_nulls_count = d.pop("not_nulls_count", UNSET)
         not_nulls_count: Union[Unset, ColumnNullsNotNullsCountStatisticsCollectorSpec]
-        if isinstance(_not_nulls_count,  Unset):
+        if isinstance(_not_nulls_count, Unset):
             not_nulls_count = UNSET
         else:
-            not_nulls_count = ColumnNullsNotNullsCountStatisticsCollectorSpec.from_dict(_not_nulls_count)
-
-
-
+            not_nulls_count = ColumnNullsNotNullsCountStatisticsCollectorSpec.from_dict(
+                _not_nulls_count
+            )
 
         _not_nulls_percent = d.pop("not_nulls_percent", UNSET)
-        not_nulls_percent: Union[Unset, ColumnNullsNotNullsPercentStatisticsCollectorSpec]
-        if isinstance(_not_nulls_percent,  Unset):
+        not_nulls_percent: Union[
+            Unset, ColumnNullsNotNullsPercentStatisticsCollectorSpec
+        ]
+        if isinstance(_not_nulls_percent, Unset):
             not_nulls_percent = UNSET
         else:
-            not_nulls_percent = ColumnNullsNotNullsPercentStatisticsCollectorSpec.from_dict(_not_nulls_percent)
-
-
-
+            not_nulls_percent = (
+                ColumnNullsNotNullsPercentStatisticsCollectorSpec.from_dict(
+                    _not_nulls_percent
+                )
+            )
 
         column_nulls_statistics_collectors_spec = cls(
             nulls_count=nulls_count,

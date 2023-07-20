@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class GetSchemaProfilingChecksTemplatesCheckTarget(str, Enum):
     COLUMN = "column"
     TABLE = "table"

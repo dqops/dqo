@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class GetIncidentIssuesDirection(str, Enum):
     ASC = "asc"
     DESC = "desc"

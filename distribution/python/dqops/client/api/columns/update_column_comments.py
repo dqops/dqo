@@ -1,18 +1,13 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from typing import cast
-from typing import Dict
-from ...models.mono_object import MonoObject
-from typing import cast, List
+from ...client import Client
 from ...models.comment_spec import CommentSpec
-
+from ...models.mono_object import MonoObject
+from ...types import Response
 
 
 def _get_kwargs(
@@ -22,20 +17,18 @@ def _get_kwargs(
     column_name: str,
     *,
     client: Client,
-    json_body: List['CommentSpec'],
-
+    json_body: List["CommentSpec"],
 ) -> Dict[str, Any]:
     url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments".format(
-        client.base_url,connectionName=connection_name,schemaName=schema_name,tableName=table_name,columnName=column_name)
+        client.base_url,
+        connectionName=connection_name,
+        schemaName=schema_name,
+        tableName=table_name,
+        columnName=column_name,
+    )
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
-
-    
-
-    
-
-    
 
     json_json_body = []
     for json_body_item_data in json_body:
@@ -43,15 +36,8 @@ def _get_kwargs(
 
         json_json_body.append(json_body_item)
 
-
-
-
-
-
-    
-
     return {
-	    "method": "put",
+        "method": "put",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -61,11 +47,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[MonoObject]:
+def _parse_response(
+    *, client: Client, response: httpx.Response
+) -> Optional[MonoObject]:
     if response.status_code == HTTPStatus.OK:
         response_200 = MonoObject.from_dict(response.json())
-
-
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -74,7 +60,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Mon
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[MonoObject]:
+def _build_response(
+    *, client: Client, response: httpx.Response
+) -> Response[MonoObject]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -90,10 +78,9 @@ def sync_detailed(
     column_name: str,
     *,
     client: Client,
-    json_body: List['CommentSpec'],
-
+    json_body: List["CommentSpec"],
 ) -> Response[MonoObject]:
-    """ updateColumnComments
+    """updateColumnComments
 
      Updates the list of comments assigned to a column.
 
@@ -110,17 +97,15 @@ def sync_detailed(
 
     Returns:
         Response[MonoObject]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-json_body=json_body,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
+        json_body=json_body,
     )
 
     response = httpx.request(
@@ -130,6 +115,7 @@ json_body=json_body,
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     connection_name: str,
     schema_name: str,
@@ -137,10 +123,9 @@ def sync(
     column_name: str,
     *,
     client: Client,
-    json_body: List['CommentSpec'],
-
+    json_body: List["CommentSpec"],
 ) -> Optional[MonoObject]:
-    """ updateColumnComments
+    """updateColumnComments
 
      Updates the list of comments assigned to a column.
 
@@ -157,18 +142,17 @@ def sync(
 
     Returns:
         MonoObject
-     """
-
+    """
 
     return sync_detailed(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-json_body=json_body,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
+        json_body=json_body,
     ).parsed
+
 
 async def asyncio_detailed(
     connection_name: str,
@@ -177,10 +161,9 @@ async def asyncio_detailed(
     column_name: str,
     *,
     client: Client,
-    json_body: List['CommentSpec'],
-
+    json_body: List["CommentSpec"],
 ) -> Response[MonoObject]:
-    """ updateColumnComments
+    """updateColumnComments
 
      Updates the list of comments assigned to a column.
 
@@ -197,25 +180,22 @@ async def asyncio_detailed(
 
     Returns:
         Response[MonoObject]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-json_body=json_body,
-
+        schema_name=schema_name,
+        table_name=table_name,
+        column_name=column_name,
+        client=client,
+        json_body=json_body,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(
-            **kwargs
-        )
+        response = await _client.request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     connection_name: str,
@@ -224,10 +204,9 @@ async def asyncio(
     column_name: str,
     *,
     client: Client,
-    json_body: List['CommentSpec'],
-
+    json_body: List["CommentSpec"],
 ) -> Optional[MonoObject]:
-    """ updateColumnComments
+    """updateColumnComments
 
      Updates the list of comments assigned to a column.
 
@@ -244,15 +223,15 @@ async def asyncio(
 
     Returns:
         MonoObject
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        connection_name=connection_name,
-schema_name=schema_name,
-table_name=table_name,
-column_name=column_name,
-client=client,
-json_body=json_body,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            connection_name=connection_name,
+            schema_name=schema_name,
+            table_name=table_name,
+            column_name=column_name,
+            client=client,
+            json_body=json_body,
+        )
+    ).parsed

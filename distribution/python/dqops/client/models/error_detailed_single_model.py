@@ -1,46 +1,34 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+import datetime
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
-
-from ..types import UNSET, Unset
-
-from typing import cast
 from dateutil.parser import isoparse
-from typing import Union
+
 from ..types import UNSET, Unset
-import datetime
-
-
-
-
-
 
 T = TypeVar("T", bound="ErrorDetailedSingleModel")
 
 
 @attr.s(auto_attribs=True)
 class ErrorDetailedSingleModel:
-    """ 
-        Attributes:
-            actual_value (Union[Unset, float]): Actual value.
-            expected_value (Union[Unset, float]): Expected value.
-            column_name (Union[Unset, str]): Column name.
-            data_group (Union[Unset, str]): Data group.
-            duration_ms (Union[Unset, int]): Duration (ms).
-            executed_at (Union[Unset, int]): Executed at.
-            time_gradient (Union[Unset, str]): Time gradient.
-            time_period (Union[Unset, datetime.datetime]): Time period.
-            provider (Union[Unset, str]): Provider.
-            quality_dimension (Union[Unset, str]): Quality dimension.
-            sensor_name (Union[Unset, str]): Sensor name.
-            readout_id (Union[Unset, str]): Sensor readout id.
-            error_message (Union[Unset, str]): Error message.
-            error_source (Union[Unset, str]): Error source.
-            error_timestamp (Union[Unset, datetime.datetime]): Error timestamp.
-     """
+    """
+    Attributes:
+        actual_value (Union[Unset, float]): Actual value.
+        expected_value (Union[Unset, float]): Expected value.
+        column_name (Union[Unset, str]): Column name.
+        data_group (Union[Unset, str]): Data group.
+        duration_ms (Union[Unset, int]): Duration (ms).
+        executed_at (Union[Unset, int]): Executed at.
+        time_gradient (Union[Unset, str]): Time gradient.
+        time_period (Union[Unset, datetime.datetime]): Time period.
+        provider (Union[Unset, str]): Provider.
+        quality_dimension (Union[Unset, str]): Quality dimension.
+        sensor_name (Union[Unset, str]): Sensor name.
+        readout_id (Union[Unset, str]): Sensor readout id.
+        error_message (Union[Unset, str]): Error message.
+        error_source (Union[Unset, str]): Error source.
+        error_timestamp (Union[Unset, datetime.datetime]): Error timestamp.
+    """
 
     actual_value: Union[Unset, float] = UNSET
     expected_value: Union[Unset, float] = UNSET
@@ -58,7 +46,6 @@ class ErrorDetailedSingleModel:
     error_source: Union[Unset, str] = UNSET
     error_timestamp: Union[Unset, datetime.datetime] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         actual_value = self.actual_value
@@ -82,11 +69,9 @@ class ErrorDetailedSingleModel:
         if not isinstance(self.error_timestamp, Unset):
             error_timestamp = self.error_timestamp.isoformat()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if actual_value is not UNSET:
             field_dict["actualValue"] = actual_value
         if expected_value is not UNSET:
@@ -120,8 +105,6 @@ class ErrorDetailedSingleModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
@@ -141,13 +124,10 @@ class ErrorDetailedSingleModel:
 
         _time_period = d.pop("timePeriod", UNSET)
         time_period: Union[Unset, datetime.datetime]
-        if isinstance(_time_period,  Unset):
+        if isinstance(_time_period, Unset):
             time_period = UNSET
         else:
             time_period = isoparse(_time_period)
-
-
-
 
         provider = d.pop("provider", UNSET)
 
@@ -163,13 +143,10 @@ class ErrorDetailedSingleModel:
 
         _error_timestamp = d.pop("errorTimestamp", UNSET)
         error_timestamp: Union[Unset, datetime.datetime]
-        if isinstance(_error_timestamp,  Unset):
+        if isinstance(_error_timestamp, Unset):
             error_timestamp = UNSET
         else:
             error_timestamp = isoparse(_error_timestamp)
-
-
-
 
         error_detailed_single_model = cls(
             actual_value=actual_value,

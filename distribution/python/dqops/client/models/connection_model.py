@@ -1,22 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.connection_spec import ConnectionSpec
-
-
-
+    from ..models.connection_spec import ConnectionSpec
 
 
 T = TypeVar("T", bound="ConnectionModel")
@@ -24,33 +13,29 @@ T = TypeVar("T", bound="ConnectionModel")
 
 @attr.s(auto_attribs=True)
 class ConnectionModel:
-    """ Full connection model
+    """Full connection model
 
-        Attributes:
-            connection_name (Union[Unset, str]): Connection name.
-            connection_hash (Union[Unset, int]): Connection hash that identifies the connection using a unique hash code.
-            spec (Union[Unset, ConnectionSpec]):
-     """
+    Attributes:
+        connection_name (Union[Unset, str]): Connection name.
+        connection_hash (Union[Unset, int]): Connection hash that identifies the connection using a unique hash code.
+        spec (Union[Unset, ConnectionSpec]):
+    """
 
     connection_name: Union[Unset, str] = UNSET
     connection_hash: Union[Unset, int] = UNSET
-    spec: Union[Unset, 'ConnectionSpec'] = UNSET
+    spec: Union[Unset, "ConnectionSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.connection_spec import ConnectionSpec
         connection_name = self.connection_name
         connection_hash = self.connection_hash
         spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if connection_hash is not UNSET:
@@ -60,11 +45,10 @@ class ConnectionModel:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.connection_spec import ConnectionSpec
+
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
 
@@ -72,13 +56,10 @@ class ConnectionModel:
 
         _spec = d.pop("spec", UNSET)
         spec: Union[Unset, ConnectionSpec]
-        if isinstance(_spec,  Unset):
+        if isinstance(_spec, Unset):
             spec = UNSET
         else:
             spec = ConnectionSpec.from_dict(_spec)
-
-
-
 
         connection_model = cls(
             connection_name=connection_name,

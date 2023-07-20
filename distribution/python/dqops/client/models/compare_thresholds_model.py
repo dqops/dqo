@@ -1,26 +1,15 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="CompareThresholdsModel")
 
 
 @attr.s(auto_attribs=True)
 class CompareThresholdsModel:
-    """ Model with the compare threshold levels for raising data quality issues at different severity levels when the
+    """Model with the compare threshold levels for raising data quality issues at different severity levels when the
     difference between the compared (tested) table and the reference table (the source of truth) exceed given thresholds
     as a percentage of difference between the actual value and the expected value from the reference table.
 
@@ -34,13 +23,12 @@ class CompareThresholdsModel:
             fatal_difference_percent (Union[Unset, float]): The percentage difference between the measure value on the
                 compared table and the reference table that raises a fatal severity data quality issue when the difference is
                 bigger.
-     """
+    """
 
     warning_difference_percent: Union[Unset, float] = UNSET
     error_difference_percent: Union[Unset, float] = UNSET
     fatal_difference_percent: Union[Unset, float] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         warning_difference_percent = self.warning_difference_percent
@@ -49,8 +37,7 @@ class CompareThresholdsModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if warning_difference_percent is not UNSET:
             field_dict["warning_difference_percent"] = warning_difference_percent
         if error_difference_percent is not UNSET:
@@ -59,8 +46,6 @@ class CompareThresholdsModel:
             field_dict["fatal_difference_percent"] = fatal_difference_percent
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

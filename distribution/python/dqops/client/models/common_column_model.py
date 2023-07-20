@@ -1,36 +1,24 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
-
-from typing import Union
-from ..types import UNSET, Unset
-
-
-
-
-
 
 T = TypeVar("T", bound="CommonColumnModel")
 
 
 @attr.s(auto_attribs=True)
 class CommonColumnModel:
-    """ Common column model that describes a column name that is frequently used in tables within a connection
+    """Common column model that describes a column name that is frequently used in tables within a connection
 
-        Attributes:
-            column_name (Union[Unset, str]): Column name.
-            tables_count (Union[Unset, int]): Count of tables that are have a column with this name.
-     """
+    Attributes:
+        column_name (Union[Unset, str]): Column name.
+        tables_count (Union[Unset, int]): Count of tables that are have a column with this name.
+    """
 
     column_name: Union[Unset, str] = UNSET
     tables_count: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
-
 
     def to_dict(self) -> Dict[str, Any]:
         column_name = self.column_name
@@ -38,16 +26,13 @@ class CommonColumnModel:
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if column_name is not UNSET:
             field_dict["column_name"] = column_name
         if tables_count is not UNSET:
             field_dict["tables_count"] = tables_count
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

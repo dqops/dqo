@@ -1,22 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Tuple, Optional, BinaryIO, TextIO, TYPE_CHECKING
-
-from typing import List
-
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
 from ..types import UNSET, Unset
 
-from typing import Union
-from typing import cast
-from ..types import UNSET, Unset
-from typing import Dict
-
 if TYPE_CHECKING:
-  from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
-
-
-
+    from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
 
 
 T = TypeVar("T", bound="DataGroupingConfigurationTrimmedModel")
@@ -24,54 +13,52 @@ T = TypeVar("T", bound="DataGroupingConfigurationTrimmedModel")
 
 @attr.s(auto_attribs=True)
 class DataGroupingConfigurationTrimmedModel:
-    """ Data grouping configuration model with trimmed path
+    """Data grouping configuration model with trimmed path
 
-        Attributes:
-            data_grouping_configuration_name (Union[Unset, str]): Data grouping configuration name.
-            spec (Union[Unset, DataGroupingConfigurationSpec]):
-     """
+    Attributes:
+        data_grouping_configuration_name (Union[Unset, str]): Data grouping configuration name.
+        spec (Union[Unset, DataGroupingConfigurationSpec]):
+    """
 
     data_grouping_configuration_name: Union[Unset, str] = UNSET
-    spec: Union[Unset, 'DataGroupingConfigurationSpec'] = UNSET
+    spec: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
         data_grouping_configuration_name = self.data_grouping_configuration_name
         spec: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spec, Unset):
             spec = self.spec.to_dict()
 
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-        })
+        field_dict.update({})
         if data_grouping_configuration_name is not UNSET:
-            field_dict["data_grouping_configuration_name"] = data_grouping_configuration_name
+            field_dict[
+                "data_grouping_configuration_name"
+            ] = data_grouping_configuration_name
         if spec is not UNSET:
             field_dict["spec"] = spec
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
+        from ..models.data_grouping_configuration_spec import (
+            DataGroupingConfigurationSpec,
+        )
+
         d = src_dict.copy()
-        data_grouping_configuration_name = d.pop("data_grouping_configuration_name", UNSET)
+        data_grouping_configuration_name = d.pop(
+            "data_grouping_configuration_name", UNSET
+        )
 
         _spec = d.pop("spec", UNSET)
         spec: Union[Unset, DataGroupingConfigurationSpec]
-        if isinstance(_spec,  Unset):
+        if isinstance(_spec, Unset):
             spec = UNSET
         else:
             spec = DataGroupingConfigurationSpec.from_dict(_spec)
-
-
-
 
         data_grouping_configuration_trimmed_model = cls(
             data_grouping_configuration_name=data_grouping_configuration_name,
