@@ -29,6 +29,8 @@ import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettin
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.metadata.comments.CommentSpec;
@@ -919,6 +921,30 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultMonthlyRecurringObservabilityCheckSettingsSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a configuration of a pair of column names that are used for joining and grouping.
+     *
+     * @param tableComparisonGroupingColumnsPairSpec Configuration of grouping columns.
+     * @param parameter                              Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableComparisonGroupingColumnsPairSpec tableComparisonGroupingColumnsPairSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of a pair of column names that are used for joining and grouping.
+     *
+     * @param tableComparisonGroupingColumnsPairSpecs A list of a pairs of columns used for grouping and joining in table comparison checks.
+     * @param parameter                               Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableComparisonGroupingColumnsPairsListSpec tableComparisonGroupingColumnsPairSpecs, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

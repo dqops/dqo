@@ -22,11 +22,13 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -42,16 +44,19 @@ import java.util.Objects;
 public class TableComparisonConfigurationSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TableComparisonConfigurationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("grouping_columns", o -> o.groupingColumns);
         }
     };
 
     @JsonPropertyDescription("The name of the data grouping configuration on the parent table (the compared table) that will be used for comparison. " +
             "When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table).")
+    @Deprecated
     private String comparedTableGroupingName;
 
     @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
             "When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table). " +
             "The data grouping configurations on the parent table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
+    @Deprecated
     private String referenceTableGroupingName;
 
     @JsonPropertyDescription("The name of the connection in DQO where the reference table (the source of truth) is configured. " +
@@ -72,11 +77,19 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
             "This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.")
     private String referenceTableFilter;
 
+    @JsonPropertyDescription("List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  " +
+            "for grouping both the compared table and the reference table (the source of truth). " +
+            "The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableComparisonGroupingColumnsPairsListSpec groupingColumns = new TableComparisonGroupingColumnsPairsListSpec();
+
 
     /**
      * Returns the data grouping configuration name on the parent table.
      * @return Grouping configuration name.
      */
+    @Deprecated
     public String getComparedTableGroupingName() {
         return comparedTableGroupingName;
     }
@@ -94,6 +107,7 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
      * Returns the name of the data grouping configuration on the reference table (the source of truth).
      * @return The data grouping configuration name.
      */
+    @Deprecated
     public String getReferenceTableGroupingName() {
         return referenceTableGroupingName;
     }
@@ -190,6 +204,24 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     public void setReferenceTableFilter(String referenceTableFilter) {
         this.setDirtyIf(!Objects.equals(this.referenceTableFilter, referenceTableFilter));
         this.referenceTableFilter = referenceTableFilter;
+    }
+
+    /**
+     * Returns the list of grouping column pairs used to group results before matching.
+     * @return A list of column pairs used for grouping and matching.
+     */
+    public TableComparisonGroupingColumnsPairsListSpec getGroupingColumns() {
+        return groupingColumns;
+    }
+
+    /**
+     * Sets a list of columns used for grouping and matching.
+     * @param groupingColumns A new list of column pairs.
+     */
+    public void setGroupingColumns(TableComparisonGroupingColumnsPairsListSpec groupingColumns) {
+        setDirtyIf(!Objects.equals(this.groupingColumns, groupingColumns));
+        this.groupingColumns = groupingColumns;
+        propagateHierarchyIdToField(groupingColumns, "grouping_columns");
     }
 
     /**

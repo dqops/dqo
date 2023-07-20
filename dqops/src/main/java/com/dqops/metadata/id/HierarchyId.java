@@ -290,4 +290,18 @@ public class HierarchyId {
 
         return (String)this.elements[6];
     }
+
+    /**
+     * Creates a hierarchy id for the parent node, which is a copy of the current hierarchy id, but without the last element.
+     * @return Hierarchy id of the parent node.
+     */
+    @JsonIgnore
+    public HierarchyId getParentHierarchyId() {
+        Object[] parentHierarchyElements = new Object[this.elements.length - 1];
+        for (int i = 0; i < parentHierarchyElements.length; i++) {
+            parentHierarchyElements[i] = this.elements[i];
+        }
+
+        return new HierarchyId(parentHierarchyElements);
+    }
 }

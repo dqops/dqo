@@ -418,6 +418,45 @@ public class DataGroupingConfigurationSpec extends AbstractSpec {
     }
 
     /**
+     * Sets a configuration of the dimension level at a given index.
+     * @param levelIndex 1-based index (up to 9) for the level to update.
+     * @param levelSpec The configuration of the dimension level to store (or null).
+     */
+    public void setLevel(int levelIndex, DataGroupingDimensionSpec levelSpec) {
+        switch (levelIndex) {
+            case 1:
+                this.setLevel1(levelSpec);
+                break;
+            case 2:
+                this.setLevel2(levelSpec);
+                break;
+            case 3:
+                this.setLevel3(levelSpec);
+                break;
+            case 4:
+                this.setLevel4(levelSpec);
+                break;
+            case 5:
+                this.setLevel5(levelSpec);
+                break;
+            case 6:
+                this.setLevel6(levelSpec);
+                break;
+            case 7:
+                this.setLevel7(levelSpec);
+                break;
+            case 8:
+                this.setLevel8(levelSpec);
+                break;
+            case 9:
+                this.setLevel9(levelSpec);
+                break;
+        }
+
+        throw new IllegalArgumentException("Data group level out of range, must be 1..9, but was: " + levelIndex);
+    }
+
+    /**
      * Creates a truncated data grouping mapping to be used by the Jinja2 renderer. Contains only data grouping dimension level configuration that are valid and reference columns.
      * @return Cloned data grouping mapping with only valid entries.
      */
