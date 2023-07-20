@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.*;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -86,6 +87,7 @@ public class TableComparisonModel {
     @JsonPropertyDescription("The name of the data grouping configuration on the parent table that will be used for comparison. " +
             "When the parent table has no data grouping configurations, compares the whole table without grouping.")
     @Setter(AccessLevel.NONE)
+    @Deprecated
     private String comparedTableGroupingName;
 
     /**
@@ -95,7 +97,17 @@ public class TableComparisonModel {
             "When the reference table has no data grouping configurations, compares the whole table without grouping. " +
             "The data grouping configurations on the compared table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
     @Setter(AccessLevel.NONE)
+    @Deprecated
     private String referenceTableGroupingName;
+
+    /**
+     * List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause.
+     */
+    @JsonPropertyDescription("List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  " +
+            "for grouping both the compared table and the reference table (the source of truth). " +
+            "The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.")
+    @Setter(AccessLevel.NONE)
+    private List<TableComparisonGroupingColumnPairModel> groupingColumns = new ArrayList<>();
 
     /**
      * The template of the compare thresholds that should be applied to all comparisons when the comparison is enabled.
@@ -151,8 +163,12 @@ public class TableComparisonModel {
         tableComparisonModel.comparedTable = comparedTableHierarchyId.getPhysicalTableName();
         tableComparisonModel.referenceConnection = comparisonSpec.getReferenceTableConnectionName();
         tableComparisonModel.referenceTable = new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName());
-        tableComparisonModel.comparedTableGroupingName = comparisonSpec.getComparedTableGroupingName();
-        tableComparisonModel.referenceTableGroupingName = comparisonSpec.getReferenceTableGroupingName();
+
+        for (TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec : comparisonSpec.getGroupingColumns()) {
+            TableComparisonGroupingColumnPairModel tableComparisonGroupingColumnPairModel =
+                    TableComparisonGroupingColumnPairModel.fromColumnPairSpec(groupingColumnsPairSpec);
+            tableComparisonModel.getGroupingColumns().add(tableComparisonGroupingColumnPairModel);
+        }
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = comparedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false);

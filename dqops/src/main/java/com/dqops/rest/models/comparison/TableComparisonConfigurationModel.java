@@ -16,6 +16,8 @@
 package com.dqops.rest.models.comparison;
 
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.exceptions.DqoRuntimeException;
@@ -26,6 +28,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.
  */
@@ -34,6 +39,9 @@ import lombok.Data;
 @ApiModel(value = "TableComparisonConfigurationModel", description = "Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.")
 @Data
 public class TableComparisonConfigurationModel {
+    /**
+     * The name of the table comparison configuration that is defined in the 'table_comparisons' node on the table specification.
+     */
     @JsonPropertyDescription("The name of the table comparison configuration that is defined in the 'table_comparisons' node on the table specification.")
     private String tableComparisonConfigurationName;
 
@@ -63,19 +71,29 @@ public class TableComparisonConfigurationModel {
 
     @JsonPropertyDescription("The name of the data grouping configuration on the parent table that will be used for comparison. " +
             "When the parent table has no data grouping configurations, compares the whole table without grouping.")
+    @Deprecated
     private String comparedTableGroupingName;
 
     @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
             "When the reference table has no data grouping configurations, compares the whole table without grouping. " +
             "The data grouping configurations on the compared table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
+    @Deprecated
     private String referenceTableGroupingName;
 
     /**
-     * Creates a basic model with the comparison from teh comparison specification.
-     * @param comparisonSpec Comparison specification.
-     * @return Reference table with the basic information.
+     * List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause.
      */
-    public static TableComparisonConfigurationModel fromReferenceTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
+    @JsonPropertyDescription("List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  " +
+            "for grouping both the compared table and the reference table (the source of truth). " +
+            "The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.")
+    private List<TableComparisonGroupingColumnPairModel> groupingColumns = new ArrayList<>();
+
+    /**
+     * Creates a basic model with the comparison from the comparison specification.
+     * @param comparisonSpec Comparison specification.
+     * @return Table comparison model with the basic information.
+     */
+    public static TableComparisonConfigurationModel fromTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
         HierarchyId comparedTableHierarchyId = comparisonSpec.getHierarchyId();
         if (comparedTableHierarchyId == null) {
             throw new DqoRuntimeException("Cannot map a detached comparison, because the connection and table name is unknown");
@@ -87,8 +105,12 @@ public class TableComparisonConfigurationModel {
         model.setComparedTable(comparedTableHierarchyId.getPhysicalTableName());
         model.setReferenceConnection(comparisonSpec.getReferenceTableConnectionName());
         model.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
-        model.setComparedTableGroupingName(comparisonSpec.getComparedTableGroupingName());
-        model.setReferenceTableGroupingName(comparisonSpec.getReferenceTableGroupingName());
+
+        for (TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec : comparisonSpec.getGroupingColumns()) {
+            TableComparisonGroupingColumnPairModel tableComparisonGroupingColumnPairModel =
+                    TableComparisonGroupingColumnPairModel.fromColumnPairSpec(groupingColumnsPairSpec);
+            model.getGroupingColumns().add(tableComparisonGroupingColumnPairModel);
+        }
 
         return model;
     }
@@ -97,9 +119,7 @@ public class TableComparisonConfigurationModel {
      * Copies selected values (the reference table name and data grouping names) to the comparison specification.
      * @param comparisonSpec Target comparison specification to copy values to.
      */
-    public void copyToReferenceTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
-        comparisonSpec.setComparedTableGroupingName(this.getComparedTableGroupingName());
-        comparisonSpec.setReferenceTableGroupingName(this.getReferenceTableGroupingName());
+    public void copyToTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
         comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
         if (this.getReferenceTable() != null) {
             comparisonSpec.setReferenceTableSchemaName(this.getReferenceTable().getSchemaName());
@@ -107,6 +127,16 @@ public class TableComparisonConfigurationModel {
         } else {
             comparisonSpec.setReferenceTableSchemaName(null);
             comparisonSpec.setReferenceTableName(null);
+        }
+
+        TableComparisonGroupingColumnsPairsListSpec groupingColumnsSpecList = comparisonSpec.getGroupingColumns();
+        groupingColumnsSpecList.clear();
+        for (TableComparisonGroupingColumnPairModel groupingColumnPairModel : this.groupingColumns) {
+            if (groupingColumnsSpecList.size() >= 9) {
+                throw new DqoRuntimeException("Too many data grouping columns. DQO supports up to 9 columns.");
+            }
+            TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec = groupingColumnPairModel.createColumnsPairSpec();
+            groupingColumnsSpecList.add(groupingColumnsPairSpec);
         }
     }
 }

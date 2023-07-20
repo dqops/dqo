@@ -28,6 +28,7 @@ import com.dqops.execution.checks.TableCheckExecutionServiceImpl;
 import com.dqops.execution.checks.TableCheckExecutionServiceObjectMother;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerStub;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -83,8 +84,6 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         comparedTableWrapper = comparedConnectionWrapper.getTables().getByObjectName(comparedSampleTable.getTableSpec().getPhysicalTableName(), true);
 
         tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
-        tableComparisonConfigurationSpec.setComparedTableGroupingName(comparedSampleTable.getTableSpec().getDefaultGroupingName());
-        tableComparisonConfigurationSpec.setReferenceTableGroupingName(referenceSampleTable.getTableSpec().getDefaultGroupingName());
         tableComparisonConfigurationSpec.setReferenceTableConnectionName(referenceSampleTable.getConnectionSpec().getConnectionName());
         tableComparisonConfigurationSpec.setReferenceTableSchemaName(referenceSampleTable.getTableSpec().getPhysicalTableName().getSchemaName());
         tableComparisonConfigurationSpec.setReferenceTableName(referenceSampleTable.getTableSpec().getPhysicalTableName().getTableName());
@@ -130,10 +129,8 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
 
     @Test
     void profiling_whenComparingRowCountGroupingOnBooleanAndComparingToSameTable_thenValuesMatch() {
-        this.comparedSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("null_placeholder_ok"));
-        this.referenceSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("null_placeholder_ok"));
+        this.tableComparisonConfigurationSpec.getGroupingColumns().add(
+                new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "null_placeholder_ok"));
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
                 .getTableCheckRootContainer(CheckType.PROFILING, null, true);
@@ -166,11 +163,8 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
 
     @Test
     void profiling_whenComparingRowCountGroupingOnBooleanAndComparingToSameTableButGroupingDifferentColumns_thenValuesNotMatch() {
-        this.comparedSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("null_placeholder_ok"));
-        this.referenceSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("email_ok"));
-
+        this.tableComparisonConfigurationSpec.getGroupingColumns().add(
+                new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "email_ok"));
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
                 .getTableCheckRootContainer(CheckType.PROFILING, null, true);
         AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
@@ -206,10 +200,8 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 new ColumnSpec() {{
                     setSqlExpression("{alias}.null_placeholder_ok * 2");
                 }});
-        this.comparedSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("null_placeholder_ok"));
-        this.referenceSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("null_placeholder_ok_recalculated"));
+        this.tableComparisonConfigurationSpec.getGroupingColumns().add(
+                new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "null_placeholder_ok_recalculated"));
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
                 .getTableCheckRootContainer(CheckType.PROFILING, null, true);
@@ -242,10 +234,8 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
 
     @Test
     void profiling_whenComparingRowCountGroupingOnNotMatchingColumns_thenValuesNotMatch() {
-        this.comparedSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("boolean_placeholder"));
-        this.referenceSampleTable.getTableSpec().getDefaultDataGroupingConfiguration()
-                .setLevel1(DataGroupingDimensionSpec.createForColumn("null_placeholder"));
+        this.tableComparisonConfigurationSpec.getGroupingColumns().add(
+                new TableComparisonGroupingColumnsPairSpec("boolean_placeholder", "null_placeholder"));
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
                 .getTableCheckRootContainer(CheckType.PROFILING, null, true);

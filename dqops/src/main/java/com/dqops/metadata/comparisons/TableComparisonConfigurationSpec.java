@@ -48,17 +48,6 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("The name of the data grouping configuration on the parent table (the compared table) that will be used for comparison. " +
-            "When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table).")
-    @Deprecated
-    private String comparedTableGroupingName;
-
-    @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
-            "When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table). " +
-            "The data grouping configurations on the parent table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
-    @Deprecated
-    private String referenceTableGroupingName;
-
     @JsonPropertyDescription("The name of the connection in DQO where the reference table (the source of truth) is configured. " +
                              "When the connection name is not provided, DQO will find the reference table on the connection of the parent table.")
     private String referenceTableConnectionName;
@@ -83,43 +72,6 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableComparisonGroupingColumnsPairsListSpec groupingColumns = new TableComparisonGroupingColumnsPairsListSpec();
-
-
-    /**
-     * Returns the data grouping configuration name on the parent table.
-     * @return Grouping configuration name.
-     */
-    @Deprecated
-    public String getComparedTableGroupingName() {
-        return comparedTableGroupingName;
-    }
-
-    /**
-     * Sets the name of the data grouping configuration name for the parent (compared) table.
-     * @param comparedTableGroupingName Data grouping configuration name.
-     */
-    public void setComparedTableGroupingName(String comparedTableGroupingName) {
-        this.setDirtyIf(!Objects.equals(this.comparedTableGroupingName, comparedTableGroupingName));
-        this.comparedTableGroupingName = comparedTableGroupingName;
-    }
-
-    /**
-     * Returns the name of the data grouping configuration on the reference table (the source of truth).
-     * @return The data grouping configuration name.
-     */
-    @Deprecated
-    public String getReferenceTableGroupingName() {
-        return referenceTableGroupingName;
-    }
-
-    /**
-     * Sets the name of the data grouping configuration on the reference table.
-     * @param referenceTableGroupingName Data grouping configuration name.
-     */
-    public void setReferenceTableGroupingName(String referenceTableGroupingName) {
-        this.setDirtyIf(!Objects.equals(this.referenceTableGroupingName, referenceTableGroupingName));
-        this.referenceTableGroupingName = referenceTableGroupingName;
-    }
 
     /**
      * Returns the name of the connection (data source) in DQO where the reference table is imported.

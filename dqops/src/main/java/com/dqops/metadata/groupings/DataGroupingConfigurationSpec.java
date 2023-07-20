@@ -426,31 +426,31 @@ public class DataGroupingConfigurationSpec extends AbstractSpec {
         switch (levelIndex) {
             case 1:
                 this.setLevel1(levelSpec);
-                break;
+                return;
             case 2:
                 this.setLevel2(levelSpec);
-                break;
+                return;
             case 3:
                 this.setLevel3(levelSpec);
-                break;
+                return;
             case 4:
                 this.setLevel4(levelSpec);
-                break;
+                return;
             case 5:
                 this.setLevel5(levelSpec);
-                break;
+                return;
             case 6:
                 this.setLevel6(levelSpec);
-                break;
+                return;
             case 7:
                 this.setLevel7(levelSpec);
-                break;
+                return;
             case 8:
                 this.setLevel8(levelSpec);
-                break;
+                return;
             case 9:
                 this.setLevel9(levelSpec);
-                break;
+                return;
         }
 
         throw new IllegalArgumentException("Data group level out of range, must be 1..9, but was: " + levelIndex);

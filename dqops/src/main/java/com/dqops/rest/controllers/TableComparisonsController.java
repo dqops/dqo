@@ -89,7 +89,7 @@ public class TableComparisonsController {
 
         List<TableComparisonConfigurationModel> result = new LinkedList<>();
         for (TableComparisonConfigurationSpec tableComparisonConfigurationSpec : tableComparisonConfigurationSpecMap.values()) {
-            TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
+            TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec);
             result.add(tableComparisonConfigurationModel);
         }
 
@@ -128,7 +128,7 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
+        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec);
         return new ResponseEntity<>(Mono.just(tableComparisonConfigurationModel), HttpStatus.OK); // 200
     }
 
@@ -195,7 +195,7 @@ public class TableComparisonsController {
             tableComparisonConfigurationSpecMap.put(newName, tableComparisonConfigurationSpec);
         }
 
-        tableComparisonConfigurationModel.copyToReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
+        tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -243,7 +243,7 @@ public class TableComparisonsController {
         }
 
         TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
-        tableComparisonConfigurationModel.copyToReferenceTableComparisonSpec(tableComparisonConfigurationSpec);
+        tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
         tableSpec.getTableComparisons().put(tableComparisonConfigurationModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
 
         userHomeContext.flush();

@@ -44,6 +44,7 @@ import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderService;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
@@ -371,6 +372,18 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             tableComparisonConfigurationSpec.setReferenceTableConnectionName("<source_of_truth_connection_name>");
             tableComparisonConfigurationSpec.setReferenceTableSchemaName("<source_of_truth_schema_name>");
             tableComparisonConfigurationSpec.setReferenceTableName("<source_of_truth_table_name>");
+
+            trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key for calculating aggregated values used for the table comparison"));
+            trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the first grouping key for calculating aggregated values used for the table comparison"));
+            tableComparisonConfigurationSpec.getGroupingColumns().add(new TableComparisonGroupingColumnsPairSpec() {{
+                setComparedTableColumnName("country");
+                setReferenceTableColumnName("country_column_name_on_reference_table");
+            }});
+            tableComparisonConfigurationSpec.getGroupingColumns().add(new TableComparisonGroupingColumnsPairSpec() {{
+                setComparedTableColumnName("state");
+                setReferenceTableColumnName("state_column_name_on_reference_table");
+            }});
+
             trimmedTableSpec.setTableComparisons(new TableComparisonConfigurationSpecMap());
             trimmedTableSpec.getTableComparisons().put(comparisonCheckCategorySpec.getComparisonName(), tableComparisonConfigurationSpec);
         }
@@ -393,7 +406,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         providerSamples.sort(checkProviderRenderedSqlDocumentationModelComparator);
         checkDocumentationModel.setProviderTemplates(providerSamples);
 
-        if (similarCheckModel.getCheckModel().isSupportsGrouping()) {
+        if (tableComparisonConfigurationSpec == null && similarCheckModel.getCheckModel().isSupportsGrouping()) {
             trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
             trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the second grouping key"));
             DataGroupingConfigurationSpec groupingConfigurationSpec = new DataGroupingConfigurationSpec();
@@ -402,11 +415,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             String groupingName = "group_by_country_and_state";
             trimmedTableSpec.getGroupings().put(groupingName, groupingConfigurationSpec);
             trimmedTableSpec.setDefaultGroupingName(groupingName);
-
-            if (tableComparisonConfigurationSpec != null) {
-                tableComparisonConfigurationSpec.setComparedTableGroupingName(groupingName);
-                tableComparisonConfigurationSpec.setReferenceTableGroupingName("<matching_grouping_name_on_the_reference_table>");
-            }
 
             TableYaml tableYamlWithDataGroupings = new TableYaml(trimmedTableSpec);
             String yamlSampleWithDataGroupings = this.yamlSerializer.serialize(tableYamlWithDataGroupings);

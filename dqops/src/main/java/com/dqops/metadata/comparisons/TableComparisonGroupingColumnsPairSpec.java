@@ -52,6 +52,22 @@ public class TableComparisonGroupingColumnsPairSpec extends AbstractSpec {
     private String referenceTableColumnName;
 
     /**
+     * The default empty constructor.
+     */
+    public TableComparisonGroupingColumnsPairSpec() {
+    }
+
+    /**
+     * Constructor that creates the column pair specification.
+     * @param comparedTableColumnName The name of the column on the compared table.
+     * @param referenceTableColumnName The name of the column on the reference table.
+     */
+    public TableComparisonGroupingColumnsPairSpec(String comparedTableColumnName, String referenceTableColumnName) {
+        this.comparedTableColumnName = comparedTableColumnName;
+        this.referenceTableColumnName = referenceTableColumnName;
+    }
+
+    /**
      * Returns the column name on the compared table that is used for grouping and joining.
      * @return Column name on the compared table.
      */
