@@ -71,7 +71,18 @@ public class TableComparisonResultsModel {
         ComparisonCheckResultModel comparisonCheckResultModel = checkResultModelMap.get(checkName);
         if (comparisonCheckResultModel == null) {
             comparisonCheckResultModel = new ComparisonCheckResultModel(checkName, executedAt);
-            checkResultModelMap.put(checkName, comparisonCheckResultModel);
+            String unifiedCheckName = checkName;
+            if (checkName.startsWith("daily_partition_")) {
+                unifiedCheckName = checkName.substring("daily_partition_".length());
+            } else if (checkName.startsWith("monthly_partition_")) {
+                unifiedCheckName = checkName.substring("monthly_partition_".length());
+            } else if (checkName.startsWith("daily_")) {
+                unifiedCheckName = checkName.substring("daily_".length());
+            } else if (checkName.startsWith("monthly_")) {
+                unifiedCheckName = checkName.substring("monthly_".length());
+            }
+
+            checkResultModelMap.put(unifiedCheckName, comparisonCheckResultModel);
         }
 
         comparisonCheckResultModel.appendResult(executedAt, severity, dataGroupingName);

@@ -16,6 +16,8 @@
 package com.dqops.core.jobqueue;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import io.swagger.annotations.ApiModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -23,10 +25,16 @@ import java.time.Instant;
 /**
  * Identifies a single job.
  */
+@ApiModel(value = "DqoQueueJobId", description = "Identifies a single job that was pushed to the job queue.")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
+    @JsonPropertyDescription("Job id.")
     private long jobId;
+
+    @JsonPropertyDescription("Parent job id. Filled only for nested jobs, for example a sub-job that runs data quality checks on a single table.")
     private DqoQueueJobId parentJobId;
+
+    @JsonPropertyDescription("The timestamp when the job was created.")
     private Instant createdAt;
 
     /**
