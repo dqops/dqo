@@ -12,16 +12,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Read VERSION
+
+    - uses: juliangruber/read-file-action@v1
+      name: Read VERSION
       id: readversion
-      uses: juliangruber/read-file-action@v1
       with:
         path: ./VERSION
     - uses: docker-practice/actions-setup-docker@master
+
     - run: export DOCKER_BUILDKIT=1
+
     - run: set -x
-    - name: Build and Push Docker Image      
-      uses: mr-smithers-excellent/docker-build-push@v4      
+
+    - uses: mr-smithers-excellent/docker-build-push@v6
+      name: Build and Push Docker Image
       with:        
         image: dqops/dqo
         tags: $(date +%s),${{ steps.readversion.outputs.content }}
