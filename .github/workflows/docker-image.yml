@@ -23,7 +23,7 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v4      
       with:        
         image: dqops/dqo
-        tags: $(date +%s),${{steps.readversion.outputs.content}}
+        tags: $(date +%s),${{ steps.readversion.outputs.content }}
         addLatest: true
 #        multiPlatform: true
 #        platform: linux/amd64,linux/arm64
