@@ -55,7 +55,7 @@ export const TableReferenceComparisons = ({
       connection,
       schema,
       table,
-      'reference-tables'
+      'table-comparisons'
     )}?isEditing=true`;
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
@@ -80,7 +80,7 @@ export const TableReferenceComparisons = ({
       connection,
       schema,
       table,
-      'reference-tables'
+      'table-comparisons'
     )}?isEditing=true&reference=${
       reference.table_comparison_configuration_name
     }`;

@@ -46,8 +46,8 @@ const initTabs = [
     value: 'data-streams'
   },
   {
-    label: 'Reference Tables',
-    value: 'reference-tables'
+    label: 'Table Comparisons',
+    value: 'table-comparisons'
   },
   {
     label: 'Date and time columns',
@@ -264,7 +264,7 @@ const TablePage = () => {
                 <TableDataGroupingConfiguration />
               )}
             </div>
-            <div>{activeTab === 'reference-tables' && <TableReferences />}</div>
+            <div>{activeTab === 'table-comparisons' && <TableReferences />}</div>
             <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
             <div>
               {activeTab === 'incident_configuration' && (

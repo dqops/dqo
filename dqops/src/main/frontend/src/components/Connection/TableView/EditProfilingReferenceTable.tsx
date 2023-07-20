@@ -159,7 +159,7 @@ export const EditProfilingReferenceTable = ({
       connection,
       schema,
       table,
-      'data-streams'
+      'data-groupings'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
       CheckTypes.SOURCES,
@@ -185,7 +185,7 @@ export const EditProfilingReferenceTable = ({
       reference?.reference_connection ?? '',
       reference?.reference_table?.schema_name ?? '',
       reference?.reference_table?.table_name ?? '',
-      'data-streams'
+      'data-groupings'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
       CheckTypes.SOURCES,

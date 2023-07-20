@@ -41,7 +41,7 @@ const tabs = [
     value: 'advanced'
   },
   {
-    label: 'Reference Table Comparisons',
+    label: 'Table Comparisons',
     value: 'reference-comparisons'
   }
 ];
@@ -132,7 +132,7 @@ const ProfilingView = () => {
       connectionName,
       schemaName,
       tableName,
-      'data-streams'
+      'data-groupings'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
       'sources',

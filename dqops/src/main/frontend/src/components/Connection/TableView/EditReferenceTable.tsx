@@ -146,7 +146,7 @@ const EditReferenceTable = ({
       connection,
       schema,
       table,
-      'data-streams'
+      'data-groupings'
     );
 
     history.push(`${url}?isEditing=true`);
@@ -158,7 +158,7 @@ const EditReferenceTable = ({
       refConnection,
       refSchema,
       refTable,
-      'data-streams'
+      'data-groupings'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
       checkTypes,
