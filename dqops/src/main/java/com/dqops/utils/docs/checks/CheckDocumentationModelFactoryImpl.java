@@ -326,8 +326,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         CheckContainerModel allChecksModel = new CheckContainerModel();
         QualityCategoryModel uiCategoryModel;
-        if (Objects.equals(checkCategoryName, "comparisons")) {
-            uiCategoryModel = new QualityCategoryModel("comparisons/" + COMPARISON_NAME);
+        if (Objects.equals(checkCategoryName, AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME)) {
+            uiCategoryModel = new QualityCategoryModel(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/" + COMPARISON_NAME);
             uiCategoryModel.setComparisonName(COMPARISON_NAME);
         } else {
             uiCategoryModel = new QualityCategoryModel(checkCategoryName);

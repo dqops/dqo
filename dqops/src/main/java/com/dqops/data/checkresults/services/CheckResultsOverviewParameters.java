@@ -48,4 +48,16 @@ public class CheckResultsOverviewParameters {
      */
     @JsonPropertyDescription("End month to load. Loads the data for the whole month identified by the date.")
     private LocalDate endMonth = LocalDate.now();
+
+    /**
+     * Returns the check overview parameters for a given number of months.
+     * @param months Number of months. 0 for the current month only. 1 for current and previous month (to capture one full month).
+     * @return Check result overview parameters.
+     */
+    public static CheckResultsOverviewParameters createForRecentMonths(long months, int resultsCount) {
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        checkResultsOverviewParameters.setResultsCount(resultsCount);
+        checkResultsOverviewParameters.setEndMonth(checkResultsOverviewParameters.getStartMonth().minusMonths(months - 1));
+        return checkResultsOverviewParameters;
+    }
 }

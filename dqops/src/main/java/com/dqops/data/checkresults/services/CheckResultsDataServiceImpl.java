@@ -17,6 +17,8 @@ package com.dqops.data.checkresults.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.services.models.*;
@@ -141,6 +143,58 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         resultMap.values().forEach(m -> m.reverseLists());
 
         return resultMap.values().toArray(CheckResultsOverviewDataModel[]::new);
+    }
+
+    /**
+     * Read the results of the most recent table comparison.
+     * @param connectionName The connection name of the compared table.
+     * @param physicalTableName Physical table name (schema and table) of the compared table.
+     * @param checkType Check type.
+     * @param timeScale Optional check scale (daily, monthly) for recurring and partitioned checks.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
+     * @return Returns the summary information about the table comparison.
+     */
+    @Override
+    public TableComparisonResultsModel readMostRecentTableComparisonResults(String connectionName,
+                                                                            PhysicalTableName physicalTableName,
+                                                                            CheckType checkType,
+                                                                            CheckTimeScale timeScale,
+                                                                            String tableComparisonConfigurationName) {
+        TableComparisonResultsModel result = new TableComparisonResultsModel();
+        CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters.createForRecentMonths(2, 1);
+
+        Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName);
+        Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName);
+        Table combinedTable = errorsTable != null ?
+                (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
+                ruleResultsTable;
+
+        if (combinedTable == null) {
+            return result;
+        }
+
+        Table filteredTable = filterCheckResultsForTableComparison(combinedTable, checkType, timeScale, tableComparisonConfigurationName);
+        Table sortedTable = filteredTable.sortDescendingOn(
+                SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME); // most recent executions first
+
+        int rowCount = sortedTable.rowCount();
+        InstantColumn executedAtColumn = sortedTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        TextColumn checkNameColumn = sortedTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sortedTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        TextColumn dataGroupNameColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+        for (int i = 0; i < rowCount ; i++) {
+            Instant executedAt = executedAtColumn.get(i);
+            Integer severity = severityColumn.get(i);
+            String checkName = checkNameColumn.get(i);
+            String dataGroup = dataGroupNameColumn.get(i);
+            String columnName = columnNameColumn.get(i);
+
+            result.appendResult(executedAt, checkName, columnName, severity, dataGroup);
+        }
+
+        return result;
     }
 
     /**
@@ -532,16 +586,51 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
-        TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
+
+        Table filteredTable = sourceTable.where(rowSelection);
+        return filteredTable;
+    }
+
+    /**
+     * Filters results to find only table comparison checks.
+     * @param sourceTable Source table to be filtered.
+     * @param checkType Check type.
+     * @param timeScale Optional check time scale.
+     * @param tableComparisonName Table comparison name.
+     * @return Filtered table.
+     */
+    protected Table filterCheckResultsForTableComparison(Table sourceTable,
+                                                         CheckType checkType,
+                                                         CheckTimeScale timeScale,
+                                                         String tableComparisonName) {
+        String checkTypeString = checkType.getDisplayName();
+        Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+                .isEqualTo(checkTypeString);
+
+        if (timeScale != null) {
+            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
+            String timeSeriesGradientName = timePeriodGradient.name();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradientName));
+        }
+
+        TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME));
+
+        if (!Strings.isNullOrEmpty(tableComparisonName)) {
+            TextColumn tableComparisonNameColumn = sourceTable.textColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparisonName));
+        }
 
         Table filteredTable = sourceTable.where(rowSelection);
         return filteredTable;

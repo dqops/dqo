@@ -189,7 +189,7 @@ public class TableComparisonModel {
            setSchemaTableName(comparedTableSpec.getPhysicalTableName().toTableSearchFilter());
            setCheckType(checkType);
            setTimeScale(checkTimeScale);
-           setCheckCategory("comparisons");
+           setCheckCategory(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME);
            setTableComparisonName(tableComparisonConfigurationName);
            setEnabled(true);
         }};

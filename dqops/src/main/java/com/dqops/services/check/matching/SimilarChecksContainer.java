@@ -18,6 +18,7 @@ package com.dqops.services.check.matching;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.QualityCategoryModel;
@@ -70,8 +71,8 @@ public class SimilarChecksContainer {
 
                 SimilarChecksGroup similarCheckGroup = this.getSimilarCheckGroup(similarCheckMatchKey);
                 String categoryName = categoryModel.getCategory();
-                if (categoryName.startsWith("comparisons/")) {
-                    categoryName = "comparisons";
+                if (categoryName.startsWith(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME)) {
+                    categoryName = AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME;
                 }
                 SimilarCheckModel similarCheckModel = new SimilarCheckModel(checkTarget, checkType, timeScale, categoryName, checkModel);
                 similarCheckGroup.addSimilarCheck(similarCheckModel);

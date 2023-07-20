@@ -16,6 +16,8 @@
 package com.dqops.data.checkresults.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.models.*;
 import com.dqops.metadata.sources.PhysicalTableName;
 
@@ -39,6 +41,21 @@ public interface CheckResultsDataService {
      */
     CheckResultsOverviewDataModel[] readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                                 CheckResultsOverviewParameters loadParameters);
+
+    /**
+     * Read the results of the most recent table comparison.
+     * @param connectionName The connection name of the compared table.
+     * @param physicalTableName Physical table name (schema and table) of the compared table.
+     * @param checkType Check type.
+     * @param timeScale Optional check scale (daily, monthly) for recurring and partitioned checks.
+     * @param tableComparisonConfigurationName Table comparison configuration name.
+     * @return Returns the summary information about the table comparison.
+     */
+    TableComparisonResultsModel readMostRecentTableComparisonResults(String connectionName,
+                                                                     PhysicalTableName physicalTableName,
+                                                                     CheckType checkType,
+                                                                     CheckTimeScale timeScale,
+                                                                     String tableComparisonConfigurationName);
 
     /**
      * Retrieves complete model of the results of check executions for the given root checks container (group of checks).
