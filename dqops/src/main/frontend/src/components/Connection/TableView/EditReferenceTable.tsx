@@ -298,11 +298,33 @@ const EditReferenceTable = ({
     setIsUpdated(true);
   };
 
+  const workOnMyObj = (
+    listOfColumns: Array<string>
+  ): { [key: number]: number } => {
+    const initialObject: { [key: number]: number } = {};
+    let check = false;
+
+    for (let i = listOfColumns.length - 1; i >= 0; i--) {
+      if (listOfColumns[i].length === 0 && !check) {
+        initialObject[i] = 2;
+      } else if (listOfColumns[i].length !== 0 && !check) {
+        check = true;
+        initialObject[i] = 2;
+      } else if (check && listOfColumns[i].length === 0) {
+        initialObject[i] = 1;
+      } else if (check && listOfColumns[i].length !== 0) {
+        initialObject[i] = 2;
+      }
+      if (listOfColumns[i].length !== 0) {
+        initialObject[i] = 3;
+      }
+    }
+
+    return initialObject;
+  };
+
   const display = () => {
-    console.log('normal list: ');
-    console.table(normalList);
-    console.log('ref list');
-    console.table(refList);
+    console.log(workOnMyObj(normalList ?? []));
   };
 
   return (
