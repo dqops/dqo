@@ -18,6 +18,7 @@ import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
+import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
 
 type EditReferenceTableProps = {
   onBack: () => void;
@@ -342,33 +343,35 @@ const EditReferenceTable = ({
         </SectionWrapper>
 
         <div className="flex gap-4">
-          <div className="mt-26 mr-20">
+          <div className=" mr-20">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
               <div
                 key={index}
-                className="text-sm py-1.5"
+                className="text-sm py-1.5 my-1.5"
                 style={{ whiteSpace: 'nowrap' }}
               >
                 Column {item}
               </div>
             ))}
           </div>
-          <SelectDataGroupingForTable
+          <SelectGroupColumnsTable
             className="flex-1"
             title="Data grouping on compared table"
             dataGroupingConfigurations={dataGroupingConfigurations}
             dataGroupingConfiguration={dataGroupingConfiguration}
             setDataGroupingConfiguration={changeDataGroupingProps}
             goToCreateNew={goToCreateNew}
+            placeholder="Select column on compared table"
           />
 
-          <SelectDataGroupingForTable
+          <SelectGroupColumnsTable
             className="flex-1"
             title="Data grouping on reference table"
             dataGroupingConfigurations={refDataGroupingConfigurations}
             dataGroupingConfiguration={refDataGroupingConfiguration}
             setDataGroupingConfiguration={changeRefDataGroupingProps}
             goToCreateNew={goToRefCreateNew}
+            placeholder='"Select column on reference table"'
           />
         </div>
       </div>

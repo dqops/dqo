@@ -19,6 +19,7 @@ interface IColumnSelectProps {
   scope?: string;
   error?: boolean;
   triggerClassName?: string;
+  placeholder?: string;
 }
 
 const ColumnSelect = ({
@@ -29,10 +30,15 @@ const ColumnSelect = ({
   disabled,
   scope = 'column',
   triggerClassName,
-  error
+  error,
+  placeholder
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
-  const { connection, schema, table }: { connection: string, schema: string, table: string } = useParams();
+  const {
+    connection,
+    schema,
+    table
+  }: { connection: string; schema: string; table: string } = useParams();
 
   const setColumns = (
     res: AxiosResponse<CommonColumnModel[] | ColumnBasicModel[]>
@@ -66,6 +72,7 @@ const ColumnSelect = ({
         triggerClassName={triggerClassName}
         onChange={onChange}
         error={error}
+        placeholder={placeholder}
       />
     </div>
   );
