@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   DataGroupingConfigurationSpec,
   DataGroupingDimensionSpec
@@ -21,6 +21,10 @@ const DataGroupingConfigurationView = ({
   onClearError
 }: IDataGroupingConfigurationViewProps) => {
   const { table }: { table: string } = useParams();
+  const [good, setGood] = useState<boolean>(false);
+  const isGood = (param: boolean): void => {
+    setGood(param);
+  };
 
   const getDataGroupingDimensionLevel = (index: number) => {
     if (index === 0) return dataGroupingConfiguration?.level_1;
@@ -44,6 +48,8 @@ const DataGroupingConfigurationView = ({
     });
   };
 
+  console.log(good);
+
   return (
     <div className="py-4 px-4 text-sm">
       {Array(9)
@@ -62,6 +68,7 @@ const DataGroupingConfigurationView = ({
             scope={table ? 'table' : 'connection'}
             error={errors ? errors[`level_${index + 1}`] : ''}
             onClearError={onClearError}
+            isGood={isGood}
           />
         ))}
     </div>

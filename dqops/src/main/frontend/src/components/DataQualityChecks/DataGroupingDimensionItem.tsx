@@ -15,6 +15,7 @@ interface IDataGroupingDimensionItemProps {
   scope?: string;
   error?: string;
   onClearError?: (idx: number) => void;
+  isGood?: (param: boolean) => void;
 }
 
 const DataGroupingDimensionItem = ({
@@ -23,7 +24,8 @@ const DataGroupingDimensionItem = ({
   dataGroupingLevel,
   scope,
   error,
-  onClearError
+  onClearError,
+  isGood
 }: IDataGroupingDimensionItemProps) => {
   const [good, setGood] = useState(false);
 
@@ -39,8 +41,10 @@ const DataGroupingDimensionItem = ({
 
     if (!isTagEmpty && !isColumnEmpty) {
       setGood(true);
+      if (isGood) isGood(true);
     } else {
       setGood(false);
+      if (isGood) isGood(false);
     }
   }, [dataGroupingLevel]);
 
@@ -73,8 +77,6 @@ const DataGroupingDimensionItem = ({
           />
         </div>
         <div className="flex-1">
-          {good === true ? 'good' : 'not'}
-
           <Input
             className={clsx(
               'h-8',
