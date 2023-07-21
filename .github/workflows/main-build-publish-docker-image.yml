@@ -1,4 +1,4 @@
-name: Docker Image CI for linux/amd64
+name: Build and publish docker image
 
 on:
   pull_request:
@@ -28,11 +28,6 @@ jobs:
 
   docker-build-on-ubuntu:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
     steps:
       - uses: actions/checkout@v3
 
@@ -51,7 +46,7 @@ jobs:
           tags: $(date +%s),${{ steps.read_version.outputs.content }},latest
           enableBuildKit: true
           multiPlatform: true
-          platform: ${{ matrix.platform }}
+          platform: linux/amd64,linux/arm64
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
