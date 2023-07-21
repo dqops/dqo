@@ -1,11 +1,10 @@
-name: Build and publish the release to releases and PyPi
+name: Build and publish the release to GitHub releases and PyPi
 
 on:
   push:
-    branches: [ "develop" ]
     tags: [ "*" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
 jobs:
   build-release:
