@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Image CI for develop
 
 on:
   push:
@@ -20,16 +20,11 @@ jobs:
         path: ./VERSION
     - uses: docker-practice/actions-setup-docker@master
 
-    - run: export DOCKER_BUILDKIT=1
-
-    - run: set -x
-
     - uses: mr-smithers-excellent/docker-build-push@v6
       name: Build and Push Docker Image
       with:        
         image: dqops/dqo
-        tags: $(date +%s),${{ steps.readversion.outputs.content }}
-        addLatest: true
+        tags: $(date +%s),${{ steps.readversion.outputs.content }},latest
         enableBuildKit: true
         multiPlatform: true
         platform: linux/amd64,linux/arm64
