@@ -137,7 +137,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-
+          dataStreamName: dataGroup,
           startDate,
           endDate,
           runCheckType,
@@ -160,6 +160,7 @@ const CheckDetails = ({
           table,
           column,
           startDate,
+          dataStreamName: dataGroup,
           endDate,
           runCheckType,
           timeScale,
@@ -180,7 +181,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-
+          dataStreamName: dataGroup,
           startDate,
           endDate,
           runCheckType,
@@ -253,6 +254,8 @@ const CheckDetails = ({
     setIsChartOpenState(arg);
   };
 
+  console.log(filters.onChangeDataGroup);
+
   return (
     <div
       className="my-4"
@@ -286,7 +289,7 @@ const CheckDetails = ({
             checkName={checkName || ''}
             timeScale={timeScale}
             results={checkResults || []}
-            dataGroup={filters.dataGroup}
+            dataGroup={filters.onChangeDataGroup}
             month={filters.month}
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
