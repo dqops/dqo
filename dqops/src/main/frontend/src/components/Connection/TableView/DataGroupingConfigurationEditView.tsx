@@ -10,6 +10,7 @@ import Input from '../../Input';
 import Button from '../../Button';
 import SvgIcon from '../../SvgIcon';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import { values } from 'lodash';
 
 interface IDataGroupingConfigurationEditViewProps {
   onBack: () => void;
@@ -39,7 +40,6 @@ const DataGroupingConfigurationEditView = ({
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [levelErrors, setLevelErrors] = useState<Errors>({});
-
   useEffect(() => {
     if (selectedGroupingConfiguration) {
       DataGroupingConfigurationsApi.getTableGroupingConfiguration(
@@ -53,6 +53,7 @@ const DataGroupingConfigurationEditView = ({
     } else {
       setDataGroupingConfiguration({});
     }
+    variable();
   }, [selectedGroupingConfiguration]);
 
   const onUpdate = async () => {
@@ -132,15 +133,43 @@ const DataGroupingConfigurationEditView = ({
       [`level_${idx}`]: ''
     });
   };
+  const [good, setGood] = useState(true); // Ustawiamy początkowo na true
 
+  const variable = () => {
+    let isGood = true;
+
+    values(dataGroupingConfiguration).forEach((dataGroupingLevel) => {
+      const isTagEmpty =
+        dataGroupingLevel?.source === DataGroupingDimensionSpecSourceEnum.tag &&
+        (!dataGroupingLevel.tag || dataGroupingLevel.tag.length === 0);
+
+      const isColumnEmpty =
+        dataGroupingLevel?.source ===
+          DataGroupingDimensionSpecSourceEnum.column_value &&
+        (!dataGroupingLevel.column || dataGroupingLevel.column.length === 0);
+
+      if (isTagEmpty || isColumnEmpty) {
+        isGood = false;
+      }
+    });
+
+    setGood(isGood);
+  };
+
+  useEffect(() => {
+    variable();
+  }, [dataGroupingConfiguration]);
+
+  console.log(good);
   return (
     <div className="px-4 text-sm">
       <ActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdated ? true : false}
         isUpdating={isUpdating}
-        isDisabled={false}
+        isDisabled={good === true ? false : true}
       />
+      {good ? 'isGood' : 'not'}
       <div className="flex py-4 border-b border-gray-300 px-8 -mx-4 justify-between items-center">
         {selectedGroupingConfiguration ? (
           <div>
