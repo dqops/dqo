@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DataGroupingDimensionSpec,
   DataGroupingDimensionSpecSourceEnum
@@ -25,6 +25,25 @@ const DataGroupingDimensionItem = ({
   error,
   onClearError
 }: IDataGroupingDimensionItemProps) => {
+  const [good, setGood] = useState(false);
+
+  useEffect(() => {
+    const isTagEmpty =
+      dataGroupingLevel?.source === DataGroupingDimensionSpecSourceEnum.tag &&
+      (!dataGroupingLevel.tag || dataGroupingLevel.tag.length === 0);
+
+    const isColumnEmpty =
+      dataGroupingLevel?.source ===
+        DataGroupingDimensionSpecSourceEnum.column_value &&
+      (!dataGroupingLevel.column || dataGroupingLevel.column.length === 0);
+
+    if (!isTagEmpty && !isColumnEmpty) {
+      setGood(true);
+    } else {
+      setGood(false);
+    }
+  }, [dataGroupingLevel]);
+
   return (
     <div className="mb-4 last:mb-0">
       <div className="flex justify-between items-center space-x-6">
@@ -54,6 +73,8 @@ const DataGroupingDimensionItem = ({
           />
         </div>
         <div className="flex-1">
+          {good === true ? 'good' : 'not'}
+
           <Input
             className={clsx(
               'h-8',
