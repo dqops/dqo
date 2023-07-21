@@ -283,13 +283,13 @@ const EditReferenceTable = ({
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
         <div className="flex items-center justify-center gap-x-5">
           <div className="font-bold text-center">
-            Reference table configuration name:{' '}
+            Table comparison configuration name:{' '}
           </div>
           <Input
             className="min-w-80"
             value={name}
             onChange={onChangeName}
-            placeholder="Ref table name"
+            placeholder="Table comparison configuration name"
           />
         </div>
         <Button
