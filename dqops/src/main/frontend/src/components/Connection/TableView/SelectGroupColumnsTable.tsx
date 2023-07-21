@@ -48,7 +48,8 @@ export const SelectGroupColumnsTable = ({
 
   //     value: item.data_grouping_configuration_name ?? ''
   //   }));
-
+  const [myObject, setMyObject] = useState<{ [key: number]: boolean }>();
+  const [fastCheck, setFastCheck] = useState<boolean>(false);
   useEffect(() => {
     if (dataGroupingConfiguration) {
       DataGroupingConfigurationsApi.getTableGroupingConfiguration(
@@ -78,17 +79,36 @@ export const SelectGroupColumnsTable = ({
 
   useEffect(() => {
     fillArrayWithEmptyStrings(9);
+    workOnMyObj();
   }, [dataGroupingConfiguration]);
 
-  console.log(listOfColumns);
   const handleColumnSelectChange = (value: string, index: number) => {
     const updatedList = [...listOfColumns];
     updatedList[index] = value;
     setListOfColumns(updatedList);
   };
 
+  const workOnMyObj = (): { [key: number]: boolean } => {
+    const initialObject: { [key: number]: boolean } = {};
+    let check = false;
+    for (let i = listOfColumns.length - 1; i >= 0; i--) {
+      if (listOfColumns[i].length === 0 && check === false) {
+        initialObject[i] = false;
+      } else if (listOfColumns[i].length !== 0 && check === false) {
+        check = true;
+        initialObject[i] = false;
+      } else if (check === true && listOfColumns[i].length === 0) {
+        initialObject[i] = true;
+      } else if (check === true && listOfColumns[i].length !== 0) {
+        initialObject[i] = false;
+      }
+    }
+    return initialObject;
+  };
+
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
+      {/* <div className="bg-black w-5 h-5" onClick={() => workOnMyObj()}></div> */}
       <table className="w-full">
         <tbody>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
@@ -102,7 +122,11 @@ export const SelectGroupColumnsTable = ({
                   //     ? 'h-8 border border-red-500'
                   //     : ''
                   // )}
-                  triggerClassName="my-0.5"
+                  triggerClassName={clsx(
+                    workOnMyObj()[index] === true
+                      ? 'my-0.5 border border-red-500'
+                      : 'my-0.5'
+                  )}
                   value={listOfColumns[index]}
                   onChange={(value: string) =>
                     handleColumnSelectChange(value, index)
