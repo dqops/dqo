@@ -50,7 +50,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_m
             max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-25"
+```yaml hl_lines="21-30"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -66,6 +66,11 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      grouping_columns:
+      - compared_table_column_name: country
+        reference_table_column_name: country_column_name_on_reference_table
+      - compared_table_column_name: state
+        reference_table_column_name: state_column_name_on_reference_table
   profiling_checks:
     comparisons:
       compare_to_source_of_truth_table:
@@ -83,6 +88,14 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
+    state:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
 
 ```
 ### **BigQuery**
@@ -268,261 +281,6 @@ spec:
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 44-49"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
-    apiVersion: dqo/v1
-    kind: table
-    spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
-      default_grouping_name: group_by_country_and_state
-      groupings:
-        group_by_country_and_state:
-          level_1:
-            source: column_value
-            column: country
-          level_2:
-            source: column_value
-            column: state
-      table_comparisons:
-        compare_to_source_of_truth_table:
-          compared_table_grouping_name: group_by_country_and_state
-          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
-          reference_table_connection_name: <source_of_truth_connection_name>
-          reference_table_schema_name: <source_of_truth_schema_name>
-          reference_table_name: <source_of_truth_table_name>
-      profiling_checks:
-        comparisons:
-          compare_to_source_of_truth_table:
-            row_count_match:
-              warning:
-                max_diff_percent: 0.0
-              error:
-                max_diff_percent: 1.0
-              fatal:
-                max_diff_percent: 5.0
-      columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
-        country:
-          labels:
-          - column used as the first grouping key
-        state:
-          labels:
-          - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            CURRENT_TIMESTAMP() AS time_period,
-            TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            LOCALTIMESTAMP AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Oracle**  
-      
-    === "Sensor template for Oracle"
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-            SELECT 1 AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} analyzed_table
-            {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-        
-                        grouping_table.grouping_level_1,
-        
-                        grouping_table.grouping_level_2
-        ,
-            time_period,
-            time_period_utc
-        FROM (
-            SELECT 1 AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CURRENT_TIMESTAMP AS time_period,
-            CAST(CURRENT_TIMESTAMP AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            SYSDATETIMEOFFSET() AS time_period,
-            CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state]
-        ORDER BY level_1, level_2
-                , 
-            
-        
-            
-        ```
-    
 
 
 
@@ -577,7 +335,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-26"
+```yaml hl_lines="21-31"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -593,6 +351,11 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      grouping_columns:
+      - compared_table_column_name: country
+        reference_table_column_name: country_column_name_on_reference_table
+      - compared_table_column_name: state
+        reference_table_column_name: state_column_name_on_reference_table
   recurring_checks:
     daily:
       comparisons:
@@ -611,6 +374,14 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
+    state:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
 
 ```
 ### **BigQuery**
@@ -796,262 +567,6 @@ spec:
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 45-50"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
-    apiVersion: dqo/v1
-    kind: table
-    spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
-      default_grouping_name: group_by_country_and_state
-      groupings:
-        group_by_country_and_state:
-          level_1:
-            source: column_value
-            column: country
-          level_2:
-            source: column_value
-            column: state
-      table_comparisons:
-        compare_to_source_of_truth_table:
-          compared_table_grouping_name: group_by_country_and_state
-          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
-          reference_table_connection_name: <source_of_truth_connection_name>
-          reference_table_schema_name: <source_of_truth_schema_name>
-          reference_table_name: <source_of_truth_table_name>
-      recurring_checks:
-        daily:
-          comparisons:
-            compare_to_source_of_truth_table:
-              daily_row_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-      columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
-        country:
-          labels:
-          - column used as the first grouping key
-        state:
-          labels:
-          - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Oracle**  
-      
-    === "Sensor template for Oracle"
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-            SELECT 1 AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} analyzed_table
-            {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-        
-                        grouping_table.grouping_level_1,
-        
-                        grouping_table.grouping_level_2
-        ,
-            time_period,
-            time_period_utc
-        FROM (
-            SELECT 1 AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(LOCALTIMESTAMP AS date) AS time_period,
-            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(LOCALTIMESTAMP AS date) AS time_period,
-            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-            CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state]
-        ORDER BY level_1, level_2
-                , 
-            
-        
-            
-        ```
-    
 
 
 
@@ -1106,7 +621,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-26"
+```yaml hl_lines="21-31"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1122,6 +637,11 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      grouping_columns:
+      - compared_table_column_name: country
+        reference_table_column_name: country_column_name_on_reference_table
+      - compared_table_column_name: state
+        reference_table_column_name: state_column_name_on_reference_table
   recurring_checks:
     monthly:
       comparisons:
@@ -1140,6 +660,14 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
+    state:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
 
 ```
 ### **BigQuery**
@@ -1325,262 +853,6 @@ spec:
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 45-50"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
-    apiVersion: dqo/v1
-    kind: table
-    spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
-      default_grouping_name: group_by_country_and_state
-      groupings:
-        group_by_country_and_state:
-          level_1:
-            source: column_value
-            column: country
-          level_2:
-            source: column_value
-            column: state
-      table_comparisons:
-        compare_to_source_of_truth_table:
-          compared_table_grouping_name: group_by_country_and_state
-          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
-          reference_table_connection_name: <source_of_truth_connection_name>
-          reference_table_schema_name: <source_of_truth_schema_name>
-          reference_table_name: <source_of_truth_table_name>
-      recurring_checks:
-        monthly:
-          comparisons:
-            compare_to_source_of_truth_table:
-              monthly_row_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-      columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
-        country:
-          labels:
-          - column used as the first grouping key
-        state:
-          labels:
-          - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Oracle**  
-      
-    === "Sensor template for Oracle"
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-            SELECT 1 AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} analyzed_table
-            {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-        
-                        grouping_table.grouping_level_1,
-        
-                        grouping_table.grouping_level_2
-        ,
-            time_period,
-            time_period_utc
-        FROM (
-            SELECT 1 AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state]
-        ORDER BY level_1, level_2
-                , 
-            
-        
-            
-        ```
-    
 
 
 
@@ -1635,7 +907,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-26"
+```yaml hl_lines="21-31"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1651,6 +923,11 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      grouping_columns:
+      - compared_table_column_name: country
+        reference_table_column_name: country_column_name_on_reference_table
+      - compared_table_column_name: state
+        reference_table_column_name: state_column_name_on_reference_table
   partitioned_checks:
     daily:
       comparisons:
@@ -1669,6 +946,14 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
+    state:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
 
 ```
 ### **BigQuery**
@@ -1858,260 +1143,6 @@ spec:
         
     ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 45-50"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
-    apiVersion: dqo/v1
-    kind: table
-    spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
-      default_grouping_name: group_by_country_and_state
-      groupings:
-        group_by_country_and_state:
-          level_1:
-            source: column_value
-            column: country
-          level_2:
-            source: column_value
-            column: state
-      table_comparisons:
-        compare_to_source_of_truth_table:
-          compared_table_grouping_name: group_by_country_and_state
-          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
-          reference_table_connection_name: <source_of_truth_connection_name>
-          reference_table_schema_name: <source_of_truth_schema_name>
-          reference_table_name: <source_of_truth_table_name>
-      partitioned_checks:
-        daily:
-          comparisons:
-            compare_to_source_of_truth_table:
-              daily_partition_row_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-      columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
-        country:
-          labels:
-          - column used as the first grouping key
-        state:
-          labels:
-          - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            CAST(analyzed_table.`` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Oracle**  
-      
-    === "Sensor template for Oracle"
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-            SELECT 1 AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} analyzed_table
-            {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-        
-                        grouping_table.grouping_level_1,
-        
-                        grouping_table.grouping_level_2
-        ,
-            time_period,
-            time_period_utc
-        FROM (
-            SELECT 1 AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            CAST(analyzed_table.[] AS date) AS time_period,
-            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
-        
-            
-        ```
-    
 
 
 
@@ -2166,7 +1197,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-26"
+```yaml hl_lines="21-31"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2182,6 +1213,11 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      grouping_columns:
+      - compared_table_column_name: country
+        reference_table_column_name: country_column_name_on_reference_table
+      - compared_table_column_name: state
+        reference_table_column_name: state_column_name_on_reference_table
   partitioned_checks:
     monthly:
       comparisons:
@@ -2200,6 +1236,14 @@ spec:
     col_inserted_at:
       labels:
       - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
+    state:
+      labels:
+      - column used as the first grouping key for calculating aggregated values used
+        for the table comparison
 
 ```
 ### **BigQuery**
@@ -2389,260 +1433,6 @@ spec:
         
     ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-19 45-50"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
-    apiVersion: dqo/v1
-    kind: table
-    spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
-      default_grouping_name: group_by_country_and_state
-      groupings:
-        group_by_country_and_state:
-          level_1:
-            source: column_value
-            column: country
-          level_2:
-            source: column_value
-            column: state
-      table_comparisons:
-        compare_to_source_of_truth_table:
-          compared_table_grouping_name: group_by_country_and_state
-          reference_table_grouping_name: <matching_grouping_name_on_the_reference_table>
-          reference_table_connection_name: <source_of_truth_connection_name>
-          reference_table_schema_name: <source_of_truth_schema_name>
-          reference_table_name: <source_of_truth_table_name>
-      partitioned_checks:
-        monthly:
-          comparisons:
-            compare_to_source_of_truth_table:
-              monthly_partition_row_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-      columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
-        country:
-          labels:
-          - column used as the first grouping key
-        state:
-          labels:
-          - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Oracle**  
-      
-    === "Sensor template for Oracle"
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-            SELECT 1 AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} analyzed_table
-            {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-        
-                        grouping_table.grouping_level_1,
-        
-                        grouping_table.grouping_level_2
-        ,
-            time_period,
-            time_period_utc
-        FROM (
-            SELECT 1 AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
-        
-            
-        ```
-    
 
 
 

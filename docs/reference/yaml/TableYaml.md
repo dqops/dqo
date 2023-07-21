@@ -278,13 +278,68 @@ Identifies a data comparison configuration between a parent table (the compared 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|compared_table_grouping_name|The name of the data grouping configuration on the parent table (the compared table) that will be used for comparison. When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table).|string| | | |
-|reference_table_grouping_name|The name of the data grouping configuration on the referenced name that will be used for comparison. When the data grouping name is not given then compares the whole table without grouping (i.e. the row count of the whole table, the sum of column values for a whole table). The data grouping configurations on the parent table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.|string| | | |
 |reference_table_connection_name|The name of the connection in DQO where the reference table (the source of truth) is configured. When the connection name is not provided, DQO will find the reference table on the connection of the parent table.|string| | | |
 |reference_table_schema_name|The name of the schema where the reference table is imported into DQO. The reference table&#x27;s metadata must be imported into DQO.|string| | | |
 |reference_table_name|The name of the reference table that is imported into DQO. The reference table&#x27;s metadata must be imported into DQO.|string| | | |
 |compared_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.|string| | | |
 |reference_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.|string| | | |
+|[grouping_columns](#tablecomparisongroupingcolumnspairslistspec)|List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared table and the reference table (the source of truth). The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.|[TableComparisonGroupingColumnsPairsListSpec](#tablecomparisongroupingcolumnspairslistspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonGroupingColumnsPairsListSpec  
+List of column pairs used for grouping and joining in the table comparison checks.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|mod_count||integer| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonGroupingColumnsPairSpec  
+Configuration of a pair of columns on the compared table and the reference table (the source of truth) that are joined
+ and used for grouping to perform data comparison of aggregated results (sums of columns, row counts, etc.).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|compared_table_column_name|The name of the column on the compared table (the parent table) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the reference table.|string| | | |
+|reference_table_column_name|The name of the column on the reference table (the source of truth) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the compared table.|string| | | |
 
 
 
