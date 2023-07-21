@@ -343,12 +343,16 @@ const EditReferenceTable = ({
         </SectionWrapper>
 
         <div className="flex gap-4">
-          <div className=" mr-20">
+          <div className=" mr-20 mt-3">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
               <div
                 key={index}
-                className="text-sm py-1.5 my-1.5"
-                style={{ whiteSpace: 'nowrap' }}
+                className="text-sm py-1.5"
+                style={{
+                  whiteSpace: 'nowrap',
+                  marginBottom: '12.6px',
+                  marginTop: '12.6px'
+                }}
               >
                 Column {item}
               </div>

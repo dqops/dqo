@@ -37,11 +37,11 @@ export const SelectGroupColumnsTable = ({
   const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
     useState<DataGroupingConfigurationSpec>();
   const history = useHistory();
+  //   const dataGroupOptions = dataGroupingConfigurations.map((item) => ({
+  //     label: item.data_grouping_configuration_name ?? '',
 
-  const dataGroupOptions = dataGroupingConfigurations.map((item) => ({
-    label: item.data_grouping_configuration_name ?? '',
-    value: item.data_grouping_configuration_name ?? ''
-  }));
+  //     value: item.data_grouping_configuration_name ?? ''
+  //   }));
 
   useEffect(() => {
     if (dataGroupingConfiguration) {
@@ -56,26 +56,30 @@ export const SelectGroupColumnsTable = ({
     }
   }, [dataGroupingConfiguration]);
 
-  const handleChange = (value: string) => {
-    const newDataGrouping = dataGroupingConfigurations.find(
-      (item) => item.data_grouping_configuration_name === value
-    );
+  //   const handleChange = (value: string) => {
+  //     const newDataGrouping = dataGroupingConfigurations.find(
+  //       (item) => item.data_grouping_configuration_name === value
+  //     );
 
-    setDataGroupingConfiguration(newDataGrouping);
-  };
-  const getDataGroupingDimensionLevel = (index: number) => {
-    if (index === 0) return dataGroupingConfigurationSpec?.level_1;
-    if (index === 1) return dataGroupingConfigurationSpec?.level_2;
-    if (index === 2) return dataGroupingConfigurationSpec?.level_3;
-    if (index === 3) return dataGroupingConfigurationSpec?.level_4;
-    if (index === 4) return dataGroupingConfigurationSpec?.level_5;
-    if (index === 5) return dataGroupingConfigurationSpec?.level_6;
-    if (index === 6) return dataGroupingConfigurationSpec?.level_7;
-    if (index === 7) return dataGroupingConfigurationSpec?.level_8;
-    if (index === 8) return dataGroupingConfigurationSpec?.level_9;
+  //     setDataGroupingConfiguration(newDataGrouping);
+  //   };
+
+  const [listOfColumns, setListOfColumns] = useState<Array<string>>([]);
+  const fillArrayWithEmptyStrings = (length: number) => {
+    const emptyStrings = Array.from({ length: length }, () => '');
+    setListOfColumns(emptyStrings);
   };
 
-  const onChangeDataGroupingConfiguration = (spec: string): void => {};
+  useEffect(() => {
+    fillArrayWithEmptyStrings(9);
+  }, []);
+
+  console.log(listOfColumns);
+  const handleColumnSelectChange = (value: string, index: number) => {
+    const updatedList = [...listOfColumns];
+    updatedList[index - 1] = value;
+    setListOfColumns(updatedList);
+  };
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
@@ -92,9 +96,10 @@ export const SelectGroupColumnsTable = ({
                   //     ? 'h-8 border border-red-500'
                   //     : ''
                   // )}
-
+                  triggerClassName="my-0.5"
+                  value={listOfColumns[index - 1]}
                   onChange={(value: string) =>
-                    onChangeDataGroupingConfiguration(value)
+                    handleColumnSelectChange(value, index)
                   }
                   placeholder={placeholder}
                 />
