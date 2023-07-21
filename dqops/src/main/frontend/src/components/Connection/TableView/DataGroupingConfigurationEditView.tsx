@@ -133,8 +133,7 @@ const DataGroupingConfigurationEditView = ({
       [`level_${idx}`]: ''
     });
   };
-  const [good, setGood] = useState(true); // Ustawiamy początkowo na true
-
+  const [good, setGood] = useState(true);
   const variable = () => {
     let isGood = true;
 
@@ -160,7 +159,6 @@ const DataGroupingConfigurationEditView = ({
     variable();
   }, [dataGroupingConfiguration]);
 
-  console.log(good);
   return (
     <div className="px-4 text-sm">
       <ActionGroup
@@ -169,7 +167,6 @@ const DataGroupingConfigurationEditView = ({
         isUpdating={isUpdating}
         isDisabled={good === true ? false : true}
       />
-      {good ? 'isGood' : 'not'}
       <div className="flex py-4 border-b border-gray-300 px-8 -mx-4 justify-between items-center">
         {selectedGroupingConfiguration ? (
           <div>

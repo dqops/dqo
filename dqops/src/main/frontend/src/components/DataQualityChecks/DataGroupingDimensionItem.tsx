@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   DataGroupingDimensionSpec,
   DataGroupingDimensionSpecSourceEnum
@@ -15,7 +15,6 @@ interface IDataGroupingDimensionItemProps {
   scope?: string;
   error?: string;
   onClearError?: (idx: number) => void;
-  isGood?: (param: boolean) => void;
 }
 
 const DataGroupingDimensionItem = ({
@@ -24,30 +23,8 @@ const DataGroupingDimensionItem = ({
   dataGroupingLevel,
   scope,
   error,
-  onClearError,
-  isGood
+  onClearError
 }: IDataGroupingDimensionItemProps) => {
-  const [good, setGood] = useState(false);
-
-  useEffect(() => {
-    const isTagEmpty =
-      dataGroupingLevel?.source === DataGroupingDimensionSpecSourceEnum.tag &&
-      (!dataGroupingLevel.tag || dataGroupingLevel.tag.length === 0);
-
-    const isColumnEmpty =
-      dataGroupingLevel?.source ===
-        DataGroupingDimensionSpecSourceEnum.column_value &&
-      (!dataGroupingLevel.column || dataGroupingLevel.column.length === 0);
-
-    if (!isTagEmpty && !isColumnEmpty) {
-      setGood(true);
-      if (isGood) isGood(true);
-    } else {
-      setGood(false);
-      if (isGood) isGood(false);
-    }
-  }, [dataGroupingLevel]);
-
   return (
     <div className="mb-4 last:mb-0">
       <div className="flex justify-between items-center space-x-6">
