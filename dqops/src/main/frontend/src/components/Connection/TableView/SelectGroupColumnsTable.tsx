@@ -26,6 +26,10 @@ type SelectDataGroupingForTableProps = {
   refConnection?: string;
   refSchema?: string;
   reftable?: string;
+  onSetRef?: (obj: { [key: number]: boolean }) => void;
+  onSetNormal?: (obj: { [key: number]: boolean }) => void;
+  onSetRefList?: (obj: Array<string>) => void;
+  onSetNormalList?: (obj: Array<string>) => void;
 };
 
 export const SelectGroupColumnsTable = ({
@@ -38,7 +42,11 @@ export const SelectGroupColumnsTable = ({
   placeholder,
   refConnection,
   refSchema,
-  reftable
+  reftable,
+  onSetNormal,
+  onSetRef,
+  onSetNormalList,
+  onSetRefList
 }: SelectDataGroupingForTableProps) => {
   const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
     useState<DataGroupingConfigurationSpec>();
@@ -76,18 +84,6 @@ export const SelectGroupColumnsTable = ({
     const emptyStrings = Array.from({ length: length }, () => '');
     setListOfColumns(emptyStrings);
   };
-
-  useEffect(() => {
-    fillArrayWithEmptyStrings(9);
-    workOnMyObj();
-  }, [dataGroupingConfiguration]);
-
-  const handleColumnSelectChange = (value: string, index: number) => {
-    const updatedList = [...listOfColumns];
-    updatedList[index] = value;
-    setListOfColumns(updatedList);
-  };
-
   const workOnMyObj = (): { [key: number]: boolean } => {
     const initialObject: { [key: number]: boolean } = {};
     let check = false;
@@ -105,6 +101,26 @@ export const SelectGroupColumnsTable = ({
     }
     return initialObject;
   };
+  useEffect(() => {
+    fillArrayWithEmptyStrings(9);
+  }, [dataGroupingConfiguration]);
+
+  useEffect(() => {
+    if (onSetNormalList) {
+      onSetNormalList(listOfColumns);
+    }
+    if (onSetRefList) {
+      onSetRefList(listOfColumns);
+    }
+  }, [listOfColumns]);
+
+  const handleColumnSelectChange = (value: string, index: number) => {
+    const updatedList = [...listOfColumns];
+    updatedList[index] = value;
+    setListOfColumns(updatedList);
+  };
+
+  console.log(listOfColumns);
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>

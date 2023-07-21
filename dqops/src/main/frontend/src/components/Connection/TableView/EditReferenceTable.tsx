@@ -19,6 +19,7 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
+import { boolean, number } from 'yargs';
 
 type EditReferenceTableProps = {
   onBack: () => void;
@@ -58,8 +59,26 @@ const EditReferenceTable = ({
     useState<DataGroupingConfigurationBasicModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [normalObj, setNormalObj] = useState<{ [key: number]: boolean }>();
+  const [refObj, setRefObj] = useState<{ [key: number]: boolean }>();
+  const [normalList, setNormalList] = useState<Array<string>>();
+  const [refList, setRefList] = useState<Array<string>>();
   const history = useHistory();
   const dispatch = useActionDispatch();
+
+  const onSetNormal = (obj: { [key: number]: boolean }): void => {
+    setNormalObj(obj);
+  };
+  const onSetRef = (obj: { [key: number]: boolean }): void => {
+    setRefObj(obj);
+  };
+
+  const onSetNormalList = (obj: Array<string>): void => {
+    setNormalList(obj);
+  };
+  const onSetRefList = (obj: Array<string>): void => {
+    setRefList(obj);
+  };
 
   useEffect(() => {
     ConnectionApiClient.getAllConnections().then((res) => {
@@ -279,6 +298,13 @@ const EditReferenceTable = ({
     setIsUpdated(true);
   };
 
+  const display = () => {
+    console.log('normal list: ');
+    console.table(normalList);
+    console.log('ref list');
+    console.table(refList);
+  };
+
   return (
     <div>
       <TableActionGroup
@@ -288,7 +314,7 @@ const EditReferenceTable = ({
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
         <div className="flex items-center justify-center gap-x-5">
-          <div className="font-bold text-center">
+          <div className="font-bold text-center" onClick={() => display()}>
             Table comparison configuration name:{' '}
           </div>
           <Input
@@ -366,6 +392,7 @@ const EditReferenceTable = ({
             setDataGroupingConfiguration={changeDataGroupingProps}
             goToCreateNew={goToCreateNew}
             placeholder="Select column on compared table"
+            onSetNormalList={onSetNormalList}
           />
 
           <SelectGroupColumnsTable
@@ -379,6 +406,7 @@ const EditReferenceTable = ({
             refConnection={refConnection}
             refSchema={refSchema}
             reftable={refTable}
+            onSetRefList={onSetRefList}
           />
         </div>
       </div>
