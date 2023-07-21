@@ -60,6 +60,12 @@ public class CopyVersionToFilesPostProcessor {
 
         updateVersionInPythonVersionFile(repositoryRootPath.resolve("distribution/python/dqops/version.py"),
                 version, pyPiPackageVersion);
+
+        updateVersionInWindowsDqoCmd(repositoryRootPath.resolve("dqo.cmd"), version);
+        updateVersionInLinuxDqoScript(repositoryRootPath.resolve("dqo"), version);
+
+        updateVersionInBannerTxt(repositoryRootPath.resolve("dqops/src/main/resources/banner.txt"), version);
+        updateVersionInIntelliJRunConfig(repositoryRootPath.resolve(".run/dqo run.run.xml"), version);
     }
 
     /**
@@ -101,6 +107,97 @@ public class CopyVersionToFilesPostProcessor {
                 if (!Objects.equals(line, correctLine)) {
                     lines.set(i, correctLine);
                     Files.write(pathToPackageJson, lines, StandardCharsets.UTF_8);
+                }
+
+                return;
+            }
+        }
+    }
+
+    /**
+     * Replace the version number in the dqo.cmd script
+     * @param pathToDqoScript Path to a dqo.cmd
+     * @param version New version number.
+     * @throws Exception
+     */
+    public static void updateVersionInWindowsDqoCmd(Path pathToDqoScript, String version) throws Exception {
+        List<String> lines = Files.readAllLines(pathToDqoScript, StandardCharsets.UTF_8);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.startsWith("set DQO_VERSION=")) {
+                String correctLine = "set DQO_VERSION=" + version;
+                if (!Objects.equals(line, correctLine)) {
+                    lines.set(i, correctLine);
+                    Files.write(pathToDqoScript, lines, StandardCharsets.UTF_8);
+                }
+
+                return;
+            }
+        }
+    }
+
+    /**
+     * Replace the version number in the dqo shell script
+     * @param pathToDqoScript Path to a dqo shell
+     * @param version New version number.
+     * @throws Exception
+     */
+    public static void updateVersionInLinuxDqoScript(Path pathToDqoScript, String version) throws Exception {
+        List<String> lines = Files.readAllLines(pathToDqoScript, StandardCharsets.UTF_8);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.startsWith("export DQO_VERSION=")) {
+                String correctLine = "export DQO_VERSION=" + version;
+                if (!Objects.equals(line, correctLine)) {
+                    lines.set(i, correctLine);
+                    byte[] newFileContent = String.join("\n", lines).getBytes(StandardCharsets.UTF_8);
+                    Files.write(pathToDqoScript, newFileContent);
+                }
+
+                return;
+            }
+        }
+    }
+
+    /**
+     * Replace the version number in the banner.txt file.
+     * @param pathToBannerTxt Path to a banner.txt
+     * @param version New version number.
+     * @throws Exception
+     */
+    public static void updateVersionInBannerTxt(Path pathToBannerTxt, String version) throws Exception {
+        List<String> lines = Files.readAllLines(pathToBannerTxt, StandardCharsets.UTF_8);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            String bannerPrefix = " :: DQOps Data Quality Operations Center ::    (v";
+            if (line.startsWith(bannerPrefix)) {
+                String correctLine = bannerPrefix + version + ")";
+                if (!Objects.equals(line, correctLine)) {
+                    lines.set(i, correctLine);
+                    Files.write(pathToBannerTxt, lines, StandardCharsets.UTF_8);
+                }
+
+                return;
+            }
+        }
+    }
+
+    /**
+     * Replace the version number in the IntelliJ run config.
+     * @param pathToRunConfig Path to an IntelliJ run config.
+     * @param version New version number.
+     * @throws Exception
+     */
+    public static void updateVersionInIntelliJRunConfig(Path pathToRunConfig, String version) throws Exception {
+        List<String> lines = Files.readAllLines(pathToRunConfig, StandardCharsets.UTF_8);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            String jarReferenceLinePrefix = "    <option name=\"JAR_PATH\" value=\"$PROJECT_DIR$/dqops/target/dqo-dqops-";
+            if (line.startsWith(jarReferenceLinePrefix)) {
+                String correctLine = jarReferenceLinePrefix + version + ".jar\" />";
+                if (!Objects.equals(line, correctLine)) {
+                    lines.set(i, correctLine);
+                    Files.write(pathToRunConfig, lines, StandardCharsets.UTF_8);
                 }
 
                 return;

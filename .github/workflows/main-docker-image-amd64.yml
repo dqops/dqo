@@ -42,6 +42,7 @@ jobs:
         id: readversion
         with:
           path: ./VERSION
+
       - uses: docker-practice/actions-setup-docker@master
 
       - uses: mr-smithers-excellent/docker-build-push@v6

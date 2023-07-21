@@ -15,4 +15,4 @@
 @REM limitations under the License.
 @REM
 
-"%DQO_RUNNER%" -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1024m -XX:TieredStopAtLevel=1 --add-opens java.base/java.nio=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*
+"%DQO_RUNNER%" -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx2048m -XX:TieredStopAtLevel=1 --add-opens java.base/java.nio=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*
