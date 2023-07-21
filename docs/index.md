@@ -1,7 +1,7 @@
 # What is DQO?
 
 DQO is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
-DQO comes with around 100 predefined data quality checks which helps you monitor the quality of your data.
+DQO comes with more than 140 predefined data quality checks which helps you monitor the quality of your data.
 
 ## DQO features
 - Intuitive graphical interface and access via CLI
