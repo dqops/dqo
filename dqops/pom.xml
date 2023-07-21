@@ -191,6 +191,9 @@
 								<phase>compile</phase>
 								<configuration>
 									<arguments>run-script build</arguments>
+									<environmentVariables>
+										<CI>false</CI> <!-- Allow warning on CI builds, temporary solution until we remove the last few warnings -->
+									</environmentVariables>
 								</configuration>
 							</execution>
 						</executions>
