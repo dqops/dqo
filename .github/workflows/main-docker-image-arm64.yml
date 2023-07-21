@@ -1,6 +1,7 @@
 name: Docker Image CI for arm64
 on:
   push:
+    branches: [ "main" ]
     tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
@@ -19,7 +20,7 @@ jobs:
 
       - uses: juliangruber/read-file-action@v1
         name: Read VERSION
-        id: readversion
+        id: read_version
         with:
           path: ./VERSION
 
@@ -29,7 +30,7 @@ jobs:
         name: Build and Push Docker Image
         with:
           image: dqops/dqo
-          tags: $(date +%s),${{ steps.readversion.outputs.content }},latest
+          tags: $(date +%s),${{ steps.read_version.outputs.content }},latest
           enableBuildKit: true
           multiPlatform: true
           platform: ${{ matrix.platform }}

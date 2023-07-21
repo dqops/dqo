@@ -2,6 +2,7 @@ name: Build and publish the release to GitHub releases and PyPi
 
 on:
   push:
+    branches: [ "main" ]
     tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
@@ -28,7 +29,7 @@ jobs:
 
       - uses: juliangruber/read-file-action@v1
         name: Read VERSION
-        id: readversion
+        id: read_version
         with:
           path: ./VERSION
 
@@ -38,8 +39,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.readversion.outputs.content }}
-          tag_name: ${{ steps.readversion.outputs.content }}
+          release_name: ${{ steps.read_version.outputs.content }}
+          tag_name: ${{ steps.read_version.outputs.content }}
           body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -50,24 +51,21 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./distribution/target/dqo-distribution-${{steps.readversion.outputs.content}}-bin.zip
-          asset_name: dqo-distribution-${{steps.readversion.outputs.content}}-bin.zip
+          asset_path: ./distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip
+          asset_name: dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip
           asset_content_type: application/zip
 
       - name: Install python dependencies
-        working-directory: ./distribution/python
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r ./distribution/python/requirements.txt
 
       - name: Build PyPi package
-        working-directory: ./distribution/python
         run: |
-          python -m build
+          python -m build ./distribution/python
 
       - name: Publish PyPi package
-        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
-        working-directory: ./distribution/python
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
