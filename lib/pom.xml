@@ -3,11 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<relativePath>../pom.xml</relativePath>
-		<groupId>com.dqops</groupId>
-		<artifactId>dqo-data-quality-observer</artifactId>
-		<version>0.2.0-beta1</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.1.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-lib</artifactId>
     <version>0.2.0-beta2</version>  <!-- DQO Version, do not touch (changed automatically) -->
