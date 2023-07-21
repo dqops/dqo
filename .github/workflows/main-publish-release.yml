@@ -1,7 +1,7 @@
 name: Build and publish the release to GitHub releases and PyPi
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -65,5 +65,6 @@ jobs:
       - name: Publish PyPi package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          packages-dir: distribution/python/dist/
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}

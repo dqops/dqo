@@ -123,7 +123,7 @@ try:
         install_requires=['install-jdk>=1.0.4',
                           'httpx>=0.15.4,<0.25.0',
                           'attrs>=21.3.0',
-                          'python-dateutil==^2.8.2',
+                          'python-dateutil>=2.8.2',
                           'numpy>=1.24.3',
                           'MarkupSafe>=2.1.1',
                           'Jinja2>=3.0.3',
