@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limit
 
+# WARNING: the next two lines with the version numbers (VERSION =, PIP_VERSION =) should not be modified manually. They are changed by a maven profile at compile time.
 VERSION = "0.2.0-beta1"
 PIP_VERSION = "0.2.0.2"
 GITHUB_RELEASE = "v" + VERSION + ""

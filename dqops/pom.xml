@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-	<version>0.2.0-beta1</version>
+	<version>0.2.0-beta1</version>  <!-- DQO Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQO Data Quality Operations Center</description>
@@ -81,6 +81,7 @@
 				</plugins>
 			</build>
 		</profile>
+
 		<profile>
 			<id>generate-python-client</id>
 			<build>
@@ -110,6 +111,7 @@
 				</plugins>
 			</build>
 		</profile>
+
 		<profile>
 			<id>update-dqo-home-specs</id>
 			<build>
@@ -137,6 +139,35 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<profile>
+			<id>update-package-version-numbers</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>update-package-version-numbers</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.utils.version.CopyVersionToFilesPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 		<profile>
 			<id>run-npm</id>
 			<activation>

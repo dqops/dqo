@@ -1,17 +1,17 @@
 # DQO Data Quality Operations Center
 
 DQO is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
-DQO comes with around 100 predefined data quality checks which helps you monitor the quality of your data.
+DQO comes with around 150 predefined data quality checks which helps you monitor the quality of your data.
 
 ![DQO screens](https://dqops.com/docs/images/dqo-screens.gif)
 
 ## Key features
 - Intuitive graphical interface and access via CLI
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server and MySQL
-- ~450 build-in table and column checks with easy customization
+- ~600 build-in table and column checks with easy customization
 - Table and column-level checks which allows writing your own SQL queries
 - Daily and monthly date partition testing
-- Data segmentation by up to 9 different data streams
+- Data grouping by up to 9 different data grouping levels
 - Build-in scheduling
 - Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
 - Incident analysis
@@ -29,13 +29,8 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 1. To install DQO via pip manager just run
 
-    Windows
     ```
-    py -m pip install dqops
-    ```
-    MacOS/Linux
-    ```
-    pip3 install dqops
+    python3 -m pip install --user dqops
     ```
    
     If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqops/dqo](https://github.com/dqops/dqo)
@@ -43,26 +38,21 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 2. Run dqo app to finalize the installation.
 
-    Windows
     ```
-    dqo
-    ```
-    MacOS/Linux
-    ```
-    ./dqo
+    python3 -m dqops
     ```
 
 3. Create DQO userhome folder.
 
-   After installation, you will be asked whether to initialize the DQO userhome folder in the default location. Type Y to create the folder.  
-   The userhome folder locally stores data such as sensor readouts and checkout results, as well as data source configurations. [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
+   After installation, you will be asked whether to initialize the DQO user's home folder in the default location. Type Y to create the folder.  
+   The user's home folder locally stores data such as sensor readouts and the data quality check results, as well as data source configurations. [You can learn more about data storage here](https://dqops.com/docs/dqo-concepts/data-storage/data-storage/).
 
 4. Login to DQO Cloud.
 
    To use DQO features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
    must create a DQO cloud account.
 
-   After creating a userhome folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
+   After creating a user's home folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
    redirected to [https://cloud.dqo.ai/registration](https://cloud.dqo.ai/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
 
    During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQO application.
