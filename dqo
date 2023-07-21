@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright © 2021 DQO.ai (support@dqo.ai)
+# Copyright © 2021 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-export DQO_VERSION=0.2.0-alpha0
+export DQO_VERSION=0.2.0-beta2
 
 # Configure local development environment overrides
 if [ -f $(dirname $0)/set-dqo-envs.sh ]; then

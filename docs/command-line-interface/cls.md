@@ -17,7 +17,7 @@ $ dqo [dqo options...] cls
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cls
+dqo> cls
 
 ```
 

@@ -1,0 +1,162 @@
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+
+import attr
+
+from ..models.connection_incident_grouping_spec_grouping_level import (
+    ConnectionIncidentGroupingSpecGroupingLevel,
+)
+from ..models.connection_incident_grouping_spec_minimum_severity import (
+    ConnectionIncidentGroupingSpecMinimumSeverity,
+)
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.incident_webhook_notifications_spec import (
+        IncidentWebhookNotificationsSpec,
+    )
+
+
+T = TypeVar("T", bound="ConnectionIncidentGroupingSpec")
+
+
+@attr.s(auto_attribs=True)
+class ConnectionIncidentGroupingSpec:
+    """
+    Attributes:
+        grouping_level (Union[Unset, ConnectionIncidentGroupingSpecGroupingLevel]): Grouping level of failed data
+            quality checks for creating higher level data quality incidents. The default grouping level is by a table, a
+            data quality dimension and a check category (i.e. a consistency data quality incident detected on a table X in
+            the numeric checks category).
+        minimum_severity (Union[Unset, ConnectionIncidentGroupingSpecMinimumSeverity]): Minimum severity level of data
+            quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported
+            severity levels are 'error' and 'fatal'.
+        divide_by_data_groups (Union[Unset, bool]): Create separate data quality incidents for each data group, creating
+            different incidents for different groups of rows. By default, data groups are ignored for grouping data quality
+            issues into data quality incidents.
+        max_incident_length_days (Union[Unset, int]): The maximum length of a data quality incident in days. When a new
+            data quality issue is detected after max_incident_length_days days since a similar data quality was first seen,
+            a new data quality incident is created that will capture all following data quality issues for the next
+            max_incident_length_days days. The default value is 60 days.
+        mute_for_days (Union[Unset, int]): The number of days that all similar data quality issues are muted when a a
+            data quality incident is closed in the 'mute' status.
+        disabled (Union[Unset, bool]): Disables data quality incident creation for failed data quality checks on the
+            data source.
+        webhooks (Union[Unset, IncidentWebhookNotificationsSpec]):
+    """
+
+    grouping_level: Union[Unset, ConnectionIncidentGroupingSpecGroupingLevel] = UNSET
+    minimum_severity: Union[
+        Unset, ConnectionIncidentGroupingSpecMinimumSeverity
+    ] = UNSET
+    divide_by_data_groups: Union[Unset, bool] = UNSET
+    max_incident_length_days: Union[Unset, int] = UNSET
+    mute_for_days: Union[Unset, int] = UNSET
+    disabled: Union[Unset, bool] = UNSET
+    webhooks: Union[Unset, "IncidentWebhookNotificationsSpec"] = UNSET
+    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        grouping_level: Union[Unset, str] = UNSET
+        if not isinstance(self.grouping_level, Unset):
+            grouping_level = self.grouping_level.value
+
+        minimum_severity: Union[Unset, str] = UNSET
+        if not isinstance(self.minimum_severity, Unset):
+            minimum_severity = self.minimum_severity.value
+
+        divide_by_data_groups = self.divide_by_data_groups
+        max_incident_length_days = self.max_incident_length_days
+        mute_for_days = self.mute_for_days
+        disabled = self.disabled
+        webhooks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.webhooks, Unset):
+            webhooks = self.webhooks.to_dict()
+
+        field_dict: Dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if grouping_level is not UNSET:
+            field_dict["grouping_level"] = grouping_level
+        if minimum_severity is not UNSET:
+            field_dict["minimum_severity"] = minimum_severity
+        if divide_by_data_groups is not UNSET:
+            field_dict["divide_by_data_groups"] = divide_by_data_groups
+        if max_incident_length_days is not UNSET:
+            field_dict["max_incident_length_days"] = max_incident_length_days
+        if mute_for_days is not UNSET:
+            field_dict["mute_for_days"] = mute_for_days
+        if disabled is not UNSET:
+            field_dict["disabled"] = disabled
+        if webhooks is not UNSET:
+            field_dict["webhooks"] = webhooks
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.incident_webhook_notifications_spec import (
+            IncidentWebhookNotificationsSpec,
+        )
+
+        d = src_dict.copy()
+        _grouping_level = d.pop("grouping_level", UNSET)
+        grouping_level: Union[Unset, ConnectionIncidentGroupingSpecGroupingLevel]
+        if isinstance(_grouping_level, Unset):
+            grouping_level = UNSET
+        else:
+            grouping_level = ConnectionIncidentGroupingSpecGroupingLevel(
+                _grouping_level
+            )
+
+        _minimum_severity = d.pop("minimum_severity", UNSET)
+        minimum_severity: Union[Unset, ConnectionIncidentGroupingSpecMinimumSeverity]
+        if isinstance(_minimum_severity, Unset):
+            minimum_severity = UNSET
+        else:
+            minimum_severity = ConnectionIncidentGroupingSpecMinimumSeverity(
+                _minimum_severity
+            )
+
+        divide_by_data_groups = d.pop("divide_by_data_groups", UNSET)
+
+        max_incident_length_days = d.pop("max_incident_length_days", UNSET)
+
+        mute_for_days = d.pop("mute_for_days", UNSET)
+
+        disabled = d.pop("disabled", UNSET)
+
+        _webhooks = d.pop("webhooks", UNSET)
+        webhooks: Union[Unset, IncidentWebhookNotificationsSpec]
+        if isinstance(_webhooks, Unset):
+            webhooks = UNSET
+        else:
+            webhooks = IncidentWebhookNotificationsSpec.from_dict(_webhooks)
+
+        connection_incident_grouping_spec = cls(
+            grouping_level=grouping_level,
+            minimum_severity=minimum_severity,
+            divide_by_data_groups=divide_by_data_groups,
+            max_incident_length_days=max_incident_length_days,
+            mute_for_days=mute_for_days,
+            disabled=disabled,
+            webhooks=webhooks,
+        )
+
+        connection_incident_grouping_spec.additional_properties = d
+        return connection_incident_grouping_spec
+
+    @property
+    def additional_keys(self) -> List[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

@@ -55,6 +55,7 @@ build/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /userhome/
+/dqoai/
 /home/venv/
 venv/
 *.pyc
@@ -62,4 +63,11 @@ venv/
 .DS_Store
 
 # Documentation site
-site/
+/site/
+/.cache/
+
+# DQO Examples
+.localsettings.dqosettings.yaml
+.data/
+.logs/
+.index/

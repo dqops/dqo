@@ -29,7 +29,7 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
+dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
            [-ct=<checkType>]
@@ -49,7 +49,7 @@ dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|`-cat`<br/>`--category`<br/>|Check category name (volume, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
 |`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
@@ -101,7 +101,7 @@ $ dqo [dqo options...] check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
               [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
               [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
@@ -120,14 +120,8 @@ dqo.ai> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to enable checks.| ||
-|`-E`<br/>`--error-rule`<br/>|Error level rule options.
-Usage:
-	-E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
-	--error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
-|`-F`<br/>`--fatal-rule`<br/>|Fatal level rule options.
-Usage:
-	-F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
-	--fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|`-E`<br/>`--error-rule`<br/>|Error level rule options. Usage: -E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|`-F`<br/>`--fatal-rule`<br/>|Fatal level rule options. Usage: -F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
@@ -135,16 +129,10 @@ Usage:
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-o`<br/>`--override`<br/>|Override existing configuration of selected checks.| ||
 |`-sn`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
-|`-S`<br/>`--sensor-param`<br/>|Configuration parameters for the sensor.
-Usage:
-	-S&lt;param_name&gt;&#x3D;&lt;param_value&gt;,
-	--sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
+|`-S`<br/>`--sensor-param`<br/>|Configuration parameters for the sensor. Usage: -S&lt;param_name&gt;&#x3D;&lt;param_value&gt;, --sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
 |`-ts`<br/>`--time-scale`<br/>|Time scale for recurring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
-|`-W`<br/>`--warning-rule`<br/>|Warning level rule options.
-Usage:
-	-W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
-	--warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|`-W`<br/>`--warning-rule`<br/>|Warning level rule options. Usage: -W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 
 
 
@@ -167,7 +155,7 @@ $ dqo [dqo options...] check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
                [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
                [-t=<table>] [-ts=<timeScale>]

@@ -41,11 +41,11 @@ Data quality KPIs at a day and data quality dimension level.
 | 2022-10-03 | 94.6%     | 97.0%        | 94.3%    |
 | 2022-10-04 | 99.1%     | 93.2%        | 94.7%    |
 
-Additionally, data quality KPIs can be calculated for different [data streams](../data-stream-segmentation/data-stream-segmentation.md)
+Additionally, data quality KPIs can be calculated for different [data streams](../data-grouping/data-grouping.md)
 separately. Data aggregated in a single database (or a data lake) can be loaded from different data sources. 
 To calculate a separate data quality KPI for each data source, it must be possible to identify that source at the data level.
 
-[Read more about data stream segmentation](../data-stream-segmentation/data-stream-segmentation.md)
+[Read more about data stream segmentation](../data-grouping/data-grouping.md)
 
 Data quality KPIs can also be calculated for combinations of data sources (data streams), time periods and data quality
 dimensions. An example output of a data quality KPI calculation at a month, country-level data sources, and separate 
@@ -59,4 +59,5 @@ data quality dimensions would look like the following table:
 | 2022-10 | JP          |     99.1% |        93.2% |    94.7% |
 
 ## What's next
-- [Visualize data quality KPIs on build-in dashboards](../data-quality-dashboards/data-quality-dashboards.md)
+- [Read about build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
+- [Learn how to review results of data quality monitoring on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)

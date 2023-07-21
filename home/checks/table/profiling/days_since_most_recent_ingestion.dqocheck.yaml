@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: table/timeliness/days_since_most_recent_ingestion
-  rule_name: comparison/max_days
-  help_text: Calculates the time difference in days between the current date and the
-    most recent data ingestion timestamp (staleness)

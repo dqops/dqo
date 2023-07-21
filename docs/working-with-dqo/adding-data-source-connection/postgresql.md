@@ -9,19 +9,19 @@ You need a PostgreSQL account. By default, PostgreSQL restricts connections to h
 pg_hba.conf file. In case of restrictions you need to add the IP address used by DQO to
 [Allowed IP Addresses in PostgreSQL Network Policies](https://www.postgresql.org/docs/9.1/auth-pg-hba-conf.html).
 
-## Adding PostgreSQL connection using graphic interface
+## Adding PostgreSQL connection using the graphical interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.jpg)
 
 2. Select PostgreSQL database type.
 
-    ![Selecting PostgreSQL database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection-postgresql.jpg)
+    ![Selecting PostgreSQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-postgresql.jpg)
 
     Add connection settings.
 
-    ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-postgresql.jpg)
+    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-postgresql.jpg)
 
     | PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                      |
     |--------------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -36,13 +36,13 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
-    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
     For example:
-    ![Adding connection JDBC settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
+    ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
     
     To remove the property click on the trash icon add the end of the input field.
 
@@ -51,17 +51,17 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables. 
 
-    ![Importing schemas](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/importing-schemas.jpg)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-   ![AImporting tables](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
+   ![AImporting tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
 
 ## Adding PostgreSQL connection using DQO Shell
 
 To add a connection run the following command in DQO Shell.
 ```
-dqo.ai> connection add
+dqo> connection add
 ```
 
 Fill in the data you will be asked for.
@@ -87,7 +87,7 @@ Run 'table import -c=connection1' to import tables.
 You can also run the command with parameters to add a connection in just a single step.
 
 ```
-dqo.ai> connection add --name=connection1
+dqo> connection add --name=connection1
 --provider=postgresql
 --postgresql-host=localhost
 --postgresql-port=65234
@@ -102,7 +102,7 @@ DQO will ask you to select the schema from which the tables will be imported.
 You can also add the schema and table name as a parameter to import tables in just a single step.
 
 ```
-dqo.ai> table import --connection={connection name}
+dqo> table import --connection={connection name}
 --schema={schema name}
 --table={table name}
 ```

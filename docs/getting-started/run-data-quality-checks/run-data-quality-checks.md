@@ -3,8 +3,8 @@
 After [adding your first connection in the previous step](../adding-data-source-connection/adding-data-source-connection.md),
 we describe how to run first checks. 
 
-In our example on BigQuery public dataset Austin Crime Data you will enable and run a table-level [row_count](../../checks/table/standard/row-count.md)
-and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md) checks using the graphic interface.
+In our example on BigQuery public dataset Austin Crime Data you will enable and run a table-level [row_count](../../checks/table/volume/row-count.md)
+and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md) checks using the graphical interface.
 
 For more information about checks, see [DQO concepts section](../../dqo-concepts/checks/index.md). 
 
@@ -16,9 +16,9 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
     Another option is to expand the tree view of the newly added connection on the left side, click on the "crime" table and use the "Advanced Profiling" link.
 
-    ![Navigating to profiling section](https://docs.dqo.ai/docs/images/getting-started/austin-crime-table-view-link-to-profiling.jpg)
+    ![Navigating to profiling section](https://dqops.com/docs/images/getting-started/austin-crime-table-view-link-to-profiling.jpg)
 
-2. Enable [row_count](../../checks/table/standard/row-count.md) table-level data quality check on "crime" table.
+2. Enable [row_count](../../checks/table/volume/row-count.md) table-level data quality check on "crime" table.
 
     Row_count check verifies that the number of rows in the table does not exceed the minimum accepted count set as the threshold level.
    
@@ -26,18 +26,18 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
     In the list of checks on the right, enable the row count data quality check by clinking switch button
     Leave the default value of the error threshold level as "0".  You can read more about threshold severity levels in [DQO concepts section](../../dqo-concepts/checks/#severity-levels).
 
-    ![Enable row_count data quality check](https://docs.dqo.ai/docs/images/getting-started/austin-crime-run-row_count-check.jpg)
+    ![Enable row_count data quality check](https://dqops.com/docs/images/getting-started/austin-crime-run-row_count-check.jpg)
 
-3. Run [row_count](../../checks/table/standard/row-count.md) data quality check by clicking the Run Check icon
+3. Run [row_count](../../checks/table/volume/row-count.md) data quality check by clicking the Run Check icon
 
-    ![Running check](https://docs.dqo.ai/docs/images/getting-started/austin-crime-run-row_count-check.jpg)
+    ![Running check](https://dqops.com/docs/images/getting-started/austin-crime-run-row_count-check.jpg)
     
     A green square should appear next to the name of the checks indicating that the results of the run check is valid.
     You can view the details by placing the mouse cursor on the green square.
 
 4. Click the "Check Details" icon to view more details of the results.
 
-    ![Checking results](https://docs.dqo.ai/docs/images/getting-started/austin-crime-row_count-check-results.jpg)
+    ![Checking results](https://dqops.com/docs/images/getting-started/austin-crime-row_count-check-results.jpg)
 
     A table will appear with more details about the run check.
 
@@ -60,11 +60,11 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
     The screen with the results should look as the one below. 
 
-    ![Checking results](https://docs.dqo.ai/docs/images/getting-started/austin-crime-nulls_percent-check-results.jpg)
+    ![Checking results](https://dqops.com/docs/images/getting-started/austin-crime-nulls_percent-check-results.jpg)
 
 5. Synchronize locally stored results with your DQO Cloud account to be able to view the results on the dashboards. 
 
-    To synchronize all the data just run `cloud sync all` command in DQO Shell.
+    To synchronize all the data click on the **Synchronize** button in the upper right corner or just run `cloud sync all` command in DQO Shell.
 
     You can read more about `cloud` command in [Command-line specification section](../../command-line-interface/cloud.md).
 

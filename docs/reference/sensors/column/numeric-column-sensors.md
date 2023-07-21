@@ -1,4 +1,236 @@
 
+## **expected numbers in use count**
+**Full sensor name**
+```
+column/numeric/expected_numbers_in_use_count
+```
+**Description**  
+Column level sensor that counts how many expected numeric values are used in a tested column. Finds unique column values from the set of expected numeric values and counts them.
+ This sensor is useful to analyze numeric columns that have a low number of unique values and it should be tested if all possible values from the list of expected values are used in any row.
+ The typical types of tested columns are numeric status or type columns.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_values|List of expected numeric values that should be found in the tested column.|integer_list| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "BigQuery"
+      
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{ values_list|join(', ') -}}
+    {% endmacro %}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+        NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{ values_list|join(', ') -}}
+    {% endmacro %}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Redshift"
+      
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "SQL Server"
+      
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT_BIG(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN MAX(0)
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
 ## **invalid latitude count**
 **Full sensor name**
 ```
@@ -11,9 +243,9 @@ Column level sensor that counts invalid latitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -22,16 +254,34 @@ Column level sensor that counts invalid latitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -40,16 +290,16 @@ Column level sensor that counts invalid latitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -58,16 +308,16 @@ Column level sensor that counts invalid latitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -76,16 +326,16 @@ Column level sensor that counts invalid latitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -94,7 +344,7 @@ Column level sensor that counts invalid latitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -115,9 +365,9 @@ Column level sensor that counts invalid longitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -126,16 +376,34 @@ Column level sensor that counts invalid longitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -144,16 +412,16 @@ Column level sensor that counts invalid longitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -162,16 +430,16 @@ Column level sensor that counts invalid longitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -180,16 +448,16 @@ Column level sensor that counts invalid longitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -198,7 +466,7 @@ Column level sensor that counts invalid longitude in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -219,65 +487,78 @@ Column level sensor that counts the average (mean) of values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -298,9 +579,9 @@ Column level sensor that counts negative values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -309,16 +590,34 @@ Column level sensor that counts negative values in a column.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -327,16 +626,16 @@ Column level sensor that counts negative values in a column.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -345,16 +644,16 @@ Column level sensor that counts negative values in a column.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -363,16 +662,16 @@ Column level sensor that counts negative values in a column.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -381,7 +680,7 @@ Column level sensor that counts negative values in a column.
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -402,9 +701,9 @@ Column level sensor that counts percentage of negative values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -416,16 +715,37 @@ Column level sensor that counts percentage of negative values in a column.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -437,16 +757,16 @@ Column level sensor that counts percentage of negative values in a column.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -458,16 +778,16 @@ Column level sensor that counts percentage of negative values in a column.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -479,16 +799,16 @@ Column level sensor that counts percentage of negative values in a column.
                 END
             ) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -500,7 +820,7 @@ Column level sensor that counts percentage of negative values in a column.
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -521,9 +841,9 @@ Column level sensor that counts non negative values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -532,16 +852,34 @@ Column level sensor that counts non negative values in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -550,16 +888,16 @@ Column level sensor that counts non negative values in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -568,16 +906,16 @@ Column level sensor that counts non negative values in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -586,16 +924,16 @@ Column level sensor that counts non negative values in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -604,7 +942,7 @@ Column level sensor that counts non negative values in a column.
                 ELSE 1
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -625,9 +963,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -636,16 +974,34 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -654,16 +1010,16 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -672,16 +1028,16 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -690,16 +1046,16 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 ELSE 1
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -708,7 +1064,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                 ELSE 1
             END
         ) / COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -717,27 +1073,29 @@ Column level sensor that calculates the percent of non-negative values in a colu
     ```
 ___
 
-## **numbers in set count**
+## **number value in set percent**
 **Full sensor name**
 ```
-column/numeric/numbers_in_set_count
+column/numeric/number_value_in_set_percent
 ```
 **Description**  
-Column level sensor that counts values that are members of a given set.
+Column level sensor that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+ This sensor is useful for checking numeric columns that store numeric codes (such as status codes) that the only values found in the column are from a set of expected values.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|integer_list| ||
+|expected_values|A list of expected values that must be present in a numeric column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|integer_list| ||
 
 
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -745,208 +1103,7 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro %}
     
     {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        0
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "postgresql"
-      
-    ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "redshift"
-      
-    ```
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "sqlserver"
-      
-    ```
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT_BIG(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
-## **numbers in set percent**
-**Full sensor name**
-```
-column/numeric/numbers_in_set_percent
-```
-**Description**  
-Column level sensor that calculates the percentage of values that are members of a given set.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|integer_list| ||
-
-
-
-
-**SQL Template (Jinja2)**  
-=== "bigquery"
-      
-    ```
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
-    {% endmacro %}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         0.0
         {%- else -%}
@@ -954,7 +1111,7 @@ Column level sensor that calculates the percentage of values that are members of
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
@@ -965,16 +1122,52 @@ Column level sensor that calculates the percentage of values that are members of
     
     SELECT
         {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{ values_list|join(', ') -}}
+    {% endmacro %}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -982,12 +1175,12 @@ Column level sensor that calculates the percentage of values that are members of
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0.0
         {%- else -%}
               100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
                     THEN 1
                   ELSE 0
                 END
@@ -996,32 +1189,32 @@ Column level sensor that calculates the percentage of values that are members of
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0.0
         {%- else -%}
               100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
                     THEN 1
                   ELSE 0
                 END
@@ -1030,20 +1223,20 @@ Column level sensor that calculates the percentage of values that are members of
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1051,12 +1244,12 @@ Column level sensor that calculates the percentage of values that are members of
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0.0
         {%- else -%}
               100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
                     THEN 1
                   ELSE 0
                 END
@@ -1065,20 +1258,20 @@ Column level sensor that calculates the percentage of values that are members of
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1086,12 +1279,12 @@ Column level sensor that calculates the percentage of values that are members of
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0.0
         {%- else -%}
               100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
                     THEN 1
                   ELSE 0
                 END
@@ -1100,11 +1293,11 @@ Column level sensor that calculates the percentage of values that are members of
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT_BIG(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1125,15 +1318,15 @@ Column level sensor that finds the median in a given column.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|percentile_value|Median (50th percentile), must equals to 0.5|double| ||
+|percentile_value|Median (50th percentile), must equal 0.5|double| ||
 
 
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
@@ -1144,16 +1337,16 @@ Column level sensor that finds the median in a given column.
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -1162,7 +1355,7 @@ Column level sensor that finds the median in a given column.
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT(
@@ -1170,7 +1363,7 @@ Column level sensor that finds the median in a given column.
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1178,54 +1371,54 @@ Column level sensor that finds the median in a given column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
@@ -1236,16 +1429,16 @@ Column level sensor that finds the median in a given column.
         {%- endif -%}
     {%- endmacro -%}
     
-    {%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-        {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-            {%- for attribute in data_streams -%}
-                {%- with data_stream_level = data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+    {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+        {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+            {%- for attribute in data_groupings -%}
+                {%- with data_grouping_level = data_groupings[attribute] -%}
+                    {%- if data_grouping_level.source == 'tag' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                    {%- elif data_grouping_level.source == 'column_value' -%}
+                        {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                     {%- endif -%}
-                {%- endwith %} AS stream_{{ attribute }}
+                {%- endwith %} AS grouping_{{ attribute }}
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
@@ -1254,20 +1447,20 @@ Column level sensor that finds the median in a given column.
         MAX(nested_table.actual_value) AS actual_value,
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_stream_projections('analyzed_table') }}
+                {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
     ```
 ___
 
@@ -1283,65 +1476,78 @@ Column level sensor that calculates population standard deviation in a given col
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1362,65 +1568,78 @@ Column level sensor that calculates population variance in a given column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1441,65 +1660,78 @@ Column level sensor that calculates sample standard deviation in a given column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1520,65 +1752,78 @@ Column level sensor that calculates sample variance in a given column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1599,65 +1844,78 @@ Column level sensor that counts the sum of values in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1678,9 +1936,9 @@ Column level sensor that counts percentage of valid latitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1689,16 +1947,34 @@ Column level sensor that counts percentage of valid latitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1707,16 +1983,16 @@ Column level sensor that counts percentage of valid latitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1725,16 +2001,16 @@ Column level sensor that counts percentage of valid latitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1743,16 +2019,16 @@ Column level sensor that counts percentage of valid latitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1761,7 +2037,7 @@ Column level sensor that counts percentage of valid latitude in a column.
                 ELSE 0
             END
         )/COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1782,9 +2058,9 @@ Column level sensor that counts percentage of valid longitude in a column.
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1793,16 +2069,34 @@ Column level sensor that counts percentage of valid longitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1811,16 +2105,16 @@ Column level sensor that counts percentage of valid longitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1829,16 +2123,16 @@ Column level sensor that counts percentage of valid longitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1847,16 +2141,16 @@ Column level sensor that counts percentage of valid longitude in a column.
                 ELSE 0
             END
         )/COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1865,7 +2159,7 @@ Column level sensor that counts percentage of valid longitude in a column.
                 ELSE 0
             END
         )/COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -1892,9 +2186,9 @@ Column level sensor that calculates the count of values that are above than a gi
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1903,16 +2197,34 @@ Column level sensor that calculates the count of values that are above than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1922,16 +2234,16 @@ Column level sensor that calculates the count of values that are above than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1941,16 +2253,16 @@ Column level sensor that calculates the count of values that are above than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1959,16 +2271,16 @@ Column level sensor that calculates the count of values that are above than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1977,7 +2289,7 @@ Column level sensor that calculates the count of values that are above than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2004,9 +2316,9 @@ Column level sensor that calculates the percentage of values that are above than
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2016,16 +2328,35 @@ Column level sensor that calculates the percentage of values that are above than
                 ELSE 0
             END
         )/ COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        )/ COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2035,16 +2366,16 @@ Column level sensor that calculates the percentage of values that are above than
                 ELSE 0
             END
         )/ COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2054,16 +2385,16 @@ Column level sensor that calculates the percentage of values that are above than
                 ELSE 0
             END
         )/ COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2073,16 +2404,16 @@ Column level sensor that calculates the percentage of values that are above than
                 ELSE 0
             END
         )/ COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2092,7 +2423,7 @@ Column level sensor that calculates the percentage of values that are above than
                 ELSE 0
             END
         )/ COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2119,9 +2450,9 @@ Column level sensor that calculates the count of values that are below than a gi
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2130,16 +2461,34 @@ Column level sensor that calculates the count of values that are below than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2149,16 +2498,16 @@ Column level sensor that calculates the count of values that are below than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2168,16 +2517,16 @@ Column level sensor that calculates the count of values that are below than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2186,16 +2535,16 @@ Column level sensor that calculates the count of values that are below than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2204,7 +2553,7 @@ Column level sensor that calculates the count of values that are below than a gi
                 ELSE 0
             END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2231,9 +2580,9 @@ Column level sensor that calculates the percentage of values that are below than
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2242,16 +2591,34 @@ Column level sensor that calculates the percentage of values that are below than
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2261,16 +2628,16 @@ Column level sensor that calculates the percentage of values that are below than
                 ELSE 0
             END
         )/ COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2280,16 +2647,16 @@ Column level sensor that calculates the percentage of values that are below than
                 ELSE 0
             END
         )/ COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2298,16 +2665,16 @@ Column level sensor that calculates the percentage of values that are below than
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2316,7 +2683,7 @@ Column level sensor that calculates the percentage of values that are below than
                 ELSE 0
             END
         ) / COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2345,9 +2712,9 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2356,16 +2723,34 @@ Column level sensor that finds the maximum value. It works on any data type that
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -2375,16 +2760,16 @@ Column level sensor that finds the maximum value. It works on any data type that
         0
       END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -2394,16 +2779,16 @@ Column level sensor that finds the maximum value. It works on any data type that
         0
       END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -2413,16 +2798,16 @@ Column level sensor that finds the maximum value. It works on any data type that
         0
       END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2433,7 +2818,7 @@ Column level sensor that finds the maximum value. It works on any data type that
         0
       END
         ) / COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -2462,9 +2847,9 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 
 **SQL Template (Jinja2)**  
-=== "bigquery"
+=== "BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2473,16 +2858,34 @@ Column level sensor that finds the maximum value. It works on any data type that
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "MySQL"
       
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "PostgreSQL"
+      
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -2492,16 +2895,16 @@ Column level sensor that finds the maximum value. It works on any data type that
         0
       END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "redshift"
+=== "Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -2511,16 +2914,16 @@ Column level sensor that finds the maximum value. It works on any data type that
         0
       END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "snowflake"
+=== "Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2529,16 +2932,16 @@ Column level sensor that finds the maximum value. It works on any data type that
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "sqlserver"
+=== "SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2547,7 +2950,7 @@ Column level sensor that finds the maximum value. It works on any data type that
                 ELSE 0
             END
         ) / COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}

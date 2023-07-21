@@ -87,7 +87,7 @@ A full list of sensors within each category is available at the link.
 | **Table**                                                                                  |                                                                                                                                                                                                            |
 | [availability table sensors](../../../reference/sensors/table/availability-table-sensors/) | Detects problems with datasource stability.                                                                                                                                                                |
 | [sql table sensors](../../../reference/sensors/table/sql-table-sensors/)                   | Verifies custom SQL queries at the table level.                                                                                                                                                            |
-| [standard table sensors](../../../reference/sensors/table/standard-table-sensors/)         | Verifies data volume.                                                                                                                                                                                      |
+| [volume table sensors](../../../reference/sensors/table/volume-table-sensors/)             | Verifies data volume.                                                                                                                                                                                      |
 | [timeliness table sensors](../../../reference/sensors/table/timeliness-table-sensors/)     | Verifies freshness, staleness and ingestion delay.                                                                                                                                                         |
 | **Column**                                                                                 |                                                                                                                                                                                                            |
 | [bool column sensors](../../../reference/sensors/column/bool-column-sensors/)              | Detects issues in columns with boolean-type data.                                                                                                                                                          |
@@ -101,7 +101,7 @@ A full list of sensors within each category is available at the link.
 | [strings column sensors](../../../reference/sensors/column/strings-column-sensors/)        | Detects issues in columns with string-type data.                                                                                                                                                           |
 | [uniqueness column sensors](../../../reference/sensors/column/uniqueness-column-sensors/)  | Detect uniqueness and duplications.                                                                                                                                                                        |
 
-## Storing sensor data
+## Sensor data storage
 
 DQO stores a copy of the sensor data locally on the monitoring agent. The data files are stored as Apache Parquet files
 in an Apache Hive compatible folder tree, partitioned by the data source, monitored table name, and the month. A local 

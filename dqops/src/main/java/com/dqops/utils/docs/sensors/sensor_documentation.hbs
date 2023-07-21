@@ -1,0 +1,38 @@
+{{#each collectedSensors}}
+## **{{replace sensorName "_" " "}}**
+**Full sensor name**
+```
+{{fullSensorName}}
+```
+**Description**{{#with "  "}}{{.}}{{/with}}
+{{sensorParametersJavaDoc}}
+{{#if definition.spec.fields}}
+**Parameters**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+{{#each definition.spec.fields}}|{{displayName}}|{{helpText}}|{{replace dataType "_type" ""}}|{{#if required}}Yes{{else}} {{/if}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
+{{/each}}
+{{else}}
+{{/if}}
+{{#if definition.spec.parameters}}
+**Additional sensor definition parameters**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Parameters name | Value |
+|-----------------|-------|
+{{#each definition.spec.parameters}}|{{@key}}|{{this}}|
+{{/each}}
+{{else}}
+{{/if}}
+**SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}
+{{#each sqlTemplates~}}
+=== "{{@key.providerTypeDisplayName}}"
+    {{#with "  "}}{{.}}{{/with}}
+    ```sql+jinja
+    {{#each this~}}
+    {{{.}}}
+    {{/each~}}
+    ```
+{{/each~}}
+___
+{{/each}}

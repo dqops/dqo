@@ -1,0 +1,12 @@
+.md-grid {
+  width: 95%;
+  max-width: 95%;
+}
+
+.md-nav {
+  font-size: 0.6rem;
+}
+.md-nav__item {
+  padding-left: 0.6rem;
+  padding-right: 0.2rem;
+}

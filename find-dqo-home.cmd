@@ -1,6 +1,6 @@
 @echo off
 @REM
-@REM Copyright © 2021 DQO.ai (support@dqo.ai)
+@REM Copyright © 2021 DQOps (support@dqops.com)
 @REM
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ if "x%DQO_USER_HOME%"=="x" (
 )
 
 if "x%DQO_JAVA_OPTS%"=="x" (
-    set DQO_JAVA_OPTS=-Xmx1024m
+    set DQO_JAVA_OPTS=-Xmx2048m
 )
 
 if not exist "%DQO_USER_HOME%" (

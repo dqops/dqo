@@ -1,6 +1,6 @@
 @echo off
 @REM
-@REM Copyright © 2021 DQO.ai (support@dqo.ai)
+@REM Copyright © 2021 DQOps (support@dqops.com)
 @REM
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -15,4 +15,4 @@
 @REM limitations under the License.
 @REM
 
-"%DQO_RUNNER%" -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1024m -XX:TieredStopAtLevel=1 --add-opens java.base/java.nio=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*
+"%DQO_RUNNER%" -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx2048m -XX:TieredStopAtLevel=1 --add-opens java.base/java.nio=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*

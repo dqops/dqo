@@ -1,0 +1,126 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import ConnectionLayout from '../../components/ConnectionLayout';
+import SvgIcon from '../../components/SvgIcon';
+import Tabs from '../../components/Tabs';
+import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { TableBasicModel } from '../../api';
+import { TableApiClient } from '../../services/apiClient';
+import Button from '../../components/Button';
+import AddTableDialog from '../../components/CustomTree/AddTableDialog';
+import { SchemaTables } from './SchemaTables';
+import { MultiChecks } from './MultiChecks';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
+
+const SchemaPage = () => {
+  const {
+    connection,
+    schema,
+    tab: activeTab,
+    checkTypes
+  }: {
+    connection: string;
+    schema: string;
+    tab: string;
+    checkTypes: CheckTypes;
+  } = useParams();
+  const [tables, setTables] = useState<TableBasicModel[]>([]);
+  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
+  const isSourceScreen = checkTypes === CheckTypes.SOURCES;
+  const dispatch = useActionDispatch();
+
+  const history = useHistory();
+
+  const tabs = useMemo(
+    () => [
+      {
+        label: 'Tables',
+        value: 'tables'
+      },
+      ...(checkTypes !== CheckTypes.SOURCES
+        ? [
+            // {
+            //   label: 'Multiple checks edit',
+            //   value: 'multiple_checks'
+            // }
+          ]
+        : [])
+    ],
+    [checkTypes]
+  );
+
+  useEffect(() => {
+    TableApiClient.getTables(connection, schema).then((res) => {
+      setTables(res.data);
+    });
+  }, [schema, connection]);
+
+  const onChangeTab = (tab: string) => {
+    history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab));
+  };
+
+  const onImportMoreTables = () => {
+    dispatch(
+      setActiveFirstLevelTab(
+        checkTypes,
+        ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, connection)
+      )
+    );
+    history.push(
+      `${ROUTES.CONNECTION_DETAIL(
+        checkTypes,
+        connection,
+        'schemas'
+      )}?import_schema=true&import_table=true&schema=${schema}`
+    );
+  };
+
+  return (
+    <ConnectionLayout>
+      <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
+        <div className="flex items-center space-x-2 max-w-full">
+          <SvgIcon name="schema" className="w-5 h-5 shrink-0" />
+          <div className="text-xl font-semibold truncate">{`${connection}.schema.${schema}`}</div>
+        </div>
+
+        <div className="flex gap-4 items-center">
+          <Button
+            className="!h-10"
+            color="primary"
+            variant="outlined"
+            label="Import more tables"
+            onClick={onImportMoreTables}
+          />
+
+          {isSourceScreen && (
+            <Button
+              className="!h-10"
+              color="primary"
+              variant="outlined"
+              label="Add Table"
+              onClick={() => setAddTableDialogOpen(true)}
+            />
+          )}
+        </div>
+      </div>
+      <div className="border-b border-gray-300">
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+      </div>
+      {activeTab === 'tables' && (
+        <div className="p-4">
+          <SchemaTables tables={tables} />
+        </div>
+      )}
+      {checkTypes !== CheckTypes.SOURCES && activeTab === 'multiple_checks' && (
+        <MultiChecks />
+      )}
+      <AddTableDialog
+        open={addTableDialogOpen}
+        onClose={() => setAddTableDialogOpen(false)}
+      />
+    </ConnectionLayout>
+  );
+};
+
+export default SchemaPage;

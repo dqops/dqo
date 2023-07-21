@@ -1,0 +1,41 @@
+/*
+ * Copyright © 2021 DQOps (support@dqops.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.dqops.core.synchronization.fileexchange;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * Data synchronization direction between a local DQO Home and DQO Cloud data quality data warehouse.
+ */
+public enum FileSynchronizationDirection {
+    /**
+     * Full synchronization that both uploads local changes to the DQO Cloud and downloads changes from DQO Cloud.
+     */
+    @JsonProperty("full")
+    full,
+
+    /**
+     * Only download new changes from DQO Cloud.
+     */
+    @JsonProperty("download")
+    download,
+
+    /**
+     * Only upload new local changes to DQO Cloud.
+     */
+    @JsonProperty("upload")
+    upload
+}

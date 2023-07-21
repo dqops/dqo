@@ -3,14 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<relativePath>../pom.xml</relativePath>
-		<groupId>ai.dqo</groupId>
-		<artifactId>dqo-data-quality-observer</artifactId>
-		<version>0.2.0-alpha0</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.1.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ai.dqo</groupId>
+
+	<groupId>com.dqops</groupId>
 	<artifactId>dqo-lib</artifactId>
-	<version>0.2.0-alpha0</version>
+    <version>0.2.0-beta2</version>  <!-- DQO Version, do not touch (changed automatically) -->
 	<name>lib</name>
 	<description>POM for a list of dependencies to libraries that should be distributed in the "lib" folder, especially all JDBC drivers.</description>
 	<packaging>jar</packaging>
@@ -30,8 +31,8 @@
 	</licenses>
 
 	<organization>
-		<name>Documati</name>
-		<url>https://dqo.ai/</url>
+		<name>Documati Sp. z o.o.</name>
+		<url>https://dqops.com/</url>
 	</organization>
 
 	<inceptionYear>2021</inceptionYear>
@@ -39,7 +40,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>ai.dqo</groupId>
+				<groupId>com.dqops</groupId>
 				<artifactId>dqo-data-quality-observer</artifactId>
 				<version>${project.version}</version>
 				<type>pom</type>
@@ -64,6 +65,16 @@
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
 			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -76,13 +87,19 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>net.snowflake</groupId>
+			<artifactId>snowflake-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.snowflake</groupId>
-			<artifactId>snowflake-jdbc</artifactId>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>23.2.0.0</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>

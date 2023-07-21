@@ -1,0 +1,424 @@
+---
+swagger: "2.0"
+info:
+  description: "DQO Cloud API"
+  version: "v1"
+  title: "DQO Cloud"
+  termsOfService: "https://dqops.com/terms-of-service"
+  contact:
+    name: "DQO Cloud Support"
+    url: "https://dqops.com/"
+    email: "support@dqops.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.dqo.ai"
+basePath: "/"
+tags:
+- name: "AccessTokenIssue"
+- name: "ApiKeyRequest"
+- name: "LookerStudioKeyRequest"
+- name: "TenantDataWarehouse"
+schemes:
+- "https"
+paths:
+  /api/v1/accesstokenissue/ro/query:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueTenantDataROQueryAccessToken"
+      description: "Issues a read-only Google access token used by the DQO Looker\
+        \ Studio Community Connector to query the tenant's data quality data warehouse."
+      operationId: "issueTenantDataROQueryAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantQueryAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/check_results:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketCheckResultsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with rule results"
+      operationId: "issueBucketCheckResultsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/checks:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketChecksRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with custom check definitions"
+      operationId: "issueBucketChecksRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/error_samples:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketErrorSamplesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with error samples"
+      operationId: "issueBucketErrorSamplesRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/errors:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketErrorsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with errors"
+      operationId: "issueBucketErrorsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/incidents:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketIncidentsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with incidents"
+      operationId: "issueBucketIncidentsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/rules:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketRulesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with custom rule definitions"
+      operationId: "issueBucketRulesRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/sensor_readouts:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketSensorReadoutsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with sensor readouts"
+      operationId: "issueBucketSensorReadoutsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/sensors:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketSensorsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with custom sensor definitions"
+      operationId: "issueBucketSensorsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/sources:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketSourcesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with sources and the data quality check configuration"
+      operationId: "issueBucketSourcesRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/statistics:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketStatisticsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with statistics"
+      operationId: "issueBucketStatisticsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/apikey/issued/{apiKeyRequest}:
+    put:
+      tags:
+      - "ApiKeyRequest"
+      summary: "issueApiKey"
+      description: "Issues an API Key by the DQO Cloud UI, this operation can also\
+        \ generate a new fresh API key."
+      operationId: "issueApiKey"
+      produces:
+      - "text/plain"
+      parameters:
+      - name: "apiKeyRequest"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - api_key: []
+      - firebase_auth: []
+  /api/v1/apikey/request:
+    post:
+      tags:
+      - "ApiKeyRequest"
+      summary: "requestApiKey"
+      description: "Initiates an API Key generation request, generating the most recent\
+        \ API Key version."
+      operationId: "requestApiKey"
+      produces:
+      - "text/plain"
+      parameters:
+      - name: "challenge"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+  /api/v1/apikey/request/{apiKeyRequest}:
+    get:
+      tags:
+      - "ApiKeyRequest"
+      summary: "pickApiKey"
+      description: "Retrieves a previously generated API Key given an API Key generation\
+        \ request."
+      operationId: "pickApiKey"
+      produces:
+      - "text/plain"
+      parameters:
+      - name: "apiKeyRequest"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+  /api/v1/apikey/request/{version}:
+    post:
+      tags:
+      - "ApiKeyRequest"
+      summary: "requestApiKeyVersion"
+      description: "Initiates an API KEY generation process, asking for a specific\
+        \ version of the API key."
+      operationId: "requestApiKeyVersion"
+      produces:
+      - "text/plain"
+      parameters:
+      - name: "challenge"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "version"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+  /api/v1/lookerstudiokey/issue:
+    get:
+      tags:
+      - "LookerStudioKeyRequest"
+      summary: "issueLookerStudioApiKey"
+      description: "Issues an API key for accessing DQO data quality dashboards from\
+        \ Looker Studio"
+      operationId: "issueLookerStudioApiKey"
+      produces:
+      - "text/plain"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - api_key: []
+  /api/v1/tenantdatawarehouse/refresh/table:
+    post:
+      tags:
+      - "TenantDataWarehouse"
+      summary: "refreshNativeTable"
+      description: "Refreshes a native table."
+      operationId: "refreshNativeTable"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/RefreshTableRequest"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - api_key: []
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "APIKey"
+    in: "header"
+  basic:
+    type: "basic"
+  firebase_auth:
+    type: "oauth2"
+    authorizationUrl: ""
+    flow: "implicit"
+definitions:
+  RefreshTableRequest:
+    type: "object"
+    properties:
+      table:
+        type: "string"
+        description: "Target table to be refreshed."
+        enum:
+        - "sensor_readouts"
+        - "check_results"
+        - "errors"
+        - "error_samples"
+        - "statistics"
+        - "incidents"
+        - "sources"
+        - "sensors"
+        - "rules"
+        - "checks"
+      connections:
+        type: "array"
+        description: "Optional list of connection names that were modified and the\
+          \ data should be refreshed."
+        items:
+          type: "string"
+      tables:
+        type: "array"
+        description: "Optional list of full table names (schema.table) that were modified\
+          \ and the data should be refreshed."
+        items:
+          type: "string"
+      months:
+        type: "array"
+        description: "Optional list of dates of the first day of the month (for example:\
+          \ '2023-02-01') that were modified and the data should be refreshed."
+        items:
+          type: "string"
+          format: "date"
+    description: "Request object for refreshing a native table in the data quality\
+      \ data warehouse."
+  TenantAccessTokenModel:
+    type: "object"
+    properties:
+      accessToken:
+        type: "string"
+        description: "Google cloud access token."
+      tenantId:
+        type: "string"
+        description: "Tenant (customer) id."
+      bucketName:
+        type: "string"
+        description: "Google Cloud Storage bucket name for the tenant."
+      bucketPathPrefix:
+        type: "string"
+        description: "Object name prefix (path) inside the bucket to store the data."
+      expiresAt:
+        type: "string"
+        description: "Access token expiration time (UTC)."
+      billingProjectId:
+        type: "string"
+        description: "GCP project id holding the data of the tenant."
+    description: "Model returned by the DQO Cloud with an AccessToken for accessing\
+      \ a folder within the landing zone of the tenant's data quality data warehouse."
+  TenantQueryAccessTokenModel:
+    type: "object"
+    properties:
+      accessToken:
+        type: "string"
+      tenantId:
+        type: "string"
+      expiresAt:
+        type: "string"
+      billingProjectId:
+        type: "string"
+      dataSetName:
+        type: "string"
+      sensorReadoutsTableName:
+        type: "string"
+      checkResultsTableName:
+        type: "string"
+      errorsTableName:
+        type: "string"
+      statisticsTableName:
+        type: "string"
+      incidentsTableName:
+        type: "string"
+    description: "Model that returns an AccessToken used by Looker Studio to query\
+      \ the data warehouse."

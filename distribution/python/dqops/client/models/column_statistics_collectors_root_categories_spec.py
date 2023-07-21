@@ -1,0 +1,162 @@
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+
+import attr
+
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.column_nulls_statistics_collectors_spec import (
+        ColumnNullsStatisticsCollectorsSpec,
+    )
+    from ..models.column_range_statistics_collectors_spec import (
+        ColumnRangeStatisticsCollectorsSpec,
+    )
+    from ..models.column_sampling_statistics_collectors_spec import (
+        ColumnSamplingStatisticsCollectorsSpec,
+    )
+    from ..models.column_strings_statistics_collectors_spec import (
+        ColumnStringsStatisticsCollectorsSpec,
+    )
+    from ..models.column_uniqueness_statistics_collectors_spec import (
+        ColumnUniquenessStatisticsCollectorsSpec,
+    )
+
+
+T = TypeVar("T", bound="ColumnStatisticsCollectorsRootCategoriesSpec")
+
+
+@attr.s(auto_attribs=True)
+class ColumnStatisticsCollectorsRootCategoriesSpec:
+    """
+    Attributes:
+        nulls (Union[Unset, ColumnNullsStatisticsCollectorsSpec]):
+        strings (Union[Unset, ColumnStringsStatisticsCollectorsSpec]):
+        uniqueness (Union[Unset, ColumnUniquenessStatisticsCollectorsSpec]):
+        range_ (Union[Unset, ColumnRangeStatisticsCollectorsSpec]):
+        sampling (Union[Unset, ColumnSamplingStatisticsCollectorsSpec]):
+    """
+
+    nulls: Union[Unset, "ColumnNullsStatisticsCollectorsSpec"] = UNSET
+    strings: Union[Unset, "ColumnStringsStatisticsCollectorsSpec"] = UNSET
+    uniqueness: Union[Unset, "ColumnUniquenessStatisticsCollectorsSpec"] = UNSET
+    range_: Union[Unset, "ColumnRangeStatisticsCollectorsSpec"] = UNSET
+    sampling: Union[Unset, "ColumnSamplingStatisticsCollectorsSpec"] = UNSET
+    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        nulls: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.nulls, Unset):
+            nulls = self.nulls.to_dict()
+
+        strings: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.strings, Unset):
+            strings = self.strings.to_dict()
+
+        uniqueness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.uniqueness, Unset):
+            uniqueness = self.uniqueness.to_dict()
+
+        range_: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.range_, Unset):
+            range_ = self.range_.to_dict()
+
+        sampling: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.sampling, Unset):
+            sampling = self.sampling.to_dict()
+
+        field_dict: Dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if nulls is not UNSET:
+            field_dict["nulls"] = nulls
+        if strings is not UNSET:
+            field_dict["strings"] = strings
+        if uniqueness is not UNSET:
+            field_dict["uniqueness"] = uniqueness
+        if range_ is not UNSET:
+            field_dict["range"] = range_
+        if sampling is not UNSET:
+            field_dict["sampling"] = sampling
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_nulls_statistics_collectors_spec import (
+            ColumnNullsStatisticsCollectorsSpec,
+        )
+        from ..models.column_range_statistics_collectors_spec import (
+            ColumnRangeStatisticsCollectorsSpec,
+        )
+        from ..models.column_sampling_statistics_collectors_spec import (
+            ColumnSamplingStatisticsCollectorsSpec,
+        )
+        from ..models.column_strings_statistics_collectors_spec import (
+            ColumnStringsStatisticsCollectorsSpec,
+        )
+        from ..models.column_uniqueness_statistics_collectors_spec import (
+            ColumnUniquenessStatisticsCollectorsSpec,
+        )
+
+        d = src_dict.copy()
+        _nulls = d.pop("nulls", UNSET)
+        nulls: Union[Unset, ColumnNullsStatisticsCollectorsSpec]
+        if isinstance(_nulls, Unset):
+            nulls = UNSET
+        else:
+            nulls = ColumnNullsStatisticsCollectorsSpec.from_dict(_nulls)
+
+        _strings = d.pop("strings", UNSET)
+        strings: Union[Unset, ColumnStringsStatisticsCollectorsSpec]
+        if isinstance(_strings, Unset):
+            strings = UNSET
+        else:
+            strings = ColumnStringsStatisticsCollectorsSpec.from_dict(_strings)
+
+        _uniqueness = d.pop("uniqueness", UNSET)
+        uniqueness: Union[Unset, ColumnUniquenessStatisticsCollectorsSpec]
+        if isinstance(_uniqueness, Unset):
+            uniqueness = UNSET
+        else:
+            uniqueness = ColumnUniquenessStatisticsCollectorsSpec.from_dict(_uniqueness)
+
+        _range_ = d.pop("range", UNSET)
+        range_: Union[Unset, ColumnRangeStatisticsCollectorsSpec]
+        if isinstance(_range_, Unset):
+            range_ = UNSET
+        else:
+            range_ = ColumnRangeStatisticsCollectorsSpec.from_dict(_range_)
+
+        _sampling = d.pop("sampling", UNSET)
+        sampling: Union[Unset, ColumnSamplingStatisticsCollectorsSpec]
+        if isinstance(_sampling, Unset):
+            sampling = UNSET
+        else:
+            sampling = ColumnSamplingStatisticsCollectorsSpec.from_dict(_sampling)
+
+        column_statistics_collectors_root_categories_spec = cls(
+            nulls=nulls,
+            strings=strings,
+            uniqueness=uniqueness,
+            range_=range_,
+            sampling=sampling,
+        )
+
+        column_statistics_collectors_root_categories_spec.additional_properties = d
+        return column_statistics_collectors_root_categories_spec
+
+    @property
+    def additional_keys(self) -> List[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

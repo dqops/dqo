@@ -1,6 +1,6 @@
 @echo off
 @REM
-@REM Copyright © 2021 DQO.ai (support@dqo.ai)
+@REM Copyright © 2021 DQOps (support@dqops.com)
 @REM
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 @REM limitations under the License.
 @REM
 
-set DQO_VERSION=0.2.0-alpha0
+set DQO_VERSION=0.2.0-beta2
 
 rem Configure local development environment overrides
 if exist "%~dp0set-dqo-envs.cmd" (

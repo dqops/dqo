@@ -17,8 +17,9 @@
 
 import os
 import sys
-import zipfile
 import urllib.request
+import zipfile
+
 import jdk
 
 # ignore those, they are filled by importing version.py
@@ -28,7 +29,11 @@ GITHUB_RELEASE = "filled by dqops/version.py"
 JAVA_VERSION = "filled by dqops/version.py"
 
 try:
-    exec(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'version.py')).read())
+    exec(
+        open(
+            os.path.join(os.path.dirname(os.path.realpath(__file__)), "version.py")
+        ).read()
+    )
 except IOError:
     print("Failed to load DQO version file.", file=sys.stderr)
     sys.exit(-1)
@@ -42,9 +47,14 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
     :param dqo_version:  Dqo version.
     """
 
-    github_url = "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip" % (dqo_tag, dqo_version)
-    distribution_local_name = os.path.join(dest, "dqo-distribution-%s-bin.zip" % dqo_version)
-    print("Trying to download DQO.ai version %s from %s" % (dqo_version, github_url))
+    github_url = (
+        "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
+        % (dqo_tag, dqo_version)
+    )
+    distribution_local_name = os.path.join(
+        dest, "dqo-distribution-%s-bin.zip" % dqo_version
+    )
+    print("Trying to download DQO version %s from %s" % (dqo_version, github_url))
 
     os.makedirs(dest, exist_ok=True)
 
@@ -60,7 +70,7 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
 
 
 def download_to_file(response, path, chunk_size=1024 * 1024):
-    total_size = int(response.info().get('Content-Length').strip())
+    total_size = int(response.info().get("Content-Length").strip())
     bytes_so_far = 0
 
     with open(path, mode="wb") as dest:
@@ -70,14 +80,20 @@ def download_to_file(response, path, chunk_size=1024 * 1024):
             if not chunk:
                 break
             dest.write(chunk)
-            print("Downloaded %d of %d bytes (%0.2f%%)" % (
-                bytes_so_far,
-                total_size,
-                round(float(bytes_so_far) / total_size * 100, 2)))
+            print(
+                "Downloaded %d of %d bytes (%0.2f%%)"
+                % (
+                    bytes_so_far,
+                    total_size,
+                    round(float(bytes_so_far) / total_size * 100, 2),
+                )
+            )
 
 
 def install_dqo_home_if_missing(dqo_home):
-    if os.path.exists(dqo_home) and os.path.exists(os.path.join(dqo_home, "README.TXT")):
+    if os.path.exists(dqo_home) and os.path.exists(
+        os.path.join(dqo_home, "README.TXT")
+    ):
         return
 
     install_dqo(dqo_home, GITHUB_RELEASE, VERSION)

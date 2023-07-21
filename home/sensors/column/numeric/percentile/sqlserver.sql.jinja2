@@ -8,16 +8,16 @@
     {%- endif -%}
 {%- endmacro -%}
 
-{%- macro render_local_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
-        {%- for attribute in data_streams -%}
-            {%- with data_stream_level = data_streams[attribute] -%}
-                {%- if data_stream_level.source == 'tag' -%}
-                    {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
-                {%- elif data_stream_level.source == 'column_value' -%}
-                    {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+{%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+    {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+        {%- for attribute in data_groupings -%}
+            {%- with data_grouping_level = data_groupings[attribute] -%}
+                {%- if data_grouping_level.source == 'tag' -%}
+                    {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                {%- elif data_grouping_level.source == 'column_value' -%}
+                    {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
                 {%- endif -%}
-            {%- endwith %} AS stream_{{ attribute }}
+            {%- endwith %} AS grouping_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
 {%- endmacro -%}
@@ -26,17 +26,17 @@ SELECT
     MAX(nested_table.actual_value) AS actual_value,
     nested_table.[time_period] AS time_period,
     nested_table.[time_period_utc] AS time_period_utc
-    {{- lib.render_data_stream_projections('analyzed_table') }}
+    {{- lib.render_data_grouping_projections('analyzed_table') }}
 FROM(
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
         OVER (PARTITION BY
             {{render_local_time_dimension_projection('analyzed_table')}}
-            {{render_local_data_stream_projections('analyzed_table') }}
+            {{render_local_data_grouping_projections('analyzed_table') }}
         ) AS actual_value
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
-ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
+GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}

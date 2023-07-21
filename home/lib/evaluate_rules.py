@@ -1,5 +1,5 @@
 #
-# Copyright © 2021 DQO.ai (support@dqo.ai)
+# Copyright © 2021 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ class RuleRunner:
             rule_parameters = request.rule_parameters
             if rule_module_path not in self.rule_modules:
                 rules_folder_index = rule_module_path.rfind('rules')
-                rule_module_name = rule_module_path[rules_folder_index + 'rules'.__len__() + 1: -3] \
+                rule_module_name = rule_module_path[rules_folder_index + len('rules') + 1: -3] \
                     .replace('\\', '.').replace('/', '.')
                 rule_module = self.import_source_file(rule_module_path, rule_module_name)
                 self.rule_modules[rule_module_path] = rule_module

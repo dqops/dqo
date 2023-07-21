@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 1
+    min_periods_with_readouts: 1
+    historic_data_point_grouping: last_n_readouts
+  fields:
+  - field_name: from_percent
+    display_name: from_percent
+    help_text: Minimal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: to_percent
+    display_name: to_percent
+    help_text: Maximal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 20

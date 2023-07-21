@@ -32,7 +32,7 @@ These topics introduce the basic concepts of DQO.
     Introduction to data quality dimensions. Dimension are aspects of data that can be measured and through which its quality can be quantified.
 
 
-- **[Data stream segmentation](./data-stream-segmentation/data-stream-segmentation.md)**
+- **[Data stream segmentation](data-grouping/data-grouping.md)**
 
     Description of data stream segmentation. Data stream is a group of rows that were loaded from a single or different sources and aggregated into one table.
 
@@ -49,6 +49,6 @@ These topics introduce the basic concepts of DQO.
 
 - **[Working with CLI](./working-with-cli/working-with-cli.md)**
 
-    Introduction to working with DQO Command Line Interface.
+    Introduction to working with DQO Command-Line Interface.
 
  

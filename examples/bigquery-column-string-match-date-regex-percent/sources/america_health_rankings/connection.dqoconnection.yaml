@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
-apiVersion: dqo/v1
-kind: source
-spec:
-  provider_type: bigquery
-  bigquery:
-    source_project_id: bigquery-public-data
-    authentication_mode: google_application_credentialsTC

@@ -40,7 +40,7 @@ DQO_REPO_HOME = os.path.abspath("../../")
 try:
     exec(open('dqops/version.py').read())
 except IOError:
-    print("Failed to load DQO.ai version file for packaging. You must be in dqops' distribution/python dir.",
+    print("Failed to load DQOps version file for packaging. You must be in dqops' distribution/python dir.",
           file=sys.stderr)
     sys.exit(-1)
 
@@ -64,7 +64,7 @@ If you are installing DQO from https://github.com/dqops/dqo source, you must fir
 DISTRIBUTION_PATH = os.path.join(DQO_REPO_HOME, "distribution/target/dqo-distribution-{0}-bin.zip".format(VERSION))
 
 in_dqo = os.path.isfile(os.path.join(DQO_REPO_HOME, "pom.xml")) and \
-         os.path.isfile(os.path.join(DQO_REPO_HOME, "dqoai/src/main/java/ai/dqo/cli/CliApplication.java"))
+         os.path.isfile(os.path.join(DQO_REPO_HOME, "dqops/src/main/java/com/dqops/cli/CliApplication.java"))
 
 
 class InstallCommand(install):
@@ -109,19 +109,28 @@ try:
         long_description=long_description,
         long_description_content_type="text/markdown",
         author='DQO Developers',
-        author_email='support@dqo.ai',
+        author_email='support@dqops.com',
         url='https://github.com/dqops/dqo/tree/master/distribution/python',
         packages=['dqops'],
-#        include_package_data=True,
+        include_package_data=True,
         package_dir={
             'dqops': 'dqops'
         },
-        # package_data={
-        #     'dqops': home_dirs
-        # },
+        package_data={
+            'dqops': ['py.typed']
+        },
         license='http://www.apache.org/licenses/LICENSE-2.0',
-        install_requires=['install-jdk==0.3.0'],
-        python_requires='>=3.6',
+        install_requires=['install-jdk>=1.0.4',
+                          'httpx>=0.15.4,<0.25.0',
+                          'attrs>=21.3.0',
+                          'python-dateutil==^2.8.2',
+                          'numpy>=1.24.3',
+                          'MarkupSafe>=2.1.1',
+                          'Jinja2>=3.0.3',
+                          'six>=1.16.0',
+                          'pandas>=2.0.1',
+                          'scipy>=1.10.1'],
+        python_requires='>=3.8',
         classifiers=[
 #            'Development Status :: 5 - Production/Stable',
             'Development Status :: 4 - Beta',
@@ -130,6 +139,7 @@ try:
             'Programming Language :: Python :: 3.9',
             'Programming Language :: Python :: 3.10',
             'Programming Language :: Python :: 3.11',
+            'Programming Language :: Python :: 3.12',
             'Environment :: Console',
 #            'Framework :: Apache Airflow :: Provider',
             'Intended Audience :: Developers',

@@ -24,6 +24,9 @@
             <includes>
                 <include>*.txt</include>
             </includes>
+            <excludes>
+                <exclude>requirements_dev.txt</exclude>
+            </excludes>
             <outputDirectory>/lib</outputDirectory>
         </fileSet>
         <fileSet>
@@ -51,7 +54,11 @@
     </fileSets>
     <files>
         <file>
-            <source>${project.basedir}/../home/README.TXT</source>
+            <source>${project.basedir}/../README.md</source>
+            <outputDirectory>/</outputDirectory>
+        </file>
+        <file>
+            <source>${project.basedir}/../CHANGELOG.md</source>
             <outputDirectory>/</outputDirectory>
         </file>
         <file>
@@ -103,7 +110,7 @@
             <outputDirectory>/bin</outputDirectory>
         </file>
         <file>
-            <source>${project.basedir}/../dqoai/${project.build.directory}/dqo-dqoai-${project.version}.jar</source>
+            <source>${project.basedir}/../dqops/${project.build.directory}/dqo-dqops-${project.version}.jar</source>
             <outputDirectory>/jars</outputDirectory>
         </file>
     </files>

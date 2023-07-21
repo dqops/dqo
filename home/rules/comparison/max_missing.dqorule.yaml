@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: current_value
+  fields:
+  - field_name: max_missing
+    display_name: max_missing
+    help_text: The maximum number of values from the expected_values list that were
+      not found in the column (inclusive).
+    data_type: long
+    sample_values:
+    - 1

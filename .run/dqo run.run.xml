@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="dqo run" type="JarApplication">
-    <option name="JAR_PATH" value="$PROJECT_DIR$/dqoai/target/dqo-dqoai-0.2.0-alpha0.jar" />
+    <option name="JAR_PATH" value="$PROJECT_DIR$/dqops/target/dqo-dqops-0.2.0-beta2.jar" />
     <option name="VM_PARAMETERS" value="-Xmx1024m --add-opens java.base/java.nio=ALL-UNNAMED" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
@@ -9,7 +9,6 @@
       <env name="DQO_USER_HOME" value="$PROJECT_DIR$/userhome" />
       <env name="HADOOP_HOME" value="$PROJECT_DIR$/home" />
     </envs>
-    <module name="dqo-dqoai" />
     <method v="2" />
   </configuration>
 </component>
