@@ -3,7 +3,6 @@ name: Build and publish the release to GitHub releases and PyPi
 on:
   push:
     branches: [ "main" ]
-    tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
