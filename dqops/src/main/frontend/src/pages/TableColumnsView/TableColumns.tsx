@@ -538,16 +538,23 @@ const TableColumns = ({
   const listOfStr = selectStrings(objectStates);
 
   const setSpec2 = () => {
+    const newSpec: DataGroupingConfigurationSpec = {};
+
     for (let i = 1; i <= 9; i++) {
       const levelKey = `level_${i}` as keyof DataGroupingConfigurationSpec;
       const level = spec[levelKey];
 
       if (level) {
         level.column = listOfStr.at(i - 1);
-        level.source = 'column_value';
+
+        if (level.column !== undefined) {
+          level.source = 'column_value';
+          newSpec[levelKey] = level;
+        }
       }
     }
-    return spec;
+
+    return newSpec;
   };
 
   const fixString = () => {
