@@ -2,9 +2,11 @@ name: Build code with Maven
 
 on:
   push:
-    branches: [ "*" ]
+    branches:
+      - "*"
   pull_request:
-    branches: [ "*" ]
+    branches:
+      - "*"
 
 jobs:
   build-release:

@@ -2,9 +2,8 @@ name: Build and publish the release to GitHub releases and PyPi
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build-release:
