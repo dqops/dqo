@@ -376,6 +376,9 @@ const EditReferenceTable = ({
             setDataGroupingConfiguration={changeRefDataGroupingProps}
             goToCreateNew={goToRefCreateNew}
             placeholder='"Select column on reference table"'
+            refConnection={refConnection}
+            refSchema={refSchema}
+            reftable={refTable}
           />
         </div>
       </div>

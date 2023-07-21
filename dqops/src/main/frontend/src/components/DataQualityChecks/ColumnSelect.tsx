@@ -20,6 +20,9 @@ interface IColumnSelectProps {
   error?: boolean;
   triggerClassName?: string;
   placeholder?: string;
+  refConnection?: string;
+  refSchema?: string;
+  refTable?: string;
 }
 
 const ColumnSelect = ({
@@ -31,7 +34,10 @@ const ColumnSelect = ({
   scope = 'column',
   triggerClassName,
   error,
-  placeholder
+  placeholder,
+  refConnection,
+  refSchema,
+  refTable
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
   const {
@@ -52,14 +58,18 @@ const ColumnSelect = ({
   };
 
   useEffect(() => {
-    if (connection && scope === 'connection') {
+    if (refConnection && refSchema && refTable) {
+      ColumnApiClient.getColumns(refConnection, refSchema, refTable).then(
+        setColumns
+      );
+    } else if (connection && scope === 'connection') {
       ConnectionApiClient.getConnectionCommonColumns(connection).then(
         setColumns
       );
-    } else if (table) {
+    } else if (table && !refTable) {
       ColumnApiClient.getColumns(connection, schema, table).then(setColumns);
     }
-  }, [connection, schema, table]);
+  }, [connection, schema, table, refConnection, refSchema, refTable]);
 
   return (
     <div>

@@ -23,6 +23,9 @@ type SelectDataGroupingForTableProps = {
   goToCreateNew: () => void;
   dataGroupingConfigurationSpec?: DataGroupingConfigurationSpec;
   placeholder?: string;
+  refConnection?: string;
+  refSchema?: string;
+  reftable?: string;
 };
 
 export const SelectGroupColumnsTable = ({
@@ -32,7 +35,10 @@ export const SelectGroupColumnsTable = ({
   dataGroupingConfiguration,
   setDataGroupingConfiguration,
   goToCreateNew,
-  placeholder
+  placeholder,
+  refConnection,
+  refSchema,
+  reftable
 }: SelectDataGroupingForTableProps) => {
   const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
     useState<DataGroupingConfigurationSpec>();
@@ -72,12 +78,12 @@ export const SelectGroupColumnsTable = ({
 
   useEffect(() => {
     fillArrayWithEmptyStrings(9);
-  }, []);
+  }, [dataGroupingConfiguration]);
 
   console.log(listOfColumns);
   const handleColumnSelectChange = (value: string, index: number) => {
     const updatedList = [...listOfColumns];
-    updatedList[index - 1] = value;
+    updatedList[index] = value;
     setListOfColumns(updatedList);
   };
 
@@ -97,11 +103,14 @@ export const SelectGroupColumnsTable = ({
                   //     : ''
                   // )}
                   triggerClassName="my-0.5"
-                  value={listOfColumns[index - 1]}
+                  value={listOfColumns[index]}
                   onChange={(value: string) =>
                     handleColumnSelectChange(value, index)
                   }
                   placeholder={placeholder}
+                  refConnection={refConnection}
+                  refSchema={refSchema}
+                  refTable={reftable}
                 />
               </tr>
             );
