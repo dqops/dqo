@@ -1,7 +1,7 @@
 name: Docker Image CI for linux/amd64
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 

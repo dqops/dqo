@@ -1,12 +1,9 @@
-name: Build code with Maven
+name: Build code with Maven for pull requests to develop
 
 on:
-  push:
-    branches:
-      - "*"
   pull_request:
     branches:
-      - "*"
+      - develop
 
 jobs:
   build-release:

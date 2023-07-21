@@ -1,7 +1,7 @@
 name: Build and publish the release to GitHub releases and PyPi
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
