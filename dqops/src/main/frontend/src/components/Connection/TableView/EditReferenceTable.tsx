@@ -215,23 +215,28 @@ const EditReferenceTable = ({
           setIsUpdating(false);
         });
     } else {
-      TableComparisonsApi.createTableComparisonConfiguration(connection, schema, table, {
-        table_comparison_configuration_name: name,
-        compared_connection: connection,
-        compared_table: {
-          schema_name: schema,
-          table_name: table
-        },
-        reference_connection: refConnection,
-        reference_table: {
-          schema_name: refSchema,
-          table_name: refTable
-        },
-        compared_table_grouping_name:
-          dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-        reference_table_grouping_name:
-          refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
-      })
+      TableComparisonsApi.createTableComparisonConfiguration(
+        connection,
+        schema,
+        table,
+        {
+          table_comparison_configuration_name: name,
+          compared_connection: connection,
+          compared_table: {
+            schema_name: schema,
+            table_name: table
+          },
+          reference_connection: refConnection,
+          reference_table: {
+            schema_name: refSchema,
+            table_name: refTable
+          },
+          compared_table_grouping_name:
+            dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
+          reference_table_grouping_name:
+            refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
+        }
+      )
         .then(() => {
           onBack();
         })
@@ -339,8 +344,12 @@ const EditReferenceTable = ({
         <div className="flex gap-4">
           <div className="mt-26 mr-20">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-              <div key={index} className="text-sm py-1.5">
-                Grouping dimension level {item}
+              <div
+                key={index}
+                className="text-sm py-1.5"
+                style={{ whiteSpace: 'nowrap' }}
+              >
+                Column {item}
               </div>
             ))}
           </div>
