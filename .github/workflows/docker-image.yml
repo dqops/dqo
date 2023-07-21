@@ -24,7 +24,7 @@ jobs:
           python-version: 3.11
 
       - name: Build with Maven
-        run: ./mvn package -DskipTests -Pbuild-with-jdk-11 -Prun-npm
+        run: mvn package -DskipTests -Pbuild-with-jdk-11 -Prun-npm
 
 
   docker-build-on-ubuntu:
