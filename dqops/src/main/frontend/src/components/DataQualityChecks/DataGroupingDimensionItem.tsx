@@ -6,6 +6,7 @@ import {
 import Input from '../Input';
 import ColumnSelect from './ColumnSelect';
 import RadioButton from '../RadioButton';
+import clsx from 'clsx';
 
 interface IDataGroupingDimensionItemProps {
   dataGroupingLevel?: DataGroupingDimensionSpec;
@@ -54,7 +55,14 @@ const DataGroupingDimensionItem = ({
         </div>
         <div className="flex-1">
           <Input
-            className="h-8"
+            className={clsx(
+              'h-8',
+              dataGroupingLevel?.source ===
+                DataGroupingDimensionSpecSourceEnum.tag &&
+                (!dataGroupingLevel.tag || dataGroupingLevel.tag.length === 0)
+                ? 'border border-red-500'
+                : ''
+            )}
             value={dataGroupingLevel?.tag}
             onChange={(e) => {
               onChange({
@@ -87,7 +95,13 @@ const DataGroupingDimensionItem = ({
         />
         <div className="flex-1">
           <ColumnSelect
-            triggerClassName="!h-8"
+            triggerClassName={clsx(
+              dataGroupingLevel?.source ===
+                DataGroupingDimensionSpecSourceEnum.column_value &&
+                !dataGroupingLevel.column
+                ? 'h-8 border border-red-500'
+                : ''
+            )}
             value={dataGroupingLevel?.column}
             onChange={(value) =>
               onChange({

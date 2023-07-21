@@ -22,12 +22,13 @@ const DataGroupingConfigurationListView = ({
   onEdit
 }: IDataGroupingConfigurationListViewProps) => {
   const [open, setOpen] = useState(false);
-  const [defaultOpen, setDefaultOpen ] = useState(false)
+  const [defaultOpen, setDefaultOpen] = useState(false);
   const [selectedGroupingConfiguration, setSelectedGroupingConfiguration] =
     useState<DataGroupingConfigurationBasicModel>();
-  const [messageBox, setMessageBox] = useState<boolean>(false)  
+  const [messageBox, setMessageBox] = useState<boolean>(false);
   const setDefaultGroupingConfiguration = async (
-    groupingConfiguration: DataGroupingConfigurationBasicModel, nameOfGrouping ?: string
+    groupingConfiguration: DataGroupingConfigurationBasicModel,
+    nameOfGrouping?: string
   ) => {
     try {
       await DataGroupingConfigurationsApi.setTableDefaultGroupingConfiguration(
@@ -61,7 +62,7 @@ const DataGroupingConfigurationListView = ({
       console.error(err);
     }
   };
-  
+
   const openConfirmDeleteModal = (
     groupingConfiguration: DataGroupingConfigurationBasicModel
   ) => {
@@ -76,29 +77,28 @@ const DataGroupingConfigurationListView = ({
     setSelectedGroupingConfiguration(groupingConfiguration);
   };
 
-
-
   useEffect(() => {
-    if(isDisableDataGrouping() ===true){
-      setMessageBox(true)
-    }else{
-      setMessageBox(false)
+    if (isDisableDataGrouping() === true) {
+      setMessageBox(true);
+    } else {
+      setMessageBox(false);
     }
-  }, [dataGroupingConfigurations])
-
-
-
+  }, [dataGroupingConfigurations]);
 
   const elem: DataGroupingConfigurationBasicModel | undefined =
     dataGroupingConfigurations.find(
       (x) => x.default_data_grouping_configuration === true
     );
 
-  const isDisableDataGrouping = () =>{
-    return  dataGroupingConfigurations.find((x) =>x.default_data_grouping_configuration === true && x.data_grouping_configuration_name!=="" ) ? false : true
-  }    
-
-console.log(messageBox)
+  const isDisableDataGrouping = () => {
+    return dataGroupingConfigurations.find(
+      (x) =>
+        x.default_data_grouping_configuration === true &&
+        x.data_grouping_configuration_name !== ''
+    )
+      ? false
+      : true;
+  };
 
   return (
     <div className="px-8 py-4 text-sm">
@@ -143,26 +143,33 @@ console.log(messageBox)
                       groupingConfiguration.default_data_grouping_configuration
                     }
                     onClick={() =>
-                      messageBox ? openConfirmDefaultModal(groupingConfiguration): setDefaultGroupingConfiguration(groupingConfiguration, groupingConfiguration.data_grouping_configuration_name) 
+                      messageBox
+                        ? openConfirmDefaultModal(groupingConfiguration)
+                        : setDefaultGroupingConfiguration(
+                            groupingConfiguration,
+                            groupingConfiguration.data_grouping_configuration_name
+                          )
                     }
                   />
                 </div>
-                <span onClick={() => onEdit(groupingConfiguration)} className='cursor-pointer underline'>
+                <span
+                  onClick={() => onEdit(groupingConfiguration)}
+                  className="cursor-pointer underline"
+                >
                   {groupingConfiguration.data_grouping_configuration_name}
                 </span>
               </td>
 
               <td className="px-2 py-2">
-
-               <IconButton
-                size="sm"
-                className="group bg-teal-500 ml-3"
-                onClick={() => {
-                  openConfirmDeleteModal(groupingConfiguration)
-                }}
-              >
-                <SvgIcon name="delete" className="w-4" />
-              </IconButton>
+                <IconButton
+                  size="sm"
+                  className="group bg-teal-500 ml-3"
+                  onClick={() => {
+                    openConfirmDeleteModal(groupingConfiguration);
+                  }}
+                >
+                  <SvgIcon name="delete" className="w-4" />
+                </IconButton>
               </td>
             </tr>
           ))}
@@ -182,12 +189,18 @@ console.log(messageBox)
           deleteGroupingConfiguration(selectedGroupingConfiguration)
         }
       />
-       <SetDefaultDialog
+      <SetDefaultDialog
         open={defaultOpen}
         onClose={() => setDefaultOpen(false)}
-        message={"Data grouping is an advanced functionality of DQO that requires planning. DQO will add a GROUP BY clause to every data quality check query, generating a lot of data quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality check results tracked by DQO and will impact data quality KPIs."}
+        message={
+          'Data grouping is an advanced functionality of DQO that requires planning. DQO will add a GROUP BY clause to every data quality check query, generating a lot of data quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality check results tracked by DQO and will impact data quality KPIs.'
+        }
         onConfirm={() =>
-          setDefaultGroupingConfiguration(selectedGroupingConfiguration ?? {}, selectedGroupingConfiguration &&  selectedGroupingConfiguration.data_grouping_configuration_name )
+          setDefaultGroupingConfiguration(
+            selectedGroupingConfiguration ?? {},
+            selectedGroupingConfiguration &&
+              selectedGroupingConfiguration.data_grouping_configuration_name
+          )
         }
       />
     </div>
