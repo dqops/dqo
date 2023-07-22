@@ -323,8 +323,47 @@ const EditReferenceTable = ({
     return initialObject;
   };
 
+  const algorith = (
+    normalListF: { [key: number]: number },
+    refListF: { [key: number]: number }
+  ) => {
+    const normalList = normalListF;
+    const refList = refListF;
+
+    let checkNormal = false;
+    let checkRef = false;
+
+    for (let i = 8; i >= 0; i--) {
+      if (normalList[i] === 2 && refList[i] === 3) {
+        normalList[i] = 1;
+      } else if (normalList[i] === 3 && refList[i] === 2) {
+        refList[i] = 1;
+      }
+
+      if (normalList[i] === 1) {
+        checkNormal = true;
+      }
+      if (checkNormal === true && normalList[i] === 2) {
+        normalList[i] = 1;
+      }
+
+      if (refList[i] === 1) {
+        checkRef = true;
+      } else if (checkRef === true && refList[i] === 2) {
+        refList[i] = 1;
+      }
+    }
+
+    console.log(normalList);
+    console.log(refList);
+  };
+
   const display = () => {
     console.log(workOnMyObj(normalList ?? []));
+    console.log(workOnMyObj(refList ?? []));
+    console.log(normalList);
+    console.log(refList);
+    algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
   };
 
   return (

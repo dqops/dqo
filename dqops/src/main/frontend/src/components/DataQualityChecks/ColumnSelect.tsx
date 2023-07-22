@@ -130,9 +130,6 @@ const ColumnSelect = ({
     scope
   ]);
 
-  console.log(ref);
-  console.log(options);
-
   return (
     <div>
       <SelectInput

@@ -120,8 +120,6 @@ export const SelectGroupColumnsTable = ({
     setListOfColumns(updatedList);
   };
 
-  console.log(listOfColumns);
-
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
       {/* <div className="bg-black w-5 h-5" onClick={() => workOnMyObj()}></div> */}
