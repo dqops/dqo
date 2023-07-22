@@ -59,11 +59,8 @@ const ColumnSelect = ({
   const [ref, setRef] = useState(false);
 
   useEffect(() => {
-    console.log('inside useeff');
-
     const fetchData = async () => {
       if (refConnection && refSchema && refTable) {
-        console.log('inside if');
         try {
           const response = await ColumnApiClient.getColumns(
             refConnection,
@@ -114,9 +111,8 @@ const ColumnSelect = ({
                 value: item.column_name || ''
               }))
             );
-            console.log('second if');
           } catch (error) {
-            console.error('Błąd pobierania danych:', error);
+            console.error('Error:', error);
           }
         }
       }
@@ -152,7 +148,6 @@ const ColumnSelect = ({
       />
     </div>
   );
-  // Reszta komponentu...
 };
 
 export default ColumnSelect;
