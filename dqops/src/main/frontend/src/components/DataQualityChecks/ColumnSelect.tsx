@@ -56,20 +56,86 @@ const ColumnSelect = ({
       }))
     );
   };
+  const [ref, setRef] = useState(false);
 
   useEffect(() => {
-    if (refConnection && refSchema && refTable) {
-      ColumnApiClient.getColumns(refConnection, refSchema, refTable).then(
-        setColumns
-      );
-    } else if (connection && scope === 'connection') {
-      ConnectionApiClient.getConnectionCommonColumns(connection).then(
-        setColumns
-      );
-    } else if (table && !refTable) {
-      ColumnApiClient.getColumns(connection, schema, table).then(setColumns);
-    }
-  }, [connection, schema, table, refConnection, refSchema, refTable]);
+    console.log('inside useeff');
+
+    const fetchData = async () => {
+      if (refConnection && refSchema && refTable) {
+        console.log('inside if');
+        try {
+          const response = await ColumnApiClient.getColumns(
+            refConnection,
+            refSchema,
+            refTable
+          );
+          setOptions(
+            response.data.map((item) => ({
+              label: item.column_name || '',
+              value: item.column_name || ''
+            }))
+          );
+          setRef(true);
+        } catch (error) {
+          console.error('Błąd pobierania danych:', error);
+        }
+      } else {
+        if (connection && scope === 'connection' && !refTable && !ref) {
+          try {
+            const response =
+              await ConnectionApiClient.getConnectionCommonColumns(connection);
+            setOptions(
+              response.data.map((item) => ({
+                label: item.column_name || '',
+                value: item.column_name || ''
+              }))
+            );
+            console.log('first if');
+          } catch (error) {
+            console.error('Błąd pobierania danych:', error);
+          }
+        } else if (
+          table &&
+          !refTable &&
+          !refConnection &&
+          !refSchema &&
+          ref === false
+        ) {
+          try {
+            const response = await ColumnApiClient.getColumns(
+              connection,
+              schema,
+              table
+            );
+            setOptions(
+              response.data.map((item) => ({
+                label: item.column_name || '',
+                value: item.column_name || ''
+              }))
+            );
+            console.log('second if');
+          } catch (error) {
+            console.error('Błąd pobierania danych:', error);
+          }
+        }
+      }
+    };
+
+    fetchData();
+  }, [
+    connection,
+    schema,
+    table,
+    refConnection,
+    refSchema,
+    refTable,
+    ref,
+    scope
+  ]);
+
+  console.log(ref);
+  console.log(options);
 
   return (
     <div>
@@ -86,6 +152,7 @@ const ColumnSelect = ({
       />
     </div>
   );
+  // Reszta komponentu...
 };
 
 export default ColumnSelect;
