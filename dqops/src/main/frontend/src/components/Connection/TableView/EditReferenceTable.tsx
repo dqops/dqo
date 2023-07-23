@@ -219,7 +219,9 @@ const EditReferenceTable = ({
           compared_table_grouping_name:
             dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
           reference_table_grouping_name:
-            refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
+            refDataGroupingConfiguration?.data_grouping_configuration_name ??
+            '',
+          grouping_columns: combinedArray() ?? []
         }
       )
         .then(() => {
@@ -372,7 +374,12 @@ const EditReferenceTable = ({
           compared_table_column_name: item,
           reference_table_column_name: refList[index]
         }));
-      return combinedArray;
+      const trim = combinedArray.filter(
+        (item) =>
+          item.compared_table_column_name !== '' ||
+          item.reference_table_column_name !== ''
+      );
+      return trim;
     }
   };
 
@@ -380,7 +387,7 @@ const EditReferenceTable = ({
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
   }, [normalList, refList]);
 
-  console.log(doubleArray);
+  console.log(combinedArray());
 
   return (
     <div>
