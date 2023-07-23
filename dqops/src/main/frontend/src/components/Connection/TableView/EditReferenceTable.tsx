@@ -59,17 +59,17 @@ const EditReferenceTable = ({
     useState<DataGroupingConfigurationBasicModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [normalObj, setNormalObj] = useState<{ [key: number]: boolean }>();
-  const [refObj, setRefObj] = useState<{ [key: number]: boolean }>();
+  const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
+  const [refObj, setRefObj] = useState<{ [key: number]: number }>();
   const [normalList, setNormalList] = useState<Array<string>>();
   const [refList, setRefList] = useState<Array<string>>();
   const history = useHistory();
   const dispatch = useActionDispatch();
 
-  const onSetNormal = (obj: { [key: number]: boolean }): void => {
+  const onSetNormal = (obj: { [key: number]: number }): void => {
     setNormalObj(obj);
   };
-  const onSetRef = (obj: { [key: number]: boolean }): void => {
+  const onSetRef = (obj: { [key: number]: number }): void => {
     setRefObj(obj);
   };
 
@@ -353,6 +353,8 @@ const EditReferenceTable = ({
         refList[i] = 1;
       }
     }
+    setRefObj(refList);
+    setNormalObj(normalList);
 
     console.log(normalList);
     console.log(refList);
@@ -365,6 +367,10 @@ const EditReferenceTable = ({
     console.log(refList);
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
   };
+
+  useEffect(() => {
+    algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
+  }, [normalList, refList]);
 
   return (
     <div>
@@ -454,6 +460,7 @@ const EditReferenceTable = ({
             goToCreateNew={goToCreateNew}
             placeholder="Select column on compared table"
             onSetNormalList={onSetNormalList}
+            object={normalObj}
           />
 
           <SelectGroupColumnsTable
@@ -468,6 +475,7 @@ const EditReferenceTable = ({
             refSchema={refSchema}
             reftable={refTable}
             onSetRefList={onSetRefList}
+            object={refObj}
           />
         </div>
       </div>

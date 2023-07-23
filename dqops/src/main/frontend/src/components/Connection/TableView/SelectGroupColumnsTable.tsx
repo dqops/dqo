@@ -30,6 +30,8 @@ type SelectDataGroupingForTableProps = {
   onSetNormal?: (obj: { [key: number]: boolean }) => void;
   onSetRefList?: (obj: Array<string>) => void;
   onSetNormalList?: (obj: Array<string>) => void;
+
+  object?: { [key: number]: number };
 };
 
 export const SelectGroupColumnsTable = ({
@@ -46,7 +48,8 @@ export const SelectGroupColumnsTable = ({
   onSetNormal,
   onSetRef,
   onSetNormalList,
-  onSetRefList
+  onSetRefList,
+  object
 }: SelectDataGroupingForTableProps) => {
   const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
     useState<DataGroupingConfigurationSpec>();
@@ -120,6 +123,8 @@ export const SelectGroupColumnsTable = ({
     setListOfColumns(updatedList);
   };
 
+  console.log(object);
+
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
       {/* <div className="bg-black w-5 h-5" onClick={() => workOnMyObj()}></div> */}
@@ -137,7 +142,7 @@ export const SelectGroupColumnsTable = ({
                   //     : ''
                   // )}
                   triggerClassName={clsx(
-                    workOnMyObj()[index] === true
+                    object && object[index] === 1
                       ? 'my-0.5 border border-red-500'
                       : 'my-0.5'
                   )}
