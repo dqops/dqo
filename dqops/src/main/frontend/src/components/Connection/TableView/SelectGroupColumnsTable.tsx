@@ -85,23 +85,7 @@ export const SelectGroupColumnsTable = ({
     const emptyStrings = Array.from({ length: length }, () => '');
     setListOfColumns(emptyStrings);
   };
-  const workOnMyObj = (): { [key: number]: boolean } => {
-    const initialObject: { [key: number]: boolean } = {};
-    let check = false;
-    for (let i = listOfColumns.length - 1; i >= 0; i--) {
-      if (listOfColumns[i].length === 0 && check === false) {
-        initialObject[i] = false;
-      } else if (listOfColumns[i].length !== 0 && check === false) {
-        check = true;
-        initialObject[i] = false;
-      } else if (check === true && listOfColumns[i].length === 0) {
-        initialObject[i] = true;
-      } else if (check === true && listOfColumns[i].length !== 0) {
-        initialObject[i] = false;
-      }
-    }
-    return initialObject;
-  };
+
   useEffect(() => {
     fillArrayWithEmptyStrings(9);
   }, [dataGroupingConfiguration]);
@@ -120,8 +104,6 @@ export const SelectGroupColumnsTable = ({
     updatedList[index] = value;
     setListOfColumns(updatedList);
   };
-
-  console.log(object);
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>

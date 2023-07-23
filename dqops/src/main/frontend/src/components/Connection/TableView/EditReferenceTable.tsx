@@ -6,7 +6,10 @@ import {
   TableApiClient,
   TableComparisonsApi
 } from '../../../services/apiClient';
-import { DataGroupingConfigurationBasicModel } from '../../../api';
+import {
+  DataGroupingConfigurationBasicModel,
+  TableComparisonGroupingColumnPairModel
+} from '../../../api';
 import Button from '../../Button';
 import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
@@ -61,6 +64,9 @@ const EditReferenceTable = ({
   const [refObj, setRefObj] = useState<{ [key: number]: number }>();
   const [normalList, setNormalList] = useState<Array<string>>();
   const [refList, setRefList] = useState<Array<string>>();
+  const [bool, setBool] = useState(false);
+  const [doubleArray, setDoubleArray] =
+    useState<Array<TableComparisonGroupingColumnPairModel>>();
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -245,7 +251,9 @@ const EditReferenceTable = ({
           compared_table_grouping_name:
             dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
           reference_table_grouping_name:
-            refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
+            refDataGroupingConfiguration?.data_grouping_configuration_name ??
+            '',
+          grouping_columns: combinedArray() ?? []
         }
       )
         .then(() => {
@@ -346,11 +354,33 @@ const EditReferenceTable = ({
     }
     setRefObj(refList);
     setNormalObj(normalList);
+    if (
+      normalObj &&
+      Object.values(normalObj).every((x) => x !== 1) &&
+      refObj &&
+      Object.values(refObj).every((x) => x !== 1)
+    ) {
+      setDoubleArray(combinedArray());
+    }
+  };
+  const combinedArray = () => {
+    if (refList && normalList) {
+      const combinedArray: Array<TableComparisonGroupingColumnPairModel> =
+        normalList &&
+        refList &&
+        normalList.map((item, index) => ({
+          compared_table_column_name: item,
+          reference_table_column_name: refList[index]
+        }));
+      return combinedArray;
+    }
   };
 
   useEffect(() => {
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
   }, [normalList, refList]);
+
+  console.log(doubleArray);
 
   return (
     <div>
