@@ -13,13 +13,11 @@ import SvgIcon from '../../SvgIcon';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Select, { Option } from '../../Select';
 import { useHistory, useParams } from 'react-router-dom';
-import { SelectDataGroupingForTable } from './SelectDataGroupingForTable';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
-import { boolean, number } from 'yargs';
 
 type EditReferenceTableProps = {
   onBack: () => void;
@@ -65,13 +63,6 @@ const EditReferenceTable = ({
   const [refList, setRefList] = useState<Array<string>>();
   const history = useHistory();
   const dispatch = useActionDispatch();
-
-  const onSetNormal = (obj: { [key: number]: number }): void => {
-    setNormalObj(obj);
-  };
-  const onSetRef = (obj: { [key: number]: number }): void => {
-    setRefObj(obj);
-  };
 
   const onSetNormalList = (obj: Array<string>): void => {
     setNormalList(obj);
@@ -355,17 +346,6 @@ const EditReferenceTable = ({
     }
     setRefObj(refList);
     setNormalObj(normalList);
-
-    console.log(normalList);
-    console.log(refList);
-  };
-
-  const display = () => {
-    console.log(workOnMyObj(normalList ?? []));
-    console.log(workOnMyObj(refList ?? []));
-    console.log(normalList);
-    console.log(refList);
-    algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
   };
 
   useEffect(() => {
@@ -381,7 +361,7 @@ const EditReferenceTable = ({
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
         <div className="flex items-center justify-center gap-x-5">
-          <div className="font-bold text-center" onClick={() => display()}>
+          <div className="font-bold text-center">
             Table comparison configuration name:{' '}
           </div>
           <Input

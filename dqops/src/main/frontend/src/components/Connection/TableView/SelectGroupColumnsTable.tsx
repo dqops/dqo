@@ -45,8 +45,7 @@ export const SelectGroupColumnsTable = ({
   refConnection,
   refSchema,
   reftable,
-  onSetNormal,
-  onSetRef,
+
   onSetNormalList,
   onSetRefList,
   object
@@ -59,8 +58,7 @@ export const SelectGroupColumnsTable = ({
 
   //     value: item.data_grouping_configuration_name ?? ''
   //   }));
-  const [myObject, setMyObject] = useState<{ [key: number]: boolean }>();
-  const [fastCheck, setFastCheck] = useState<boolean>(false);
+
   useEffect(() => {
     if (dataGroupingConfiguration) {
       DataGroupingConfigurationsApi.getTableGroupingConfiguration(
