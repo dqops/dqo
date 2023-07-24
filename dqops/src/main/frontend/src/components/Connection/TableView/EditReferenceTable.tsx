@@ -495,7 +495,7 @@ const EditReferenceTable = ({
             placeholder='"Select column on reference table"'
             refConnection={refConnection}
             refSchema={refSchema}
-            reftable={refTable}
+            refTable={refTable}
             onSetRefList={onSetRefList}
             object={refObj}
           />

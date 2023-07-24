@@ -23,6 +23,7 @@ interface IColumnSelectProps {
   refConnection?: string;
   refSchema?: string;
   refTable?: string;
+  passedOptions?: Option[];
 }
 
 const ColumnSelect = ({
@@ -31,13 +32,11 @@ const ColumnSelect = ({
   tooltipText,
   onChange,
   disabled,
-  scope = 'column',
   triggerClassName,
   error,
+  scope = 'column',
   placeholder,
-  refConnection,
-  refSchema,
-  refTable
+  passedOptions
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
   const {
@@ -56,16 +55,13 @@ const ColumnSelect = ({
       }))
     );
   };
-  const [ref, setRef] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (refConnection && refSchema && refTable) {
+      if (connection && scope === 'connection') {
         try {
-          const response = await ColumnApiClient.getColumns(
-            refConnection,
-            refSchema,
-            refTable
+          const response = await ConnectionApiClient.getConnectionCommonColumns(
+            connection
           );
           setOptions(
             response.data.map((item) => ({
@@ -73,62 +69,33 @@ const ColumnSelect = ({
               value: item.column_name || ''
             }))
           );
-          setRef(true);
+          console.log('first if');
         } catch (error) {
           console.error('Błąd pobierania danych:', error);
         }
-      } else {
-        if (connection && scope === 'connection' && !refTable && !ref) {
-          try {
-            const response =
-              await ConnectionApiClient.getConnectionCommonColumns(connection);
-            setOptions(
-              response.data.map((item) => ({
-                label: item.column_name || '',
-                value: item.column_name || ''
-              }))
-            );
-            console.log('first if');
-          } catch (error) {
-            console.error('Błąd pobierania danych:', error);
-          }
-        } else if (
-          table &&
-          !refTable &&
-          !refConnection &&
-          !refSchema &&
-          ref === false
-        ) {
-          try {
-            const response = await ColumnApiClient.getColumns(
-              connection,
-              schema,
-              table
-            );
-            setOptions(
-              response.data.map((item) => ({
-                label: item.column_name || '',
-                value: item.column_name || ''
-              }))
-            );
-          } catch (error) {
-            console.error('Error:', error);
-          }
+      } else if (table) {
+        try {
+          const response = await ColumnApiClient.getColumns(
+            connection,
+            schema,
+            table
+          );
+          setOptions(
+            response.data.map((item) => ({
+              label: item.column_name || '',
+              value: item.column_name || ''
+            }))
+          );
+        } catch (error) {
+          console.error('Error:', error);
         }
       }
     };
 
-    fetchData();
-  }, [
-    connection,
-    schema,
-    table,
-    refConnection,
-    refSchema,
-    refTable,
-    ref,
-    scope
-  ]);
+    if (passedOptions === undefined) {
+      fetchData();
+    }
+  }, [connection, schema, table, scope]);
 
   return (
     <div>
@@ -137,7 +104,7 @@ const ColumnSelect = ({
         label={label}
         value={value}
         tooltipText={tooltipText}
-        options={options}
+        options={passedOptions ?? options}
         triggerClassName={triggerClassName}
         onChange={onChange}
         error={error}

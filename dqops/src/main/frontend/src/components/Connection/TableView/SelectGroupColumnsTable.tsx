@@ -2,14 +2,15 @@ import SectionWrapper from '../../Dashboard/SectionWrapper';
 import React, { useEffect, useState } from 'react';
 import {
   DataGroupingConfigurationBasicModel,
-  DataGroupingConfigurationSpec,
-  DataGroupingDimensionSpecSourceEnum
+  DataGroupingConfigurationSpec
 } from '../../../api';
-import Select from '../../Select';
-import Button from '../../Button';
-import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import {
+  ColumnApiClient,
+  ConnectionApiClient,
+  DataGroupingConfigurationsApi
+} from '../../../services/apiClient';
 import clsx from 'clsx';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 
 type SelectDataGroupingForTableProps = {
@@ -25,7 +26,7 @@ type SelectDataGroupingForTableProps = {
   placeholder?: string;
   refConnection?: string;
   refSchema?: string;
-  reftable?: string;
+  refTable?: string;
   onSetRef?: (obj: { [key: number]: boolean }) => void;
   onSetNormal?: (obj: { [key: number]: boolean }) => void;
   onSetRefList?: (obj: Array<string>) => void;
@@ -33,6 +34,10 @@ type SelectDataGroupingForTableProps = {
 
   object?: { [key: number]: number };
 };
+interface Option {
+  label: string;
+  value: string;
+}
 
 export const SelectGroupColumnsTable = ({
   title,
@@ -44,7 +49,7 @@ export const SelectGroupColumnsTable = ({
   placeholder,
   refConnection,
   refSchema,
-  reftable,
+  refTable,
 
   onSetNormalList,
   onSetRefList,
@@ -104,6 +109,63 @@ export const SelectGroupColumnsTable = ({
     updatedList[index] = value;
     setListOfColumns(updatedList);
   };
+  const [options, setOptions] = useState<Option[]>([]);
+  const {
+    connection,
+    schema,
+    table
+  }: { connection: string; schema: string; table: string } = useParams();
+
+  const [ref, setRef] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (refConnection && refSchema && refTable) {
+        try {
+          const response = await ColumnApiClient.getColumns(
+            refConnection,
+            refSchema,
+            refTable
+          );
+          setOptions(
+            response.data.map((item) => ({
+              label: item.column_name || '',
+              value: item.column_name || ''
+            }))
+          );
+          setRef(true);
+        } catch (error) {
+          console.error('Błąd pobierania danych:', error);
+        }
+      } else {
+        if (
+          table &&
+          !refTable &&
+          !refConnection &&
+          !refSchema &&
+          ref === false
+        ) {
+          try {
+            const response = await ColumnApiClient.getColumns(
+              connection,
+              schema,
+              table
+            );
+            setOptions(
+              response.data.map((item) => ({
+                label: item.column_name || '',
+                value: item.column_name || ''
+              }))
+            );
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        }
+      }
+    };
+
+    fetchData();
+  }, [connection, schema, table, refConnection, refSchema, refTable, ref]);
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
@@ -133,7 +195,8 @@ export const SelectGroupColumnsTable = ({
                   placeholder={placeholder}
                   refConnection={refConnection}
                   refSchema={refSchema}
-                  refTable={reftable}
+                  refTable={refTable}
+                  passedOptions={options}
                 />
               </tr>
             );
