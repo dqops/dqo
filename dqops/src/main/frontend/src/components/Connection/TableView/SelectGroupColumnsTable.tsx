@@ -152,7 +152,7 @@ export const SelectGroupColumnsTable = ({
             refTable
           );
           setOptions([
-            { label: 'Empty Field', value: '' },
+            { label: ' - ', value: '' },
             ...response.data.map((item) => ({
               label: item.column_name || '',
               value: item.column_name || ''
@@ -177,7 +177,7 @@ export const SelectGroupColumnsTable = ({
               table
             );
             setOptions([
-              { label: 'Empty Field', value: '' },
+              { label: ' - ', value: '' },
               ...response.data.map((item) => ({
                 label: item.column_name || '',
                 value: item.column_name || ''

@@ -133,11 +133,7 @@ const SelectInput = ({
             <div
               data-testid="select-option"
               key={index}
-              className={clsx(
-                index === 0 && option.label === 'Empty Field'
-                  ? 'py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap  text-sm text-red-500'
-                  : 'py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm'
-              )}
+              className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
               onClick={() => handleClick(option)}
             >
               {option.label}
