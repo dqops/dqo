@@ -1,23 +1,22 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   ConnectionApiClient,
-  DataGroupingConfigurationsApi,
   SchemaApiClient,
   TableApiClient,
   TableComparisonsApi
 } from '../../../services/apiClient';
-import { DataGroupingConfigurationBasicModel } from '../../../api';
+import { TableComparisonGroupingColumnPairModel } from '../../../api';
 import Button from '../../Button';
 import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Select, { Option } from '../../Select';
 import { useHistory, useParams } from 'react-router-dom';
-import { SelectDataGroupingForTable } from './SelectDataGroupingForTable';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
+import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
 
 type EditReferenceTableProps = {
   onBack: () => void;
@@ -46,19 +45,27 @@ const EditReferenceTable = ({
     schema: string;
     table: string;
   } = useParams();
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
-    DataGroupingConfigurationBasicModel[]
-  >([]);
-  const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] =
-    useState<DataGroupingConfigurationBasicModel[]>([]);
-  const [dataGroupingConfiguration, setDataGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
-  const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
+
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
+  const [refObj, setRefObj] = useState<{ [key: number]: number }>();
+  const [normalList, setNormalList] = useState<Array<string>>();
+  const [refList, setRefList] = useState<Array<string>>();
+  const [bool, setBool] = useState(false);
+  const [doubleArray, setDoubleArray] =
+    useState<Array<TableComparisonGroupingColumnPairModel>>();
+  const [trueArray, setTrueArray] =
+    useState<Array<TableComparisonGroupingColumnPairModel>>();
   const history = useHistory();
   const dispatch = useActionDispatch();
+
+  const onSetNormalList = (obj: Array<string>): void => {
+    setNormalList(obj);
+  };
+  const onSetRefList = (obj: Array<string>): void => {
+    setRefList(obj);
+  };
 
   useEffect(() => {
     ConnectionApiClient.getAllConnections().then((res) => {
@@ -83,37 +90,11 @@ const EditReferenceTable = ({
         setRefConnection(res.data?.reference_connection ?? '');
         setRefSchema(res.data?.reference_table?.schema_name ?? '');
         setRefTable(res.data?.reference_table?.table_name ?? '');
+        setTrueArray(res.data.grouping_columns ?? []);
       });
     }
   }, [selectedReference]);
 
-  useEffect(() => {
-    DataGroupingConfigurationsApi.getTableGroupingConfigurations(
-      connection,
-      schema,
-      table
-    ).then((res) => {
-      setDataGroupingConfigurations(res.data);
-      setDataGroupingConfiguration(
-        res.data.find((item) => item.default_data_grouping_configuration)
-      );
-    });
-  }, [connection, schema, table]);
-
-  useEffect(() => {
-    if (refConnection && refSchema && refTable) {
-      DataGroupingConfigurationsApi.getTableGroupingConfigurations(
-        refConnection,
-        refSchema,
-        refTable
-      ).then((res) => {
-        setRefDataGroupingConfigurations(res.data);
-        setRefDataGroupingConfiguration(
-          res.data.find((item) => item.default_data_grouping_configuration)
-        );
-      });
-    }
-  }, [refConnection, refSchema, refTable]);
   useEffect(() => {
     if (refConnection) {
       SchemaApiClient.getSchemas(refConnection).then((res) => {
@@ -199,10 +180,7 @@ const EditReferenceTable = ({
             schema_name: refSchema,
             table_name: refTable
           },
-          compared_table_grouping_name:
-            dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-          reference_table_grouping_name:
-            refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
+          grouping_columns: doubleArray ?? []
         }
       )
         .then(() => {
@@ -215,23 +193,25 @@ const EditReferenceTable = ({
           setIsUpdating(false);
         });
     } else {
-      TableComparisonsApi.createTableComparisonConfiguration(connection, schema, table, {
-        table_comparison_configuration_name: name,
-        compared_connection: connection,
-        compared_table: {
-          schema_name: schema,
-          table_name: table
-        },
-        reference_connection: refConnection,
-        reference_table: {
-          schema_name: refSchema,
-          table_name: refTable
-        },
-        compared_table_grouping_name:
-          dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-        reference_table_grouping_name:
-          refDataGroupingConfiguration?.data_grouping_configuration_name ?? ''
-      })
+      TableComparisonsApi.createTableComparisonConfiguration(
+        connection,
+        schema,
+        table,
+        {
+          table_comparison_configuration_name: name,
+          compared_connection: connection,
+          compared_table: {
+            schema_name: schema,
+            table_name: table
+          },
+          reference_connection: refConnection,
+          reference_table: {
+            schema_name: refSchema,
+            table_name: refTable
+          },
+          grouping_columns: doubleArray ?? []
+        }
+      )
         .then(() => {
           onBack();
         })
@@ -242,42 +222,172 @@ const EditReferenceTable = ({
   };
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setName(e.target.value);
+      setIsUpdated(true);
+    }
   };
 
   const changePropsTable = (value: string) => {
-    setRefTable(value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setRefTable(value);
+      setIsUpdated(true);
+    }
   };
   const changePropsSchema = (value: string) => {
-    setRefSchema(value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setRefSchema(value);
+      setIsUpdated(true);
+    }
   };
   const changePropsConnection = (value: string) => {
-    setRefConnection(value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setRefConnection(value);
+      setIsUpdated(true);
+    }
   };
 
-  const changeDataGroupingProps = (
-    value?: DataGroupingConfigurationBasicModel | undefined
-  ) => {
-    setDataGroupingConfiguration(value);
-    setIsUpdated(true);
+  const workOnMyObj = (
+    listOfColumns: Array<string>
+  ): { [key: number]: number } => {
+    const initialObject: { [key: number]: number } = {};
+    let check = false;
+
+    for (let i = listOfColumns.length - 1; i >= 0; i--) {
+      if (listOfColumns[i].length === 0 && !check) {
+        initialObject[i] = 2;
+      } else if (listOfColumns[i].length !== 0 && !check) {
+        check = true;
+        initialObject[i] = 2;
+      } else if (check && listOfColumns[i].length === 0) {
+        initialObject[i] = 1;
+      } else if (check && listOfColumns[i].length !== 0) {
+        initialObject[i] = 2;
+      }
+      if (listOfColumns[i].length !== 0) {
+        initialObject[i] = 3;
+      }
+    }
+
+    return initialObject;
   };
 
-  const changeRefDataGroupingProps = (
-    value?: DataGroupingConfigurationBasicModel | undefined
+  const algorith = (
+    normalListF: { [key: number]: number },
+    refListF: { [key: number]: number }
   ) => {
-    setRefDataGroupingConfiguration(value);
-    setIsUpdated(true);
+    const normalList = normalListF;
+    const refList = refListF;
+
+    let checkNormal = false;
+    let checkRef = false;
+
+    for (let i = 8; i >= 0; i--) {
+      if (normalList[i] === 2 && refList[i] === 3) {
+        normalList[i] = 1;
+      } else if (normalList[i] === 3 && refList[i] === 2) {
+        refList[i] = 1;
+      }
+
+      if (normalList[i] === 1) {
+        checkNormal = true;
+      }
+      if (checkNormal === true && normalList[i] === 2) {
+        normalList[i] = 1;
+      }
+
+      if (refList[i] === 1) {
+        checkRef = true;
+      } else if (checkRef === true && refList[i] === 2) {
+        refList[i] = 1;
+      }
+    }
+    setRefObj(refList);
+    setNormalObj(normalList);
   };
+  const combinedArray = () => {
+    if (refList && normalList) {
+      const combinedArray: Array<TableComparisonGroupingColumnPairModel> =
+        normalList &&
+        refList &&
+        normalList.map((item, index) => ({
+          compared_table_column_name: item,
+          reference_table_column_name: refList[index]
+        }));
+      const trim = combinedArray.filter(
+        (item) =>
+          item.compared_table_column_name !== '' ||
+          item.reference_table_column_name !== ''
+      );
+      setDoubleArray(trim);
+      if (
+        trim.find(
+          (x) =>
+            (x.compared_table_column_name?.length === 0 &&
+              x.reference_table_column_name?.length !== 0) ||
+            (x.compared_table_column_name?.length !== 0 &&
+              x.reference_table_column_name?.length === 0)
+        )
+      ) {
+        setBool(false);
+      } else {
+        setBool(true);
+      }
+    }
+  };
+
+  const splitArrays = () => {
+    if (trueArray) {
+      const comparedArr = trueArray.map((x) =>
+        typeof x.compared_table_column_name === 'string'
+          ? x.compared_table_column_name
+          : ''
+      );
+      const refArr = trueArray.map((x) =>
+        typeof x.reference_table_column_name === 'string'
+          ? x.reference_table_column_name
+          : ''
+      );
+      return { comparedArr, refArr };
+    }
+  };
+
+  useEffect(() => {
+    algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
+    combinedArray();
+    splitArrays();
+  }, [normalList, refList]);
 
   return (
     <div>
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={
+          name.length !== 0 &&
+          connection.length !== 0 &&
+          schema.length !== 0 &&
+          table.length !== 0 &&
+          refConnection.length !== 0 &&
+          refSchema.length !== 0 &&
+          refTable.length !== 0 &&
+          bool &&
+          (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+            isUpdated)
+        }
+        isDisabled={
+          !(
+            name.length !== 0 &&
+            connection.length !== 0 &&
+            schema.length !== 0 &&
+            table.length !== 0 &&
+            refConnection.length !== 0 &&
+            refSchema.length !== 0 &&
+            refTable.length !== 0 &&
+            bool &&
+            (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+              isUpdated)
+          )
+        }
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
@@ -337,29 +447,42 @@ const EditReferenceTable = ({
         </SectionWrapper>
 
         <div className="flex gap-4">
-          <div className="mt-26 mr-20">
+          <div className=" mr-20 mt-3">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-              <div key={index} className="text-sm py-1.5">
-                Grouping dimension level {item}
+              <div
+                key={index}
+                className="text-sm py-1.5"
+                style={{
+                  whiteSpace: 'nowrap',
+                  marginBottom: '12.6px',
+                  marginTop: '12.6px'
+                }}
+              >
+                Column {item}
               </div>
             ))}
           </div>
-          <SelectDataGroupingForTable
+          <SelectGroupColumnsTable
             className="flex-1"
             title="Data grouping on compared table"
-            dataGroupingConfigurations={dataGroupingConfigurations}
-            dataGroupingConfiguration={dataGroupingConfiguration}
-            setDataGroupingConfiguration={changeDataGroupingProps}
             goToCreateNew={goToCreateNew}
+            placeholder="Select column on compared table"
+            onSetNormalList={onSetNormalList}
+            object={normalObj}
+            responseList={splitArrays()?.comparedArr}
           />
 
-          <SelectDataGroupingForTable
+          <SelectGroupColumnsTable
             className="flex-1"
             title="Data grouping on reference table"
-            dataGroupingConfigurations={refDataGroupingConfigurations}
-            dataGroupingConfiguration={refDataGroupingConfiguration}
-            setDataGroupingConfiguration={changeRefDataGroupingProps}
             goToCreateNew={goToRefCreateNew}
+            placeholder='"Select column on reference table"'
+            refConnection={refConnection}
+            refSchema={refSchema}
+            refTable={refTable}
+            onSetRefList={onSetRefList}
+            object={refObj}
+            responseList={splitArrays()?.refArr}
           />
         </div>
       </div>
