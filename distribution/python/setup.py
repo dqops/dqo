@@ -22,6 +22,7 @@ import sys
 import zipfile
 import jdk
 from setuptools import setup
+from setuptools import find_packages
 import importlib.util
 from setuptools.command.install import install
 from shutil import rmtree
@@ -111,11 +112,8 @@ try:
         author='DQO Developers',
         author_email='support@dqops.com',
         url='https://github.com/dqops/dqo/tree/master/distribution/python',
-        packages=['dqops'],
+        packages=find_packages(),
         include_package_data=True,
-        package_dir={
-            'dqops': 'dqops'
-        },
         package_data={
             'dqops': ['py.typed']
         },
