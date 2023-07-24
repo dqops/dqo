@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ColumnApiClient, ConnectionApiClient } from '../../services/apiClient';
-import { AxiosResponse } from 'axios';
-import { ColumnBasicModel, CommonColumnModel } from '../../api';
+
 import SelectInput from '../SelectInput';
 
 export interface Option {
@@ -44,17 +43,6 @@ const ColumnSelect = ({
     schema,
     table
   }: { connection: string; schema: string; table: string } = useParams();
-
-  const setColumns = (
-    res: AxiosResponse<CommonColumnModel[] | ColumnBasicModel[]>
-  ) => {
-    setOptions(
-      res.data.map((item) => ({
-        label: item.column_name || '',
-        value: item.column_name || ''
-      }))
-    );
-  };
 
   useEffect(() => {
     const fetchData = async () => {

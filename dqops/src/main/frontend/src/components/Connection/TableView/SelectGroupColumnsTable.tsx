@@ -1,25 +1,14 @@
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import React, { useEffect, useState } from 'react';
-import {
-  DataGroupingConfigurationBasicModel,
-  DataGroupingConfigurationSpec
-} from '../../../api';
-import {
-  ColumnApiClient,
-  DataGroupingConfigurationsApi
-} from '../../../services/apiClient';
+import { DataGroupingConfigurationSpec } from '../../../api';
+import { ColumnApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 
 type SelectDataGroupingForTableProps = {
   title: string;
   className?: string;
-  dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
-  dataGroupingConfiguration?: DataGroupingConfigurationBasicModel;
-  setDataGroupingConfiguration: (
-    value?: DataGroupingConfigurationBasicModel
-  ) => void;
   goToCreateNew: () => void;
   dataGroupingConfigurationSpec?: DataGroupingConfigurationSpec;
   placeholder?: string;
@@ -42,10 +31,6 @@ interface Option {
 export const SelectGroupColumnsTable = ({
   title,
   className,
-  dataGroupingConfigurations,
-  dataGroupingConfiguration,
-  setDataGroupingConfiguration,
-  goToCreateNew,
   placeholder,
   refConnection,
   refSchema,
@@ -55,43 +40,15 @@ export const SelectGroupColumnsTable = ({
   responseList,
   object
 }: SelectDataGroupingForTableProps) => {
-  const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
-    useState<DataGroupingConfigurationSpec>();
   const [fetched, setFetched] = useState(false);
   const {
     connection,
     schema,
     table
   }: { connection: string; schema: string; table: string } = useParams();
-  const history = useHistory();
-  //   const dataGroupOptions = dataGroupingConfigurations.map((item) => ({
-  //     label: item.data_grouping_configuration_name ?? '',
-
-  //     value: item.data_grouping_configuration_name ?? ''
-  //   }));
-
-  useEffect(() => {
-    if (dataGroupingConfiguration) {
-      DataGroupingConfigurationsApi.getTableGroupingConfiguration(
-        dataGroupingConfiguration.connection_name ?? '',
-        dataGroupingConfiguration.schema_name ?? '',
-        dataGroupingConfiguration.table_name ?? '',
-        dataGroupingConfiguration.data_grouping_configuration_name || ''
-      ).then((res) => {
-        setDataGroupingConfigurationSpec(res.data.spec);
-      });
-    }
-  }, [dataGroupingConfiguration]);
-
-  //   const handleChange = (value: string) => {
-  //     const newDataGrouping = dataGroupingConfigurations.find(
-  //       (item) => item.data_grouping_configuration_name === value
-  //     );
-
-  //     setDataGroupingConfiguration(newDataGrouping);
-  //   };
 
   const [listOfColumns, setListOfColumns] = useState<Array<string>>([]);
+
   const fillArray = (length: number) => {
     const emptyStrings = Array.from({ length: length }, () => '');
     if (responseList === undefined || responseList.length === 0) {
@@ -199,13 +156,6 @@ export const SelectGroupColumnsTable = ({
             return (
               <tr key={index} className="my-1.5">
                 <ColumnSelect
-                  // triggerClassName={clsx(
-                  //   getDataGroupingDimensionLevel(index)?.source ===
-                  //     DataGroupingDimensionSpecSourceEnum.column_value &&
-                  //     !dataGroupingLevel.column
-                  //     ? 'h-8 border border-red-500'
-                  //     : ''
-                  // )}
                   triggerClassName={clsx(
                     object && object[index] === 1
                       ? 'my-0.5 border border-red-500'

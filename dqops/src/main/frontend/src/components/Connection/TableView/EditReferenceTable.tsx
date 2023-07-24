@@ -1,15 +1,11 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   ConnectionApiClient,
-  DataGroupingConfigurationsApi,
   SchemaApiClient,
   TableApiClient,
   TableComparisonsApi
 } from '../../../services/apiClient';
-import {
-  DataGroupingConfigurationBasicModel,
-  TableComparisonGroupingColumnPairModel
-} from '../../../api';
+import { TableComparisonGroupingColumnPairModel } from '../../../api';
 import Button from '../../Button';
 import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
@@ -49,15 +45,7 @@ const EditReferenceTable = ({
     schema: string;
     table: string;
   } = useParams();
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
-    DataGroupingConfigurationBasicModel[]
-  >([]);
-  const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] =
-    useState<DataGroupingConfigurationBasicModel[]>([]);
-  const [dataGroupingConfiguration, setDataGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
-  const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
+
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
@@ -107,33 +95,6 @@ const EditReferenceTable = ({
     }
   }, [selectedReference]);
 
-  useEffect(() => {
-    DataGroupingConfigurationsApi.getTableGroupingConfigurations(
-      connection,
-      schema,
-      table
-    ).then((res) => {
-      setDataGroupingConfigurations(res.data);
-      setDataGroupingConfiguration(
-        res.data.find((item) => item.default_data_grouping_configuration)
-      );
-    });
-  }, [connection, schema, table]);
-
-  useEffect(() => {
-    if (refConnection && refSchema && refTable) {
-      DataGroupingConfigurationsApi.getTableGroupingConfigurations(
-        refConnection,
-        refSchema,
-        refTable
-      ).then((res) => {
-        setRefDataGroupingConfigurations(res.data);
-        setRefDataGroupingConfiguration(
-          res.data.find((item) => item.default_data_grouping_configuration)
-        );
-      });
-    }
-  }, [refConnection, refSchema, refTable]);
   useEffect(() => {
     if (refConnection) {
       SchemaApiClient.getSchemas(refConnection).then((res) => {
@@ -219,11 +180,6 @@ const EditReferenceTable = ({
             schema_name: refSchema,
             table_name: refTable
           },
-          compared_table_grouping_name:
-            dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-          reference_table_grouping_name:
-            refDataGroupingConfiguration?.data_grouping_configuration_name ??
-            '',
           grouping_columns: doubleArray ?? []
         }
       )
@@ -253,11 +209,6 @@ const EditReferenceTable = ({
             schema_name: refSchema,
             table_name: refTable
           },
-          compared_table_grouping_name:
-            dataGroupingConfiguration?.data_grouping_configuration_name ?? '',
-          reference_table_grouping_name:
-            refDataGroupingConfiguration?.data_grouping_configuration_name ??
-            '',
           grouping_columns: doubleArray ?? []
         }
       )
@@ -294,20 +245,6 @@ const EditReferenceTable = ({
       setRefConnection(value);
       setIsUpdated(true);
     }
-  };
-
-  const changeDataGroupingProps = (
-    value?: DataGroupingConfigurationBasicModel | undefined
-  ) => {
-    setDataGroupingConfiguration(value);
-    setIsUpdated(true);
-  };
-
-  const changeRefDataGroupingProps = (
-    value?: DataGroupingConfigurationBasicModel | undefined
-  ) => {
-    setRefDataGroupingConfiguration(value);
-    setIsUpdated(true);
   };
 
   const workOnMyObj = (
@@ -528,9 +465,6 @@ const EditReferenceTable = ({
           <SelectGroupColumnsTable
             className="flex-1"
             title="Data grouping on compared table"
-            dataGroupingConfigurations={dataGroupingConfigurations}
-            dataGroupingConfiguration={dataGroupingConfiguration}
-            setDataGroupingConfiguration={changeDataGroupingProps}
             goToCreateNew={goToCreateNew}
             placeholder="Select column on compared table"
             onSetNormalList={onSetNormalList}
@@ -541,9 +475,6 @@ const EditReferenceTable = ({
           <SelectGroupColumnsTable
             className="flex-1"
             title="Data grouping on reference table"
-            dataGroupingConfigurations={refDataGroupingConfigurations}
-            dataGroupingConfiguration={refDataGroupingConfiguration}
-            setDataGroupingConfiguration={changeRefDataGroupingProps}
             goToCreateNew={goToRefCreateNew}
             placeholder='"Select column on reference table"'
             refConnection={refConnection}
