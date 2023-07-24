@@ -61,8 +61,8 @@ public class TableComparisonGroupingColumnPairModel {
      */
     public TableComparisonGroupingColumnsPairSpec createColumnsPairSpec() {
         return new TableComparisonGroupingColumnsPairSpec() {{
-            setComparedTableColumnName(this.getComparedTableColumnName());
-            setReferenceTableColumnName(this.getReferenceTableColumnName());
+            setComparedTableColumnName(comparedTableColumnName);
+            setReferenceTableColumnName(referenceTableColumnName);
         }};
     }
 }
