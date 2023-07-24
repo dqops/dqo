@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ColumnApiClient, ConnectionApiClient } from '../../services/apiClient';
-import { AxiosResponse } from 'axios';
-import { ColumnBasicModel, CommonColumnModel } from '../../api';
+
 import SelectInput from '../SelectInput';
 
 export interface Option {
@@ -19,6 +18,11 @@ interface IColumnSelectProps {
   scope?: string;
   error?: boolean;
   triggerClassName?: string;
+  placeholder?: string;
+  refConnection?: string;
+  refSchema?: string;
+  refTable?: string;
+  passedOptions?: Option[];
 }
 
 const ColumnSelect = ({
@@ -27,33 +31,58 @@ const ColumnSelect = ({
   tooltipText,
   onChange,
   disabled,
-  scope = 'column',
   triggerClassName,
-  error
+  error,
+  scope = 'column',
+  placeholder,
+  passedOptions
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
-  const { connection, schema, table }: { connection: string, schema: string, table: string } = useParams();
-
-  const setColumns = (
-    res: AxiosResponse<CommonColumnModel[] | ColumnBasicModel[]>
-  ) => {
-    setOptions(
-      res.data.map((item) => ({
-        label: item.column_name || '',
-        value: item.column_name || ''
-      }))
-    );
-  };
+  const {
+    connection,
+    schema,
+    table
+  }: { connection: string; schema: string; table: string } = useParams();
 
   useEffect(() => {
-    if (connection && scope === 'connection') {
-      ConnectionApiClient.getConnectionCommonColumns(connection).then(
-        setColumns
-      );
-    } else if (table) {
-      ColumnApiClient.getColumns(connection, schema, table).then(setColumns);
+    const fetchData = async () => {
+      if (connection && scope === 'connection') {
+        try {
+          const response = await ConnectionApiClient.getConnectionCommonColumns(
+            connection
+          );
+          setOptions(
+            response.data.map((item) => ({
+              label: item.column_name || '',
+              value: item.column_name || ''
+            }))
+          );
+        } catch (error) {
+          console.error('Błąd pobierania danych:', error);
+        }
+      } else if (table) {
+        try {
+          const response = await ColumnApiClient.getColumns(
+            connection,
+            schema,
+            table
+          );
+          setOptions(
+            response.data.map((item) => ({
+              label: item.column_name || '',
+              value: item.column_name || ''
+            }))
+          );
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    };
+
+    if (passedOptions === undefined) {
+      fetchData();
     }
-  }, [connection, schema, table]);
+  }, [connection, schema, table, scope]);
 
   return (
     <div>
@@ -62,10 +91,11 @@ const ColumnSelect = ({
         label={label}
         value={value}
         tooltipText={tooltipText}
-        options={options}
+        options={passedOptions ?? options}
         triggerClassName={triggerClassName}
         onChange={onChange}
         error={error}
+        placeholder={placeholder}
       />
     </div>
   );
