@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  * REST api controller to manage the list of schemas inside a connection.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Schemas", description = "Schema management")
 public class SchemasController {

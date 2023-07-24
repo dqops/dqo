@@ -40,7 +40,7 @@ import java.util.Optional;
  * Controller over the errors on tables and columns.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Errors", description = "Returns the errors related to check executions on tables and columns.")
 public class ErrorsController {

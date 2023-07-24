@@ -54,7 +54,7 @@ import java.util.stream.Stream;
  * REST api controller to return a list of connections.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Connections", description = "Manages connections to monitored data sources")
 public class ConnectionsController {

@@ -40,7 +40,7 @@ import java.util.Optional;
  * Controller over the check results on tables and columns.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "CheckResults", description = "Returns the complete results of executed checks on tables and columns.")
 public class CheckResultsController {

@@ -37,7 +37,7 @@ import reactor.core.publisher.Flux;
  * Controller that returns the overview of the recent results and errors on tables and columns.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "CheckResultsOverview", description = "Returns the overview of the recently executed checks on tables and columns.")
 public class CheckResultsOverviewController {

@@ -85,7 +85,7 @@ import java.util.stream.Stream;
  * REST api controller to manage the list of tables inside a schema.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {

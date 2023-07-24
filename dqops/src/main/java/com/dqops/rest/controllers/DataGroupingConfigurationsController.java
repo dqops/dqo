@@ -40,7 +40,7 @@ import java.util.*;
  * REST api controller to manage the data grouping configurations on a table.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "DataGroupingConfigurations", description = "Manages data grouping configurations on a table")
 public class DataGroupingConfigurationsController {

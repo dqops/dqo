@@ -40,7 +40,7 @@ import java.util.Optional;
  * Controller over the sensor readouts on tables and columns.
  */
 @RestController
-@RequestMapping("/api/connections")
+@RequestMapping("api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "SensorReadouts", description = "Returns the complete sensor readouts of executed checks on tables and columns.")
 public class SensorReadoutsController {
