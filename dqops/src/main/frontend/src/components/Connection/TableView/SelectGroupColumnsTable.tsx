@@ -115,7 +115,7 @@ export const SelectGroupColumnsTable = ({
           ]);
           setRef(true);
         } catch (error) {
-          console.error('Błąd pobierania danych:', error);
+          console.error('Error:', error);
         }
       } else {
         if (
@@ -138,14 +138,16 @@ export const SelectGroupColumnsTable = ({
                 value: item.column_name || ''
               }))
             ]);
+            setRef(true);
           } catch (error) {
             console.error('Error:', error);
           }
         }
       }
     };
-
-    fetchData();
+    if (ref === false) {
+      fetchData();
+    }
   }, [connection, schema, table, refConnection, refSchema, refTable, ref]);
 
   return (
