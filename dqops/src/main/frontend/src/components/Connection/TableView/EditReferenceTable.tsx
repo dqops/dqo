@@ -221,9 +221,10 @@ const EditReferenceTable = ({
           reference_table_grouping_name:
             refDataGroupingConfiguration?.data_grouping_configuration_name ??
             '',
-          grouping_columns: combinedArray() ?? []
+          grouping_columns: doubleArray ?? []
         }
       )
+        .then((res) => console.log(res.data))
         .then(() => {
           onBack();
         })
@@ -255,9 +256,10 @@ const EditReferenceTable = ({
           reference_table_grouping_name:
             refDataGroupingConfiguration?.data_grouping_configuration_name ??
             '',
-          grouping_columns: combinedArray() ?? []
+          grouping_columns: doubleArray ?? []
         }
       )
+        .then((res) => console.log(res.data))
         .then(() => {
           onBack();
         })
@@ -356,14 +358,6 @@ const EditReferenceTable = ({
     }
     setRefObj(refList);
     setNormalObj(normalList);
-    if (
-      normalObj &&
-      Object.values(normalObj).every((x) => x !== 1) &&
-      refObj &&
-      Object.values(refObj).every((x) => x !== 1)
-    ) {
-      setDoubleArray(combinedArray());
-    }
   };
   const combinedArray = () => {
     if (refList && normalList) {
@@ -379,21 +373,32 @@ const EditReferenceTable = ({
           item.compared_table_column_name !== '' ||
           item.reference_table_column_name !== ''
       );
-      return trim;
+      setDoubleArray(trim);
+      if (
+        trim.find(
+          (x) =>
+            x.compared_table_column_name?.length === 0 ||
+            x.reference_table_column_name?.length === 0
+        )
+      ) {
+        setBool(false);
+      } else {
+        setBool(true);
+      }
     }
   };
+  console.log(bool);
 
   useEffect(() => {
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
+    combinedArray();
   }, [normalList, refList]);
-
-  console.log(combinedArray());
 
   return (
     <div>
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdated && bool}
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
