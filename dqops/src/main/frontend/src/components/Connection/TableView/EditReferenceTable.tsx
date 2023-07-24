@@ -273,21 +273,29 @@ const EditReferenceTable = ({
   };
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setName(e.target.value);
+      setIsUpdated(true);
+    }
   };
 
   const changePropsTable = (value: string) => {
-    setRefTable(value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setRefTable(value);
+      setIsUpdated(true);
+    }
   };
   const changePropsSchema = (value: string) => {
-    setRefSchema(value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setRefSchema(value);
+      setIsUpdated(true);
+    }
   };
   const changePropsConnection = (value: string) => {
-    setRefConnection(value);
-    setIsUpdated(true);
+    if (selectedReference === undefined || selectedReference.length === 0) {
+      setRefConnection(value);
+      setIsUpdated(true);
+    }
   };
 
   const changeDataGroupingProps = (
