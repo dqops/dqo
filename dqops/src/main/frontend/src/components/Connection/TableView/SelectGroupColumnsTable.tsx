@@ -51,7 +51,6 @@ export const SelectGroupColumnsTable = ({
   refConnection,
   refSchema,
   refTable,
-
   onSetNormalList,
   onSetRefList,
   responseList,
@@ -59,6 +58,7 @@ export const SelectGroupColumnsTable = ({
 }: SelectDataGroupingForTableProps) => {
   const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
     useState<DataGroupingConfigurationSpec>();
+  const [fetched, setFetched] = useState(false);
   const {
     connection,
     schema,
@@ -94,16 +94,26 @@ export const SelectGroupColumnsTable = ({
 
   const [listOfColumns, setListOfColumns] = useState<Array<string>>([]);
   const fillArray = (length: number) => {
+    const emptyStrings = Array.from({ length: length }, () => '');
     if (responseList === undefined || responseList.length === 0) {
-      const emptyStrings = Array.from({ length: length }, () => '');
       setListOfColumns(emptyStrings);
     } else {
-      setListOfColumns([...responseList]);
+      const emptyStringsArray = Array.from(
+        { length: 9 - responseList.length },
+        () => ''
+      );
+      const combinedArrayVar = responseList.concat(emptyStringsArray);
+
+      setListOfColumns(combinedArrayVar);
+      setFetched(true);
     }
+    console.log('inside');
   };
 
   useEffect(() => {
-    fillArray(9);
+    if (fetched === false && responseList?.length !== 0) {
+      fillArray(9);
+    }
   }, [
     connection,
     schema,

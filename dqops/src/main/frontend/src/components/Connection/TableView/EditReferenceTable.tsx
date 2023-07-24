@@ -380,8 +380,10 @@ const EditReferenceTable = ({
       if (
         trim.find(
           (x) =>
-            x.compared_table_column_name?.length === 0 ||
-            x.reference_table_column_name?.length === 0
+            (x.compared_table_column_name?.length === 0 &&
+              x.reference_table_column_name?.length !== 0) ||
+            (x.compared_table_column_name?.length !== 0 &&
+              x.reference_table_column_name?.length === 0)
         )
       ) {
         setBool(false);
@@ -403,10 +405,13 @@ const EditReferenceTable = ({
           ? x.reference_table_column_name
           : ''
       );
-      console.log(comparedArr, refArr);
       return { comparedArr, refArr };
     }
   };
+
+  console.log(doubleArray);
+
+  console.log(trueArray);
 
   useEffect(() => {
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
@@ -418,7 +423,30 @@ const EditReferenceTable = ({
     <div>
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated && bool}
+        isUpdated={
+          name.length !== 0 &&
+          connection.length !== 0 &&
+          schema.length !== 0 &&
+          table.length !== 0 &&
+          refConnection.length !== 0 &&
+          refSchema.length !== 0 &&
+          refTable.length !== 0 &&
+          bool &&
+          JSON.stringify(trueArray) !== JSON.stringify(doubleArray)
+        }
+        isDisabled={
+          !(
+            name.length !== 0 &&
+            connection.length !== 0 &&
+            schema.length !== 0 &&
+            table.length !== 0 &&
+            refConnection.length !== 0 &&
+            refSchema.length !== 0 &&
+            refTable.length !== 0 &&
+            bool &&
+            JSON.stringify(trueArray) !== JSON.stringify(doubleArray)
+          )
+        }
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
