@@ -151,12 +151,13 @@ export const SelectGroupColumnsTable = ({
             refSchema,
             refTable
           );
-          setOptions(
-            response.data.map((item) => ({
+          setOptions([
+            { label: 'Empty Field', value: '' },
+            ...response.data.map((item) => ({
               label: item.column_name || '',
               value: item.column_name || ''
             }))
-          );
+          ]);
           setRef(true);
         } catch (error) {
           console.error('Błąd pobierania danych:', error);
@@ -175,12 +176,13 @@ export const SelectGroupColumnsTable = ({
               schema,
               table
             );
-            setOptions(
-              response.data.map((item) => ({
+            setOptions([
+              { label: 'Empty Field', value: '' },
+              ...response.data.map((item) => ({
                 label: item.column_name || '',
                 value: item.column_name || ''
               }))
-            );
+            ]);
           } catch (error) {
             console.error('Error:', error);
           }
