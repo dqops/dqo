@@ -259,7 +259,7 @@ const EditReferenceTable = ({
           grouping_columns: doubleArray ?? []
         }
       )
-        .then((res) => console.log(res.data))
+        .then((res) => console.log(res.request))
         .then(() => {
           onBack();
         })
