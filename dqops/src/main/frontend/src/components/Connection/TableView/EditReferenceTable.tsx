@@ -432,7 +432,8 @@ const EditReferenceTable = ({
           refSchema.length !== 0 &&
           refTable.length !== 0 &&
           bool &&
-          JSON.stringify(trueArray) !== JSON.stringify(doubleArray)
+          (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+            isUpdated)
         }
         isDisabled={
           !(
@@ -444,7 +445,8 @@ const EditReferenceTable = ({
             refSchema.length !== 0 &&
             refTable.length !== 0 &&
             bool &&
-            JSON.stringify(trueArray) !== JSON.stringify(doubleArray)
+            (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+              isUpdated)
           )
         }
         isUpdating={isUpdating}
