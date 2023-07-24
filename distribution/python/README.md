@@ -75,7 +75,7 @@ Usage of the DQO client.
 ```python
 from dqops.client import Client
 
-client = Client(base_url="http://localhost:8888/")
+client = Client(base_url="http://localhost:8888")
 ```
 
 If the endpoints you're going to hit require authentication, use `AuthenticatedClient` instead:
@@ -83,7 +83,7 @@ If the endpoints you're going to hit require authentication, use `AuthenticatedC
 ```python
 from dqops.client import AuthenticatedClient
 
-client = AuthenticatedClient(base_url="http://localhost:8888/", token="Your DQO Cloud API Key")
+client = AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO Cloud API Key")
 ```
 
 Now call your endpoint and use your models:
