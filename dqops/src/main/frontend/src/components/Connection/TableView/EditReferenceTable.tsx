@@ -227,7 +227,6 @@ const EditReferenceTable = ({
           grouping_columns: doubleArray ?? []
         }
       )
-        .then((res) => console.log(res.data))
         .then(() => {
           onBack();
         })
@@ -262,7 +261,6 @@ const EditReferenceTable = ({
           grouping_columns: doubleArray ?? []
         }
       )
-        .then((res) => console.log(res.request))
         .then(() => {
           onBack();
         })
@@ -416,10 +414,6 @@ const EditReferenceTable = ({
       return { comparedArr, refArr };
     }
   };
-
-  console.log(doubleArray);
-
-  console.log(trueArray);
 
   useEffect(() => {
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));

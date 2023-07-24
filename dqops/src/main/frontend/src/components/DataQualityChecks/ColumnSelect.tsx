@@ -69,7 +69,6 @@ const ColumnSelect = ({
               value: item.column_name || ''
             }))
           );
-          console.log('first if');
         } catch (error) {
           console.error('Błąd pobierania danych:', error);
         }

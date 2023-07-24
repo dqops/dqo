@@ -6,7 +6,6 @@ import {
 } from '../../../api';
 import {
   ColumnApiClient,
-  ConnectionApiClient,
   DataGroupingConfigurationsApi
 } from '../../../services/apiClient';
 import clsx from 'clsx';
@@ -107,7 +106,6 @@ export const SelectGroupColumnsTable = ({
       setListOfColumns(combinedArrayVar);
       setFetched(true);
     }
-    console.log('inside');
   };
 
   useEffect(() => {
