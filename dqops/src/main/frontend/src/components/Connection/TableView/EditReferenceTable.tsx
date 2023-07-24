@@ -67,6 +67,8 @@ const EditReferenceTable = ({
   const [bool, setBool] = useState(false);
   const [doubleArray, setDoubleArray] =
     useState<Array<TableComparisonGroupingColumnPairModel>>();
+  const [trueArray, setTrueArray] =
+    useState<Array<TableComparisonGroupingColumnPairModel>>();
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -100,6 +102,7 @@ const EditReferenceTable = ({
         setRefConnection(res.data?.reference_connection ?? '');
         setRefSchema(res.data?.reference_table?.schema_name ?? '');
         setRefTable(res.data?.reference_table?.table_name ?? '');
+        setTrueArray(res.data.grouping_columns ?? []);
       });
     }
   }, [selectedReference]);
@@ -387,11 +390,28 @@ const EditReferenceTable = ({
       }
     }
   };
-  console.log(bool);
+
+  const splitArrays = () => {
+    if (trueArray) {
+      const comparedArr = trueArray.map((x) =>
+        typeof x.compared_table_column_name === 'string'
+          ? x.compared_table_column_name
+          : ''
+      );
+      const refArr = trueArray.map((x) =>
+        typeof x.reference_table_column_name === 'string'
+          ? x.reference_table_column_name
+          : ''
+      );
+      console.log(comparedArr, refArr);
+      return { comparedArr, refArr };
+    }
+  };
 
   useEffect(() => {
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
     combinedArray();
+    splitArrays();
   }, [normalList, refList]);
 
   return (
@@ -483,6 +503,7 @@ const EditReferenceTable = ({
             placeholder="Select column on compared table"
             onSetNormalList={onSetNormalList}
             object={normalObj}
+            responseList={splitArrays()?.comparedArr}
           />
 
           <SelectGroupColumnsTable
@@ -498,6 +519,7 @@ const EditReferenceTable = ({
             refTable={refTable}
             onSetRefList={onSetRefList}
             object={refObj}
+            responseList={splitArrays()?.refArr}
           />
         </div>
       </div>

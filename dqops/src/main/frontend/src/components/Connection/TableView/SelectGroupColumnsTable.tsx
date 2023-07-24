@@ -33,6 +33,7 @@ type SelectDataGroupingForTableProps = {
   onSetNormalList?: (obj: Array<string>) => void;
 
   object?: { [key: number]: number };
+  responseList?: Array<string>;
 };
 interface Option {
   label: string;
@@ -53,10 +54,16 @@ export const SelectGroupColumnsTable = ({
 
   onSetNormalList,
   onSetRefList,
+  responseList,
   object
 }: SelectDataGroupingForTableProps) => {
   const [dataGroupingConfigurationSpec, setDataGroupingConfigurationSpec] =
     useState<DataGroupingConfigurationSpec>();
+  const {
+    connection,
+    schema,
+    table
+  }: { connection: string; schema: string; table: string } = useParams();
   const history = useHistory();
   //   const dataGroupOptions = dataGroupingConfigurations.map((item) => ({
   //     label: item.data_grouping_configuration_name ?? '',
@@ -86,14 +93,26 @@ export const SelectGroupColumnsTable = ({
   //   };
 
   const [listOfColumns, setListOfColumns] = useState<Array<string>>([]);
-  const fillArrayWithEmptyStrings = (length: number) => {
-    const emptyStrings = Array.from({ length: length }, () => '');
-    setListOfColumns(emptyStrings);
+  const fillArray = (length: number) => {
+    if (responseList === undefined || responseList.length === 0) {
+      const emptyStrings = Array.from({ length: length }, () => '');
+      setListOfColumns(emptyStrings);
+    } else {
+      setListOfColumns([...responseList]);
+    }
   };
 
   useEffect(() => {
-    fillArrayWithEmptyStrings(9);
-  }, [dataGroupingConfiguration]);
+    fillArray(9);
+  }, [
+    connection,
+    schema,
+    table,
+    responseList,
+    refConnection,
+    refSchema,
+    refTable
+  ]);
 
   useEffect(() => {
     if (onSetNormalList) {
@@ -110,11 +129,6 @@ export const SelectGroupColumnsTable = ({
     setListOfColumns(updatedList);
   };
   const [options, setOptions] = useState<Option[]>([]);
-  const {
-    connection,
-    schema,
-    table
-  }: { connection: string; schema: string; table: string } = useParams();
 
   const [ref, setRef] = useState(false);
 
@@ -169,7 +183,6 @@ export const SelectGroupColumnsTable = ({
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
-      {/* <div className="bg-black w-5 h-5" onClick={() => workOnMyObj()}></div> */}
       <table className="w-full">
         <tbody>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
