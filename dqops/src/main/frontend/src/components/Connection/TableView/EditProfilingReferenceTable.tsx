@@ -86,6 +86,7 @@ export const EditProfilingReferenceTable = ({
   const [isExtended, setIsExtended] = useState(false);
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
+
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -450,6 +451,18 @@ export const EditProfilingReferenceTable = ({
     }
   }, [job?.status]);
 
+  const onRunChecks = async (columnName: string) => {
+    await JobApiClient.runChecks(false, undefined, {
+      checkSearchFilters: {
+        ...categoryCheck?.run_checks_job_template,
+        columnName: columnName,
+        checkTarget: 'column'
+      }
+    });
+  };
+
+  console.log(reference);
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -719,7 +732,11 @@ export const EditProfilingReferenceTable = ({
                 <tr key={index}>
                   <td
                     className="text-left pr-4 py-1.5 flex items-center gap-x-2"
-                    onClick={() => handleExtend(index)}
+                    onClick={() => {
+                      handleExtend(index),
+                        onRunChecks(item.compared_column_name ?? ''),
+                        onRunChecks(item.reference_column_name ?? '');
+                    }}
                   >
                     {isElemExtended?.at(index) ? (
                       <SvgIcon name="chevron-down" className="w-5 h-5" />
@@ -750,6 +767,8 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
+                      disabled={item.reference_column_name === undefined}
+                      isDisabled={item.reference_column_name === undefined}
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -765,6 +784,8 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
+                      disabled={item.reference_column_name === undefined}
+                      isDisabled={item.reference_column_name === undefined}
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -780,6 +801,8 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
+                      disabled={item.reference_column_name === undefined}
+                      isDisabled={item.reference_column_name === undefined}
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -795,6 +818,8 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
+                      disabled={item.reference_column_name === undefined}
+                      isDisabled={item.reference_column_name === undefined}
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -810,6 +835,8 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
+                      disabled={item.reference_column_name === undefined}
+                      isDisabled={item.reference_column_name === undefined}
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -825,6 +852,8 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
+                      disabled={item.reference_column_name === undefined}
+                      isDisabled={item.reference_column_name === undefined}
                     />
                   </td>
                 </tr>
