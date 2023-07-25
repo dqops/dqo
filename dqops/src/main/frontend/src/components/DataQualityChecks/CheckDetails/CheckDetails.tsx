@@ -254,8 +254,6 @@ const CheckDetails = ({
     setIsChartOpenState(arg);
   };
 
-  console.log(filters.onChangeDataGroup);
-
   return (
     <div
       className="my-4"

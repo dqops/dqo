@@ -6,6 +6,7 @@ import SvgIcon from '../../SvgIcon';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi,
+  JobApiClient,
   TableComparisonsApi
 } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
@@ -14,27 +15,35 @@ import {
   ColumnComparisonModel,
   CompareThresholdsModel,
   DataGroupingConfigurationBasicModel,
+  QualityCategoryModel,
   TableComparisonModel
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
 import Select, { Option } from '../../Select';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  setCurrentJobId
+} from '../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { SelectDataGroupingForTableProfiling } from './SelectDataGroupingForTableProfiling';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { useSelector } from 'react-redux';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
   selectedReference?: string;
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
+  categoryCheck?: QualityCategoryModel;
 };
 
 export const EditProfilingReferenceTable = ({
   checkTypes,
   timePartitioned,
   onBack,
-  selectedReference
+  selectedReference,
+  categoryCheck
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -63,7 +72,7 @@ export const EditProfilingReferenceTable = ({
   const [isExtended, setIsExtended] = useState(false);
   const history = useHistory();
   const dispatch = useActionDispatch();
-
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
@@ -380,6 +389,21 @@ export const EditProfilingReferenceTable = ({
 
   console.log(reference);
 
+  const onRunChecksRowCount = async () => {
+    if (showRowCount) {
+      const res = await JobApiClient.runChecks(false, undefined, {
+        checkSearchFilters: categoryCheck?.run_checks_job_template
+      });
+      dispatch(
+        setCurrentJobId(
+          checkTypes,
+          firstLevelActiveTab,
+          (res.data as any)?.jobId?.jobId
+        )
+      );
+    }
+  };
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -413,7 +437,12 @@ export const EditProfilingReferenceTable = ({
             {reference?.reference_table?.table_name}
           </a>
         </div>
-        <Button label="Compare Tables" color="primary" variant="contained" />
+        <Button
+          label="Compare Tables"
+          color="primary"
+          variant="contained"
+          onClick={onRunChecksRowCount}
+        />
       </div>
 
       <div className="px-8 py-4">

@@ -12,11 +12,13 @@ import qs from 'query-string';
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
+  checksUI?: any;
 };
 
 export const TableReferenceComparisons = ({
   checkTypes,
-  timePartitioned
+  timePartitioned,
+  checksUI
 }: TableReferenceComparisonsProps) => {
   const {
     connection,
@@ -130,6 +132,8 @@ export const TableReferenceComparisons = ({
     }
   };
 
+  console.log(selectedReference);
+
   return (
     <>
       {isEditing ? (
@@ -138,6 +142,9 @@ export const TableReferenceComparisons = ({
           timePartitioned={timePartitioned}
           onBack={onBack}
           selectedReference={selectedReference}
+          categoryCheck={checksUI.categories.find(
+            (c: any) => c.category === `comparisons/${selectedReference}`
+          )}
         />
       ) : (
         <ProfilingReferenceTableList
