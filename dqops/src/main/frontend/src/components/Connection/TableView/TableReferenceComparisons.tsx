@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { TableComparisonsApi } from '../../../services/apiClient';
 import { TableComparisonConfigurationModel } from '../../../api';
-import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
@@ -24,7 +23,9 @@ export const TableReferenceComparisons = ({
     schema,
     table
   }: { connection: string; schema: string; table: string } = useParams();
-  const [references, setReferences] = useState<TableComparisonConfigurationModel[]>([]);
+  const [references, setReferences] = useState<
+    TableComparisonConfigurationModel[]
+  >([]);
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
@@ -42,11 +43,13 @@ export const TableReferenceComparisons = ({
   }, []);
 
   const getReferenceComparisons = () => {
-    TableComparisonsApi.getTableComparisonConfigurations(connection, schema, table).then(
-      (res) => {
-        setReferences(res.data);
-      }
-    );
+    TableComparisonsApi.getTableComparisonConfigurations(
+      connection,
+      schema,
+      table
+    ).then((res) => {
+      setReferences(res.data);
+    });
   };
 
   const onCreateNewReference = () => {
@@ -113,7 +116,9 @@ export const TableReferenceComparisons = ({
     history.replace(`${location.pathname}?${qs.stringify(parsed)}`);
   };
 
-  const onEditProfilingReference = (reference: TableComparisonConfigurationModel) => {
+  const onEditProfilingReference = (
+    reference: TableComparisonConfigurationModel
+  ) => {
     setSelectedReference(reference.table_comparison_configuration_name);
     onChangeEditing(true, reference.table_comparison_configuration_name);
   };
