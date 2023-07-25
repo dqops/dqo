@@ -378,6 +378,8 @@ export const EditProfilingReferenceTable = ({
     }
   }, [showRowCount]);
 
+  console.log(reference);
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -402,7 +404,7 @@ export const EditProfilingReferenceTable = ({
         />
       </div>
 
-      <div className="px-8 py-4 border-b border-gray-300">
+      <div className="px-8 py-4 border-b border-gray-300 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span>Comparing this table to the reference table:</span>
           <a className="text-teal-500 cursor-pointer" onClick={goToRefTable}>
@@ -411,6 +413,7 @@ export const EditProfilingReferenceTable = ({
             {reference?.reference_table?.table_name}
           </a>
         </div>
+        <Button label="Compare Tables" color="primary" variant="contained" />
       </div>
 
       <div className="px-8 py-4">
@@ -441,7 +444,7 @@ export const EditProfilingReferenceTable = ({
               <div>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
                   <div key={index} className="text-sm py-1.5 w-44">
-                    Grouping dimension level {item}
+                    Column {item}
                   </div>
                 ))}
               </div>
@@ -456,6 +459,11 @@ export const EditProfilingReferenceTable = ({
             setDataGroupingConfiguration={setDataGroupingConfiguration}
             goToCreateNew={goToCreateNew}
             isExtended={isExtended}
+            columnArray={reference?.grouping_columns?.map((x) =>
+              typeof x.compared_table_column_name === 'string'
+                ? x.compared_table_column_name
+                : ''
+            )}
           />
 
           <SelectDataGroupingForTableProfiling
@@ -466,6 +474,11 @@ export const EditProfilingReferenceTable = ({
             setDataGroupingConfiguration={setRefDataGroupingConfiguration}
             goToCreateNew={goToRefCreateNew}
             isExtended={isExtended}
+            columnArray={reference?.grouping_columns?.map((x) =>
+              typeof x.reference_table_column_name === 'string'
+                ? x.reference_table_column_name
+                : ''
+            )}
           />
         </div>
 
