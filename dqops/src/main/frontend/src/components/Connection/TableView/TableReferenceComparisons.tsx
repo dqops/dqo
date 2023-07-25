@@ -132,8 +132,6 @@ export const TableReferenceComparisons = ({
     }
   };
 
-  console.log(selectedReference);
-
   return (
     <>
       {isEditing ? (
@@ -142,9 +140,13 @@ export const TableReferenceComparisons = ({
           timePartitioned={timePartitioned}
           onBack={onBack}
           selectedReference={selectedReference}
-          categoryCheck={checksUI.categories.find(
-            (c: any) => c.category === `comparisons/${selectedReference}`
-          )}
+          categoryCheck={
+            checksUI?.categories
+              ? checksUI.categories.find(
+                  (c: any) => c.category === `comparisons/${selectedReference}`
+                )
+              : undefined
+          }
         />
       ) : (
         <ProfilingReferenceTableList

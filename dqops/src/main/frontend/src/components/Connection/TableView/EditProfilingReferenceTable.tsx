@@ -15,6 +15,7 @@ import {
   ColumnComparisonModel,
   CompareThresholdsModel,
   DataGroupingConfigurationBasicModel,
+  DqoJobHistoryEntryModelStatusEnum,
   QualityCategoryModel,
   TableComparisonModel
 } from '../../../api';
@@ -29,6 +30,8 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { SelectDataGroupingForTableProfiling } from './SelectDataGroupingForTableProfiling';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -57,12 +60,19 @@ export const EditProfilingReferenceTable = ({
     schema: string;
     table: string;
   } = useParams();
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
     DataGroupingConfigurationBasicModel[]
   >([]);
+  const [jobId, setJobId] = useState<number>();
+  const [loading, setLoading] = useState(false);
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
   const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] =
     useState<DataGroupingConfigurationBasicModel[]>([]);
   const [dataGroupingConfiguration, setDataGroupingConfiguration] =
@@ -387,10 +397,9 @@ export const EditProfilingReferenceTable = ({
     }
   }, [showRowCount]);
 
-  console.log(reference);
-
   const onRunChecksRowCount = async () => {
-    if (showRowCount) {
+    try {
+      setLoading(true);
       const res = await JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: categoryCheck?.run_checks_job_template
       });
@@ -401,8 +410,24 @@ export const EditProfilingReferenceTable = ({
           (res.data as any)?.jobId?.jobId
         )
       );
+      setJobId((res.data as any)?.jobId?.jobId);
+    } catch (err) {
+      console.error(err);
     }
   };
+  const disabled =
+    job &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed;
+
+  useEffect(() => {
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
+      setLoading(false);
+    }
+  }, [job?.status]);
 
   return (
     <div className="text-sm">
@@ -437,12 +462,23 @@ export const EditProfilingReferenceTable = ({
             {reference?.reference_table?.table_name}
           </a>
         </div>
-        <Button
-          label="Compare Tables"
-          color="primary"
-          variant="contained"
-          onClick={onRunChecksRowCount}
-        />
+        <div className="flex justify-center items-center gap-x-2">
+          {job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+            job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
+            job?.status && (
+              <SvgIcon
+                name="sync"
+                className={clsx('w-4 h-4 mr-3', loading ? 'animate-spin' : '')}
+              />
+            )}
+          <Button
+            label="Compare Tables"
+            color="primary"
+            variant="contained"
+            onClick={onRunChecksRowCount}
+            disabled={disabled || loading}
+          />
+        </div>
       </div>
 
       <div className="px-8 py-4">
