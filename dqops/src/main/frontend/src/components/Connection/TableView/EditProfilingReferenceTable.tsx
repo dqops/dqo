@@ -60,6 +60,7 @@ export const EditProfilingReferenceTable = ({
     useState<DataGroupingConfigurationBasicModel>();
   const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] =
     useState<DataGroupingConfigurationBasicModel>();
+  const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
   const [isExtended, setIsExtended] = useState(false);
   const history = useHistory();
   const dispatch = useActionDispatch();
@@ -378,6 +379,12 @@ export const EditProfilingReferenceTable = ({
     }
   }, [showRowCount]);
 
+  const handleExtend = (index: number) => {
+    const newArr = [...isElemExtended];
+    newArr[index] = !isElemExtended[index];
+    setIsElemExtended(newArr);
+  };
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -607,10 +614,18 @@ export const EditProfilingReferenceTable = ({
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {reference?.columns?.map((item, index) => (
+            {reference?.columns?.map((item, index) => (
+              <tbody key={index}>
                 <tr key={index}>
-                  <td className="text-left pr-4 py-1.5">
+                  <td
+                    className="text-left pr-4 py-1.5 flex items-center gap-x-2"
+                    onClick={() => handleExtend(index)}
+                  >
+                    {isElemExtended?.at(index) ? (
+                      <SvgIcon name="chevron-down" className="w-5 h-5" />
+                    ) : (
+                      <SvgIcon name="chevron-right" className="w-5 h-5" />
+                    )}
                     {item.compared_column_name}
                   </td>
                   <td className="text-left px-4 py-1.5">
@@ -713,8 +728,21 @@ export const EditProfilingReferenceTable = ({
                     />
                   </td>
                 </tr>
-              ))}
-            </tbody>
+                {isElemExtended.at(index) && (
+                  <tr className=" h-50 bg-blue-200">
+                    MY RESULTS WILL BE HERE
+                    <th className="text-left pr-4 py-1.5"></th>
+                    <th className="text-left px-4 py-1.5"></th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                  </tr>
+                )}
+              </tbody>
+            ))}
           </table>
         </SectionWrapper>
       </div>
