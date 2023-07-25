@@ -776,7 +776,13 @@ export const EditProfilingReferenceTable = ({
                   </td>
                   <td className="text-center px-4 py-1.5">
                     <Checkbox
-                      checked={!!item.compare_min}
+                      checked={
+                        !!item.compare_min &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        )
+                      }
                       onChange={(checked) =>
                         onChangeColumn(
                           {
@@ -799,7 +805,13 @@ export const EditProfilingReferenceTable = ({
                   </td>
                   <td className="text-center px-4 py-1.5">
                     <Checkbox
-                      checked={!!item.compare_max}
+                      checked={
+                        !!item.compare_max &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        )
+                      }
                       onChange={(checked) =>
                         onChangeColumn(
                           {
@@ -822,7 +834,13 @@ export const EditProfilingReferenceTable = ({
                   </td>
                   <td className="text-center px-4 py-1.5">
                     <Checkbox
-                      checked={!!item.compare_sum}
+                      checked={
+                        !!item.compare_sum &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        )
+                      }
                       onChange={(checked) =>
                         onChangeColumn(
                           {
@@ -845,7 +863,13 @@ export const EditProfilingReferenceTable = ({
                   </td>
                   <td className="text-center px-4 py-1.5">
                     <Checkbox
-                      checked={!!item.compare_mean}
+                      checked={
+                        !!item.compare_mean &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        )
+                      }
                       onChange={(checked) =>
                         onChangeColumn(
                           {
@@ -868,7 +892,13 @@ export const EditProfilingReferenceTable = ({
                   </td>
                   <td className="text-center px-4 py-1.5">
                     <Checkbox
-                      checked={!!item.compare_null_count}
+                      checked={
+                        !!item.compare_null_count &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        )
+                      }
                       onChange={(checked) =>
                         onChangeColumn(
                           {
@@ -891,7 +921,13 @@ export const EditProfilingReferenceTable = ({
                   </td>
                   <td className="text-center px-4 py-1.5">
                     <Checkbox
-                      checked={!!item.compare_not_null_count}
+                      checked={
+                        !!item.compare_not_null_count &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        )
+                      }
                       onChange={(checked) =>
                         onChangeColumn(
                           {
