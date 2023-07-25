@@ -536,9 +536,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     Throwable sensorConfigurationException = sensorRunParameters.getSensorConfigurationException();
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, sensorConfigurationException);
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultWithError, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                    if (sensorRunParameters.hasEnoughInformationForReportingDetailedError()) {
+                        ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                                sensorExecutionResultWithError, sensorRunParameters);
+                        allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                    }
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters, sensorExecutionResultWithError, sensorConfigurationException));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorConfigurationException, sensorRunParameters.getCheckSearchFilter()));
                     continue;
@@ -631,11 +633,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 SensorExecutionRunParameters sensorRunParameters = createSensorRunParametersToReferenceTable(userHome, checkSpec, userTimeWindowFilters);
                 if (!sensorRunParameters.isSuccess()) {
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
+
                     Throwable sensorConfigurationException = sensorRunParameters.getSensorConfigurationException();
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, sensorConfigurationException);
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultWithError, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                    if (sensorRunParameters.hasEnoughInformationForReportingDetailedError()) {
+                        ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                                sensorExecutionResultWithError, sensorRunParameters);
+                        allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                    }
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters, sensorExecutionResultWithError, sensorConfigurationException));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorConfigurationException, sensorRunParameters.getCheckSearchFilter()));
                     SensorPrepareResult incorrectPrepareResult = SensorPrepareResult.createForPrepareException(sensorRunParameters, null, sensorConfigurationException);
