@@ -212,6 +212,15 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Allow starting DQO without a DQO Cloud API Key and without prompting to log in to DQO Cloud.", defaultValue = "false")
     private Boolean dqoCloudStartWithoutApiKey;
 
+    @CommandLine.Option(names = {"--dqo.cloud.authenticate-with-dqo-cloud"},
+            description = "Turns on user authentication by using DQO Cloud credentials. Users will be redirected to the DQO Cloud login screen to login and will be returned back to the local DQO instance.", defaultValue = "false")
+    private Boolean dqoCloudAuthenticateWithDqoCloud;
+
+    @CommandLine.Option(names = {"--dqo.instance.signature-key"},
+            description = "DQO local instance signature key that is used to issue and verify digital signatures on API keys. It is a base64 encoded byte array (32 bytes). " +
+                    "When not configured, DQO will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
+    private String dqoInstanceSignatureKey;
+
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
             description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). The maximum number of threads is also limited by the DQO license.")
     private Long dqoQueueMaxConcurrentJobs;
