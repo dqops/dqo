@@ -94,19 +94,6 @@ export const EditProfilingReferenceTable = ({
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
         setReference(res.data);
-
-        ColumnApiClient.getColumns(
-          connection ?? '',
-          schema ?? '',
-          table ?? ''
-        ).then((columnRes) => {
-          setColumnOptions(
-            columnRes.data.map((item) => ({
-              label: item.column_name ?? '',
-              value: item.column_name ?? ''
-            }))
-          );
-        });
       };
       if (checkTypes === CheckTypes.PROFILING) {
         TableComparisonsApi.getTableComparisonProfiling(
@@ -149,6 +136,20 @@ export const EditProfilingReferenceTable = ({
         }
       }
     }
+    if (reference) {
+      ColumnApiClient.getColumns(
+        reference.reference_connection ?? '',
+        reference.reference_table?.schema_name ?? '',
+        reference.reference_table?.table_name ?? ''
+      ).then((columnRes) => {
+        setColumnOptions(
+          columnRes.data.map((item) => ({
+            label: item.column_name ?? '',
+            value: item.column_name ?? ''
+          }))
+        );
+      });
+    }
   }, [selectedReference]);
 
   useEffect(() => {
@@ -177,7 +178,21 @@ export const EditProfilingReferenceTable = ({
         );
       });
     }
-  }, [reference]);
+    if (reference) {
+      ColumnApiClient.getColumns(
+        reference.reference_connection ?? '',
+        reference.reference_table?.schema_name ?? '',
+        reference.reference_table?.table_name ?? ''
+      ).then((columnRes) => {
+        setColumnOptions(
+          columnRes.data.map((item) => ({
+            label: item.column_name ?? '',
+            value: item.column_name ?? ''
+          }))
+        );
+      });
+    }
+  }, [reference, selectedReference]);
 
   const goToCreateNew = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -747,11 +762,16 @@ export const EditProfilingReferenceTable = ({
                   </td>
                   <td className="text-left px-4 py-1.5">
                     <Select
-                      value={item.reference_column_name}
-                      options={columnOptions}
+                      value={
+                        item.reference_column_name !== undefined
+                          ? item.reference_column_name
+                          : ''
+                      }
+                      options={[{ value: '', label: '' }, ...columnOptions]}
                       onChange={(e) =>
                         onChangeColumn({ reference_column_name: e }, index)
                       }
+                      empty={true}
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">

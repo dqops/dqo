@@ -33,6 +33,7 @@ export interface SelectProps {
   onAdd?: () => void;
   addLabel?: string;
   prefix?: string;
+  empty?: boolean;
 }
 
 const Select = ({
@@ -49,7 +50,8 @@ const Select = ({
   menuClassName,
   onAdd,
   addLabel,
-  prefix
+  prefix,
+  empty
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLButtonElement>(null);
@@ -133,7 +135,12 @@ const Select = ({
                 onClick={() => handleClick(option)}
                 style={{ minWidth: menuWidth }}
               >
-                <div className="flex gap-2 items-center">
+                <div
+                  className={clsx(
+                    'flex gap-2 items-center',
+                    empty ? 'h-5' : ''
+                  )}
+                >
                   {option.icon || ''}
                   {option.label}
                 </div>
