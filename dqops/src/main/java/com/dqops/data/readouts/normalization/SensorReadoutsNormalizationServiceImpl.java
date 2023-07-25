@@ -220,8 +220,10 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(checkDisplayNameColumn);
 
         TextColumn checkTypeColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, resultsRowCount);
-        String checkType = sensorRunParameters.getCheckType().getDisplayName();
-        checkTypeColumn.setMissingTo(checkType);
+        if (sensorRunParameters.getCheckType() != null) {
+            String checkType = sensorRunParameters.getCheckType().getDisplayName();
+            checkTypeColumn.setMissingTo(checkType);
+        }
         sortedNormalizedTable.addColumns(checkTypeColumn);
 
         TextColumn checkCategoryColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultsRowCount);
@@ -235,8 +237,10 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(qualityDimensionColumn);
 
         TextColumn sensorNameColumn = TextColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, resultsRowCount);
-        String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
-        sensorNameColumn.setMissingTo(sensorDefinitionName);
+        if (sensorRunParameters.getEffectiveSensorRuleNames() != null) {
+            String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
+            sensorNameColumn.setMissingTo(sensorDefinitionName);
+        }
         sortedNormalizedTable.addColumns(sensorNameColumn);
 
         LongColumn sortedDataStreamHashColumn = (LongColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
