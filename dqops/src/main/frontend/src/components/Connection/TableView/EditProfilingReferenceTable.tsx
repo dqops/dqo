@@ -6,6 +6,7 @@ import SvgIcon from '../../SvgIcon';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi,
+  TableComparisonResultsApi,
   TableComparisonsApi
 } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
@@ -14,7 +15,8 @@ import {
   ColumnComparisonModel,
   CompareThresholdsModel,
   DataGroupingConfigurationBasicModel,
-  TableComparisonModel
+  TableComparisonModel,
+  TableComparisonResultsModel
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
@@ -50,6 +52,7 @@ export const EditProfilingReferenceTable = ({
   } = useParams();
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
+  const [isRowCountExtended, setIsRowCountExtended] = useState(false);
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
     DataGroupingConfigurationBasicModel[]
@@ -62,6 +65,8 @@ export const EditProfilingReferenceTable = ({
     useState<DataGroupingConfigurationBasicModel>();
   const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
   const [isExtended, setIsExtended] = useState(false);
+  const [tableComparisonResults, setTableComparisonResults] =
+    useState<TableComparisonResultsModel>();
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -385,6 +390,16 @@ export const EditProfilingReferenceTable = ({
     setIsElemExtended(newArr);
   };
 
+  const getResultsData = async () => {
+    await TableComparisonResultsApi.getTableComparisonProfilingResults(
+      connection,
+      schema,
+      table,
+      selectedReference ?? ''
+    ).then((res) => setTableComparisonResults(res.data));
+    console.log(tableComparisonResults);
+  };
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -394,7 +409,7 @@ export const EditProfilingReferenceTable = ({
       />
       <div className="flex items-center justify-between border-b border-t border-gray-300 py-2 px-8">
         <div className="flex items-center gap-3">
-          <span>
+          <span onClick={getResultsData}>
             Profiling table comparison using the table comparison configuration:
           </span>
           <span>{reference?.table_comparison_configuration_name}</span>
@@ -526,7 +541,15 @@ export const EditProfilingReferenceTable = ({
         >
           <div className="flex flex-col gap-8">
             <div className="flex gap-4">
-              <span>
+              <span
+                className="flex items-center cursor-pointer"
+                onClick={() => setIsRowCountExtended(!isRowCountExtended)}
+              >
+                {isRowCountExtended ? (
+                  <SvgIcon name="chevron-down" className="w-5 h-5" />
+                ) : (
+                  <SvgIcon name="chevron-right" className="w-5 h-5" />
+                )}
                 Compare row count between target and reference column:
               </span>
               <Checkbox
@@ -535,7 +558,7 @@ export const EditProfilingReferenceTable = ({
               />
             </div>
 
-            {showRowCount && (
+            {isRowCountExtended && (
               <div className="grid grid-cols-3 w-full">
                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
                   <span className="flex-1">
@@ -730,15 +753,26 @@ export const EditProfilingReferenceTable = ({
                 </tr>
                 {isElemExtended.at(index) && (
                   <tr className=" h-50 bg-blue-200">
-                    MY RESULTS WILL BE HERE
                     <th className="text-left pr-4 py-1.5"></th>
                     <th className="text-left px-4 py-1.5"></th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                      Error
+                    </th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                      Error
+                    </th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                      Error
+                    </th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                      Error
+                    </th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                      Error
+                    </th>
+                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                      Error
+                    </th>
                   </tr>
                 )}
               </tbody>
