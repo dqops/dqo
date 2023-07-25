@@ -25,8 +25,12 @@ export const ProfilingReferenceTableList = ({
             <th className="text-left px-2 py-2">Connection</th>
             <th className="text-left px-2 py-2">Schema</th>
             <th className="text-left px-2 py-2">Reference table name</th>
-            <th className="text-left px-2 py-2">Compared data grouping</th>
-            <th className="text-left px-2 py-2">Reference data grouping</th>
+            <th className="text-left px-2 py-2 text-red-500">
+              Compared data grouping
+            </th>
+            <th className="text-left px-2 py-2 text-red-500">
+              Reference data grouping
+            </th>
             <th className="text-left px-2 py-2" />
             <th className="text-left px-2 py-2" />
           </tr>

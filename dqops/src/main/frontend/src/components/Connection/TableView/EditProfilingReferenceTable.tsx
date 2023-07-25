@@ -6,6 +6,7 @@ import SvgIcon from '../../SvgIcon';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi,
+  JobApiClient,
   TableComparisonsApi
 } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
@@ -14,27 +15,38 @@ import {
   ColumnComparisonModel,
   CompareThresholdsModel,
   DataGroupingConfigurationBasicModel,
+  DqoJobHistoryEntryModelStatusEnum,
+  QualityCategoryModel,
   TableComparisonModel
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
 import Select, { Option } from '../../Select';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  setCurrentJobId
+} from '../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { SelectDataGroupingForTableProfiling } from './SelectDataGroupingForTableProfiling';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
   selectedReference?: string;
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
+  categoryCheck?: QualityCategoryModel;
 };
 
 export const EditProfilingReferenceTable = ({
   checkTypes,
   timePartitioned,
   onBack,
-  selectedReference
+  selectedReference,
+  categoryCheck
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -48,12 +60,19 @@ export const EditProfilingReferenceTable = ({
     schema: string;
     table: string;
   } = useParams();
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
     DataGroupingConfigurationBasicModel[]
   >([]);
+  const [jobId, setJobId] = useState<number>();
+  const [loading, setLoading] = useState(false);
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
   const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] =
     useState<DataGroupingConfigurationBasicModel[]>([]);
   const [dataGroupingConfiguration, setDataGroupingConfiguration] =
@@ -63,7 +82,7 @@ export const EditProfilingReferenceTable = ({
   const [isExtended, setIsExtended] = useState(false);
   const history = useHistory();
   const dispatch = useActionDispatch();
-
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
@@ -378,6 +397,38 @@ export const EditProfilingReferenceTable = ({
     }
   }, [showRowCount]);
 
+  const onRunChecksRowCount = async () => {
+    try {
+      setLoading(true);
+      const res = await JobApiClient.runChecks(false, undefined, {
+        checkSearchFilters: categoryCheck?.run_checks_job_template
+      });
+      dispatch(
+        setCurrentJobId(
+          checkTypes,
+          firstLevelActiveTab,
+          (res.data as any)?.jobId?.jobId
+        )
+      );
+      setJobId((res.data as any)?.jobId?.jobId);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const disabled =
+    job &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed;
+
+  useEffect(() => {
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
+      setLoading(false);
+    }
+  }, [job?.status]);
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -402,7 +453,7 @@ export const EditProfilingReferenceTable = ({
         />
       </div>
 
-      <div className="px-8 py-4 border-b border-gray-300">
+      <div className="px-8 py-4 border-b border-gray-300 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span>Comparing this table to the reference table:</span>
           <a className="text-teal-500 cursor-pointer" onClick={goToRefTable}>
@@ -410,6 +461,23 @@ export const EditProfilingReferenceTable = ({
             {reference?.reference_table?.schema_name}.
             {reference?.reference_table?.table_name}
           </a>
+        </div>
+        <div className="flex justify-center items-center gap-x-2">
+          {job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+            job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
+            job?.status && (
+              <SvgIcon
+                name="sync"
+                className={clsx('w-4 h-4 mr-3', loading ? 'animate-spin' : '')}
+              />
+            )}
+          <Button
+            label="Compare Tables"
+            color="primary"
+            variant="contained"
+            onClick={onRunChecksRowCount}
+            disabled={disabled || loading}
+          />
         </div>
       </div>
 
@@ -441,7 +509,7 @@ export const EditProfilingReferenceTable = ({
               <div>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
                   <div key={index} className="text-sm py-1.5 w-44">
-                    Grouping dimension level {item}
+                    Column {item}
                   </div>
                 ))}
               </div>
@@ -456,6 +524,11 @@ export const EditProfilingReferenceTable = ({
             setDataGroupingConfiguration={setDataGroupingConfiguration}
             goToCreateNew={goToCreateNew}
             isExtended={isExtended}
+            columnArray={reference?.grouping_columns?.map((x) =>
+              typeof x.compared_table_column_name === 'string'
+                ? x.compared_table_column_name
+                : ''
+            )}
           />
 
           <SelectDataGroupingForTableProfiling
@@ -466,6 +539,11 @@ export const EditProfilingReferenceTable = ({
             setDataGroupingConfiguration={setRefDataGroupingConfiguration}
             goToCreateNew={goToRefCreateNew}
             isExtended={isExtended}
+            columnArray={reference?.grouping_columns?.map((x) =>
+              typeof x.reference_table_column_name === 'string'
+                ? x.reference_table_column_name
+                : ''
+            )}
           />
         </div>
 

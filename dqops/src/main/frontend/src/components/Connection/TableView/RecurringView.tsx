@@ -11,13 +11,19 @@ import {
   updateTableMonthlyRecurringChecks
 } from '../../../redux/actions/table.actions';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../../api';
+import {
+  CheckResultsOverviewDataModel,
+  CheckContainerModel
+} from '../../../api';
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useHistory, useParams } from "react-router-dom";
-import { CheckTypes, ROUTES } from "../../../shared/routes";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
-import { TableReferenceComparisons } from "./TableReferenceComparisons";
+import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../../redux/selectors';
+import { TableReferenceComparisons } from './TableReferenceComparisons';
 
 const initTabs = [
   {
@@ -35,15 +41,30 @@ const initTabs = [
   {
     label: 'Monthly Comparisons',
     value: 'monthly_comparisons'
-  },
+  }
 ];
 
 const RecurringView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, tab, checkTypes }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, tab: string } = useParams();
+  const {
+    connection: connectionName,
+    schema: schemaName,
+    table: tableName,
+    tab,
+    checkTypes
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+    tab: string;
+  } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
-  const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
-  const [monthlyCheckResultsOverview, setMonthlyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
+  const [monthlyCheckResultsOverview, setMonthlyCheckResultsOverview] =
+    useState<CheckResultsOverviewDataModel[]>([]);
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
@@ -53,13 +74,27 @@ const RecurringView = () => {
     isUpdatedDailyRecurring,
     isUpdatedMonthlyRecurring,
     isUpdating,
-    loading,
+    loading
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    dispatch(getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
     dispatch(
-      getTableMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableDailyRecurringChecks(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName
+      )
+    );
+    dispatch(
+      getTableMonthlyRecurringChecks(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName
+      )
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
@@ -78,7 +113,14 @@ const RecurringView = () => {
         )
       );
       await dispatch(
-        getTableDailyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+        getTableDailyRecurringChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName,
+          false
+        )
       );
     } else {
       if (!monthlyRecurring) return;
@@ -94,17 +136,28 @@ const RecurringView = () => {
         )
       );
       await dispatch(
-        getTableMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+        getTableMonthlyRecurringChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName,
+          false
+        )
       );
     }
   };
 
   const onDailyRecurringChange = (ui: CheckContainerModel) => {
-    dispatch(setUpdatedDailyRecurringChecks(checkTypes, firstLevelActiveTab, ui));
+    dispatch(
+      setUpdatedDailyRecurringChecks(checkTypes, firstLevelActiveTab, ui)
+    );
   };
 
   const onMonthlyRecurringChange = (ui: CheckContainerModel) => {
-    dispatch(setUpdatedMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, ui));
+    dispatch(
+      setUpdatedMonthlyRecurringChecks(checkTypes, firstLevelActiveTab, ui)
+    );
   };
 
   useEffect(() => {
@@ -128,26 +181,59 @@ const RecurringView = () => {
   }, [isUpdatedMonthlyRecurring]);
 
   useEffect(() => {
-    if (tab !== 'daily' && tab !== 'monthly' && tab !== 'daily_comparisons' && tab !== 'monthly_comparisons') {
-      history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, 'daily'));
+    if (
+      tab !== 'daily' &&
+      tab !== 'monthly' &&
+      tab !== 'daily_comparisons' &&
+      tab !== 'monthly_comparisons'
+    ) {
+      history.push(
+        ROUTES.TABLE_LEVEL_PAGE(
+          checkTypes,
+          connectionName,
+          schemaName,
+          tableName,
+          'daily'
+        )
+      );
     }
   }, [tab]);
 
   const getDailyCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      'daily'
+    ).then((res) => {
       setDailyCheckResultsOverview(res.data);
     });
   };
-  
+
   const getMonthlyCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      'monthly'
+    ).then((res) => {
       setMonthlyCheckResultsOverview(res.data);
     });
   };
 
   const onChangeTab = (tab: string) => {
-    history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab));
+    history.push(
+      ROUTES.TABLE_LEVEL_PAGE(
+        checkTypes,
+        connectionName,
+        schemaName,
+        tableName,
+        tab
+      )
+    );
   };
+
+  console.log(dailyRecurring);
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
@@ -184,12 +270,14 @@ const RecurringView = () => {
         <TableReferenceComparisons
           checkTypes={checkTypes}
           timePartitioned="daily"
+          checksUI={dailyRecurring}
         />
       )}
       {tab === 'monthly_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           timePartitioned="monthly"
+          checksUI={monthlyRecurring}
         />
       )}
     </div>

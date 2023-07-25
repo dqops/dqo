@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  CheckResultsOverviewDataModel,
-  CheckContainerModel
-} from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import TableActionGroup from '../../components/Connection/TableView/TableActionGroup';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
