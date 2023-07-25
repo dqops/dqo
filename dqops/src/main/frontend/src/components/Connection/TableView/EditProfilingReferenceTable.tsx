@@ -595,12 +595,16 @@ export const EditProfilingReferenceTable = ({
               <tr>
                 <th className="text-left pr-4 py-1.5">Compared column</th>
                 <th className="text-left px-4 py-1.5"></th>
-                <th className="text-center px-4 py-1.5 pr-1">Min</th>
-                <th className="text-center px-4 py-1.5 pr-1">Max</th>
-                <th className="text-center px-4 py-1.5 pr-1">Sum</th>
-                <th className="text-center px-4 py-1.5 pr-1">Mean</th>
-                <th className="text-center px-4 py-1.5 pr-1">Null count</th>
-                <th className="text-center px-4 py-1.5 pr-1">Not null count</th>
+                <th className="text-center px-4 py-1.5 pr-1 w-1/12">Min</th>
+                <th className="text-center px-4 py-1.5 pr-1 w-1/12">Max</th>
+                <th className="text-center px-4 py-1.5 pr-1 w-1/12">Sum</th>
+                <th className="text-center px-4 py-1.5 pr-1 w-1/12">Mean</th>
+                <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                  Null count
+                </th>
+                <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                  Not null count
+                </th>
               </tr>
             </thead>
             <tbody>
