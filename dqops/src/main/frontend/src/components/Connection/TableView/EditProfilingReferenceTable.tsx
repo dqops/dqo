@@ -787,8 +787,14 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
-                      disabled={item.reference_column_name === undefined}
-                      isDisabled={item.reference_column_name === undefined}
+                      disabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
+                      isDisabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -804,8 +810,14 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
-                      disabled={item.reference_column_name === undefined}
-                      isDisabled={item.reference_column_name === undefined}
+                      disabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
+                      isDisabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -821,8 +833,14 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
-                      disabled={item.reference_column_name === undefined}
-                      isDisabled={item.reference_column_name === undefined}
+                      disabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
+                      isDisabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -838,8 +856,14 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
-                      disabled={item.reference_column_name === undefined}
-                      isDisabled={item.reference_column_name === undefined}
+                      disabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
+                      isDisabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -855,8 +879,14 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
-                      disabled={item.reference_column_name === undefined}
-                      isDisabled={item.reference_column_name === undefined}
+                      disabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
+                      isDisabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
                     />
                   </td>
                   <td className="text-center px-4 py-1.5">
@@ -872,8 +902,14 @@ export const EditProfilingReferenceTable = ({
                           index
                         )
                       }
-                      disabled={item.reference_column_name === undefined}
-                      isDisabled={item.reference_column_name === undefined}
+                      disabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
+                      isDisabled={
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      }
                     />
                   </td>
                 </tr>
