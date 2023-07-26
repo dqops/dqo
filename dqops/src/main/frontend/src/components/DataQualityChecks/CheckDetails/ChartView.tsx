@@ -17,6 +17,18 @@ export const ChartView = ({ data }: ChartViewProps) => {
 
   const dataSource: any = {
     datasets: [
+      data.some((item) => item.fatalLowerBound !== undefined)
+        ? {
+            label: 'Fatal (lower bound)',
+            data: data.map((item) => ({
+              x: item.timePeriod,
+              y: item.fatalLowerBound
+            })),
+            fill: 'start',
+            borderColor: '#E3170A',
+            backgroundColor: '#E3170A30'
+          }
+        : null,
       data.some((item) => item.errorLowerBound !== undefined)
         ? {
             label: 'Error (lower bound)',
@@ -136,8 +148,9 @@ export const ChartView = ({ data }: ChartViewProps) => {
     <div
       className="my-8"
       style={{
-        minWidth: '1280px',
-        width: `calc(100vw - ${sidebarWidth + 150}px`
+        minWidth: '1000px',
+        width: `calc(100vw - ${sidebarWidth  + 150}px`,
+        height: '370px'
       }}
     >
       <Line data={dataSource} options={options as any} />
