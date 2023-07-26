@@ -466,18 +466,9 @@ export const EditProfilingReferenceTable = ({
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       setLoading(false);
+      getResultsData();
     }
   }, [job?.status]);
-
-  const onRunChecks = async (columnName: string) => {
-    await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: {
-        ...categoryCheck?.run_checks_job_template,
-        columnName: columnName,
-        checkTarget: 'column'
-      }
-    });
-  };
 
   console.log(reference);
 
