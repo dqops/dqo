@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
  * DQO login token payload returned by the DQO Cloud or issued locally.
  */
 @Data
-public class DqoUserTokenPayload {
+public class DqoUserTokenPayload implements Cloneable {
     /**
      * The login (email) of the user.
      */
@@ -71,4 +71,21 @@ public class DqoUserTokenPayload {
     @JsonProperty("dr")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LinkedHashMap<String, DqoUserDataDomainRole> domainRoles = new LinkedHashMap<>();
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public DqoUserTokenPayload clone() {
+        try {
+            DqoUserTokenPayload cloned = (DqoUserTokenPayload) super.clone();
+            if (cloned.domainRoles != null) {
+                cloned.domainRoles = (LinkedHashMap<String, DqoUserDataDomainRole>) cloned.domainRoles.clone();
+            }
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Object cannot be cloned", ex);
+        }
+    }
 }

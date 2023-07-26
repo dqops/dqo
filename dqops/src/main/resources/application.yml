@@ -83,10 +83,6 @@ dqo:
       http2: true
       http2-max-concurrent-streams: 2000
       parallel-delete-operations: 2000
-  spring:
-    shell:
-      interactive:
-        enabled: true
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
   cloud:
     ui-base-url: https://cloud.dqo.ai

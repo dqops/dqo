@@ -92,10 +92,11 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
         boolean isHttps = !Strings.isNullOrEmpty(this.serverSslConfigurationProperties.getKeyStore());
         urlBuilder.append(isHttps ? "https://" : "http://");
 
-        if (Strings.isNullOrEmpty(this.serverConfigurationProperties.getAddress())) {
+        String address = this.serverConfigurationProperties.getAddress();
+        if (Strings.isNullOrEmpty(address)) {
             urlBuilder.append("localhost");
         } else {
-            urlBuilder.append(this.serverConfigurationProperties.getAddress());
+            urlBuilder.append(address);
         }
 
         String port = this.serverConfigurationProperties.getPort();
@@ -192,19 +193,28 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
             throw new DqoRuntimeException("The refresh token has already expired.");
         }
 
-        DqoUserTokenPayload authenticationToken = new DqoUserTokenPayload();
-        authenticationToken.setUser(signedRefreshToken.getTarget().getUser());
-        authenticationToken.setTenantId(signedRefreshToken.getTarget().getTenantId());
-        authenticationToken.setTenantGroup(signedRefreshToken.getTarget().getTenantGroup());
+        DqoUserTokenPayload authenticationToken = signedRefreshToken.getTarget().clone();
         authenticationToken.setDisposition(DqoUserAuthenticationTokenDisposition.AUTHENTICATION_TOKEN);
-        if (signedRefreshToken.getTarget().getDomainRoles() != null) {
-            authenticationToken.setDomainRoles((LinkedHashMap<String, DqoUserDataDomainRole>) signedRefreshToken.getTarget().getDomainRoles().clone());
-        }
         Instant expiresAt = Instant.now().plus(this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes(), ChronoUnit.MINUTES);
         authenticationToken.setExpiresAt(expiresAt);
 
         SignedObject<DqoUserTokenPayload> signedAuthenticationToken = this.signatureService.createSigned(authenticationToken);
         return signedAuthenticationToken;
+    }
+
+    /**
+     * Issues an API key token for the calling user.
+     * @param sourceUserToken Source user token.
+     * @return Signed API Key token.
+     */
+    @Override
+    public SignedObject<DqoUserTokenPayload> issueApiKey(DqoUserTokenPayload sourceUserToken) {
+        DqoUserTokenPayload authenticationToken = sourceUserToken.clone();
+        authenticationToken.setDisposition(DqoUserAuthenticationTokenDisposition.API_KEY);
+        authenticationToken.setExpiresAt(null); // API Keys do not have an expiration time
+
+        SignedObject<DqoUserTokenPayload> signedApiKeyToken = this.signatureService.createSigned(authenticationToken);
+        return signedApiKeyToken;
     }
 
     /**
@@ -215,11 +225,14 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     @Override
     public SignedObject<DqoUserTokenPayload> verifyAuthenticationToken(String authenticationToken) {
         SignedObject<DqoUserTokenPayload> signedAuthenticationToken = this.signatureService.decodeSignedMessageHex(DqoUserTokenPayload.class, authenticationToken);
-        if (signedAuthenticationToken.getTarget().getDisposition() != DqoUserAuthenticationTokenDisposition.AUTHENTICATION_TOKEN) {
-            throw new DqoRuntimeException("The authentication token is invalid, it has a different purpose: " + signedAuthenticationToken.getTarget().getDisposition());
+        DqoUserAuthenticationTokenDisposition tokenDisposition = signedAuthenticationToken.getTarget().getDisposition();
+        if (tokenDisposition != DqoUserAuthenticationTokenDisposition.AUTHENTICATION_TOKEN &&
+                tokenDisposition != DqoUserAuthenticationTokenDisposition.API_KEY) {
+            throw new DqoRuntimeException("The authentication token is invalid, it has a different purpose: " + tokenDisposition);
         }
 
-        if (signedAuthenticationToken.getTarget().getExpiresAt().isBefore(Instant.now())) {
+        if (signedAuthenticationToken.getTarget().getExpiresAt() != null &&
+                signedAuthenticationToken.getTarget().getExpiresAt().isBefore(Instant.now())) {
             throw new DqoRuntimeException("The authentication token has already expired.");
         }
 
