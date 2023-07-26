@@ -34,6 +34,7 @@ import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
+import ResultPanel from './ResultPanel';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -450,6 +451,8 @@ export const EditProfilingReferenceTable = ({
       setJobId((res.data as any)?.jobId?.jobId);
     } catch (err) {
       console.error(err);
+    } finally {
+      getResultsData();
     }
   };
   const disabled =
@@ -748,9 +751,7 @@ export const EditProfilingReferenceTable = ({
                   <td
                     className="text-left pr-4 py-1.5 flex items-center gap-x-2"
                     onClick={() => {
-                      handleExtend(index),
-                        onRunChecks(item.compared_column_name ?? ''),
-                        onRunChecks(item.reference_column_name ?? '');
+                      handleExtend(index);
                     }}
                   >
                     {isElemExtended?.at(index) ? (
@@ -950,28 +951,50 @@ export const EditProfilingReferenceTable = ({
                   </td>
                 </tr>
                 {isElemExtended.at(index) && (
-                  <tr className=" h-50 bg-blue-200">
-                    <th className="text-left pr-4 py-1.5"></th>
-                    <th className="text-left px-4 py-1.5"></th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                      Error
-                    </th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                      Error
-                    </th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                      Error
-                    </th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                      Error
-                    </th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                      Error
-                    </th>
-                    <th className="text-center px-4 py-1.5 pr-1 w-1/12">
-                      Error
-                    </th>
-                  </tr>
+                  <ResultPanel
+                    minBool={
+                      !!item.compare_min &&
+                      !(
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      )
+                    }
+                    maxBool={
+                      !!item.compare_max &&
+                      !(
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      )
+                    }
+                    sumBool={
+                      !!item.compare_sum &&
+                      !(
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      )
+                    }
+                    meanBool={
+                      !!item.compare_mean &&
+                      !(
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      )
+                    }
+                    nullCount={
+                      !!item.compare_null_count &&
+                      !(
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      )
+                    }
+                    notNullCount={
+                      !!item.compare_not_null_count &&
+                      !(
+                        item.reference_column_name === undefined ||
+                        item.reference_column_name.length === 0
+                      )
+                    }
+                  />
                 )}
               </tbody>
             ))}
