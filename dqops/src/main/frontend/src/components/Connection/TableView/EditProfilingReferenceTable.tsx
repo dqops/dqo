@@ -19,7 +19,8 @@ import {
   TableComparisonModel,
   TableComparisonResultsModel,
   DqoJobHistoryEntryModelStatusEnum,
-  QualityCategoryModel
+  QualityCategoryModel,
+  ComparisonCheckResultModel
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
@@ -469,6 +470,24 @@ export const EditProfilingReferenceTable = ({
   }, [job?.status]);
 
   console.log(reference);
+  console.log(
+    Object.values(tableComparisonResults?.column_comparison_results ?? {})
+  );
+
+  const prepareData = (
+    nameOfColumn: string
+  ): { [key: string]: ComparisonCheckResultModel } => {
+    const columnComparisonResults =
+      tableComparisonResults?.column_comparison_results ?? {};
+
+    if (Object.keys(columnComparisonResults).find((x) => x === nameOfColumn)) {
+      return columnComparisonResults[nameOfColumn] ?? [];
+    } else {
+      return {};
+    }
+  };
+
+  console.log(prepareData('Chest'));
 
   return (
     <div className="text-sm">
@@ -941,6 +960,7 @@ export const EditProfilingReferenceTable = ({
                 </tr>
                 {isElemExtended.at(index) && (
                   <ResultPanel
+                    obj={prepareData(item.compared_column_name ?? '')}
                     minBool={
                       !!item.compare_min &&
                       !(

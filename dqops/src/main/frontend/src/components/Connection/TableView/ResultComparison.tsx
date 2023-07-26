@@ -6,6 +6,6 @@ interface dataInterface {
   onUpdate?: () => void;
 }
 
-export default function ResultComparison() {
+export default function ResultComparison({ item, onUpdate }: dataInterface) {
   return <div>ResultComparison</div>;
 }
