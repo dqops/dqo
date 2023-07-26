@@ -22,6 +22,7 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
+import com.dqops.utils.docs.HandledClassesLinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -37,6 +38,7 @@ import java.util.List;
 public class RuleDocumentationGeneratorImplTests extends BaseTest {
     private RuleDocumentationGeneratorImpl sut;
     private Path projectRootPath;
+    private HandledClassesLinkageStore linkageStore;
     private DqoHome dqoHome;
 
     @BeforeEach
@@ -49,6 +51,7 @@ public class RuleDocumentationGeneratorImplTests extends BaseTest {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(projectRootPath, dqoHomeContext, specToUiCheckMappingService);
+        this.linkageStore = new HandledClassesLinkageStore();
 
         this.sut = new RuleDocumentationGeneratorImpl(ruleDocumentationModelFactory);
     }
