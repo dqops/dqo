@@ -102,13 +102,14 @@ public class GenerateDocumentationPostProcessor {
 
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+            HandledClassesLinkageStore linkageStore = new HandledClassesLinkageStore();
 
-            generateDocumentationForSensors(projectDir, dqoHomeContext);
-            generateDocumentationForRules(projectDir, dqoHomeContext);
-            generateDocumentationForCliCommands(projectDir);
-            generateDocumentationForChecks(projectDir, dqoHomeContext);
-            generateDocumentationForYaml(projectDir, dqoHomeContext);
-            generateDocumentationForParquetFiles(projectDir);
+            generateDocumentationForSensors(projectDir, linkageStore, dqoHomeContext);
+            generateDocumentationForRules(projectDir, linkageStore, dqoHomeContext);
+            generateDocumentationForCliCommands(projectDir, linkageStore);
+            generateDocumentationForChecks(projectDir, linkageStore, dqoHomeContext);
+            generateDocumentationForYaml(projectDir, linkageStore, dqoHomeContext);
+            generateDocumentationForParquetFiles(projectDir, linkageStore);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,16 +118,18 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Generates documentation for sensors.
-     * @param projectRoot Path to the project root.
+     *
+     * @param projectRoot    Path to the project root.
+     * @param linkageStore
      * @param dqoHomeContext DQO home instance with access to the sensor references and SQLs.
      */
-    public static void generateDocumentationForSensors(Path projectRoot, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForSensors(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
         Path sensorsDocPath = projectRoot.resolve("../docs/reference/sensors").toAbsolutePath().normalize();
         DocumentationFolder currentSensorDocFiles = DocumentationFolderFactory.loadCurrentFiles(sensorsDocPath);
         SensorDocumentationModelFactory sensorDocumentationModelFactory = createSensorDocumentationModelFactory(dqoHomeContext);
         SensorDocumentationGenerator sensorDocumentationGenerator = new SensorDocumentationGeneratorImpl(sensorDocumentationModelFactory);
 
-        DocumentationFolder renderedDocumentation = sensorDocumentationGenerator.renderSensorDocumentation(projectRoot, dqoHomeContext.getDqoHome());
+        DocumentationFolder renderedDocumentation = sensorDocumentationGenerator.renderSensorDocumentation(projectRoot, linkageStore, dqoHomeContext.getDqoHome());
         renderedDocumentation.writeModifiedFiles(currentSensorDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
@@ -150,16 +153,18 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Generates documentation for rules.
-     * @param projectRoot Path to the project root.
+     *
+     * @param projectRoot    Path to the project root.
+     * @param linkageStore
      * @param dqoHomeContext DQO home instance with access to the rule references.
      */
-    public static void generateDocumentationForRules(Path projectRoot, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForRules(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
         Path rulesDocPath = projectRoot.resolve("../docs/reference/rules").toAbsolutePath().normalize();
         DocumentationFolder currentRuleDocFiles = DocumentationFolderFactory.loadCurrentFiles(rulesDocPath);
         RuleDocumentationModelFactory ruleDocumentationModelFactory = createRuleDocumentationModelFactory(projectRoot, dqoHomeContext);
         RuleDocumentationGenerator ruleDocumentationGenerator = new RuleDocumentationGeneratorImpl(ruleDocumentationModelFactory);
 
-        DocumentationFolder renderedDocumentation = ruleDocumentationGenerator.renderRuleDocumentation(projectRoot, dqoHomeContext.getDqoHome());
+        DocumentationFolder renderedDocumentation = ruleDocumentationGenerator.renderRuleDocumentation(projectRoot, linkageStore, dqoHomeContext.getDqoHome());
         renderedDocumentation.writeModifiedFiles(currentRuleDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
@@ -183,9 +188,11 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Generates documentation for CLI Commands.
-     * @param projectRoot Path to the project root.
+     *
+     * @param projectRoot  Path to the project root.
+     * @param linkageStore
      */
-    public static void generateDocumentationForCliCommands(Path projectRoot) {
+    public static void generateDocumentationForCliCommands(Path projectRoot, HandledClassesLinkageStore linkageStore) {
         Path cliDocPath = projectRoot.resolve("../docs/command-line-interface").toAbsolutePath().normalize();
         DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
         CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
@@ -201,10 +208,10 @@ public class GenerateDocumentationPostProcessor {
     }
 
 
-    public static void generateDocumentationForChecks(Path projectRoot, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForChecks(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
         Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
         DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
-        CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, dqoHomeContext);
+        CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, linkageStore, dqoHomeContext);
         CheckDocumentationGenerator checkDocumentationGenerator = new CheckDocumentationGeneratorImpl(checkDocumentationModelFactory);
 
         DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot);
@@ -219,11 +226,13 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Creates a check documentation model factory.
-     * @param projectRoot Project root path.
+     *
+     * @param projectRoot    Project root path.
+     * @param linkageStore
      * @param dqoHomeContext DQO Home context.
      * @return Check documentation model factory.
      */
-    public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, final DqoHomeContext dqoHomeContext){
+    public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, HandledClassesLinkageStore linkageStore, final DqoHomeContext dqoHomeContext){
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
         configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
@@ -242,7 +251,7 @@ public class GenerateDocumentationPostProcessor {
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
                 new ModelToSpecCheckMappingServiceImpl(reflectionService),
                 new YamlSerializerImpl(configurationProperties),
-                new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties));
+                new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties), linkageStore);
         return checkDocumentationModelFactory;
     }
 
@@ -259,15 +268,17 @@ public class GenerateDocumentationPostProcessor {
 
     /**
      * Generates documentation for yaml classes.
-     * @param projectRoot Path to the project root.
+     *
+     * @param projectRoot  Path to the project root.
+     * @param linkageStore
      */
-    public static void generateDocumentationForYaml(Path projectRoot, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForYaml(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
         Path yamlDocPath = projectRoot.resolve("../docs/reference/yaml").toAbsolutePath().normalize();
         DocumentationFolder currentYamlDocFiles = DocumentationFolderFactory.loadCurrentFiles(yamlDocPath);
-        YamlDocumentationGenerator yamlDocumentationGenerator = new YamlDocumentationGeneratorImpl(new YamlDocumentationModelFactoryImpl());
+        YamlDocumentationGenerator yamlDocumentationGenerator = new YamlDocumentationGeneratorImpl(new YamlDocumentationModelFactoryImpl(linkageStore));
 
         List<YamlDocumentationSchemaNode> yamlDocumentationSchema = getYamlDocumentationSchema(dqoHomeContext);
-        DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot, yamlDocumentationSchema);
+        DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot, linkageStore, yamlDocumentationSchema);
         renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
@@ -282,12 +293,13 @@ public class GenerateDocumentationPostProcessor {
      * @return List of Yaml documentation schema nodes, containing data about the layout.
      */
     protected static List<YamlDocumentationSchemaNode> getYamlDocumentationSchema(DqoHomeContext dqoHomeContext) {
-        ReflectionService reflectionService = new ReflectionServiceImpl();
-        SimilarCheckMatchingService similarCheckMatchingService = createSimilarCheckMatchingService(
-                reflectionService, dqoHomeContext);
+//        ReflectionService reflectionService = new ReflectionServiceImpl();
+//        SimilarCheckMatchingService similarCheckMatchingService = createSimilarCheckMatchingService(
+//                reflectionService, dqoHomeContext);
+//
+//        List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = getYamlChecksDocumentationSchema(similarCheckMatchingService);
 
-        List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = getYamlChecksDocumentationSchema(similarCheckMatchingService);
-
+        List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = new ArrayList<>();
         Path profilingPath = Path.of("profiling");
         Path recurringPath = Path.of("recurring");
         Path partitionedPath = Path.of("partitioned");
@@ -370,18 +382,29 @@ public class GenerateDocumentationPostProcessor {
 
     protected static List<YamlDocumentationSchemaNode> getYamlCheckGroupsSchema(Collection<SimilarChecksGroup> checksGroups, Path schemaNodePathPrefix) {
         List<YamlDocumentationSchemaNode> nodesForChecksGroups = new ArrayList<>();
-        Set<String> handledCategories = new HashSet<>();
+        List<String> categories = checksGroups.stream().map(SimilarChecksGroup::getFirstCheckCategory).distinct().sorted().collect(Collectors.toList());
+        for (String category : categories) {
+            Path categoryPath = schemaNodePathPrefix.resolve(category);
+            List<SimilarChecksGroup> similarChecksInCategory = checksGroups.stream().filter(checksGroup -> checksGroup.getFirstCheckCategory().equals(category)).collect(Collectors.toList());
+
+        }
+
         for (SimilarChecksGroup checksGroup : checksGroups) {
             String checkCategoryName = checksGroup.getFirstCheckCategory();
-            if (handledCategories.contains(checkCategoryName)) {
-                continue;
-            }
+            //if (handledCategories.contains(checkCategoryName)) {
+              //  continue;
+            //}
 
             List<SimilarCheckModel> similarCheckModels = checksGroup.getSimilarChecks();
 
-            YamlDocumentationSchemaNode schemaNode = new YamlDocumentationSchemaNode(null, schemaNodePathPrefix.resolve(checkCategoryName));
+            YamlDocumentationSchemaNode schemaNode = new YamlDocumentationSchemaNode(
+                    null,
+                    schemaNodePathPrefix.resolve(checkCategoryName)
+            );
 
-            handledCategories.add(checkCategoryName);
+
+
+            //handledCategories.add(checkCategoryName);
         }
         List<String> r = checksGroups.stream().map(similarChecksGroup -> similarChecksGroup.getFirstCheckCategory())
 
@@ -393,9 +416,10 @@ public class GenerateDocumentationPostProcessor {
     /**
      * Generates documentation for parquet files classes.
      *
-     * @param projectRoot Path to the project root.
+     * @param projectRoot  Path to the project root.
+     * @param linkageStore
      */
-    public static void generateDocumentationForParquetFiles(Path projectRoot) {
+    public static void generateDocumentationForParquetFiles(Path projectRoot, HandledClassesLinkageStore linkageStore) {
         Path parquetsDocPath = projectRoot.resolve("../docs/reference/parquets").toAbsolutePath().normalize();
         DocumentationFolder currentParquetsDocFiles = DocumentationFolderFactory.loadCurrentFiles(parquetsDocPath);
         ParquetFilesDocumentationGenerator parquetFilesDocumentationGenerator = new ParquetFilesDocumentationGeneratorImpl(new ParquetFilesDocumentationModelFactoryImpl());

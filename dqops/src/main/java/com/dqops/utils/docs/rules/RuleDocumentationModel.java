@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.rules;
 
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
+import com.dqops.rules.AbstractRuleParametersSpec;
 import lombok.Data;
 
 /**
@@ -24,6 +25,8 @@ import lombok.Data;
  */
 @Data
 public class RuleDocumentationModel {
+    private Class<? extends AbstractRuleParametersSpec> ruleParametersClazz;
+
     /**
      * Rule description extracted from the JavaDoc comment for the whole rule definition parameter.
      */

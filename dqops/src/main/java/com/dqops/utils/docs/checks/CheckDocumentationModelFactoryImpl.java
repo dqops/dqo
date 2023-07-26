@@ -65,6 +65,7 @@ import com.dqops.services.check.matching.SimilarCheckMatchingService;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.services.check.matching.SimilarChecksContainer;
 import com.dqops.services.check.matching.SimilarChecksGroup;
+import com.dqops.utils.docs.HandledClassesLinkageStore;
 import com.dqops.utils.docs.ProviderTypeModel;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactory;
 import com.dqops.utils.docs.sensors.SensorDocumentationModel;
@@ -78,12 +79,12 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
 import java.util.*;
 
 /**
  * Check documentation model factory. Creates documentation objects for each check.
  */
-@Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final String COMPARISON_NAME = "compare_to_source_of_truth_table";
 
@@ -119,29 +120,33 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private YamlSerializer yamlSerializer;
     private JinjaTemplateRenderService jinjaTemplateRenderService;
+    private final HandledClassesLinkageStore linkageStore;
 
     /**
      * Creates a check documentation service.
-     * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
+     *
+     * @param similarCheckMatchingService     Service that finds all similar checks that share the same sensor and rule.
      * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
-     * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
-     * @param modelToSpecCheckMappingService UI check model to specification adapter that can generate a sample usage for us.
-     * @param yamlSerializer Yaml serializer, used to render the table yaml files with a sample usage.
-     * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
+     * @param ruleDocumentationModelFactory   Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
+     * @param modelToSpecCheckMappingService  UI check model to specification adapter that can generate a sample usage for us.
+     * @param yamlSerializer                  Yaml serializer, used to render the table yaml files with a sample usage.
+     * @param jinjaTemplateRenderService      Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
+     * @param linkageStore
      */
-    @Autowired
     public CheckDocumentationModelFactoryImpl(SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
                                               ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
-                                              JinjaTemplateRenderService jinjaTemplateRenderService) {
+                                              JinjaTemplateRenderService jinjaTemplateRenderService,
+                                              HandledClassesLinkageStore linkageStore) {
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.yamlSerializer = yamlSerializer;
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
+        this.linkageStore = linkageStore;
     }
 
     /**
@@ -272,6 +277,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }
 
                 categoryDocumentationModel.getCheckGroups().add(similarChecksDocumentationModel);
+                Class<?> checkSpecClass = similarChecksDocumentationModel.getAllChecks().stream().findAny().get().getCheckModel().getCheckSpec().getClass();
+                this.linkageStore.put(checkSpecClass, Path.of(
+                        "/docs","checks",
+                        target.name(), categoryName,
+                        similarChecksDocumentationModel.getPrimaryCheckName().replace(' ', '-')
+                ));
             }
 
             resultList.add(categoryDocumentationModel);

@@ -55,7 +55,7 @@ public class RuleDocumentationGeneratorImplTests extends BaseTest {
 
     @Test
     void renderRuleDocumentation_whenCalled_generatesDocumentationForAllRulesInMemory() {
-        DocumentationFolder documentationFolder = this.sut.renderRuleDocumentation(this.projectRootPath, this.dqoHome);
+        DocumentationFolder documentationFolder = this.sut.renderRuleDocumentation(this.projectRootPath, linkageStore, this.dqoHome);
         Assertions.assertEquals(0, documentationFolder.getSubFolders().size());
     }
 

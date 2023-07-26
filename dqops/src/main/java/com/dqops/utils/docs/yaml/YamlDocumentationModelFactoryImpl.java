@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.yaml;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.HandledClassesLinkageStore;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -25,10 +26,8 @@ import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * Yaml documentation model factory that creates a yaml documentation.
@@ -39,6 +38,12 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
     private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
+    private final HandledClassesLinkageStore linkageStore;
+
+    public YamlDocumentationModelFactoryImpl(HandledClassesLinkageStore linkageStore) {
+        this.linkageStore = linkageStore;
+    }
+
     /**
      * Create a yaml documentation models.
      * @param yamlDocumentationSchema Yaml documentation schema.
@@ -47,7 +52,6 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
     @Override
     public List<YamlSuperiorObjectDocumentationModel> createDocumentationForYaml(List<YamlDocumentationSchemaNode> yamlDocumentationSchema) {
         List<YamlSuperiorObjectDocumentationModel> yamlDocumentation = new ArrayList<>();
-        Map<Class<?>, YamlObjectDocumentationModel> accumulatedYamlObjectModels = new LinkedHashMap<>();
 
         for (YamlDocumentationSchemaNode yamlDocumentationNode : yamlDocumentationSchema) {
             Class<?> yamlClass = yamlDocumentationNode.getClazz();
@@ -55,17 +59,21 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             yamlSuperiorObjectDocumentationModel.setSuperiorClassFullName(yamlClass.getName());
             yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().toString());
 
-            Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new LinkedHashMap<>();
-            generateYamlObjectDocumentationModelRecursive(yamlSuperiorObjectDocumentationModel.getSuperiorClassSimpleName(),
-                    yamlClass, yamlObjectDocumentationModels, accumulatedYamlObjectModels);
+            Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
+
+            generateYamlObjectDocumentationModelRecursive(
+                    Path.of("docs", "reference", "yaml",
+                            yamlSuperiorObjectDocumentationModel.getSuperiorClassSimpleName()),
+                    yamlClass, yamlObjectDocumentationModels);
 
             yamlSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
             yamlSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
 
             for (Map.Entry<Class<?>, YamlObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {
                 yamlSuperiorObjectDocumentationModel.getClassObjects().add(yamlObject.getValue());
-                accumulatedYamlObjectModels.put(yamlObject.getKey(), yamlObject.getValue());
+                linkageStore.put(yamlObject.getKey(), yamlObject.getValue().getObjectClassPath());
             }
+
             yamlDocumentation.add(yamlSuperiorObjectDocumentationModel);
         }
         return yamlDocumentation;
@@ -77,11 +85,10 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
      * @param targetClass    Class for which fields to generate documentation.
      * @param visitedObjects Data structure to add created model.
      */
-    private void generateYamlObjectDocumentationModelRecursive(String superiorObjectFileName,
+    private void generateYamlObjectDocumentationModelRecursive(Path superiorObjectFileName,
                                                                Class<?> targetClass,
-                                                               Map<Class<?>, YamlObjectDocumentationModel> visitedObjects,
-                                                               Map<Class<?>, YamlObjectDocumentationModel> previouslyVisitedObjects) {
-        if (!visitedObjects.containsKey(targetClass) && !previouslyVisitedObjects.containsKey(targetClass)) {
+                                                               Map<Class<?>, YamlObjectDocumentationModel> visitedObjects) {
+        if (!visitedObjects.containsKey(targetClass) && !linkageStore.containsKey(targetClass)) {
             visitedObjects.put(targetClass, null);
 
             YamlObjectDocumentationModel yamlObjectDocumentationModel = new YamlObjectDocumentationModel();
@@ -99,7 +106,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
                 Class<?> superClass = targetClass.getSuperclass();
                 if (isGenericSuperclass(superClass)) {
                     Type genericSuperclass = targetClass.getGenericSuperclass();
-                    processGenericTypes(superiorObjectFileName, genericSuperclass, visitedObjects, previouslyVisitedObjects);
+                    processGenericTypes(superiorObjectFileName, genericSuperclass, visitedObjects);
                 }
             }
 
@@ -109,24 +116,24 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             yamlObjectDocumentationModel.setClassFullName(classInfo.getReflectedClass().getName());
             yamlObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
             yamlObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
-            yamlObjectDocumentationModel.setClassLocationFile(superiorObjectFileName);
+            yamlObjectDocumentationModel.setObjectClassPath(
+                    Path.of("/").resolve(superiorObjectFileName).resolve("#" + classInfo.getReflectedClass().getSimpleName())
+            );
 
             for (FieldInfo info : infoFields) {
                 if (info.getDataType().equals(ParameterDataType.object_type)) {
                     if (info.getClazz().getName().contains("java.") || info.getClazz().getName().contains("float")) {
                         continue;
                     }
-                    generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, info.getClazz(), visitedObjects, previouslyVisitedObjects);
+                    generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, info.getClazz(), visitedObjects);
                 }
 
                 YamlFieldsDocumentationModel yamlFieldsDocumentationModel = new YamlFieldsDocumentationModel();
                 yamlFieldsDocumentationModel.setClassNameUsedOnTheField(info.getClazz().getSimpleName());
 
-                if (previouslyVisitedObjects.containsKey(info.getClazz())) {
-                    YamlObjectDocumentationModel infoClassObject = previouslyVisitedObjects.get(info.getClazz());
-                    // Assumption: superior objects located in nested paths don't contain references to other files.
-                    yamlFieldsDocumentationModel.setClassUsedOnTheFieldPath("../" + infoClassObject.getClassLocationFile() +
-                            "/#" + yamlFieldsDocumentationModel.getClassNameUsedOnTheField());
+                if (linkageStore.containsKey(info.getClazz())) {
+                    Path infoClassPath = linkageStore.get(info.getClazz());
+                    yamlFieldsDocumentationModel.setClassUsedOnTheFieldPath(infoClassPath.toString());
                 } else {
                     yamlFieldsDocumentationModel.setClassUsedOnTheFieldPath(
                             "#" + yamlFieldsDocumentationModel.getClassNameUsedOnTheField());
@@ -161,8 +168,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
     /**
      * Process and parse generic types, and then invoke appropriate actions on those types in a recursive.
      */
-    private void processGenericTypes(String superiorObjectFileName, Type type, Map<Class<?>, YamlObjectDocumentationModel> visitedObjects,
-                                     Map<Class<?>, YamlObjectDocumentationModel> previouslyVisitedObjects) {
+    private void processGenericTypes(Path superiorObjectFileName, Type type, Map<Class<?>, YamlObjectDocumentationModel> visitedObjects) {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] typeArguments = parameterizedType.getActualTypeArguments();
@@ -170,7 +176,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
                 if (typeArgument instanceof Class) {
                     Class<?> genericClass = (Class<?>) typeArgument;
                     if (!isJavaClass(genericClass)) {
-                        generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, genericClass, visitedObjects, previouslyVisitedObjects);
+                        generateYamlObjectDocumentationModelRecursive(superiorObjectFileName, genericClass, visitedObjects);
                     }
                 }
             }

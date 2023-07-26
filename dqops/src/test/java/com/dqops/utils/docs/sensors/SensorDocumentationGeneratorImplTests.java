@@ -58,13 +58,13 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
 
     @Test
     void renderSensorDocumentation_whenCalled_generatesDocumentationForAllSensorsInMemory() {
-        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, this.dqoHome);
+        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, linkageStore, this.dqoHome);
         Assertions.assertEquals(2, documentationFolder.getSubFolders().size());
     }
 
     @Test
     void renderSensorDocumentation_whenCalledForTableVolumeChecks_generatesDocumentationForEveryConnector() {
-        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, this.dqoHome);
+        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, linkageStore, this.dqoHome);
         Optional<String> volumeSensorsDocumentation = documentationFolder.getSubFolders().stream()
                 .filter(targetFolder -> targetFolder.getFolderName().equals("table"))
                 .flatMap(tableFolder -> tableFolder.getFiles().stream())
