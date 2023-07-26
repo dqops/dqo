@@ -19,7 +19,6 @@ spring:
       enabled: false
 
 server:
-  address: localhost
   port: ${port:8888}
   shutdown: graceful
   error:
