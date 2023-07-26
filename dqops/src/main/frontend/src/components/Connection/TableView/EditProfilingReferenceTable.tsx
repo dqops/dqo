@@ -451,8 +451,6 @@ export const EditProfilingReferenceTable = ({
       setJobId((res.data as any)?.jobId?.jobId);
     } catch (err) {
       console.error(err);
-    } finally {
-      getResultsData();
     }
   };
   const disabled =
