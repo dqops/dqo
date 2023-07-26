@@ -686,7 +686,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     protected Table loadRecentRuleResults(CheckResultsDetailedParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_DETAILED);
-        int monthsToLoad = 2;
+        int monthsToLoad = 3;
         checkResultsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), monthsToLoad);
         Table ruleResultsData = checkResultsSnapshot.getAllData();
         return ruleResultsData;
