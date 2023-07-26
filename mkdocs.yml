@@ -311,6 +311,19 @@ nav:
 ########## END INCLUDE RULE REFERENCE
 ########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY
     - Yaml:
+      - profiling:
+        - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'
+        - column profiling checks: 'reference/yaml/profiling/column-profiling-checks.md'
+      - recurring:
+        - table daily recurring checks: 'reference/yaml/recurring/table-daily-recurring-checks.md'
+        - table monthly recurring checks: 'reference/yaml/recurring/table-monthly-recurring-checks.md'
+        - column daily recurring checks: 'reference/yaml/recurring/column-daily-recurring-checks.md'
+        - column monthly recurring checks: 'reference/yaml/recurring/column-monthly-recurring-checks.md'
+      - partitioned:
+        - table daily partitioned checks: 'reference/yaml/partitioned/table-daily-partitioned-checks.md'
+        - table monthly partitioned checks: 'reference/yaml/partitioned/table-monthly-partitioned-checks.md'
+        - column daily partitioned checks: 'reference/yaml/partitioned/column-daily-partitioned-checks.md'
+        - column monthly partitioned checks: 'reference/yaml/partitioned/column-monthly-partitioned-checks.md'
       - ConnectionYaml: 'reference/yaml/ConnectionYaml.md'
       - DashboardYaml: 'reference/yaml/DashboardYaml.md'
       - ProviderSensorYaml: 'reference/yaml/ProviderSensorYaml.md'
@@ -318,7 +331,6 @@ nav:
       - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
       - SettingsYaml: 'reference/yaml/SettingsYaml.md'
       - TableYaml: 'reference/yaml/TableYaml.md'
-      - SettingsYaml: 'reference/yaml/SettingsYaml.md'
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY

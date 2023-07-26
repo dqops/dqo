@@ -20,7 +20,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Yaml superior class description model. Contains info about superior class and all of the object occurring on them.
+ * Yaml superior class description model. Contains info about superior class and the objects it comprises.
  */
 @Data
 public class YamlSuperiorObjectDocumentationModel {
@@ -40,5 +40,13 @@ public class YamlSuperiorObjectDocumentationModel {
      * List of all superior class fields.
      */
     private List<YamlObjectDocumentationModel> classObjects;
+
+    public String getLocationFilePath() {
+        if (this.superiorClassSimpleName == null) {
+            return null;
+        }
+
+        return this.superiorClassSimpleName + ".md";
+    }
 
 }

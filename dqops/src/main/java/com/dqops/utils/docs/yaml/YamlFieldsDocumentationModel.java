@@ -51,6 +51,10 @@ public class YamlFieldsDocumentationModel {
      */
     private String classNameUsedOnTheField;
     /**
+     * Field class link.
+     */
+    private String classUsedOnTheFieldPath;
+    /**
      * Field data type.
      */
     private ParameterDataType dataType;

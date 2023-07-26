@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.rules;
 
 import com.dqops.metadata.dqohome.DqoHome;
+import com.dqops.utils.docs.HandledClassesLinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 
 import java.nio.file.Path;
@@ -28,8 +29,9 @@ public interface RuleDocumentationGenerator {
      * Renders documentation for all rules as markdown files.
      *
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
+     * @param linkageStore
      * @param dqoHome         DQO home.
      * @return Folder structure with rendered markdown files.
      */
-    DocumentationFolder renderRuleDocumentation(Path projectRootPath, DqoHome dqoHome);
+    DocumentationFolder renderRuleDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, DqoHome dqoHome);
 }
