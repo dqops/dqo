@@ -40,7 +40,6 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.LinkedHashMap;
 
 /**
  * Service that manages communication with DQO Cloud for authenticating local users using their DQO Cloud credentials.
@@ -140,7 +139,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
                 ticketGrantingTicketRequest.setUrl(returnBaseUrl);
 
                 String signedTicketGrantingTicket = refreshTokenIssueApi.issueLoginTicketGrantingTicketToken(ticketGrantingTicketRequest);
-                this.grantingTicketPayloadSignedObject = this.signatureService.decodeSignedMessageHex(
+                this.grantingTicketPayloadSignedObject = this.signatureService.decodeSignedMessageHexNoValidate(
                         UserLoginTicketGrantingTicketPayload.class, signedTicketGrantingTicket);
             }
 
@@ -184,7 +183,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
      */
     @Override
     public SignedObject<DqoUserTokenPayload> issueDqoUserAuthenticationToken(String refreshToken) {
-        SignedObject<DqoUserTokenPayload> signedRefreshToken = this.signatureService.decodeSignedMessageHex(DqoUserTokenPayload.class, refreshToken);
+        SignedObject<DqoUserTokenPayload> signedRefreshToken = this.signatureService.decodeAndValidateSignedMessageHex(DqoUserTokenPayload.class, refreshToken);
         if (signedRefreshToken.getTarget().getDisposition() != DqoUserAuthenticationTokenDisposition.REFRESH_TOKEN) {
             throw new DqoRuntimeException("The refresh token is invalid, it has a different purpose: " + signedRefreshToken.getTarget().getDisposition());
         }
@@ -224,7 +223,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
      */
     @Override
     public SignedObject<DqoUserTokenPayload> verifyAuthenticationToken(String authenticationToken) {
-        SignedObject<DqoUserTokenPayload> signedAuthenticationToken = this.signatureService.decodeSignedMessageHex(DqoUserTokenPayload.class, authenticationToken);
+        SignedObject<DqoUserTokenPayload> signedAuthenticationToken = this.signatureService.decodeAndValidateSignedMessageHex(DqoUserTokenPayload.class, authenticationToken);
         DqoUserAuthenticationTokenDisposition tokenDisposition = signedAuthenticationToken.getTarget().getDisposition();
         if (tokenDisposition != DqoUserAuthenticationTokenDisposition.AUTHENTICATION_TOKEN &&
                 tokenDisposition != DqoUserAuthenticationTokenDisposition.API_KEY) {

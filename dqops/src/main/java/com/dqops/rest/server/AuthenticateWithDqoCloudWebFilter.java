@@ -68,6 +68,10 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             String refreshToken = exchange.getRequest().getQueryParams().getFirst("refreshToken");
             SignedObject<DqoUserTokenPayload> signedAuthenticationToken = this.instanceCloudLoginService.issueDqoUserAuthenticationToken(refreshToken);
             String hostHeader = exchange.getRequest().getHeaders().getFirst("Host");
+            int portPrefixIndex = hostHeader.indexOf(':');
+            if (portPrefixIndex > 0) {
+                hostHeader = hostHeader.substring(0, portPrefixIndex);
+            }
             ResponseCookie dqoAccessTokenCookie = ResponseCookie.from("DQOAccessToken", signedAuthenticationToken.getSignedHex())
                     .maxAge(Duration.ofHours(24))
                     .domain(hostHeader)

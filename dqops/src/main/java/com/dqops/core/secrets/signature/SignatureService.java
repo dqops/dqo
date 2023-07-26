@@ -45,5 +45,14 @@ public interface SignatureService {
      * @return Deserialized payload.
      * @throws SignatureNotMatchException when the signature is invalid.
      */
-    <T> SignedObject<T> decodeSignedMessageHex(Class<T> payloadType, String messageHex);
+    <T> SignedObject<T> decodeAndValidateSignedMessageHex(Class<T> payloadType, String messageHex);
+
+    /**
+     * Decodes a signed message, without validation.
+     * @param payloadType Payload class type.
+     * @param messageHex Signed message (payload + signature) as a hex string.
+     * @param <T> Payload type.
+     * @return Deserialized payload.
+     */
+    <T> SignedObject<T> decodeSignedMessageHexNoValidate(Class<T> payloadType, String messageHex);
 }

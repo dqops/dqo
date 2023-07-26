@@ -116,7 +116,7 @@ public class SignatureServiceImpl implements SignatureService {
      * @return Deserialized payload.
      * @throws SignatureNotMatchException when the signature is invalid.
      */
-    public <T> SignedObject<T> decodeSignedMessageHex(Class<T> payloadType, String messageHex) {
+    public <T> SignedObject<T> decodeAndValidateSignedMessageHex(Class<T> payloadType, String messageHex) {
         try {
             byte[] messageBytes = Hex.decodeHex(messageHex);
             byte[] payloadBytes = new byte[messageBytes.length - HASH_BIT_LENGTH / 8];
@@ -139,6 +139,31 @@ public class SignatureServiceImpl implements SignatureService {
         }
         catch (SignatureNotMatchException ex) {
             throw ex;
+        }
+        catch (Exception ex) {
+            throw new DqoRuntimeException(ex);
+        }
+    }
+
+    /**
+     * Decodes a signed message, without validation.
+     *
+     * @param payloadType Payload class type.
+     * @param messageHex  Signed message (payload + signature) as a hex string.
+     * @return Deserialized payload.
+     */
+    @Override
+    public <T> SignedObject<T> decodeSignedMessageHexNoValidate(Class<T> payloadType, String messageHex) {
+        try {
+            byte[] messageBytes = Hex.decodeHex(messageHex);
+            byte[] payloadBytes = new byte[messageBytes.length - HASH_BIT_LENGTH / 8];
+            System.arraycopy(messageBytes, 0, payloadBytes, 0, payloadBytes.length);
+
+            String payloadJsonString = new String(payloadBytes, StandardCharsets.UTF_8);
+            T deserializedPayload = this.jsonSerializer.deserialize(payloadJsonString, payloadType);
+
+            SignedObject<T> signedObject = new SignedObject<>(deserializedPayload, messageBytes, messageHex);
+            return signedObject;
         }
         catch (Exception ex) {
             throw new DqoRuntimeException(ex);
