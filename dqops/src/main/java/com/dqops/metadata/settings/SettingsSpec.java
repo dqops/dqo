@@ -55,6 +55,9 @@ public class SettingsSpec extends AbstractSpec {
 	@JsonPropertyDescription("Api key")
 	private String apiKey;
 
+	@JsonPropertyDescription("DQO instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.")
+	private String instanceSignatureKey;
+
 	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQO server instance.")
 	private String timeZone;
 
@@ -130,6 +133,23 @@ public class SettingsSpec extends AbstractSpec {
 	public void setApiKey(String apiKey) {
 		setDirtyIf(!Objects.equals(this.apiKey, apiKey));
 		this.apiKey = apiKey;
+	}
+
+	/**
+	 * Returns the DQO instance signature key as Base64 encoded byte array.
+	 * @return Instance signature key, base64.
+	 */
+	public String getInstanceSignatureKey() {
+		return instanceSignatureKey;
+	}
+
+	/**
+	 * Sets the instance signature key as a base64 encoded string.
+	 * @param instanceSignatureKey Instance signature key.
+	 */
+	public void setInstanceSignatureKey(String instanceSignatureKey) {
+		setDirtyIf(!Objects.equals(this.instanceSignatureKey, instanceSignatureKey));
+		this.instanceSignatureKey = instanceSignatureKey;
 	}
 
 	/**
@@ -217,6 +237,7 @@ public class SettingsSpec extends AbstractSpec {
 	public SettingsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
 		SettingsSpec cloned = (SettingsSpec) super.deepClone();
 		cloned.apiKey = secretValueProvider.expandValue(this.apiKey);
+		cloned.instanceSignatureKey = secretValueProvider.expandValue(this.instanceSignatureKey);
 		cloned.editorPath = secretValueProvider.expandValue(this.editorPath);
 		cloned.editorName = secretValueProvider.expandValue(this.editorName);
 		cloned.timeZone = secretValueProvider.expandValue(this.timeZone);

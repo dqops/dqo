@@ -19,6 +19,7 @@ spring:
       enabled: false
 
 server:
+  address: localhost
   port: ${port:8888}
   shutdown: graceful
   error:
@@ -102,12 +103,15 @@ dqo:
     max-retries: 5
     retry-backoff-millis: 10
     start-without-api-key: false
+    authenticate-with-dqo-cloud: false
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}
   core:
     lock-wait-timeout-seconds: 900
     print-stack-trace: false
+  instance:
+    authentication-token-expiration-minutes: 10080
   sensor:
     limits:
       sensor-readout-limit: 1000

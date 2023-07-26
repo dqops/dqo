@@ -451,10 +451,13 @@ definitions:
   UserLoginTicketGrantingTicketRequest:
     type: "object"
     properties:
-      exp:
+      tid:
+        type: "string"
+        description: "Tenant id."
+      tg:
         type: "integer"
-        format: "int64"
-        description: "The expiration timestamp."
+        format: "int32"
+        description: "Tenant group."
       url:
         type: "string"
         description: "The base return url that is authorized."
