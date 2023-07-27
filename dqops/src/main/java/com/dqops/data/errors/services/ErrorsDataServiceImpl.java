@@ -80,9 +80,9 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         TextColumn dataGroupNameColumn = filteredTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
         List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
 
-        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME)) {
-            dataGroups.remove(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
-            dataGroups.add(0, CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
+        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+            dataGroups.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+            dataGroups.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
         }
 
         String selectedDataStream = Objects.requireNonNullElse(loadParameters.getDataGroup(), dataGroups.get(0));

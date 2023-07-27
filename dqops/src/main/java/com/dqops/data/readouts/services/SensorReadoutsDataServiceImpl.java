@@ -79,9 +79,9 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         TextColumn dataGroupNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
         List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
 
-        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME)) {
-            dataGroups.remove(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
-            dataGroups.add(0, CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
+        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+            dataGroups.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+            dataGroups.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
         }
 
         String selectedDataGroups = Objects.requireNonNullElse(loadParameters.getDataGroupName(), dataGroups.get(0));

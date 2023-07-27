@@ -209,7 +209,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(expectedTimePeriod.toInstant(TimeZone.getDefault().toZoneId().getRules().getOffset(expectedTimePeriod)), results.getTimePeriodUtcColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
@@ -231,7 +231,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
@@ -250,7 +250,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getDataGroupHashColumn());
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
         Assertions.assertEquals("5e66efdc-b585-6460-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
         Assertions.assertEquals("60685857-4b08-6610-b6b0-03adefaca0c1", results.getIdColumn().get(0));
     }
@@ -274,7 +274,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         Assertions.assertEquals(LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
