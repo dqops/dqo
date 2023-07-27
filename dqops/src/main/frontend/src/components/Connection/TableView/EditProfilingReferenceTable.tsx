@@ -470,9 +470,7 @@ export const EditProfilingReferenceTable = ({
   }, [job?.status]);
 
   console.log(reference);
-  console.log(
-    Object.values(tableComparisonResults?.column_comparison_results ?? {})
-  );
+  console.log(tableComparisonResults?.column_comparison_results ?? {});
 
   const prepareData = (
     nameOfColumn: string
@@ -487,7 +485,31 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
-  console.log(prepareData('Chest'));
+  const calculateColor = (nameOfCol: string, nameOfCheck: string): string => {
+    const colorVar = prepareData(nameOfCol)[nameOfCheck];
+
+    if (colorVar && colorVar.fatals && Number(colorVar.fatals) !== 0) {
+      return 'bg-red-200';
+    } else if (colorVar && colorVar.errors && Number(colorVar.errors) !== 0) {
+      return 'bg-orange-200';
+    } else if (
+      colorVar &&
+      colorVar.warnings &&
+      Number(colorVar.warnings) !== 0
+    ) {
+      return 'bg-yellow-200';
+    } else if (
+      colorVar &&
+      colorVar.valid_results &&
+      Number(colorVar.valid_results) !== 0
+    ) {
+      return 'bg-green-200';
+    } else {
+      return '';
+    }
+  };
+
+  console.log(calculateColor('Chest', 'min_match'));
 
   return (
     <div className="text-sm">
@@ -783,7 +805,20 @@ export const EditProfilingReferenceTable = ({
                       empty={true}
                     />
                   </td>
-                  <td className="text-center px-4 py-1.5">
+                  <td
+                    className={clsx(
+                      'text-center px-4 py-1.5',
+                      !!item.compare_min &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        ) &&
+                        calculateColor(
+                          item.compared_column_name ?? '',
+                          'min_match'
+                        )
+                    )}
+                  >
                     <Checkbox
                       checked={
                         !!item.compare_min &&
@@ -812,7 +847,20 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-center px-4 py-1.5">
+                  <td
+                    className={clsx(
+                      'text-center px-4 py-1.5',
+                      !!item.compare_max &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        ) &&
+                        calculateColor(
+                          item.compared_column_name ?? '',
+                          'max_match'
+                        )
+                    )}
+                  >
                     <Checkbox
                       checked={
                         !!item.compare_max &&
@@ -841,7 +889,20 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-center px-4 py-1.5">
+                  <td
+                    className={clsx(
+                      'text-center px-4 py-1.5',
+                      !!item.compare_sum &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        ) &&
+                        calculateColor(
+                          item.compared_column_name ?? '',
+                          'sum_match'
+                        )
+                    )}
+                  >
                     <Checkbox
                       checked={
                         !!item.compare_sum &&
@@ -870,7 +931,20 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-center px-4 py-1.5">
+                  <td
+                    className={clsx(
+                      'text-center px-4 py-1.5',
+                      !!item.compare_mean &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        ) &&
+                        calculateColor(
+                          item.compared_column_name ?? '',
+                          'mean_match'
+                        )
+                    )}
+                  >
                     <Checkbox
                       checked={
                         !!item.compare_mean &&
@@ -899,7 +973,20 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-center px-4 py-1.5">
+                  <td
+                    className={clsx(
+                      'text-center px-4 py-1.5',
+                      !!item.compare_null_count &&
+                        !(
+                          item.reference_column_name === undefined ||
+                          item.reference_column_name.length === 0
+                        ) &&
+                        calculateColor(
+                          item.compared_column_name ?? '',
+                          'null_count_match'
+                        )
+                    )}
+                  >
                     <Checkbox
                       checked={
                         !!item.compare_null_count &&
@@ -928,7 +1015,15 @@ export const EditProfilingReferenceTable = ({
                       }
                     />
                   </td>
-                  <td className="text-center px-4 py-1.5">
+                  <td
+                    className={clsx(
+                      'text-center px-4 py-1.5',
+                      calculateColor(
+                        item.compared_column_name ?? '',
+                        'not_null_count_match'
+                      )
+                    )}
+                  >
                     <Checkbox
                       checked={
                         !!item.compare_not_null_count &&

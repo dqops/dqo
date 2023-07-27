@@ -7,7 +7,6 @@ interface data {
 }
 
 const ResultBox = ({ item }: data) => {
-  console.log(item);
   return (
     <tr className="flex flex-col text-xs font-light justify-start items-start  absolute top-0">
       <td className="flex justify-between w-2/3 ">
