@@ -1,12 +1,14 @@
 import React from 'react';
 import { ComparisonCheckResultModel } from '../../../api';
 import clsx from 'clsx';
+import Input from '../../Input';
 
 interface data {
   item: ComparisonCheckResultModel;
+  bool?: boolean;
 }
 
-const ResultBox = ({ item }: data) => {
+const ResultBox = ({ item, bool }: data) => {
   return (
     <tr className="flex flex-col text-xs font-light justify-start items-start  absolute top-0">
       <td className="flex justify-between w-2/3 ">
@@ -45,6 +47,37 @@ const ResultBox = ({ item }: data) => {
           </section>
         </a>
       </td>
+      {bool === true && (
+        <td className="h-20">
+          {' '}
+          <div className="block mb-5 mt-3 h-20">
+            <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={0}
+              />
+              %
+            </div>
+            <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={0}
+              />
+              %
+            </div>
+            <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
+              <Input
+                className="max-w-30 !min-w-initial"
+                type="number"
+                value={0}
+              />
+              %
+            </div>
+          </div>
+        </td>
+      )}
     </tr>
   );
 };

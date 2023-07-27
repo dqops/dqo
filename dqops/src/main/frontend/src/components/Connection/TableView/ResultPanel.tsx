@@ -30,27 +30,40 @@ export default function ResultPanel({
   };
 
   return (
-    <tr className=" h-30 w-full">
+    <tr className=" h-70 w-full">
       <th className="text-left pr-4 py-1.5  w-1/6 "></th>
       <th className="text-left px-4 py-1.5 w-1/6 "></th>
       <th className=" px-4 py-1.5 pr-1  relative">
-        {minBool && <ResultBox item={prepareObj('min_match')} />}
+        {obj['min_match'] && (
+          <ResultBox item={prepareObj('min_match')} bool={minBool} />
+        )}
       </th>
       <th className=" px-4 py-1.5 pr-1  relative">
-        {maxBool && <ResultBox item={prepareObj('max_match')} />}
+        {obj['max_match'] && (
+          <ResultBox item={prepareObj('max_match')} bool={maxBool} />
+        )}
       </th>
       <th className=" px-4 py-1.5 pr-1 relative">
-        {sumBool && <ResultBox item={prepareObj('sum_match')} />}
+        {obj['sum_match'] && (
+          <ResultBox item={prepareObj('sum_match')} bool={sumBool} />
+        )}
       </th>
       <th className="px-4 py-1.5 pr-1 relative">
-        {meanBool && <ResultBox item={prepareObj('mean_match')} />}
+        {obj['mean_match'] && (
+          <ResultBox item={prepareObj('mean_match')} bool={meanBool} />
+        )}
       </th>
       <th className="text-center px-4 py-1.5 pr-1 relative">
-        {nullCount && <ResultBox item={prepareObj('null_count_match')} />}
+        {obj['null_count_match'] && (
+          <ResultBox item={prepareObj('null_count_match')} bool={nullCount} />
+        )}
       </th>
       <th className="text-center px-4 py-1.5 pr-1 relative">
-        {notNullCount && (
-          <ResultBox item={prepareObj('not_null_count_match')} />
+        {obj['not_null_count_match'] && (
+          <ResultBox
+            item={prepareObj('not_null_count_match')}
+            bool={notNullCount}
+          />
         )}
       </th>
     </tr>

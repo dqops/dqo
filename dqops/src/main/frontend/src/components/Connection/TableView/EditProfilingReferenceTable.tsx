@@ -509,8 +509,6 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
-  console.log(calculateColor('Chest', 'min_match'));
-
   return (
     <div className="text-sm">
       <TableActionGroup
