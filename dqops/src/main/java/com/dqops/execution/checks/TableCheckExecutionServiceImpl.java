@@ -386,13 +386,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         List<SensorPrepareResult> allPreparedSensorsOnReferenceTables = this.prepareComparisonSensorsOnReferenceTable(
                 checks, executionContext, userHome, userTimeWindowFilters, progressListener,
-                allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
+                checkExecutionSummary, executionStatistics, jobCancellationToken);
 
         GroupedSensorsCollection groupedSensorsCollectionOnReferenceTables = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
         groupedSensorsCollectionOnReferenceTables.addAllPreparedSensors(allPreparedSensorsOnReferenceTables);
 
         List<SensorExecutionResult> sensorExecutionResultsOnReferenceTables = this.executeSensors(
-                groupedSensorsCollectionOnReferenceTables, executionContext, progressListener, allErrorsTable,
+                groupedSensorsCollectionOnReferenceTables, executionContext, progressListener, null,
                 checkExecutionSummary, executionStatistics, dummySensorExecution, jobCancellationToken);
 
         Map<HierarchyId, SensorExecutionResult> referenceDataResultsPerCheck = sensorExecutionResultsOnReferenceTables.stream()
@@ -606,7 +606,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param userHome User home.
      * @param userTimeWindowFilters Optional user provided time window filters.
      * @param progressListener Progress listener - to report progress.
-     * @param allErrorsTable Target table where errors are added when parsing fails.
      * @param checkExecutionSummary Check execution summary where results are added.
      * @param executionStatistics Execution statistics - counts of checks and errors.
      * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
@@ -617,7 +616,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                                               UserHome userHome,
                                                                               TimeWindowFilterParameters userTimeWindowFilters,
                                                                               CheckExecutionProgressListener progressListener,
-                                                                              Table allErrorsTable,
                                                                               CheckExecutionSummary checkExecutionSummary,
                                                                               TableChecksExecutionStatistics executionStatistics,
                                                                               JobCancellationToken jobCancellationToken) {
@@ -636,11 +634,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                     Throwable sensorConfigurationException = sensorRunParameters.getSensorConfigurationException();
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, sensorConfigurationException);
-                    if (sensorRunParameters.hasEnoughInformationForReportingDetailedError()) {
-                        ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                                sensorExecutionResultWithError, sensorRunParameters);
-                        allErrorsTable.append(normalizedSensorErrorResults.getTable());
-                    }
+//                    if (sensorRunParameters.hasEnoughInformationForReportingDetailedError()) {
+//                        ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+//                                sensorExecutionResultWithError, sensorRunParameters);
+//                        allErrorsTable.append(normalizedSensorErrorResults.getTable());
+//                    }
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters, sensorExecutionResultWithError, sensorConfigurationException));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorConfigurationException, sensorRunParameters.getCheckSearchFilter()));
                     SensorPrepareResult incorrectPrepareResult = SensorPrepareResult.createForPrepareException(sensorRunParameters, null, sensorConfigurationException);
@@ -661,9 +659,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, missingTimestampException);
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultWithError, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
+//                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+//                            sensorExecutionResultWithError, sensorRunParameters);
+//                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters, sensorExecutionResultWithError, missingTimestampException));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, sensorRunParameters.getCheckSearchFilter()));
                     SensorPrepareResult incorrectPrepareResult = SensorPrepareResult.createForPrepareException(sensorRunParameters, null, missingTimestampException);
@@ -679,9 +677,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 if (!sensorPrepareResult.isSuccess()) {
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
-                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                            sensorExecutionResultFailedPrepare, sensorRunParameters);
-                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
+//                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+//                            sensorExecutionResultFailedPrepare, sensorRunParameters);
+//                    allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters,
                             sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(
@@ -757,9 +755,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                         if (!sensorExecuteResult.isSuccess()) {
                             executionStatistics.incrementSensorExecutionErrorsCount(1);
-                            ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
-                                    sensorExecuteResult, sensorRunParameters);
-                            allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                            if (allErrorsTable != null) {
+                                ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
+                                        sensorExecuteResult, sensorRunParameters);
+                                allErrorsTable.append(normalizedSensorErrorResults.getTable());
+                            }
                             progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
                                     sensorExecuteResult, sensorExecuteResult.getException()));
                             checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(
