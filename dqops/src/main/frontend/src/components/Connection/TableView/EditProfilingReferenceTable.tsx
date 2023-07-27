@@ -432,7 +432,7 @@ export const EditProfilingReferenceTable = ({
       connection,
       schema,
       table,
-      selectedReference ?? ''
+      'newNewEew'
     ).then((res) => setTableComparisonResults(res.data));
     console.log(tableComparisonResults);
   };
@@ -808,15 +808,10 @@ export const EditProfilingReferenceTable = ({
                   <td
                     className={clsx(
                       'text-center px-4 py-1.5',
-                      !!item.compare_min &&
-                        !(
-                          item.reference_column_name === undefined ||
-                          item.reference_column_name.length === 0
-                        ) &&
-                        calculateColor(
-                          item.compared_column_name ?? '',
-                          'min_match'
-                        )
+                      calculateColor(
+                        item.compared_column_name ?? '',
+                        'min_match'
+                      )
                     )}
                   >
                     <Checkbox
@@ -850,15 +845,10 @@ export const EditProfilingReferenceTable = ({
                   <td
                     className={clsx(
                       'text-center px-4 py-1.5',
-                      !!item.compare_max &&
-                        !(
-                          item.reference_column_name === undefined ||
-                          item.reference_column_name.length === 0
-                        ) &&
-                        calculateColor(
-                          item.compared_column_name ?? '',
-                          'max_match'
-                        )
+                      calculateColor(
+                        item.compared_column_name ?? '',
+                        'max_match'
+                      )
                     )}
                   >
                     <Checkbox
@@ -892,15 +882,10 @@ export const EditProfilingReferenceTable = ({
                   <td
                     className={clsx(
                       'text-center px-4 py-1.5',
-                      !!item.compare_sum &&
-                        !(
-                          item.reference_column_name === undefined ||
-                          item.reference_column_name.length === 0
-                        ) &&
-                        calculateColor(
-                          item.compared_column_name ?? '',
-                          'sum_match'
-                        )
+                      calculateColor(
+                        item.compared_column_name ?? '',
+                        'sum_match'
+                      )
                     )}
                   >
                     <Checkbox
@@ -934,15 +919,10 @@ export const EditProfilingReferenceTable = ({
                   <td
                     className={clsx(
                       'text-center px-4 py-1.5',
-                      !!item.compare_mean &&
-                        !(
-                          item.reference_column_name === undefined ||
-                          item.reference_column_name.length === 0
-                        ) &&
-                        calculateColor(
-                          item.compared_column_name ?? '',
-                          'mean_match'
-                        )
+                      calculateColor(
+                        item.compared_column_name ?? '',
+                        'mean_match'
+                      )
                     )}
                   >
                     <Checkbox
@@ -976,15 +956,10 @@ export const EditProfilingReferenceTable = ({
                   <td
                     className={clsx(
                       'text-center px-4 py-1.5',
-                      !!item.compare_null_count &&
-                        !(
-                          item.reference_column_name === undefined ||
-                          item.reference_column_name.length === 0
-                        ) &&
-                        calculateColor(
-                          item.compared_column_name ?? '',
-                          'null_count_match'
-                        )
+                      calculateColor(
+                        item.compared_column_name ?? '',
+                        'null_count_match'
+                      )
                     )}
                   >
                     <Checkbox

@@ -30,7 +30,7 @@ export default function ResultPanel({
   };
 
   return (
-    <tr className=" h-50 w-full">
+    <tr className=" h-30 w-full">
       <th className="text-left pr-4 py-1.5  w-1/6 "></th>
       <th className="text-left px-4 py-1.5 w-1/6 "></th>
       <th className=" px-4 py-1.5 pr-1  relative">
