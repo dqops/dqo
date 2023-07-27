@@ -432,7 +432,7 @@ export const EditProfilingReferenceTable = ({
       connection,
       schema,
       table,
-      'newNewEew'
+      selectedReference ?? ''
     ).then((res) => setTableComparisonResults(res.data));
     console.log(tableComparisonResults);
   };
