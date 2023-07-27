@@ -6,11 +6,11 @@ DQO comes with more than 140 predefined data quality checks which helps you moni
 ## DQO features
 - Intuitive graphical interface and access via CLI
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, and MySQL
-- More than 140 build-in table and column checks with easy customization 
+- More than 140 built-in table and column checks with easy customization
 - Table and column-level checks which allows writing your own SQL queries
 - Daily and monthly date partition testing
 - Data segmentation by up to 9 different data streams
-- Build-in scheduling
+- Built-in scheduling
 - Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
 - Incident analysis
 

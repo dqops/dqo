@@ -32,5 +32,11 @@ public enum DqoUserAuthenticationTokenDisposition {
      * This token is an authentication token that was issued from a refresh token.
      */
     @JsonProperty("at")
-    AUTHENTICATION_TOKEN
+    AUTHENTICATION_TOKEN,
+
+    /**
+     * This token is an API Key.
+     */
+    @JsonProperty("ak")
+    API_KEY
 }

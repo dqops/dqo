@@ -53,6 +53,13 @@ public interface InstanceCloudLoginService {
     SignedObject<DqoUserTokenPayload> issueDqoUserAuthenticationToken(String refreshToken);
 
     /**
+     * Issues an API key token for the calling user.
+     * @param sourceUserToken Source user token.
+     * @return Signed API Key token.
+     */
+    SignedObject<DqoUserTokenPayload> issueApiKey(DqoUserTokenPayload sourceUserToken);
+
+    /**
      * Verifies and decodes the authentication token. Throws an exception if the authentication token is invalid or has expired.
      * @param authenticationToken Authentication token.
      * @return Decoded authentication token.

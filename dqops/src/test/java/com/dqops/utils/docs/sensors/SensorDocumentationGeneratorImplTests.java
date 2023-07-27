@@ -23,6 +23,7 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
+import com.dqops.utils.docs.HandledClassesLinkageStore;
 import com.dqops.utils.docs.ProviderTypeModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
@@ -40,6 +41,7 @@ import java.util.Optional;
 public class SensorDocumentationGeneratorImplTests extends BaseTest {
     private SensorDocumentationGeneratorImpl sut;
     private Path projectRootPath;
+    private HandledClassesLinkageStore linkageStore;
     private DqoHome dqoHome;
 
     @BeforeEach
@@ -52,19 +54,20 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
+        this.linkageStore = new HandledClassesLinkageStore();
 
         this.sut = new SensorDocumentationGeneratorImpl(sensorDocumentationModelFactory);
     }
 
     @Test
     void renderSensorDocumentation_whenCalled_generatesDocumentationForAllSensorsInMemory() {
-        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, this.dqoHome);
+        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, linkageStore, this.dqoHome);
         Assertions.assertEquals(2, documentationFolder.getSubFolders().size());
     }
 
     @Test
     void renderSensorDocumentation_whenCalledForTableVolumeChecks_generatesDocumentationForEveryConnector() {
-        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, this.dqoHome);
+        DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, linkageStore, this.dqoHome);
         Optional<String> volumeSensorsDocumentation = documentationFolder.getSubFolders().stream()
                 .filter(targetFolder -> targetFolder.getFolderName().equals("table"))
                 .flatMap(tableFolder -> tableFolder.getFiles().stream())
