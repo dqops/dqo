@@ -21,7 +21,19 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.*;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
+import com.dqops.core.configuration.DqoIncidentsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
+import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
+import com.dqops.data.checkresults.services.models.ComparisonCheckResultModel;
+import com.dqops.data.checkresults.services.models.TableComparisonResultsModel;
+import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactoryImpl;
+import com.dqops.data.errors.factory.ErrorsTableFactoryImpl;
+import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
+import com.dqops.data.readouts.factory.SensorReadoutsTableFactoryImpl;
+import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
+import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.TableCheckExecutionServiceImpl;
@@ -42,6 +54,8 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,6 +76,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
     private ConnectionWrapper comparedConnectionWrapper;
     private TableWrapper comparedTableWrapper;
     private CheckSearchFilters checkSearchFilters;
+    private CheckResultsDataServiceImpl checkResultsDataService;
 
     @BeforeEach
     void setUp() {
@@ -94,6 +109,16 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         this.tableCheckExecutionService = TableCheckExecutionServiceObjectMother.createCheckExecutionServiceOnUserHomeContext(userHomeContext);
 
         checkSearchFilters = new CheckSearchFilters();
+
+        ParquetPartitionStorageServiceImpl parquetPartitionStorageService = ParquetPartitionStorageServiceObjectMother.create(userHomeContext);
+        DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
+        DqoIncidentsConfigurationProperties incidentsConfigurationProperties = DqoIncidentsConfigurationPropertiesObjectMother.getDefault();
+        CheckResultsSnapshotFactoryImpl checkResultsSnapshotFactory = new CheckResultsSnapshotFactoryImpl(parquetPartitionStorageService,
+                new CheckResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl()));
+        ErrorsSnapshotFactoryImpl errorsSnapshotFactory = new ErrorsSnapshotFactoryImpl(parquetPartitionStorageService,
+                new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl()));
+        checkResultsDataService = new CheckResultsDataServiceImpl(checkResultsSnapshotFactory, errorsSnapshotFactory,
+                defaultTimeZoneProvider, incidentsConfigurationProperties);
     }
 
     @Test
@@ -125,6 +150,13 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
+
+        TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
+                comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
+                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME);
+        Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
+        ComparisonCheckResultModel rowCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("row_count_match");
+        Assertions.assertEquals(1, rowCountMatchResultsModel.getValidResults());
     }
 
     @Test

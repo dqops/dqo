@@ -30,7 +30,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 1. To install DQO via pip manager just run
 
     ```
-    python3 -m pip install --user dqops
+    python -m pip install --user dqops
     ```
 
    If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqops/dqo](https://github.com/dqops/dqo)
@@ -39,7 +39,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 2. Run dqo app to finalize the installation.
 
     ```
-    python3 -m dqops
+    python -m dqops
     ```
 
 3. Create DQO userhome folder.

@@ -39,6 +39,7 @@ import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationServiceI
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactoryImpl;
 import com.dqops.data.storage.ParquetPartitionMetadataServiceImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
+import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
 import com.dqops.data.storage.parquet.HadoopConfigurationProvider;
 import com.dqops.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
@@ -89,19 +90,8 @@ public class TableCheckExecutionServiceObjectMother {
         DataQualityRuleRunnerImpl ruleRunner = new DataQualityRuleRunnerImpl(ruleDefinitionFindService, RuleRunnerFactoryObjectMother.createDefault());
         RuleEvaluationServiceImpl ruleEvaluationService = new RuleEvaluationServiceImpl(ruleRunner, ruleDefinitionFindService, defaultTimeZoneProvider);
 
-        Path testUserHomeAbsolutePath = userHomeContext.getHomeRoot().getPhysicalAbsolutePath();
-        LocalDqoUserHomePathProviderStub localDqoUserHomePathProviderStub = new LocalDqoUserHomePathProviderStub(testUserHomeAbsolutePath);
-        UserHomeLockManager userHomeLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-        HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getCustomUserHome(testUserHomeAbsolutePath);
-        SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
-        LocalUserHomeFileStorageServiceImpl localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
-                homeLocationFindService, userHomeLockManager, synchronizationStatusTracker);
-        ParquetPartitionMetadataServiceImpl parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
-                userHomeLockManager, localUserHomeFileStorageService);
-        HadoopConfigurationProvider hadoopConfigurationProvider = HadoopConfigurationProviderObjectMother.getDefault();
-        ParquetPartitionStorageServiceImpl parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(
-                parquetPartitionMetadataService, localDqoUserHomePathProviderStub, userHomeLockManager,
-                hadoopConfigurationProvider, localUserHomeFileStorageService, synchronizationStatusTracker);
+        ParquetPartitionStorageServiceImpl parquetPartitionStorageService =
+                ParquetPartitionStorageServiceObjectMother.create(userHomeContext);
         SensorReadoutsTableFactoryImpl sensorReadoutsTableFactory = new SensorReadoutsTableFactoryImpl();
         SensorReadoutsSnapshotFactoryImpl sensorReadoutsSnapshotFactory = new SensorReadoutsSnapshotFactoryImpl(
                 parquetPartitionStorageService, sensorReadoutsTableFactory);

@@ -632,6 +632,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             TextColumn tableComparisonNameColumn = (TextColumn) TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
             if (tableComparisonNameColumn != null) {
                 rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparisonName));
+            } else {
+                rowSelection = Selection.with(); // empty selection, because there is no column
             }
         }
 

@@ -79,16 +79,30 @@ To run the examples, follow the steps below.
     ```
     check run
     ```
-    You can also execute the checks using the graphical interface.
+   
+    You can also execute the checks using the [graphical interface](../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md).
+    Simply, open the DQO User Interface Console (http://localhost:8888).
+
+    Go to **Profiling** section. Select the table or column mentioned in the example description from the tree view on the left. 
+
+    Select **Advanced Profiling** tab.
+    ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-checks.png)
+
+    Run the enabled check using the **Run check** button.
+    ![Run check](https://dqops.com/docs/images/examples/run-check.png)
+
+    Review the results by opening the **Check details** button.
+    ![Check details](https://dqops.com/docs/images/examples/check-details.png)
 
 
-7. After executing the checks, synchronize the results with your DQO cloud account by running the following command.
+7. After executing the checks, synchronize the results with your DQO cloud account by running the following command or 
+    using the **Synchronize** button located in the upper right corner of the graphical interface.
 
     ```
     cloud sync all
     ``` 
 
-8. You can now review the results on the data quality dashboards as described in [getting started section](../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
+8. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
 
 ## List of the use cases
 
