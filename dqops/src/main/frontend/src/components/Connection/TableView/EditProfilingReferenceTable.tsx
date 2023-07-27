@@ -378,7 +378,7 @@ export const EditProfilingReferenceTable = ({
     setIsUpdated(false);
   };
 
-  const onChange = (obj: Partial<TableComparisonModel>) => {
+  const onChange = (obj: Partial<TableComparisonModel>): void => {
     setReference({
       ...(reference || {}),
       ...obj

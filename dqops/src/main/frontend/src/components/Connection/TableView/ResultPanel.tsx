@@ -1,6 +1,6 @@
 import React from 'react';
 import ResultBox from './ResultBox';
-import { ComparisonCheckResultModel } from '../../../api';
+import { ComparisonCheckResultModel, TableComparisonModel } from '../../../api';
 
 interface dataInterface {
   minBool?: boolean;
@@ -10,6 +10,8 @@ interface dataInterface {
   nullCount?: boolean;
   notNullCount?: boolean;
   obj: { [key: string]: ComparisonCheckResultModel };
+  onChange?: (obj: Partial<TableComparisonModel>) => void;
+  reference?: TableComparisonModel;
 }
 
 export default function ResultPanel({
@@ -19,7 +21,9 @@ export default function ResultPanel({
   meanBool,
   nullCount,
   notNullCount,
-  obj
+  obj,
+  onChange,
+  reference
 }: dataInterface) {
   const prepareObj = (key: string): ComparisonCheckResultModel => {
     if (Object.keys(obj).find((x) => x === key)) {
