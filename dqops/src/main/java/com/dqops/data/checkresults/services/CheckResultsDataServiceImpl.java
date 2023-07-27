@@ -37,6 +37,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.tables.TableColumnUtility;
 import com.dqops.utils.tables.TableRowUtility;
 import com.google.common.base.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -628,8 +629,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME));
 
         if (!Strings.isNullOrEmpty(tableComparisonName)) {
-            TextColumn tableComparisonNameColumn = sourceTable.textColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
-            rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparisonName));
+            TextColumn tableComparisonNameColumn = (TextColumn) TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            if (tableComparisonNameColumn != null) {
+                rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparisonName));
+            } else {
+                rowSelection = Selection.with(); // empty selection, because there is no column
+            }
         }
 
         Table filteredTable = sourceTable.where(rowSelection);

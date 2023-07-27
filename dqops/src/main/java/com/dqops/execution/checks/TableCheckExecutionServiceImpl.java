@@ -472,6 +472,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                 executionContext, sensorExecutionResultComparedTable.getSensorRunParameters().getCheck(), sensorRunParametersComparedTable,
                                 normalizedSensorResultsComparedTable, sensorReadoutsSnapshot, progressListener);
                         progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParametersComparedTable, normalizedSensorResultsComparedTable, ruleEvaluationResult));
+                        ruleEvaluationResult.getTableComparisonNameColumn()
+                                        .setMissingTo(sensorRunParametersReferenceTable.getTableComparisonConfiguration().getComparisonName());
 
                         allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
                         executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);

@@ -18,15 +18,14 @@ package com.dqops.core.configuration;
 import com.dqops.utils.BeanFactoryObjectMother;
 
 /**
- * Object mother for the configuration.
+ * Incidents configuration properties object mother.
  */
-public final class DqoDockerUserhomeConfigurationPropertiesObjectMother {
-
+public class DqoIncidentsConfigurationPropertiesObjectMother {
     /**
-     * Creates a default configuration properties that pull the settings from environment variables and the application-test.resource file.
-     * @return Default configuration.
+     * Retrieves the default incident configuration parameters and clones it.
+     * @return Incident configuration.
      */
-    public static DqoDockerUserhomeConfigurationProperties createDefaultDockerUserhomeConfiguration() {
-        return BeanFactoryObjectMother.getBeanFactory().getBean(DqoDockerUserhomeConfigurationProperties.class).clone();
+    public static DqoIncidentsConfigurationProperties getDefault() {
+        return BeanFactoryObjectMother.getBeanFactory().getBean(DqoIncidentsConfigurationProperties.class).clone();
     }
 }
