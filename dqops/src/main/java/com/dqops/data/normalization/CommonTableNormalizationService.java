@@ -25,7 +25,7 @@ public interface CommonTableNormalizationService {
     /**
      * The data group name that covers the whole table, without dividing the table into data groups.
      */
-    String ALL_DATA_DATA_GROUP_NAME = "all data";
+    String NO_GROUPING_DATA_GROUP_NAME = "no grouping";
 
     /**
      * Finds all data grouping dimension level columns and returns them as an array of columns. The array length is 9 elements (the number of data stream levels supported).

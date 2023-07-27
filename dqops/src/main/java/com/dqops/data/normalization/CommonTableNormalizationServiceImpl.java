@@ -28,7 +28,6 @@ import tech.tablesaw.columns.Column;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Table normalization service that provides basic features used for normalization of sensor readout results or profiler results.
@@ -176,7 +175,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
 
         if (notNullColumnCount == 0) {
             // when no data stream columns are used, we return data_stream_name as "all data"
-            return ALL_DATA_DATA_GROUP_NAME;
+            return NO_GROUPING_DATA_GROUP_NAME;
         }
 
         StringBuilder sb = new StringBuilder();
