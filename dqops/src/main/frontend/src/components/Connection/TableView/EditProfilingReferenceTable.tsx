@@ -485,8 +485,24 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
-  const calculateColor = (nameOfCol: string, nameOfCheck: string): string => {
-    const colorVar = prepareData(nameOfCol)[nameOfCheck];
+  const calculateColor = (
+    nameOfCol: string,
+    nameOfCheck: string,
+    bool?: boolean
+  ): string => {
+    let colorVar = prepareData(nameOfCol)[nameOfCheck];
+    if (
+      bool &&
+      tableComparisonResults?.table_comparison_results &&
+      tableComparisonResults
+    ) {
+      const comparisonResult = Object.values(
+        tableComparisonResults.table_comparison_results
+      )?.at(0);
+      if (comparisonResult) {
+        colorVar = comparisonResult;
+      }
+    }
 
     if (colorVar && colorVar.fatals && Number(colorVar.fatals) !== 0) {
       return 'bg-red-200';
@@ -509,7 +525,7 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
-  console.log(reference);
+  console.log(tableComparisonResults?.table_comparison_results);
 
   return (
     <div className="text-sm">
@@ -629,58 +645,14 @@ export const EditProfilingReferenceTable = ({
           />
         </div>
 
-        <div className="px-4">
-          <p>Default thresholds for differences(percent):</p>
-          <div className="grid grid-cols-3 mb-5 mt-3">
-            <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
-              <span className="flex-1">Warning when the difference above:</span>
-              <Input
-                className="max-w-30 !min-w-initial"
-                type="number"
-                value={
-                  reference?.default_compare_thresholds
-                    ?.warning_difference_percent
-                }
-              />
-              %
-            </div>
-            <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
-              <span className="flex-1">Error when the difference above:</span>
-              <Input
-                className="max-w-30 !min-w-initial"
-                type="number"
-                value={
-                  reference?.default_compare_thresholds
-                    ?.error_difference_percent
-                }
-              />
-              %
-            </div>
-            <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
-              <span className="flex-1">
-                Fatal Error when the difference above:
-              </span>
-              <Input
-                className="max-w-30 !min-w-initial"
-                type="number"
-                value={
-                  reference?.default_compare_thresholds
-                    ?.fatal_difference_percent
-                }
-              />
-              %
-            </div>
-          </div>
-        </div>
-
         <SectionWrapper
           title="Table level comparison"
-          className="mb-10 px-0 mt-10"
+          className="mb-10 px-0 mt-10 h-full py-0 pt-0"
         >
-          <div className="flex flex-col gap-8">
-            <div className="flex gap-4">
+          <div className="flex flex-col h-full ">
+            <div className="flex h-15 pb-0 mb-0">
               <span
-                className="flex items-center cursor-pointer"
+                className="flex items-center cursor-pointer mr-2"
                 onClick={() => setIsRowCountExtended(!isRowCountExtended)}
               >
                 {isRowCountExtended ? (
@@ -690,67 +662,111 @@ export const EditProfilingReferenceTable = ({
                 )}
                 Compare row count between target and reference column:
               </span>
-              <Checkbox
-                checked={showRowCount}
-                onChange={(checked) => setShowRowCount(checked)}
-              />
+              <div
+                className={clsx(
+                  'h-10, w-20 flex items-center justify-center pr-3',
+                  calculateColor('', '', true)
+                )}
+              >
+                <Checkbox
+                  checked={showRowCount}
+                  onChange={(checked) => setShowRowCount(checked)}
+                />
+              </div>
             </div>
 
             {isRowCountExtended && (
-              <div className="grid grid-cols-3 w-full">
-                <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
-                  <span className="flex-1">
-                    Warning when the difference above:
-                  </span>
-                  <Input
-                    className="max-w-30 !min-w-initial"
-                    type="number"
-                    value={
-                      reference?.compare_row_count?.warning_difference_percent
-                    }
-                    onChange={(e) =>
-                      onChangeCompareRowCount({
-                        warning_difference_percent: Number(e.target.value)
-                      })
-                    }
-                  />
-                  %
+              <div className="flex">
+                <div className="flex flex-col  pt-0 mt-0 w-100">
+                  <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2 w-98">
+                    <span className="flex-1">
+                      Warning when the difference above:
+                    </span>
+                    <Input
+                      className="max-w-30 !min-w-initial"
+                      type="number"
+                      value={
+                        reference?.compare_row_count?.warning_difference_percent
+                      }
+                      onChange={(e) =>
+                        onChangeCompareRowCount({
+                          warning_difference_percent: Number(e.target.value)
+                        })
+                      }
+                    />
+                    %
+                  </div>
+                  <div className="bg-orange-100 px-4 py-2 flex items-center gap-2 w-98">
+                    <span className="flex-1">
+                      Error when the difference above:
+                    </span>
+                    <Input
+                      className="max-w-30 !min-w-initial"
+                      type="number"
+                      value={
+                        reference?.compare_row_count?.error_difference_percent
+                      }
+                      onChange={(e) =>
+                        onChangeCompareRowCount({
+                          error_difference_percent: Number(e.target.value)
+                        })
+                      }
+                    />
+                    %
+                  </div>
+                  <div className="bg-red-100 px-4 py-2 flex items-center gap-2 w-98">
+                    <span className="flex-1">
+                      Fatal Error when the difference above:
+                    </span>
+                    <Input
+                      className="max-w-30 !min-w-initial"
+                      type="number"
+                      value={
+                        reference?.compare_row_count?.fatal_difference_percent
+                      }
+                      onChange={(e) =>
+                        onChangeCompareRowCount({
+                          fatal_difference_percent: Number(e.target.value)
+                        })
+                      }
+                    />
+                    %
+                  </div>
                 </div>
-                <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
-                  <span className="flex-1">
-                    Error when the difference above:
-                  </span>
-                  <Input
-                    className="max-w-30 !min-w-initial"
-                    type="number"
-                    value={
-                      reference?.compare_row_count?.error_difference_percent
+                <div className="gap-y-3">
+                  Results:
+                  <td className="flex justify-between w-2/3 ">
+                    <th className="text-xs font-light">Valid:</th>
+                    {
+                      Object.values(
+                        tableComparisonResults?.table_comparison_results ?? []
+                      ).at(0)?.valid_results
                     }
-                    onChange={(e) =>
-                      onChangeCompareRowCount({
-                        error_difference_percent: Number(e.target.value)
-                      })
+                  </td>
+                  <td className="flex justify-between w-2/3 ">
+                    <th className="text-xs font-light">Errors:</th>
+                    {
+                      Object.values(
+                        tableComparisonResults?.table_comparison_results ?? []
+                      ).at(0)?.errors
                     }
-                  />
-                  %
-                </div>
-                <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
-                  <span className="flex-1">
-                    Fatal Error when the difference above:
-                  </span>
-                  <Input
-                    className="max-w-30 !min-w-initial"
-                    type="number"
-                    value={
-                      reference?.compare_row_count?.fatal_difference_percent
+                  </td>
+                  <td className="flex justify-between w-2/3 ">
+                    <th className="text-xs font-light">Fatal:</th>
+                    {
+                      Object.values(
+                        tableComparisonResults?.table_comparison_results ?? []
+                      ).at(0)?.fatals
                     }
-                    onChange={(e) =>
-                      onChangeCompareRowCount({
-                        fatal_difference_percent: Number(e.target.value)
-                      })
+                  </td>
+                  <td className="flex justify-between w-2/3 ">
+                    <th className="text-xs font-light">Warning:</th>
+                    {
+                      Object.values(
+                        tableComparisonResults?.table_comparison_results ?? []
+                      ).at(0)?.warnings
                     }
-                  />
-                  %
+                  </td>
                 </div>
               </div>
             )}
