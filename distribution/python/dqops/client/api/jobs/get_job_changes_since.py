@@ -16,7 +16,7 @@ def _get_kwargs(
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/jobchangessince/{sequenceNumber}".format(
+    url = "{}api/jobs/jobchangessince/{sequenceNumber}".format(
         client.base_url, sequenceNumber=sequence_number
     )
 

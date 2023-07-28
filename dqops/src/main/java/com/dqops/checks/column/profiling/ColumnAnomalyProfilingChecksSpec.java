@@ -150,16 +150,16 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
     }
 
     /**
-     * Returns a mean value anomaly 60 days check specification.
-     * @return Mean value anomaly 60 days check specification.
+     * Returns a mean value anomaly 90 days check specification.
+     * @return Mean value anomaly 90 days check specification.
      */
     public ColumnAnomalyStationaryMeanCheckSpec getMeanAnomalyStationary() {
         return meanAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a mean value anomaly 60 days check.
-     * @param meanAnomalyStationary Mean value anomaly 60 days check specification.
+     * Sets a new specification of a mean value anomaly 90 days check.
+     * @param meanAnomalyStationary Mean value anomaly 90 days check specification.
      */
     public void setMeanAnomalyStationary(ColumnAnomalyStationaryMeanCheckSpec meanAnomalyStationary) {
         this.setDirtyIf(!Objects.equals(this.meanAnomalyStationary, meanAnomalyStationary));
@@ -186,16 +186,16 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
     }
 
     /**
-     * Returns a median anomaly 60 days check specification.
-     * @return Median anomaly 60 days check specification.
+     * Returns a median anomaly 90 days check specification.
+     * @return Median anomaly 90 days check specification.
      */
     public ColumnAnomalyStationaryMedianCheckSpec getMedianAnomalyStationary() {
         return medianAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a median anomaly 60 days check.
-     * @param medianAnomalyStationary Median anomaly 60 days check specification.
+     * Sets a new specification of a median anomaly 90 days check.
+     * @param medianAnomalyStationary Median anomaly 90 days check specification.
      */
     public void setMedianAnomalyStationary(ColumnAnomalyStationaryMedianCheckSpec medianAnomalyStationary) {
         this.setDirtyIf(!Objects.equals(this.medianAnomalyStationary, medianAnomalyStationary));
@@ -222,16 +222,16 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
     }
 
     /**
-     * Returns a sum anomaly 60 days check specification.
-     * @return Sum anomaly 60 days check specification.
+     * Returns a sum anomaly 90 days check specification.
+     * @return Sum anomaly 90 days check specification.
      */
     public ColumnAnomalyDifferencingSumCheckSpec getSumAnomalyDifferencing() {
         return sumAnomalyDifferencing;
     }
     
     /**
-     * Sets a new specification of a sum anomaly 60 days check.
-     * @param sumAnomalyDifferencing Sum anomaly 60 days check specification.
+     * Sets a new specification of a sum anomaly 90 days check.
+     * @param sumAnomalyDifferencing Sum anomaly 90 days check specification.
      */
     public void setSumAnomalyDifferencing(ColumnAnomalyDifferencingSumCheckSpec sumAnomalyDifferencing) {
         this.setDirtyIf(!Objects.equals(this.sumAnomalyDifferencing, sumAnomalyDifferencing));

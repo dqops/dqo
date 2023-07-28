@@ -658,6 +658,48 @@ Checks for the presence of null or missing values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
+|[nulls_percent_anomaly_stationary_30_days](./column/nulls/nulls-percent-anomaly-stationary-30-days/#nulls-percent-anomaly-stationary-30-days)|profiling|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|
+|[daily_nulls_percent_anomaly_stationary_30_days](./column/nulls/nulls-percent-anomaly-stationary-30-days/#daily-nulls-percent-anomaly-stationary-30-days)|recurring|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|
+|[daily_partition_nulls_percent_anomaly_stationary_30_days](./column/nulls/nulls-percent-anomaly-stationary-30-days/#daily-partition-nulls-percent-anomaly-stationary-30-days)|partitioned|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[nulls_percent_anomaly_stationary](./column/nulls/nulls-percent-anomaly-stationary/#nulls-percent-anomaly-stationary)|profiling|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_nulls_percent_anomaly_stationary](./column/nulls/nulls-percent-anomaly-stationary/#daily-nulls-percent-anomaly-stationary)|recurring|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|
+|[daily_partition_nulls_percent_anomaly_stationary](./column/nulls/nulls-percent-anomaly-stationary/#daily-partition-nulls-percent-anomaly-stationary)|partitioned|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[nulls_percent_change](./column/nulls/nulls-percent-change/#nulls-percent-change)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout.|
+|[daily_nulls_percent_change](./column/nulls/nulls-percent-change/#daily-nulls-percent-change)|recurring|Verifies that the null percent value in a column changed in a fixed rate since last readout.|
+|[daily_partition_nulls_percent_change](./column/nulls/nulls-percent-change/#daily-partition-nulls-percent-change)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[nulls_percent_change_yesterday](./column/nulls/nulls-percent-change-yesterday/#nulls-percent-change-yesterday)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_nulls_percent_change_yesterday](./column/nulls/nulls-percent-change-yesterday/#daily-nulls-percent-change-yesterday)|recurring|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_partition_nulls_percent_change_yesterday](./column/nulls/nulls-percent-change-yesterday/#daily-partition-nulls-percent-change-yesterday)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[nulls_percent_change_7_days](./column/nulls/nulls-percent-change-7-days/#nulls-percent-change-7-days)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|
+|[daily_nulls_percent_change_7_days](./column/nulls/nulls-percent-change-7-days/#daily-nulls-percent-change-7-days)|recurring|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|
+|[daily_partition_nulls_percent_change_7_days](./column/nulls/nulls-percent-change-7-days/#daily-partition-nulls-percent-change-7-days)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[nulls_percent_change_30_days](./column/nulls/nulls-percent-change-30-days/#nulls-percent-change-30-days)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|
+|[daily_nulls_percent_change_30_days](./column/nulls/nulls-percent-change-30-days/#daily-nulls-percent-change-30-days)|recurring|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|
+|[daily_partition_nulls_percent_change_30_days](./column/nulls/nulls-percent-change-30-days/#daily-partition-nulls-percent-change-30-days)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
 |[not_nulls_count](./column/nulls/not-nulls-count/#not-nulls-count)|profiling|Verifies that the number of not null values in a column does not exceed the minimum accepted count.|
 |[daily_not_nulls_count](./column/nulls/not-nulls-count/#daily-not-nulls-count)|recurring|Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
 |[monthly_not_nulls_count](./column/nulls/not-nulls-count/#monthly-not-nulls-count)|recurring|Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|

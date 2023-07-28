@@ -23,12 +23,14 @@ def _get_kwargs(
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram".format(
-        client.base_url,
-        connectionName=connection_name,
-        year=year,
-        month=month,
-        incidentId=incident_id,
+    url = (
+        "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram".format(
+            client.base_url,
+            connectionName=connection_name,
+            year=year,
+            month=month,
+            incidentId=incident_id,
+        )
     )
 
     headers: Dict[str, str] = client.get_headers()

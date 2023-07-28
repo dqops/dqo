@@ -17,7 +17,7 @@ def _get_kwargs(
     client: Client,
     json_body: AllChecksPatchParameters,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/checks/{checkName}/bulkenable".format(
+    url = "{}api/connections/{connectionName}/checks/{checkName}/bulkenable".format(
         client.base_url, connectionName=connection_name, checkName=check_name
     )
 

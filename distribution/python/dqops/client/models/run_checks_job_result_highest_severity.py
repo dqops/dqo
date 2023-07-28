@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class RunChecksQueueJobResultHighestSeverity(str, Enum):
+class RunChecksJobResultHighestSeverity(str, Enum):
     ERROR = "error"
     FATAL = "fatal"
     VALID = "valid"

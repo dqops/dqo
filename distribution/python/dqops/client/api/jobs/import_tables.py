@@ -15,7 +15,7 @@ def _get_kwargs(
     client: Client,
     json_body: ImportTablesQueueJobParameters,
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/importtables".format(client.base_url)
+    url = "{}api/jobs/importtables".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()

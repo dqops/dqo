@@ -149,16 +149,16 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     }
 
     /**
-     * Returns a mean value anomaly 60 days check specification.
-     * @return Mean value anomaly 60 days check specification.
+     * Returns a mean value anomaly 90 days check specification.
+     * @return Mean value anomaly 90 days check specification.
      */
     public ColumnAnomalyStationaryMeanCheckSpec getDailyMeanAnomalyStationary() {
         return dailyMeanAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a mean value anomaly 60 days check.
-     * @param dailyMeanAnomalyStationary Mean value anomaly 60 days check specification.
+     * Sets a new specification of a mean value anomaly 90 days check.
+     * @param dailyMeanAnomalyStationary Mean value anomaly 90 days check specification.
      */
     public void setDailyMeanAnomalyStationary(ColumnAnomalyStationaryMeanCheckSpec dailyMeanAnomalyStationary) {
         this.setDirtyIf(!Objects.equals(this.dailyMeanAnomalyStationary, dailyMeanAnomalyStationary));
@@ -185,16 +185,16 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     }
 
     /**
-     * Returns a median anomaly 60 days check specification.
-     * @return Median anomaly 60 days check specification.
+     * Returns a median anomaly 90 days check specification.
+     * @return Median anomaly 90 days check specification.
      */
     public ColumnAnomalyStationaryMedianCheckSpec getDailyMedianAnomalyStationary() {
         return dailyMedianAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a median anomaly 60 days check.
-     * @param dailyMedianAnomalyStationary Median anomaly 60 days check specification.
+     * Sets a new specification of a median anomaly 90 days check.
+     * @param dailyMedianAnomalyStationary Median anomaly 90 days check specification.
      */
     public void setDailyMedianAnomalyStationary(ColumnAnomalyStationaryMedianCheckSpec dailyMedianAnomalyStationary) {
         this.setDirtyIf(!Objects.equals(this.dailyMedianAnomalyStationary, dailyMedianAnomalyStationary));
@@ -221,16 +221,16 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     }
 
     /**
-     * Returns a sum anomaly 60 days check specification.
-     * @return Sum anomaly 60 days check specification.
+     * Returns a sum anomaly 90 days check specification.
+     * @return Sum anomaly 90 days check specification.
      */
     public ColumnAnomalyDifferencingSumCheckSpec getDailySumAnomalyDifferencing() {
         return dailySumAnomalyDifferencing;
     }
 
     /**
-     * Sets a new specification of a sum anomaly 60 days check.
-     * @param dailySumAnomalyDifferencing Sum anomaly 60 days check specification.
+     * Sets a new specification of a sum anomaly 90 days check.
+     * @param dailySumAnomalyDifferencing Sum anomaly 90 days check specification.
      */
     public void setDailySumAnomalyDifferencing(ColumnAnomalyDifferencingSumCheckSpec dailySumAnomalyDifferencing) {
         this.setDirtyIf(!Objects.equals(this.dailySumAnomalyDifferencing, dailySumAnomalyDifferencing));
