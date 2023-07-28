@@ -509,6 +509,8 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
+  console.log(reference);
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -1029,6 +1031,7 @@ export const EditProfilingReferenceTable = ({
                 {isElemExtended.at(index) && (
                   <ResultPanel
                     obj={prepareData(item.compared_column_name ?? '')}
+                    onChange={onChange}
                     minBool={
                       !!item.compare_min &&
                       !(
@@ -1071,6 +1074,8 @@ export const EditProfilingReferenceTable = ({
                         item.reference_column_name.length === 0
                       )
                     }
+                    reference={reference}
+                    index={index}
                   />
                 )}
               </tbody>
