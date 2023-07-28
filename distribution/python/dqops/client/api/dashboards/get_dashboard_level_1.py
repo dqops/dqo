@@ -16,7 +16,7 @@ def _get_kwargs(
     client: Client,
     window_location_origin: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/dashboards/{folder}/{dashboardName}".format(
+    url = "{}api/dashboards/{folder}/{dashboardName}".format(
         client.base_url, folder=folder, dashboardName=dashboard_name
     )
 

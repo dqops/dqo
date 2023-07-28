@@ -1,25 +1,4 @@
 
-## DashboardListSpec  
-List of dashboards.  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-___  
-
 ## DashboardsFolderListSpec  
 List of dashboard folders.  
   
@@ -31,8 +10,8 @@ List of dashboard folders.
 
 ___  
 
-## DashboardsFolderSpec  
-Description of a folder with multiple dashboards or other folders.  
+## DashboardYaml  
+Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
   
 
 
@@ -46,9 +25,9 @@ Description of a folder with multiple dashboards or other folders.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|folder_name|Folder name|string| | | |
-|[dashboards](#dashboardlistspec)|List of data quality dashboard at this level.|[DashboardListSpec](#dashboardlistspec)| | | |
-|[folders](#dashboardsfolderlistspec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
+|api_version||string| | | |
+|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
+|[spec](#dashboardsfolderlistspec)||[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
 
 
 
@@ -90,8 +69,29 @@ Description of a single dashboard that is available in the platform.
 
 ___  
 
-## DashboardYaml  
-Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
+## DashboardListSpec  
+List of dashboards.  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___  
+
+## DashboardsFolderSpec  
+Description of a folder with multiple dashboards or other folders.  
   
 
 
@@ -105,9 +105,9 @@ Data quality dashboard definition YAML schema for a data quality dashboards list
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
-|[spec](#dashboardsfolderlistspec)||[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
+|folder_name|Folder name|string| | | |
+|[dashboards](#dashboardlistspec)|List of data quality dashboard at this level.|[DashboardListSpec](#dashboardlistspec)| | | |
+|[folders](#dashboardsfolderlistspec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
 
 
 

@@ -16,7 +16,7 @@ def _get_kwargs(
     client: Client,
     json_body: CheckSpecModel,
 ) -> Dict[str, Any]:
-    url = "{}/api/checks/{fullCheckName}".format(
+    url = "{}api/checks/{fullCheckName}".format(
         client.base_url, fullCheckName=full_check_name
     )
 

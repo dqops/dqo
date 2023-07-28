@@ -20,7 +20,7 @@ def _get_kwargs(
     client: Client,
     json_body: TableComparisonConfigurationModel,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/tablecomparisons".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

@@ -14,7 +14,7 @@ def _get_kwargs(
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}".format(
+    url = "{}api/connections/{connectionName}".format(
         client.base_url, connectionName=connection_name
     )
 

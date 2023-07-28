@@ -22,7 +22,7 @@ def _get_kwargs(
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,
