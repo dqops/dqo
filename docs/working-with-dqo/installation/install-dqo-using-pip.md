@@ -50,7 +50,9 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 ## Start DQO application
 
-1. Run dqo app to finalize the installation.
+1. Run dqo app to finalize the installation. This process may take some time as the DQO distribution will be downloaded
+    and the Python environment will be initialized in the DQO home directory.
+
 
     ```
     python -m dqops
