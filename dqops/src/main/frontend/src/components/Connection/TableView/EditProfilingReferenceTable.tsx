@@ -582,7 +582,7 @@ export const EditProfilingReferenceTable = ({
             <div className="flex">
               {showRowCount && (
                 <div className="flex flex-col pt-0 mt-0 w-100">
-                  <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2 w-98">
+                  <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2 w-92">
                     <span className="flex-1">
                       Warning when the difference above:
                     </span>
@@ -600,7 +600,7 @@ export const EditProfilingReferenceTable = ({
                     />
                     %
                   </div>
-                  <div className="bg-orange-100 px-4 py-2 flex items-center gap-2 w-98">
+                  <div className="bg-orange-100 px-4 py-2 flex items-center gap-2 w-92">
                     <span className="flex-1">
                       Error when the difference above:
                     </span>
@@ -618,7 +618,7 @@ export const EditProfilingReferenceTable = ({
                     />
                     %
                   </div>
-                  <div className="bg-red-100 px-4 py-2 flex items-center gap-2 w-98">
+                  <div className="bg-red-100 px-4 py-2 flex items-center gap-2 w-92">
                     <span className="flex-1">
                       Fatal Error when the difference above:
                     </span>
