@@ -5,7 +5,6 @@ import Button from '../../Button';
 import SvgIcon from '../../SvgIcon';
 import {
   ColumnApiClient,
-  DataGroupingConfigurationsApi,
   TableComparisonResultsApi,
   JobApiClient,
   TableComparisonsApi
@@ -15,7 +14,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import {
   ColumnComparisonModel,
   CompareThresholdsModel,
-  DataGroupingConfigurationBasicModel,
   TableComparisonModel,
   TableComparisonResultsModel,
   DqoJobHistoryEntryModelStatusEnum,
@@ -71,19 +69,9 @@ export const EditProfilingReferenceTable = ({
   const [showRowCount, setShowRowCount] = useState(false);
   const [isRowCountExtended, setIsRowCountExtended] = useState(false);
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
-    DataGroupingConfigurationBasicModel[]
-  >([]);
   const [jobId, setJobId] = useState<number>();
   const [loading, setLoading] = useState(false);
   const job = jobId ? job_dictionary_state[jobId] : undefined;
-
-  const [refDataGroupingConfigurations, setRefDataGroupingConfigurations] =
-    useState<DataGroupingConfigurationBasicModel[]>([]);
-  const [dataGroupingConfiguration, setDataGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
-  const [refDataGroupingConfiguration, setRefDataGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
   const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
   const [isExtended, setIsExtended] = useState(false);
   const [tableComparisonResults, setTableComparisonResults] =
@@ -155,31 +143,6 @@ export const EditProfilingReferenceTable = ({
   }, [selectedReference]);
 
   useEffect(() => {
-    DataGroupingConfigurationsApi.getTableGroupingConfigurations(
-      connection,
-      schema,
-      table
-    ).then((res) => {
-      setDataGroupingConfigurations(res.data);
-      setDataGroupingConfiguration(
-        res.data.find((item) => item.default_data_grouping_configuration)
-      );
-    });
-  }, [connection, schema, table]);
-
-  useEffect(() => {
-    if (reference) {
-      DataGroupingConfigurationsApi.getTableGroupingConfigurations(
-        reference.reference_connection ?? '',
-        reference.reference_table?.schema_name ?? '',
-        reference.reference_table?.table_name ?? ''
-      ).then((res) => {
-        setRefDataGroupingConfigurations(res.data);
-        setRefDataGroupingConfiguration(
-          res.data.find((item) => item.default_data_grouping_configuration)
-        );
-      });
-    }
     if (reference) {
       ColumnApiClient.getColumns(
         reference.reference_connection ?? '',
@@ -195,59 +158,6 @@ export const EditProfilingReferenceTable = ({
       });
     }
   }, [reference, selectedReference]);
-
-  const goToCreateNew = () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      connection,
-      schema,
-      table,
-      'data-groupings'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      CheckTypes.SOURCES,
-      connection,
-      schema,
-      table
-    );
-
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url: `${url}?isEditing=true`,
-        value,
-        label: reference?.reference_table?.table_name ?? '',
-        state: {}
-      })
-    );
-    history.push(`${url}?isEditing=true`);
-  };
-
-  const goToRefCreateNew = () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? '',
-      'data-groupings'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      CheckTypes.SOURCES,
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? ''
-    );
-
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url: `${url}?isEditing=true`,
-        value,
-        label: reference?.reference_table?.table_name ?? '',
-        state: {}
-      })
-    );
-
-    history.push(`${url}?isEditing=true`);
-  };
 
   const goToRefTable = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -278,11 +188,7 @@ export const EditProfilingReferenceTable = ({
   const onUpdate = () => {
     setIsUpdating(true);
     const data = {
-      ...reference,
-      compared_table_grouping_name:
-        dataGroupingConfiguration?.data_grouping_configuration_name,
-      reference_table_grouping_name:
-        refDataGroupingConfiguration?.data_grouping_configuration_name
+      ...reference
     };
 
     if (checkTypes === CheckTypes.PROFILING) {
@@ -543,6 +449,8 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
+  console.log(reference);
+
   return (
     <div className="text-sm">
       <TableActionGroup
@@ -594,9 +502,8 @@ export const EditProfilingReferenceTable = ({
           />
         </div>
       </div>
-
       <div className="px-8 py-4">
-        <p className="text-center mb-7">
+        <p className="text-center mb-1  ">
           Table comparison will use these data grouping configurations:
         </p>
 
@@ -631,12 +538,6 @@ export const EditProfilingReferenceTable = ({
           </div>
 
           <SelectDataGroupingForTableProfiling
-            className="flex-1"
-            title="Data grouping on compared table"
-            dataGroupingConfigurations={dataGroupingConfigurations}
-            dataGroupingConfiguration={dataGroupingConfiguration}
-            setDataGroupingConfiguration={setDataGroupingConfiguration}
-            goToCreateNew={goToCreateNew}
             isExtended={isExtended}
             columnArray={reference?.grouping_columns?.map((x) =>
               typeof x.compared_table_column_name === 'string'
@@ -646,12 +547,6 @@ export const EditProfilingReferenceTable = ({
           />
 
           <SelectDataGroupingForTableProfiling
-            className="flex-1"
-            title="Data grouping on reference table"
-            dataGroupingConfigurations={refDataGroupingConfigurations}
-            dataGroupingConfiguration={refDataGroupingConfiguration}
-            setDataGroupingConfiguration={setRefDataGroupingConfiguration}
-            goToCreateNew={goToRefCreateNew}
             isExtended={isExtended}
             columnArray={reference?.grouping_columns?.map((x) =>
               typeof x.reference_table_column_name === 'string'
@@ -861,7 +756,7 @@ export const EditProfilingReferenceTable = ({
                         onChangeColumn(
                           {
                             compare_min: checked
-                              ? reference?.compare_row_count
+                              ? reference?.default_compare_thresholds
                               : undefined
                           },
                           index
@@ -898,7 +793,7 @@ export const EditProfilingReferenceTable = ({
                         onChangeColumn(
                           {
                             compare_max: checked
-                              ? reference?.compare_row_count
+                              ? reference?.default_compare_thresholds
                               : undefined
                           },
                           index
@@ -935,7 +830,7 @@ export const EditProfilingReferenceTable = ({
                         onChangeColumn(
                           {
                             compare_sum: checked
-                              ? reference?.compare_row_count
+                              ? reference?.default_compare_thresholds
                               : undefined
                           },
                           index
@@ -972,7 +867,7 @@ export const EditProfilingReferenceTable = ({
                         onChangeColumn(
                           {
                             compare_mean: checked
-                              ? reference?.compare_row_count
+                              ? reference?.default_compare_thresholds
                               : undefined
                           },
                           index
@@ -1009,7 +904,7 @@ export const EditProfilingReferenceTable = ({
                         onChangeColumn(
                           {
                             compare_null_count: checked
-                              ? reference?.compare_row_count
+                              ? reference?.default_compare_thresholds
                               : undefined
                           },
                           index
@@ -1046,7 +941,7 @@ export const EditProfilingReferenceTable = ({
                         onChangeColumn(
                           {
                             compare_not_null_count: checked
-                              ? reference?.compare_row_count
+                              ? reference?.default_compare_thresholds
                               : undefined
                           },
                           index
