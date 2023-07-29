@@ -113,6 +113,7 @@ export const SelectGroupColumnsTable = ({
               value: item.column_name || ''
             }))
           ]);
+          console.log('inside');
           setRef(true);
         } catch (error) {
           console.error('Error:', error);
@@ -145,10 +146,11 @@ export const SelectGroupColumnsTable = ({
         }
       }
     };
-    if (ref === false) {
-      fetchData();
-    }
+
+    fetchData();
   }, [connection, schema, table, refConnection, refSchema, refTable, ref]);
+
+  console.log(options);
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
