@@ -86,8 +86,8 @@ const ResultBox = ({
               Show mismatches
               <section
                 className={clsx(
-                  'hidden group-hover:grid grid-cols-3 absolute top-4 right-0 px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline',
-                  item.not_matching_data_groups ? 'w-50 h-29 ' : 'w-40 h-10'
+                  'hidden group-hover:grid grid-cols-2 absolute top-4 right-0 px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline',
+                  item.not_matching_data_groups ? 'w-60 h-60 ' : 'w-40 h-10'
                 )}
                 style={{ right: '-8px' }}
               >
