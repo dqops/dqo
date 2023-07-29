@@ -57,14 +57,12 @@ export const EditProfilingReferenceTable = ({
   const {
     connection,
     schema,
-    table,
-    tab
+    table
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
-    tab: string;
   } = useParams();
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -443,7 +441,7 @@ export const EditProfilingReferenceTable = ({
         connection,
         schema,
         table,
-        tab === 'daily_comparisons' ? 'daily' : 'monthly',
+        timePartitioned === 'daily' ? 'daily' : 'monthly',
         selectedReference ?? ''
       ).then((res) => setTableComparisonResults(res.data));
       console.log(tableComparisonResults);
@@ -452,7 +450,7 @@ export const EditProfilingReferenceTable = ({
         connection,
         schema,
         table,
-        tab === 'daily_comparisons' ? 'daily' : 'monthly',
+        timePartitioned === 'daily' ? 'daily' : 'monthly',
         selectedReference ?? ''
       ).then((res) => setTableComparisonResults(res.data));
       console.log(tableComparisonResults);
@@ -491,9 +489,6 @@ export const EditProfilingReferenceTable = ({
       getResultsData();
     }
   }, [job?.status]);
-
-  console.log(reference);
-  console.log(tableComparisonResults?.column_comparison_results ?? {});
 
   const prepareData = (
     nameOfColumn: string
@@ -547,9 +542,6 @@ export const EditProfilingReferenceTable = ({
       return '';
     }
   };
-
-  console.log(tableComparisonResults?.table_comparison_results);
-  console.log(tab);
 
   return (
     <div className="text-sm">
@@ -689,7 +681,7 @@ export const EditProfilingReferenceTable = ({
               <div
                 className={clsx(
                   'h-10, w-20 flex items-center justify-center pr-3',
-                  calculateColor('', '', true)
+                  showRowCount ? calculateColor('', '', true) : ''
                 )}
               >
                 <Checkbox
@@ -701,62 +693,65 @@ export const EditProfilingReferenceTable = ({
 
             {isRowCountExtended && (
               <div className="flex">
-                <div className="flex flex-col  pt-0 mt-0 w-100">
-                  <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2 w-98">
-                    <span className="flex-1">
-                      Warning when the difference above:
-                    </span>
-                    <Input
-                      className="max-w-30 !min-w-initial"
-                      type="number"
-                      value={
-                        reference?.compare_row_count?.warning_difference_percent
-                      }
-                      onChange={(e) =>
-                        onChangeCompareRowCount({
-                          warning_difference_percent: Number(e.target.value)
-                        })
-                      }
-                    />
-                    %
+                {showRowCount && (
+                  <div className="flex flex-col  pt-0 mt-0 w-100">
+                    <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2 w-98">
+                      <span className="flex-1">
+                        Warning when the difference above:
+                      </span>
+                      <Input
+                        className="max-w-30 !min-w-initial"
+                        type="number"
+                        value={
+                          reference?.compare_row_count
+                            ?.warning_difference_percent
+                        }
+                        onChange={(e) =>
+                          onChangeCompareRowCount({
+                            warning_difference_percent: Number(e.target.value)
+                          })
+                        }
+                      />
+                      %
+                    </div>
+                    <div className="bg-orange-100 px-4 py-2 flex items-center gap-2 w-98">
+                      <span className="flex-1">
+                        Error when the difference above:
+                      </span>
+                      <Input
+                        className="max-w-30 !min-w-initial"
+                        type="number"
+                        value={
+                          reference?.compare_row_count?.error_difference_percent
+                        }
+                        onChange={(e) =>
+                          onChangeCompareRowCount({
+                            error_difference_percent: Number(e.target.value)
+                          })
+                        }
+                      />
+                      %
+                    </div>
+                    <div className="bg-red-100 px-4 py-2 flex items-center gap-2 w-98">
+                      <span className="flex-1">
+                        Fatal Error when the difference above:
+                      </span>
+                      <Input
+                        className="max-w-30 !min-w-initial"
+                        type="number"
+                        value={
+                          reference?.compare_row_count?.fatal_difference_percent
+                        }
+                        onChange={(e) =>
+                          onChangeCompareRowCount({
+                            fatal_difference_percent: Number(e.target.value)
+                          })
+                        }
+                      />
+                      %
+                    </div>
                   </div>
-                  <div className="bg-orange-100 px-4 py-2 flex items-center gap-2 w-98">
-                    <span className="flex-1">
-                      Error when the difference above:
-                    </span>
-                    <Input
-                      className="max-w-30 !min-w-initial"
-                      type="number"
-                      value={
-                        reference?.compare_row_count?.error_difference_percent
-                      }
-                      onChange={(e) =>
-                        onChangeCompareRowCount({
-                          error_difference_percent: Number(e.target.value)
-                        })
-                      }
-                    />
-                    %
-                  </div>
-                  <div className="bg-red-100 px-4 py-2 flex items-center gap-2 w-98">
-                    <span className="flex-1">
-                      Fatal Error when the difference above:
-                    </span>
-                    <Input
-                      className="max-w-30 !min-w-initial"
-                      type="number"
-                      value={
-                        reference?.compare_row_count?.fatal_difference_percent
-                      }
-                      onChange={(e) =>
-                        onChangeCompareRowCount({
-                          fatal_difference_percent: Number(e.target.value)
-                        })
-                      }
-                    />
-                    %
-                  </div>
-                </div>
+                )}
                 <div className="gap-y-3">
                   Results:
                   <td className="flex justify-between w-2/3 ">
