@@ -57,12 +57,14 @@ export const EditProfilingReferenceTable = ({
   const {
     connection,
     schema,
-    table
+    table,
+    tab
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
+    tab: string;
   } = useParams();
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -428,14 +430,35 @@ export const EditProfilingReferenceTable = ({
   };
 
   const getResultsData = async () => {
-    await TableComparisonResultsApi.getTableComparisonProfilingResults(
-      connection,
-      schema,
-      table,
-      selectedReference ?? ''
-    ).then((res) => setTableComparisonResults(res.data));
-    console.log(tableComparisonResults);
+    if (checkTypes === 'profiling') {
+      await TableComparisonResultsApi.getTableComparisonProfilingResults(
+        connection,
+        schema,
+        table,
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
+      console.log(tableComparisonResults);
+    } else if (checkTypes === 'recurring') {
+      await TableComparisonResultsApi.getTableComparisonRecurringResults(
+        connection,
+        schema,
+        table,
+        tab === 'daily_comparisons' ? 'daily' : 'monthly',
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
+      console.log(tableComparisonResults);
+    } else if (checkTypes === 'partitioned') {
+      await TableComparisonResultsApi.getTableComparisonPartitionedResults(
+        connection,
+        schema,
+        table,
+        tab === 'daily_comparisons' ? 'daily' : 'monthly',
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
+      console.log(tableComparisonResults);
+    }
   };
+
   const onRunChecksRowCount = async () => {
     try {
       setLoading(true);
@@ -526,6 +549,7 @@ export const EditProfilingReferenceTable = ({
   };
 
   console.log(tableComparisonResults?.table_comparison_results);
+  console.log(tab);
 
   return (
     <div className="text-sm">
