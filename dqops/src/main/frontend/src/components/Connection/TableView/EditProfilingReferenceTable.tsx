@@ -506,7 +506,7 @@ export const EditProfilingReferenceTable = ({
           Table comparison will use these data grouping configurations:
         </p>
 
-        <div className="flex gap-4 mb-8">
+        <div className="flex gap-4 mb-2">
           <div>
             <div
               className="flex h-18 w-40 mt-8"
@@ -523,7 +523,7 @@ export const EditProfilingReferenceTable = ({
                   className="w-5 h-5 text-gray-700 cursor-pointer"
                 />
               )}
-              <span className="cursor-pointer">Data grouping name</span>
+              <span className="cursor-pointer">List of columns</span>
             </div>
             {isExtended === true && (
               <div>
@@ -557,7 +557,10 @@ export const EditProfilingReferenceTable = ({
 
         <SectionWrapper
           title="Table level comparison"
-          className="mb-10 px-0 mt-10 h-full py-0 pt-0 pb-2"
+          className={clsx(
+            'mb-10 px-0 h-full py-0 pt-0 pb-2',
+            isExtended ? 'mt-10' : 'mt-0'
+          )}
         >
           <div className="flex flex-col h-full ">
             <div className="flex h-15 pb-0 mb-0">
