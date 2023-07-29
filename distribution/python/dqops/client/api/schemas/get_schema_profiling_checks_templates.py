@@ -23,7 +23,7 @@ def _get_kwargs(
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/bulkenable/profiling".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/bulkenable/profiling".format(
         client.base_url, connectionName=connection_name, schemaName=schema_name
     )
 

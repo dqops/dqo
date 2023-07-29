@@ -17,7 +17,7 @@ def _get_kwargs(
     client: Client,
     json_body: StatisticsCollectorSearchFilters,
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/collectstatistics/table".format(client.base_url)
+    url = "{}api/jobs/collectstatistics/table".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()

@@ -6,36 +6,51 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.check_search_filters import CheckSearchFilters
-    from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
+    from ..models.physical_table_name import PhysicalTableName
+    from ..models.run_checks_job_result import RunChecksJobResult
     from ..models.time_window_filter_parameters import TimeWindowFilterParameters
 
 
-T = TypeVar("T", bound="RunChecksQueueJobParameters")
+T = TypeVar("T", bound="RunChecksOnTableParameters")
 
 
 @attr.s(auto_attribs=True)
-class RunChecksQueueJobParameters:
-    """Run checks configuration, specifies the target checks that should be executed and an optional time window.
+class RunChecksOnTableParameters:
+    """Run checks configuration for a job that will run checks on a single table, specifies the target table and the target
+    checks that should be executed and an optional time window.
 
-    Attributes:
-        check_search_filters (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
-            checks on which tables and columns should be executed.
-        time_window_filter (Union[Unset, TimeWindowFilterParameters]): Time window configuration for partitioned checks
-            (the number of recent days or months to analyze in an incremental mode) or an absolute time range to analyze.
-        dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
-            dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
-            be rendered.
-        run_checks_result (Union[Unset, RunChecksQueueJobResult]): Returns the result (highest data quality check
-            severity and the finished checks count) for the checks that were recently executed.
+        Attributes:
+            connection (Union[Unset, str]): The name of the target connection.
+            max_jobs_per_connection (Union[Unset, int]): The maximum number of concurrent 'run checks on table' jobs that
+                could be run on this connection. Limits the number of concurrent jobs.
+            table (Union[Unset, PhysicalTableName]):
+            check_search_filters (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
+                checks on which tables and columns should be executed.
+            time_window_filter (Union[Unset, TimeWindowFilterParameters]): Time window configuration for partitioned checks
+                (the number of recent days or months to analyze in an incremental mode) or an absolute time range to analyze.
+            dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
+                dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
+                be rendered.
+            run_checks_result (Union[Unset, RunChecksJobResult]): Returns the result (highest data quality check severity
+                and the finished checks count) for the checks that were recently executed.
     """
 
+    connection: Union[Unset, str] = UNSET
+    max_jobs_per_connection: Union[Unset, int] = UNSET
+    table: Union[Unset, "PhysicalTableName"] = UNSET
     check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
     time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
-    run_checks_result: Union[Unset, "RunChecksQueueJobResult"] = UNSET
+    run_checks_result: Union[Unset, "RunChecksJobResult"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        connection = self.connection
+        max_jobs_per_connection = self.max_jobs_per_connection
+        table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.table, Unset):
+            table = self.table.to_dict()
+
         check_search_filters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.check_search_filters, Unset):
             check_search_filters = self.check_search_filters.to_dict()
@@ -52,6 +67,12 @@ class RunChecksQueueJobParameters:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if connection is not UNSET:
+            field_dict["connection"] = connection
+        if max_jobs_per_connection is not UNSET:
+            field_dict["maxJobsPerConnection"] = max_jobs_per_connection
+        if table is not UNSET:
+            field_dict["table"] = table
         if check_search_filters is not UNSET:
             field_dict["checkSearchFilters"] = check_search_filters
         if time_window_filter is not UNSET:
@@ -66,10 +87,22 @@ class RunChecksQueueJobParameters:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_search_filters import CheckSearchFilters
-        from ..models.run_checks_queue_job_result import RunChecksQueueJobResult
+        from ..models.physical_table_name import PhysicalTableName
+        from ..models.run_checks_job_result import RunChecksJobResult
         from ..models.time_window_filter_parameters import TimeWindowFilterParameters
 
         d = src_dict.copy()
+        connection = d.pop("connection", UNSET)
+
+        max_jobs_per_connection = d.pop("maxJobsPerConnection", UNSET)
+
+        _table = d.pop("table", UNSET)
+        table: Union[Unset, PhysicalTableName]
+        if isinstance(_table, Unset):
+            table = UNSET
+        else:
+            table = PhysicalTableName.from_dict(_table)
+
         _check_search_filters = d.pop("checkSearchFilters", UNSET)
         check_search_filters: Union[Unset, CheckSearchFilters]
         if isinstance(_check_search_filters, Unset):
@@ -89,21 +122,24 @@ class RunChecksQueueJobParameters:
         dummy_execution = d.pop("dummyExecution", UNSET)
 
         _run_checks_result = d.pop("runChecksResult", UNSET)
-        run_checks_result: Union[Unset, RunChecksQueueJobResult]
+        run_checks_result: Union[Unset, RunChecksJobResult]
         if isinstance(_run_checks_result, Unset):
             run_checks_result = UNSET
         else:
-            run_checks_result = RunChecksQueueJobResult.from_dict(_run_checks_result)
+            run_checks_result = RunChecksJobResult.from_dict(_run_checks_result)
 
-        run_checks_queue_job_parameters = cls(
+        run_checks_on_table_parameters = cls(
+            connection=connection,
+            max_jobs_per_connection=max_jobs_per_connection,
+            table=table,
             check_search_filters=check_search_filters,
             time_window_filter=time_window_filter,
             dummy_execution=dummy_execution,
             run_checks_result=run_checks_result,
         )
 
-        run_checks_queue_job_parameters.additional_properties = d
-        return run_checks_queue_job_parameters
+        run_checks_on_table_parameters.additional_properties = d
+        return run_checks_on_table_parameters
 
     @property
     def additional_keys(self) -> List[str]:

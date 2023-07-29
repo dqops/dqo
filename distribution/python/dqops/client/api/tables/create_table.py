@@ -18,7 +18,7 @@ def _get_kwargs(
     client: Client,
     json_body: TableSpec,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,
