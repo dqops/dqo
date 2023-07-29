@@ -558,18 +558,18 @@ export const EditProfilingReferenceTable = ({
         <SectionWrapper
           title="Table level comparison"
           className={clsx(
-            'mb-10 px-0 h-full py-0 pt-0 pb-2',
+            'mb-10 px-0 h-full py-0 pt-0 pb-2 w-1/6 ',
             isExtended ? 'mt-10' : 'mt-0'
           )}
         >
-          <div className="flex flex-col h-full ">
-            <div className="flex h-15 pb-0 mb-0">
-              <span className="flex items-center cursor-pointer mr-2">
-                Compare row count between target and reference column:
+          <div className="flex flex-col h-full w-full">
+            <div className="flex flex-col items-center justify-center h-30 w-2/3 pb-0 mb-0">
+              <span className="flex items-center cursor-pointer mr-2 font-bold mb-1 mt-4">
+                Row count
               </span>
               <div
                 className={clsx(
-                  'h-10, w-20 flex items-center justify-center pr-3',
+                  'w-full h-12 flex items-center justify-center pr-5 ',
                   showRowCount ? calculateColor('', '', true) : ''
                 )}
               >
@@ -579,65 +579,7 @@ export const EditProfilingReferenceTable = ({
                 />
               </div>
             </div>
-            <div className="flex">
-              {showRowCount && (
-                <div className="flex flex-col pt-0 mt-0 w-100">
-                  <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2 w-92">
-                    <span className="flex-1">
-                      Warning when the difference above:
-                    </span>
-                    <Input
-                      className="max-w-30 !min-w-initial"
-                      type="number"
-                      value={
-                        reference?.compare_row_count?.warning_difference_percent
-                      }
-                      onChange={(e) =>
-                        onChangeCompareRowCount({
-                          warning_difference_percent: Number(e.target.value)
-                        })
-                      }
-                    />
-                    %
-                  </div>
-                  <div className="bg-orange-100 px-4 py-2 flex items-center gap-2 w-92">
-                    <span className="flex-1">
-                      Error when the difference above:
-                    </span>
-                    <Input
-                      className="max-w-30 !min-w-initial"
-                      type="number"
-                      value={
-                        reference?.compare_row_count?.error_difference_percent
-                      }
-                      onChange={(e) =>
-                        onChangeCompareRowCount({
-                          error_difference_percent: Number(e.target.value)
-                        })
-                      }
-                    />
-                    %
-                  </div>
-                  <div className="bg-red-100 px-4 py-2 flex items-center gap-2 w-92">
-                    <span className="flex-1">
-                      Fatal Error when the difference above:
-                    </span>
-                    <Input
-                      className="max-w-30 !min-w-initial"
-                      type="number"
-                      value={
-                        reference?.compare_row_count?.fatal_difference_percent
-                      }
-                      onChange={(e) =>
-                        onChangeCompareRowCount({
-                          fatal_difference_percent: Number(e.target.value)
-                        })
-                      }
-                    />
-                    %
-                  </div>
-                </div>
-              )}
+            <div className="flex flex-col w-2/3">
               {Object.values(
                 tableComparisonResults?.table_comparison_results ?? []
               ).at(0) && (
@@ -675,6 +617,55 @@ export const EditProfilingReferenceTable = ({
                       ).at(0)?.warnings
                     }
                   </td>
+                </div>
+              )}
+              {showRowCount && (
+                <div className="flex flex-col pt-0 mt-0 w-full">
+                  <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
+                    <Input
+                      className="max-w-30 !min-w-initial"
+                      type="number"
+                      value={
+                        reference?.compare_row_count?.warning_difference_percent
+                      }
+                      onChange={(e) =>
+                        onChangeCompareRowCount({
+                          warning_difference_percent: Number(e.target.value)
+                        })
+                      }
+                    />
+                    %
+                  </div>
+                  <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
+                    <Input
+                      className="max-w-30 !min-w-initial"
+                      type="number"
+                      value={
+                        reference?.compare_row_count?.error_difference_percent
+                      }
+                      onChange={(e) =>
+                        onChangeCompareRowCount({
+                          error_difference_percent: Number(e.target.value)
+                        })
+                      }
+                    />
+                    %
+                  </div>
+                  <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
+                    <Input
+                      className="max-w-30 !min-w-initial"
+                      type="number"
+                      value={
+                        reference?.compare_row_count?.fatal_difference_percent
+                      }
+                      onChange={(e) =>
+                        onChangeCompareRowCount({
+                          fatal_difference_percent: Number(e.target.value)
+                        })
+                      }
+                    />
+                    %
+                  </div>
                 </div>
               )}
             </div>
