@@ -51,6 +51,9 @@ export default function UserProfile({ name, email }: UserProfile) {
       () => userProfile?.license_type === 'FREE' && setLicenseFreeFunc()
     );
   }, [name, email]);
+  const today = moment();
+  const sampleData = moment(userProfile?.trial_period_expires_at);
+  const dayDiff = sampleData.diff(today, 'days');
 
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
@@ -83,7 +86,7 @@ export default function UserProfile({ name, email }: UserProfile) {
             <div className="ml-1 flex items-center gap-x-2 my-2">
               {' '}
               <div className="font-bold" style={{ whiteSpace: 'nowrap' }}>
-                {userProfile?.trial_period_expires_at} days left
+                {dayDiff} days left
               </div>
               <div
                 className="h-1 bg-gray-100"
@@ -92,9 +95,7 @@ export default function UserProfile({ name, email }: UserProfile) {
                 <div
                   className="h-1 absolute bg-teal-500"
                   style={{
-                    width: `${
-                      (userProfile?.trial_period_expires_at / 14) * 100
-                    }%`
+                    width: `${(dayDiff / 14) * 100}%`
                   }}
                 ></div>
               </div>
