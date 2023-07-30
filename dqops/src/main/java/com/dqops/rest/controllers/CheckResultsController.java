@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsDetailedParameters;
 import com.dqops.data.checkresults.services.models.CheckResultsDetailedDataModel;
+import com.dqops.data.checkresults.services.models.TableDataQualityStatusModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -32,6 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -57,6 +59,68 @@ public class CheckResultsController {
                                   CheckResultsDataService checkResultsDataService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.checkResultsDataService = checkResultsDataService;
+    }
+
+    /**
+     * Read the most recent results of executed data quality checks on the table and return the current table's data quality status - the number of failed data quality
+     * checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently.
+     * This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param months         The number of months to load.
+     * @param checkType      Optional check type filter.
+     * @param checkTimeScale Optional check time scale filter.
+     * @return The most recent table's data quality status.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/status", produces = "application/json")
+    @ApiOperation(value = "getTableDataQualityStatus", notes = "Read the most recent results of executed data quality checks on the table and return the current table's data quality status - the number of failed data quality " +
+            "checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. " +
+            "This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.",
+            response = TableDataQualityStatusModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The most recent data quality status of the requested table",
+                    response = TableDataQualityStatusModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TableDataQualityStatusModel>> getTableDataQualityStatus(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "months", value = "Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).", required = false)
+            @RequestParam(required = false) Optional<Integer> months,
+            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, recurring, partitioned).", required = false)
+            @RequestParam(required = false) Optional<CheckType> checkType,
+            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for recurring and partitioned checks (values: daily or monthly).", required = false)
+            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                physicalTableName, true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService.analyzeTableMostRecentQualityStatus(
+                connectionName, physicalTableName,
+                months.orElse(1), checkType.orElse(null), checkTimeScale.orElse(null));
+
+        return new ResponseEntity<>(Mono.just(tableDataQualityStatusModel), HttpStatus.OK); // 200
     }
 
     /**

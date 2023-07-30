@@ -1251,6 +1251,10 @@ from .get_table_comparison_partitioned_results_time_scale import (
 from .get_table_comparison_recurring_results_time_scale import (
     GetTableComparisonRecurringResultsTimeScale,
 )
+from .get_table_data_quality_status_check_time_scale import (
+    GetTableDataQualityStatusCheckTimeScale,
+)
+from .get_table_data_quality_status_check_type import GetTableDataQualityStatusCheckType
 from .get_table_partitioned_checks_basic_model_time_scale import (
     GetTablePartitionedChecksBasicModelTimeScale,
 )
@@ -1610,6 +1614,13 @@ from .table_daily_recurring_check_categories_spec_custom import (
 )
 from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
+from .table_data_quality_status_model import TableDataQualityStatusModel
+from .table_data_quality_status_model_failed_checks_statuses import (
+    TableDataQualityStatusModelFailedChecksStatuses,
+)
+from .table_data_quality_status_model_failed_checks_statuses_additional_property import (
+    TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty,
+)
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_incident_grouping_spec_grouping_level import (
@@ -2288,6 +2299,8 @@ __all__ = (
     "GetTableComparisonConfigurationsCheckType",
     "GetTableComparisonPartitionedResultsTimeScale",
     "GetTableComparisonRecurringResultsTimeScale",
+    "GetTableDataQualityStatusCheckTimeScale",
+    "GetTableDataQualityStatusCheckType",
     "GetTablePartitionedChecksBasicModelTimeScale",
     "GetTablePartitionedChecksModelFilterTimeScale",
     "GetTablePartitionedChecksModelTimeScale",
@@ -2495,6 +2508,9 @@ __all__ = (
     "TableDailyRecurringCheckCategoriesSpecCustom",
     "TableDataFreshnessCheckSpec",
     "TableDataIngestionDelayCheckSpec",
+    "TableDataQualityStatusModel",
+    "TableDataQualityStatusModelFailedChecksStatuses",
+    "TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty",
     "TableDataStalenessCheckSpec",
     "TableIncidentGroupingSpec",
     "TableIncidentGroupingSpecGroupingLevel",

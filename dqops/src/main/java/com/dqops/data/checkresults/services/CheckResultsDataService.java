@@ -108,4 +108,20 @@ public interface CheckResultsDataService {
                                                                      Instant incidentUntil,
                                                                      int minSeverity,
                                                                      IncidentHistogramFilterParameters filterParameters);
+
+    /**
+     * Analyzes the table to find the status of the most recent data quality check for each time series
+     * and asses the most current status.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param lastMonths The number of recent months to load the data. 1 means the current month and 1 last month.
+     * @param checkType Check type (optional filter).
+     * @param checkTimeScale Check time scale (optional filter).
+     * @return The table status.
+     */
+    TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(String connectionName,
+                                                                    PhysicalTableName physicalTableName,
+                                                                    int lastMonths,
+                                                                    CheckType checkType,
+                                                                    CheckTimeScale checkTimeScale);
 }

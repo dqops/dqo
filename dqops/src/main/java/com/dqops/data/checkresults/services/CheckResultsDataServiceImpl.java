@@ -477,11 +477,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      */
     @Override
     public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                           PhysicalTableName physicalTableName,
-                                                                           long incidentHash,
-                                                                           Instant firstSeen,
-                                                                           Instant incidentUntil,
-                                                                           int minSeverity,
+                                                                            PhysicalTableName physicalTableName,
+                                                                            long incidentHash,
+                                                                            Instant firstSeen,
+                                                                            Instant incidentUntil,
+                                                                            int minSeverity,
                                                                             IncidentHistogramFilterParameters filterParameters) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
 
@@ -573,6 +573,131 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         histogramModel.sortAndTruncateCheckHistogram(this.dqoIncidentsConfigurationProperties.getCheckHistogramSize());
 
         return histogramModel;
+    }
+
+    /**
+     * Analyzes the table to find the status of the most recent data quality check for each time series
+     * and asses the most current status.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param lastMonths The number of recent months to load the data. 1 means the current month and 1 last month.
+     * @param checkType Check type (optional filter).
+     * @param checkTimeScale Check time scale (optional filter).
+     * @return The table status.
+     */
+    @Override
+    public TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(String connectionName,
+                                                                           PhysicalTableName physicalTableName,
+                                                                           int lastMonths,
+                                                                           CheckType checkType,
+                                                                           CheckTimeScale checkTimeScale) {
+        TableDataQualityStatusModel statusModel = new TableDataQualityStatusModel();
+        statusModel.setConnectionName(connectionName);
+        statusModel.setSchemaName(physicalTableName.getSchemaName());
+        statusModel.setTableName(physicalTableName.getTableName());
+        CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters.createForRecentMonths(lastMonths, 1);
+
+        Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName);
+        Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName);
+        Table combinedTable = errorsTable != null ?
+                (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
+                ruleResultsTable;
+
+        if (combinedTable == null) {
+            return statusModel;
+        }
+
+        Selection rowSelection = Selection.withRange(0, combinedTable.rowCount());
+        if (checkType != null) {
+            String checkTypeString = checkType.getDisplayName();
+            rowSelection = combinedTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+                    .isEqualTo(checkTypeString);
+        }
+
+        if (checkTimeScale != null) {
+            TextColumn timeGradientColumn = combinedTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = checkTimeScale.toTimeSeriesGradient();
+            String timeSeriesGradientName = timePeriodGradient.name();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradientName));
+        }
+
+        Table filteredTable = combinedTable.where(rowSelection);
+        Table sortedTable = filteredTable.sortDescendingOn(
+                CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME,
+                CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME,
+                CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+
+        LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+        LongColumn timeSeriesIdColumn = sortedTable.longColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
+        InstantColumn executedAtColumn = sortedTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        TextColumn checkNameColumn = sortedTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sortedTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+
+        long lastCheckHash = Long.MIN_VALUE;
+        long lastTimeSeriesId = Long.MIN_VALUE;
+        int rowCount = sortedTable.rowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            long currentCheckHash = checkHashColumn.getLong(i);
+            long currentTimeSeriesId = timeSeriesIdColumn.getLong(i);
+
+            if (lastCheckHash == currentCheckHash && lastTimeSeriesId == currentTimeSeriesId) {
+                continue;
+            }
+
+            Integer severity = severityColumn.get(i);
+            if (severity == null) {
+                continue;
+            }
+
+            if (severity > statusModel.getHighestSeverityIssue() && severity != 4) {
+                statusModel.setHighestSeverityIssue(severity);
+            }
+
+            statusModel.setExecutedChecks(statusModel.getExecutedChecks() + 1);
+            switch (severity) {
+                case 0:
+                    statusModel.setValidResults(statusModel.getValidResults() + 1);
+                    break;
+                case 1:
+                    statusModel.setWarnings(statusModel.getWarnings() + 1);
+                    break;
+                case 2:
+                    statusModel.setErrors(statusModel.getErrors() + 1);
+                    break;
+                case 3:
+                    statusModel.setFatals(statusModel.getFatals() + 1);
+                    break;
+                case 4:
+                    statusModel.setExecutionErrors(statusModel.getExecutionErrors() + 1);
+                    break;
+            }
+
+            Instant executedAt = executedAtColumn.get(i);
+            if (statusModel.getLastCheckExecutedAt() != null) {
+                if (executedAt != null && executedAt.isAfter(statusModel.getLastCheckExecutedAt())) {
+                    statusModel.setLastCheckExecutedAt(executedAt);
+                }
+            } else {
+                statusModel.setLastCheckExecutedAt(executedAt);
+            }
+
+            if (severity > 0) {
+                String checkName = checkNameColumn.get(i);
+                String columnName = columnNameColumn.get(i);
+                String reportedCheckNameWithColumn = Strings.isNullOrEmpty(columnName) ? checkName :
+                        checkName + "[" + columnName + "]";
+
+                CheckResultStatus checkResultStatus = CheckResultStatus.fromSeverity(severity);
+                CheckResultStatus currentHighestSeverity = statusModel.getFailedChecksStatuses().get(reportedCheckNameWithColumn);
+                if (currentHighestSeverity == null || currentHighestSeverity.getSeverity() < checkResultStatus.getSeverity()) {
+                    statusModel.getFailedChecksStatuses().put(reportedCheckNameWithColumn, checkResultStatus);
+                }
+            }
+        }
+
+        return statusModel;
     }
 
     /**
