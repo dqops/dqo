@@ -14,6 +14,7 @@ import {
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
 import Button from '../Button';
+import moment from 'moment';
 
 interface UserProfile {
   name?: string;
@@ -50,7 +51,6 @@ export default function UserProfile({ name, email }: UserProfile) {
       () => userProfile?.license_type === 'FREE' && setLicenseFreeFunc()
     );
   }, [name, email]);
-
 
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
