@@ -52,7 +52,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=not_null_co
                 max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-33"
+```yaml hl_lines="24-34"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -68,6 +68,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -314,7 +315,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_not_n
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -330,6 +331,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -577,7 +579,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_not
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -593,6 +595,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -840,7 +843,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -856,6 +859,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -1107,7 +1111,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1123,6 +1127,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table

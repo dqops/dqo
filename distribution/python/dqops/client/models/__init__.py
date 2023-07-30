@@ -1239,6 +1239,12 @@ from .get_table_columns_partitioned_checks_model_time_scale import (
 from .get_table_columns_recurring_checks_model_time_scale import (
     GetTableColumnsRecurringChecksModelTimeScale,
 )
+from .get_table_comparison_configurations_check_time_scale import (
+    GetTableComparisonConfigurationsCheckTimeScale,
+)
+from .get_table_comparison_configurations_check_type import (
+    GetTableComparisonConfigurationsCheckType,
+)
 from .get_table_comparison_partitioned_results_time_scale import (
     GetTableComparisonPartitionedResultsTimeScale,
 )
@@ -1538,7 +1544,19 @@ from .table_column_types_hash_sensor_parameters_spec import (
 )
 from .table_columns_statistics_model import TableColumnsStatisticsModel
 from .table_comparison_configuration_model import TableComparisonConfigurationModel
+from .table_comparison_configuration_model_check_type import (
+    TableComparisonConfigurationModelCheckType,
+)
+from .table_comparison_configuration_model_time_scale import (
+    TableComparisonConfigurationModelTimeScale,
+)
 from .table_comparison_configuration_spec import TableComparisonConfigurationSpec
+from .table_comparison_configuration_spec_check_type import (
+    TableComparisonConfigurationSpecCheckType,
+)
+from .table_comparison_configuration_spec_time_scale import (
+    TableComparisonConfigurationSpecTimeScale,
+)
 from .table_comparison_daily_partitioned_checks_spec import (
     TableComparisonDailyPartitionedChecksSpec,
 )
@@ -2266,6 +2284,8 @@ __all__ = (
     "GetSchemaRecurringChecksTemplatesTimeScale",
     "GetTableColumnsPartitionedChecksModelTimeScale",
     "GetTableColumnsRecurringChecksModelTimeScale",
+    "GetTableComparisonConfigurationsCheckTimeScale",
+    "GetTableComparisonConfigurationsCheckType",
     "GetTableComparisonPartitionedResultsTimeScale",
     "GetTableComparisonRecurringResultsTimeScale",
     "GetTablePartitionedChecksBasicModelTimeScale",
@@ -2449,7 +2469,11 @@ __all__ = (
     "TableColumnsStatisticsModel",
     "TableColumnTypesHashSensorParametersSpec",
     "TableComparisonConfigurationModel",
+    "TableComparisonConfigurationModelCheckType",
+    "TableComparisonConfigurationModelTimeScale",
     "TableComparisonConfigurationSpec",
+    "TableComparisonConfigurationSpecCheckType",
+    "TableComparisonConfigurationSpecTimeScale",
     "TableComparisonDailyPartitionedChecksSpec",
     "TableComparisonDailyRecurringChecksSpec",
     "TableComparisonGroupingColumnPairModel",

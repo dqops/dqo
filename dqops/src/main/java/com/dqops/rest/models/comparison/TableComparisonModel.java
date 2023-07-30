@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.*;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -57,48 +58,25 @@ public class TableComparisonModel {
      * Compared connection name - the connection name to the data source that is compared (verified).
      */
     @JsonPropertyDescription("Compared connection name - the connection name to the data source that is compared (verified).")
-    @Setter(AccessLevel.NONE)
     private String comparedConnection;
 
     /**
      * The schema and table name of the compared table that is verified.
      */
     @JsonPropertyDescription("The schema and table name of the compared table that is verified.")
-    @Setter(AccessLevel.NONE)
     private PhysicalTableName comparedTable;
 
     /**
      * Reference connection name - the connection name to the data source that has the reference data to compare to.
      */
     @JsonPropertyDescription("Reference connection name - the connection name to the data source that has the reference data to compare to.")
-    @Setter(AccessLevel.NONE)
     private String referenceConnection;
 
     /**
      * The schema and table name of the reference table that has the expected data.
      */
     @JsonPropertyDescription("The schema and table name of the reference table that has the expected data.")
-    @Setter(AccessLevel.NONE)
     private PhysicalTableName referenceTable;
-
-    /**
-     * The name of the data grouping configuration on the parent table that will be used for comparison.
-     */
-    @JsonPropertyDescription("The name of the data grouping configuration on the parent table that will be used for comparison. " +
-            "When the parent table has no data grouping configurations, compares the whole table without grouping.")
-    @Setter(AccessLevel.NONE)
-    @Deprecated
-    private String comparedTableGroupingName;
-
-    /**
-     * The name of the data grouping configuration on the referenced name that will be used for comparison.
-     */
-    @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
-            "When the reference table has no data grouping configurations, compares the whole table without grouping. " +
-            "The data grouping configurations on the compared table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
-    @Setter(AccessLevel.NONE)
-    @Deprecated
-    private String referenceTableGroupingName;
 
     /**
      * List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause.
@@ -106,7 +84,6 @@ public class TableComparisonModel {
     @JsonPropertyDescription("List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  " +
             "for grouping both the compared table and the reference table (the source of truth). " +
             "The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.")
-    @Setter(AccessLevel.NONE)
     private List<TableComparisonGroupingColumnPairModel> groupingColumns = new ArrayList<>();
 
     /**
@@ -227,6 +204,27 @@ public class TableComparisonModel {
         TableComparisonConfigurationSpec comparisonSpec = targetTableSpec.getTableComparisons().get(referenceTableConfigurationName);
         if (comparisonSpec == null) {
             throw new DqoRuntimeException("Table comparison '" + referenceTableConfigurationName + "' was not found in table " + targetTableSpec.getHierarchyId());
+        }
+
+        comparisonSpec.setCheckType(checkType);
+        comparisonSpec.setTimeScale(checkTimeScale);
+        comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
+        if (this.getReferenceTable() != null) {
+            comparisonSpec.setReferenceTableSchemaName(this.getReferenceTable().getSchemaName());
+            comparisonSpec.setReferenceTableName(this.getReferenceTable().getTableName());
+        } else {
+            comparisonSpec.setReferenceTableSchemaName(null);
+            comparisonSpec.setReferenceTableName(null);
+        }
+
+        TableComparisonGroupingColumnsPairsListSpec groupingColumnsSpecList = comparisonSpec.getGroupingColumns();
+        groupingColumnsSpecList.clear();
+        for (TableComparisonGroupingColumnPairModel groupingColumnPairModel : this.groupingColumns) {
+            if (groupingColumnsSpecList.size() >= 9) {
+                throw new DqoRuntimeException("Too many data grouping columns. DQO supports up to 9 columns.");
+            }
+            TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec = groupingColumnPairModel.createColumnsPairSpec();
+            groupingColumnsSpecList.add(groupingColumnsPairSpec);
         }
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = targetTableSpec.getTableCheckRootContainer(
