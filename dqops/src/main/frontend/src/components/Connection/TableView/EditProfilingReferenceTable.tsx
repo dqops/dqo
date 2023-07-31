@@ -28,12 +28,12 @@ import {
   setCurrentJobId
 } from '../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { SelectDataGroupingForTableProfiling } from './SelectDataGroupingForTableProfiling';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
 import ResultPanel from './ResultPanel';
+import EditReferenceTable from './EditReferenceTable';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -457,20 +457,10 @@ export const EditProfilingReferenceTable = ({
         isUpdated={isUpdated}
         isUpdating={isUpdating}
       />
-      <div className="flex items-center justify-between border-b border-t border-gray-300 py-2 px-8">
-        <div className="flex items-center gap-3">
-          <span onClick={getResultsData}>
-            Profiling table comparison using the table comparison configuration:
-          </span>
-          <span>{reference?.table_comparison_configuration_name}</span>
-        </div>
-        <Button
-          label="Back"
-          color="primary"
-          variant="text"
-          className="px-0 text-sm"
-          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-          onClick={() => onBack(false)}
+      <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
+        <EditReferenceTable
+          onBack={() => onBack(false)}
+          selectedReference={selectedReference}
         />
       </div>
 
@@ -535,26 +525,7 @@ export const EditProfilingReferenceTable = ({
               </div>
             )}
           </div>
-
-          <SelectDataGroupingForTableProfiling
-            isExtended={isExtended}
-            columnArray={reference?.grouping_columns?.map((x) =>
-              typeof x.compared_table_column_name === 'string'
-                ? x.compared_table_column_name
-                : ''
-            )}
-          />
-
-          <SelectDataGroupingForTableProfiling
-            isExtended={isExtended}
-            columnArray={reference?.grouping_columns?.map((x) =>
-              typeof x.reference_table_column_name === 'string'
-                ? x.reference_table_column_name
-                : ''
-            )}
-          />
         </div>
-
         <SectionWrapper
           title="Table level comparison"
           className={clsx(

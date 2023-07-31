@@ -132,6 +132,26 @@ export const TableReferenceComparisons = ({
     }
   };
 
+  const onCreate = () => {
+    const url = `${ROUTES.TABLE_LEVEL_PAGE(
+      checkTypes,
+      connection,
+      schema,
+      table,
+      'table-comparisons'
+    )}?isEditing=true`;
+    dispatch(
+      addFirstLevelTab(checkTypes, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
+        state: {},
+        label: table
+      })
+    );
+
+    history.push(url);
+  };
+
   return (
     <>
       {isEditing ? (
@@ -151,7 +171,7 @@ export const TableReferenceComparisons = ({
       ) : (
         <ProfilingReferenceTableList
           references={references}
-          onCreate={onCreateNewReference}
+          onCreate={onCreate}
           selectReference={onEditProfilingReference}
           onEdit={onEditReference}
         />

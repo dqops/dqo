@@ -358,9 +358,8 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
-  console.log(refTable, refSchema, refConnection, splitArrays()?.refArr);
   return (
-    <div>
+    <div className="w-full">
       <TableActionGroup
         onUpdate={onUpdate}
         isUpdated={
