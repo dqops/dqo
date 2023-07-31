@@ -186,17 +186,13 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdate = () => {
-    const data = {
-      ...reference
-    };
-
     if (checkTypes === CheckTypes.PROFILING) {
       TableComparisonsApi.updateTableComparisonProfiling(
         connection,
         schema,
         table,
         reference?.table_comparison_configuration_name ?? '',
-        data
+        reference
       )
         .catch((err) => {
           console.log(err);
@@ -211,7 +207,7 @@ export const EditProfilingReferenceTable = ({
           schema,
           table,
           reference?.table_comparison_configuration_name ?? '',
-          data
+          reference
         ).catch((err) => {
           console.log(err);
         });
@@ -221,7 +217,7 @@ export const EditProfilingReferenceTable = ({
           schema,
           table,
           reference?.table_comparison_configuration_name ?? '',
-          data
+          reference
         ).catch((err) => {
           console.log(err);
         });
@@ -233,7 +229,7 @@ export const EditProfilingReferenceTable = ({
           schema,
           table,
           reference?.table_comparison_configuration_name ?? '',
-          data
+          reference
         ).catch((err) => {
           console.log(err);
         });
@@ -243,7 +239,7 @@ export const EditProfilingReferenceTable = ({
           schema,
           table,
           reference?.table_comparison_configuration_name ?? '',
-          data
+          reference
         ).catch((err) => {
           console.log(err);
         });
