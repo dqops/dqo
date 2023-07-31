@@ -186,7 +186,6 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdate = () => {
-    setIsUpdating(true);
     const data = {
       ...reference
     };
@@ -199,9 +198,6 @@ export const EditProfilingReferenceTable = ({
         reference?.table_comparison_configuration_name ?? '',
         data
       )
-        .then(() => {
-          onBack(true);
-        })
         .catch((err) => {
           console.log(err);
         })
@@ -216,16 +212,9 @@ export const EditProfilingReferenceTable = ({
           table,
           reference?.table_comparison_configuration_name ?? '',
           data
-        )
-          .then(() => {
-            onBack(true);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
+        ).catch((err) => {
+          console.log(err);
+        });
       } else if (timePartitioned === 'monthly') {
         TableComparisonsApi.updateTableComparisonRecurringMonthly(
           connection,
@@ -233,16 +222,9 @@ export const EditProfilingReferenceTable = ({
           table,
           reference?.table_comparison_configuration_name ?? '',
           data
-        )
-          .then(() => {
-            onBack(true);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
+        ).catch((err) => {
+          console.log(err);
+        });
       }
     } else if (checkTypes === CheckTypes.PARTITIONED) {
       if (timePartitioned === 'daily') {
@@ -252,16 +234,9 @@ export const EditProfilingReferenceTable = ({
           table,
           reference?.table_comparison_configuration_name ?? '',
           data
-        )
-          .then(() => {
-            onBack(true);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
+        ).catch((err) => {
+          console.log(err);
+        });
       } else if (timePartitioned === 'monthly') {
         TableComparisonsApi.updateTableComparisonPartitionedMonthly(
           connection,
@@ -269,19 +244,11 @@ export const EditProfilingReferenceTable = ({
           table,
           reference?.table_comparison_configuration_name ?? '',
           data
-        )
-          .then(() => {
-            onBack(true);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setIsUpdating(false);
-          });
+        ).catch((err) => {
+          console.log(err);
+        });
       }
     }
-    setIsUpdated(false);
   };
 
   const onChange = (obj: Partial<TableComparisonModel>): void => {
@@ -460,6 +427,7 @@ export const EditProfilingReferenceTable = ({
           selectedReference={selectedReference}
           changes={changes}
           onUpdateParent={onUpdate}
+          isUpdatedParent={isUpdated}
         />
       </div>
       <span onClick={onUpdate}>button</span>
@@ -676,7 +644,7 @@ export const EditProfilingReferenceTable = ({
                           item.reference_column_name.length === 0
                         )
                       }
-                      onChange={(checked) =>
+                      onChange={(checked) => {
                         onChangeColumn(
                           {
                             compare_min: checked
@@ -684,8 +652,9 @@ export const EditProfilingReferenceTable = ({
                               : undefined
                           },
                           index
-                        )
-                      }
+                        ),
+                          setChanges(true);
+                      }}
                       disabled={
                         item.reference_column_name === undefined ||
                         item.reference_column_name.length === 0
@@ -713,7 +682,7 @@ export const EditProfilingReferenceTable = ({
                           item.reference_column_name.length === 0
                         )
                       }
-                      onChange={(checked) =>
+                      onChange={(checked) => {
                         onChangeColumn(
                           {
                             compare_max: checked
@@ -721,8 +690,9 @@ export const EditProfilingReferenceTable = ({
                               : undefined
                           },
                           index
-                        )
-                      }
+                        ),
+                          setChanges(true);
+                      }}
                       disabled={
                         item.reference_column_name === undefined ||
                         item.reference_column_name.length === 0
@@ -750,7 +720,7 @@ export const EditProfilingReferenceTable = ({
                           item.reference_column_name.length === 0
                         )
                       }
-                      onChange={(checked) =>
+                      onChange={(checked) => {
                         onChangeColumn(
                           {
                             compare_sum: checked
@@ -758,8 +728,9 @@ export const EditProfilingReferenceTable = ({
                               : undefined
                           },
                           index
-                        )
-                      }
+                        ),
+                          setChanges(true);
+                      }}
                       disabled={
                         item.reference_column_name === undefined ||
                         item.reference_column_name.length === 0
@@ -787,7 +758,7 @@ export const EditProfilingReferenceTable = ({
                           item.reference_column_name.length === 0
                         )
                       }
-                      onChange={(checked) =>
+                      onChange={(checked) => {
                         onChangeColumn(
                           {
                             compare_mean: checked
@@ -795,8 +766,9 @@ export const EditProfilingReferenceTable = ({
                               : undefined
                           },
                           index
-                        )
-                      }
+                        ),
+                          setChanges(true);
+                      }}
                       disabled={
                         item.reference_column_name === undefined ||
                         item.reference_column_name.length === 0
@@ -824,7 +796,7 @@ export const EditProfilingReferenceTable = ({
                           item.reference_column_name.length === 0
                         )
                       }
-                      onChange={(checked) =>
+                      onChange={(checked) => {
                         onChangeColumn(
                           {
                             compare_null_count: checked
@@ -832,8 +804,9 @@ export const EditProfilingReferenceTable = ({
                               : undefined
                           },
                           index
-                        )
-                      }
+                        ),
+                          setChanges(true);
+                      }}
                       disabled={
                         item.reference_column_name === undefined ||
                         item.reference_column_name.length === 0
@@ -861,7 +834,7 @@ export const EditProfilingReferenceTable = ({
                           item.reference_column_name.length === 0
                         )
                       }
-                      onChange={(checked) =>
+                      onChange={(checked) => {
                         onChangeColumn(
                           {
                             compare_not_null_count: checked
@@ -869,8 +842,9 @@ export const EditProfilingReferenceTable = ({
                               : undefined
                           },
                           index
-                        )
-                      }
+                        ),
+                          setChanges(true);
+                      }}
                       disabled={
                         item.reference_column_name === undefined ||
                         item.reference_column_name.length === 0

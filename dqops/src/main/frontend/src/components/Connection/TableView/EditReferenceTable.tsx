@@ -23,13 +23,15 @@ type EditReferenceTableProps = {
   selectedReference?: string;
   changes?: boolean;
   onUpdateParent?: () => void;
+  isUpdatedParent?: boolean;
 };
 
 const EditReferenceTable = ({
   onBack,
   selectedReference,
   changes,
-  onUpdateParent
+  onUpdateParent,
+  isUpdatedParent
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -166,7 +168,12 @@ const EditReferenceTable = ({
 
   const onUpdate = () => {
     setIsUpdating(true);
+
     if (selectedReference) {
+      console.log(doubleArray);
+      if (onUpdateParent) {
+        onUpdateParent();
+      }
       TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
         schema,
@@ -187,11 +194,10 @@ const EditReferenceTable = ({
           grouping_columns: doubleArray ?? []
         }
       )
-
         .then(() => {
-          console.log('inside update');
           onBack();
         })
+        .then(() => {})
         .catch((err) => {
           console.log('err', err);
         })
@@ -219,16 +225,14 @@ const EditReferenceTable = ({
         }
       )
         .then(() => {
-          console.log('inside create');
+          onUpdateParent && onUpdateParent;
+        })
+        .then(() => {
           onBack();
         })
         .finally(() => {
           setIsUpdating(false);
         });
-    }
-    if (onUpdateParent) {
-      onUpdateParent();
-      console.log('insidde parent updating');
     }
   };
 
@@ -369,21 +373,24 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
+  console.log(doubleArray);
+
   return (
     <div className="w-full">
       <TableActionGroup
         onUpdate={onUpdate}
         isUpdated={
-          name.length !== 0 &&
-          connection.length !== 0 &&
-          schema.length !== 0 &&
-          table.length !== 0 &&
-          refConnection.length !== 0 &&
-          refSchema.length !== 0 &&
-          refTable.length !== 0 &&
-          bool &&
-          (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-            isUpdated)
+          (name.length !== 0 &&
+            connection.length !== 0 &&
+            schema.length !== 0 &&
+            table.length !== 0 &&
+            refConnection.length !== 0 &&
+            refSchema.length !== 0 &&
+            refTable.length !== 0 &&
+            bool &&
+            (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+              isUpdated)) ||
+          isUpdatedParent
         }
         // isDisabled={
         //   !(
