@@ -68,7 +68,7 @@ public class TableComparisonModelTests extends BaseTest {
     @Test
     void fromTableSpec_whenTableGivenAndProfilingChecksEmpty_thenCreatesModel() {
         this.tableComparisonConfigurationSpec.getGroupingColumns().add(new TableComparisonGroupingColumnsPairSpec("col1", "ref_col1"));
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec,"reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec,"reftable", CheckType.profiling, null);
         Assertions.assertEquals(2, sut.getColumns().size());
         Assertions.assertNotNull(sut.getDefaultCompareThresholds());
         Assertions.assertEquals("reftable", sut.getTableComparisonConfigurationName());
@@ -88,7 +88,7 @@ public class TableComparisonModelTests extends BaseTest {
         rowCountMatch.setError(new MaxDiffPercentRule1ParametersSpec(3.5));
         rowCountMatch.setFatal(new MaxDiffPercentRule5ParametersSpec(4.5));
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.profiling, null);
         Assertions.assertNotNull(sut.getCompareRowCount());
         Assertions.assertEquals(2.5, sut.getCompareRowCount().getWarningDifferencePercent());
         Assertions.assertEquals(3.5, sut.getCompareRowCount().getErrorDifferencePercent());
@@ -99,7 +99,7 @@ public class TableComparisonModelTests extends BaseTest {
     void fromTableSpec_whenMatchingColumnInReferencedTableNotFound_thenReferenceColumnNameNull() {
         this.referencedTableSpec.getColumns().put("somethingelse", new ColumnSpec());
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.profiling, null);
 
         ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
         Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
@@ -110,7 +110,7 @@ public class TableComparisonModelTests extends BaseTest {
     void fromTableSpec_whenColumnInReferencedTableFoundWithFullCase_thenReturnsItAsSuggestedMatch() {
         this.referencedTableSpec.getColumns().put("col1", new ColumnSpec());
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.profiling, null);
 
         ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
         Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
@@ -121,7 +121,7 @@ public class TableComparisonModelTests extends BaseTest {
     void fromTableSpec_whenColumnInReferencedTableFoundButDifferentCase_thenReturnsItAsSuggestedMatch() {
         this.referencedTableSpec.getColumns().put("COL1", new ColumnSpec());
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.profiling, null);
 
         ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
         Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
@@ -132,7 +132,7 @@ public class TableComparisonModelTests extends BaseTest {
     void fromTableSpec_whenColumnInReferencedTableNotFoundExactlyButSimilarColumnFound_thenReturnsItAsSuggestedMatch() {
         this.referencedTableSpec.getColumns().put("COL1_fk", new ColumnSpec());
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.profiling, null);
 
         ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
         Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
@@ -173,7 +173,7 @@ public class TableComparisonModelTests extends BaseTest {
         }});
         columnSpec.getProfilingChecks().getComparisons().put("reftable", columnComparison);
 
-        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.PROFILING, null);
+        TableComparisonModel sut = TableComparisonModel.fromTableSpec(this.comparedTableSpec, this.referencedTableSpec, "reftable", CheckType.profiling, null);
         ColumnComparisonModel columnComparisonModel = sut.getColumns().get(0);
         Assertions.assertEquals("col1", columnComparisonModel.getComparedColumnName());
         Assertions.assertEquals("refcol1", columnComparisonModel.getReferenceColumnName());
@@ -189,7 +189,7 @@ public class TableComparisonModelTests extends BaseTest {
     void copyToTableSpec_whenRowCountConfiguredAndNotConfiguredInTable_thenCreatesCheckConfiguration() {
         this.sut.setCompareRowCount(new CompareThresholdsModel(1.5, 2.5, 3.5));
 
-        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
+        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.profiling, null);
 
         TableComparisonProfilingChecksSpec tableComparisonChecks = this.comparedTableSpec.getProfilingChecks().getComparisons().get("reftable");
         Assertions.assertNotNull(tableComparisonChecks);
@@ -207,7 +207,7 @@ public class TableComparisonModelTests extends BaseTest {
         tableComparisons.setRowCountMatch(rowCountMatch);
         rowCountMatch.setWarning(new MaxDiffPercentRule0ParametersSpec(2.5));
 
-        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
+        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.profiling, null);
 
         TableComparisonProfilingChecksSpec tableComparisonChecks = this.comparedTableSpec.getProfilingChecks().getComparisons().get("reftable");
         Assertions.assertNotNull(tableComparisonChecks);
@@ -223,7 +223,7 @@ public class TableComparisonModelTests extends BaseTest {
         rowCountMatch.setWarning(new MaxDiffPercentRule0ParametersSpec(2.5));
 
         this.sut.setCompareRowCount(new CompareThresholdsModel(null, 2.5, null));
-        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
+        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.profiling, null);
 
         TableComparisonProfilingChecksSpec tableComparisonChecks = this.comparedTableSpec.getProfilingChecks().getComparisons().get("reftable");
         Assertions.assertNotNull(tableComparisonChecks);
@@ -246,7 +246,7 @@ public class TableComparisonModelTests extends BaseTest {
             setCompareNotNullCount(new CompareThresholdsModel(6.5, null, null));
         }};
         this.sut.getColumns().add(columnComparisonModel);
-        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.PROFILING, null);
+        this.sut.copyToTableSpec(this.comparedTableSpec, "reftable", CheckType.profiling, null);
 
         ColumnSpec columnSpec = this.comparedTableSpec.getColumns().get("col1");
         ColumnProfilingCheckCategoriesSpec profilingChecks = columnSpec.getProfilingChecks();

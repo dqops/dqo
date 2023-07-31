@@ -253,7 +253,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.PROFILING;
+        return CheckType.profiling;
     }
 
     /**

@@ -125,7 +125,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         exactCheckSearchFilters.setCheckName(check.getCheckName());
         exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());
 
-        int rowCountLimit = checkType == CheckType.PARTITIONED ? this.sensorLimitsConfigurationProperties.getSensorReadoutLimitPartitioned() :
+        int rowCountLimit = checkType == CheckType.partitioned ? this.sensorLimitsConfigurationProperties.getSensorReadoutLimitPartitioned() :
                 this.sensorLimitsConfigurationProperties.getSensorReadoutLimit();
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,

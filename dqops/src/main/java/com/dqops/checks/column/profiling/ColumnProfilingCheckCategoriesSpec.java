@@ -433,7 +433,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.PROFILING;
+        return CheckType.profiling;
     }
 
     /**

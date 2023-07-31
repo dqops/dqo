@@ -187,7 +187,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.PARTITIONED;
+        return CheckType.partitioned;
     }
 
     /**

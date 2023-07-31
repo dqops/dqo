@@ -426,7 +426,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             }
 
             if (providerSensorDefinitionSpec.getSupportsPartitionedChecks() != null &&
-                    !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
+                    !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.partitioned) {
                 return null; // skip this check
             }
 
@@ -535,7 +535,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             }
 
             if (providerSensorDefinitionSpec.getSupportsPartitionedChecks() != null &&
-                    !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
+                    !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.partitioned) {
                 return null; // skip this check
             }
         }
