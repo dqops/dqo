@@ -104,7 +104,7 @@ public class DqoUserProfileModel {
             setUser(dqoCloudApiKey.getApiKeyPayload().getSubject());
             setTenant(dqoCloudApiKey.getApiKeyPayload().getTenantId() + "/" + dqoCloudApiKey.getApiKeyPayload().getTenantGroup());
             setLicenseType(dqoCloudApiKey.getApiKeyPayload().getLicenseType());
-            setTrialPeriodExpiresAt(dqoCloudApiKey.getApiKeyPayload().getExpiresAt().toString());
+            setTrialPeriodExpiresAt(dqoCloudApiKey.getApiKeyPayload().getExpiresAt() != null ? dqoCloudApiKey.getApiKeyPayload().getExpiresAt().toString() : null);
             setConnectionsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTIONS_LIMIT));
             setUsersLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.USERS_LIMIT));
             setMonthsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.MONTHS_LIMIT));
