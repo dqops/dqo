@@ -180,25 +180,6 @@ const RecurringView = () => {
     );
   }, [isUpdatedMonthlyRecurring]);
 
-  useEffect(() => {
-    if (
-      tab !== 'daily' &&
-      tab !== 'monthly' &&
-      tab !== 'daily_comparisons' &&
-      tab !== 'monthly_comparisons'
-    ) {
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          connectionName,
-          schemaName,
-          tableName,
-          'daily'
-        )
-      );
-    }
-  }, [tab]);
-
   const getDailyCheckOverview = () => {
     CheckResultOverviewApi.getTableRecurringChecksOverview(
       connectionName,

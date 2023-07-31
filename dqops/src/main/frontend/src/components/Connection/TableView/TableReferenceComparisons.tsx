@@ -56,18 +56,19 @@ export const TableReferenceComparisons = ({
   };
 
   const getNewTableComparison = () => {
-    TableComparisonsApi.getTableComparisonConfigurations(
-      connection,
-      schema,
-      table,
-      'profiling',
-      undefined
-    ).then((res) => {
-      console.log('profiling');
-      console.log(res.data);
-      setReferences(res.data);
-    });
-    if (checkTypes === CheckTypes.PARTITIONED) {
+    if (checkTypes === CheckTypes.PROFILING) {
+      TableComparisonsApi.getTableComparisonConfigurations(
+        connection,
+        schema,
+        table,
+        'profiling',
+        undefined
+      ).then((res) => {
+        console.log('profiling');
+        console.log(res.data);
+        setReferences(res.data);
+      });
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
       TableComparisonsApi.getTableComparisonConfigurations(
         connection,
         schema,
@@ -170,27 +171,27 @@ export const TableReferenceComparisons = ({
   };
 
   const onCreate = () => {
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
-      connection,
-      schema,
-      table,
-      'table-comparisons'
-    )}?isEditing=true`;
-    dispatch(
-      addFirstLevelTab(checkTypes, {
-        url,
-        value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
-        state: {},
-        label: table
-      })
-    );
+    // const url = `${ROUTES.TABLE_LEVEL_PAGE(
+    //   checkTypes,
+    //   connection,
+    //   schema,
+    //   table,
+    //   'table-comparisons'
+    // )}?isEditing=true`;
+    // dispatch(
+    //   addFirstLevelTab(checkTypes, {
+    //     url,
+    //     value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
+    //     state: {},
+    //     label: table
+    //   })
+    // );
 
-    history.push(url);
+    // history.push(url);
+    setIsEditing(true);
   };
 
-  console.log(references);
-  console.log(checksUI);
+  console.log(isEditing);
 
   return (
     <>
