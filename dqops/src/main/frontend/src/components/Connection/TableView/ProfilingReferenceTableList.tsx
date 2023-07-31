@@ -30,21 +30,26 @@ export const ProfilingReferenceTableList = ({
           </tr>
         </thead>
         <tbody>
-          {references.map((reference, index) => (
-            <tr key={index}>
-              <Button
-                variant="text"
-                color="primary"
-                className="text-sm px-0.5"
-                label={reference.table_comparison_configuration_name}
-                onClick={() => selectReference(reference)}
-              />
-              <td className="px-2">{reference.reference_connection}</td>
-              <td className="px-2">{reference.reference_table?.schema_name}</td>
-              <td className="px-2">{reference.reference_table?.table_name}</td>
-              <td className="px-2"></td>
-            </tr>
-          ))}
+          {references &&
+            references.map((reference, index) => (
+              <tr key={index}>
+                <Button
+                  variant="text"
+                  color="primary"
+                  className="text-sm px-0.5"
+                  label={reference.table_comparison_configuration_name}
+                  onClick={() => selectReference(reference)}
+                />
+                <td className="px-2">{reference.reference_connection}</td>
+                <td className="px-2">
+                  {reference.reference_table?.schema_name}
+                </td>
+                <td className="px-2">
+                  {reference.reference_table?.table_name}
+                </td>
+                <td className="px-2"></td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <Button

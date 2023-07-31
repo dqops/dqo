@@ -24,12 +24,14 @@ type EditReferenceTableProps = {
   changes?: boolean;
   onUpdateParent?: () => void;
   isUpdatedParent?: boolean;
+  timePartitioned?: 'daily' | 'monthly';
 };
 
 const EditReferenceTable = ({
   onBack,
   selectedReference,
   changes,
+  timePartitioned,
   onUpdateParent,
   isUpdatedParent
 }: EditReferenceTableProps) => {
@@ -203,31 +205,150 @@ const EditReferenceTable = ({
           setIsUpdating(false);
         });
     } else {
-      await TableComparisonsApi.createTableComparisonConfiguration(
-        connection,
-        schema,
-        table,
-        {
-          table_comparison_configuration_name: name,
-          compared_connection: connection,
-          compared_table: {
-            schema_name: schema,
-            table_name: table
-          },
-          reference_connection: refConnection,
-          reference_table: {
-            schema_name: refSchema,
-            table_name: refTable
-          },
-          grouping_columns: doubleArray ?? []
-        }
-      )
-        .then(() => {
-          onBack();
-        })
-        .finally(() => {
-          setIsUpdating(false);
-        });
+      if (checkTypes === CheckTypes.PROFILING) {
+        await TableComparisonsApi.createTableComparisonProfiling(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            console.log('inside put func');
+            onBack();
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.PARTITIONED &&
+        timePartitioned === 'daily'
+      ) {
+        await TableComparisonsApi.createTableComparisonPartitionedDaily(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack();
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.PARTITIONED &&
+        timePartitioned === 'monthly'
+      ) {
+        await TableComparisonsApi.createTableComparisonPartitionedMonthly(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack();
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.RECURRING &&
+        timePartitioned === 'daily'
+      ) {
+        await TableComparisonsApi.createTableComparisonRecurringDaily(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack();
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.RECURRING &&
+        timePartitioned === 'monthly'
+      ) {
+        await TableComparisonsApi.createTableComparisonRecurringMonthly(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack();
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      }
     }
   };
 

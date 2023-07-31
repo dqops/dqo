@@ -41,7 +41,7 @@ export const TableReferenceComparisons = ({
   }, [location]);
 
   useEffect(() => {
-    getReferenceComparisons();
+    getNewTableComparison();
   }, []);
 
   const getReferenceComparisons = () => {
@@ -53,6 +53,41 @@ export const TableReferenceComparisons = ({
       setReferences(res.data);
       console.log('inside getting data');
     });
+  };
+
+  const getNewTableComparison = () => {
+    if (checkTypes && checkTypes === CheckTypes.PROFILING) {
+      TableComparisonsApi.getTableComparisonConfigurations(
+        connection,
+        schema,
+        table,
+        'profiling',
+        undefined
+      ).then((res) => {
+        console.log(res.data);
+        setReferences(res.data);
+      });
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
+      TableComparisonsApi.getTableComparisonConfigurations(
+        connection,
+        schema,
+        table,
+        checkTypes,
+        timePartitioned
+      ).then((res) => {
+        setReferences(res.data);
+      });
+    } else if (checkTypes === CheckTypes.RECURRING) {
+      TableComparisonsApi.getTableComparisonConfigurations(
+        connection,
+        schema,
+        table,
+        checkTypes,
+        timePartitioned
+      ).then((res) => {
+        setReferences(res.data);
+      });
+    }
   };
 
   const onCreateNewReference = () => {
@@ -127,7 +162,6 @@ export const TableReferenceComparisons = ({
   };
 
   const onBack = (stayOnSamePage?: boolean | undefined) => {
-    getReferenceComparisons();
     if (stayOnSamePage === false) {
       setIsEditing(false);
     }
@@ -152,6 +186,8 @@ export const TableReferenceComparisons = ({
 
     history.push(url);
   };
+
+  console.log(references);
   console.log(checksUI);
 
   return (

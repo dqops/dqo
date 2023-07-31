@@ -186,63 +186,65 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdate = () => {
-    if (checkTypes === CheckTypes.PROFILING) {
-      TableComparisonsApi.updateTableComparisonProfiling(
-        connection,
-        schema,
-        table,
-        reference?.table_comparison_configuration_name ?? '',
-        reference
-      )
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setIsUpdating(false);
-        });
-    } else if (checkTypes === CheckTypes.RECURRING) {
-      if (timePartitioned === 'daily') {
-        TableComparisonsApi.updateTableComparisonRecurringDaily(
+    if (reference) {
+      if (checkTypes === CheckTypes.PROFILING) {
+        TableComparisonsApi.updateTableComparisonProfiling(
           connection,
           schema,
           table,
           reference?.table_comparison_configuration_name ?? '',
           reference
-        ).catch((err) => {
-          console.log(err);
-        });
-      } else if (timePartitioned === 'monthly') {
-        TableComparisonsApi.updateTableComparisonRecurringMonthly(
-          connection,
-          schema,
-          table,
-          reference?.table_comparison_configuration_name ?? '',
-          reference
-        ).catch((err) => {
-          console.log(err);
-        });
-      }
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
-      if (timePartitioned === 'daily') {
-        TableComparisonsApi.updateTableComparisonPartitionedDaily(
-          connection,
-          schema,
-          table,
-          reference?.table_comparison_configuration_name ?? '',
-          reference
-        ).catch((err) => {
-          console.log(err);
-        });
-      } else if (timePartitioned === 'monthly') {
-        TableComparisonsApi.updateTableComparisonPartitionedMonthly(
-          connection,
-          schema,
-          table,
-          reference?.table_comparison_configuration_name ?? '',
-          reference
-        ).catch((err) => {
-          console.log(err);
-        });
+        )
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (checkTypes === CheckTypes.RECURRING) {
+        if (timePartitioned === 'daily') {
+          TableComparisonsApi.updateTableComparisonRecurringDaily(
+            connection,
+            schema,
+            table,
+            reference?.table_comparison_configuration_name ?? '',
+            reference
+          ).catch((err) => {
+            console.log(err);
+          });
+        } else if (timePartitioned === 'monthly') {
+          TableComparisonsApi.updateTableComparisonRecurringMonthly(
+            connection,
+            schema,
+            table,
+            reference?.table_comparison_configuration_name ?? '',
+            reference
+          ).catch((err) => {
+            console.log(err);
+          });
+        }
+      } else if (checkTypes === CheckTypes.PARTITIONED) {
+        if (timePartitioned === 'daily') {
+          TableComparisonsApi.updateTableComparisonPartitionedDaily(
+            connection,
+            schema,
+            table,
+            reference?.table_comparison_configuration_name ?? '',
+            reference
+          ).catch((err) => {
+            console.log(err);
+          });
+        } else if (timePartitioned === 'monthly') {
+          TableComparisonsApi.updateTableComparisonPartitionedMonthly(
+            connection,
+            schema,
+            table,
+            reference?.table_comparison_configuration_name ?? '',
+            reference
+          ).catch((err) => {
+            console.log(err);
+          });
+        }
       }
     }
   };
@@ -424,6 +426,7 @@ export const EditProfilingReferenceTable = ({
           changes={changes}
           onUpdateParent={onUpdate}
           isUpdatedParent={isUpdated}
+          timePartitioned={timePartitioned}
         />
       </div>
       <span onClick={onUpdate}>button</span>

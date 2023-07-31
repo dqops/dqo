@@ -4,7 +4,7 @@ import { TableComparisonsApi } from '../../../services/apiClient';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { TableComparisonConfigurationModel } from '../../../api';
 import EditReferenceTable from './EditReferenceTable';
-import qs from "query-string";
+import qs from 'query-string';
 
 const TableReferences = () => {
   const {
@@ -13,7 +13,9 @@ const TableReferences = () => {
     table
   }: { connection: string; schema: string; table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [references, setReferences] = useState<TableComparisonConfigurationModel[]>([]);
+  const [references, setReferences] = useState<
+    TableComparisonConfigurationModel[]
+  >([]);
   const [selectedReference, setSelectedReference] = useState<string>();
   const location = useLocation();
   const history = useHistory();
@@ -29,11 +31,14 @@ const TableReferences = () => {
   }, []);
 
   const getReferences = () => {
-    TableComparisonsApi.getTableComparisonConfigurations(connection, schema, table).then((res) => {
+    TableComparisonsApi.getTableComparisonConfigurations(
+      connection,
+      schema,
+      table
+    ).then((res) => {
       setReferences(res.data);
     });
   };
-
 
   const onChangeEditing = (value: boolean, reference?: string) => {
     setIsEditing(value);
@@ -51,7 +56,9 @@ const TableReferences = () => {
     getReferences();
   };
 
-  const onEditReferenceTable = (reference: TableComparisonConfigurationModel) => {
+  const onEditReferenceTable = (
+    reference: TableComparisonConfigurationModel
+  ) => {
     setSelectedReference(reference.table_comparison_configuration_name);
     onChangeEditing(true, reference.table_comparison_configuration_name);
   };
