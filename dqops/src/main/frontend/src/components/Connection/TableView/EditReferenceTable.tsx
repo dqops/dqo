@@ -166,15 +166,14 @@ const EditReferenceTable = ({
     history.push(`${url}?isEditing=true`);
   };
 
-  const onUpdate = () => {
-    setIsUpdating(true);
-
+  const onUpdate = async () => {
+    if (onUpdateParent) {
+      setIsUpdating(true);
+      onUpdateParent();
+    }
     if (selectedReference) {
       console.log(doubleArray);
-      if (onUpdateParent) {
-        onUpdateParent();
-      }
-      TableComparisonsApi.updateTableComparisonConfiguration(
+      await TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
         schema,
         table,
@@ -197,7 +196,6 @@ const EditReferenceTable = ({
         .then(() => {
           onBack();
         })
-        .then(() => {})
         .catch((err) => {
           console.log('err', err);
         })
@@ -205,7 +203,7 @@ const EditReferenceTable = ({
           setIsUpdating(false);
         });
     } else {
-      TableComparisonsApi.createTableComparisonConfiguration(
+      await TableComparisonsApi.createTableComparisonConfiguration(
         connection,
         schema,
         table,
@@ -224,9 +222,6 @@ const EditReferenceTable = ({
           grouping_columns: doubleArray ?? []
         }
       )
-        .then(() => {
-          onUpdateParent && onUpdateParent;
-        })
         .then(() => {
           onBack();
         })
