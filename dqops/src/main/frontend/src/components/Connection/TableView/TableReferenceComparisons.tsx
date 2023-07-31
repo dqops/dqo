@@ -64,6 +64,7 @@ export const TableReferenceComparisons = ({
         'profiling',
         undefined
       ).then((res) => {
+        console.log('profiling');
         console.log(res.data);
         setReferences(res.data);
       });
@@ -76,6 +77,7 @@ export const TableReferenceComparisons = ({
         timePartitioned
       ).then((res) => {
         setReferences(res.data);
+        console.log('part');
       });
     } else if (checkTypes === CheckTypes.RECURRING) {
       TableComparisonsApi.getTableComparisonConfigurations(
@@ -86,6 +88,7 @@ export const TableReferenceComparisons = ({
         timePartitioned
       ).then((res) => {
         setReferences(res.data);
+        console.log('rec');
       });
     }
   };
@@ -192,6 +195,7 @@ export const TableReferenceComparisons = ({
 
   return (
     <>
+      <div onClick={() => getNewTableComparison()}>TEST DATA</div>
       {isEditing ? (
         <EditProfilingReferenceTable
           checkTypes={checkTypes}
