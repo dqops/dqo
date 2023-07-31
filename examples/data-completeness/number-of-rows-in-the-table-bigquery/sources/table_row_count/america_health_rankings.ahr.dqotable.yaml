@@ -6,19 +6,14 @@ spec:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
   profiling_checks:
-    standard:
+    volume:
       row_count:
-        comments:
-        - date: 2023-05-05T12:19:34.814+00:00
-          comment_by: user
-          comment: "\"In this example, we verify if the number of rows in a table\
-            \ does not exceed the minimum accepted count.\""
         warning:
-          min_count: 692
-        error:
-          min_count: 381
-        fatal:
           min_count: 150
+        error:
+          min_count: 100
+        fatal:
+          min_count: 50
   columns:
     edition:
       type_snapshot:

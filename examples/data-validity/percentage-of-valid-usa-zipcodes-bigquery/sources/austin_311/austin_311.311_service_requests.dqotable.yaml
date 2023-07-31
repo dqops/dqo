@@ -68,9 +68,9 @@ spec:
                 \ whether the percentage of USA zip-code values reaches the indicated\
                 \ thresholds."
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
     county:
