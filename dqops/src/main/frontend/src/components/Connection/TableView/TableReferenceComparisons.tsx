@@ -56,19 +56,18 @@ export const TableReferenceComparisons = ({
   };
 
   const getNewTableComparison = () => {
-    if (checkTypes && checkTypes === CheckTypes.PROFILING) {
-      TableComparisonsApi.getTableComparisonConfigurations(
-        connection,
-        schema,
-        table,
-        'profiling',
-        undefined
-      ).then((res) => {
-        console.log('profiling');
-        console.log(res.data);
-        setReferences(res.data);
-      });
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
+    TableComparisonsApi.getTableComparisonConfigurations(
+      connection,
+      schema,
+      table,
+      'profiling',
+      undefined
+    ).then((res) => {
+      console.log('profiling');
+      console.log(res.data);
+      setReferences(res.data);
+    });
+    if (checkTypes === CheckTypes.PARTITIONED) {
       TableComparisonsApi.getTableComparisonConfigurations(
         connection,
         schema,
