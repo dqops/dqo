@@ -30,14 +30,6 @@ class TableComparisonModel:
         reference_connection (Union[Unset, str]): Reference connection name - the connection name to the data source
             that has the reference data to compare to.
         reference_table (Union[Unset, PhysicalTableName]):
-        compared_table_grouping_name (Union[Unset, str]): The name of the data grouping configuration on the parent
-            table that will be used for comparison. When the parent table has no data grouping configurations, compares the
-            whole table without grouping.
-        reference_table_grouping_name (Union[Unset, str]): The name of the data grouping configuration on the referenced
-            name that will be used for comparison. When the reference table has no data grouping configurations, compares
-            the whole table without grouping. The data grouping configurations on the compared table and the reference table
-            must have the same grouping dimension levels configured, but the configuration (the names of the columns) could
-            be different.
         grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
             the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
             table and the reference table (the source of truth). The columns are used in the next of the table comparison to
@@ -62,8 +54,6 @@ class TableComparisonModel:
     compared_table: Union[Unset, "PhysicalTableName"] = UNSET
     reference_connection: Union[Unset, str] = UNSET
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
-    compared_table_grouping_name: Union[Unset, str] = UNSET
-    reference_table_grouping_name: Union[Unset, str] = UNSET
     grouping_columns: Union[
         Unset, List["TableComparisonGroupingColumnPairModel"]
     ] = UNSET
@@ -85,8 +75,6 @@ class TableComparisonModel:
         if not isinstance(self.reference_table, Unset):
             reference_table = self.reference_table.to_dict()
 
-        compared_table_grouping_name = self.compared_table_grouping_name
-        reference_table_grouping_name = self.reference_table_grouping_name
         grouping_columns: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.grouping_columns, Unset):
             grouping_columns = []
@@ -132,10 +120,6 @@ class TableComparisonModel:
             field_dict["reference_connection"] = reference_connection
         if reference_table is not UNSET:
             field_dict["reference_table"] = reference_table
-        if compared_table_grouping_name is not UNSET:
-            field_dict["compared_table_grouping_name"] = compared_table_grouping_name
-        if reference_table_grouping_name is not UNSET:
-            field_dict["reference_table_grouping_name"] = reference_table_grouping_name
         if grouping_columns is not UNSET:
             field_dict["grouping_columns"] = grouping_columns
         if default_compare_thresholds is not UNSET:
@@ -183,10 +167,6 @@ class TableComparisonModel:
             reference_table = UNSET
         else:
             reference_table = PhysicalTableName.from_dict(_reference_table)
-
-        compared_table_grouping_name = d.pop("compared_table_grouping_name", UNSET)
-
-        reference_table_grouping_name = d.pop("reference_table_grouping_name", UNSET)
 
         grouping_columns = []
         _grouping_columns = d.pop("grouping_columns", UNSET)
@@ -237,8 +217,6 @@ class TableComparisonModel:
             compared_table=compared_table,
             reference_connection=reference_connection,
             reference_table=reference_table,
-            compared_table_grouping_name=compared_table_grouping_name,
-            reference_table_grouping_name=reference_table_grouping_name,
             grouping_columns=grouping_columns,
             default_compare_thresholds=default_compare_thresholds,
             compare_row_count=compare_row_count,

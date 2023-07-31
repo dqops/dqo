@@ -185,6 +185,12 @@ nav:
       - nulls:
         - nulls count: 'checks/column/nulls/nulls-count.md'
         - nulls percent: 'checks/column/nulls/nulls-percent.md'
+        - nulls percent anomaly stationary 30 days: 'checks/column/nulls/nulls-percent-anomaly-stationary-30-days.md'
+        - nulls percent anomaly stationary: 'checks/column/nulls/nulls-percent-anomaly-stationary.md'
+        - nulls percent change: 'checks/column/nulls/nulls-percent-change.md'
+        - nulls percent change yesterday: 'checks/column/nulls/nulls-percent-change-yesterday.md'
+        - nulls percent change 7 days: 'checks/column/nulls/nulls-percent-change-7-days.md'
+        - nulls percent change 30 days: 'checks/column/nulls/nulls-percent-change-30-days.md'
         - not nulls count: 'checks/column/nulls/not-nulls-count.md'
         - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
       - numeric:

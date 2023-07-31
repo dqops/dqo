@@ -358,6 +358,7 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
+  console.log(refTable, refSchema, refConnection, splitArrays()?.refArr);
   return (
     <div>
       <TableActionGroup

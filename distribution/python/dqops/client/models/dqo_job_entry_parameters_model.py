@@ -24,10 +24,8 @@ if TYPE_CHECKING:
     from ..models.repair_stored_data_queue_job_parameters import (
         RepairStoredDataQueueJobParameters,
     )
-    from ..models.run_checks_on_table_queue_job_parameters import (
-        RunChecksOnTableQueueJobParameters,
-    )
-    from ..models.run_checks_queue_job_parameters import RunChecksQueueJobParameters
+    from ..models.run_checks_on_table_parameters import RunChecksOnTableParameters
+    from ..models.run_checks_parameters import RunChecksParameters
     from ..models.synchronize_multiple_folders_dqo_queue_job_parameters import (
         SynchronizeMultipleFoldersDqoQueueJobParameters,
     )
@@ -46,11 +44,11 @@ class DqoJobEntryParametersModel:
         synchronize_root_folder_parameters (Union[Unset, SynchronizeRootFolderDqoQueueJobParameters]):
         synchronize_multiple_folders_parameters (Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParameters]):
         run_scheduled_checks_parameters (Union[Unset, RecurringScheduleSpec]):
-        run_checks_parameters (Union[Unset, RunChecksQueueJobParameters]): Run checks configuration, specifies the
-            target checks that should be executed and an optional time window.
-        run_checks_on_table_parameters (Union[Unset, RunChecksOnTableQueueJobParameters]): Run checks configuration for
-            a job that will run checks on a single table, specifies the target table and the target checks that should be
-            executed and an optional time window.
+        run_checks_parameters (Union[Unset, RunChecksParameters]): Run checks configuration, specifies the target checks
+            that should be executed and an optional time window.
+        run_checks_on_table_parameters (Union[Unset, RunChecksOnTableParameters]): Run checks configuration for a job
+            that will run checks on a single table, specifies the target table and the target checks that should be executed
+            and an optional time window.
         collect_statistics_parameters (Union[Unset, CollectStatisticsQueueJobParameters]):
         collect_statistics_on_table_parameters (Union[Unset, CollectStatisticsOnTableQueueJobParameters]):
         import_schema_parameters (Union[Unset, ImportSchemaQueueJobParameters]):
@@ -66,10 +64,8 @@ class DqoJobEntryParametersModel:
         Unset, "SynchronizeMultipleFoldersDqoQueueJobParameters"
     ] = UNSET
     run_scheduled_checks_parameters: Union[Unset, "RecurringScheduleSpec"] = UNSET
-    run_checks_parameters: Union[Unset, "RunChecksQueueJobParameters"] = UNSET
-    run_checks_on_table_parameters: Union[
-        Unset, "RunChecksOnTableQueueJobParameters"
-    ] = UNSET
+    run_checks_parameters: Union[Unset, "RunChecksParameters"] = UNSET
+    run_checks_on_table_parameters: Union[Unset, "RunChecksOnTableParameters"] = UNSET
     collect_statistics_parameters: Union[
         Unset, "CollectStatisticsQueueJobParameters"
     ] = UNSET
@@ -196,10 +192,8 @@ class DqoJobEntryParametersModel:
         from ..models.repair_stored_data_queue_job_parameters import (
             RepairStoredDataQueueJobParameters,
         )
-        from ..models.run_checks_on_table_queue_job_parameters import (
-            RunChecksOnTableQueueJobParameters,
-        )
-        from ..models.run_checks_queue_job_parameters import RunChecksQueueJobParameters
+        from ..models.run_checks_on_table_parameters import RunChecksOnTableParameters
+        from ..models.run_checks_parameters import RunChecksParameters
         from ..models.synchronize_multiple_folders_dqo_queue_job_parameters import (
             SynchronizeMultipleFoldersDqoQueueJobParameters,
         )
@@ -248,23 +242,21 @@ class DqoJobEntryParametersModel:
             )
 
         _run_checks_parameters = d.pop("runChecksParameters", UNSET)
-        run_checks_parameters: Union[Unset, RunChecksQueueJobParameters]
+        run_checks_parameters: Union[Unset, RunChecksParameters]
         if isinstance(_run_checks_parameters, Unset):
             run_checks_parameters = UNSET
         else:
-            run_checks_parameters = RunChecksQueueJobParameters.from_dict(
+            run_checks_parameters = RunChecksParameters.from_dict(
                 _run_checks_parameters
             )
 
         _run_checks_on_table_parameters = d.pop("runChecksOnTableParameters", UNSET)
-        run_checks_on_table_parameters: Union[Unset, RunChecksOnTableQueueJobParameters]
+        run_checks_on_table_parameters: Union[Unset, RunChecksOnTableParameters]
         if isinstance(_run_checks_on_table_parameters, Unset):
             run_checks_on_table_parameters = UNSET
         else:
-            run_checks_on_table_parameters = (
-                RunChecksOnTableQueueJobParameters.from_dict(
-                    _run_checks_on_table_parameters
-                )
+            run_checks_on_table_parameters = RunChecksOnTableParameters.from_dict(
+                _run_checks_on_table_parameters
             )
 
         _collect_statistics_parameters = d.pop("collectStatisticsParameters", UNSET)

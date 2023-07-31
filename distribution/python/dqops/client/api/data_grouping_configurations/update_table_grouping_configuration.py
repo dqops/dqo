@@ -21,7 +21,7 @@ def _get_kwargs(
     client: Client,
     json_body: DataGroupingConfigurationTrimmedModel,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

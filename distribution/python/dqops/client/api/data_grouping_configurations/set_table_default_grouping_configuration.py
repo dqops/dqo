@@ -17,7 +17,7 @@ def _get_kwargs(
     client: Client,
     data_grouping_configuration_name: str,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

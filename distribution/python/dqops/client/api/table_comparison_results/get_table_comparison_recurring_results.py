@@ -21,7 +21,7 @@ def _get_kwargs(
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

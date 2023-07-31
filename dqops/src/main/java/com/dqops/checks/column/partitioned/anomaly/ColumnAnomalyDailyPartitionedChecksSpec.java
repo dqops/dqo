@@ -148,16 +148,16 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a mean value anomaly 60 days check specification.
-     * @return Mean value anomaly 60 days check specification.
+     * Returns a mean value anomaly 90 days check specification.
+     * @return Mean value anomaly 90 days check specification.
      */
     public ColumnAnomalyStationaryMeanCheckSpec getDailyPartitionMeanAnomalyStationary() {
         return dailyPartitionMeanAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a mean value anomaly 60 days check.
-     * @param dailyPartitionMeanAnomalyStationary Mean value anomaly 60 days check specification.
+     * Sets a new specification of a mean value anomaly 90 days check.
+     * @param dailyPartitionMeanAnomalyStationary Mean value anomaly 90 days check specification.
      */
     public void setDailyPartitionMeanAnomalyStationary(ColumnAnomalyStationaryMeanCheckSpec dailyPartitionMeanAnomalyStationary) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanAnomalyStationary, dailyPartitionMeanAnomalyStationary));
@@ -184,16 +184,16 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a median anomaly 60 days check specification.
-     * @return Median anomaly 60 days check specification.
+     * Returns a median anomaly 90 days check specification.
+     * @return Median anomaly 90 days check specification.
      */
     public ColumnAnomalyStationaryMedianCheckSpec getDailyPartitionMedianAnomalyStationary() {
         return dailyPartitionMedianAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a median anomaly 60 days check.
-     * @param dailyPartitionMedianAnomalyStationary Median anomaly 60 days check specification.
+     * Sets a new specification of a median anomaly 90 days check.
+     * @param dailyPartitionMedianAnomalyStationary Median anomaly 90 days check specification.
      */
     public void setDailyPartitionMedianAnomalyStationary(ColumnAnomalyStationaryMedianCheckSpec dailyPartitionMedianAnomalyStationary) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianAnomalyStationary, dailyPartitionMedianAnomalyStationary));
@@ -220,16 +220,16 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a sum anomaly 60 days check specification.
-     * @return Sum anomaly 60 days check specification.
+     * Returns a sum anomaly 90 days check specification.
+     * @return Sum anomaly 90 days check specification.
      */
     public ColumnAnomalyStationaryPartitionSumCheckSpec getDailyPartitionSumAnomalyStationary() {
         return dailyPartitionSumAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a sum anomaly 60 days check.
-     * @param dailyPartitionSumAnomalyStationary Sum anomaly 60 days check specification.
+     * Sets a new specification of a sum anomaly 90 days check.
+     * @param dailyPartitionSumAnomalyStationary Sum anomaly 90 days check specification.
      */
     public void setDailyPartitionSumAnomalyStationary(ColumnAnomalyStationaryPartitionSumCheckSpec dailyPartitionSumAnomalyStationary) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomalyStationary, dailyPartitionSumAnomalyStationary));

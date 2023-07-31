@@ -16,7 +16,7 @@ def _get_kwargs(
     client: Client,
     json_body: SensorModel,
 ) -> Dict[str, Any]:
-    url = "{}/api/sensors/{fullSensorName}".format(
+    url = "{}api/sensors/{fullSensorName}".format(
         client.base_url, fullSensorName=full_sensor_name
     )
 

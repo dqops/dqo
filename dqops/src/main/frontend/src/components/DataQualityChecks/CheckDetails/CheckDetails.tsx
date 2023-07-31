@@ -128,7 +128,7 @@ const CheckDetails = ({
   };
 
   const fetchCheckErrors = useCallback(
-    (month: string, dataGroup?: string) => {
+    (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(
@@ -137,7 +137,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-          dataStreamName: dataGroup,
+          dataGrouping,
           startDate,
           endDate,
           runCheckType,
@@ -150,7 +150,7 @@ const CheckDetails = ({
   );
 
   const fetchCheckReadouts = useCallback(
-    (month: string, dataGroup?: string) => {
+    (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(
@@ -160,7 +160,7 @@ const CheckDetails = ({
           table,
           column,
           startDate,
-          dataStreamName: dataGroup,
+          dataGrouping,
           endDate,
           runCheckType,
           timeScale,
@@ -172,7 +172,7 @@ const CheckDetails = ({
   );
 
   const fetchCheckResults = useCallback(
-    (month: string, dataGroup?: string) => {
+    (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
       dispatch(
@@ -181,7 +181,7 @@ const CheckDetails = ({
           schema,
           table,
           column,
-          dataStreamName: dataGroup,
+          dataGrouping,
           startDate,
           endDate,
           runCheckType,

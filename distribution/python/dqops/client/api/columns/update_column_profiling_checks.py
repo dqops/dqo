@@ -21,7 +21,7 @@ def _get_kwargs(
     client: Client,
     json_body: ColumnProfilingCheckCategoriesSpec,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

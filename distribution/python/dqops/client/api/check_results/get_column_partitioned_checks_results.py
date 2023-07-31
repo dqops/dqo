@@ -25,7 +25,7 @@ def _get_kwargs(
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

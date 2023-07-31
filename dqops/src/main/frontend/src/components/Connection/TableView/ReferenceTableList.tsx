@@ -45,8 +45,6 @@ const ReferenceTableList = ({
             <th className="text-left px-2 py-2">Connection</th>
             <th className="text-left px-2 py-2">Schema</th>
             <th className="text-left px-2 py-2">Reference table name</th>
-            <th className="text-left px-2 py-2">Compared data grouping</th>
-            <th className="text-left px-2 py-2">Reference data grouping</th>
             <th className="text-left px-2 py-2" />
             <th className="text-left px-2 py-2" />
           </tr>
@@ -66,10 +64,6 @@ const ReferenceTableList = ({
               <td className="px-2">{reference.reference_connection}</td>
               <td className="px-2">{reference.reference_table?.schema_name}</td>
               <td className="px-2">{reference.reference_table?.table_name}</td>
-              <td className="px-2">{reference.compared_table_grouping_name}</td>
-              <td className="px-2">
-                {reference.reference_table_grouping_name}
-              </td>
 
               <td className="px-2">
                 <Button

@@ -1,8 +1,9 @@
 from enum import Enum
 
 
-class RunChecksQueueJobResultHighestSeverity(str, Enum):
+class TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty(str, Enum):
     ERROR = "error"
+    EXECUTION_ERROR = "execution_error"
     FATAL = "fatal"
     VALID = "valid"
     WARNING = "warning"

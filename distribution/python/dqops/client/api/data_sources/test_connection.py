@@ -16,7 +16,7 @@ def _get_kwargs(
     json_body: ConnectionBasicModel,
     verify_name_uniqueness: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/datasource/testconnection".format(client.base_url)
+    url = "{}api/datasource/testconnection".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()

@@ -49,15 +49,16 @@ To use DQO you need:
 2. Open a terminal, navigate to the created directory, and install DQO via pip manager
 
     ```
-    python3 -m pip install --user dqops
+    python -m pip install --user dqops
     ```
 
 ## Start DQO application
 
-1. Run dqo app to finalize the installation. 
+1. Run dqo app to finalize the installation. This process may take some time as the DQO distribution will be downloaded
+   and the Python environment will be initialized in the DQO home directory.
 
     ```
-    python3 -m dqops
+    python -m dqops
     ```
 
 2. Create DQO `userhome` folder.
