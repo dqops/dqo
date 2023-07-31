@@ -5,13 +5,20 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { TableComparisonConfigurationModel } from '../../../api';
 import EditReferenceTable from './EditReferenceTable';
 import qs from 'query-string';
+import { CheckTypes } from '../../../shared/routes';
 
 const TableReferences = () => {
   const {
+    checkTypes,
     connection,
     schema,
     table
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+  } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [references, setReferences] = useState<
     TableComparisonConfigurationModel[]
@@ -34,10 +41,37 @@ const TableReferences = () => {
     TableComparisonsApi.getTableComparisonConfigurations(
       connection,
       schema,
-      table
+      table,
+      'profiling',
+      undefined
     ).then((res) => {
+      console.log('profiling');
+      console.log(res.data);
       setReferences(res.data);
     });
+    if (checkTypes === CheckTypes.PARTITIONED) {
+      TableComparisonsApi.getTableComparisonConfigurations(
+        connection,
+        schema,
+        table,
+        checkTypes,
+        'daily'
+      ).then((res) => {
+        setReferences(res.data);
+        console.log('part');
+      });
+    } else if (checkTypes === CheckTypes.RECURRING) {
+      TableComparisonsApi.getTableComparisonConfigurations(
+        connection,
+        schema,
+        table,
+        checkTypes,
+        'daily'
+      ).then((res) => {
+        setReferences(res.data);
+        console.log('rec');
+      });
+    }
   };
 
   const onChangeEditing = (value: boolean, reference?: string) => {
