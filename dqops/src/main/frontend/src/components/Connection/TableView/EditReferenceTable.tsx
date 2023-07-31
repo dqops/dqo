@@ -174,7 +174,6 @@ const EditReferenceTable = ({
       onUpdateParent();
     }
     if (selectedReference) {
-      console.log(doubleArray);
       await TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
         schema,

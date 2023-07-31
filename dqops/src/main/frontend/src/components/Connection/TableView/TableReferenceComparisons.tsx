@@ -192,10 +192,10 @@ export const TableReferenceComparisons = ({
   };
 
   console.log(isEditing);
+  console.log(references);
 
   return (
     <>
-      <div onClick={() => getNewTableComparison()}>TEST DATA</div>
       {isEditing ? (
         <EditProfilingReferenceTable
           checkTypes={checkTypes}
