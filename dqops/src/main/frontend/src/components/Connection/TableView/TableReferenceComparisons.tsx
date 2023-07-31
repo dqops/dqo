@@ -51,6 +51,7 @@ export const TableReferenceComparisons = ({
       table
     ).then((res) => {
       setReferences(res.data);
+      console.log('inside getting data');
     });
   };
 
@@ -151,6 +152,7 @@ export const TableReferenceComparisons = ({
 
     history.push(url);
   };
+  console.log(checksUI);
 
   return (
     <>

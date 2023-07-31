@@ -21,11 +21,15 @@ import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
 type EditReferenceTableProps = {
   onBack: () => void;
   selectedReference?: string;
+  changes?: boolean;
+  onUpdateParent?: () => void;
 };
 
 const EditReferenceTable = ({
   onBack,
-  selectedReference
+  selectedReference,
+  changes,
+  onUpdateParent
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -183,7 +187,9 @@ const EditReferenceTable = ({
           grouping_columns: doubleArray ?? []
         }
       )
+
         .then(() => {
+          console.log('inside update');
           onBack();
         })
         .catch((err) => {
@@ -213,11 +219,16 @@ const EditReferenceTable = ({
         }
       )
         .then(() => {
+          console.log('inside create');
           onBack();
         })
         .finally(() => {
           setIsUpdating(false);
         });
+    }
+    if (onUpdateParent) {
+      onUpdateParent();
+      console.log('insidde parent updating');
     }
   };
 
@@ -374,20 +385,20 @@ const EditReferenceTable = ({
           (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
             isUpdated)
         }
-        isDisabled={
-          !(
-            name.length !== 0 &&
-            connection.length !== 0 &&
-            schema.length !== 0 &&
-            table.length !== 0 &&
-            refConnection.length !== 0 &&
-            refSchema.length !== 0 &&
-            refTable.length !== 0 &&
-            bool &&
-            (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-              isUpdated)
-          )
-        }
+        // isDisabled={
+        //   !(
+        //     name.length !== 0 &&
+        //     connection.length !== 0 &&
+        //     schema.length !== 0 &&
+        //     table.length !== 0 &&
+        //     refConnection.length !== 0 &&
+        //     refSchema.length !== 0 &&
+        //     refTable.length !== 0 &&
+        //     bool &&
+        //     (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+        //       isUpdated)
+        //   )
+        // }
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">

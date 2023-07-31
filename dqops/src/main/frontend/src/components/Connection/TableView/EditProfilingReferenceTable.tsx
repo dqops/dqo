@@ -75,6 +75,7 @@ export const EditProfilingReferenceTable = ({
   const [isExtended, setIsExtended] = useState(false);
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
+  const [changes, setChanges] = useState(false);
 
   const history = useHistory();
   const dispatch = useActionDispatch();
@@ -199,7 +200,7 @@ export const EditProfilingReferenceTable = ({
         data
       )
         .then(() => {
-          onBack();
+          onBack(true);
         })
         .catch((err) => {
           console.log(err);
@@ -217,7 +218,7 @@ export const EditProfilingReferenceTable = ({
           data
         )
           .then(() => {
-            onBack();
+            onBack(true);
           })
           .catch((err) => {
             console.log(err);
@@ -234,7 +235,7 @@ export const EditProfilingReferenceTable = ({
           data
         )
           .then(() => {
-            onBack();
+            onBack(true);
           })
           .catch((err) => {
             console.log(err);
@@ -253,7 +254,7 @@ export const EditProfilingReferenceTable = ({
           data
         )
           .then(() => {
-            onBack();
+            onBack(true);
           })
           .catch((err) => {
             console.log(err);
@@ -270,7 +271,7 @@ export const EditProfilingReferenceTable = ({
           data
         )
           .then(() => {
-            onBack();
+            onBack(true);
           })
           .catch((err) => {
             console.log(err);
@@ -448,21 +449,20 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
-  console.log(reference);
+  console.log(categoryCheck);
+  console.log(selectedReference);
 
   return (
     <div className="text-sm">
-      <TableActionGroup
-        onUpdate={onUpdate}
-        isUpdated={isUpdated}
-        isUpdating={isUpdating}
-      />
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable
           onBack={() => onBack(false)}
           selectedReference={selectedReference}
+          changes={changes}
+          onUpdateParent={onUpdate}
         />
       </div>
+      <span onClick={onUpdate}>button</span>
 
       <div className="px-8 py-4 border-b border-gray-300 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -492,40 +492,6 @@ export const EditProfilingReferenceTable = ({
         </div>
       </div>
       <div className="px-8 py-4">
-        <p className="text-center mb-1  ">
-          Table comparison will use these data grouping configurations:
-        </p>
-
-        <div className="flex gap-4 mb-2">
-          <div>
-            <div
-              className="flex h-18 w-40 mt-8"
-              onClick={() => setIsExtended(!isExtended)}
-            >
-              {isExtended === false ? (
-                <SvgIcon
-                  name="chevron-right"
-                  className="w-5 h-5 text-gray-700 cursor-pointer"
-                />
-              ) : (
-                <SvgIcon
-                  name="chevron-down"
-                  className="w-5 h-5 text-gray-700 cursor-pointer"
-                />
-              )}
-              <span className="cursor-pointer">List of columns</span>
-            </div>
-            {isExtended === true && (
-              <div>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-                  <div key={index} className="text-sm py-1.5 w-44">
-                    Column {item}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
         <SectionWrapper
           title="Table level comparison"
           className={clsx(
@@ -546,7 +512,9 @@ export const EditProfilingReferenceTable = ({
               >
                 <Checkbox
                   checked={showRowCount}
-                  onChange={(checked) => setShowRowCount(checked)}
+                  onChange={(checked) => {
+                    setShowRowCount(checked), setChanges(true);
+                  }}
                 />
               </div>
             </div>
