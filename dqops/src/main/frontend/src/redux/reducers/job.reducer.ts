@@ -38,7 +38,7 @@ export interface IJobsState {
   areSettingsOpen: boolean;
   job_dictionary_state: Record<string, DqoJobHistoryEntryModel>;
   bool?: boolean;
-  dataStreamName: string;
+  dataGrouping: string;
   spec: DataGroupingConfigurationSpec;
   isAdvisorOpen: boolean;
   isCronScheduled: boolean;
@@ -56,7 +56,7 @@ const initialState: IJobsState = {
   areSettingsOpen: false,
   job_dictionary_state: {},
   bool: false,
-  dataStreamName: '',
+  dataGrouping: '',
   spec: {},
   isAdvisorOpen: false,
   isCronScheduled: true,
@@ -171,7 +171,7 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         bool: action.bool,
-        dataStreamName: action.dataStreamName,
+        dataGrouping: action.dataGrouping,
         spec: action.spec
       };
     }

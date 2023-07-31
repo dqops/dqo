@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { JOB_ACTION, SOURCE_ACTION } from '../types';
+import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from '../../shared/routes';
 import {
   CheckResultsDetailedDataModel,
@@ -23,8 +23,7 @@ import {
   SensorReadoutsDetailedDataModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
-  TableIncidentGroupingSpec,
-  DataGroupingConfigurationSpec
+  TableIncidentGroupingSpec
 } from '../../api';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
@@ -35,7 +34,6 @@ import {
   SensorReadoutsApi,
   TableApiClient
 } from '../../services/apiClient';
-import { type } from 'os';
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -281,7 +279,7 @@ export const getCheckResults =
       schema,
       table,
       column,
-      dataStreamName,
+      dataGrouping,
       checkName,
       runCheckType,
       startDate,
@@ -292,7 +290,7 @@ export const getCheckResults =
       schema: string;
       table: string;
       column?: string;
-      dataStreamName?: string;
+      dataGrouping?: string;
       startDate: string;
       endDate: string;
       timeScale?: 'daily' | 'monthly';
@@ -335,7 +333,7 @@ export const getCheckResults =
           schema,
           table,
           column,
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -348,7 +346,7 @@ export const getCheckResults =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -361,7 +359,7 @@ export const getCheckResults =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -374,7 +372,7 @@ export const getCheckResults =
           connection,
           schema,
           table,
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -386,7 +384,7 @@ export const getCheckResults =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -398,7 +396,7 @@ export const getCheckResults =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -450,7 +448,7 @@ export const getCheckReadouts =
       schema,
       table,
       column,
-      dataStreamName,
+      dataGrouping,
       startDate,
       endDate,
       checkName,
@@ -461,7 +459,7 @@ export const getCheckReadouts =
       schema: string;
       table: string;
       column?: string;
-      dataStreamName?: string;
+      dataGrouping?: string;
       check?: CheckModel;
       startDate: string;
       endDate: string;
@@ -500,7 +498,7 @@ export const getCheckReadouts =
           schema,
           table,
           column,
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -513,7 +511,7 @@ export const getCheckReadouts =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -526,7 +524,7 @@ export const getCheckReadouts =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -539,7 +537,7 @@ export const getCheckReadouts =
           connection,
           schema,
           table,
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -551,7 +549,7 @@ export const getCheckReadouts =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -563,7 +561,7 @@ export const getCheckReadouts =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -615,7 +613,7 @@ export const getCheckErrors =
       schema,
       table,
       column,
-      dataStreamName,
+      dataGrouping,
       startDate,
       endDate,
       checkName,
@@ -626,7 +624,7 @@ export const getCheckErrors =
       schema: string;
       table: string;
       column?: string;
-      dataStreamName?: string;
+      dataGrouping?: string;
       startDate: string;
       endDate: string;
       timeScale?: 'daily' | 'monthly';
@@ -658,7 +656,7 @@ export const getCheckErrors =
           schema,
           table,
           column,
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -671,7 +669,7 @@ export const getCheckErrors =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -684,7 +682,7 @@ export const getCheckErrors =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -697,7 +695,7 @@ export const getCheckErrors =
           connection,
           schema,
           table,
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -709,7 +707,7 @@ export const getCheckErrors =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -721,7 +719,7 @@ export const getCheckErrors =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
           endDate
         )
@@ -866,7 +864,7 @@ export const toggleCheck = (
   type: SOURCE_ACTION.TOGGLE_CHECK,
   checkType,
   activeTab,
-  data: checkName,
+  data: checkName
 });
 
 export const closeCheck = (
@@ -877,5 +875,5 @@ export const closeCheck = (
   type: SOURCE_ACTION.CLOSE_CHECK,
   checkType,
   activeTab,
-  data: checkName,
+  data: checkName
 });

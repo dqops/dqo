@@ -57,11 +57,11 @@ export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
 });
 export const setCreatedDataStream = (
   bool: boolean,
-  dataStreamName: string,
+  dataGrouping: string,
   spec: DataGroupingConfigurationSpec
 ) => ({
   type: JOB_ACTION.SET_CREATED_DATA_STREAM,
   bool,
-  dataStreamName,
+  dataGrouping,
   spec
 });
