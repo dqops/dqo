@@ -64,8 +64,6 @@ export const TableReferenceComparisons = ({
         'profiling',
         undefined
       ).then((res) => {
-        console.log('profiling');
-        console.log(res.data);
         setReferences(res.data);
       });
     } else if (checkTypes === CheckTypes.PARTITIONED) {
@@ -77,7 +75,6 @@ export const TableReferenceComparisons = ({
         timePartitioned
       ).then((res) => {
         setReferences(res.data);
-        console.log('part');
       });
     } else if (checkTypes === CheckTypes.RECURRING) {
       TableComparisonsApi.getTableComparisonConfigurations(
@@ -88,7 +85,6 @@ export const TableReferenceComparisons = ({
         timePartitioned
       ).then((res) => {
         setReferences(res.data);
-        console.log('rec');
       });
     }
   };
@@ -229,7 +225,6 @@ export const TableReferenceComparisons = ({
   };
 
  
-  console.log(references);
 
   return (
     <>

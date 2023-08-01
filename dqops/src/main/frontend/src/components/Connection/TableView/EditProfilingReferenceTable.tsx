@@ -299,7 +299,6 @@ export const EditProfilingReferenceTable = ({
         table,
         selectedReference ?? ''
       ).then((res) => setTableComparisonResults(res.data));
-      console.log(tableComparisonResults);
     } else if (checkTypes === 'recurring') {
       await TableComparisonResultsApi.getTableComparisonRecurringResults(
         connection,
@@ -308,7 +307,6 @@ export const EditProfilingReferenceTable = ({
         timePartitioned === 'daily' ? 'daily' : 'monthly',
         selectedReference ?? ''
       ).then((res) => setTableComparisonResults(res.data));
-      console.log(tableComparisonResults);
     } else if (checkTypes === 'partitioned') {
       await TableComparisonResultsApi.getTableComparisonPartitionedResults(
         connection,
@@ -317,7 +315,6 @@ export const EditProfilingReferenceTable = ({
         timePartitioned === 'daily' ? 'daily' : 'monthly',
         selectedReference ?? ''
       ).then((res) => setTableComparisonResults(res.data));
-      console.log(tableComparisonResults);
     }
   };
 
@@ -409,7 +406,6 @@ export const EditProfilingReferenceTable = ({
 
   useEffect(() =>{onUpdate()}, [reference, table, schema, connection])
 
-  console.log(reference?.columns)
 
   return (
     <div className="text-sm">

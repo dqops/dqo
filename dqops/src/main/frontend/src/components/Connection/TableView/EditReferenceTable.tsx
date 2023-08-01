@@ -222,7 +222,6 @@ const EditReferenceTable = ({
           }
         )
           .then(() => {
-            console.log('inside put func');
             onBack();
           })
           .finally(() => {
