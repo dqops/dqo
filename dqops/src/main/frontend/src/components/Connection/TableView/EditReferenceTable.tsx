@@ -23,7 +23,6 @@ type EditReferenceTableProps = {
   onBack: () => void;
   selectedReference?: string;
   changes?: boolean;
-  onUpdateParent?: () => void;
   isUpdatedParent?: boolean;
   timePartitioned?: 'daily' | 'monthly';
   onRunChecksRowCount?: () => void
@@ -33,9 +32,7 @@ type EditReferenceTableProps = {
 const EditReferenceTable = ({
   onBack,
   selectedReference,
-  changes,
   timePartitioned,
-  onUpdateParent,
   isUpdatedParent,
   onRunChecksRowCount,
   disabled
@@ -58,7 +55,6 @@ const EditReferenceTable = ({
     schema: string;
     table: string;
   } = useParams();
-
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
@@ -636,5 +632,4 @@ const EditReferenceTable = ({
     </div>
   );
 };
-
 export default EditReferenceTable;

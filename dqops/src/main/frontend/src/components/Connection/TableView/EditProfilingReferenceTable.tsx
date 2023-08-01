@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Input from '../../Input';
-import Button from '../../Button';
 import SvgIcon from '../../SvgIcon';
 import {
   ColumnApiClient,
@@ -70,7 +69,6 @@ export const EditProfilingReferenceTable = ({
   const [loading, setLoading] = useState(false);
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
-  const [isExtended, setIsExtended] = useState(false);
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
   const [changes, setChanges] = useState(false);
@@ -420,7 +418,7 @@ export const EditProfilingReferenceTable = ({
           onBack={() => onBack(false)}
           selectedReference={selectedReference}
           changes={changes}
-          onUpdateParent={onUpdate}
+          
           isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
           onRunChecksRowCount={onRunChecksRowCount}
@@ -459,11 +457,7 @@ export const EditProfilingReferenceTable = ({
       <div className="px-8 py-4">
         <SectionWrapper
           title="Table level comparison"
-          className={clsx(
-            'mb-10 px-0 h-full py-0 pt-0 pb-2 w-1/6 ',
-            isExtended ? 'mt-10' : 'mt-0'
-          )}
-        >
+          className='mb-10 px-0 h-full py-0 pt-0 pb-2 w-1/6 mt-0'>
           <div className="flex flex-col h-full w-full">
             <div className="flex flex-col items-center justify-center h-30 w-2/3 pb-0 mb-0">
               <span className="flex items-center cursor-pointer mr-2 font-bold mb-1 mt-4">

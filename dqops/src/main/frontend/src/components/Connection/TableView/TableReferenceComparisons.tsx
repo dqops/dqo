@@ -44,16 +44,16 @@ export const TableReferenceComparisons = ({
     getNewTableComparison();
   }, []);
 
-  const getReferenceComparisons = () => {
-    TableComparisonsApi.getTableComparisonConfigurations(
-      connection,
-      schema,
-      table
-    ).then((res) => {
-      setReferences(res.data);
-      console.log('inside getting data');
-    });
-  };
+  // const getReferenceComparisons = () => {
+  //   TableComparisonsApi.getTableComparisonConfigurations(
+  //     connection,
+  //     schema,
+  //     table
+  //   ).then((res) => {
+  //     setReferences(res.data);
+  //     console.log('inside getting data');
+  //   });
+  // };
 
   const getNewTableComparison = () => {
     if (checkTypes === CheckTypes.PROFILING) {
@@ -93,30 +93,30 @@ export const TableReferenceComparisons = ({
     }
   };
 
-  const onCreateNewReference = () => {
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      connection,
-      schema,
-      table,
-      'table-comparisons'
-    )}?isEditing=true`;
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value: ROUTES.TABLE_LEVEL_VALUE(
-          CheckTypes.SOURCES,
-          connection,
-          schema,
-          table
-        ),
-        state: {},
-        label: table
-      })
-    );
+  // const onCreateNewReference = () => {
+  //   const url = `${ROUTES.TABLE_LEVEL_PAGE(
+  //     CheckTypes.SOURCES,
+  //     connection,
+  //     schema,
+  //     table,
+  //     'table-comparisons'
+  //   )}?isEditing=true`;
+  //   dispatch(
+  //     addFirstLevelTab(CheckTypes.SOURCES, {
+  //       url,
+  //       value: ROUTES.TABLE_LEVEL_VALUE(
+  //         CheckTypes.SOURCES,
+  //         connection,
+  //         schema,
+  //         table
+  //       ),
+  //       state: {},
+  //       label: table
+  //     })
+  //   );
 
-    history.push(url);
-  };
+  //   history.push(url);
+  // };
 
   const onEditReference = (reference: TableComparisonConfigurationModel) => {
     const url = `${ROUTES.TABLE_LEVEL_PAGE(
