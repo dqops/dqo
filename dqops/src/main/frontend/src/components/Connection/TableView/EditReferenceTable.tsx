@@ -17,6 +17,7 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
+import clsx from 'clsx';
 
 type EditReferenceTableProps = {
   onBack: () => void;
@@ -25,6 +26,8 @@ type EditReferenceTableProps = {
   onUpdateParent?: () => void;
   isUpdatedParent?: boolean;
   timePartitioned?: 'daily' | 'monthly';
+  onRunChecksRowCount?: () => void
+  disabled ?: boolean
 };
 
 const EditReferenceTable = ({
@@ -33,7 +36,9 @@ const EditReferenceTable = ({
   changes,
   timePartitioned,
   onUpdateParent,
-  isUpdatedParent
+  isUpdatedParent,
+  onRunChecksRowCount,
+  disabled
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -529,6 +534,20 @@ const EditReferenceTable = ({
             placeholder="Table comparison configuration name"
           />
         </div>
+        <div className='flex justify-center items-center gap-x-2'>
+        <SvgIcon
+        name="sync"
+        className={clsx('w-4 h-4 mr-3', disabled ? 'animate-spin' : 'hidden')}
+        />
+
+        <Button
+            label="Compare Tables"
+            color="primary"
+            variant="contained"
+            onClick={onRunChecksRowCount && onRunChecksRowCount}
+            disabled={disabled}
+        />
+
         <Button
           label="Back"
           color="primary"
@@ -537,14 +556,15 @@ const EditReferenceTable = ({
           leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
           onClick={onBack}
         />
+        </div>
       </div>
 
       <div className="px-8 py-4">
         <SectionWrapper
           title="Reference table (the source of truth)"
-          className="py-8 mb-10"
+          className="py-8 mb-10 flex w-full items-center"
         >
-          <div className="flex gap-2 items-center mb-3">
+          <div className="flex gap-2 items-center w-1/3 mb-3">
             <div className="w-60">Connection</div>
             <Select
               className="flex-1"
@@ -553,7 +573,7 @@ const EditReferenceTable = ({
               onChange={changePropsConnection}
             />
           </div>
-          <div className="flex gap-2 items-center mb-3">
+          <div className="flex gap-2 items-center w-1/3 mb-3">
             <div className="w-60">Schema</div>
             <Select
               className="flex-1"
@@ -562,7 +582,7 @@ const EditReferenceTable = ({
               onChange={changePropsSchema}
             />
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center w-1/3 mb-3">
             <div className="w-60">Table</div>
             <Select
               className="flex-1"

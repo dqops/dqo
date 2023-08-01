@@ -423,8 +423,12 @@ export const EditProfilingReferenceTable = ({
           onUpdateParent={onUpdate}
           isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
+          onRunChecksRowCount={onRunChecksRowCount}
+          disabled={disabled || loading}
         />
       </div>
+      {reference &&
+      <div>
       <div className="px-8 py-4 border-b border-gray-300 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span>Comparing this table to the reference table:</span>
@@ -434,7 +438,7 @@ export const EditProfilingReferenceTable = ({
             {reference?.reference_table?.table_name}
           </a>
         </div>
-        <div className="flex justify-center items-center gap-x-2">
+        {/* <div className="flex justify-center items-center gap-x-2">
           {job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
             job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
             job?.status && (
@@ -450,7 +454,7 @@ export const EditProfilingReferenceTable = ({
             onClick={onRunChecksRowCount}
             disabled={disabled || loading}
           />
-        </div>
+        </div> */}
       </div>
       <div className="px-8 py-4">
         <SectionWrapper
@@ -903,7 +907,10 @@ export const EditProfilingReferenceTable = ({
             ))}
           </table>
         </SectionWrapper>
+                    
       </div>
+     </div>
+    }              
     </div>
   );
 };
