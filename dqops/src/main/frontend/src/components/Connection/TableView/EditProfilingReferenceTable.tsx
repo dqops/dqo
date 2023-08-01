@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import TableActionGroup from './TableActionGroup';
 import Input from '../../Input';
 import Button from '../../Button';
 import SvgIcon from '../../SvgIcon';
@@ -51,7 +50,6 @@ export const EditProfilingReferenceTable = ({
   categoryCheck
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
   const {
     connection,
     schema,
@@ -198,9 +196,6 @@ export const EditProfilingReferenceTable = ({
           .catch((err) => {
             console.log(err);
           })
-          .finally(() => {
-            setIsUpdating(false);
-          });
       } else if (checkTypes === CheckTypes.RECURRING) {
         if (timePartitioned === 'daily') {
           TableComparisonsApi.updateTableComparisonRecurringDaily(
@@ -414,8 +409,8 @@ export const EditProfilingReferenceTable = ({
     }
   };
 
-  console.log(categoryCheck);
-  console.log(selectedReference);
+  useEffect(() =>{onUpdate()}, [reference, table, schema, connection])
+
 
   return (
     <div className="text-sm">

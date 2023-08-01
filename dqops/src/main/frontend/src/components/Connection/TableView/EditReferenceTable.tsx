@@ -169,10 +169,6 @@ const EditReferenceTable = ({
   };
 
   const onUpdate = async () => {
-    if (onUpdateParent) {
-      setIsUpdating(true);
-      onUpdateParent();
-    }
     if (selectedReference) {
       await TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
@@ -488,8 +484,6 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
-  console.log(doubleArray);
-
   return (
     <div className="w-full">
       <TableActionGroup
@@ -507,20 +501,20 @@ const EditReferenceTable = ({
               isUpdated)) ||
           isUpdatedParent
         }
-        // isDisabled={
-        //   !(
-        //     name.length !== 0 &&
-        //     connection.length !== 0 &&
-        //     schema.length !== 0 &&
-        //     table.length !== 0 &&
-        //     refConnection.length !== 0 &&
-        //     refSchema.length !== 0 &&
-        //     refTable.length !== 0 &&
-        //     bool &&
-        //     (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-        //       isUpdated)
-        //   )
-        // }
+        isDisabled={
+          !(
+            name.length !== 0 &&
+            connection.length !== 0 &&
+            schema.length !== 0 &&
+            table.length !== 0 &&
+            refConnection.length !== 0 &&
+            refSchema.length !== 0 &&
+            refTable.length !== 0 &&
+            bool &&
+            (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+              isUpdated) || isUpdatedParent
+          )
+        }
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
