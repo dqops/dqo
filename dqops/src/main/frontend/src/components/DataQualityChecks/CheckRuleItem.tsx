@@ -114,7 +114,6 @@ const CheckRuleItem = ({
                   handleRuleParameterChange(field, index)
                 }
                 disabled={disabled}
-                className="!max-w-25 !min-w-25"
                 onSave={onUpdate}
               />
             </div>
