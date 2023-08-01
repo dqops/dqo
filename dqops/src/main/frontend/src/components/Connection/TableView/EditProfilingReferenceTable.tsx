@@ -138,7 +138,7 @@ export const EditProfilingReferenceTable = ({
         );
       });
     }
-  }, [selectedReference]);
+  }, []);
 
   useEffect(() => {
     if (reference) {
@@ -411,6 +411,7 @@ export const EditProfilingReferenceTable = ({
 
   useEffect(() =>{onUpdate()}, [reference, table, schema, connection])
 
+  console.log(reference?.columns)
 
   return (
     <div className="text-sm">
@@ -424,8 +425,6 @@ export const EditProfilingReferenceTable = ({
           timePartitioned={timePartitioned}
         />
       </div>
-      <span onClick={onUpdate}>button</span>
-
       <div className="px-8 py-4 border-b border-gray-300 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span>Comparing this table to the reference table:</span>

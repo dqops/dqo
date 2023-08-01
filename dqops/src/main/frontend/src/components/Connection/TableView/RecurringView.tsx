@@ -214,7 +214,6 @@ const RecurringView = () => {
     );
   };
 
-  console.log(dailyRecurring);
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">

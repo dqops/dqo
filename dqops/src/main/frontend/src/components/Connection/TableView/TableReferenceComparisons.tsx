@@ -168,30 +168,67 @@ export const TableReferenceComparisons = ({
     if (stayOnSamePage === false) {
       setIsEditing(false);
     }
+     if(checkTypes === CheckTypes.PROFILING){
+       const url = `${ROUTES.TABLE_LEVEL_PAGE(
+         checkTypes,
+         connection,
+         schema,
+         table,
+         'table-comparisons'
+         )}`;
+         dispatch(
+      addFirstLevelTab(checkTypes, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
+        state: {},
+        label: table
+      })
+      );
+      history.push(url);
+    }
+    else if(timePartitioned ==="daily"){
+      const url = `${ROUTES.TABLE_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        table,
+        'daily_comparisons'
+        )}`;
+        dispatch(
+     addFirstLevelTab(checkTypes, {
+       url,
+       value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
+       state: {},
+       label: table
+     })
+     );
+     history.push(url);
+   }
+   else if(timePartitioned === "monthly"){
+    const url = `${ROUTES.TABLE_LEVEL_PAGE(
+      checkTypes,
+      connection,
+      schema,
+      table,
+      'monthly_comparisons'
+      )}`;
+      dispatch(
+   addFirstLevelTab(checkTypes, {
+     url,
+     value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
+     state: {},
+     label: table
+   })
+   );
+   history.push(url);
+    }
   };
 
   const onCreate = () => {
-    // const url = `${ROUTES.TABLE_LEVEL_PAGE(
-    //   checkTypes,
-    //   connection,
-    //   schema,
-    //   table,
-    //   'table-comparisons'
-    // )}?isEditing=true`;
-    // dispatch(
-    //   addFirstLevelTab(checkTypes, {
-    //     url,
-    //     value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
-    //     state: {},
-    //     label: table
-    //   })
-    // );
-
-    // history.push(url);
     setIsEditing(true);
   };
 
-  console.log(isEditing);
+ 
   console.log(references);
 
   return (
