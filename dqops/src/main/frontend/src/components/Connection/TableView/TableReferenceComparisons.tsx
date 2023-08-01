@@ -32,6 +32,7 @@ export const TableReferenceComparisons = ({
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
   const [selectedReference, setSelectedReference] = useState<string>();
+  const [isCreating, setIsCreting] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export const TableReferenceComparisons = ({
 
   useEffect(() => {
     getNewTableComparison();
+    setIsCreting(false);
   }, []);
 
   // const getReferenceComparisons = () => {
@@ -164,67 +166,89 @@ export const TableReferenceComparisons = ({
     if (stayOnSamePage === false) {
       setIsEditing(false);
     }
-     if(checkTypes === CheckTypes.PROFILING){
-       const url = `${ROUTES.TABLE_LEVEL_PAGE(
-         checkTypes,
-         connection,
-         schema,
-         table,
-         'table-comparisons'
-         )}`;
-         dispatch(
-      addFirstLevelTab(checkTypes, {
-        url,
-        value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
-        state: {},
-        label: table
-      })
+    if (checkTypes === CheckTypes.PROFILING) {
+      const url = `${ROUTES.TABLE_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        table,
+        'table-comparisons'
+      )}`;
+      dispatch(
+        addFirstLevelTab(checkTypes, {
+          url,
+          value: ROUTES.TABLE_LEVEL_VALUE(
+            checkTypes,
+            connection,
+            schema,
+            table
+          ),
+          state: {},
+          label: table
+        })
       );
+      if (isCreating === true) {
+        getNewTableComparison();
+      }
       history.push(url);
-    }
-    else if(timePartitioned ==="daily"){
+    } else if (timePartitioned === 'daily') {
       const url = `${ROUTES.TABLE_LEVEL_PAGE(
         checkTypes,
         connection,
         schema,
         table,
         'daily_comparisons'
-        )}`;
-        dispatch(
-     addFirstLevelTab(checkTypes, {
-       url,
-       value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
-       state: {},
-       label: table
-     })
-     );
-     history.push(url);
-   }
-   else if(timePartitioned === "monthly"){
-    const url = `${ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
-      connection,
-      schema,
-      table,
-      'monthly_comparisons'
       )}`;
       dispatch(
-   addFirstLevelTab(checkTypes, {
-     url,
-     value: ROUTES.TABLE_LEVEL_VALUE(checkTypes, connection, schema, table),
-     state: {},
-     label: table
-   })
-   );
-   history.push(url);
+        addFirstLevelTab(checkTypes, {
+          url,
+          value: ROUTES.TABLE_LEVEL_VALUE(
+            checkTypes,
+            connection,
+            schema,
+            table
+          ),
+          state: {},
+          label: table
+        })
+      );
+      if (isCreating === true) {
+        getNewTableComparison();
+      }
+      history.push(url);
+    } else if (timePartitioned === 'monthly') {
+      const url = `${ROUTES.TABLE_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        table,
+        'monthly_comparisons'
+      )}`;
+      dispatch(
+        addFirstLevelTab(checkTypes, {
+          url,
+          value: ROUTES.TABLE_LEVEL_VALUE(
+            checkTypes,
+            connection,
+            schema,
+            table
+          ),
+          state: {},
+          label: table
+        })
+      );
+      if (isCreating === true) {
+        getNewTableComparison();
+      }
+      history.push(url);
     }
+    setIsCreting(false);
   };
 
   const onCreate = () => {
+    setIsCreting(true);
     setIsEditing(true);
   };
-
- 
 
   return (
     <>
@@ -241,6 +265,7 @@ export const TableReferenceComparisons = ({
                 )
               : undefined
           }
+          isCreating={isCreating}
         />
       ) : (
         <ProfilingReferenceTableList
