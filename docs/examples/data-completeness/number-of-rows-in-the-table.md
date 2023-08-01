@@ -109,7 +109,7 @@ The detailed explanation of how to run the example is described [here](../#runni
 
 To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
 
 1. Go to **Profiling** section. 
 
@@ -118,10 +118,10 @@ To execute the check prepared in the example using the [graphical interface](../
 3. Select **Advanced Profiling** tab.
 
 4. Run the enabled check using the **Run check** button.
-    ![Run check](https://dqops.com/docs/images/examples/run-check.png)
+    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
 
 5. Review the results by opening the **Check details** button.
-    ![Check details](https://dqops.com/docs/images/examples/check-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details.png)
 
 6. You should see the results as the one below.
     The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (692).
