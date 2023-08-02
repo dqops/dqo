@@ -99,7 +99,7 @@ const RecurringView = () => {
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (tab === 'daily') {
+    if (tab === 'daily' || tab === 'daily_comparisons') {
       if (!dailyRecurring) return;
 
       await dispatch(
@@ -214,7 +214,6 @@ const RecurringView = () => {
     );
   };
 
-
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <TableActionGroup
@@ -251,6 +250,7 @@ const RecurringView = () => {
           checkTypes={checkTypes}
           timePartitioned="daily"
           checksUI={dailyRecurring}
+          fetchChecks={onUpdate}
         />
       )}
       {tab === 'monthly_comparisons' && (
@@ -258,6 +258,7 @@ const RecurringView = () => {
           checkTypes={checkTypes}
           timePartitioned="monthly"
           checksUI={monthlyRecurring}
+          fetchChecks={onUpdate}
         />
       )}
     </div>

@@ -8,18 +8,23 @@ import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
 import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import qs from 'query-string';
+import { useSelector } from 'react-redux';
+import { getFirstLevelState } from '../../../redux/selectors';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
   checksUI?: any;
+  fetchChecks: () => Promise<void>;
 };
 
 export const TableReferenceComparisons = ({
   checkTypes,
   timePartitioned,
-  checksUI
-}: TableReferenceComparisonsProps) => {
+  checksUI,
+  fetchChecks
+}: //checksUI
+TableReferenceComparisonsProps) => {
   const {
     connection,
     schema,
@@ -34,6 +39,7 @@ export const TableReferenceComparisons = ({
   const [selectedReference, setSelectedReference] = useState<string>();
   const [isCreating, setIsCreting] = useState(false);
   const location = useLocation();
+  // const { checksUI } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
     const { isEditing: editing, reference } = qs.parse(location.search);
@@ -44,6 +50,7 @@ export const TableReferenceComparisons = ({
   useEffect(() => {
     getNewTableComparison();
     setIsCreting(false);
+    fetchChecks();
   }, []);
 
   // const getReferenceComparisons = () => {
@@ -188,6 +195,7 @@ export const TableReferenceComparisons = ({
         })
       );
       if (isCreating === true) {
+        fetchChecks();
         getNewTableComparison();
       }
       history.push(url);
@@ -213,6 +221,7 @@ export const TableReferenceComparisons = ({
         })
       );
       if (isCreating === true) {
+        fetchChecks();
         getNewTableComparison();
       }
       history.push(url);
@@ -238,6 +247,7 @@ export const TableReferenceComparisons = ({
         })
       );
       if (isCreating === true) {
+        fetchChecks();
         getNewTableComparison();
       }
       history.push(url);
@@ -251,7 +261,7 @@ export const TableReferenceComparisons = ({
   };
 
   console.log(selectedReference);
-  // console.log(checksUI.categories);
+  console.log(checksUI?.categories ?? '');
   return (
     <>
       {isEditing ? (
