@@ -428,8 +428,8 @@ export const EditProfilingReferenceTable = ({
       </div>
       {reference && (
         <div>
-          <div className="px-8 py-4 border-b border-gray-300 flex items-center justify-between">
-            <div className="flex items-center gap-4">
+          {/* <div className="px-8 py-4 border-b border-gray-300 flex items-center justify-between"> */}
+          {/* <div className="flex items-center gap-4">
               <span>Comparing this table to the reference table:</span>
               <a
                 className="text-teal-500 cursor-pointer"
@@ -439,8 +439,8 @@ export const EditProfilingReferenceTable = ({
                 {reference?.reference_table?.schema_name}.
                 {reference?.reference_table?.table_name}
               </a>
-            </div>
-            {/* <div className="flex justify-center items-center gap-x-2">
+            </div> */}
+          {/* <div className="flex justify-center items-center gap-x-2">
           {job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
             job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
             job?.status && (
@@ -456,8 +456,8 @@ export const EditProfilingReferenceTable = ({
             onClick={onRunChecksRowCount}
             disabled={disabled || loading}
           />
-        </div> */}
-          </div>
+          </div> */}
+          {/* </div> */}
           <div className="px-8 py-4">
             <SectionWrapper
               title="Table level comparison"

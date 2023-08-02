@@ -569,6 +569,8 @@ const EditReferenceTable = ({
           <SectionWrapper
             title="Reference table (the source of truth)"
             className="py-8 mb-10 flex w-full items-center justify-between"
+            svgIcon={isCreating ? false : true}
+            onClick={() => setExtendRefnames(false)}
           >
             <div className="flex flex-col gap-2 w-1/4 mb-3">
               <div>Connection</div>
@@ -614,18 +616,30 @@ const EditReferenceTable = ({
 
         {isCreating || extendDg ? (
           <div className="flex gap-4">
-            <div className=" mr-20 mt-3">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+            <div className="mr-20 mt-0 relative">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
                 <div
                   key={index}
                   className="text-sm py-1.5"
                   style={{
                     whiteSpace: 'nowrap',
-                    marginBottom: '12.6px',
-                    marginTop: '12.6px'
+                    marginBottom: '12.4px',
+                    marginTop: '4.6px'
                   }}
                 >
-                  Column {item}
+                  {item === 0 ? (
+                    isCreating === false ? (
+                      <SvgIcon
+                        name="chevron-down"
+                        className="w-5 h-5 absolute top-0"
+                        onClick={() => setExtendDg(false)}
+                      />
+                    ) : (
+                      ''
+                    )
+                  ) : (
+                    'Column' + item
+                  )}
                 </div>
               ))}
             </div>
