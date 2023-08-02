@@ -496,10 +496,10 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
-  const saveRun = async () => {
-    await onUpdate();
+  const saveRun = () => {
+    onUpdate();
     if (onRunChecksRowCount) {
-      await onRunChecksRowCount();
+      onRunChecksRowCount();
     }
   };
 
