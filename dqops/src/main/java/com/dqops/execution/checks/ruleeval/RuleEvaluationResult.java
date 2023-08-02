@@ -34,7 +34,6 @@ public class RuleEvaluationResult {
     private final DoubleColumn expectedValueColumn;
     private final IntColumn severityColumn;
     private final LongColumn incidentHashColumn;
-    private final TextColumn tableComparisonNameColumn;
     private final TextColumn referenceConnectionColumn;
     private final TextColumn referenceSchemaColumn;
     private final TextColumn referenceTableColumn;
@@ -59,7 +58,6 @@ public class RuleEvaluationResult {
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
 		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
         this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(ruleResultsTable, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
-        this.tableComparisonNameColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
         this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME);
         this.referenceSchemaColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME);
         this.referenceTableColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME);
@@ -108,14 +106,6 @@ public class RuleEvaluationResult {
      */
     public LongColumn getIncidentHashColumn() {
         return incidentHashColumn;
-    }
-
-    /**
-     * Returns the table comparison name column.
-     * @return Table comparison name column.
-     */
-    public TextColumn getTableComparisonNameColumn() {
-        return tableComparisonNameColumn;
     }
 
     /**

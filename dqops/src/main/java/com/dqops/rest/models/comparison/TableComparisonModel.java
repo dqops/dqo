@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.*;
+import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
@@ -27,15 +28,14 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +109,12 @@ public class TableComparisonModel {
      */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run the table comparison checks for this table, using checks selected in this model.")
     private CheckSearchFilters compareTableRunChecksJobTemplate;
+
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored check results for this table comparison.
+     */
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored check results for this table comparison.")
+    private DeleteStoredDataQueueJobParameters compareTableCleanDataJobTemplate;
 
     /**
      * Creates a table comparison model, copying the configuration of all comparison checks on the table level and on the column level.
@@ -186,6 +192,9 @@ public class TableComparisonModel {
            setTableComparisonName(tableComparisonConfigurationName);
            setEnabled(true);
         }};
+
+        tableComparisonModel.compareTableCleanDataJobTemplate =
+                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(tableComparisonModel.compareTableRunChecksJobTemplate);
 
         return tableComparisonModel;
     }

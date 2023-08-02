@@ -15,6 +15,7 @@
  */
 package com.dqops.data.readouts.factory;
 
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
@@ -66,6 +67,7 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
                 TextColumn.create(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME),
+                TextColumn.create(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME),

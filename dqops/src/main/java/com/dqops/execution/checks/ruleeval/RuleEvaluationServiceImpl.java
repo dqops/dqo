@@ -184,7 +184,6 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 result.getIncludeInSlaColumn().set(targetRowIndex, checkSpec.isIncludeInSla());
 
                 if (tableComparisonConfiguration != null) {
-                    result.getTableComparisonNameColumn().set(targetRowIndex, tableComparisonConfiguration.getComparisonName());
                     result.getReferenceConnectionColumn().set(targetRowIndex, tableComparisonConfiguration.getReferenceTableConnectionName());
                     result.getReferenceSchemaColumn().set(targetRowIndex, tableComparisonConfiguration.getReferenceTableSchemaName());
                     result.getReferenceTableColumn().set(targetRowIndex, tableComparisonConfiguration.getReferenceTableName());
