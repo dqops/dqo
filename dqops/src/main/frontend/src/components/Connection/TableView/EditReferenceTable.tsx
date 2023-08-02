@@ -496,6 +496,13 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
+  const saveRun = async () => {
+    await onUpdate();
+    if (onRunChecksRowCount) {
+      await onRunChecksRowCount();
+    }
+  };
+
   useEffect(() => {
     setIsButtonEnabled(
       (name.length !== 0 &&
@@ -545,7 +552,7 @@ const EditReferenceTable = ({
               label="Compare Tables"
               color="primary"
               variant="contained"
-              onClick={onRunChecksRowCount && onRunChecksRowCount}
+              onClick={saveRun}
               disabled={disabled}
             />
           )}
