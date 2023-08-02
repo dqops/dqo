@@ -250,6 +250,8 @@ export const TableReferenceComparisons = ({
     setIsEditing(true);
   };
 
+  console.log(selectedReference);
+  // console.log(checksUI.categories);
   return (
     <>
       {isEditing ? (
