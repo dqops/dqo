@@ -63,7 +63,7 @@ public class OracleColumnNullsNotNullsCountSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(12L, resultTable.column(0).get(0));
+        Assertions.assertEquals(12, (double) resultTable.column(0).get(0));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class OracleColumnNullsNotNullsCountSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(12L, resultTable.column(0).get(0));
+        Assertions.assertEquals(12, (double) resultTable.column(0).get(0));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class OracleColumnNullsNotNullsCountSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(12L, resultTable.column(0).get(0));
+        Assertions.assertEquals(12, (double) resultTable.column(0).get(0));
     }
 
     @Test
@@ -100,9 +100,9 @@ public class OracleColumnNullsNotNullsCountSensorParametersSpecIntegrationTest e
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals(12, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1, (double) resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,6 +115,6 @@ public class OracleColumnNullsNotNullsCountSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(12L, resultTable.column(0).get(0));
+        Assertions.assertEquals(12, (double) resultTable.column(0).get(0));
     }
 }
