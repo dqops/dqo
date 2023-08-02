@@ -78,6 +78,11 @@ export const EditProfilingReferenceTable = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
+  const onChangeUpdatedParent = (variable: boolean): void => {
+    setIsUpdated(variable);
+  };
+
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
@@ -428,6 +433,7 @@ export const EditProfilingReferenceTable = ({
           disabled={disabled || loading}
           isCreating={isCreating}
           goToRefTable={goToRefTable}
+          onChangeUpdatedParent={onChangeUpdatedParent}
         />
       </div>
       {reference && (

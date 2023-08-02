@@ -29,6 +29,7 @@ type EditReferenceTableProps = {
   disabled?: boolean;
   isCreating?: boolean;
   goToRefTable?: () => void;
+  onChangeUpdatedParent: (variable: boolean) => void;
 };
 
 const EditReferenceTable = ({
@@ -39,7 +40,8 @@ const EditReferenceTable = ({
   onRunChecksRowCount,
   disabled,
   isCreating,
-  goToRefTable
+  goToRefTable,
+  onChangeUpdatedParent
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -72,6 +74,9 @@ const EditReferenceTable = ({
     useState<Array<TableComparisonGroupingColumnPairModel>>();
   const [extendRefnames, setExtendRefnames] = useState(false);
   const [extendDg, setExtendDg] = useState(false);
+  const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
+    false
+  );
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -198,7 +203,7 @@ const EditReferenceTable = ({
         }
       )
         .then(() => {
-          onBack(true);
+          onBack(false);
         })
         .catch((err) => {
           console.log('err', err);
@@ -228,7 +233,7 @@ const EditReferenceTable = ({
           }
         )
           .then(() => {
-            onBack(true);
+            onBack(false);
           })
           .finally(() => {
             setIsUpdating(false);
@@ -257,7 +262,7 @@ const EditReferenceTable = ({
           }
         )
           .then(() => {
-            onBack(true);
+            onBack(false);
           })
           .finally(() => {
             setIsUpdating(false);
@@ -286,7 +291,7 @@ const EditReferenceTable = ({
           }
         )
           .then(() => {
-            onBack(true);
+            onBack(false);
           })
           .finally(() => {
             setIsUpdating(false);
@@ -315,7 +320,7 @@ const EditReferenceTable = ({
           }
         )
           .then(() => {
-            onBack(true);
+            onBack(false);
           })
           .finally(() => {
             setIsUpdating(false);
@@ -344,13 +349,15 @@ const EditReferenceTable = ({
           }
         )
           .then(() => {
-            onBack(true);
+            onBack(false);
           })
           .finally(() => {
             setIsUpdating(false);
           });
       }
     }
+    setIsButtonEnabled(false);
+    onChangeUpdatedParent(false);
   };
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -400,7 +407,6 @@ const EditReferenceTable = ({
         initialObject[i] = 3;
       }
     }
-
     return initialObject;
   };
 
@@ -490,38 +496,28 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
+  useEffect(() => {
+    setIsButtonEnabled(
+      (name.length !== 0 &&
+        connection.length !== 0 &&
+        schema.length !== 0 &&
+        table.length !== 0 &&
+        refConnection.length !== 0 &&
+        refSchema.length !== 0 &&
+        refTable.length !== 0 &&
+        bool &&
+        (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+          isUpdated)) ||
+        isUpdatedParent
+    );
+  }, [normalList, refList, isUpdatedParent, bool]);
+
   return (
     <div className="w-full">
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={
-          (name.length !== 0 &&
-            connection.length !== 0 &&
-            schema.length !== 0 &&
-            table.length !== 0 &&
-            refConnection.length !== 0 &&
-            refSchema.length !== 0 &&
-            refTable.length !== 0 &&
-            bool &&
-            (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-              isUpdated)) ||
-          isUpdatedParent
-        }
-        isDisabled={
-          !(
-            (name.length !== 0 &&
-              connection.length !== 0 &&
-              schema.length !== 0 &&
-              table.length !== 0 &&
-              refConnection.length !== 0 &&
-              refSchema.length !== 0 &&
-              refTable.length !== 0 &&
-              bool &&
-              (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-                isUpdated)) ||
-            isUpdatedParent
-          )
-        }
+        isUpdated={isButtonEnabled}
+        isDisabled={!isButtonEnabled}
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
@@ -544,15 +540,15 @@ const EditReferenceTable = ({
               disabled ? 'animate-spin' : 'hidden'
             )}
           />
-
-          <Button
-            label="Compare Tables"
-            color="primary"
-            variant="contained"
-            onClick={onRunChecksRowCount && onRunChecksRowCount}
-            disabled={disabled}
-          />
-
+          {isCreating === false && (
+            <Button
+              label="Compare Tables"
+              color="primary"
+              variant="contained"
+              onClick={onRunChecksRowCount && onRunChecksRowCount}
+              disabled={disabled}
+            />
+          )}
           <Button
             label="Back"
             color="primary"

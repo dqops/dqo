@@ -104,7 +104,7 @@ const TableReferences = () => {
 
   return (
     <div className="my-1 text-sm">
-      {isEditing ? (
+      {/* {isEditing ? (
         <EditReferenceTable
           onBack={onBack}
           selectedReference={selectedReference}
@@ -116,7 +116,7 @@ const TableReferences = () => {
           refetch={getReferences}
           onEditReferenceTable={onEditReferenceTable}
         />
-      )}
+      )} */}
     </div>
   );
 };
