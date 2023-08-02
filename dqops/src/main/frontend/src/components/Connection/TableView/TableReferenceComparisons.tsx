@@ -8,8 +8,6 @@ import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
 import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import qs from 'query-string';
-import { useSelector } from 'react-redux';
-import { getFirstLevelState } from '../../../redux/selectors';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
@@ -23,8 +21,7 @@ export const TableReferenceComparisons = ({
   timePartitioned,
   checksUI,
   fetchChecks
-}: //checksUI
-TableReferenceComparisonsProps) => {
+}: TableReferenceComparisonsProps) => {
   const {
     connection,
     schema,
@@ -39,7 +36,6 @@ TableReferenceComparisonsProps) => {
   const [selectedReference, setSelectedReference] = useState<string>();
   const [isCreating, setIsCreting] = useState(false);
   const location = useLocation();
-  // const { checksUI } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
     const { isEditing: editing, reference } = qs.parse(location.search);
@@ -52,17 +48,6 @@ TableReferenceComparisonsProps) => {
     setIsCreting(false);
     fetchChecks();
   }, []);
-
-  // const getReferenceComparisons = () => {
-  //   TableComparisonsApi.getTableComparisonConfigurations(
-  //     connection,
-  //     schema,
-  //     table
-  //   ).then((res) => {
-  //     setReferences(res.data);
-  //     console.log('inside getting data');
-  //   });
-  // };
 
   const getNewTableComparison = () => {
     if (checkTypes === CheckTypes.PROFILING) {
@@ -97,31 +82,6 @@ TableReferenceComparisonsProps) => {
       });
     }
   };
-
-  // const onCreateNewReference = () => {
-  //   const url = `${ROUTES.TABLE_LEVEL_PAGE(
-  //     CheckTypes.SOURCES,
-  //     connection,
-  //     schema,
-  //     table,
-  //     'table-comparisons'
-  //   )}?isEditing=true`;
-  //   dispatch(
-  //     addFirstLevelTab(CheckTypes.SOURCES, {
-  //       url,
-  //       value: ROUTES.TABLE_LEVEL_VALUE(
-  //         CheckTypes.SOURCES,
-  //         connection,
-  //         schema,
-  //         table
-  //       ),
-  //       state: {},
-  //       label: table
-  //     })
-  //   );
-
-  //   history.push(url);
-  // };
 
   const onEditReference = (reference: TableComparisonConfigurationModel) => {
     const url = `${ROUTES.TABLE_LEVEL_PAGE(
@@ -260,8 +220,6 @@ TableReferenceComparisonsProps) => {
     setIsEditing(true);
   };
 
-  console.log(selectedReference);
-  console.log(checksUI?.categories ?? '');
   return (
     <>
       {isEditing ? (
