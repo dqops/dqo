@@ -523,9 +523,9 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 min-w-120 max-w-120 flex items-end justify-end">
-          <div className="flex space-x-2">
-            <div className="text-gray-700 text-sm w-full">
+        <td className="py-2 px-4 flex items-end justify-end">
+          <div className=" space-x-2">
+            <div className="text-gray-700 text-sm w-full ">
               <SensorParameters
                 parameters={check.sensor_parameters || []}
                 onChange={(parameters: FieldModel[]) =>

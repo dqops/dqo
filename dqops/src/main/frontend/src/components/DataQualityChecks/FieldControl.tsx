@@ -93,7 +93,7 @@ const FieldControl = ({
               label={label}
               value={value}
               tooltipText={tooltip}
-              className="!min-w-40 !max-w-40 !text-xs"
+              className="!min-w-30 !max-w-30 !text-xs"
               onChange={(e) => handleChange({ string_value: e.target.value })}
               disabled={disabled}
               error={isInvalid}
@@ -106,7 +106,7 @@ const FieldControl = ({
               tooltipText={tooltip}
               className={clsx(
                 '!h-8 !text-xs',
-                className ? className : '!min-w-40 !max-w-40'
+                className ? className : '!min-w-30 !max-w-30'
               )}
               onChange={(e) => handleChange({ string_value: e.target.value })}
               disabled={disabled}
@@ -123,7 +123,7 @@ const FieldControl = ({
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
-            className ? className : ''
+            className ? className : '!min-w-30 !max-w-30'
           )}
           disabled={disabled}
           error={isInvalid}
@@ -138,7 +138,7 @@ const FieldControl = ({
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
 
-            className ? className : '!min-w-40 !max-w-40'
+            className ? className : '!min-w-30 !max-w-30'
           )}
           disabled={disabled}
           error={isInvalid}
@@ -153,7 +153,7 @@ const FieldControl = ({
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
 
-            className ? className : '!min-w-40 !max-w-40'
+            className ? className : '!min-w-30 !max-w-30'
           )}
           disabled={disabled}
           error={isInvalid}
@@ -174,7 +174,7 @@ const FieldControl = ({
           triggerClassName={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
 
-            className ? className : '!min-w-40 !max-w-40'
+            className ? className : '!min-w-30 !max-w-30'
           )}
           onChange={(value) => handleChange({ enum_value: value })}
           disabled={disabled}
@@ -214,7 +214,7 @@ const FieldControl = ({
           triggerClassName={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
 
-            className ? className : '!min-w-40 !max-w-40'
+            className ? className : '!min-w-30 !max-w-30'
           )}
           label={label}
           value={value}
@@ -234,9 +234,7 @@ const FieldControl = ({
             value={value}
             onChange={(date_value) => handleChange({ date_value })}
             className={clsx(
-              '!h-8 !text-xs !min-w-30 !max-w-30',
-
-              className ? className : '!min-w-40 !max-w-40'
+              '!h-8 !text-xs min-w-30 max-w-30',
             )}
             tooltipText={tooltip}
             disabled={disabled}

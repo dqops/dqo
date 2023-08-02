@@ -23,11 +23,11 @@ const SensorParameters = ({
   };
 
   return (
-    <div className="w-full pr-8">
+    <div className="w-full pr-0">
       {parameters.length ? (
-        <div className="flex space-x-2">
+        <div className="flex justify-end items-end space-x-2">
           {parameters.map((item, index) => (
-            <div key={index} className="">
+            <div key={index} className="flex justify-end items-end">
               <FieldControl
                 field={item}
                 onChange={(field: FieldModel) => handleChange(field, index)}
@@ -38,7 +38,7 @@ const SensorParameters = ({
           ))}
         </div>
       ) : (
-        <div>No sensor parameters</div>
+        <div></div>
       )}
     </div>
   );
