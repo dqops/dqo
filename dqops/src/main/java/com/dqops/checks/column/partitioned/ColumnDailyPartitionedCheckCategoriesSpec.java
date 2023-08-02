@@ -410,7 +410,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.PARTITIONED;
+        return CheckType.partitioned;
     }
 
     /**

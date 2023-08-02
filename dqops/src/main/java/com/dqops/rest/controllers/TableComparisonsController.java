@@ -352,7 +352,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.PROFILING, null);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.profiling, null);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -393,7 +393,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.RECURRING, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.recurring, CheckTimeScale.daily);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -434,7 +434,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.RECURRING, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.recurring, CheckTimeScale.monthly);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -475,7 +475,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.PARTITIONED, CheckTimeScale.daily);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.daily);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -516,7 +516,7 @@ public class TableComparisonsController {
                 referenceTableConfigurationSpec.getReferenceTableSchemaName(),
                 referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.PARTITIONED, CheckTimeScale.monthly);
+        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec, tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.monthly);
         return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
     }
 
@@ -591,7 +591,7 @@ public class TableComparisonsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel, CheckType.PROFILING, null);
+        return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel, CheckType.profiling, null);
     }
 
     /**
@@ -618,7 +618,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.RECURRING, CheckTimeScale.daily);
+                CheckType.recurring, CheckTimeScale.daily);
     }
 
     /**
@@ -645,7 +645,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.RECURRING, CheckTimeScale.monthly);
+                CheckType.recurring, CheckTimeScale.monthly);
     }
 
     /**
@@ -672,7 +672,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.PARTITIONED, CheckTimeScale.daily);
+                CheckType.partitioned, CheckTimeScale.daily);
     }
 
     /**
@@ -699,7 +699,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return createTableComparisonConfigurationWithChecks(connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.PARTITIONED, CheckTimeScale.monthly);
+                CheckType.partitioned, CheckTimeScale.monthly);
     }
 
     /**
@@ -777,7 +777,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.PROFILING, null);
+                tableComparisonModel, CheckType.profiling, null);
     }
 
     /**
@@ -806,7 +806,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.RECURRING, CheckTimeScale.daily);
+                tableComparisonModel, CheckType.recurring, CheckTimeScale.daily);
     }
 
     /**
@@ -835,7 +835,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.RECURRING, CheckTimeScale.monthly);
+                tableComparisonModel, CheckType.recurring, CheckTimeScale.monthly);
     }
 
     /**
@@ -864,7 +864,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.PARTITIONED, CheckTimeScale.daily);
+                tableComparisonModel, CheckType.partitioned, CheckTimeScale.daily);
     }
 
     /**
@@ -893,7 +893,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
         return updateTableComparisonWithChecks(connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.PARTITIONED, CheckTimeScale.monthly);
+                tableComparisonModel, CheckType.partitioned, CheckTimeScale.monthly);
     }
 
     /**

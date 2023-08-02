@@ -29,7 +29,6 @@ import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.groupings.DataGroupingConfigurationSpecObjectMother;
 import com.dqops.metadata.groupings.DataStreamLevelSpecObjectMother;
 import com.dqops.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -80,7 +79,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
 				checkSpec,
                 null,
                 new EffectiveSensorRuleNames(checkSpec.getParameters().getSensorDefinitionName(), checkSpec.getRuleDefinitionName()),
-                CheckType.PROFILING,
+                CheckType.profiling,
                 null, // time series
                 new TimeWindowFilterParameters(),
                 tableSpec.getDefaultDataGroupingConfiguration(),
