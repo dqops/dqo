@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * REST api controller to manage the list of checks.
  */
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Checks", description = "Data quality check definition management")
 public class ChecksController {

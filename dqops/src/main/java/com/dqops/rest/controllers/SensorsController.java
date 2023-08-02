@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * REST api controller to manage the list of sensors.
  */
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Sensors", description = "Sensors definition Management")
 public class SensorsController {

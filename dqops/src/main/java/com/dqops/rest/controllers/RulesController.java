@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * REST api controller to manage the list of rules.
  */
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Rules", description = "Rule management")
 public class RulesController {

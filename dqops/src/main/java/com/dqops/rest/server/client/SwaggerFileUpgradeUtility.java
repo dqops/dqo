@@ -20,11 +20,13 @@ import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.JsonSerializerImpl;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -66,6 +68,16 @@ public class SwaggerFileUpgradeUtility {
                     }
                 });
             }));
+
+            ArrayList<String> pathStrings = new ArrayList<>(openApi.getPaths().keySet());
+            for (String pathStringOriginal : pathStrings) {
+                if (pathStringOriginal.startsWith("/")) {
+                    String correctPathString = pathStringOriginal.substring(1);
+                    PathItem pathItem = openApi.getPaths().get(pathStringOriginal);
+                    openApi.getPaths().remove(pathStringOriginal);
+                    openApi.getPaths().put(correctPathString, pathItem);
+                }
+            }
 
             JsonSerializerImpl jsonSerializer = new JsonSerializerImpl();
             String upgradedSwaggerContent = jsonSerializer.serializePrettyPrint(openApi);

@@ -46,7 +46,7 @@ import java.util.stream.StreamSupport;
  * REST API controller that returns information about the configuration of DQO and the profile of the current user.
  */
 @RestController
-@RequestMapping("api/environment")
+@RequestMapping("/api/environment")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Environment", description = "DQO environment and configuration controller, provides access to the DQO configuration.")
 @Slf4j

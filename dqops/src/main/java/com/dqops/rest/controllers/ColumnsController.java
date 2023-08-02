@@ -69,7 +69,7 @@ import java.util.stream.Stream;
  * REST api controller to manage the list of columns inside a table.
  */
 @RestController
-@RequestMapping("api/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Columns", description = "Manages columns inside a table")
 public class ColumnsController {
