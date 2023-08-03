@@ -211,17 +211,7 @@ const CheckDetails = ({
         })
       );
     },
-    [
-      runCheckType,
-      checkName,
-      timeScale,
-      connection,
-      schema,
-      table,
-      column,
-      category,
-      comparisonName
-    ]
+    [runCheckType, checkName, timeScale, connection, schema, table, column]
   );
 
   useEffect(() => {

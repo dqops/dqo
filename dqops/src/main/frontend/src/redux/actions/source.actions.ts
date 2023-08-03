@@ -329,101 +329,106 @@ export const getCheckResults =
     const errCallback = () => {
       dispatch(getCheckResultsError(checkType, activeTab));
     };
-
-    if (column) {
-      if (checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
-        CheckResultApi.getColumnProfilingChecksResults(
-          connection,
-          schema,
-          table,
-          column,
-          dataGrouping,
-          startDate,
-          endDate,
-          checkName,
-          category,
-          comparisonName
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        CheckResultApi.getColumnRecurringChecksResults(
-          connection,
-          schema,
-          table,
-          column,
-          timeScale || 'daily',
-          dataGrouping,
-          startDate,
-          endDate,
-          checkName,
-          category,
-          comparisonName
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
-        CheckResultApi.getColumnPartitionedChecksResults(
-          connection,
-          schema,
-          table,
-          column,
-          timeScale || 'daily',
-          dataGrouping,
-          startDate,
-          endDate,
-          checkName,
-          category,
-          comparisonName
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      }
-    } else {
-      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
-        CheckResultApi.getTableProfilingChecksResults(
-          connection,
-          schema,
-          table,
-          dataGrouping,
-          startDate,
-          endDate,
-          checkName,
-          category,
-          comparisonName
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        CheckResultApi.getTableRecurringChecksResults(
-          connection,
-          schema,
-          table,
-          timeScale || 'daily',
-          dataGrouping,
-          startDate,
-          endDate,
-          checkName,
-          category,
-          comparisonName
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
-        CheckResultApi.getTablePartitionedChecksResults(
-          connection,
-          schema,
-          table,
-          timeScale || 'daily',
-          dataGrouping,
-          startDate,
-          endDate,
-          checkName,
-          category,
-          comparisonName
-        )
-          .then(successCallback)
-          .catch(errCallback);
+    if (JSON.stringify(startDate) !== JSON.stringify(endDate)) {
+      if (column) {
+        if (checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+          CheckResultApi.getColumnProfilingChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
+          CheckResultApi.getColumnRecurringChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned
+        ) {
+          CheckResultApi.getColumnPartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        }
+      } else {
+        if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+          CheckResultApi.getTableProfilingChecksResults(
+            connection,
+            schema,
+            table,
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
+          CheckResultApi.getTableRecurringChecksResults(
+            connection,
+            schema,
+            table,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned
+        ) {
+          CheckResultApi.getTablePartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        }
       }
     }
   };
