@@ -30,7 +30,7 @@ import reactor.core.publisher.Mono;
  * REST API controller that accepts logs received from the web application. The logs are logged locally.
  */
 @RestController
-@RequestMapping("api/logs")
+@RequestMapping("/api/logs")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "LogShipping", description = "Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQO instance logs.")
 @Slf4j

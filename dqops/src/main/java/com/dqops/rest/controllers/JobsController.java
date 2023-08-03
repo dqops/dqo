@@ -65,7 +65,7 @@ import java.util.concurrent.TimeUnit;
  * Jobs controller that supports publishing new jobs.
  */
 @RestController
-@RequestMapping("api/jobs")
+@RequestMapping("/api/jobs")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Jobs", description = "Jobs management controller that supports starting new jobs, such as running selected data quality checks")
 public class JobsController {

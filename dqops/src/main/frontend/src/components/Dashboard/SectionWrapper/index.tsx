@@ -1,17 +1,22 @@
 import React from 'react';
 
 import clsx from 'clsx';
+import SvgIcon from '../../SvgIcon';
 
 interface ISectionWrapperProps {
   title: string;
   children?: any;
   className?: string;
+  svgIcon?: boolean;
+  onClick?: () => void;
 }
 
 const SectionWrapper = ({
   title,
   children,
-  className
+  className,
+  svgIcon,
+  onClick
 }: ISectionWrapperProps) => {
   return (
     <div
@@ -20,7 +25,14 @@ const SectionWrapper = ({
         className
       )}
     >
-      <div className="px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold">
+      <div
+        className={clsx(
+          'px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold',
+          svgIcon ? 'flex items-center justify-center' : ''
+        )}
+        onClick={onClick}
+      >
+        {svgIcon && <SvgIcon name="chevron-down" className="w-5 h-5" />}
         {title}
       </div>
       {children}

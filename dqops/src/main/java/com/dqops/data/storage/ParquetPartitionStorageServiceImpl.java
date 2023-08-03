@@ -42,6 +42,7 @@ import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.DateColumn;
@@ -109,11 +110,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      */
     @Override
     public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
-        Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-        Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
-        String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
-        Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
-        Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+        Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings);
         File targetParquetFile = targetParquetFilePath.toFile();
 
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
@@ -143,8 +140,30 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             throw new DataStorageIOException(ex.getMessage(), ex);
         }
         catch (Exception ex) {
+            if (ex.getCause() instanceof RuntimeException && ex.getCause().getMessage() != null &&
+                    ex.getCause().getMessage().contains("is not a Parquet file")) {
+                // Corrupted partition file -> remove the file
+                deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                return new LoadedMonthlyPartition(partitionId, 0L, null);
+            }
             throw new DataStorageIOException(ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Makes a path to the parquet file.
+     * @param partitionId Partition id.
+     * @param storageSettings Storage settings.
+     * @return Parquet file path.
+     */
+    @NotNull
+    protected Path makeParquetTargetFilePath(ParquetPartitionId partitionId, FileStorageSettings storageSettings) {
+        Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
+        Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
+        String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
+        Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
+        Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+        return targetParquetFilePath;
     }
 
     /**
@@ -261,12 +280,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                           TableDataChanges tableDataChanges,
                                           FileStorageSettings storageSettings) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
-            Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-            Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
-
-            String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(loadedPartition.getPartitionId());
-            Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
-            Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartition.getPartitionId(), storageSettings);
             File targetParquetFile = targetParquetFilePath.toFile();
 
             Table newOrChangedDataPartitionMonth = null;

@@ -22,7 +22,6 @@ import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableOwnerSpec;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.metadata.sources.TimestampColumnsSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -176,9 +175,9 @@ public class TableBasicModel {
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
-            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
-            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.RECURRING));
-            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
+            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.profiling));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.recurring));
+            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.partitioned));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -189,21 +188,21 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.PROFILING);
+                setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.RECURRING);
+                setCheckType(CheckType.recurring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.PARTITIONED);
+                setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
@@ -234,9 +233,9 @@ public class TableBasicModel {
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
-            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
-            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.RECURRING));
-            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
+            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.profiling));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.recurring));
+            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.partitioned));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -247,21 +246,21 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.PROFILING);
+                setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.RECURRING);
+                setCheckType(CheckType.recurring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
-                setCheckType(CheckType.PARTITIONED);
+                setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()

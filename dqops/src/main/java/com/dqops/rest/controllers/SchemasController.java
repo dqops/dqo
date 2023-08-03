@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  * REST api controller to manage the list of schemas inside a connection.
  */
 @RestController
-@RequestMapping("api/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Schemas", description = "Schema management")
 public class SchemasController {
@@ -150,7 +150,7 @@ public class SchemasController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
-                connectionName, schemaName, new CheckContainerTypeModel(CheckType.PROFILING, null),
+                connectionName, schemaName, new CheckContainerTypeModel(CheckType.profiling, null),
                 tableNamePattern.orElse(null),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
@@ -216,7 +216,7 @@ public class SchemasController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
-                connectionName, schemaName, new CheckContainerTypeModel(CheckType.RECURRING, timeScale),
+                connectionName, schemaName, new CheckContainerTypeModel(CheckType.recurring, timeScale),
                 tableNamePattern.orElse(null),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
@@ -282,7 +282,7 @@ public class SchemasController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
-                connectionName, schemaName, new CheckContainerTypeModel(CheckType.PARTITIONED, timeScale),
+                connectionName, schemaName, new CheckContainerTypeModel(CheckType.partitioned, timeScale),
                 tableNamePattern.orElse(null),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
@@ -328,7 +328,7 @@ public class SchemasController {
         }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
-                connectionName, schemaName, CheckType.PROFILING,
+                connectionName, schemaName, CheckType.profiling,
                 null, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
@@ -368,7 +368,7 @@ public class SchemasController {
         }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
-                connectionName, schemaName, CheckType.RECURRING,
+                connectionName, schemaName, CheckType.recurring,
                 timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
@@ -408,7 +408,7 @@ public class SchemasController {
         }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
-                connectionName, schemaName, CheckType.PARTITIONED,
+                connectionName, schemaName, CheckType.partitioned,
                 timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200

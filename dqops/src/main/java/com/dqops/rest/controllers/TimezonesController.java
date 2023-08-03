@@ -33,7 +33,7 @@ import reactor.core.publisher.Flux;
  * REST api controller to return a list of available time zones.
  */
 @RestController
-@RequestMapping("api/timezones")
+@RequestMapping("/api/timezones")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Timezones", description = "Timezone management")
 

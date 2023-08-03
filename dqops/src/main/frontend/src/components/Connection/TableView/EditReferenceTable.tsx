@@ -17,15 +17,31 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
+import clsx from 'clsx';
 
 type EditReferenceTableProps = {
-  onBack: () => void;
+  onBack: (stayOnSamePage?: boolean | undefined) => void;
   selectedReference?: string;
+  changes?: boolean;
+  isUpdatedParent?: boolean;
+  timePartitioned?: 'daily' | 'monthly';
+  onRunChecksRowCount?: () => void;
+  disabled?: boolean;
+  isCreating?: boolean;
+  goToRefTable?: () => void;
+  onChangeUpdatedParent: (variable: boolean) => void;
 };
 
 const EditReferenceTable = ({
   onBack,
-  selectedReference
+  selectedReference,
+  timePartitioned,
+  isUpdatedParent,
+  onRunChecksRowCount,
+  disabled,
+  isCreating,
+  goToRefTable,
+  onChangeUpdatedParent
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -45,7 +61,6 @@ const EditReferenceTable = ({
     schema: string;
     table: string;
   } = useParams();
-
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [normalObj, setNormalObj] = useState<{ [key: number]: number }>();
@@ -57,6 +72,11 @@ const EditReferenceTable = ({
     useState<Array<TableComparisonGroupingColumnPairModel>>();
   const [trueArray, setTrueArray] =
     useState<Array<TableComparisonGroupingColumnPairModel>>();
+  const [extendRefnames, setExtendRefnames] = useState(false);
+  const [extendDg, setExtendDg] = useState(false);
+  const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
+    false
+  );
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -160,10 +180,9 @@ const EditReferenceTable = ({
     history.push(`${url}?isEditing=true`);
   };
 
-  const onUpdate = () => {
-    setIsUpdating(true);
+  const onUpdate = async () => {
     if (selectedReference) {
-      TableComparisonsApi.updateTableComparisonConfiguration(
+      await TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
         schema,
         table,
@@ -184,7 +203,7 @@ const EditReferenceTable = ({
         }
       )
         .then(() => {
-          onBack();
+          onBack(false);
         })
         .catch((err) => {
           console.log('err', err);
@@ -193,32 +212,152 @@ const EditReferenceTable = ({
           setIsUpdating(false);
         });
     } else {
-      TableComparisonsApi.createTableComparisonConfiguration(
-        connection,
-        schema,
-        table,
-        {
-          table_comparison_configuration_name: name,
-          compared_connection: connection,
-          compared_table: {
-            schema_name: schema,
-            table_name: table
-          },
-          reference_connection: refConnection,
-          reference_table: {
-            schema_name: refSchema,
-            table_name: refTable
-          },
-          grouping_columns: doubleArray ?? []
-        }
-      )
-        .then(() => {
-          onBack();
-        })
-        .finally(() => {
-          setIsUpdating(false);
-        });
+      if (checkTypes === CheckTypes.PROFILING) {
+        await TableComparisonsApi.createTableComparisonProfiling(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack(false);
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.PARTITIONED &&
+        timePartitioned === 'daily'
+      ) {
+        await TableComparisonsApi.createTableComparisonPartitionedDaily(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack(false);
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.PARTITIONED &&
+        timePartitioned === 'monthly'
+      ) {
+        await TableComparisonsApi.createTableComparisonPartitionedMonthly(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack(false);
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.RECURRING &&
+        timePartitioned === 'daily'
+      ) {
+        await TableComparisonsApi.createTableComparisonRecurringDaily(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack(false);
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      } else if (
+        checkTypes === CheckTypes.RECURRING &&
+        timePartitioned === 'monthly'
+      ) {
+        await TableComparisonsApi.createTableComparisonRecurringMonthly(
+          connection,
+          schema,
+          table,
+          {
+            table_comparison_configuration_name: name,
+            compared_connection: connection,
+            compared_table: {
+              schema_name: schema,
+              table_name: table
+            },
+            reference_connection: refConnection,
+            reference_table: {
+              schema_name: refSchema,
+              table_name: refTable
+            },
+            grouping_columns: doubleArray ?? []
+          }
+        )
+          .then(() => {
+            onBack(false);
+          })
+          .finally(() => {
+            setIsUpdating(false);
+          });
+      }
     }
+    setIsButtonEnabled(false);
+    onChangeUpdatedParent(false);
   };
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +407,6 @@ const EditReferenceTable = ({
         initialObject[i] = 3;
       }
     }
-
     return initialObject;
   };
 
@@ -358,37 +496,35 @@ const EditReferenceTable = ({
     splitArrays();
   }, [normalList, refList]);
 
-  console.log(refTable, refSchema, refConnection, splitArrays()?.refArr);
+  const saveRun = () => {
+    onUpdate();
+    if (onRunChecksRowCount) {
+      onRunChecksRowCount();
+    }
+  };
+
+  useEffect(() => {
+    setIsButtonEnabled(
+      (name.length !== 0 &&
+        connection.length !== 0 &&
+        schema.length !== 0 &&
+        table.length !== 0 &&
+        refConnection.length !== 0 &&
+        refSchema.length !== 0 &&
+        refTable.length !== 0 &&
+        bool &&
+        (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
+          isUpdated)) ||
+        isUpdatedParent
+    );
+  }, [normalList, refList, isUpdatedParent, bool]);
+
   return (
-    <div>
+    <div className="w-full">
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={
-          name.length !== 0 &&
-          connection.length !== 0 &&
-          schema.length !== 0 &&
-          table.length !== 0 &&
-          refConnection.length !== 0 &&
-          refSchema.length !== 0 &&
-          refTable.length !== 0 &&
-          bool &&
-          (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-            isUpdated)
-        }
-        isDisabled={
-          !(
-            name.length !== 0 &&
-            connection.length !== 0 &&
-            schema.length !== 0 &&
-            table.length !== 0 &&
-            refConnection.length !== 0 &&
-            refSchema.length !== 0 &&
-            refTable.length !== 0 &&
-            bool &&
-            (JSON.stringify(trueArray) !== JSON.stringify(doubleArray) ||
-              isUpdated)
-          )
-        }
+        isUpdated={isButtonEnabled}
+        isDisabled={!isButtonEnabled}
         isUpdating={isUpdating}
       />
       <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8">
@@ -403,92 +539,161 @@ const EditReferenceTable = ({
             placeholder="Table comparison configuration name"
           />
         </div>
-        <Button
-          label="Back"
-          color="primary"
-          variant="text"
-          className="px-0"
-          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-          onClick={onBack}
-        />
+        <div className="flex justify-center items-center gap-x-2">
+          <SvgIcon
+            name="sync"
+            className={clsx(
+              'w-4 h-4 mr-3',
+              disabled ? 'animate-spin' : 'hidden'
+            )}
+          />
+          {isCreating === false && (
+            <Button
+              label="Compare Tables"
+              color="primary"
+              variant="contained"
+              onClick={saveRun}
+              disabled={disabled}
+            />
+          )}
+          <Button
+            label="Back"
+            color="primary"
+            variant="text"
+            className="px-0"
+            leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
+            onClick={onBack}
+          />
+        </div>
       </div>
 
       <div className="px-8 py-4">
-        <SectionWrapper
-          title="Reference table (the source of truth)"
-          className="py-8 mb-10"
-        >
-          <div className="flex gap-2 items-center mb-3">
-            <div className="w-60">Connection</div>
-            <Select
-              className="flex-1"
-              options={connectionOptions}
-              value={refConnection}
-              onChange={changePropsConnection}
+        {isCreating === true || extendRefnames === true ? (
+          <SectionWrapper
+            title="Reference table (the source of truth)"
+            className="py-8 mb-10 flex w-full items-center justify-between"
+            svgIcon={isCreating ? false : true}
+            onClick={() => setExtendRefnames(false)}
+          >
+            <div className="flex flex-col gap-2 w-1/4 mb-3">
+              <div>Connection</div>
+              <Select
+                className="flex-1"
+                options={connectionOptions}
+                value={refConnection}
+                onChange={changePropsConnection}
+              />
+            </div>
+            <div className="flex flex-col gap-2  w-1/4 mb-3">
+              <div> Schema</div>
+              <Select
+                className="flex-1"
+                options={schemaOptions}
+                value={refSchema}
+                onChange={changePropsSchema}
+              />
+            </div>
+            <div className="flex flex-col gap-2  w-1/4 mb-3">
+              <div>Table</div>
+              <Select
+                className="flex-1"
+                options={tableOptions}
+                value={refTable}
+                onChange={changePropsTable}
+              />
+            </div>
+          </SectionWrapper>
+        ) : (
+          <div className="flex items-center gap-4 mb-8">
+            <SvgIcon
+              name="chevron-right"
+              className="w-5 h-5"
+              onClick={() => setExtendRefnames(true)}
             />
+            <span>Comparing this table to the reference table:</span>
+            <a className="text-teal-500 cursor-pointer" onClick={goToRefTable}>
+              {refConnection}.{refSchema}.{refTable}
+            </a>
           </div>
-          <div className="flex gap-2 items-center mb-3">
-            <div className="w-60">Schema</div>
-            <Select
-              className="flex-1"
-              options={schemaOptions}
-              value={refSchema}
-              onChange={changePropsSchema}
-            />
-          </div>
-          <div className="flex gap-2 items-center">
-            <div className="w-60">Table</div>
-            <Select
-              className="flex-1"
-              options={tableOptions}
-              value={refTable}
-              onChange={changePropsTable}
-            />
-          </div>
-        </SectionWrapper>
+        )}
 
-        <div className="flex gap-4">
-          <div className=" mr-20 mt-3">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-              <div
-                key={index}
-                className="text-sm py-1.5"
-                style={{
-                  whiteSpace: 'nowrap',
-                  marginBottom: '12.6px',
-                  marginTop: '12.6px'
-                }}
-              >
-                Column {item}
-              </div>
-            ))}
-          </div>
-          <SelectGroupColumnsTable
-            className="flex-1"
-            title="Data grouping on compared table"
-            goToCreateNew={goToCreateNew}
-            placeholder="Select column on compared table"
-            onSetNormalList={onSetNormalList}
-            object={normalObj}
-            responseList={splitArrays()?.comparedArr}
-          />
+        {isCreating || extendDg ? (
+          <div className="flex gap-4">
+            <div className="mr-20 mt-0 relative">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                <div
+                  key={index}
+                  className="text-sm py-1.5"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    marginBottom: '12.4px',
+                    marginTop: '4.6px'
+                  }}
+                >
+                  {item === 0 ? (
+                    isCreating === false ? (
+                      <SvgIcon
+                        name="chevron-down"
+                        className="w-5 h-5 absolute top-0"
+                        onClick={() => setExtendDg(false)}
+                      />
+                    ) : (
+                      ''
+                    )
+                  ) : (
+                    'Column' + item
+                  )}
+                </div>
+              ))}
+            </div>
+            <SelectGroupColumnsTable
+              className="flex-1"
+              title="Data grouping on compared table"
+              goToCreateNew={goToCreateNew}
+              placeholder="Select column on compared table"
+              onSetNormalList={onSetNormalList}
+              object={normalObj}
+              responseList={splitArrays()?.comparedArr}
+            />
 
-          <SelectGroupColumnsTable
-            className="flex-1"
-            title="Data grouping on reference table"
-            goToCreateNew={goToRefCreateNew}
-            placeholder='"Select column on reference table"'
-            refConnection={refConnection}
-            refSchema={refSchema}
-            refTable={refTable}
-            onSetRefList={onSetRefList}
-            object={refObj}
-            responseList={splitArrays()?.refArr}
-          />
-        </div>
+            <SelectGroupColumnsTable
+              className="flex-1"
+              title="Data grouping on reference table"
+              goToCreateNew={goToRefCreateNew}
+              placeholder='"Select column on reference table"'
+              refConnection={refConnection}
+              refSchema={refSchema}
+              refTable={refTable}
+              onSetRefList={onSetRefList}
+              object={refObj}
+              responseList={splitArrays()?.refArr}
+            />
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <SvgIcon
+              name="chevron-right"
+              className="w-5 h-5"
+              onClick={() => setExtendDg(true)}
+            />
+            <div className="px-4">
+              Data grouping on compared table:{' '}
+              {splitArrays()?.comparedArr.map((x, index) =>
+                index !== (splitArrays()?.comparedArr.length ?? 9) - 1
+                  ? x + ','
+                  : x
+              )}
+            </div>
+            <div className="pl-8">
+              Data grouping on reference table:{' '}
+              {splitArrays()?.refArr.map((x, index) =>
+                index !== (splitArrays()?.refArr.length ?? 9) - 1 ? x + ',' : x
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
-
 export default EditReferenceTable;

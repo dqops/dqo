@@ -99,7 +99,7 @@ const RecurringView = () => {
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (tab === 'daily') {
+    if (tab === 'daily' || tab === 'daily_comparisons') {
       if (!dailyRecurring) return;
 
       await dispatch(
@@ -180,25 +180,6 @@ const RecurringView = () => {
     );
   }, [isUpdatedMonthlyRecurring]);
 
-  useEffect(() => {
-    if (
-      tab !== 'daily' &&
-      tab !== 'monthly' &&
-      tab !== 'daily_comparisons' &&
-      tab !== 'monthly_comparisons'
-    ) {
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          connectionName,
-          schemaName,
-          tableName,
-          'daily'
-        )
-      );
-    }
-  }, [tab]);
-
   const getDailyCheckOverview = () => {
     CheckResultOverviewApi.getTableRecurringChecksOverview(
       connectionName,
@@ -232,8 +213,6 @@ const RecurringView = () => {
       )
     );
   };
-
-  console.log(dailyRecurring);
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
@@ -271,6 +250,7 @@ const RecurringView = () => {
           checkTypes={checkTypes}
           timePartitioned="daily"
           checksUI={dailyRecurring}
+          fetchChecks={onUpdate}
         />
       )}
       {tab === 'monthly_comparisons' && (
@@ -278,6 +258,7 @@ const RecurringView = () => {
           checkTypes={checkTypes}
           timePartitioned="monthly"
           checksUI={monthlyRecurring}
+          fetchChecks={onUpdate}
         />
       )}
     </div>

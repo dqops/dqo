@@ -66,7 +66,7 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
       'detail'
     );
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
-    console.log(url);
+
     if (defaultTab) {
       if (item.value === CheckTypes.RECURRING) {
         url = ROUTES.TABLE_RECURRING(
@@ -97,7 +97,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
           table
         );
       } else if (item.value === CheckTypes.PROFILING) {
-        console.log(url);
         url = ROUTES.TABLE_LEVEL_PAGE(
           item.value,
           connection,

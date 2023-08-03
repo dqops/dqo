@@ -40,7 +40,7 @@ import java.util.Optional;
  * Controller over the errors on tables and columns.
  */
 @RestController
-@RequestMapping("api/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Errors", description = "Returns the errors related to check executions on tables and columns.")
 public class ErrorsController {
@@ -106,7 +106,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -166,7 +166,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurring = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
+        AbstractRootChecksContainerSpec recurring = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -225,7 +225,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec Partitioned = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec Partitioned = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -290,7 +290,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -357,7 +357,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurring = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
+        AbstractRootChecksContainerSpec recurring = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -424,7 +424,7 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec Partitioned = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec Partitioned = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataGroup.ifPresent(loadParams::setDataGroup);
         monthStart.ifPresent(loadParams::setStartMonth);

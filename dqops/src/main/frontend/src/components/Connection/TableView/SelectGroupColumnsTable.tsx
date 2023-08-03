@@ -9,7 +9,7 @@ import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 type SelectDataGroupingForTableProps = {
   title: string;
   className?: string;
-  goToCreateNew: () => void;
+  goToCreateNew?: () => void;
   dataGroupingConfigurationSpec?: DataGroupingConfigurationSpec;
   placeholder?: string;
   refConnection?: string;
@@ -113,7 +113,7 @@ export const SelectGroupColumnsTable = ({
               value: item.column_name || ''
             }))
           ]);
-          console.log('inside');
+
           setRef(true);
         } catch (error) {
           console.error('Error:', error);
@@ -149,8 +149,6 @@ export const SelectGroupColumnsTable = ({
 
     fetchData();
   }, [connection, schema, table, refConnection, refSchema, refTable, ref]);
-
-  console.log(options);
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>

@@ -434,7 +434,7 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.RECURRING;
+        return CheckType.recurring;
     }
 
     /**
