@@ -15,6 +15,7 @@
  */
 package com.dqops.data.readouts.normalization;
 
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.tables.TableColumnUtility;
@@ -62,6 +63,7 @@ public class SensorReadoutsNormalizedResult {
     private final TextColumn checkDisplayNameColumn;
     private final TextColumn checkTypeColumn;
     private final TextColumn checkCategoryColumn;
+    private final TextColumn tableComparisonNameColumn;
     private final TextColumn qualityDimensionColumn;
     private final TextColumn sensorNameColumn;
     private final TextColumn timeSeriesIdColumn;
@@ -114,6 +116,7 @@ public class SensorReadoutsNormalizedResult {
         this.checkDisplayNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
         this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
         this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        this.tableComparisonNameColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
         this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
         this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
         this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
@@ -412,6 +415,14 @@ public class SensorReadoutsNormalizedResult {
      */
     public TextColumn getCheckCategoryColumn() {
         return checkCategoryColumn;
+    }
+
+    /**
+     * Returns the column that contains the table comparison name for data comparison checks.
+     * @return Table comparison name column.
+     */
+    public TextColumn getTableComparisonNameColumn() {
+        return tableComparisonNameColumn;
     }
 
     /**

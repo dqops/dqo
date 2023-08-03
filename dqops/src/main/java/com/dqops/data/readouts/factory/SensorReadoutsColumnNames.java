@@ -162,6 +162,11 @@ public class SensorReadoutsColumnNames {
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
 
     /**
+     * The name of a table comparison configuration used for a data comparison (accuracy) check.
+     */
+    public static final String TABLE_COMPARISON_NAME_COLUMN_NAME = "table_comparison";
+
+    /**
      * The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness.
      */
     public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
