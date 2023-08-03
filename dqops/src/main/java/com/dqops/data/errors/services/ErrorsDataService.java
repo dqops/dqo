@@ -30,5 +30,5 @@ public interface ErrorsDataService {
      * @return Complete model of the errors.
      */
     ErrorsDetailedDataModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                 ErrorsDetailedParameters loadParameters);
+                                                 ErrorsDetailedFilterParameters loadParameters);
 }

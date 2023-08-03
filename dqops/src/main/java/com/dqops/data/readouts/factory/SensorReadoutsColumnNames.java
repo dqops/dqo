@@ -227,6 +227,7 @@ public class SensorReadoutsColumnNames {
 
             COLUMN_NAME_COLUMN_NAME,
             DATA_GROUP_NAME_COLUMN_NAME,
+            TABLE_COMPARISON_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,

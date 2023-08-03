@@ -17,6 +17,11 @@ package com.dqops.data.errors.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
+import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
+import com.dqops.data.checkresults.services.models.CheckResultDetailedSingleModel;
+import com.dqops.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.services.models.ErrorDetailedSingleModel;
 import com.dqops.data.errors.services.models.ErrorsDetailedDataModel;
@@ -27,15 +32,22 @@ import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
+import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.tables.TableRowUtility;
+import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,6 +57,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ErrorsDataServiceImpl implements ErrorsDataService {
+    public static final int DEFAULT_MAX_RECENT_LOADED_MONTHS = 3;
+
     private ErrorsSnapshotFactory errorsSnapshotFactory;
 
     @Autowired
@@ -61,7 +75,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      */
     @Override
     public ErrorsDetailedDataModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                        ErrorsDetailedParameters loadParameters) {
+                                                        ErrorsDetailedFilterParameters loadParameters) {
         Map<Long, ErrorsDetailedDataModel> errorMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
@@ -72,104 +86,131 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             return new ErrorsDetailedDataModel[0]; // empty array
         }
 
-        Table filteredTable = filterTableToRootChecksContainer(rootChecksContainerSpec, errorsTable);
+        Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, errorsTable, loadParameters);
         if (filteredTable.isEmpty()) {
             return new ErrorsDetailedDataModel[0]; // empty array
         }
 
-        TextColumn dataGroupNameColumn = filteredTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
-
-        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
-            dataGroups.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-            dataGroups.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+        if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            filteredTable = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
 
-        String selectedDataStream = Objects.requireNonNullElse(loadParameters.getDataGroup(), dataGroups.get(0));
-        Table filteredByDataStream = filteredTable.where(dataGroupNameColumn.isEqualTo(selectedDataStream));
-
-        if (filteredByDataStream.isEmpty()) {
+        if (filteredTable.isEmpty()) {
             return new ErrorsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredByDataStream.sortDescendingOn(
-                ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME,  // most recent execution first
+        Table sortedTable = filteredTable.sortDescendingOn(
+                ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME); // then the most recent reading (for partitioned checks) when many partitions were captured
 
-        Table workingTable = sortedTable;
-        if (loadParameters.getErrorsCount() < sortedTable.rowCount()) {
-            workingTable = sortedTable.dropRange(loadParameters.getErrorsCount(), sortedTable.rowCount());
-        }
+        LongColumn checkHashColumn = sortedTable.longColumn(ErrorsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn dataGroupSortedColumn = sortedTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
-        for (Row row : workingTable) {
-            Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
-
-            String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-            String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
-            Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-            String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-            String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
-
-            String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-            String dataGroupName = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-
-            Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
-            Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
-            String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-
-            String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
-            String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-            String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
-
-            String sensorReadoutId = row.getString(ErrorsColumnNames.READOUT_ID_COLUMN_NAME);
-            String errorMessage = row.getString(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
-            LocalDateTime errorTimestamp = row.getDateTime(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME);
-            String errorSource = row.getString(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME);
-
-            ErrorDetailedSingleModel singleModel = new ErrorDetailedSingleModel() {{
-                setActualValue(actualValue);
-                setExpectedValue(expectedValue);
-
-                setColumnName(columnName);
-                setDataGroup(dataGroupName);
-
-                setDurationMs(durationMs);
-                setExecutedAt(executedAt);
-                setTimeGradient(timeGradient);
-                setTimePeriod(timePeriod);
-
-                setProvider(provider);
-                setQualityDimension(qualityDimension);
-
-                setSensorName(sensorName);
-                setReadoutId(sensorReadoutId);
-                setErrorMessage(errorMessage);
-                setErrorSource(errorSource);
-                setErrorTimestamp(errorTimestamp);
-            }};
-
+        int rowCount = sortedTable.rowCount();
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+            Long checkHash = checkHashColumn.get(rowIndex);
+            String dataGroupNameForCheck = dataGroupSortedColumn.get(rowIndex);
             ErrorsDetailedDataModel errorsDetailedDataModel = errorMap.get(checkHash);
-            if (errorsDetailedDataModel == null) {
-                errorsDetailedDataModel = new ErrorsDetailedDataModel() {{
-                    setCheckCategory(checkCategory);
-                    setCheckHash(checkHash);
-                    setCheckName(checkName);
-                    setCheckType(checkType);
-                    setCheckDisplayName(checkDisplayName);
 
-                    setDataGroupsNames(dataGroups);
-                    setDataGroup(selectedDataStream);
-                    setSingleErrors(new ArrayList<>());
-                }};
+            ErrorDetailedSingleModel singleModel = null;
+
+            if (errorsDetailedDataModel != null) {
+                if (errorsDetailedDataModel.getSingleErrors().size() >= loadParameters.getMaxResultsPerCheck()) {
+                    continue; // enough results loaded
+                }
+
+                if (!Objects.equals(dataGroupNameForCheck, errorsDetailedDataModel.getDataGroup())) {
+                    continue; // we are not mixing groups, results for a different group were already loaded
+                }
+            } else {
+                Row row = sortedTable.row(rowIndex);
+                singleModel = createErrorSingleModel(row);
+                String checkCategory = row.getString(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+                String checkDisplayName = row.getString(ErrorsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+                String checkName = row.getString(ErrorsColumnNames.CHECK_NAME_COLUMN_NAME);
+                String checkType = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
+
+                errorsDetailedDataModel = new ErrorsDetailedDataModel();
+                errorsDetailedDataModel.setCheckCategory(checkCategory);
+                errorsDetailedDataModel.setCheckName(checkName);
+                errorsDetailedDataModel.setCheckHash(checkHash);
+                errorsDetailedDataModel.setCheckType(checkType);
+                errorsDetailedDataModel.setCheckDisplayName(checkDisplayName);
+                errorsDetailedDataModel.setDataGroup(dataGroupNameForCheck);
+
+                Selection resultsForCheckHash = checkHashColumn.isIn(checkHash);
+                List<String> dataGroupsForCheck = dataGroupSortedColumn.where(resultsForCheckHash)
+                        .unique().asList().stream().sorted().collect(Collectors.toList());
+
+                if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+                    dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                    dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                }
+
+                errorsDetailedDataModel.setDataGroupsNames(dataGroupsForCheck);
                 errorMap.put(checkHash, errorsDetailedDataModel);
+            }
+
+            if (singleModel == null) {
+                singleModel = createErrorSingleModel(sortedTable.row(rowIndex));
             }
 
             errorsDetailedDataModel.getSingleErrors().add(singleModel);
         }
 
         return errorMap.values().toArray(ErrorsDetailedDataModel[]::new);
+    }
+
+    /**
+     * Creates a model with a single error row.
+     * @param row Row.
+     * @return Model with a single error.
+     */
+    @NotNull
+    private static ErrorDetailedSingleModel createErrorSingleModel(Row row) {
+        Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, ErrorsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+
+        String columnName = TableRowUtility.getSanitizedStringValue(row, ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        String dataGroupName = row.getString(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+        Integer durationMs = row.getInt(ErrorsColumnNames.DURATION_MS_COLUMN_NAME);
+        Instant executedAt = row.getInstant(ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        String timeGradient = row.getString(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        LocalDateTime timePeriod = row.getDateTime(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME);
+
+        String provider = row.getString(ErrorsColumnNames.PROVIDER_COLUMN_NAME);
+        String qualityDimension = row.getString(ErrorsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+        String sensorName = row.getString(ErrorsColumnNames.SENSOR_NAME_COLUMN_NAME);
+
+        String sensorReadoutId = row.getString(ErrorsColumnNames.READOUT_ID_COLUMN_NAME);
+        String errorMessage = row.getString(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
+        LocalDateTime errorTimestamp = row.getDateTime(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME);
+        String errorSource = row.getString(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME);
+
+        ErrorDetailedSingleModel singleModel = new ErrorDetailedSingleModel() {{
+            setActualValue(actualValue);
+            setExpectedValue(expectedValue);
+
+            setColumnName(columnName);
+            setDataGroup(dataGroupName);
+
+            setDurationMs(durationMs);
+            setExecutedAt(executedAt);
+            setTimeGradient(timeGradient);
+            setTimePeriod(timePeriod);
+
+            setProvider(provider);
+            setQualityDimension(qualityDimension);
+
+            setSensorName(sensorName);
+            setReadoutId(sensorReadoutId);
+            setErrorMessage(errorMessage);
+            setErrorSource(errorSource);
+            setErrorTimestamp(errorTimestamp);
+        }};
+        return singleModel;
     }
 
     /**
@@ -200,6 +241,60 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
     }
 
     /**
+     * Filters the results to only the results for the target object.
+     * @param rootChecksContainerSpec Root checks container to identify the parent column, check type and time scale.
+     * @param sourceTable Source table to be filtered.
+     * @param filterParameters Filter parameters.
+     * @return Filtered table.
+     */
+    protected Table filterTableToRootChecksContainerAndFilterParameters(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                                        Table sourceTable,
+                                                                        ErrorsDetailedFilterParameters filterParameters) {
+        String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
+        String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
+        CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
+
+        Selection rowSelection = sourceTable.textColumn(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+
+        if (timeScale != null) {
+            TextColumn timeGradientColumn = sourceTable.textColumn(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
+        }
+
+        TextColumn columnNameColumn = sourceTable.textColumn(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
+
+        if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
+            TextColumn checkNameColumn = sourceTable.textColumn(ErrorsColumnNames.CHECK_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
+        }
+
+        String checkCategory = filterParameters.getCheckCategory();
+        String tableComparison = filterParameters.getTableComparison();
+
+        if (!Strings.isNullOrEmpty(checkCategory)) {
+            if (checkCategory.startsWith(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/")) {
+                // this code will support receiving combined category names for table comparisons
+                String[] columnCategorySplits = StringUtils.split(checkCategory, '/');
+                checkCategory = columnCategorySplits[0];
+                tableComparison = columnCategorySplits[1];
+            }
+
+            TextColumn checkCategoryColumn = sourceTable.textColumn(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
+        }
+
+        if (!Strings.isNullOrEmpty(tableComparison)) {
+            TextColumn tableComparisonNameColumn = sourceTable.textColumn(ErrorsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
+        }
+
+        Table filteredTable = sourceTable.where(rowSelection);
+        return filteredTable;
+    }
+
+    /**
      * Loads errors for a maximum of two months available in the data, within the date range specified in {@code loadParameters}.
      * If the date range is open-ended, only one or none of the range's boundaries are checked.
      * @param loadParameters Load parameters.
@@ -207,14 +302,24 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      * @param physicalTableName Physical table name.
      * @return Table with errors for the most recent two months inside the specified range or null when no data found.
      */
-    protected Table loadRecentErrors(ErrorsDetailedParameters loadParameters,
+    protected Table loadRecentErrors(ErrorsDetailedFilterParameters loadParameters,
                                      String connectionName,
                                      PhysicalTableName physicalTableName) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED);
-        int monthsToLoad = 2;
-        errorsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), monthsToLoad);
-        Table errorsData = errorsSnapshot.getAllData();
-        return errorsData;
+        int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
+
+        if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {
+            LocalDate startMonthTruncated = LocalDateTimeTruncateUtility.truncateMonth(loadParameters.getStartMonth());
+            LocalDate endMonthTruncated = LocalDateTimeTruncateUtility.truncateMonth(loadParameters.getEndMonth());
+
+            maxMonthsToLoad =
+                    (int) LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(
+                            startMonthTruncated.atStartOfDay(), endMonthTruncated.atStartOfDay(), TimePeriodGradient.month) + 1;
+        }
+
+        errorsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), maxMonthsToLoad);
+        Table ruleResultsData = errorsSnapshot.getAllData();
+        return ruleResultsData;
     }
 }

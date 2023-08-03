@@ -30,12 +30,35 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class SensorReadoutsDetailedParameters {
+public class SensorReadoutsDetailedFilterParameters {
     /**
-     * The number of recent readouts to return.
+     * The default limit of results per check to load.
      */
-    @JsonPropertyDescription("Number of recent readouts to load.")
-    private int readoutsCount = 100;
+    public static final int DEFAULT_MAX_RESULTS_PER_CHECK = 100;
+
+    /**
+     * The maximum number of most recent results to load for each check.
+     */
+    @JsonPropertyDescription("The maximum number of most recent results to load for each check.")
+    private int maxResultsPerCheck = DEFAULT_MAX_RESULTS_PER_CHECK;
+
+    /**
+     * Check name to filter.
+     */
+    @JsonPropertyDescription("Check name to filter.")
+    private String checkName;
+
+    /**
+     * Check category to filter.
+     */
+    @JsonPropertyDescription("Check category to filter.")
+    private String checkCategory;
+
+    /**
+     * Table comparison name to filter.
+     */
+    @JsonPropertyDescription("Table comparison name to filter.")
+    private String tableComparison;
 
     /**
      * Name of the data group name for which to get the readouts.

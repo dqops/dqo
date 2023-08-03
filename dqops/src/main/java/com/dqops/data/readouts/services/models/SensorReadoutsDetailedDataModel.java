@@ -30,10 +30,17 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class SensorReadoutsDetailedDataModel {
+    @JsonPropertyDescription("Check name.")
+    private String checkName;
+    @JsonPropertyDescription("Check display name.")
+    private String checkDisplayName;
+    @JsonPropertyDescription("Check type.")
+    private String checkType;
     @JsonPropertyDescription("Check hash.")
     private Long checkHash;
     @JsonPropertyDescription("Check category name.")
     private String checkCategory;
+
     @JsonPropertyDescription("Sensor name.")
     private String sensorName;
 

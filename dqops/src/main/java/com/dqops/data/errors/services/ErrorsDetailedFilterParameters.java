@@ -30,19 +30,42 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class ErrorsDetailedParameters {
+public class ErrorsDetailedFilterParameters {
     /**
-     * The number of recent errors to return.
+     * The default limit of results per check to load.
      */
-    @JsonPropertyDescription("Number of recent errors to load.")
-    private int errorsCount = 100;
+    public static final int DEFAULT_MAX_RESULTS_PER_CHECK = 100;
+
+    /**
+     * The maximum number of most recent results to load for each check.
+     */
+    @JsonPropertyDescription("The maximum number of most recent results to load for each check.")
+    private int maxResultsPerCheck = DEFAULT_MAX_RESULTS_PER_CHECK;
+
+    /**
+     * Check name to filter.
+     */
+    @JsonPropertyDescription("Check name to filter.")
+    private String checkName;
+
+    /**
+     * Check category to filter.
+     */
+    @JsonPropertyDescription("Check category to filter.")
+    private String checkCategory;
+
+    /**
+     * Table comparison name to filter.
+     */
+    @JsonPropertyDescription("Table comparison name to filter.")
+    private String tableComparison;
 
     /**
      * Name of the data group for which to get the errors.
      * If null, the default one is picked.
      */
     @JsonPropertyDescription("Data group for which to load the errors.")
-    private String dataGroup = null;
+    private String dataGroupName = null;
 
     /**
      * Start month to load. Loads the data for the whole month identified by the date.
