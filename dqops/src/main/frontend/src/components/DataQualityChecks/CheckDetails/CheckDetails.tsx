@@ -57,6 +57,7 @@ interface CheckDetailsProps {
   onClose: () => void;
   data_clean_job_template?: DeleteStoredDataQueueJobParameters;
   defaultFilters?: any;
+  category?: string;
 }
 //deleted dataGroup from here
 const CheckDetails = ({
@@ -70,7 +71,8 @@ const CheckDetails = ({
   checkName,
   timeScale,
   onClose,
-  defaultFilters
+  defaultFilters,
+  category
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const [isChartOpenState, setIsChartOpenState] = useState(false);
@@ -137,11 +139,21 @@ const CheckDetails = ({
           endDate,
           runCheckType,
           timeScale,
-          checkName: checkName ?? ''
+          checkName: checkName ?? '',
+          category
         })
       );
     },
-    [checkName, timeScale, runCheckType, connection, schema, table, column]
+    [
+      checkName,
+      timeScale,
+      runCheckType,
+      connection,
+      schema,
+      table,
+      column,
+      category
+    ]
   );
 
   const fetchCheckReadouts = useCallback(
@@ -159,11 +171,21 @@ const CheckDetails = ({
           endDate,
           runCheckType,
           timeScale,
-          checkName: checkName ?? ''
+          checkName: checkName ?? '',
+          category
         })
       );
     },
-    [runCheckType, checkName, timeScale, connection, schema, table, column]
+    [
+      runCheckType,
+      checkName,
+      timeScale,
+      connection,
+      schema,
+      table,
+      column,
+      category
+    ]
   );
 
   const fetchCheckResults = useCallback(
@@ -181,11 +203,21 @@ const CheckDetails = ({
           endDate,
           runCheckType,
           checkName: checkName ?? '',
-          timeScale
+          timeScale,
+          category
         })
       );
     },
-    [runCheckType, checkName, timeScale, connection, schema, table, column]
+    [
+      runCheckType,
+      checkName,
+      timeScale,
+      connection,
+      schema,
+      table,
+      column,
+      category
+    ]
   );
 
   useEffect(() => {
@@ -249,9 +281,6 @@ const CheckDetails = ({
     setIsChartOpenState(arg);
   };
 
-  console.log(checkResults);
-  console.log(filters);
-
   return (
     <div
       className="my-4"
@@ -290,6 +319,7 @@ const CheckDetails = ({
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
             isChartOpen={isChartOpen}
+            category={category}
           />
         )}
         {activeTab === 'sensor_readouts' && (
