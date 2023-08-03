@@ -11,14 +11,14 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-Here is a table with some sample customer data. In this example, we will verify if the number of rows in a table does not exceed the minimum accepted count.
+In this example, we will verify if the number of rows in a table does not exceed the minimum accepted count.
 
 We want to verify that the number of rows in a table does not exceed the minimum accepted count.
 
 **SOLUTION**
 
 We will verify the data using profiling [row_count](../../checks/table/volume/row-count.md) table check.
-Our goal is to verify if number of rows does not fall below setup thresholds.
+Our goal is to verify if the number of rows does not fall below setup thresholds.
 
 In this example, we will set three minimum count thresholds levels for the check:
 
@@ -111,11 +111,11 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
 
-1. Go to **Profiling** section. 
+1. Go to the **Profiling** section. 
 
 2. Select the table or column mentioned in the example description from the tree view on the left.
 
-3. Select **Advanced Profiling** tab.
+3. Select the **Advanced Profiling** tab.
 
 4. Run the enabled check using the **Run check** button.
     ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
@@ -132,7 +132,7 @@ To execute the check prepared in the example using the [graphical interface](../
 7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button 
     located in the upper right corner of the graphical interface.
 
-8. You can now [review the results on the data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
+8. You can now [review the results on the data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
 
 
 ## Running the checks in the example and evaluating the results using DQO Shell
