@@ -243,12 +243,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                 CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
 
-        Table workingTable = sortedTable;
-        if (loadParameters.getResultsCount() < sortedTable.rowCount()) {
-            workingTable = sortedTable.dropRange(loadParameters.getResultsCount(), sortedTable.rowCount());
-        }
-
-        for (Row row : workingTable) {
+        for (Row row : sortedTable) {
             CheckResultDetailedSingleModel singleModel = createSingleCheckResultDetailedModel(row);
 
             CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(singleModel.getCheckHash());
@@ -264,6 +259,10 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     setSingleCheckResults(new ArrayList<>());
                 }};
                 resultMap.put(singleModel.getCheckHash(), checkResultsDetailedDataModel);
+            } else {
+                if (checkResultsDetailedDataModel.getSingleCheckResults().size() >= loadParameters.getResultsCount()) {
+                    continue;
+                }
             }
 
             checkResultsDetailedDataModel.getSingleCheckResults().add(singleModel);
