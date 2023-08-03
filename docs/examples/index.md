@@ -75,9 +75,9 @@ To run the examples, follow the steps below.
     You can also execute the checks using the [graphical interface](../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md).
     Simply, open the DQO User Interface Console (http://localhost:8888).
 
-    Go to **Profiling** section. Select the table or column mentioned in the example description from the tree view on the left. 
+    Go to the **Profiling** section. Select the table or column mentioned in the example description from the tree view on the left. 
 
-    Select **Advanced Profiling** tab.
+    Select the **Advanced Profiling** tab.
     ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
 
     Run the enabled check using the **Run check** button.
@@ -94,7 +94,7 @@ To run the examples, follow the steps below.
     cloud sync all
     ``` 
 
-6. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
+6. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
 
 ## List of the use cases
 

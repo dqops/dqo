@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,5 +53,5 @@ public class CheckResultsDetailedDataModel {
     private String dataGroup;
 
     @JsonPropertyDescription("Single check results")
-    private List<CheckResultDetailedSingleModel> singleCheckResults;
+    private List<CheckResultDetailedSingleModel> singleCheckResults = new ArrayList<>();
 }

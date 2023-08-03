@@ -306,15 +306,15 @@ public class TableDataSnapshot {
 
     /**
      * Ensures that the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded,
-     * up to the point when the snapshot contains <code>monthCount</code> loaded partitions.
+     * up to the point when the snapshot contains <code>maxRecentMonthsToLoad</code> loaded partitions.
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
      * @param start The date of the start month. If null, the date range is not left-bounded.
      * @param end The date of the end month. If null, the date range is not right-bounded.
-     * @param monthCount Maximum number of months to have loaded.
+     * @param maxRecentMonthsToLoad Maximum number of months to have loaded.
      */
-    public void ensureNRecentMonthsAreLoaded(LocalDate start, LocalDate end, int monthCount) {
+    public void ensureNRecentMonthsAreLoaded(LocalDate start, LocalDate end, int maxRecentMonthsToLoad) {
         int currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
-        int needToLoad = monthCount - currentlyLoadedPartitions;
+        int needToLoad = maxRecentMonthsToLoad - currentlyLoadedPartitions;
         if (needToLoad <= 0) {
             // no need to load more partitions
             return;
@@ -323,7 +323,7 @@ public class TableDataSnapshot {
         if (this.firstLoadedMonth == null) {
             // no data ever loaded
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, start, end, this.storageSettings, this.columnNames, monthCount);
+                    this.connectionName, this.tableName, start, end, this.storageSettings, this.columnNames, maxRecentMonthsToLoad);
 
             if (loadedPartitions != null) {
                 this.firstLoadedMonth = loadedPartitions.keySet().stream()
@@ -361,7 +361,7 @@ public class TableDataSnapshot {
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
             }
             currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
-            needToLoad = monthCount - currentlyLoadedPartitions;
+            needToLoad = maxRecentMonthsToLoad - currentlyLoadedPartitions;
             if (needToLoad <= 0) {
                 // no need to load more partitions
                 return;
