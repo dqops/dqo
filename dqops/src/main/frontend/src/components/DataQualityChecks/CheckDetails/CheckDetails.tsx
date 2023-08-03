@@ -111,19 +111,14 @@ const CheckDetails = ({
 
     if (month === 'Last 3 months') {
       return {
-        startDate: moment()
-          .add(-2, 'month')
-          .startOf('month')
-          .format('YYYY-MM-DD'),
-        endDate: moment().endOf('month').format('YYYY-MM-DD')
+        startDate: moment().add(-3, 'month').format('YYYY-MM-DD'),
+        endDate: moment().format('YYYY-MM-DD')
       };
     }
 
     return {
-      startDate: moment(month, 'MMMM YYYY')
-        .startOf('month')
-        .format('YYYY-MM-DD'),
-      endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+      startDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD'),
+      endDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD')
     };
   };
 
