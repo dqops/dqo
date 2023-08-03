@@ -254,6 +254,9 @@ const CheckDetails = ({
     setIsChartOpenState(arg);
   };
 
+  console.log(checkResults);
+  console.log(filters);
+
   return (
     <div
       className="my-4"

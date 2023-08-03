@@ -252,6 +252,8 @@ const CheckResultsTab = ({
     }
   ];
 
+  console.log(results);
+
   const monthOptions = useMemo(() => {
     return [
       {
@@ -303,7 +305,6 @@ const CheckResultsTab = ({
           schema,
           table,
           column,
-
           runCheckType,
           checkName,
           timeScale,
