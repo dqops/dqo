@@ -83,16 +83,16 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      * @param endBoundary     End date, the whole month of the given date is loaded. If null, then the current month is taken.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
-     * @param monthsCount     Limit of partitions loaded, with the preference of the most recent ones.
+     * @param maxRecentMonthsToLoad     Limit of partitions loaded, with the preference of the most recent ones.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     @Override
-    public Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(String connectionName, PhysicalTableName tableName, LocalDate startBoundary, LocalDate endBoundary, FileStorageSettings storageSettings, String[] columnNames, int monthsCount) {
+    public Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(String connectionName, PhysicalTableName tableName, LocalDate startBoundary, LocalDate endBoundary, FileStorageSettings storageSettings, String[] columnNames, int maxRecentMonthsToLoad) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startBoundary);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endBoundary);
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> resultPartitions = new LinkedHashMap<>();
-        int currentMonthsCount = monthsCount;
+        int currentMonthsCount = maxRecentMonthsToLoad;
 
         for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && currentMonthsCount > 0;
              currentMonth = currentMonth.minusMonths(1L)) {
