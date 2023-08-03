@@ -300,8 +300,11 @@ const DataQualityChecks = ({
 
   return (
     <div
-      className={clsx(className, 'p-4 overflow-auto')}
-      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
+      className={clsx(className, 'p-1 overflow-y-auto')}
+      style={{
+        maxWidth: `calc(100vw - ${sidebarWidth + 30}px`,
+        minWidth: '100%'
+      }}
     >
       <div className="flex items-center text-sm mb-3 gap-6">
         <div className="flex items-center space-x-1 gap-x-4">

@@ -28,6 +28,8 @@ interface CheckResultsTabProps {
   timeScale?: 'daily' | 'monthly';
   checkName: string;
   isChartOpen: (arg: boolean) => void;
+  category?: string;
+  comparisonName?: string;
 }
 
 const CheckResultsTab = ({
@@ -39,7 +41,9 @@ const CheckResultsTab = ({
   runCheckType,
   timeScale,
   checkName,
-  isChartOpen
+  isChartOpen,
+  category,
+  comparisonName
 }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
   const [mode, setMode] = useState('table');
@@ -286,7 +290,9 @@ const CheckResultsTab = ({
           checkName,
           timeScale,
           startDate,
-          endDate
+          endDate,
+          category,
+          comparisonName
         })
       );
     } else {
@@ -303,12 +309,13 @@ const CheckResultsTab = ({
           schema,
           table,
           column,
-
           runCheckType,
           checkName,
           timeScale,
           startDate,
-          endDate
+          endDate,
+          category,
+          comparisonName
         })
       );
     }
