@@ -285,7 +285,8 @@ export const getCheckResults =
       startDate,
       endDate,
       timeScale,
-      category
+      category,
+      comparisonName
     }: {
       connection: string;
       schema: string;
@@ -298,6 +299,7 @@ export const getCheckResults =
       checkName: string;
       runCheckType?: string;
       category?: string;
+      comparisonName?: string;
     }
   ) =>
   (dispatch: any) => {
@@ -339,7 +341,8 @@ export const getCheckResults =
           startDate,
           endDate,
           checkName,
-          category
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -354,7 +357,8 @@ export const getCheckResults =
           startDate,
           endDate,
           checkName,
-          category
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -369,7 +373,8 @@ export const getCheckResults =
           startDate,
           endDate,
           checkName,
-          category
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -384,7 +389,8 @@ export const getCheckResults =
           startDate,
           endDate,
           checkName,
-          category
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -398,7 +404,8 @@ export const getCheckResults =
           startDate,
           endDate,
           checkName,
-          category
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -412,7 +419,8 @@ export const getCheckResults =
           startDate,
           endDate,
           checkName,
-          category
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);

@@ -58,6 +58,7 @@ interface CheckDetailsProps {
   data_clean_job_template?: DeleteStoredDataQueueJobParameters;
   defaultFilters?: any;
   category?: string;
+  comparisonName?: string;
 }
 //deleted dataGroup from here
 const CheckDetails = ({
@@ -72,7 +73,8 @@ const CheckDetails = ({
   timeScale,
   onClose,
   defaultFilters,
-  category
+  category,
+  comparisonName
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const [isChartOpenState, setIsChartOpenState] = useState(false);
@@ -204,7 +206,8 @@ const CheckDetails = ({
           runCheckType,
           checkName: checkName ?? '',
           timeScale,
-          category
+          category,
+          comparisonName
         })
       );
     },
@@ -216,7 +219,8 @@ const CheckDetails = ({
       schema,
       table,
       column,
-      category
+      category,
+      comparisonName
     ]
   );
 
@@ -320,6 +324,7 @@ const CheckDetails = ({
             onChangeDataGroup={onChangeDataGroup}
             isChartOpen={isChartOpen}
             category={category}
+            comparisonName={comparisonName}
           />
         )}
         {activeTab === 'sensor_readouts' && (

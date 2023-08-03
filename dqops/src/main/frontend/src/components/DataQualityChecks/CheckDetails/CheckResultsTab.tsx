@@ -29,6 +29,7 @@ interface CheckResultsTabProps {
   checkName: string;
   isChartOpen: (arg: boolean) => void;
   category?: string;
+  comparisonName?: string;
 }
 
 const CheckResultsTab = ({
@@ -41,7 +42,8 @@ const CheckResultsTab = ({
   timeScale,
   checkName,
   isChartOpen,
-  category
+  category,
+  comparisonName
 }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
   const [mode, setMode] = useState('table');
@@ -254,8 +256,6 @@ const CheckResultsTab = ({
     }
   ];
 
-  console.log(results);
-
   const monthOptions = useMemo(() => {
     return [
       {
@@ -291,7 +291,8 @@ const CheckResultsTab = ({
           timeScale,
           startDate,
           endDate,
-          category
+          category,
+          comparisonName
         })
       );
     } else {
@@ -313,7 +314,8 @@ const CheckResultsTab = ({
           timeScale,
           startDate,
           endDate,
-          category
+          category,
+          comparisonName
         })
       );
     }

@@ -165,6 +165,7 @@ const CheckCategoriesView = ({
               )?.configured
             }
             category={category.category}
+            comparisonName={category.comparison_name}
           />
         ))}
       <DeleteOnlyDataDialog
