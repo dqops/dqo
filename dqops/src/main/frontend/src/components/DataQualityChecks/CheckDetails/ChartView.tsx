@@ -149,15 +149,6 @@ export const ChartView = ({ data }: ChartViewProps) => {
     }
   };
 
-  const dataSet = {
-    datasets: [
-      {
-        width: `calc(100vw - ${sidebarWidth + 150}px`,
-        height: '370px'
-      }
-    ]
-  };
-
   return (
     <div className="my-8">
       <Line

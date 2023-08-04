@@ -329,6 +329,8 @@ const CheckResultsTab = ({
     )
     .reduce((arr, el) => [...arr, ...el], []);
 
+  console.log(allResults);
+
   return (
     <div
       className="py-3 overflow-auto"
