@@ -85,7 +85,7 @@ const HomePage = () => {
                     <br />You can check the details by placing the mouse cursor on the square.
                   </li>
                   <li className="mb-2">
-                    Click the Check Details icon <img src="/images/home/details.png" alt="" className="inline" />  to view more details.
+                    Click the Results icon <img src="/images/home/details.png" alt="" className="inline" />  to view more details.
                   </li>
                   <li className="mb-2">
                     Go to the Data Quality Dashboards section to review KPIs (percentage of passed data quality checks).
