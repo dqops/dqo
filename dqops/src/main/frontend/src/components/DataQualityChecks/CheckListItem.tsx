@@ -448,7 +448,7 @@ const CheckListItem = ({
               </Tooltip>
             )}
             <Tooltip
-              content="Check Details"
+              content="Results"
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
               <div className="w-5 h-5">
