@@ -122,13 +122,16 @@ const CheckDetails = ({
 
     return {
       startDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD'),
-      endDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD')
+      endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
     };
   };
 
   const fetchCheckErrors = useCallback(
     (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
+
+      console.log(startDate);
+      console.log(endDate);
 
       dispatch(
         getCheckErrors(checkTypes, firstLevelActiveTab, {
@@ -142,7 +145,8 @@ const CheckDetails = ({
           runCheckType,
           timeScale,
           checkName: checkName ?? '',
-          category
+          category,
+          comparisonName
         })
       );
     },
@@ -154,13 +158,17 @@ const CheckDetails = ({
       schema,
       table,
       column,
-      category
+      category,
+      comparisonName
     ]
   );
 
   const fetchCheckReadouts = useCallback(
     (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
+
+      console.log(startDate);
+      console.log(endDate);
 
       dispatch(
         getCheckReadouts(checkTypes, firstLevelActiveTab, {
@@ -174,7 +182,8 @@ const CheckDetails = ({
           runCheckType,
           timeScale,
           checkName: checkName ?? '',
-          category
+          category,
+          comparisonName
         })
       );
     },
@@ -186,13 +195,17 @@ const CheckDetails = ({
       schema,
       table,
       column,
-      category
+      category,
+      comparisonName
     ]
   );
 
   const fetchCheckResults = useCallback(
     (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
+
+      console.log(startDate);
+      console.log(endDate);
 
       dispatch(
         getCheckResults(checkTypes, firstLevelActiveTab, {
