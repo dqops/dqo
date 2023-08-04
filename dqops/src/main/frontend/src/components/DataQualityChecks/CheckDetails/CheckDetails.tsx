@@ -130,9 +130,6 @@ const CheckDetails = ({
     (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
-      console.log(startDate);
-      console.log(endDate);
-
       dispatch(
         getCheckErrors(checkTypes, firstLevelActiveTab, {
           connection,
@@ -167,9 +164,6 @@ const CheckDetails = ({
     (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
 
-      console.log(startDate);
-      console.log(endDate);
-
       dispatch(
         getCheckReadouts(checkTypes, firstLevelActiveTab, {
           connection,
@@ -203,9 +197,6 @@ const CheckDetails = ({
   const fetchCheckResults = useCallback(
     (month: string, dataGrouping?: string) => {
       const { startDate, endDate } = calculateDateRange(month);
-
-      console.log(startDate);
-      console.log(endDate);
 
       dispatch(
         getCheckResults(checkTypes, firstLevelActiveTab, {

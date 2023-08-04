@@ -279,9 +279,6 @@ const CheckResultsTab = ({
         .format('YYYY-MM-DD');
       const endDate = moment().endOf('month').format('YYYY-MM-DD');
 
-      console.log(startDate);
-      console.log(endDate);
-
       dispatch(
         getCheckResults(checkTypes, firstLevelActiveTab, {
           connection,
@@ -304,9 +301,6 @@ const CheckResultsTab = ({
       const endDate = month
         ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
         : '';
-
-      console.log(startDate);
-      console.log(endDate);
 
       dispatch(
         getCheckResults(checkTypes, firstLevelActiveTab, {
@@ -334,8 +328,6 @@ const CheckResultsTab = ({
       }))
     )
     .reduce((arr, el) => [...arr, ...el], []);
-
-  console.log(month);
 
   return (
     <div
