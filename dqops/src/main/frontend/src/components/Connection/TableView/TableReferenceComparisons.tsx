@@ -86,6 +86,8 @@ export const TableReferenceComparisons = ({
         setReferences(res.data);
       });
     }
+    setIsCreting(false);
+    fetchChecks();
   };
 
   const onEditReference = (reference: TableComparisonConfigurationModel) => {
