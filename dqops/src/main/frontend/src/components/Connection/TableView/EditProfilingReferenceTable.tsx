@@ -40,6 +40,8 @@ type EditProfilingReferenceTableProps = {
   timePartitioned?: 'daily' | 'monthly';
   categoryCheck?: QualityCategoryModel;
   isCreating?: boolean;
+  getNewTableComparison: () => void;
+  onChangeSelectedReference: (arg: string) => void;
 };
 
 export const EditProfilingReferenceTable = ({
@@ -48,7 +50,9 @@ export const EditProfilingReferenceTable = ({
   onBack,
   selectedReference,
   categoryCheck,
-  isCreating
+  isCreating,
+  getNewTableComparison,
+  onChangeSelectedReference
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -78,6 +82,11 @@ export const EditProfilingReferenceTable = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [selectedName, setSelectedName] = useState('');
+
+  const onChangeSelectedName = (arg: string): void => {
+    setSelectedName(arg);
+  };
 
   const onChangeUpdatedParent = (variable: boolean): void => {
     setIsUpdated(variable);
@@ -143,7 +152,7 @@ export const EditProfilingReferenceTable = ({
         );
       });
     }
-  }, []);
+  }, [selectedReference]);
 
   useEffect(() => {
     if (reference) {
@@ -422,6 +431,13 @@ export const EditProfilingReferenceTable = ({
 
   return (
     <div className="text-sm">
+      <div
+        onClick={() => {
+          onChangeSelectedReference(selectedName), getNewTableComparison();
+        }}
+      >
+        button
+      </div>
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable
           onBack={onBack}
@@ -434,6 +450,10 @@ export const EditProfilingReferenceTable = ({
           isCreating={isCreating}
           goToRefTable={goToRefTable}
           onChangeUpdatedParent={onChangeUpdatedParent}
+          onChangeSelectedName={onChangeSelectedName}
+          combinedFunc={(name: string) => {
+            onChangeSelectedReference(name), getNewTableComparison();
+          }}
         />
       </div>
       {reference && (
