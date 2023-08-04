@@ -24,6 +24,7 @@
     "chartjs-adapter-moment": "^1.0.1",
     "clsx": "^1.2.1",
     "dotenv": "^16.3.1",
+    "dotenv-expand": "^10.0.0",
     "http-proxy-middleware": "^2.0.6",
     "install": "^0.13.0",
     "lodash": "^4.17.21",
