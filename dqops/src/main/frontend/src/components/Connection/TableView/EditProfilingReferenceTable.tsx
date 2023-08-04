@@ -429,8 +429,6 @@ export const EditProfilingReferenceTable = ({
     onUpdate();
   }, [reference, table, schema, connection]);
 
-  console.log(reference);
-
   return (
     <div className="text-sm">
       <div

@@ -63,7 +63,6 @@ export const TableReferenceComparisons = ({
         undefined
       ).then((res) => {
         setReferences(res.data);
-        console.log(references);
       });
     } else if (checkTypes === CheckTypes.PARTITIONED) {
       TableComparisonsApi.getTableComparisonConfigurations(
@@ -227,8 +226,6 @@ export const TableReferenceComparisons = ({
     setIsCreting(true);
     setIsEditing(true);
   };
-
-  console.log(selectedReference);
 
   return (
     <>
