@@ -30,6 +30,8 @@ type EditReferenceTableProps = {
   isCreating?: boolean;
   goToRefTable?: () => void;
   onChangeUpdatedParent: (variable: boolean) => void;
+  onChangeSelectedName: (arg: string) => void;
+  combinedFunc: (name: string) => void;
 };
 
 const EditReferenceTable = ({
@@ -41,7 +43,9 @@ const EditReferenceTable = ({
   disabled,
   isCreating,
   goToRefTable,
-  onChangeUpdatedParent
+  onChangeUpdatedParent,
+  onChangeSelectedName,
+  combinedFunc
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -181,6 +185,7 @@ const EditReferenceTable = ({
   };
 
   const onUpdate = async () => {
+    onChangeSelectedName(name);
     if (selectedReference) {
       await TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
@@ -355,6 +360,7 @@ const EditReferenceTable = ({
             setIsUpdating(false);
           });
       }
+      combinedFunc(name);
     }
     setIsButtonEnabled(false);
     onChangeUpdatedParent(false);

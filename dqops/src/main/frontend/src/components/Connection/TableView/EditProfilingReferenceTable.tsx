@@ -82,6 +82,11 @@ export const EditProfilingReferenceTable = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [selectedName, setSelectedName] = useState('');
+
+  const onChangeSelectedName = (arg: string): void => {
+    setSelectedName(arg);
+  };
 
   const onChangeUpdatedParent = (variable: boolean): void => {
     setIsUpdated(variable);
@@ -147,7 +152,7 @@ export const EditProfilingReferenceTable = ({
         );
       });
     }
-  }, []);
+  }, [selectedReference]);
 
   useEffect(() => {
     if (reference) {
@@ -424,11 +429,13 @@ export const EditProfilingReferenceTable = ({
     onUpdate();
   }, [reference, table, schema, connection]);
 
+  console.log(reference);
+
   return (
     <div className="text-sm">
       <div
         onClick={() => {
-          onChangeSelectedReference('1223'), getNewTableComparison();
+          onChangeSelectedReference(selectedName), getNewTableComparison();
         }}
       >
         button
@@ -445,6 +452,10 @@ export const EditProfilingReferenceTable = ({
           isCreating={isCreating}
           goToRefTable={goToRefTable}
           onChangeUpdatedParent={onChangeUpdatedParent}
+          onChangeSelectedName={onChangeSelectedName}
+          combinedFunc={(name: string) => {
+            onChangeSelectedReference(name), getNewTableComparison();
+          }}
         />
       </div>
       {reference && (
