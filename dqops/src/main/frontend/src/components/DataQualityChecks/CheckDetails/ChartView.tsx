@@ -115,8 +115,13 @@ export const ChartView = ({ data }: ChartViewProps) => {
         : null
     ].filter((item) => item !== null)
   };
+  const customWidth = `calc(100vw - ${sidebarWidth + 150}px)`;
+  const customHeight = '370px';
+
+  const aspectRatioValue = parseFloat(customWidth) / parseFloat(customHeight);
 
   const options = {
+    aspectRatio: aspectRatioValue,
     plugins: {
       title: {
         display: false
@@ -144,16 +149,23 @@ export const ChartView = ({ data }: ChartViewProps) => {
     }
   };
 
-  return (
-    <div
-      className="my-8"
-      style={{
-        minWidth: '1000px',
-        width: `calc(100vw - ${sidebarWidth  + 150}px`,
+  const dataSet = {
+    datasets: [
+      {
+        width: `calc(100vw - ${sidebarWidth + 150}px`,
         height: '370px'
-      }}
-    >
-      <Line data={dataSource} options={options as any} />
+      }
+    ]
+  };
+
+  return (
+    <div className="my-8">
+      <Line
+        data={dataSource}
+        options={options as any}
+        width={customWidth}
+        height={customHeight}
+      />
     </div>
   );
 };
