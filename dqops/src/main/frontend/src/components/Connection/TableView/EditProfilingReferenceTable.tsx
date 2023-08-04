@@ -40,6 +40,8 @@ type EditProfilingReferenceTableProps = {
   timePartitioned?: 'daily' | 'monthly';
   categoryCheck?: QualityCategoryModel;
   isCreating?: boolean;
+  getNewTableComparison: () => void;
+  onChangeSelectedReference: (arg: string) => void;
 };
 
 export const EditProfilingReferenceTable = ({
@@ -48,7 +50,9 @@ export const EditProfilingReferenceTable = ({
   onBack,
   selectedReference,
   categoryCheck,
-  isCreating
+  isCreating,
+  getNewTableComparison,
+  onChangeSelectedReference
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -422,6 +426,13 @@ export const EditProfilingReferenceTable = ({
 
   return (
     <div className="text-sm">
+      <div
+        onClick={() => {
+          onChangeSelectedReference('1223'), getNewTableComparison();
+        }}
+      >
+        button
+      </div>
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable
           onBack={onBack}
