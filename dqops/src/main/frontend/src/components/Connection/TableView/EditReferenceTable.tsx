@@ -546,6 +546,7 @@ const EditReferenceTable = ({
           />
         </div>
         <div className="flex justify-center items-center gap-x-2">
+          <Button color="primary" variant="contained" label="Delete results" />
           <SvgIcon
             name="sync"
             className={clsx(
