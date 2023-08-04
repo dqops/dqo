@@ -31,7 +31,6 @@ export const Table: React.FC<TableProps> = ({
   loading,
   getRowClass
 }) => {
-  console.log(data);
   return (
     <div className="w-full">
       <table className={className}>
