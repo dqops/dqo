@@ -122,7 +122,7 @@ const CheckDetails = ({
 
     return {
       startDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD'),
-      endDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD')
+      endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
     };
   };
 
@@ -142,7 +142,8 @@ const CheckDetails = ({
           runCheckType,
           timeScale,
           checkName: checkName ?? '',
-          category
+          category,
+          comparisonName
         })
       );
     },
@@ -154,7 +155,8 @@ const CheckDetails = ({
       schema,
       table,
       column,
-      category
+      category,
+      comparisonName
     ]
   );
 
@@ -174,7 +176,8 @@ const CheckDetails = ({
           runCheckType,
           timeScale,
           checkName: checkName ?? '',
-          category
+          category,
+          comparisonName
         })
       );
     },
@@ -186,7 +189,8 @@ const CheckDetails = ({
       schema,
       table,
       column,
-      category
+      category,
+      comparisonName
     ]
   );
 

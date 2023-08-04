@@ -481,7 +481,8 @@ export const getCheckReadouts =
       checkName,
       runCheckType,
       timeScale,
-      category
+      category,
+      comparisonName
     }: {
       connection: string;
       schema: string;
@@ -495,6 +496,7 @@ export const getCheckReadouts =
       checkName: string;
       runCheckType?: string;
       category?: string;
+      comparisonName?: string;
     }
   ) =>
   (dispatch: any) => {
@@ -529,7 +531,10 @@ export const getCheckReadouts =
           column,
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -542,7 +547,10 @@ export const getCheckReadouts =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -555,7 +563,10 @@ export const getCheckReadouts =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -568,7 +579,10 @@ export const getCheckReadouts =
           table,
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -580,7 +594,10 @@ export const getCheckReadouts =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -592,7 +609,10 @@ export const getCheckReadouts =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -648,7 +668,8 @@ export const getCheckErrors =
       checkName,
       runCheckType,
       timeScale,
-      category
+      category,
+      comparisonName
     }: {
       connection: string;
       schema: string;
@@ -661,6 +682,7 @@ export const getCheckErrors =
       checkName: string;
       runCheckType?: string;
       category?: string;
+      comparisonName?: string;
     }
   ) =>
   (dispatch: any) => {
@@ -689,7 +711,10 @@ export const getCheckErrors =
           column,
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -702,7 +727,10 @@ export const getCheckErrors =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -715,7 +743,10 @@ export const getCheckErrors =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -728,7 +759,10 @@ export const getCheckErrors =
           table,
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -740,7 +774,10 @@ export const getCheckErrors =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -752,7 +789,10 @@ export const getCheckErrors =
           timeScale || 'daily',
           dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);

@@ -154,6 +154,9 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             if (singleModel == null) {
                 singleModel = createSensorReadoutSingleRow(sortedTable.row(rowIndex));
             }
+            if (sensorReadoutDetailedDataModel.getSingleSensorReadouts() == null) {
+                sensorReadoutDetailedDataModel.setSingleSensorReadouts(new ArrayList<>());
+            }
 
             sensorReadoutDetailedDataModel.getSingleSensorReadouts().add(singleModel);
         }
