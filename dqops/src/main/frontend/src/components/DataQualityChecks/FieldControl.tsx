@@ -22,6 +22,7 @@ interface ISensorParametersFieldSettingsProps {
   disabled?: boolean;
   className?: string;
   onSave?: () => void;
+  checkBoxNotRed?: boolean;
 }
 
 const FieldControl = ({
@@ -29,7 +30,8 @@ const FieldControl = ({
   onChange,
   disabled,
   className,
-  onSave
+  onSave,
+  checkBoxNotRed
 }: ISensorParametersFieldSettingsProps) => {
   const type = field?.definition?.data_type;
   const label = field?.definition?.display_name;
@@ -82,7 +84,7 @@ const FieldControl = ({
           label={label}
           tooltipText={tooltip}
           disabled={disabled}
-          error={isInvalid}
+          error={checkBoxNotRed ? false : isInvalid}
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.string && (
@@ -233,9 +235,7 @@ const FieldControl = ({
             label={label}
             value={value}
             onChange={(date_value) => handleChange({ date_value })}
-            className={clsx(
-              '!h-8 !text-xs min-w-30 max-w-30',
-            )}
+            className={clsx('!h-8 !text-xs min-w-30 max-w-30')}
             tooltipText={tooltip}
             disabled={disabled}
             error={isInvalid}
