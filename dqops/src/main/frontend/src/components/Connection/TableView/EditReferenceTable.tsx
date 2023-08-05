@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   ConnectionApiClient,
+  JobApiClient,
   SchemaApiClient,
   TableApiClient,
   TableComparisonsApi
@@ -18,6 +19,7 @@ import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
 import clsx from 'clsx';
+import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -81,6 +83,8 @@ const EditReferenceTable = ({
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
     false
   );
+  const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -546,7 +550,12 @@ const EditReferenceTable = ({
           />
         </div>
         <div className="flex justify-center items-center gap-x-2">
-          <Button color="primary" variant="contained" label="Delete results" />
+          <Button
+            color="primary"
+            variant="contained"
+            label="Delete results"
+            onClick={() => setDeleteDataDialogOpened(true)}
+          />
           <SvgIcon
             name="sync"
             className={clsx(
@@ -700,6 +709,19 @@ const EditReferenceTable = ({
           </div>
         )}
       </div>
+      <DeleteOnlyDataDialog
+        open={deleteDataDialogOpened}
+        onClose={() => setDeleteDataDialogOpened(false)}
+        onDelete={(params) => {
+          setDeleteDataDialogOpened(false);
+          JobApiClient.deleteStoredData({
+            connectionName: connection,
+            schemaTableName: schema,
+            ...params,
+            tableComparisonName: selectedReference
+          });
+        }}
+      />
     </div>
   );
 };
