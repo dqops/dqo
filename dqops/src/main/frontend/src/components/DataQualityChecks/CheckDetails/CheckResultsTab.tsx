@@ -272,52 +272,28 @@ const CheckResultsTab = ({
   }, []);
 
   useEffect(() => {
-    if (mode === 'chart') {
-      const startDate = moment()
-        .subtract(5, 'month')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-      const endDate = moment().endOf('month').format('YYYY-MM-DD');
+    const startDate = month
+      ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
+      : '';
+    const endDate = month
+      ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+      : '';
 
-      dispatch(
-        getCheckResults(checkTypes, firstLevelActiveTab, {
-          connection,
-          schema,
-          table,
-          column,
-          runCheckType,
-          checkName,
-          timeScale,
-          startDate,
-          endDate,
-          category,
-          comparisonName
-        })
-      );
-    } else {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
-
-      dispatch(
-        getCheckResults(checkTypes, firstLevelActiveTab, {
-          connection,
-          schema,
-          table,
-          column,
-          runCheckType,
-          checkName,
-          timeScale,
-          startDate,
-          endDate,
-          category,
-          comparisonName
-        })
-      );
-    }
+    dispatch(
+      getCheckResults(checkTypes, firstLevelActiveTab, {
+        connection,
+        schema,
+        table,
+        column,
+        runCheckType,
+        checkName,
+        timeScale,
+        startDate,
+        endDate,
+        category,
+        comparisonName
+      })
+    );
   }, [mode]);
 
   const allResults = results
