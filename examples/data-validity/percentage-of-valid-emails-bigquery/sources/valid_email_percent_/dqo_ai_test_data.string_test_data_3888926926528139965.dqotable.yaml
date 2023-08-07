@@ -23,7 +23,6 @@ spec:
               comment: "In this example, values in \"email\" column are verified whether\
                 \ the percentage of invalid email values does not exceed the indicated\
                 \ thresholds."
-            parameters: {}
             warning:
               min_percent: 99.0
             error:
