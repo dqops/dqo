@@ -75,18 +75,13 @@ const CheckResultsTab = ({
 
   const columns = [
     {
-      label: 'Id',
-      value: 'id',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
-      label: 'Check Name',
-      value: 'checkName',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
-      label: 'Executed At',
-      value: 'executedAt',
+      label:
+        checkTypes === 'profiling'
+          ? 'Profiled at (local time)'
+          : checkTypes === 'partitioned'
+          ? 'Partition Date'
+          : 'Checkpoint date',
+      value: 'timePeriod',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
@@ -95,8 +90,8 @@ const CheckResultsTab = ({
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Time Period',
-      value: 'timePeriod',
+      label: 'Executed At',
+      value: 'executedAt',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
@@ -253,6 +248,11 @@ const CheckResultsTab = ({
       label: 'Data Group',
       value: 'dataGroup',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
+    },
+    {
+      label: 'Id',
+      value: 'id',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     }
   ];
 
