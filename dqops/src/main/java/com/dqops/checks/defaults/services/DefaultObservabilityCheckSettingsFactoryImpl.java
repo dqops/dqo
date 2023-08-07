@@ -18,13 +18,12 @@ package com.dqops.checks.defaults.services;
 
 import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyDifferencingSumCheckSpec;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyStationaryMeanCheckSpec;
-import com.dqops.checks.column.checkspecs.consistency.ColumnStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
 import com.dqops.checks.column.profiling.ColumnSchemaProfilingChecksSpec;
 import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
-import com.dqops.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringChecksSpec;
-import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
+import com.dqops.checks.column.recurring.datatype.ColumnDatatypeDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
@@ -91,11 +90,11 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         defaultSettings.setTableVolume(tableVolume);
 
-        ColumnConsistencyDailyRecurringChecksSpec columnConsistency = new ColumnConsistencyDailyRecurringChecksSpec();
-        columnConsistency.setDailyStringDatatypeChanged(new ColumnStringDatatypeChangedCheckSpec() {{
+        ColumnDatatypeDailyRecurringChecksSpec columnDatatype = new ColumnDatatypeDailyRecurringChecksSpec();
+        columnDatatype.setDailyStringDatatypeChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        defaultSettings.setColumnConsistency(columnConsistency);
+        defaultSettings.setColumnDatatype(columnDatatype);
 
         ColumnAnomalyDailyRecurringChecksSpec columnAnomaly = new ColumnAnomalyDailyRecurringChecksSpec();
         columnAnomaly.setDailySumAnomalyDifferencing(new ColumnAnomalyDifferencingSumCheckSpec() {{

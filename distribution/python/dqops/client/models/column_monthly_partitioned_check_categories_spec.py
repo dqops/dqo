@@ -14,8 +14,8 @@ if TYPE_CHECKING:
     from ..models.column_bool_monthly_partitioned_checks_spec import (
         ColumnBoolMonthlyPartitionedChecksSpec,
     )
-    from ..models.column_consistency_monthly_partitioned_checks_spec import (
-        ColumnConsistencyMonthlyPartitionedChecksSpec,
+    from ..models.column_datatype_monthly_partitioned_checks_spec import (
+        ColumnDatatypeMonthlyPartitionedChecksSpec,
     )
     from ..models.column_datetime_monthly_partitioned_checks_spec import (
         ColumnDatetimeMonthlyPartitionedChecksSpec,
@@ -68,7 +68,7 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         bool_ (Union[Unset, ColumnBoolMonthlyPartitionedChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityMonthlyPartitionedChecksSpec]):
         accuracy (Union[Unset, ColumnAccuracyMonthlyPartitionedChecksSpec]):
-        consistency (Union[Unset, ColumnConsistencyMonthlyPartitionedChecksSpec]):
+        datatype (Union[Unset, ColumnDatatypeMonthlyPartitionedChecksSpec]):
         anomaly (Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]):
         comparisons (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpecComparisons]): Dictionary of configuration
             of checks for table comparisons at a column level. The key that identifies each comparison must match the name
@@ -86,7 +86,7 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
     bool_: Union[Unset, "ColumnBoolMonthlyPartitionedChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityMonthlyPartitionedChecksSpec"] = UNSET
     accuracy: Union[Unset, "ColumnAccuracyMonthlyPartitionedChecksSpec"] = UNSET
-    consistency: Union[Unset, "ColumnConsistencyMonthlyPartitionedChecksSpec"] = UNSET
+    datatype: Union[Unset, "ColumnDatatypeMonthlyPartitionedChecksSpec"] = UNSET
     anomaly: Union[Unset, "ColumnAnomalyMonthlyPartitionedChecksSpec"] = UNSET
     comparisons: Union[
         Unset, "ColumnMonthlyPartitionedCheckCategoriesSpecComparisons"
@@ -138,9 +138,9 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        consistency: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.consistency, Unset):
-            consistency = self.consistency.to_dict()
+        datatype: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.datatype, Unset):
+            datatype = self.datatype.to_dict()
 
         anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.anomaly, Unset):
@@ -175,8 +175,8 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
             field_dict["integrity"] = integrity
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if consistency is not UNSET:
-            field_dict["consistency"] = consistency
+        if datatype is not UNSET:
+            field_dict["datatype"] = datatype
         if anomaly is not UNSET:
             field_dict["anomaly"] = anomaly
         if comparisons is not UNSET:
@@ -195,8 +195,8 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         from ..models.column_bool_monthly_partitioned_checks_spec import (
             ColumnBoolMonthlyPartitionedChecksSpec,
         )
-        from ..models.column_consistency_monthly_partitioned_checks_spec import (
-            ColumnConsistencyMonthlyPartitionedChecksSpec,
+        from ..models.column_datatype_monthly_partitioned_checks_spec import (
+            ColumnDatatypeMonthlyPartitionedChecksSpec,
         )
         from ..models.column_datetime_monthly_partitioned_checks_spec import (
             ColumnDatetimeMonthlyPartitionedChecksSpec,
@@ -313,14 +313,12 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         else:
             accuracy = ColumnAccuracyMonthlyPartitionedChecksSpec.from_dict(_accuracy)
 
-        _consistency = d.pop("consistency", UNSET)
-        consistency: Union[Unset, ColumnConsistencyMonthlyPartitionedChecksSpec]
-        if isinstance(_consistency, Unset):
-            consistency = UNSET
+        _datatype = d.pop("datatype", UNSET)
+        datatype: Union[Unset, ColumnDatatypeMonthlyPartitionedChecksSpec]
+        if isinstance(_datatype, Unset):
+            datatype = UNSET
         else:
-            consistency = ColumnConsistencyMonthlyPartitionedChecksSpec.from_dict(
-                _consistency
-            )
+            datatype = ColumnDatatypeMonthlyPartitionedChecksSpec.from_dict(_datatype)
 
         _anomaly = d.pop("anomaly", UNSET)
         anomaly: Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]
@@ -354,7 +352,7 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
             bool_=bool_,
             integrity=integrity,
             accuracy=accuracy,
-            consistency=consistency,
+            datatype=datatype,
             anomaly=anomaly,
             comparisons=comparisons,
         )

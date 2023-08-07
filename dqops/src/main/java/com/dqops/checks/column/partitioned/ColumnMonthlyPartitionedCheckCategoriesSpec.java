@@ -23,7 +23,7 @@ import com.dqops.checks.column.partitioned.accuracy.ColumnAccuracyMonthlyPartiti
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.comparison.ColumnComparisonMonthlyPartitionedChecksSpecMap;
-import com.dqops.checks.column.partitioned.consistency.ColumnConsistencyMonthlyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.datatype.ColumnDatatypeMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
@@ -70,7 +70,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
-            put("consistency", o -> o.consistency);
+            put("datatype", o -> o.datatype);
             put("anomaly", o -> o.anomaly);
             put("comparisons", o -> o.comparisons);
         }
@@ -126,10 +126,10 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyMonthlyPartitionedChecksSpec accuracy;
 
-    @JsonPropertyDescription("Monthly partitioned checks for consistency in the column")
+    @JsonPropertyDescription("Monthly partitioned checks for datatype in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyMonthlyPartitionedChecksSpec consistency;
+    private ColumnDatatypeMonthlyPartitionedChecksSpec datatype;
 
     @JsonPropertyDescription("Monthly partitioned checks for anomaly in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -322,21 +322,21 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     }
 
     /**
-     * Returns a container of custom consistency checks on a column.
-     * @return Custom consistency checks.
+     * Returns a container of custom datatype checks on a column.
+     * @return Custom datatype checks.
      */
-    public ColumnConsistencyMonthlyPartitionedChecksSpec getConsistency() {
-        return consistency;
+    public ColumnDatatypeMonthlyPartitionedChecksSpec getDatatype() {
+        return datatype;
     }
 
     /**
-     * Sets a reference to a container of custom consistency checks.
-     * @param consistency Custom consistency checks.
+     * Sets a reference to a container of custom datatype checks.
+     * @param datatype Custom datatype checks.
      */
-    public void setConsistency(ColumnConsistencyMonthlyPartitionedChecksSpec consistency) {
-        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
-        this.consistency = consistency;
-        propagateHierarchyIdToField(consistency, "consistency");
+    public void setDatatype(ColumnDatatypeMonthlyPartitionedChecksSpec datatype) {
+        this.setDirtyIf(!Objects.equals(this.datatype, datatype));
+        this.datatype = datatype;
+        propagateHierarchyIdToField(datatype, "datatype");
     }
 
     /**

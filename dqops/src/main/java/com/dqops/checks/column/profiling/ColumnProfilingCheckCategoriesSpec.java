@@ -59,7 +59,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
-            put("consistency", o -> o.consistency);
+            put("datatype", o -> o.datatype);
             put("anomaly", o -> o.anomaly);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
@@ -116,10 +116,10 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyProfilingChecksSpec accuracy;
 
-    @JsonPropertyDescription("Configuration of consistency checks on a column level.")
+    @JsonPropertyDescription("Configuration of datatype checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyProfilingChecksSpec consistency;
+    private ColumnDatatypeProfilingChecksSpec datatype;
 
     @JsonPropertyDescription("Configuration of anomaly checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -317,21 +317,21 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the consistency check configuration on a column level.
-     * @return Consistency check configuration.
+     * Returns the datatype check configuration on a column level.
+     * @return Datatype check configuration.
      */
-    public ColumnConsistencyProfilingChecksSpec getConsistency() {
-        return consistency;
+    public ColumnDatatypeProfilingChecksSpec getDatatype() {
+        return datatype;
     }
 
     /**
-     * Sets the consistency check configuration on a column level.
-     * @param consistency New consistency checks configuration.
+     * Sets the datatype check configuration on a column level.
+     * @param datatype New datatype checks configuration.
      */
-    public void setConsistency(ColumnConsistencyProfilingChecksSpec consistency) {
-        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
-        this.consistency = consistency;
-        this.propagateHierarchyIdToField(consistency, "consistency");
+    public void setDatatype(ColumnDatatypeProfilingChecksSpec datatype) {
+        this.setDirtyIf(!Objects.equals(this.datatype, datatype));
+        this.datatype = datatype;
+        this.propagateHierarchyIdToField(datatype, "datatype");
     }
 
     /**

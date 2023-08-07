@@ -14,8 +14,8 @@ if TYPE_CHECKING:
     from ..models.column_bool_monthly_recurring_checks_spec import (
         ColumnBoolMonthlyRecurringChecksSpec,
     )
-    from ..models.column_consistency_monthly_recurring_checks_spec import (
-        ColumnConsistencyMonthlyRecurringChecksSpec,
+    from ..models.column_datatype_monthly_recurring_checks_spec import (
+        ColumnDatatypeMonthlyRecurringChecksSpec,
     )
     from ..models.column_datetime_monthly_recurring_checks_spec import (
         ColumnDatetimeMonthlyRecurringChecksSpec,
@@ -71,7 +71,7 @@ class ColumnMonthlyRecurringCheckCategoriesSpec:
         bool_ (Union[Unset, ColumnBoolMonthlyRecurringChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityMonthlyRecurringChecksSpec]):
         accuracy (Union[Unset, ColumnAccuracyMonthlyRecurringChecksSpec]):
-        consistency (Union[Unset, ColumnConsistencyMonthlyRecurringChecksSpec]):
+        datatype (Union[Unset, ColumnDatatypeMonthlyRecurringChecksSpec]):
         anomaly (Union[Unset, ColumnAnomalyMonthlyRecurringChecksSpec]):
         schema (Union[Unset, ColumnSchemaMonthlyRecurringChecksSpec]):
         comparisons (Union[Unset, ColumnMonthlyRecurringCheckCategoriesSpecComparisons]): Dictionary of configuration of
@@ -90,7 +90,7 @@ class ColumnMonthlyRecurringCheckCategoriesSpec:
     bool_: Union[Unset, "ColumnBoolMonthlyRecurringChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityMonthlyRecurringChecksSpec"] = UNSET
     accuracy: Union[Unset, "ColumnAccuracyMonthlyRecurringChecksSpec"] = UNSET
-    consistency: Union[Unset, "ColumnConsistencyMonthlyRecurringChecksSpec"] = UNSET
+    datatype: Union[Unset, "ColumnDatatypeMonthlyRecurringChecksSpec"] = UNSET
     anomaly: Union[Unset, "ColumnAnomalyMonthlyRecurringChecksSpec"] = UNSET
     schema: Union[Unset, "ColumnSchemaMonthlyRecurringChecksSpec"] = UNSET
     comparisons: Union[
@@ -143,9 +143,9 @@ class ColumnMonthlyRecurringCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        consistency: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.consistency, Unset):
-            consistency = self.consistency.to_dict()
+        datatype: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.datatype, Unset):
+            datatype = self.datatype.to_dict()
 
         anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.anomaly, Unset):
@@ -184,8 +184,8 @@ class ColumnMonthlyRecurringCheckCategoriesSpec:
             field_dict["integrity"] = integrity
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if consistency is not UNSET:
-            field_dict["consistency"] = consistency
+        if datatype is not UNSET:
+            field_dict["datatype"] = datatype
         if anomaly is not UNSET:
             field_dict["anomaly"] = anomaly
         if schema is not UNSET:
@@ -206,8 +206,8 @@ class ColumnMonthlyRecurringCheckCategoriesSpec:
         from ..models.column_bool_monthly_recurring_checks_spec import (
             ColumnBoolMonthlyRecurringChecksSpec,
         )
-        from ..models.column_consistency_monthly_recurring_checks_spec import (
-            ColumnConsistencyMonthlyRecurringChecksSpec,
+        from ..models.column_datatype_monthly_recurring_checks_spec import (
+            ColumnDatatypeMonthlyRecurringChecksSpec,
         )
         from ..models.column_datetime_monthly_recurring_checks_spec import (
             ColumnDatetimeMonthlyRecurringChecksSpec,
@@ -323,14 +323,12 @@ class ColumnMonthlyRecurringCheckCategoriesSpec:
         else:
             accuracy = ColumnAccuracyMonthlyRecurringChecksSpec.from_dict(_accuracy)
 
-        _consistency = d.pop("consistency", UNSET)
-        consistency: Union[Unset, ColumnConsistencyMonthlyRecurringChecksSpec]
-        if isinstance(_consistency, Unset):
-            consistency = UNSET
+        _datatype = d.pop("datatype", UNSET)
+        datatype: Union[Unset, ColumnDatatypeMonthlyRecurringChecksSpec]
+        if isinstance(_datatype, Unset):
+            datatype = UNSET
         else:
-            consistency = ColumnConsistencyMonthlyRecurringChecksSpec.from_dict(
-                _consistency
-            )
+            datatype = ColumnDatatypeMonthlyRecurringChecksSpec.from_dict(_datatype)
 
         _anomaly = d.pop("anomaly", UNSET)
         anomaly: Union[Unset, ColumnAnomalyMonthlyRecurringChecksSpec]
@@ -369,7 +367,7 @@ class ColumnMonthlyRecurringCheckCategoriesSpec:
             bool_=bool_,
             integrity=integrity,
             accuracy=accuracy,
-            consistency=consistency,
+            datatype=datatype,
             anomaly=anomaly,
             schema=schema,
             comparisons=comparisons,
