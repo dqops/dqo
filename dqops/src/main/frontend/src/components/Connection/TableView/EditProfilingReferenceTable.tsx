@@ -95,6 +95,7 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
+        console.log(res.data);
         setReference(res.data);
       };
       if (checkTypes === CheckTypes.PROFILING) {
@@ -454,6 +455,7 @@ export const EditProfilingReferenceTable = ({
           combinedFunc={(name: string) => {
             onChangeSelectedReference(name), getNewTableComparison();
           }}
+          cleanDataTemplate={reference?.compare_table_clean_data_job_template}
         />
       </div>
       {reference && (

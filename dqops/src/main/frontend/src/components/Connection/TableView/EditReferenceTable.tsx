@@ -6,7 +6,10 @@ import {
   TableApiClient,
   TableComparisonsApi
 } from '../../../services/apiClient';
-import { TableComparisonGroupingColumnPairModel } from '../../../api';
+import {
+  DeleteStoredDataQueueJobParameters,
+  TableComparisonGroupingColumnPairModel
+} from '../../../api';
 import Button from '../../Button';
 import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
@@ -34,6 +37,7 @@ type EditReferenceTableProps = {
   onChangeUpdatedParent: (variable: boolean) => void;
   onChangeSelectedName: (arg: string) => void;
   combinedFunc: (name: string) => void;
+  cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
 };
 
 const EditReferenceTable = ({
@@ -47,7 +51,8 @@ const EditReferenceTable = ({
   goToRefTable,
   onChangeUpdatedParent,
   onChangeSelectedName,
-  combinedFunc
+  combinedFunc,
+  cleanDataTemplate
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -715,10 +720,8 @@ const EditReferenceTable = ({
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
           JobApiClient.deleteStoredData({
-            connectionName: connection,
-            schemaTableName: schema,
-            ...params,
-            tableComparisonName: selectedReference
+            ...(cleanDataTemplate || {}),
+            ...params
           });
         }}
       />
