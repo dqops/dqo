@@ -52,7 +52,6 @@ const TableColumnsView = () => {
           schemaName,
           tableName
         );
-      console.log('getting columns');
       setStatistics(res.data);
     } catch (err) {
       console.error(err);
