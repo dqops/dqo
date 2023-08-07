@@ -363,7 +363,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             }
         }
 
-        if (changesList.size() > 0) {
+        if (waitForChangeFuture == null) {
             return Mono.just(new DqoJobQueueIncrementalSnapshotModel(changesList, this.currentSynchronizationStatus, changeSequence));
         }
 
