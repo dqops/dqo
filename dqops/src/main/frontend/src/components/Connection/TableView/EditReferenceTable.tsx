@@ -41,7 +41,6 @@ type EditReferenceTableProps = {
   isCreating?: boolean;
   goToRefTable?: () => void;
   onChangeUpdatedParent: (variable: boolean) => void;
-  onChangeSelectedName: (arg: string) => void;
   combinedFunc: (name: string) => void;
   cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
 };
@@ -56,7 +55,6 @@ const EditReferenceTable = ({
   isCreating,
   goToRefTable,
   onChangeUpdatedParent,
-  onChangeSelectedName,
   combinedFunc,
   cleanDataTemplate
 }: EditReferenceTableProps) => {
@@ -207,7 +205,6 @@ const EditReferenceTable = ({
   };
 
   const onUpdate = async () => {
-    onChangeSelectedName(name);
     if (selectedReference) {
       await TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
@@ -557,7 +554,6 @@ const EditReferenceTable = ({
         ...(cleanDataTemplate || {}),
         ...params
       });
-      console.log(res.data);
       dispatch(
         setCurrentJobId(
           checkTypes,
@@ -584,11 +580,6 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
-  console.log(job);
-  console.log(jobId);
-  console.log(disabled);
-  console.log(deletingData);
-
   return (
     <div className="w-full">
       <TableActionGroup
@@ -610,6 +601,13 @@ const EditReferenceTable = ({
           />
         </div>
         <div className="flex justify-center items-center gap-x-2">
+          <SvgIcon
+            name="sync"
+            className={clsx(
+              'w-4 h-4 mr-3',
+              disabledDeleting || deletingData ? 'animate-spin' : 'hidden'
+            )}
+          />
           <Button
             color="primary"
             variant="contained"
@@ -620,9 +618,7 @@ const EditReferenceTable = ({
             name="sync"
             className={clsx(
               'w-4 h-4 mr-3',
-              disabled || disabledDeleting || deletingData
-                ? 'animate-spin'
-                : 'hidden'
+              disabled ? 'animate-spin' : 'hidden'
             )}
           />
           {isCreating === false && (
