@@ -50,6 +50,7 @@ import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionRepor
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,7 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/api/jobs")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Jobs", description = "Jobs management controller that supports starting new jobs, such as running selected data quality checks")
+@Slf4j
 public class JobsController {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
@@ -402,6 +404,7 @@ public class JobsController {
             return new ResponseEntity<>(returnEmptyWhenError, HttpStatus.OK); // 200
         }
         catch (Exception ex) {
+            log.error("Failed to retrieve recent jobs, error: " + ex.getMessage(), ex);
             return new ResponseEntity<>(Mono.just(new DqoJobQueueIncrementalSnapshotModel(
                     new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(), sequenceNumber)), HttpStatus.OK);
         }

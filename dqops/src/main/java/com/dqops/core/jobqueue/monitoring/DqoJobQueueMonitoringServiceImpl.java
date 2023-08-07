@@ -338,7 +338,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)
                     .values());
-            if (changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
+            if (changesList.size() == 0 || lastChangeId >= this.currentSynchronizationStatusChangeId) {
                 CompletableFuture<Long> completableFuture = new CompletableFuture<>();
                 completableFuture.completeOnTimeout(null, timeout, timeUnit);
                 this.waitingClients.put(changeSequence, completableFuture);
