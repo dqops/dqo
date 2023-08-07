@@ -81,6 +81,11 @@ export const EditProfilingReferenceTable = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [isDataDeleted, setIsDataDeleted] = useState(false);
+
+  const onChangeIsDataDeleted = (arg: boolean): void => {
+    setIsDataDeleted(arg);
+  };
 
   const onChangeUpdatedParent = (variable: boolean): void => {
     setIsUpdated(variable);
@@ -424,6 +429,12 @@ export const EditProfilingReferenceTable = ({
     onUpdate();
   }, [reference, table, schema, connection]);
 
+  useEffect(() => {
+    if (isDataDeleted === true) {
+      getResultsData();
+    }
+  }, [isDataDeleted]);
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
@@ -441,6 +452,7 @@ export const EditProfilingReferenceTable = ({
             onChangeSelectedReference(name), getNewTableComparison();
           }}
           cleanDataTemplate={reference?.compare_table_clean_data_job_template}
+          onChangeIsDataDeleted={onChangeIsDataDeleted}
         />
       </div>
       {reference && (

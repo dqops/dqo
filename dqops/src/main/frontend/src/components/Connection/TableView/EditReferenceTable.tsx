@@ -43,6 +43,7 @@ type EditReferenceTableProps = {
   onChangeUpdatedParent: (variable: boolean) => void;
   combinedFunc: (name: string) => void;
   cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
+  onChangeIsDataDeleted: (arg: boolean) => void;
 };
 
 const EditReferenceTable = ({
@@ -56,7 +57,8 @@ const EditReferenceTable = ({
   goToRefTable,
   onChangeUpdatedParent,
   combinedFunc,
-  cleanDataTemplate
+  cleanDataTemplate,
+  onChangeIsDataDeleted
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -576,6 +578,7 @@ const EditReferenceTable = ({
       job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
+      onChangeIsDataDeleted(true);
       setDeletingData(false);
     }
   }, [job?.status]);
