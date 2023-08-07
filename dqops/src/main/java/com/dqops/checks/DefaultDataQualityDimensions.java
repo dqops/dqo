@@ -20,6 +20,7 @@ package com.dqops.checks;
  */
 public enum DefaultDataQualityDimensions {
     Accuracy,
+    Availability,
     Completeness,
     Consistency,
     Integrity,
