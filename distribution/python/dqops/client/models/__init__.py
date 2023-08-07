@@ -334,30 +334,6 @@ from .column_comparison_null_count_match_check_spec import (
 )
 from .column_comparison_profiling_checks_spec import ColumnComparisonProfilingChecksSpec
 from .column_comparison_sum_match_check_spec import ColumnComparisonSumMatchCheckSpec
-from .column_consistency_daily_partitioned_checks_spec import (
-    ColumnConsistencyDailyPartitionedChecksSpec,
-)
-from .column_consistency_daily_recurring_checks_spec import (
-    ColumnConsistencyDailyRecurringChecksSpec,
-)
-from .column_consistency_date_match_format_percent_check_spec import (
-    ColumnConsistencyDateMatchFormatPercentCheckSpec,
-)
-from .column_consistency_date_match_format_percent_sensor_parameters_spec import (
-    ColumnConsistencyDateMatchFormatPercentSensorParametersSpec,
-)
-from .column_consistency_date_match_format_percent_sensor_parameters_spec_date_formats import (
-    ColumnConsistencyDateMatchFormatPercentSensorParametersSpecDateFormats,
-)
-from .column_consistency_monthly_partitioned_checks_spec import (
-    ColumnConsistencyMonthlyPartitionedChecksSpec,
-)
-from .column_consistency_monthly_recurring_checks_spec import (
-    ColumnConsistencyMonthlyRecurringChecksSpec,
-)
-from .column_consistency_profiling_checks_spec import (
-    ColumnConsistencyProfilingChecksSpec,
-)
 from .column_daily_partitioned_check_categories_spec import (
     ColumnDailyPartitionedCheckCategoriesSpec,
 )
@@ -375,6 +351,31 @@ from .column_daily_recurring_check_categories_spec_comparisons import (
 )
 from .column_daily_recurring_check_categories_spec_custom import (
     ColumnDailyRecurringCheckCategoriesSpecCustom,
+)
+from .column_datatype_daily_partitioned_checks_spec import (
+    ColumnDatatypeDailyPartitionedChecksSpec,
+)
+from .column_datatype_daily_recurring_checks_spec import (
+    ColumnDatatypeDailyRecurringChecksSpec,
+)
+from .column_datatype_date_match_format_percent_check_spec import (
+    ColumnDatatypeDateMatchFormatPercentCheckSpec,
+)
+from .column_datatype_date_match_format_percent_sensor_parameters_spec import (
+    ColumnDatatypeDateMatchFormatPercentSensorParametersSpec,
+)
+from .column_datatype_date_match_format_percent_sensor_parameters_spec_date_formats import (
+    ColumnDatatypeDateMatchFormatPercentSensorParametersSpecDateFormats,
+)
+from .column_datatype_monthly_partitioned_checks_spec import (
+    ColumnDatatypeMonthlyPartitionedChecksSpec,
+)
+from .column_datatype_monthly_recurring_checks_spec import (
+    ColumnDatatypeMonthlyRecurringChecksSpec,
+)
+from .column_datatype_profiling_checks_spec import ColumnDatatypeProfilingChecksSpec
+from .column_datatype_string_datatype_changed_check_spec import (
+    ColumnDatatypeStringDatatypeChangedCheckSpec,
 )
 from .column_date_values_in_future_percent_check_spec import (
     ColumnDateValuesInFuturePercentCheckSpec,
@@ -787,9 +788,6 @@ from .column_statistics_collectors_root_categories_spec import (
 from .column_statistics_model import ColumnStatisticsModel
 from .column_string_boolean_placeholder_percent_check_spec import (
     ColumnStringBooleanPlaceholderPercentCheckSpec,
-)
-from .column_string_datatype_changed_check_spec import (
-    ColumnStringDatatypeChangedCheckSpec,
 )
 from .column_string_datatype_detected_check_spec import (
     ColumnStringDatatypeDetectedCheckSpec,
@@ -1926,20 +1924,21 @@ __all__ = (
     "ColumnComparisonNullCountMatchCheckSpec",
     "ColumnComparisonProfilingChecksSpec",
     "ColumnComparisonSumMatchCheckSpec",
-    "ColumnConsistencyDailyPartitionedChecksSpec",
-    "ColumnConsistencyDailyRecurringChecksSpec",
-    "ColumnConsistencyDateMatchFormatPercentCheckSpec",
-    "ColumnConsistencyDateMatchFormatPercentSensorParametersSpec",
-    "ColumnConsistencyDateMatchFormatPercentSensorParametersSpecDateFormats",
-    "ColumnConsistencyMonthlyPartitionedChecksSpec",
-    "ColumnConsistencyMonthlyRecurringChecksSpec",
-    "ColumnConsistencyProfilingChecksSpec",
     "ColumnDailyPartitionedCheckCategoriesSpec",
     "ColumnDailyPartitionedCheckCategoriesSpecComparisons",
     "ColumnDailyPartitionedCheckCategoriesSpecCustom",
     "ColumnDailyRecurringCheckCategoriesSpec",
     "ColumnDailyRecurringCheckCategoriesSpecComparisons",
     "ColumnDailyRecurringCheckCategoriesSpecCustom",
+    "ColumnDatatypeDailyPartitionedChecksSpec",
+    "ColumnDatatypeDailyRecurringChecksSpec",
+    "ColumnDatatypeDateMatchFormatPercentCheckSpec",
+    "ColumnDatatypeDateMatchFormatPercentSensorParametersSpec",
+    "ColumnDatatypeDateMatchFormatPercentSensorParametersSpecDateFormats",
+    "ColumnDatatypeMonthlyPartitionedChecksSpec",
+    "ColumnDatatypeMonthlyRecurringChecksSpec",
+    "ColumnDatatypeProfilingChecksSpec",
+    "ColumnDatatypeStringDatatypeChangedCheckSpec",
     "ColumnDatetimeDailyPartitionedChecksSpec",
     "ColumnDatetimeDailyRecurringChecksSpec",
     "ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec",
@@ -2106,7 +2105,6 @@ __all__ = (
     "ColumnStatisticsCollectorsRootCategoriesSpec",
     "ColumnStatisticsModel",
     "ColumnStringBooleanPlaceholderPercentCheckSpec",
-    "ColumnStringDatatypeChangedCheckSpec",
     "ColumnStringDatatypeDetectedCheckSpec",
     "ColumnStringEmptyCountCheckSpec",
     "ColumnStringEmptyPercentCheckSpec",

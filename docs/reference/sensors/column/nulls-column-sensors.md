@@ -39,6 +39,26 @@ Column-level sensor that calculates the number of rows with not null values.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+    FROM(
+        SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}
+    ) grouping_table
+    WHERE actual_value IS NOT NULL
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -135,6 +155,28 @@ Column level sensor that calculates the percentage of not null values in a colum
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+    FROM (
+             SELECT
+                     {{ lib.render_target_column('analyzed_table') }} AS actual_value
+                     {{- lib.render_data_grouping_projections('analyzed_table') }}
+                     {{- lib.render_time_dimension_projection('analyzed_table') }}
+             FROM {{ lib.render_target_table() }} analyzed_table
+             {{- lib.render_where_clause() -}}
+    ) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -249,6 +291,29 @@ Column-level sensor that calculates the number of rows with null values.
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN actual_value IS NULL THEN 1
+                ELSE 0
+            END
+        ) actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+             SELECT
+                {{ lib.render_target_column('analyzed_table')}} actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -377,6 +442,32 @@ Column-level sensor that calculates the percentage of rows with null values.
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN actual_value IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+             SELECT
+                {{ lib.render_target_column('analyzed_table')}} actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

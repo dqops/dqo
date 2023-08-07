@@ -17,6 +17,9 @@ T = TypeVar("T", bound="SensorReadoutsDetailedDataModel")
 class SensorReadoutsDetailedDataModel:
     """
     Attributes:
+        check_name (Union[Unset, str]): Check name.
+        check_display_name (Union[Unset, str]): Check display name.
+        check_type (Union[Unset, str]): Check type.
         check_hash (Union[Unset, int]): Check hash.
         check_category (Union[Unset, str]): Check category name.
         sensor_name (Union[Unset, str]): Sensor name.
@@ -25,6 +28,9 @@ class SensorReadoutsDetailedDataModel:
         single_sensor_readouts (Union[Unset, List['SensorReadoutDetailedSingleModel']]): Single sensor readouts
     """
 
+    check_name: Union[Unset, str] = UNSET
+    check_display_name: Union[Unset, str] = UNSET
+    check_type: Union[Unset, str] = UNSET
     check_hash: Union[Unset, int] = UNSET
     check_category: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
@@ -36,6 +42,9 @@ class SensorReadoutsDetailedDataModel:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        check_name = self.check_name
+        check_display_name = self.check_display_name
+        check_type = self.check_type
         check_hash = self.check_hash
         check_category = self.check_category
         sensor_name = self.sensor_name
@@ -55,6 +64,12 @@ class SensorReadoutsDetailedDataModel:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if check_name is not UNSET:
+            field_dict["checkName"] = check_name
+        if check_display_name is not UNSET:
+            field_dict["checkDisplayName"] = check_display_name
+        if check_type is not UNSET:
+            field_dict["checkType"] = check_type
         if check_hash is not UNSET:
             field_dict["checkHash"] = check_hash
         if check_category is not UNSET:
@@ -77,6 +92,12 @@ class SensorReadoutsDetailedDataModel:
         )
 
         d = src_dict.copy()
+        check_name = d.pop("checkName", UNSET)
+
+        check_display_name = d.pop("checkDisplayName", UNSET)
+
+        check_type = d.pop("checkType", UNSET)
+
         check_hash = d.pop("checkHash", UNSET)
 
         check_category = d.pop("checkCategory", UNSET)
@@ -97,6 +118,9 @@ class SensorReadoutsDetailedDataModel:
             single_sensor_readouts.append(single_sensor_readouts_item)
 
         sensor_readouts_detailed_data_model = cls(
+            check_name=check_name,
+            check_display_name=check_display_name,
+            check_type=check_type,
             check_hash=check_hash,
             check_category=check_category,
             sensor_name=sensor_name,

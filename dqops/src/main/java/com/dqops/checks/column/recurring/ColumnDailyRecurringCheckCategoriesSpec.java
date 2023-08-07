@@ -23,7 +23,7 @@ import com.dqops.checks.column.recurring.accuracy.ColumnAccuracyDailyRecurringCh
 import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.bool.ColumnBoolDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.comparison.ColumnComparisonDailyRecurringChecksSpecMap;
-import com.dqops.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringChecksSpec;
+import com.dqops.checks.column.recurring.datatype.ColumnDatatypeDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.datetime.ColumnDatetimeDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.integrity.ColumnIntegrityDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
@@ -71,7 +71,7 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
-            put("consistency", o -> o.consistency);
+            put("datatype", o -> o.datatype);
             put("anomaly", o -> o.anomaly);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
@@ -128,10 +128,10 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyDailyRecurringChecksSpec accuracy;
 
-    @JsonPropertyDescription("Daily recurring checks of consistency in the column")
+    @JsonPropertyDescription("Daily recurring checks of datatype in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyDailyRecurringChecksSpec consistency;
+    private ColumnDatatypeDailyRecurringChecksSpec datatype;
 
     @JsonPropertyDescription("Daily recurring checks of anomaly in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -332,18 +332,18 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnConsistencyDailyRecurringChecksSpec getConsistency() {
-        return consistency;
+    public ColumnDatatypeDailyRecurringChecksSpec getDatatype() {
+        return datatype;
     }
 
     /**
-     * Sets the container of consistency data quality checks (recurring).
-     * @param consistency New consistency checks.
+     * Sets the container of datatype data quality checks (recurring).
+     * @param datatype New datatype checks.
      */
-    public void setConsistency(ColumnConsistencyDailyRecurringChecksSpec consistency) {
-        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
-        this.consistency = consistency;
-        this.propagateHierarchyIdToField(consistency, "consistency");
+    public void setDatatype(ColumnDatatypeDailyRecurringChecksSpec datatype) {
+        this.setDirtyIf(!Objects.equals(this.datatype, datatype));
+        this.datatype = datatype;
+        this.propagateHierarchyIdToField(datatype, "datatype");
     }
 
     /**

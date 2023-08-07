@@ -23,7 +23,7 @@ class DeleteStoredDataQueueJobParameters:
         delete_sensor_readouts (Union[Unset, bool]):
         column_names (Union[Unset, List[str]]):
         check_category (Union[Unset, str]):
-        data_comparison_name (Union[Unset, str]):
+        table_comparison_name (Union[Unset, str]):
         check_name (Union[Unset, str]):
         check_type (Union[Unset, str]):
         sensor_name (Union[Unset, str]):
@@ -45,7 +45,7 @@ class DeleteStoredDataQueueJobParameters:
     delete_sensor_readouts: Union[Unset, bool] = UNSET
     column_names: Union[Unset, List[str]] = UNSET
     check_category: Union[Unset, str] = UNSET
-    data_comparison_name: Union[Unset, str] = UNSET
+    table_comparison_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     check_type: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
@@ -77,7 +77,7 @@ class DeleteStoredDataQueueJobParameters:
             column_names = self.column_names
 
         check_category = self.check_category
-        data_comparison_name = self.data_comparison_name
+        table_comparison_name = self.table_comparison_name
         check_name = self.check_name
         check_type = self.check_type
         sensor_name = self.sensor_name
@@ -111,8 +111,8 @@ class DeleteStoredDataQueueJobParameters:
             field_dict["columnNames"] = column_names
         if check_category is not UNSET:
             field_dict["checkCategory"] = check_category
-        if data_comparison_name is not UNSET:
-            field_dict["dataComparisonName"] = data_comparison_name
+        if table_comparison_name is not UNSET:
+            field_dict["tableComparisonName"] = table_comparison_name
         if check_name is not UNSET:
             field_dict["checkName"] = check_name
         if check_type is not UNSET:
@@ -167,7 +167,7 @@ class DeleteStoredDataQueueJobParameters:
 
         check_category = d.pop("checkCategory", UNSET)
 
-        data_comparison_name = d.pop("dataComparisonName", UNSET)
+        table_comparison_name = d.pop("tableComparisonName", UNSET)
 
         check_name = d.pop("checkName", UNSET)
 
@@ -198,7 +198,7 @@ class DeleteStoredDataQueueJobParameters:
             delete_sensor_readouts=delete_sensor_readouts,
             column_names=column_names,
             check_category=check_category,
-            data_comparison_name=data_comparison_name,
+            table_comparison_name=table_comparison_name,
             check_name=check_name,
             check_type=check_type,
             sensor_name=sensor_name,

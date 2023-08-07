@@ -173,9 +173,9 @@ nav:
         - mean match: 'checks/column/comparisons/mean-match.md'
         - not null count match: 'checks/column/comparisons/not-null-count-match.md'
         - null count match: 'checks/column/comparisons/null-count-match.md'
-      - consistency:
-        - date match format percent: 'checks/column/consistency/date-match-format-percent.md'
-        - string datatype changed: 'checks/column/consistency/string-datatype-changed.md'
+      - datatype:
+        - date match format percent: 'checks/column/datatype/date-match-format-percent.md'
+        - string datatype changed: 'checks/column/datatype/string-datatype-changed.md'
       - datetime:
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
@@ -294,7 +294,7 @@ nav:
       - column:
         - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
         - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'
-        - consistency column sensors: 'reference/sensors/column/consistency-column-sensors.md'
+        - datatype column sensors: 'reference/sensors/column/datatype-column-sensors.md'
         - datetime column sensors: 'reference/sensors/column/datetime-column-sensors.md'
         - integrity column sensors: 'reference/sensors/column/integrity-column-sensors.md'
         - nulls column sensors: 'reference/sensors/column/nulls-column-sensors.md'

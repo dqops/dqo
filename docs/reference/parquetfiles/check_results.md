@@ -47,6 +47,7 @@ The data quality check results table that stores check results - a copy of senso
  | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
  | check_type | The data quality check type (profiling, recurring, partitioned). | text |
  | check_category | The data quality check category name. | text |
+ | table_comparison | The name of a table comparison configuration used for a data comparison (accuracy) check. | text |
  | quality_dimension | The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness. | text |
  | sensor_name | The data quality sensor name. | text |
  | time_series_id | The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash. | text |
@@ -58,7 +59,6 @@ The data quality check results table that stores check results - a copy of senso
  | updated_by | The login of the user that updated the row. | text |
  | severity | Check (rule) severity (0, 1, 2, 3) for none, warning, error and fatal severity failed data quality checks. | integer |
  | incident_hash | The matching data quality incident hash. The value is used to map a failed data quality check to an incident. | long |
- | table_comparison | The name of a table comparison configuration used for a data comparison (accuracy) check. | text |
  | reference_connection | The name of a connection to another data source that contains the reference data used as the expected values for accuracy checks. | text |
  | reference_schema | The schema in another data source that contains the reference data used as the expected values for accuracy checks. | text |
  | reference_table | The table name in another data source that contains the reference data used as the expected values for accuracy checks. | text |

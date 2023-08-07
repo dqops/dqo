@@ -203,6 +203,56 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('grouping_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}} ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN grouping_table."target_column" IS NOT NULL
+                AND grouping_table."target_column" = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            analyzed_table."target_column",
+        CURRENT_TIMESTAMP AS time_period,
+        CAST(CURRENT_TIMESTAMP AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -528,6 +578,57 @@ spec:
             LOCALTIMESTAMP AS time_period,
             LOCALTIMESTAMP AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}} ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN grouping_table."target_column" IS NOT NULL
+                    AND grouping_table."target_column" = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                analyzed_table."target_column",
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
+            CURRENT_TIMESTAMP AS time_period,
+            CAST(CURRENT_TIMESTAMP AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -904,6 +1005,56 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('grouping_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}} ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN grouping_table."target_column" IS NOT NULL
+                AND grouping_table."target_column" = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            analyzed_table."target_column",
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -1230,6 +1381,57 @@ spec:
             DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}} ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN grouping_table."target_column" IS NOT NULL
+                    AND grouping_table."target_column" = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                analyzed_table."target_column",
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -1606,6 +1808,56 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('grouping_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}} ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN grouping_table."target_column" IS NOT NULL
+                AND grouping_table."target_column" = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            analyzed_table."target_column",
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -1932,6 +2184,57 @@ spec:
             DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}} ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN grouping_table."target_column" IS NOT NULL
+                    AND grouping_table."target_column" = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                analyzed_table."target_column",
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -2308,6 +2611,56 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('grouping_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}} ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN grouping_table."target_column" IS NOT NULL
+                AND grouping_table."target_column" = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            analyzed_table."target_column",
+        TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -2638,6 +2991,57 @@ spec:
             DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}} ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN grouping_table."target_column" IS NOT NULL
+                    AND grouping_table."target_column" = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                analyzed_table."target_column",
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
+            TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -3012,6 +3416,56 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('grouping_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}} ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN grouping_table."target_column" IS NOT NULL
+                AND grouping_table."target_column" = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            analyzed_table."target_column",
+        TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -3342,6 +3796,57 @@ spec:
             DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}} ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN grouping_table."target_column" IS NOT NULL
+                    AND grouping_table."target_column" = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM(
+            SELECT
+                analyzed_table."target_column",
+            analyzed_table."country" AS grouping_level_1,
+            analyzed_table."state" AS grouping_level_2,
+            TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
