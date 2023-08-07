@@ -23,6 +23,8 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -115,6 +117,13 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
      * @return Table comparison container.
      */
     public abstract AbstractComparisonCheckCategorySpecMap<?> getComparisons();
+
+    /**
+     * Returns time series configuration for the given group of checks.
+     * @param tableSpec Parent table specification - used to get the details about the time partitioning column.
+     * @return Time series configuration.
+     */
+    public abstract TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec);
 
     /**
      * Checks if there are any configured checks (not null) in any check category.

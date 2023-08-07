@@ -33,7 +33,7 @@ const SensorReadoutsTab = ({
     {
       label:
         checkTypes === 'profiling'
-          ? 'Profiled at (local time)'
+          ? 'Profile date (local time)'
           : checkTypes === 'partitioned'
           ? 'Partition Date'
           : 'Checkpoint date',

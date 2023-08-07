@@ -33,7 +33,6 @@ import com.dqops.checks.column.recurring.schema.ColumnSchemaMonthlyRecurringChec
 import com.dqops.checks.column.recurring.sql.ColumnSqlMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.strings.ColumnStringsMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.uniqueness.ColumnUniquenessMonthlyRecurringChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -58,7 +57,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);

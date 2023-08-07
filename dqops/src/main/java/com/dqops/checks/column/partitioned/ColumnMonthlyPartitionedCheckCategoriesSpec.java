@@ -32,7 +32,6 @@ import com.dqops.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecks
 import com.dqops.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -57,7 +56,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);

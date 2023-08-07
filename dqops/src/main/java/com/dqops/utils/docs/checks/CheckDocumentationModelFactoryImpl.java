@@ -50,7 +50,6 @@ import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -621,7 +620,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setProviderType(providerType);
 
-                TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
 
                 EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
@@ -634,7 +632,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         null,
                         effectiveSensorRuleNames,
                         checkRootContainer.getCheckType(),
-                        timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
+                        checkRootContainer.getTimeSeriesConfiguration(tableSpec),
                         null,
                         tableSpec.getDefaultDataGroupingConfiguration(),
                         null,

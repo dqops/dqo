@@ -15,11 +15,7 @@
  */
 package com.dqops.checks.column.profiling;
 
-import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.CheckTarget;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
+import com.dqops.checks.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -45,8 +41,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec
-        implements TimeSeriesConfigurationProvider {
+public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
@@ -418,10 +413,14 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      */
     @Override
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
+        ProfilingTimePeriod profilingTimePeriod = tableSpec != null && tableSpec.getProfilingChecks() != null &&
+                tableSpec.getProfilingChecks().getResultTruncation() != null ?
+                tableSpec.getProfilingChecks().getResultTruncation() : ProfilingTimePeriod.one_per_month;
+
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimePeriodGradient.millisecond);
+            setTimeGradient(profilingTimePeriod.toTimePeriodGradient());
         }};
     }
 
