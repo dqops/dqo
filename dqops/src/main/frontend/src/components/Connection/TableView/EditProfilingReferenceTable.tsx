@@ -77,7 +77,6 @@ export const EditProfilingReferenceTable = ({
   const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
-  const [changes, setChanges] = useState(false);
   const [rowCountExtended, setRowCountExtended] = useState(false);
   const history = useHistory();
   const dispatch = useActionDispatch();
@@ -443,7 +442,6 @@ export const EditProfilingReferenceTable = ({
         <EditReferenceTable
           onBack={onBack}
           selectedReference={selectedReference}
-          changes={changes}
           isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
           onRunChecksRowCount={onRunChecksRowCount}
@@ -502,7 +500,7 @@ export const EditProfilingReferenceTable = ({
                       <Checkbox
                         checked={showRowCount}
                         onChange={(checked) => {
-                          setShowRowCount(checked), setChanges(true);
+                          setShowRowCount(checked);
                         }}
                       />{' '}
                     </th>
@@ -706,8 +704,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -744,8 +741,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -782,8 +778,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -820,8 +815,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -858,8 +852,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -896,8 +889,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||

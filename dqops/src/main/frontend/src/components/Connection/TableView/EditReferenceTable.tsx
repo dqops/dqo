@@ -8,6 +8,7 @@ import {
 } from '../../../services/apiClient';
 import {
   DeleteStoredDataQueueJobParameters,
+  DqoJobHistoryEntryModelStatusEnum,
   TableComparisonGroupingColumnPairModel
 } from '../../../api';
 import Button from '../../Button';
@@ -18,16 +19,21 @@ import Select, { Option } from '../../Select';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  setCurrentJobId
+} from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
 import clsx from 'clsx';
 import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
   selectedReference?: string;
-  changes?: boolean;
   isUpdatedParent?: boolean;
   timePartitioned?: 'daily' | 'monthly';
   onRunChecksRowCount?: () => void;
@@ -85,10 +91,17 @@ const EditReferenceTable = ({
     useState<Array<TableComparisonGroupingColumnPairModel>>();
   const [extendRefnames, setExtendRefnames] = useState(false);
   const [extendDg, setExtendDg] = useState(false);
+  const [deletingData, setDeletingData] = useState(false);
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
     false
   );
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const history = useHistory();
   const dispatch = useActionDispatch();
@@ -534,6 +547,48 @@ const EditReferenceTable = ({
     );
   }, [normalList, refList, isUpdatedParent, bool]);
 
+  const deleteDataFunct = async (params: {
+    [key: string]: string | boolean;
+  }) => {
+    setDeleteDataDialogOpened(false);
+    try {
+      setDeletingData(true);
+      const res = await JobApiClient.deleteStoredData({
+        ...(cleanDataTemplate || {}),
+        ...params
+      });
+      console.log(res.data);
+      dispatch(
+        setCurrentJobId(
+          checkTypes,
+          firstLevelActiveTab,
+          (res.data as any)?.jobId
+        )
+      );
+      setJobId((res.data as any)?.jobId);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const disabledDeleting =
+    job &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed;
+
+  useEffect(() => {
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
+      setDeletingData(false);
+    }
+  }, [job?.status]);
+
+  console.log(job);
+  console.log(jobId);
+  console.log(disabled);
+  console.log(deletingData);
+
   return (
     <div className="w-full">
       <TableActionGroup
@@ -565,7 +620,9 @@ const EditReferenceTable = ({
             name="sync"
             className={clsx(
               'w-4 h-4 mr-3',
-              disabled ? 'animate-spin' : 'hidden'
+              disabled || disabledDeleting || deletingData
+                ? 'animate-spin'
+                : 'hidden'
             )}
           />
           {isCreating === false && (
@@ -717,13 +774,7 @@ const EditReferenceTable = ({
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}
-        onDelete={(params) => {
-          setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData({
-            ...(cleanDataTemplate || {}),
-            ...params
-          });
-        }}
+        onDelete={deleteDataFunct}
       />
     </div>
   );
