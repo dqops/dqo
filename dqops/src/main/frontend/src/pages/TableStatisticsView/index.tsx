@@ -96,8 +96,8 @@ export default function TableStatisticsView({
 
   return (
     <div>
-      <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded mt-8">
-        <div className="font-bold ml-3 px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold">
+      <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
+        <div className="font-bold ml-3 px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 ">
           Table Statistics
         </div>
         <div className="flex justify-between gap-x-10">
