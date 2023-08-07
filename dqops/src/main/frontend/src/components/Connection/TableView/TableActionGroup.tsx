@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../Button';
 import ConfirmDialog from './ConfirmDialog';
-import {
-  ColumnApiClient,
-  JobApiClient,
-  TableApiClient
-} from '../../../services/apiClient';
+import { JobApiClient, TableApiClient } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
-import { AxiosResponse } from 'axios';
+
 import {
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
@@ -30,6 +26,7 @@ interface ITableActionGroupProps {
   createDataStream?: boolean;
   maxToCreateDataStream?: boolean;
   createDataStreamFunc?: () => void;
+  statistics?: TableColumnsStatisticsModel;
 }
 
 const TableActionGroup = ({
@@ -42,7 +39,8 @@ const TableActionGroup = ({
   addSaveButton = true,
   createDataStream,
   maxToCreateDataStream,
-  createDataStreamFunc
+  createDataStreamFunc,
+  statistics
 }: ITableActionGroupProps) => {
   const {
     checkTypes,
@@ -65,20 +63,6 @@ const TableActionGroup = ({
     (state: IRootState) => state.job || {}
   );
 
-  const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
-  const fetchColumns = async () => {
-    try {
-      const res: AxiosResponse<TableColumnsStatisticsModel> =
-        await ColumnApiClient.getColumnsStatistics(connection, schema, table);
-      setStatistics(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchColumns();
-  }, [connection, schema, table]);
   const fullPath = `${connection}.${schema}.${table}`;
 
   const removeTable = async () => {
@@ -92,13 +76,15 @@ const TableActionGroup = ({
   };
 
   const collectStatistics = async () => {
-    try {
-      setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnTable(
-        statistics?.collect_column_statistics_job_template
-      );
-    } finally {
-      setLoadingJob(false);
+    if (statistics) {
+      try {
+        setLoadingJob(true);
+        await JobApiClient.collectStatisticsOnTable(
+          statistics?.collect_column_statistics_job_template
+        );
+      } finally {
+        setLoadingJob(false);
+      }
     }
   };
 

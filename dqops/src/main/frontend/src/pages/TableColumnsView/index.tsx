@@ -52,6 +52,7 @@ const TableColumnsView = () => {
           schemaName,
           tableName
         );
+      console.log('getting columns');
       setStatistics(res.data);
     } catch (err) {
       console.error(err);
@@ -77,7 +78,6 @@ const TableColumnsView = () => {
   const collectStatistics = async () => {
     try {
       setLoadingJob(true);
-
       await JobApiClient.collectStatisticsOnTable(
         statistics?.collect_column_statistics_job_template
       );
@@ -219,6 +219,7 @@ const TableColumnsView = () => {
           updateData={updateData}
           setLevelsData={setLevelsData}
           setNumberOfSelected={setNumberOfSelected}
+          statistics={statistics}
         />
       </div>
     </ConnectionLayout>

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import TableColumns from '../TableColumnsView/TableColumns';
-import { DataGroupingConfigurationSpec, TableStatisticsModel } from '../../api';
+import {
+  DataGroupingConfigurationSpec,
+  TableColumnsStatisticsModel,
+  TableStatisticsModel
+} from '../../api';
 import { AxiosResponse } from 'axios';
 import { TableApiClient } from '../../services/apiClient';
 import Loader from '../../components/Loader';
@@ -18,7 +22,8 @@ export default function TableStatisticsView({
   tableName,
   updateData2,
   setLevelsData2,
-  setNumberOfSelected2
+  setNumberOfSelected2,
+  statistics
 }: {
   connectionName: string;
   schemaName: string;
@@ -26,6 +31,7 @@ export default function TableStatisticsView({
   updateData2: (arg: string) => void;
   setLevelsData2: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected2: (arg: number) => void;
+  statistics?: TableColumnsStatisticsModel;
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
@@ -138,6 +144,7 @@ export default function TableStatisticsView({
         updateData={updateData}
         setLevelsData={setLevelsData}
         setNumberOfSelected={setNumberOfSelected}
+        statistics={statistics}
       />
     </div>
   );
