@@ -1,11 +1,16 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   ConnectionApiClient,
+  JobApiClient,
   SchemaApiClient,
   TableApiClient,
   TableComparisonsApi
 } from '../../../services/apiClient';
-import { TableComparisonGroupingColumnPairModel } from '../../../api';
+import {
+  DeleteStoredDataQueueJobParameters,
+  DqoJobHistoryEntryModelStatusEnum,
+  TableComparisonGroupingColumnPairModel
+} from '../../../api';
 import Button from '../../Button';
 import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
@@ -14,15 +19,21 @@ import Select, { Option } from '../../Select';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  setCurrentJobId
+} from '../../../redux/actions/source.actions';
 import TableActionGroup from './TableActionGroup';
 import { SelectGroupColumnsTable } from './SelectGroupColumnsTable';
 import clsx from 'clsx';
+import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
   selectedReference?: string;
-  changes?: boolean;
   isUpdatedParent?: boolean;
   timePartitioned?: 'daily' | 'monthly';
   onRunChecksRowCount?: () => void;
@@ -30,8 +41,9 @@ type EditReferenceTableProps = {
   isCreating?: boolean;
   goToRefTable?: () => void;
   onChangeUpdatedParent: (variable: boolean) => void;
-  onChangeSelectedName: (arg: string) => void;
   combinedFunc: (name: string) => void;
+  cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
+  onChangeIsDataDeleted: (arg: boolean) => void;
 };
 
 const EditReferenceTable = ({
@@ -44,8 +56,9 @@ const EditReferenceTable = ({
   isCreating,
   goToRefTable,
   onChangeUpdatedParent,
-  onChangeSelectedName,
-  combinedFunc
+  combinedFunc,
+  cleanDataTemplate,
+  onChangeIsDataDeleted
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -78,9 +91,18 @@ const EditReferenceTable = ({
     useState<Array<TableComparisonGroupingColumnPairModel>>();
   const [extendRefnames, setExtendRefnames] = useState(false);
   const [extendDg, setExtendDg] = useState(false);
+  const [deletingData, setDeletingData] = useState(false);
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
     false
   );
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
   const history = useHistory();
   const dispatch = useActionDispatch();
 
@@ -185,7 +207,6 @@ const EditReferenceTable = ({
   };
 
   const onUpdate = async () => {
-    onChangeSelectedName(name);
     if (selectedReference) {
       await TableComparisonsApi.updateTableComparisonConfiguration(
         connection,
@@ -525,6 +546,43 @@ const EditReferenceTable = ({
     );
   }, [normalList, refList, isUpdatedParent, bool]);
 
+  const deleteDataFunct = async (params: {
+    [key: string]: string | boolean;
+  }) => {
+    setDeleteDataDialogOpened(false);
+    try {
+      setDeletingData(true);
+      const res = await JobApiClient.deleteStoredData({
+        ...(cleanDataTemplate || {}),
+        ...params
+      });
+      dispatch(
+        setCurrentJobId(
+          checkTypes,
+          firstLevelActiveTab,
+          (res.data as any)?.jobId
+        )
+      );
+      setJobId((res.data as any)?.jobId);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const disabledDeleting =
+    job &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed;
+
+  useEffect(() => {
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
+      onChangeIsDataDeleted(true);
+      setDeletingData(false);
+    }
+  }, [job?.status]);
+
   return (
     <div className="w-full">
       <TableActionGroup
@@ -546,6 +604,19 @@ const EditReferenceTable = ({
           />
         </div>
         <div className="flex justify-center items-center gap-x-2">
+          <SvgIcon
+            name="sync"
+            className={clsx(
+              'w-4 h-4 mr-3',
+              disabledDeleting || deletingData ? 'animate-spin' : 'hidden'
+            )}
+          />
+          <Button
+            color="primary"
+            variant="contained"
+            label="Delete results"
+            onClick={() => setDeleteDataDialogOpened(true)}
+          />
           <SvgIcon
             name="sync"
             className={clsx(
@@ -699,6 +770,11 @@ const EditReferenceTable = ({
           </div>
         )}
       </div>
+      <DeleteOnlyDataDialog
+        open={deleteDataDialogOpened}
+        onClose={() => setDeleteDataDialogOpened(false)}
+        onDelete={deleteDataFunct}
+      />
     </div>
   );
 };
