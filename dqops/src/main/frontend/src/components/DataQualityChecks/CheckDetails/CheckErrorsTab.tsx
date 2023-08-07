@@ -76,7 +76,7 @@ const CheckErrorsTab = ({
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group</div>
           <Select
-            value={dataGroup}
+            value={errors[0].dataGroup ?? dataGroup}
             options={
               (errors[0]?.dataGroupsNames || []).map((item) => ({
                 label: item,

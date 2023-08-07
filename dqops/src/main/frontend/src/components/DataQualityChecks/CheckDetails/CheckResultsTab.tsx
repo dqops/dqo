@@ -314,7 +314,7 @@ const CheckResultsTab = ({
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group</div>
           <Select
-            value={dataGroup}
+            value={results[0]?.dataGroup ?? dataGroup}
             options={
               (results[0]?.dataGroups || []).map((item) => ({
                 label: item,

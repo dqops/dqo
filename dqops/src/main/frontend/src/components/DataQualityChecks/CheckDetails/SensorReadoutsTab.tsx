@@ -92,7 +92,7 @@ const SensorReadoutsTab = ({
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group</div>
           <Select
-            value={dataGroup}
+            value={sensorReadouts[0].dataGroup ?? dataGroup}
             options={
               (sensorReadouts[0]?.dataGroupNames || []).map((item) => ({
                 label: item,
