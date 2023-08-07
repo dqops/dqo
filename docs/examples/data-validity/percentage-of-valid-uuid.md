@@ -102,8 +102,38 @@ spec:
         column_type: DATE
         nullable: true
 ```
+## Running the checks in the example and evaluating the results using the graphical interface
 
-## Running the checks in the example and evaluating the results
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-string-valid-uuid-percent-check.png)
+
+1. Go to **Profiling** section.
+
+2. Select the table or column mentioned in the example description from the tree view on the left.
+
+3. Select **Advanced Profiling** tab.
+
+4. Run the enabled check using the **Run check** button.
+   ![Run check](https://dqops.com/docs/images/examples/string-valid-uuid-percent-run-check.png)
+
+5. Review the results by opening the **Check details** button.
+   ![Check details](https://dqops.com/docs/images/examples/string-valid-uuid-percent-check-details.png)
+
+6. You should see the results as the one below.
+   The actual value in this example is 75, which is below the minimum threshold level set in the warning (100.0%).
+   The check gives a fatal error (notice the red square on the left of the name of the check).
+
+   ![String-valid-uuid-percent check results](https://dqops.com/docs/images/examples/string-valid-uuid-percent-check-results.png)
+
+7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
+   located in the upper right corner of the graphical interface.
+
+8. You can now [review the results on the data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
+
+## Running the checks in the example and evaluating the results using DQO Shell
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
