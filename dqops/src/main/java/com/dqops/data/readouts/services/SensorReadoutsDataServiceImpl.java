@@ -17,6 +17,11 @@ package com.dqops.data.readouts.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
+import com.dqops.data.errors.factory.ErrorsColumnNames;
+import com.dqops.data.errors.services.models.ErrorDetailedSingleModel;
+import com.dqops.data.errors.services.models.ErrorsDetailedDataModel;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.services.models.SensorReadoutDetailedSingleModel;
@@ -26,15 +31,22 @@ import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
+import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.tables.TableRowUtility;
+import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +56,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService {
+    public static final int DEFAULT_MAX_RECENT_LOADED_MONTHS = 3;
+
     private SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
 
     @Autowired
@@ -60,7 +74,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
      */
     @Override
     public SensorReadoutsDetailedDataModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                        SensorReadoutsDetailedParameters loadParameters) {
+                                                                        SensorReadoutsDetailedFilterParameters loadParameters) {
         Map<Long, SensorReadoutsDetailedDataModel> readoutMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
@@ -71,97 +85,133 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             return new SensorReadoutsDetailedDataModel[0]; // empty array
         }
 
-        Table filteredTable = filterTableToRootChecksContainer(rootChecksContainerSpec, sensorReadoutsTable);
+        Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, sensorReadoutsTable, loadParameters);
         if (filteredTable.isEmpty()) {
             return new SensorReadoutsDetailedDataModel[0]; // empty array
         }
 
-        TextColumn dataGroupNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
-
-        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
-            dataGroups.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-            dataGroups.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+        if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            filteredTable = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
 
-        String selectedDataGroups = Objects.requireNonNullElse(loadParameters.getDataGroupName(), dataGroups.get(0));
-        Table filteredByDataGroup = filteredTable.where(dataGroupNameColumn.isEqualTo(selectedDataGroups));
-
-        if (filteredByDataGroup.isEmpty()) {
+        if (filteredTable.isEmpty()) {
             return new SensorReadoutsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredByDataGroup.sortDescendingOn(
-                SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME,  // most recent execution first
+        Table sortedTable = filteredTable.sortDescendingOn(
+                SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME); // then the most recent reading (for partitioned checks) when many partitions were captured
 
-        Table workingTable = sortedTable;
-        if (loadParameters.getReadoutsCount() < sortedTable.rowCount()) {
-            workingTable = sortedTable.dropRange(loadParameters.getReadoutsCount(), sortedTable.rowCount());
-        }
+        LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn dataGroupSortedColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
-        for (Row row : workingTable) {
-            String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
-            Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+        int rowCount = sortedTable.rowCount();
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+            Long checkHash = checkHashColumn.get(rowIndex);
+            String dataGroupNameForCheck = dataGroupSortedColumn.get(rowIndex);
+            SensorReadoutsDetailedDataModel sensorReadoutDetailedDataModel = readoutMap.get(checkHash);
 
-            String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-            String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
-            Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-            String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-            String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+            SensorReadoutDetailedSingleModel singleModel = null;
 
-            String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-            String dataStream = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            if (sensorReadoutDetailedDataModel != null) {
+                if (sensorReadoutDetailedDataModel.getSingleSensorReadouts().size() >= loadParameters.getMaxResultsPerCheck()) {
+                    continue; // enough results loaded
+                }
 
-            Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
-            Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
-            String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+                if (!Objects.equals(dataGroupNameForCheck, sensorReadoutDetailedDataModel.getDataGroup())) {
+                    continue; // we are not mixing groups, results for a different group were already loaded
+                }
+            } else {
+                Row row = sortedTable.row(rowIndex);
+                singleModel = createSensorReadoutSingleRow(row);
+                String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+                String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+                String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+                String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
-            String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
-            String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-            String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
+                sensorReadoutDetailedDataModel = new SensorReadoutsDetailedDataModel();
+                sensorReadoutDetailedDataModel.setCheckCategory(checkCategory);
+                sensorReadoutDetailedDataModel.setCheckName(checkName);
+                sensorReadoutDetailedDataModel.setCheckHash(checkHash);
+                sensorReadoutDetailedDataModel.setCheckType(checkType);
+                sensorReadoutDetailedDataModel.setCheckDisplayName(checkDisplayName);
+                sensorReadoutDetailedDataModel.setDataGroup(dataGroupNameForCheck);
 
-            SensorReadoutDetailedSingleModel singleModel = new SensorReadoutDetailedSingleModel() {{
-                setId(id);
-                setActualValue(actualValue);
-                setExpectedValue(expectedValue);
+                Selection resultsForCheckHash = checkHashColumn.isIn(checkHash);
+                List<String> dataGroupsForCheck = dataGroupSortedColumn.where(resultsForCheckHash)
+                        .unique().asList().stream().sorted().collect(Collectors.toList());
 
-                setColumnName(columnName);
-                setDataGroup(dataStream);
+                if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+                    dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                    dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                }
 
-                setDurationMs(durationMs);
-                setExecutedAt(executedAt);
-                setTimeGradient(timeGradient);
-                setTimePeriod(timePeriod);
-
-                setProvider(provider);
-                setQualityDimension(qualityDimension);
-
-                setCheckName(checkName);
-                setCheckType(checkType);
-                setCheckDisplayName(checkDisplayName);
-            }};
-
-            SensorReadoutsDetailedDataModel sensorReadoutsDetailedDataModel = readoutMap.get(checkHash);
-            if (sensorReadoutsDetailedDataModel == null) {
-                sensorReadoutsDetailedDataModel = new SensorReadoutsDetailedDataModel() {{
-                    setCheckCategory(checkCategory);
-                    setCheckHash(checkHash);
-                    setSensorName(sensorName);
-
-                    setDataGroupNames(dataGroups);
-                    setDataGroup(selectedDataGroups);
-                    setSingleSensorReadouts(new ArrayList<>());
-                }};
-                readoutMap.put(checkHash, sensorReadoutsDetailedDataModel);
+                sensorReadoutDetailedDataModel.setDataGroupNames(dataGroupsForCheck);
+                readoutMap.put(checkHash, sensorReadoutDetailedDataModel);
             }
 
-            sensorReadoutsDetailedDataModel.getSingleSensorReadouts().add(singleModel);
+            if (singleModel == null) {
+                singleModel = createSensorReadoutSingleRow(sortedTable.row(rowIndex));
+            }
+            if (sensorReadoutDetailedDataModel.getSingleSensorReadouts() == null) {
+                sensorReadoutDetailedDataModel.setSingleSensorReadouts(new ArrayList<>());
+            }
+
+            sensorReadoutDetailedDataModel.getSingleSensorReadouts().add(singleModel);
         }
 
         return readoutMap.values().toArray(SensorReadoutsDetailedDataModel[]::new);
+    }
+
+    /**
+     * Creates a model of a single sensor result.
+     * @param row A row with a single sensor result.
+     * @return Single sensor result model.
+     */
+    @NotNull
+    private static SensorReadoutDetailedSingleModel createSensorReadoutSingleRow(Row row) {
+        String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
+
+        String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+        String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+
+        Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+
+        String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        String dataStream = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+        Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
+        Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+
+        String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
+        String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+
+        SensorReadoutDetailedSingleModel singleModel = new SensorReadoutDetailedSingleModel() {{
+            setId(id);
+            setActualValue(actualValue);
+            setExpectedValue(expectedValue);
+
+            setColumnName(columnName);
+            setDataGroup(dataStream);
+
+            setDurationMs(durationMs);
+            setExecutedAt(executedAt);
+            setTimeGradient(timeGradient);
+            setTimePeriod(timePeriod);
+
+            setProvider(provider);
+            setQualityDimension(qualityDimension);
+
+            setCheckName(checkName);
+            setCheckType(checkType);
+            setCheckDisplayName(checkDisplayName);
+        }};
+        return singleModel;
     }
 
     /**
@@ -192,6 +242,60 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
     }
 
     /**
+     * Filters the results to only the results for the target object.
+     * @param rootChecksContainerSpec Root checks container to identify the parent column, check type and time scale.
+     * @param sourceTable Source table to be filtered.
+     * @param filterParameters Filter parameters.
+     * @return Filtered table.
+     */
+    protected Table filterTableToRootChecksContainerAndFilterParameters(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                                        Table sourceTable,
+                                                                        SensorReadoutsDetailedFilterParameters filterParameters) {
+        String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
+        String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
+        CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
+
+        Selection rowSelection = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+
+        if (timeScale != null) {
+            TextColumn timeGradientColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
+        }
+
+        TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
+
+        if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
+            TextColumn checkNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
+        }
+
+        String checkCategory = filterParameters.getCheckCategory();
+        String tableComparison = filterParameters.getTableComparison();
+
+        if (!Strings.isNullOrEmpty(checkCategory)) {
+            if (checkCategory.startsWith(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/")) {
+                // this code will support receiving combined category names for table comparisons
+                String[] columnCategorySplits = StringUtils.split(checkCategory, '/');
+                checkCategory = columnCategorySplits[0];
+                tableComparison = columnCategorySplits[1];
+            }
+
+            TextColumn checkCategoryColumn = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
+        }
+
+        if (!Strings.isNullOrEmpty(tableComparison)) {
+            TextColumn tableComparisonNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
+        }
+
+        Table filteredTable = sourceTable.where(rowSelection);
+        return filteredTable;
+    }
+
+    /**
      * Loads sensor readouts for a maximum of two months available in the data, within the date range specified in {@code loadParameters}.
      * If the date range is open-ended, only one or none of the range's boundaries are checked.
      * @param loadParameters Load parameters.
@@ -199,11 +303,21 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
      * @param physicalTableName Physical table name.
      * @return Table with sensor readouts for the most recent two months inside the specified range or null when no data found.
      */
-    protected Table loadRecentSensorReadouts(SensorReadoutsDetailedParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
+    protected Table loadRecentSensorReadouts(SensorReadoutsDetailedFilterParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, SensorReadoutsColumnNames.COLUMN_NAMES_FOR_READOUTS_DETAILED);
-        int monthsToLoad = 2;
-        sensorReadoutsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), monthsToLoad);
+        int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
+
+        if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {
+            LocalDate startMonthTruncated = LocalDateTimeTruncateUtility.truncateMonth(loadParameters.getStartMonth());
+            LocalDate endMonthTruncated = LocalDateTimeTruncateUtility.truncateMonth(loadParameters.getEndMonth());
+
+            maxMonthsToLoad =
+                    (int) LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(
+                            startMonthTruncated.atStartOfDay(), endMonthTruncated.atStartOfDay(), TimePeriodGradient.month) + 1;
+        }
+
+        sensorReadoutsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), maxMonthsToLoad);
         Table sensorReadoutsData = sensorReadoutsSnapshot.getAllData();
         return sensorReadoutsData;
     }

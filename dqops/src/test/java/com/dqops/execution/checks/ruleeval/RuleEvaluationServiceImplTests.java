@@ -94,7 +94,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				checkSpec,
                 null,
                 new EffectiveSensorRuleNames(checkSpec.getParameters().getSensorDefinitionName(), new MinCountRuleWarningParametersSpec().getRuleDefinitionName()),
-                CheckType.PROFILING,
+                CheckType.profiling,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),
                 tableSpec.getDefaultDataGroupingConfiguration(),

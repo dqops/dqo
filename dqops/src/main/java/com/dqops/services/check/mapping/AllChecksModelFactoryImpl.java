@@ -172,7 +172,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
-            if (checkType == CheckType.PROFILING) {
+            if (checkType == CheckType.profiling) {
                 AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null, false);
                 checkContainers.put(new CheckContainerTypeModel(checkType, null), checkContainer);
             }
@@ -272,7 +272,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
-            if (checkType == CheckType.PROFILING) {
+            if (checkType == CheckType.profiling) {
                 AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null, false);
                 checkContainers.put(new CheckContainerTypeModel(checkType, null), checkContainer);
             }

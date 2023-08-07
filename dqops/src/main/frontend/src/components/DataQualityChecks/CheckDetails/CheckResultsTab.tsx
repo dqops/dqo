@@ -28,6 +28,8 @@ interface CheckResultsTabProps {
   timeScale?: 'daily' | 'monthly';
   checkName: string;
   isChartOpen: (arg: boolean) => void;
+  category?: string;
+  comparisonName?: string;
 }
 
 const CheckResultsTab = ({
@@ -39,7 +41,9 @@ const CheckResultsTab = ({
   runCheckType,
   timeScale,
   checkName,
-  isChartOpen
+  isChartOpen,
+  category,
+  comparisonName
 }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
   const [mode, setMode] = useState('table');
@@ -268,50 +272,28 @@ const CheckResultsTab = ({
   }, []);
 
   useEffect(() => {
-    if (mode === 'chart') {
-      const startDate = moment()
-        .subtract(5, 'month')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-      const endDate = moment().format('YYYY-MM-DD');
+    const startDate = month
+      ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
+      : '';
+    const endDate = month
+      ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+      : '';
 
-      dispatch(
-        getCheckResults(checkTypes, firstLevelActiveTab, {
-          connection,
-          schema,
-          table,
-          column,
-
-          runCheckType,
-          checkName,
-          timeScale,
-          startDate,
-          endDate
-        })
-      );
-    } else {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
-
-      dispatch(
-        getCheckResults(checkTypes, firstLevelActiveTab, {
-          connection,
-          schema,
-          table,
-          column,
-
-          runCheckType,
-          checkName,
-          timeScale,
-          startDate,
-          endDate
-        })
-      );
-    }
+    dispatch(
+      getCheckResults(checkTypes, firstLevelActiveTab, {
+        connection,
+        schema,
+        table,
+        column,
+        runCheckType,
+        checkName,
+        timeScale,
+        startDate,
+        endDate,
+        category,
+        comparisonName
+      })
+    );
   }, [mode]);
 
   const allResults = results

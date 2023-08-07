@@ -90,6 +90,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
             setTimeGradient(deletionParameters.getTimeGradient());
+            setTableComparisonName(deletionParameters.getTableComparisonName());
         }};
     }
 
@@ -126,6 +127,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
             setTimeGradient(deletionParameters.getTimeGradient());
+            setTableComparisonName(deletionParameters.getTableComparisonName());
         }};
     }
 
@@ -145,6 +147,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
             setTimeGradient(deletionParameters.getTimeGradient());
+            setTableComparisonName(deletionParameters.getTableComparisonName());
         }};
     }
 

@@ -25,11 +25,10 @@ import 'chartjs-adapter-moment';
 axios.interceptors.response.use(undefined, function (error) {
   const statusCode = error.response ? error.response.status : null;
   if (statusCode === 403) {
-      window.location.reload();
-      return Promise.reject(error);
+    window.location.reload();
   }
-  return Promise.resolve(error);
-})
+  return Promise.reject(error);
+});
 
 const App = () => {
   const dispatch = useActionDispatch();

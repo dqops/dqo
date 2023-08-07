@@ -42,6 +42,7 @@ import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.DateColumn;
@@ -109,11 +110,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      */
     @Override
     public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
-        Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-        Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
-        String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
-        Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
-        Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+        Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings);
         File targetParquetFile = targetParquetFilePath.toFile();
 
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
@@ -143,8 +140,30 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             throw new DataStorageIOException(ex.getMessage(), ex);
         }
         catch (Exception ex) {
+            if (ex.getCause() instanceof RuntimeException && ex.getCause().getMessage() != null &&
+                    ex.getCause().getMessage().contains("is not a Parquet file")) {
+                // Corrupted partition file -> remove the file
+                deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                return new LoadedMonthlyPartition(partitionId, 0L, null);
+            }
             throw new DataStorageIOException(ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Makes a path to the parquet file.
+     * @param partitionId Partition id.
+     * @param storageSettings Storage settings.
+     * @return Parquet file path.
+     */
+    @NotNull
+    protected Path makeParquetTargetFilePath(ParquetPartitionId partitionId, FileStorageSettings storageSettings) {
+        Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
+        Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
+        String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
+        Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
+        Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+        return targetParquetFilePath;
     }
 
     /**
@@ -184,7 +203,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param endBoundary     End date, the whole month of the given date is loaded. If null, then the current month is taken.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
-     * @param monthsCount     Limit of partitions loaded, with the preference of the most recent ones.
+     * @param maxRecentMonthsToLoad     Limit of partitions loaded, with the preference of the most recent ones.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     @Override
@@ -194,7 +213,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                                                                               LocalDate endBoundary,
                                                                                               FileStorageSettings storageSettings,
                                                                                               String[] columnNames,
-                                                                                              int monthsCount) {
+                                                                                              int maxRecentMonthsToLoad) {
         Map<ParquetPartitionId, LoadedMonthlyPartition> resultPartitions = new LinkedHashMap<>();
 
         LocalDate startNonNull = startBoundary;
@@ -212,7 +231,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startNonNull);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endNonNull);
 
-        for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && monthsCount > 0;
+        for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && maxRecentMonthsToLoad > 0;
              currentMonth = currentMonth.minusMonths(1L)) {
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
@@ -220,7 +239,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 resultPartitions.put(partitionId, currentMonthPartition);
 
                 if (currentMonthPartition.getData() != null) {
-                    --monthsCount;
+                    --maxRecentMonthsToLoad;
                 }
             }
         }
@@ -261,12 +280,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                           TableDataChanges tableDataChanges,
                                           FileStorageSettings storageSettings) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
-            Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-            Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
-
-            String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(loadedPartition.getPartitionId());
-            Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
-            Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartition.getPartitionId(), storageSettings);
             File targetParquetFile = targetParquetFilePath.toFile();
 
             Table newOrChangedDataPartitionMonth = null;

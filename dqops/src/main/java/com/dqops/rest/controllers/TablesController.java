@@ -85,7 +85,7 @@ import java.util.stream.Stream;
  * REST api controller to manage the list of tables inside a schema.
  */
 @RestController
-@RequestMapping("api/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {
@@ -750,7 +750,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -811,7 +811,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -871,7 +871,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -930,7 +930,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -980,7 +980,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -1030,7 +1030,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -1081,7 +1081,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -1149,7 +1149,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1216,7 +1216,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1348,7 +1348,7 @@ public class TablesController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.PROFILING, null),
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.profiling, null),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
                 CheckTarget.column,
@@ -1410,7 +1410,7 @@ public class TablesController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.RECURRING, timeScale),
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.recurring, timeScale),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
                 CheckTarget.column,
@@ -1472,7 +1472,7 @@ public class TablesController {
         }
 
         List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.PARTITIONED, timeScale),
+                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.partitioned, timeScale),
                 columnNamePattern.orElse(null),
                 columnDataType.orElse(null),
                 CheckTarget.column,
@@ -1518,7 +1518,7 @@ public class TablesController {
         }
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.PROFILING,
+                connectionName, fullTableName, CheckType.profiling,
                 null, checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
@@ -1559,7 +1559,7 @@ public class TablesController {
         }
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.RECURRING,
+                connectionName, fullTableName, CheckType.recurring,
                 timeScale, checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
@@ -1600,7 +1600,7 @@ public class TablesController {
         }
 
         List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.PARTITIONED,
+                connectionName, fullTableName, CheckType.partitioned,
                 timeScale, checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
@@ -2551,7 +2551,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksModel(
-                spec -> spec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, true),
+                spec -> spec.getTableCheckRootContainer(CheckType.recurring, timeScale, true),
                 connectionName,
                 schemaName,
                 tableName,
@@ -2599,7 +2599,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksModel(
-                spec -> spec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, true),
+                spec -> spec.getTableCheckRootContainer(CheckType.partitioned, timeScale, true),
                 connectionName,
                 schemaName,
                 tableName,

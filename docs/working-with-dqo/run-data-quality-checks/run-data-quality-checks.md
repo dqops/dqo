@@ -40,7 +40,7 @@ For more information about different categories of checks, see [DQO concepts sec
 
    You can view the details by placing the mouse cursor on the square.
 
-6. Click the "Check Details" icon to view more details of the results.
+6. Click the "Results" icon to view more details of the results.
 
     ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/check-results.jpg)
 

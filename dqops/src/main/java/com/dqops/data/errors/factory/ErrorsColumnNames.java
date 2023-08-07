@@ -62,7 +62,8 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
             ACTUAL_VALUE_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
             TIME_PERIOD_UTC_COLUMN_NAME,
-            EXECUTED_AT_COLUMN_NAME
+            EXECUTED_AT_COLUMN_NAME,
+            TABLE_COMPARISON_NAME_COLUMN_NAME
     };
 
     /**
@@ -80,6 +81,7 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
 
             COLUMN_NAME_COLUMN_NAME,
             DATA_GROUP_NAME_COLUMN_NAME,
+            TABLE_COMPARISON_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,

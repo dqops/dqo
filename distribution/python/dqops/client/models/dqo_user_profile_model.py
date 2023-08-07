@@ -15,7 +15,7 @@ class DqoUserProfileModel:
         user (Union[Unset, str]): User email.
         tenant (Union[Unset, str]): DQO Cloud tenant.
         license_type (Union[Unset, str]): DQO Cloud license type.
-        trial_period_expires_at (Union[Unset, int]): The date and time when the trial period of a PERSONAL DQO license
+        trial_period_expires_at (Union[Unset, str]): The date and time when the trial period of a PERSONAL DQO license
             expires and the account is downgraded to a FREE license.
         connections_limit (Union[Unset, int]): Limit of the number of connections that could be synchronized to the DQO
             Cloud data quality warehouse.
@@ -33,7 +33,7 @@ class DqoUserProfileModel:
     user: Union[Unset, str] = UNSET
     tenant: Union[Unset, str] = UNSET
     license_type: Union[Unset, str] = UNSET
-    trial_period_expires_at: Union[Unset, int] = UNSET
+    trial_period_expires_at: Union[Unset, str] = UNSET
     connections_limit: Union[Unset, int] = UNSET
     users_limit: Union[Unset, int] = UNSET
     months_limit: Union[Unset, int] = UNSET

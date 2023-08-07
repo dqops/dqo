@@ -35,6 +35,7 @@ package com.dqops.data.storage.parquet;
  * #L%
  */
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.tables.TableColumnUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
@@ -79,7 +80,7 @@ public class DqoTablesawParquetReader extends TablesawParquetReader {
             return read(TablesawParquetReadOptions.builder(file).build());
         }
         final InputStream inStream = source.inputStream();
-        if(inStream != null) {
+        if (inStream != null) {
             return readFromStream(inStream);
         }
         throw new UnsupportedOperationException("Reading parquet from a character stream is not supported");
@@ -105,8 +106,8 @@ public class DqoTablesawParquetReader extends TablesawParquetReader {
             }
 
             return loadedTable;
-        } catch (IOException e) {
-            throw new RuntimeIOException(e);
+        } catch (Exception ex) {
+            throw new DqoRuntimeException(ex);
         }
     }
 
@@ -158,6 +159,13 @@ public class DqoTablesawParquetReader extends TablesawParquetReader {
             return readInternal(makeReaderFromStream(inStream, readSupport), readSupport, "stream");
         } catch (IOException e) {
             throw new RuntimeIOException(e);
+        }
+        finally {
+            try {
+                inStream.close();
+            }
+            catch (IOException ioe) {
+            }
         }
     }
 

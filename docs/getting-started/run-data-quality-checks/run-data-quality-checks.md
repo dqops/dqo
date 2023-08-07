@@ -35,7 +35,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
     A green square should appear next to the name of the checks indicating that the results of the run check is valid.
     You can view the details by placing the mouse cursor on the green square.
 
-4. Click the "Check Details" icon to view more details of the results.
+4. Click the "Results" icon to view more details of the results.
 
     ![Checking results](https://dqops.com/docs/images/getting-started/austin-crime-row_count-check-results.jpg)
 
@@ -56,7 +56,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
     This time an orange square should appear indicating that the test detected and Error in the data.
 
-4. Click the "Check Details" icon to view more details of the results.
+4. Click the "Results" icon to view more details of the results.
 
     The screen with the results should look as the one below. 
 

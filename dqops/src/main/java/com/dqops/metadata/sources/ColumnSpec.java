@@ -291,7 +291,7 @@ public class ColumnSpec extends AbstractSpec {
                                                                        CheckTimeScale checkTimeScale,
                                                                        boolean attachCheckContainer) {
         switch (checkType) {
-            case PROFILING: {
+            case profiling: {
                 if (this.profilingChecks != null) {
                     return this.profilingChecks;
                 }
@@ -304,7 +304,7 @@ public class ColumnSpec extends AbstractSpec {
                 return columnProfilingCheckCategoriesSpec;
             }
 
-            case RECURRING: {
+            case recurring: {
                 ColumnRecurringChecksRootSpec recurringSpec = this.recurringChecks;
                 if (recurringSpec == null) {
                     recurringSpec = new ColumnRecurringChecksRootSpec();
@@ -344,7 +344,7 @@ public class ColumnSpec extends AbstractSpec {
                 }
             }
 
-            case PARTITIONED: {
+            case partitioned: {
                 ColumnPartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
                 if (partitionedChecksSpec == null) {
                     partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
@@ -556,13 +556,13 @@ public class ColumnSpec extends AbstractSpec {
      */
     public boolean hasAnyChecksConfigured(CheckType checkType) {
         switch (checkType) {
-            case PROFILING:
+            case profiling:
                 return this.profilingChecks != null && this.profilingChecks.hasAnyConfiguredChecks();
 
-            case RECURRING:
+            case recurring:
                 return this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks();
 
-            case PARTITIONED:
+            case partitioned:
                 return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
         }
 

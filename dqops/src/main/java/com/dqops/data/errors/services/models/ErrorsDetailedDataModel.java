@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,5 +48,5 @@ public class ErrorsDetailedDataModel {
     private String dataGroup;
 
     @JsonPropertyDescription("Single error statuses")
-    private List<ErrorDetailedSingleModel> singleErrors;
+    private List<ErrorDetailedSingleModel> singleErrors = new ArrayList<>();
 }

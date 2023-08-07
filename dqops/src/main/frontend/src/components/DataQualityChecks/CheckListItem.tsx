@@ -45,6 +45,7 @@ interface ICheckListItemProps {
   mode?: string;
   changeCopyUI: (checked: boolean) => void;
   checkedCopyUI?: boolean;
+  comparisonName?: string;
 }
 
 const CheckListItem = ({
@@ -56,7 +57,9 @@ const CheckListItem = ({
   onUpdate,
   timeWindowFilter,
   changeCopyUI,
-  checkedCopyUI
+  checkedCopyUI,
+  category,
+  comparisonName
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
@@ -445,7 +448,7 @@ const CheckListItem = ({
               </Tooltip>
             )}
             <Tooltip
-              content="Check Details"
+              content="Results"
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
               <div className="w-5 h-5">
@@ -523,9 +526,9 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 min-w-120 max-w-120 flex items-end justify-end">
-          <div className="flex space-x-2">
-            <div className="text-gray-700 text-sm w-full">
+        <td className="py-2 px-4 flex items-end justify-end">
+          <div className=" space-x-2">
+            <div className="text-gray-700 text-sm w-full ">
               <SensorParameters
                 parameters={check.sensor_parameters || []}
                 onChange={(parameters: FieldModel[]) =>
@@ -620,6 +623,8 @@ const CheckListItem = ({
               timeScale={check.run_checks_job_template?.timeScale}
               check={check}
               onClose={closeCheckDetails}
+              category={category}
+              comparisonName={comparisonName}
             />
           </td>
         </tr>

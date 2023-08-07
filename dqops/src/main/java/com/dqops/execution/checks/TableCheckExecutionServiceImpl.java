@@ -472,8 +472,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                 executionContext, sensorExecutionResultComparedTable.getSensorRunParameters().getCheck(), sensorRunParametersComparedTable,
                                 normalizedSensorResultsComparedTable, sensorReadoutsSnapshot, progressListener);
                         progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParametersComparedTable, normalizedSensorResultsComparedTable, ruleEvaluationResult));
-                        ruleEvaluationResult.getTableComparisonNameColumn()
-                                        .setMissingTo(sensorRunParametersReferenceTable.getTableComparisonConfiguration().getComparisonName());
 
                         allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
                         executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
@@ -839,11 +837,12 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     .filter(n -> n instanceof AbstractComparisonCheckCategorySpec)
                     .findFirst();
             DataGroupingConfigurationSpec dataGroupingConfigurationForComparison = null;
+            TableComparisonConfigurationSpec tableComparisonConfigurationSpec = null;
             String extraComparisonFilter = null;
             if (comparisonCheckCategory.isPresent()) {
                 AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec) comparisonCheckCategory.get();
                 String referenceTableConfigurationName = comparisonCheckCategorySpec.getComparisonName();
-                TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableSpec.getTableComparisons().get(referenceTableConfigurationName);
+                tableComparisonConfigurationSpec = tableSpec.getTableComparisons().get(referenceTableConfigurationName);
                 if (tableComparisonConfigurationSpec == null) {
                     throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableSpec.toString() +
                             " because the reference table configuration " + referenceTableConfigurationName + " is not configured on the table. " +
@@ -858,7 +857,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                     connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType, dataGroupingConfigurationForComparison,
-                    timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+                    tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
             sensorRunParameters.appendAdditionalFilter(extraComparisonFilter);
             return sensorRunParameters;
         }
@@ -963,7 +962,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                     referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
-                    timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
+                    tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
             sensorRunParameters.setTableComparisonConfiguration(tableComparisonConfigurationSpec);
             sensorRunParameters.setReferenceColumnName(referencedColumnName);
             sensorRunParameters.appendAdditionalFilter(tableComparisonConfigurationSpec.getReferenceTableFilter());

@@ -42,6 +42,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -179,6 +181,50 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
 
         Assertions.assertNotNull(reloadedPartition);
         Assertions.assertEquals(0L, reloadedPartition.getLastModified());
+        Assertions.assertNull(reloadedPartition.getData());
+    }
+
+    @Test
+    void loadPartition_whenFileIsCorruptedBecauseItIs0Bytes_thenReturnsNullAndDeletesFile() throws Exception {
+        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
+        LocalDate month = LocalDate.of(2022, 3, 1);
+        ParquetPartitionId partitionId = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                "connection",
+                tableName,
+                month);
+
+        Path pathToParquetFile = this.sut.makeParquetTargetFilePath(partitionId, this.sensorReadoutsStorageSettings);
+        Files.createDirectories(pathToParquetFile.getParent());
+        Files.write(pathToParquetFile, new byte[0]);
+        Assertions.assertTrue(Files.exists(pathToParquetFile));
+
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertFalse(Files.exists(pathToParquetFile));
+
+        Assertions.assertNotNull(reloadedPartition);
+        Assertions.assertNull(reloadedPartition.getData());
+    }
+
+    @Test
+    void loadPartition_whenFileIsCorruptedWithInvalidContent_thenReturnsNullAndDeletesFile() throws Exception {
+        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
+        LocalDate month = LocalDate.of(2022, 3, 1);
+        ParquetPartitionId partitionId = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                "connection",
+                tableName,
+                month);
+
+        Path pathToParquetFile = this.sut.makeParquetTargetFilePath(partitionId, this.sensorReadoutsStorageSettings);
+        Files.createDirectories(pathToParquetFile.getParent());
+        Files.write(pathToParquetFile, new byte[] { 1, 2, 3, 4, 5, 6 });
+        Assertions.assertTrue(Files.exists(pathToParquetFile));
+
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertFalse(Files.exists(pathToParquetFile));
+
+        Assertions.assertNotNull(reloadedPartition);
         Assertions.assertNull(reloadedPartition.getData());
     }
 

@@ -27,7 +27,6 @@ import tech.tablesaw.api.*;
 public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult {
     private final IntColumn severityColumn;
     private final LongColumn incidentHashColumn;
-    private final TextColumn tableComparisonNameColumn;
     private final TextColumn referenceConnectionColumn;
     private final TextColumn referenceSchemaColumn;
     private final TextColumn referenceTableColumn;
@@ -41,28 +40,35 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
     private final DoubleColumn warningLowerBoundColumn;
     private final DoubleColumn warningUpperBoundColumn;
 
-
     /**
      * Create a normalized wrapper over a table with the .data/check_results data, adding missing columns.
      * @param table Tablesaw data for the check results.
      */
     public CheckResultsNormalizedResult(Table table) {
+        this(table, true);
+    }
+
+    /**
+     * Create a normalized wrapper over a table with the .data/check_results data, adding missing columns.
+     * @param table Tablesaw data for the check results.
+     * @param addColumWhenMissing Adds columns if they are missing.
+     */
+    public CheckResultsNormalizedResult(Table table, boolean addColumWhenMissing) {
         super(table);
-        this.severityColumn = TableColumnUtility.getOrAddIntColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
-        this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(table, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
-        this.tableComparisonNameColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
-        this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME);
-        this.referenceSchemaColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME);
-        this.referenceTableColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME);
-        this.referenceColumnColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME);
-        this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
-        this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
-        this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
-        this.fatalUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
-        this.errorLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
-        this.errorUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
-        this.warningLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
-        this.warningUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
+        this.severityColumn = TableColumnUtility.getOrAddIntColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME, addColumWhenMissing);
+        this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(table, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME, addColumWhenMissing);
+        this.referenceSchemaColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME, addColumWhenMissing);
+        this.referenceTableColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME, addColumWhenMissing);
+        this.referenceColumnColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME, addColumWhenMissing);
+        this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME, addColumWhenMissing);
+        this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME, addColumWhenMissing);
+        this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME, addColumWhenMissing);
+        this.fatalUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME, addColumWhenMissing);
+        this.errorLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME, addColumWhenMissing);
+        this.errorUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME, addColumWhenMissing);
+        this.warningLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME, addColumWhenMissing);
+        this.warningUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME, addColumWhenMissing);
     }
 
     /**
@@ -79,14 +85,6 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      */
     public LongColumn getIncidentHashColumn() {
         return incidentHashColumn;
-    }
-
-    /**
-     * Returns the column that contains the table comparison name for data comparison checks.
-     * @return Table comparison name column.
-     */
-    public TextColumn getTableComparisonNameColumn() {
-        return tableComparisonNameColumn;
     }
 
     /**

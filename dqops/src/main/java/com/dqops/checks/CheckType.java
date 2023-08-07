@@ -22,13 +22,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public enum CheckType {
     @JsonProperty("profiling")
-    PROFILING("profiling"),
+    profiling("profiling"),
 
     @JsonProperty("recurring")
-    RECURRING("recurring"),
+    recurring("recurring"),
 
     @JsonProperty("partitioned")
-    PARTITIONED("partitioned");
+    partitioned("partitioned");
 
     private final String displayName;
 

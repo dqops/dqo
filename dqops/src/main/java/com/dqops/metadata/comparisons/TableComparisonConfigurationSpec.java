@@ -19,7 +19,6 @@ package com.dqops.metadata.comparisons;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.metadata.basespecs.AbstractSpec;
-import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
@@ -69,7 +68,7 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     private String referenceTableFilter;
 
     @JsonPropertyDescription("The type of checks (profiling, recurring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
-    private CheckType checkType = CheckType.PROFILING;
+    private CheckType checkType = CheckType.profiling;
 
     @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or an empty value for profiling checks.")
     private CheckTimeScale timeScale;

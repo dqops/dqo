@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.readouts.services;
+package com.dqops.data.checkresults.services;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -25,35 +25,58 @@ import java.time.LocalDate;
 
 
 /**
- * The parameters for retrieving the sensor readouts model.
+ * The parameters for retrieving the check results model.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class SensorReadoutsDetailedParameters {
+public class CheckResultsDetailedFilterParameters {
     /**
-     * The number of recent readouts to return.
+     * The default limit of results per check to load.
      */
-    @JsonPropertyDescription("Number of recent readouts to load.")
-    private int readoutsCount = 100;
+    public static final int DEFAULT_MAX_RESULTS_PER_CHECK = 100;
 
     /**
-     * Name of the data group name for which to get the readouts.
+     * The maximum number of most recent results to load for each check.
+     */
+    @JsonPropertyDescription("The maximum number of most recent results to load for each check.")
+    private int maxResultsPerCheck = DEFAULT_MAX_RESULTS_PER_CHECK;
+
+    /**
+     * Check name to filter.
+     */
+    @JsonPropertyDescription("Check name to filter.")
+    private String checkName;
+
+    /**
+     * Check category to filter.
+     */
+    @JsonPropertyDescription("Check category to filter.")
+    private String checkCategory;
+
+    /**
+     * Table comparison name to filter.
+     */
+    @JsonPropertyDescription("Table comparison name to filter.")
+    private String tableComparison;
+
+    /**
+     * Name of the data group name for which to get the results.
      * If null, the default one is picked.
      */
-    @JsonPropertyDescription("Data group name for which to load the readouts.")
+    @JsonPropertyDescription("Data group name for which to load the results.")
     private String dataGroupName = null;
 
     /**
      * Start month to load. Loads the data for the whole month identified by the date.
-     * If null, two most recent months for which the readouts are available are selected.
+     * If null, two most recent months for which the results are available are selected.
      */
     @JsonPropertyDescription("Start month to load. Loads the data for the whole month identified by the date.")
     private LocalDate startMonth = null;
 
     /**
      * End month to load. Loads the data for the whole month identified by the date.
-     * If null, two most recent months for which the readouts are available are selected.
+     * If null, two most recent months for which the results are available are selected.
      */
     @JsonPropertyDescription("End month to load. Loads the data for the whole month identified by the date.")
     private LocalDate endMonth = null;

@@ -40,7 +40,7 @@ import java.util.Optional;
  * Controller that provides access to data quality dashboards.
  */
 @RestController
-@RequestMapping("api/dashboards")
+@RequestMapping("/api/dashboards")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Dashboards", description = "Provides access to data quality dashboards")
 @Slf4j

@@ -410,7 +410,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.PARTITIONED;
+        return CheckType.partitioned;
     }
 
     /**
