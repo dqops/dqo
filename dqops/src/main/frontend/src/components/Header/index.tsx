@@ -25,7 +25,8 @@ import UserProfile from '../UserProfile';
 import { HeaderBanner } from './HeaderBanner';
 import {
   toggleAdvisor,
-  setAdvisorObject
+  setAdvisorObject,
+  setAdvisorJobId
 } from '../../redux/actions/job.actions';
 
 const Header = () => {
@@ -56,9 +57,8 @@ const Header = () => {
   );
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
-  const { isAdvisorOpen, job_dictionary_state, advisorObject } = useSelector(
-    (state: IRootState) => state.job
-  );
+  const { isAdvisorOpen, job_dictionary_state, advisorObject, advisorJobId } =
+    useSelector((state: IRootState) => state.job);
 
   const onClick = (newCheckTypes: CheckTypes) => () => {
     let url = '';
@@ -168,28 +168,33 @@ const Header = () => {
 
   useEffect(() => {
     if (
-      (Object.values(job_dictionary_state) as any).find(
-        (x: any) => x?.updatedModel?.jobType === 'import selected tables'
-      ) &&
-      (Object.values(job_dictionary_state) as any).find(
-        (x: any) => x?.updatedModel?.jobType === 'import selected tables'
-      )?.parameters?.importTableParameters !== advisorObject
+      Object.values(job_dictionary_state)
+        .filter((x) => x.jobType === 'import selected tables')
+        .find(
+          (y) =>
+            y.status === 'queued' ||
+            y.status === 'waiting' ||
+            y.status === 'running'
+        )
     ) {
       dispatch(
-        setAdvisorObject(
-          (Object.values(job_dictionary_state) as any).find(
-            (x: any) => x?.updatedModel?.jobType === 'import selected tables'
-          )?.parameters?.importTableParameters ?? {}
+        setAdvisorJobId(
+          Number(
+            Object.keys(job_dictionary_state).find(
+              (key) =>
+                job_dictionary_state[key] ===
+                Object.values(job_dictionary_state)
+                  .filter((x) => x.jobType === 'import selected tables')
+                  ?.find(
+                    (y) =>
+                      y.status === 'queued' ||
+                      y.status === 'waiting' ||
+                      y.status === 'running'
+                  )
+            )
+          )
         )
       );
-    } else if (
-      Object.values(job_dictionary_state).find(
-        (x) => x.jobType === 'import selected tables'
-      ) &&
-      Object.values(job_dictionary_state).find(
-        (x) => x.jobType === 'import selected tables'
-      )?.parameters?.importTableParameters !== advisorObject
-    ) {
       dispatch(
         setAdvisorObject(
           Object.values(job_dictionary_state).find(
@@ -200,8 +205,18 @@ const Header = () => {
     }
   }, [job_dictionary_state]);
 
+  console.log(job_dictionary_state);
+  console.log(advisorJobId);
+  console.log(advisorObject);
+
   useEffect(() => {
-    dispatch(toggleAdvisor(true));
+    if (
+      advisorJobId !== 0 &&
+      job_dictionary_state[advisorJobId].status === 'succeeded'
+    ) {
+      dispatch(toggleAdvisor(true));
+      console.log('do not be here');
+    }
   }, [advisorObject]);
 
   return (

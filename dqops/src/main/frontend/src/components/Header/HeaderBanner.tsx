@@ -12,6 +12,8 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useHistory, useParams } from 'react-router-dom';
 import AdvisorConfirmDialog from './AdvisorConfirmDialog';
 import SvgIcon from '../SvgIcon';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 type HeaderBannerProps = {
   onClose: () => void;
@@ -32,6 +34,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const [scheduleConfigured, setScheduleConfigured] = useState(false);
   const [isCollected, setIsCollected] = useState(false);
   const [isProfilingChecked, setIsProfilingChecked] = useState(false);
+  const { advisorObject } = useSelector((state: IRootState) => state.job);
 
   const collectStatistics = () => {
     setIsCollected(true);

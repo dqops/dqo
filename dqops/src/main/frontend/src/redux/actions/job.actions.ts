@@ -117,6 +117,11 @@ export const setAdvisorObject = (obj: ImportTablesQueueJobParameters) => ({
   obj
 });
 
+export const setAdvisorJobId = (num: number) => ({
+  type: JOB_ACTION.SET_ADVISOR_JOBID,
+  num
+});
+
 export const setCronScheduler = (isCronScheduled: boolean) => ({
   type: JOB_ACTION.SET_CRON_SCHEDULER,
   isCronScheduled
