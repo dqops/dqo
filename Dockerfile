@@ -8,6 +8,7 @@ COPY pom.xml .
 COPY dqops/pom.xml dqops/
 COPY distribution/pom.xml distribution/
 COPY lib lib
+COPY VERSION VERSION
 
 # resolve dependencies
 ENV USER_HOME="/user/mvn"
@@ -26,6 +27,7 @@ WORKDIR /workspace/app
 COPY dqops/src dqops/src
 RUN ./mvnw.sh install -DskipTests -pl !distribution
 RUN mkdir -p dqops/target/dependency && (cd dqops/target/dependency; jar -xf ../*.jar)
+RUN mv lib/target/output/dqo-lib-$(cat /workspace/app/VERSION) lib/target/output/dqo-lib
 
 FROM python:3.11.3-slim-bullseye AS dqo-home
 WORKDIR /dqo
@@ -63,6 +65,7 @@ COPY --from=dqo-home /dqo/home home
 
 # copy spring dependencies
 ARG DEPENDENCY=/workspace/app/dqops/target/dependency
+COPY --from=dqo-libs /workspace/app/lib/target/output/dqo-lib/jars /dqo/lib
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/lib /dqo/lib
 COPY --from=dqo-libs ${DEPENDENCY}/META-INF /dqo/META-INF
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/classes /dqo
