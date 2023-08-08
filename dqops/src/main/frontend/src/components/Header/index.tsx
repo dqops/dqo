@@ -212,7 +212,6 @@ const Header = () => {
     ) {
       dispatch(setAdvisorJobId(0));
       dispatch(toggleAdvisor(true));
-      console.log('do not be here');
     }
   }, [advisorObject]);
 
