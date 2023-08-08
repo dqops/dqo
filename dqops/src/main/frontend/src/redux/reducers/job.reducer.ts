@@ -20,7 +20,8 @@ import {
   DataGroupingConfigurationSpec,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
-  DqoJobQueueInitialSnapshotModel
+  DqoJobQueueInitialSnapshotModel,
+  ImportTablesQueueJobParameters
 } from '../../api';
 
 export interface IJobsState {
@@ -41,6 +42,7 @@ export interface IJobsState {
   dataGrouping: string;
   spec: DataGroupingConfigurationSpec;
   isAdvisorOpen: boolean;
+  advisorObject: ImportTablesQueueJobParameters;
   isCronScheduled: boolean;
   isLicenseFree: boolean;
 }
@@ -59,6 +61,7 @@ const initialState: IJobsState = {
   dataGrouping: '',
   spec: {},
   isAdvisorOpen: false,
+  advisorObject: {},
   isCronScheduled: true,
   isLicenseFree: false
 };
@@ -180,6 +183,12 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         isAdvisorOpen: action.isOpen
       };
+    case JOB_ACTION.SET_ADVISOR_OBJECT:
+      return {
+        ...state,
+        advisorObject: action.obj
+      };
+
     case JOB_ACTION.SET_CRON_SCHEDULER: {
       return {
         ...state,
