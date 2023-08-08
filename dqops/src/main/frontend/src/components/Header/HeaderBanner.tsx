@@ -40,14 +40,14 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
     setIsCollected(true);
 
     JobApiClient.collectStatisticsOnDataGroups({
-      connectionName: connection
+      connectionName: advisorObject.connectionName
     });
   };
 
   const runProfilingChecks = () => {
     JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: {
-        connectionName: connection,
+        connectionName: advisorObject.connectionName,
         checkType: CheckTypes.PROFILING
       }
     });
@@ -57,7 +57,11 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const configureScheduling = () => {
     setScheduleConfigured(true);
     history.push(
-      ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule')
+      ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        advisorObject.connectionName ?? connection,
+        'schedule'
+      )
     );
   };
 
@@ -66,7 +70,6 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
       onClose();
       return;
     }
-
     setConfirmOpen(true);
   };
 

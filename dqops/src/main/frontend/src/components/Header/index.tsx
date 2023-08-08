@@ -205,15 +205,12 @@ const Header = () => {
     }
   }, [job_dictionary_state]);
 
-  console.log(job_dictionary_state);
-  console.log(advisorJobId);
-  console.log(advisorObject);
-
   useEffect(() => {
     if (
       advisorJobId !== 0 &&
       job_dictionary_state[advisorJobId].status === 'succeeded'
     ) {
+      dispatch(setAdvisorJobId(0));
       dispatch(toggleAdvisor(true));
       console.log('do not be here');
     }
