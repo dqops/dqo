@@ -188,10 +188,10 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.setColumnSchema(columnSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
-        columnNulls.setNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
+        columnNulls.setProfileNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec());
         }});
-        columnNulls.setNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
+        columnNulls.setProfileNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
         }});
         defaultSettings.setColumnNulls(columnNulls);
