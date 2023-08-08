@@ -62,13 +62,13 @@ public class SettingsSpec extends AbstractSpec {
 	private String timeZone;
 
 	@JsonPropertyDescription("Configuration of the default schedules that are assigned to new connections to data sources that are imported. The settings that are configured take precedence over configuration from the DQO command line parameters and environment variables.")
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+//	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)    // NOTE: we are intentionally commenting this out, because when the field is null, we will create a default configuration. An empty configuration is defined by an empty object (with no schedules configured).
 	private RecurringSchedulesSpec defaultSchedules;
 
 	@JsonPropertyDescription("The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.")
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+//	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)    // NOTE: we are intentionally commenting this out, because when the field is null, we will create a default configuration. An empty configuration is defined by an empty object (with no checks configured).
 	private DefaultObservabilityCheckSettingsSpec defaultDataObservabilityChecks;
 
 	/**

@@ -19,11 +19,15 @@ package com.dqops.checks.defaults.services;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyDifferencingSumCheckSpec;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyStationaryMeanCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.nulls.ColumnAnomalyStationaryNullPercent30DaysCheckSpec;
+import com.dqops.checks.column.checkspecs.nulls.ColumnChangeNullPercentSinceYesterdayCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
+import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnSchemaProfilingChecksSpec;
 import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.datatype.ColumnDatatypeDailyRecurringChecksSpec;
+import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
@@ -40,12 +44,14 @@ import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.schema.TableSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
+import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.EqualsInteger1RuleParametersSpec;
 import com.dqops.rules.comparison.MaxFailuresRule0ParametersSpec;
 import com.dqops.rules.comparison.ValueChangedParametersSpec;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
 import org.springframework.stereotype.Component;
 
@@ -129,6 +135,15 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         defaultSettings.setColumnSchema(columnSchema);
 
+        ColumnNullsDailyRecurringChecksSpec columnNulls = new ColumnNullsDailyRecurringChecksSpec();
+        columnNulls.setDailyNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec());
+        }});
+        columnNulls.setDailyNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
+            setWarning(new ChangePercent1DayRule10ParametersSpec());
+        }});
+        defaultSettings.setColumnNulls(columnNulls);
+
         return defaultSettings;
     }
 
@@ -171,6 +186,15 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
             setWarning(new ValueChangedParametersSpec());
         }});
         defaultSettings.setColumnSchema(columnSchema);
+
+        ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
+        columnNulls.setNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec());
+        }});
+        columnNulls.setNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
+            setWarning(new ChangePercent1DayRule10ParametersSpec());
+        }});
+        defaultSettings.setColumnNulls(columnNulls);
 
         return defaultSettings;
     }
