@@ -161,6 +161,6 @@ public class ColumnSchemaColumnExistsCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

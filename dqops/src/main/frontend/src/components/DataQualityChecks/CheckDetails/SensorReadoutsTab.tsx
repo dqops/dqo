@@ -4,6 +4,8 @@ import Select from '../../Select';
 import { Table } from '../../Table';
 import { useTree } from '../../../contexts/treeContext';
 import moment from 'moment';
+import { useParams } from 'react-router-dom';
+import { CheckTypes } from '../../../shared/routes';
 
 interface SensorReadoutsTabProps {
   sensorReadouts: SensorReadoutsDetailedDataModel[];
@@ -20,22 +22,22 @@ const SensorReadoutsTab = ({
   month,
   onChangeMonth
 }: SensorReadoutsTabProps) => {
+  const {
+    checkTypes
+  }: {
+    checkTypes: CheckTypes;
+  } = useParams();
   const { sidebarWidth } = useTree();
 
   const columns = [
     {
-      label: 'Id',
-      value: 'id',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
-      label: 'Check Name',
-      value: 'checkName',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
-      label: 'Executed At',
-      value: 'executedAt',
+      label:
+        checkTypes === 'profiling'
+          ? 'Profile date (local time)'
+          : checkTypes === 'partitioned'
+          ? 'Partition Date'
+          : 'Checkpoint date',
+      value: 'timePeriod',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
@@ -64,6 +66,11 @@ const SensorReadoutsTab = ({
     {
       label: 'Data Grouping',
       value: 'dataGroup',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
+    },
+    {
+      label: 'Id',
+      value: 'id',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     }
   ];

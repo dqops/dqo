@@ -21,7 +21,6 @@ import com.dqops.checks.table.profiling.TableAvailabilityProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -60,7 +59,7 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
             put("column_datetime", o -> o.columnDatetime);
             put("column_pii", o -> o.columnPii);
             put("column_bool", o -> o.columnBool);
-            put("column_consistency", o -> o.columnConsistency);
+            put("column_datatype", o -> o.columnDatatype);
             put("column_anomaly", o -> o.columnAnomaly);
             put("column_schema", o -> o.columnSchema);
         }
@@ -116,10 +115,10 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolProfilingChecksSpec columnBool;
 
-    @JsonPropertyDescription("The default configuration of consistency checks on a column level.")
+    @JsonPropertyDescription("The default configuration of datatype checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyProfilingChecksSpec columnConsistency;
+    private ColumnDatatypeProfilingChecksSpec columnDatatype;
 
     @JsonPropertyDescription("The default configuration of anomaly checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -313,21 +312,21 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
     }
 
     /**
-     * Returns the consistency check configuration on a column level.
-     * @return Consistency check configuration.
+     * Returns the datatype check configuration on a column level.
+     * @return Datatype check configuration.
      */
-    public ColumnConsistencyProfilingChecksSpec getColumnConsistency() {
-        return columnConsistency;
+    public ColumnDatatypeProfilingChecksSpec getColumnDatatype() {
+        return columnDatatype;
     }
 
     /**
-     * Sets the consistency check configuration on a column level.
-     * @param columnConsistency New consistency checks configuration.
+     * Sets the datatype check configuration on a column level.
+     * @param columnDatatype New datatype checks configuration.
      */
-    public void setColumnConsistency(ColumnConsistencyProfilingChecksSpec columnConsistency) {
-        this.setDirtyIf(!Objects.equals(this.columnConsistency, columnConsistency));
-        this.columnConsistency = columnConsistency;
-        this.propagateHierarchyIdToField(columnConsistency, "column_consistency");
+    public void setColumnDatatype(ColumnDatatypeProfilingChecksSpec columnDatatype) {
+        this.setDirtyIf(!Objects.equals(this.columnDatatype, columnDatatype));
+        this.columnDatatype = columnDatatype;
+        this.propagateHierarchyIdToField(columnDatatype, "column_datatype");
     }
 
     /**
@@ -478,8 +477,8 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
             this.getColumnCheckCategories(targetColumn).setBool(this.columnBool.deepClone());
         }
 
-        if (this.columnConsistency != null && !this.columnConsistency.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setConsistency(this.columnConsistency.deepClone());
+        if (this.columnDatatype != null && !this.columnDatatype.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setDatatype(this.columnDatatype.deepClone());
         }
 
         if (this.columnAnomaly != null && !this.columnAnomaly.isDefault() && DataTypeCategory.isNumericType(dataTypeCategory)) {

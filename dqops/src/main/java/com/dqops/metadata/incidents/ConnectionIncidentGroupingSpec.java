@@ -46,7 +46,7 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
         }
     };
 
-    @JsonPropertyDescription("Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a consistency data quality incident detected on a table X in the numeric checks category).")
+    @JsonPropertyDescription("Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).")
     private IncidentGroupingLevel groupingLevel = IncidentGroupingLevel.table_dimension_category;
 
     @JsonPropertyDescription("Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported severity levels are 'error' and 'fatal'.")

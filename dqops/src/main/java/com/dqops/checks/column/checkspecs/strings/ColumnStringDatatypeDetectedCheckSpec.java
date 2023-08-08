@@ -160,6 +160,6 @@ public class ColumnStringDatatypeDetectedCheckSpec extends AbstractCheckSpec<Col
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Validity;
     }
 }
