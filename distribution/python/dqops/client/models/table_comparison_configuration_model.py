@@ -2,6 +2,12 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.table_comparison_configuration_model_check_type import (
+    TableComparisonConfigurationModelCheckType,
+)
+from ..models.table_comparison_configuration_model_time_scale import (
+    TableComparisonConfigurationModelTimeScale,
+)
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -28,14 +34,11 @@ class TableComparisonConfigurationModel:
             reference_connection (Union[Unset, str]): Reference connection name - the connection name to the data source
                 that has the reference data to compare to.
             reference_table (Union[Unset, PhysicalTableName]):
-            compared_table_grouping_name (Union[Unset, str]): The name of the data grouping configuration on the parent
-                table that will be used for comparison. When the parent table has no data grouping configurations, compares the
-                whole table without grouping.
-            reference_table_grouping_name (Union[Unset, str]): The name of the data grouping configuration on the referenced
-                name that will be used for comparison. When the reference table has no data grouping configurations, compares
-                the whole table without grouping. The data grouping configurations on the compared table and the reference table
-                must have the same grouping dimension levels configured, but the configuration (the names of the columns) could
-                be different.
+            check_type (Union[Unset, TableComparisonConfigurationModelCheckType]): The type of checks (profiling, recurring,
+                partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.
+            time_scale (Union[Unset, TableComparisonConfigurationModelTimeScale]): The time scale that this check comparison
+                configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or
+                an empty value for profiling checks.
             grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
                 the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
                 table and the reference table (the source of truth). The columns are used in the next of the table comparison to
@@ -48,8 +51,8 @@ class TableComparisonConfigurationModel:
     compared_table: Union[Unset, "PhysicalTableName"] = UNSET
     reference_connection: Union[Unset, str] = UNSET
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
-    compared_table_grouping_name: Union[Unset, str] = UNSET
-    reference_table_grouping_name: Union[Unset, str] = UNSET
+    check_type: Union[Unset, TableComparisonConfigurationModelCheckType] = UNSET
+    time_scale: Union[Unset, TableComparisonConfigurationModelTimeScale] = UNSET
     grouping_columns: Union[
         Unset, List["TableComparisonGroupingColumnPairModel"]
     ] = UNSET
@@ -67,8 +70,14 @@ class TableComparisonConfigurationModel:
         if not isinstance(self.reference_table, Unset):
             reference_table = self.reference_table.to_dict()
 
-        compared_table_grouping_name = self.compared_table_grouping_name
-        reference_table_grouping_name = self.reference_table_grouping_name
+        check_type: Union[Unset, str] = UNSET
+        if not isinstance(self.check_type, Unset):
+            check_type = self.check_type.value
+
+        time_scale: Union[Unset, str] = UNSET
+        if not isinstance(self.time_scale, Unset):
+            time_scale = self.time_scale.value
+
         grouping_columns: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.grouping_columns, Unset):
             grouping_columns = []
@@ -92,10 +101,10 @@ class TableComparisonConfigurationModel:
             field_dict["reference_connection"] = reference_connection
         if reference_table is not UNSET:
             field_dict["reference_table"] = reference_table
-        if compared_table_grouping_name is not UNSET:
-            field_dict["compared_table_grouping_name"] = compared_table_grouping_name
-        if reference_table_grouping_name is not UNSET:
-            field_dict["reference_table_grouping_name"] = reference_table_grouping_name
+        if check_type is not UNSET:
+            field_dict["check_type"] = check_type
+        if time_scale is not UNSET:
+            field_dict["time_scale"] = time_scale
         if grouping_columns is not UNSET:
             field_dict["grouping_columns"] = grouping_columns
 
@@ -131,9 +140,19 @@ class TableComparisonConfigurationModel:
         else:
             reference_table = PhysicalTableName.from_dict(_reference_table)
 
-        compared_table_grouping_name = d.pop("compared_table_grouping_name", UNSET)
+        _check_type = d.pop("check_type", UNSET)
+        check_type: Union[Unset, TableComparisonConfigurationModelCheckType]
+        if isinstance(_check_type, Unset):
+            check_type = UNSET
+        else:
+            check_type = TableComparisonConfigurationModelCheckType(_check_type)
 
-        reference_table_grouping_name = d.pop("reference_table_grouping_name", UNSET)
+        _time_scale = d.pop("time_scale", UNSET)
+        time_scale: Union[Unset, TableComparisonConfigurationModelTimeScale]
+        if isinstance(_time_scale, Unset):
+            time_scale = UNSET
+        else:
+            time_scale = TableComparisonConfigurationModelTimeScale(_time_scale)
 
         grouping_columns = []
         _grouping_columns = d.pop("grouping_columns", UNSET)
@@ -150,8 +169,8 @@ class TableComparisonConfigurationModel:
             compared_table=compared_table,
             reference_connection=reference_connection,
             reference_table=reference_table,
-            compared_table_grouping_name=compared_table_grouping_name,
-            reference_table_grouping_name=reference_table_grouping_name,
+            check_type=check_type,
+            time_scale=time_scale,
             grouping_columns=grouping_columns,
         )
 

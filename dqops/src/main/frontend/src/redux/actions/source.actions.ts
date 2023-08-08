@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { JOB_ACTION, SOURCE_ACTION } from '../types';
+import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from '../../shared/routes';
 import {
   CheckResultsDetailedDataModel,
@@ -23,8 +23,7 @@ import {
   SensorReadoutsDetailedDataModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
-  TableIncidentGroupingSpec,
-  DataGroupingConfigurationSpec
+  TableIncidentGroupingSpec
 } from '../../api';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
@@ -35,7 +34,6 @@ import {
   SensorReadoutsApi,
   TableApiClient
 } from '../../services/apiClient';
-import { type } from 'os';
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -281,23 +279,27 @@ export const getCheckResults =
       schema,
       table,
       column,
-      dataStreamName,
+      dataGrouping,
       checkName,
       runCheckType,
       startDate,
       endDate,
-      timeScale
+      timeScale,
+      category,
+      comparisonName
     }: {
       connection: string;
       schema: string;
       table: string;
       column?: string;
-      dataStreamName?: string;
+      dataGrouping?: string;
       startDate: string;
       endDate: string;
       timeScale?: 'daily' | 'monthly';
       checkName: string;
       runCheckType?: string;
+      category?: string;
+      comparisonName?: string;
     }
   ) =>
   (dispatch: any) => {
@@ -327,83 +329,106 @@ export const getCheckResults =
     const errCallback = () => {
       dispatch(getCheckResultsError(checkType, activeTab));
     };
-
-    if (column) {
-      if (checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
-        CheckResultApi.getColumnProfilingChecksResults(
-          connection,
-          schema,
-          table,
-          column,
-          dataStreamName,
-          startDate,
-          endDate
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        CheckResultApi.getColumnRecurringChecksResults(
-          connection,
-          schema,
-          table,
-          column,
-          timeScale || 'daily',
-          dataStreamName,
-          startDate,
-          endDate
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
-        CheckResultApi.getColumnPartitionedChecksResults(
-          connection,
-          schema,
-          table,
-          column,
-          timeScale || 'daily',
-          dataStreamName,
-          startDate,
-          endDate
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      }
-    } else {
-      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
-        CheckResultApi.getTableProfilingChecksResults(
-          connection,
-          schema,
-          table,
-          dataStreamName,
-          startDate,
-          endDate
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        CheckResultApi.getTableRecurringChecksResults(
-          connection,
-          schema,
-          table,
-          timeScale || 'daily',
-          dataStreamName,
-          startDate,
-          endDate
-        )
-          .then(successCallback)
-          .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
-        CheckResultApi.getTablePartitionedChecksResults(
-          connection,
-          schema,
-          table,
-          timeScale || 'daily',
-          dataStreamName,
-          startDate,
-          endDate
-        )
-          .then(successCallback)
-          .catch(errCallback);
+    if (JSON.stringify(startDate) !== JSON.stringify(endDate)) {
+      if (column) {
+        if (checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+          CheckResultApi.getColumnProfilingChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
+          CheckResultApi.getColumnRecurringChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned
+        ) {
+          CheckResultApi.getColumnPartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        }
+      } else {
+        if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+          CheckResultApi.getTableProfilingChecksResults(
+            connection,
+            schema,
+            table,
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
+          CheckResultApi.getTableRecurringChecksResults(
+            connection,
+            schema,
+            table,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned
+        ) {
+          CheckResultApi.getTablePartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          )
+            .then(successCallback)
+            .catch(errCallback);
+        }
       }
     }
   };
@@ -450,24 +475,28 @@ export const getCheckReadouts =
       schema,
       table,
       column,
-      dataStreamName,
+      dataGrouping,
       startDate,
       endDate,
       checkName,
       runCheckType,
-      timeScale
+      timeScale,
+      category,
+      comparisonName
     }: {
       connection: string;
       schema: string;
       table: string;
       column?: string;
-      dataStreamName?: string;
+      dataGrouping?: string;
       check?: CheckModel;
       startDate: string;
       endDate: string;
       timeScale?: 'daily' | 'monthly';
       checkName: string;
       runCheckType?: string;
+      category?: string;
+      comparisonName?: string;
     }
   ) =>
   (dispatch: any) => {
@@ -500,9 +529,12 @@ export const getCheckReadouts =
           schema,
           table,
           column,
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -513,9 +545,12 @@ export const getCheckReadouts =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -526,9 +561,12 @@ export const getCheckReadouts =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -539,9 +577,12 @@ export const getCheckReadouts =
           connection,
           schema,
           table,
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -551,9 +592,12 @@ export const getCheckReadouts =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -563,9 +607,12 @@ export const getCheckReadouts =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -615,23 +662,27 @@ export const getCheckErrors =
       schema,
       table,
       column,
-      dataStreamName,
+      dataGrouping,
       startDate,
       endDate,
       checkName,
       runCheckType,
-      timeScale
+      timeScale,
+      category,
+      comparisonName
     }: {
       connection: string;
       schema: string;
       table: string;
       column?: string;
-      dataStreamName?: string;
+      dataGrouping?: string;
       startDate: string;
       endDate: string;
       timeScale?: 'daily' | 'monthly';
       checkName: string;
       runCheckType?: string;
+      category?: string;
+      comparisonName?: string;
     }
   ) =>
   (dispatch: any) => {
@@ -658,9 +709,12 @@ export const getCheckErrors =
           schema,
           table,
           column,
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -671,9 +725,12 @@ export const getCheckErrors =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -684,9 +741,12 @@ export const getCheckErrors =
           table,
           column,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -697,9 +757,12 @@ export const getCheckErrors =
           connection,
           schema,
           table,
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -709,9 +772,12 @@ export const getCheckErrors =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -721,9 +787,12 @@ export const getCheckErrors =
           schema,
           table,
           timeScale || 'daily',
-          dataStreamName,
+          dataGrouping,
           startDate,
-          endDate
+          endDate,
+          checkName,
+          category,
+          comparisonName
         )
           .then(successCallback)
           .catch(errCallback);
@@ -866,7 +935,7 @@ export const toggleCheck = (
   type: SOURCE_ACTION.TOGGLE_CHECK,
   checkType,
   activeTab,
-  data: checkName,
+  data: checkName
 });
 
 export const closeCheck = (
@@ -877,5 +946,5 @@ export const closeCheck = (
   type: SOURCE_ACTION.CLOSE_CHECK,
   checkType,
   activeTab,
-  data: checkName,
+  data: checkName
 });

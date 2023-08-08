@@ -32,6 +32,7 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
     private final TextColumn errorSourceColumn;
     private final DateTimeColumn errorTimestampColumn;
 
+
     /**
      * Creates a check error dataset, extracting key columns.
      * WARNING: this method has an intended side result - it adds missing columns to the table.
@@ -39,11 +40,21 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
      * @param table Sorted table with check errors - may be modified by adding missing columns.
      */
     public ErrorsNormalizedResult(Table table) {
-        super(table);
-        this.readoutIdColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.READOUT_ID_COLUMN_NAME);
-        this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
-        this.errorSourceColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME);
-        this.errorTimestampColumn = TableColumnUtility.getOrAddDateTimeColumn(table, ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME);
+        this(table, true);
+    }
+
+    /**
+     * Creates a check error dataset, extracting key columns.
+     *
+     * @param table Sorted table with check errors - may be modified by adding missing columns.
+     * @param addColumWhenMissing Adds the columns if they are missing.
+     */
+    public ErrorsNormalizedResult(Table table, boolean addColumWhenMissing) {
+        super(table, addColumWhenMissing);
+        this.readoutIdColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.READOUT_ID_COLUMN_NAME, addColumWhenMissing);
+        this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME, addColumWhenMissing);
+        this.errorSourceColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME, addColumWhenMissing);
+        this.errorTimestampColumn = TableColumnUtility.getOrAddDateTimeColumn(table, ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME, addColumWhenMissing);
     }
 
     /**

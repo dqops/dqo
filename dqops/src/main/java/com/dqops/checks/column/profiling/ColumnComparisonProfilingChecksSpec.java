@@ -19,7 +19,6 @@ import com.dqops.checks.column.checkspecs.comparison.*;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.ColumnCompareCheckType;
 import com.dqops.checks.comparison.ComparisonCheckRules;
-import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,139 +39,139 @@ import java.util.Objects;
 public class ColumnComparisonProfilingChecksSpec extends AbstractColumnComparisonCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnComparisonProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnComparisonCheckCategorySpec.FIELDS) {
         {
-            put("sum_match", o -> o.sumMatch);
-            put("min_match", o -> o.minMatch);
-            put("max_match", o -> o.maxMatch);
-            put("mean_match", o -> o.meanMatch);
-            put("not_null_count_match", o -> o.notNullCountMatch);
-            put("null_count_match", o -> o.nullCountMatch);
+            put("profile_sum_match", o -> o.profileSumMatch);
+            put("profile_min_match", o -> o.profileMinMatch);
+            put("profile_max_match", o -> o.profileMaxMatch);
+            put("profile_mean_match", o -> o.profileMeanMatch);
+            put("profile_not_null_count_match", o -> o.profileNotNullCountMatch);
+            put("profile_null_count_match", o -> o.profileNullCountMatch);
         }
     };
 
     @JsonPropertyDescription("Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds.")
-    private ColumnComparisonSumMatchCheckSpec sumMatch;
+    private ColumnComparisonSumMatchCheckSpec profileSumMatch;
 
     @JsonPropertyDescription("Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds.")
-    private ColumnComparisonMinMatchCheckSpec minMatch;
+    private ColumnComparisonMinMatchCheckSpec profileMinMatch;
 
     @JsonPropertyDescription("Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds.")
-    private ColumnComparisonMaxMatchCheckSpec maxMatch;
+    private ColumnComparisonMaxMatchCheckSpec profileMaxMatch;
 
     @JsonPropertyDescription("Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds.")
-    private ColumnComparisonMeanMatchCheckSpec meanMatch;
+    private ColumnComparisonMeanMatchCheckSpec profileMeanMatch;
 
     @JsonPropertyDescription("Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds.")
-    private ColumnComparisonNotNullCountMatchCheckSpec notNullCountMatch;
+    private ColumnComparisonNotNullCountMatchCheckSpec profileNotNullCountMatch;
 
     @JsonPropertyDescription("Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds.")
-    private ColumnComparisonNullCountMatchCheckSpec nullCountMatch;
+    private ColumnComparisonNullCountMatchCheckSpec profileNullCountMatch;
 
     /**
      * Returns an accuracy total sum match percent check specification.
      * @return Accuracy total sum match percent check specification.
      */
-    public ColumnComparisonSumMatchCheckSpec getSumMatch() {
-        return sumMatch;
+    public ColumnComparisonSumMatchCheckSpec getProfileSumMatch() {
+        return profileSumMatch;
     }
 
     /**
      * Sets a new definition of an Accuracy total sum match percent check.
-     * @param sumMatch accuracy total sum match percent check specification.
+     * @param profileSumMatch accuracy total sum match percent check specification.
      */
-    public void setSumMatch(ColumnComparisonSumMatchCheckSpec sumMatch) {
-        this.setDirtyIf(!Objects.equals(this.sumMatch, sumMatch));
-        this.sumMatch = sumMatch;
-        propagateHierarchyIdToField(sumMatch, "sum_match");
+    public void setProfileSumMatch(ColumnComparisonSumMatchCheckSpec profileSumMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileSumMatch, profileSumMatch));
+        this.profileSumMatch = profileSumMatch;
+        propagateHierarchyIdToField(profileSumMatch, "profile_sum_match");
     }
 
     /**
      * Returns an accuracy min percent check specification.
      * @return Accuracy min percent check specification.
      */
-    public ColumnComparisonMinMatchCheckSpec getMinMatch() {
-        return minMatch;
+    public ColumnComparisonMinMatchCheckSpec getProfileMinMatch() {
+        return profileMinMatch;
     }
 
     /**
      * Sets a new definition of an accuracy min percent check.
-     * @param minMatch Accuracy min percent check specification.
+     * @param profileMinMatch Accuracy min percent check specification.
      */
-    public void setMinMatch(ColumnComparisonMinMatchCheckSpec minMatch) {
-        this.setDirtyIf(!Objects.equals(this.minMatch, minMatch));
-        this.minMatch = minMatch;
-        propagateHierarchyIdToField(minMatch, "min_match");
+    public void setProfileMinMatch(ColumnComparisonMinMatchCheckSpec profileMinMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileMinMatch, profileMinMatch));
+        this.profileMinMatch = profileMinMatch;
+        propagateHierarchyIdToField(profileMinMatch, "profile_min_match");
     }
 
     /**
      * Returns an accuracy max percent check specification.
      * @return Accuracy max percent check specification.
      */
-    public ColumnComparisonMaxMatchCheckSpec getMaxMatch() {
-        return maxMatch;
+    public ColumnComparisonMaxMatchCheckSpec getProfileMaxMatch() {
+        return profileMaxMatch;
     }
 
     /**
      * Sets a new definition of an accuracy max percent check.
-     * @param maxMatch Accuracy max percent check specification.
+     * @param profileMaxMatch Accuracy max percent check specification.
      */
-    public void setMaxMatch(ColumnComparisonMaxMatchCheckSpec maxMatch) {
-        this.setDirtyIf(!Objects.equals(this.maxMatch, maxMatch));
-        this.maxMatch = maxMatch;
-        propagateHierarchyIdToField(maxMatch, "max_match");
+    public void setProfileMaxMatch(ColumnComparisonMaxMatchCheckSpec profileMaxMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileMaxMatch, profileMaxMatch));
+        this.profileMaxMatch = profileMaxMatch;
+        propagateHierarchyIdToField(profileMaxMatch, "profile_max_match");
     }
 
     /**
      * Returns an accuracy average percent check specification.
      * @return Accuracy average percent check specification.
      */
-    public ColumnComparisonMeanMatchCheckSpec getMeanMatch() {
-        return meanMatch;
+    public ColumnComparisonMeanMatchCheckSpec getProfileMeanMatch() {
+        return profileMeanMatch;
     }
 
     /**
      * Sets a new definition of an accuracy average percent check.
-     * @param meanMatch Accuracy average percent check specification.
+     * @param profileMeanMatch Accuracy average percent check specification.
      */
-    public void setMeanMatch(ColumnComparisonMeanMatchCheckSpec meanMatch) {
-        this.setDirtyIf(!Objects.equals(this.meanMatch, meanMatch));
-        this.meanMatch = meanMatch;
-        propagateHierarchyIdToField(meanMatch, "mean_match");
+    public void setProfileMeanMatch(ColumnComparisonMeanMatchCheckSpec profileMeanMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanMatch, profileMeanMatch));
+        this.profileMeanMatch = profileMeanMatch;
+        propagateHierarchyIdToField(profileMeanMatch, "profile_mean_match");
     }
 
     /**
      * Returns an accuracy not null count percent check specification.
      * @return Accuracy not null count percent check specification.
      */
-    public ColumnComparisonNotNullCountMatchCheckSpec getNotNullCountMatch() {
-        return this.notNullCountMatch;
+    public ColumnComparisonNotNullCountMatchCheckSpec getProfileNotNullCountMatch() {
+        return this.profileNotNullCountMatch;
     }
 
     /**
      * Sets a new definition of an accuracy not null count percent check.
-     * @param notNullCountMatch Accuracy not null count percent check specification.
+     * @param profileNotNullCountMatch Accuracy not null count percent check specification.
      */
-    public void setNotNullCountMatch(ColumnComparisonNotNullCountMatchCheckSpec notNullCountMatch) {
-        this.setDirtyIf(!Objects.equals(this.notNullCountMatch, notNullCountMatch));
-        this.notNullCountMatch = notNullCountMatch;
-        propagateHierarchyIdToField(notNullCountMatch, "not_null_count_match");
+    public void setProfileNotNullCountMatch(ColumnComparisonNotNullCountMatchCheckSpec profileNotNullCountMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileNotNullCountMatch, profileNotNullCountMatch));
+        this.profileNotNullCountMatch = profileNotNullCountMatch;
+        propagateHierarchyIdToField(profileNotNullCountMatch, "profile_not_null_count_match");
     }
 
     /**
      * Returns an accuracy null count percent check specification.
      * @return Accuracy null count percent check specification.
      */
-    public ColumnComparisonNullCountMatchCheckSpec getNullCountMatch() {
-        return this.nullCountMatch;
+    public ColumnComparisonNullCountMatchCheckSpec getProfileNullCountMatch() {
+        return this.profileNullCountMatch;
     }
 
     /**
      * Sets a new definition of an accuracy null count percent check.
-     * @param nullCountMatch Accuracy null count percent check specification.
+     * @param profileNullCountMatch Accuracy null count percent check specification.
      */
-    public void setNullCountMatch(ColumnComparisonNullCountMatchCheckSpec nullCountMatch) {
-        this.setDirtyIf(!Objects.equals(this.nullCountMatch, nullCountMatch));
-        this.nullCountMatch = nullCountMatch;
-        propagateHierarchyIdToField(nullCountMatch, "null_count_match");
+    public void setProfileNullCountMatch(ColumnComparisonNullCountMatchCheckSpec profileNullCountMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileNullCountMatch, profileNullCountMatch));
+        this.profileNullCountMatch = profileNullCountMatch;
+        propagateHierarchyIdToField(profileNullCountMatch, "profile_null_count_match");
     }
 
     /**
@@ -186,63 +185,63 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
     public ComparisonCheckRules getCheckSpec(ColumnCompareCheckType columnCompareCheckType, boolean createWhenMissing) {
         switch (columnCompareCheckType) {
             case min_match: {
-                if (this.minMatch == null) {
+                if (this.profileMinMatch == null) {
                     if (createWhenMissing) {
-                        this.setMinMatch(new ColumnComparisonMinMatchCheckSpec());
+                        this.setProfileMinMatch(new ColumnComparisonMinMatchCheckSpec());
                     }
                 }
 
-                return this.minMatch;
+                return this.profileMinMatch;
             }
 
             case max_match: {
-                if (this.maxMatch == null) {
+                if (this.profileMaxMatch == null) {
                     if (createWhenMissing) {
-                        this.setMaxMatch(new ColumnComparisonMaxMatchCheckSpec());
+                        this.setProfileMaxMatch(new ColumnComparisonMaxMatchCheckSpec());
                     }
                 }
 
-                return this.maxMatch;
+                return this.profileMaxMatch;
             }
 
             case sum_match: {
-                if (this.sumMatch == null) {
+                if (this.profileSumMatch == null) {
                     if (createWhenMissing) {
-                        this.setSumMatch(new ColumnComparisonSumMatchCheckSpec());
+                        this.setProfileSumMatch(new ColumnComparisonSumMatchCheckSpec());
                     }
                 }
 
-                return this.sumMatch;
+                return this.profileSumMatch;
             }
 
             case mean_match: {
-                if (this.meanMatch == null) {
+                if (this.profileMeanMatch == null) {
                     if (createWhenMissing) {
-                        this.setMeanMatch(new ColumnComparisonMeanMatchCheckSpec());
+                        this.setProfileMeanMatch(new ColumnComparisonMeanMatchCheckSpec());
                     }
                 }
 
-                return this.meanMatch;
+                return this.profileMeanMatch;
             }
 
             case null_count_match: {
-                if (this.nullCountMatch == null) {
+                if (this.profileNullCountMatch == null) {
                     if (createWhenMissing) {
-                        this.setNullCountMatch(new ColumnComparisonNullCountMatchCheckSpec());
+                        this.setProfileNullCountMatch(new ColumnComparisonNullCountMatchCheckSpec());
                     }
                 }
 
-                return this.nullCountMatch;
+                return this.profileNullCountMatch;
             }
 
             case not_null_count_match: {
-                if (this.notNullCountMatch == null) {
+                if (this.profileNotNullCountMatch == null) {
                     if (createWhenMissing) {
-                        this.setNotNullCountMatch(new ColumnComparisonNotNullCountMatchCheckSpec());
+                        this.setProfileNotNullCountMatch(new ColumnComparisonNotNullCountMatchCheckSpec());
                     }
                 }
 
-                return this.notNullCountMatch;
+                return this.profileNotNullCountMatch;
             }
 
             default:
@@ -259,27 +258,27 @@ public class ColumnComparisonProfilingChecksSpec extends AbstractColumnCompariso
     public void removeCheckSpec(ColumnCompareCheckType columnCompareCheckType) {
         switch (columnCompareCheckType) {
             case min_match:
-                this.setMinMatch(null);
+                this.setProfileMinMatch(null);
                 break;
 
             case max_match:
-                this.setMaxMatch(null);
+                this.setProfileMaxMatch(null);
                 break;
 
             case sum_match:
-                this.setSumMatch(null);
+                this.setProfileSumMatch(null);
                 break;
 
             case mean_match:
-                this.setMeanMatch(null);
+                this.setProfileMeanMatch(null);
                 break;
 
             case null_count_match:
-                this.setNullCountMatch(null);
+                this.setProfileNullCountMatch(null);
                 break;
 
             case not_null_count_match:
-                this.setNotNullCountMatch(null);
+                this.setProfileNotNullCountMatch(null);
                 break;
         }
     }

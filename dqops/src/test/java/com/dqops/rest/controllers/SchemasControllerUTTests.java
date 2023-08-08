@@ -23,9 +23,6 @@ import com.dqops.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLeng
 import com.dqops.checks.column.profiling.ColumnNumericProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
-import com.dqops.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
@@ -48,15 +45,6 @@ import com.dqops.services.check.CheckFlatConfigurationFactoryImpl;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.AllChecksModelFactory;
 import com.dqops.services.check.mapping.AllChecksModelFactoryImpl;
-import com.dqops.services.check.mapping.models.AllChecksModel;
-import com.dqops.services.check.mapping.models.CheckContainerModel;
-import com.dqops.services.check.mapping.models.CheckContainerTypeModel;
-import com.dqops.services.check.mapping.models.column.AllColumnChecksModel;
-import com.dqops.services.check.mapping.models.column.ColumnChecksModel;
-import com.dqops.services.check.mapping.models.column.TableColumnChecksModel;
-import com.dqops.services.check.mapping.models.table.AllTableChecksModel;
-import com.dqops.services.check.mapping.models.table.SchemaTableChecksModel;
-import com.dqops.services.check.mapping.models.table.TableChecksModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
 import com.dqops.services.metadata.SchemaService;
 import com.dqops.services.metadata.SchemaServiceImpl;
@@ -68,12 +56,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -136,7 +121,7 @@ public class SchemasControllerUTTests extends BaseTest {
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
         t1rowCountSpec.setFatal(t1rowCountFatalSpec);
-        t1volumeChecksSpec.setRowCount(t1rowCountSpec);
+        t1volumeChecksSpec.setProfileRowCount(t1rowCountSpec);
         t1categoriesSpec.setVolume(t1volumeChecksSpec);
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
@@ -149,7 +134,7 @@ public class SchemasControllerUTTests extends BaseTest {
         t2rowCountFatalSpec.setMinCount(10L);
         t2rowCountSpec.setError(t2rowCountErrorSpec);
         t2rowCountSpec.setFatal(t2rowCountFatalSpec);
-        t2volumeChecksSpec.setRowCount(t2rowCountSpec);
+        t2volumeChecksSpec.setProfileRowCount(t2rowCountSpec);
         t2categoriesSpec.setVolume(t2volumeChecksSpec);
         table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
@@ -162,7 +147,7 @@ public class SchemasControllerUTTests extends BaseTest {
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
-        col21stringChecksSpec.setStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
+        col21stringChecksSpec.setProfileStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
         col21categoriesSpec.setStrings(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
@@ -171,7 +156,7 @@ public class SchemasControllerUTTests extends BaseTest {
         ColumnNumericProfilingChecksSpec col23numericChecksSpec = new ColumnNumericProfilingChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setNegativeCount(columnNegativeCountCheckSpec);
+        col23numericChecksSpec.setProfileNegativeCount(columnNegativeCountCheckSpec);
         MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);
@@ -208,7 +193,7 @@ public class SchemasControllerUTTests extends BaseTest {
         Assertions.assertNotNull(resultAllTables);
         Assertions.assertEquals(2, resultAllTables.size());
         resultAllTables.forEach(Assertions::assertNotNull);
-        resultAllTables.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
+        resultAllTables.forEach(c -> Assertions.assertEquals(CheckType.profiling, c.getCheckType()));
 
         List<CheckConfigurationModel> resultAllColumns = result.stream()
                 .filter(checkConfigurationModel -> checkConfigurationModel.getCheckTarget() == CheckTarget.column)
@@ -216,7 +201,7 @@ public class SchemasControllerUTTests extends BaseTest {
         Assertions.assertNotNull(resultAllColumns);
         Assertions.assertEquals(2, resultAllColumns.size());
         resultAllColumns.forEach(Assertions::assertNotNull);
-        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.profiling, c.getCheckType()));
 
         Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
 
@@ -258,7 +243,7 @@ public class SchemasControllerUTTests extends BaseTest {
         Assertions.assertNotNull(resultAllColumns);
         Assertions.assertEquals(2, resultAllColumns.size());
         resultAllColumns.forEach(Assertions::assertNotNull);
-        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.profiling, c.getCheckType()));
 
         Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
 
@@ -300,7 +285,7 @@ public class SchemasControllerUTTests extends BaseTest {
         Assertions.assertNotNull(resultAllColumns);
         Assertions.assertEquals(1, resultAllColumns.size());
         resultAllColumns.forEach(Assertions::assertNotNull);
-        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.PROFILING, c.getCheckType()));
+        resultAllColumns.forEach(c -> Assertions.assertEquals(CheckType.profiling, c.getCheckType()));
 
         Assertions.assertEquals(1, resultAllColumns.stream().map(CheckConfigurationModel::getTableName).distinct().count());
 

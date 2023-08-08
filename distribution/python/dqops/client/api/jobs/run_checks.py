@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.run_checks_queue_job_parameters import RunChecksQueueJobParameters
+from ...models.run_checks_parameters import RunChecksParameters
 from ...models.run_checks_queue_job_result import RunChecksQueueJobResult
 from ...types import UNSET, Response, Unset
 
@@ -13,11 +13,11 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
+    json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/runchecks".format(client.base_url)
+    url = "{}api/jobs/runchecks".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -70,7 +70,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
+    json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
@@ -81,8 +81,8 @@ def sync_detailed(
     Args:
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
+        json_body (RunChecksParameters): Run checks configuration, specifies the target checks
+            that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -110,7 +110,7 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
+    json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
@@ -121,8 +121,8 @@ def sync(
     Args:
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
+        json_body (RunChecksParameters): Run checks configuration, specifies the target checks
+            that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,7 +143,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
+    json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
@@ -154,8 +154,8 @@ async def asyncio_detailed(
     Args:
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
+        json_body (RunChecksParameters): Run checks configuration, specifies the target checks
+            that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -181,7 +181,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
+    json_body: RunChecksParameters,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
@@ -192,8 +192,8 @@ async def asyncio(
     Args:
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
+        json_body (RunChecksParameters): Run checks configuration, specifies the target checks
+            that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

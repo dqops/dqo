@@ -23,7 +23,6 @@ import com.dqops.checks.table.partitioned.comparison.TableComparisonMonthlyParti
 import com.dqops.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -48,7 +47,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);
@@ -188,7 +187,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.PARTITIONED;
+        return CheckType.partitioned;
     }
 
     /**

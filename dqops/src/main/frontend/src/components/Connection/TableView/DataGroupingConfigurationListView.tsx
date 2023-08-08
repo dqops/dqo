@@ -178,6 +178,7 @@ const DataGroupingConfigurationListView = ({
 
       <Button
         label="New data grouping configuration"
+        className="text-sm"
         color="primary"
         onClick={onCreate}
       />

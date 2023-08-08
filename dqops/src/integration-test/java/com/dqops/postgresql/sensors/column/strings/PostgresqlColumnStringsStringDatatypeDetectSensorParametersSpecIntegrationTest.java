@@ -16,7 +16,7 @@
 package com.dqops.postgresql.sensors.column.strings;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.consistency.ColumnStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class PostgresqlColumnStringsStringDatatypeDetectSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnStringsStringDatatypeDetectSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringDatatypeChangedCheckSpec checkSpec;
+    private ColumnDatatypeStringDatatypeChangedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -51,7 +51,7 @@ public class PostgresqlColumnStringsStringDatatypeDetectSensorParametersSpecInte
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringDatatypeDetectSensorParametersSpec();
-		this.checkSpec = new ColumnStringDatatypeChangedCheckSpec();
+		this.checkSpec = new ColumnDatatypeStringDatatypeChangedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

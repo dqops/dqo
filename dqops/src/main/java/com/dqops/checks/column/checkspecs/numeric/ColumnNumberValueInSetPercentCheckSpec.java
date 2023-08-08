@@ -164,6 +164,6 @@ public class ColumnNumberValueInSetPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

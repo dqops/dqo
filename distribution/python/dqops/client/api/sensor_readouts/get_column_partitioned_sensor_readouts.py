@@ -26,8 +26,12 @@ def _get_kwargs(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,
@@ -53,6 +57,14 @@ def _get_kwargs(
         json_month_end = month_end.isoformat() if month_end else None
 
     params["monthEnd"] = json_month_end
+
+    params["checkName"] = check_name
+
+    params["category"] = category
+
+    params["tableComparison"] = table_comparison
+
+    params["maxResultsPerCheck"] = max_results_per_check
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -109,6 +121,10 @@ def sync_detailed(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Response[List["SensorReadoutsDetailedDataModel"]]:
     """getColumnPartitionedSensorReadouts
 
@@ -124,6 +140,10 @@ def sync_detailed(
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        max_results_per_check (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,6 +163,10 @@ def sync_detailed(
         data_group=data_group,
         month_start=month_start,
         month_end=month_end,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        max_results_per_check=max_results_per_check,
     )
 
     response = httpx.request(
@@ -164,6 +188,10 @@ def sync(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
     """getColumnPartitionedSensorReadouts
 
@@ -179,6 +207,10 @@ def sync(
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        max_results_per_check (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -198,6 +230,10 @@ def sync(
         data_group=data_group,
         month_start=month_start,
         month_end=month_end,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        max_results_per_check=max_results_per_check,
     ).parsed
 
 
@@ -212,6 +248,10 @@ async def asyncio_detailed(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Response[List["SensorReadoutsDetailedDataModel"]]:
     """getColumnPartitionedSensorReadouts
 
@@ -227,6 +267,10 @@ async def asyncio_detailed(
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        max_results_per_check (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -246,6 +290,10 @@ async def asyncio_detailed(
         data_group=data_group,
         month_start=month_start,
         month_end=month_end,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        max_results_per_check=max_results_per_check,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
@@ -265,6 +313,10 @@ async def asyncio(
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["SensorReadoutsDetailedDataModel"]]:
     """getColumnPartitionedSensorReadouts
 
@@ -280,6 +332,10 @@ async def asyncio(
         data_group (Union[Unset, None, str]):
         month_start (Union[Unset, None, datetime.date]):
         month_end (Union[Unset, None, datetime.date]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        max_results_per_check (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -300,5 +356,9 @@ async def asyncio(
             data_group=data_group,
             month_start=month_start,
             month_end=month_end,
+            check_name=check_name,
+            category=category,
+            table_comparison=table_comparison,
+            max_results_per_check=max_results_per_check,
         )
     ).parsed

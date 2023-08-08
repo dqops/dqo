@@ -54,7 +54,7 @@ const FieldDatePicker = ({
           <label
             htmlFor={name}
             className={clsx(
-              'block font-regular text-gray-700 mb-1 text-sm flex space-x-1',
+              'font-regular text-gray-700 mb-1 text-sm flex space-x-1',
               error ? 'text-red-500' : ''
             )}
           >
@@ -75,11 +75,11 @@ const FieldDatePicker = ({
           </label>
         )}
       </div>
-      <div className="relative">
+      <div className="relative ">
         <div ref={ref} className="relative">
           <div
             className={clsx(
-              "h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full text-sm rounded flex items-center",
+              "h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none text-sm rounded flex items-center w-30",
               disabled ? 'bg-gray-300 bg-opacity-20 cursor-not-allowed' : '',
             )}
             onClick={onClick}

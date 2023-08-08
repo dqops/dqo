@@ -17,6 +17,18 @@ export const ChartView = ({ data }: ChartViewProps) => {
 
   const dataSource: any = {
     datasets: [
+      data.some((item) => item.fatalLowerBound !== undefined)
+        ? {
+            label: 'Fatal (lower bound)',
+            data: data.map((item) => ({
+              x: item.timePeriod,
+              y: item.fatalLowerBound
+            })),
+            fill: 'start',
+            borderColor: '#E3170A',
+            backgroundColor: '#E3170A30'
+          }
+        : null,
       data.some((item) => item.errorLowerBound !== undefined)
         ? {
             label: 'Error (lower bound)',
@@ -103,8 +115,13 @@ export const ChartView = ({ data }: ChartViewProps) => {
         : null
     ].filter((item) => item !== null)
   };
+  const customWidth = `calc(100vw - ${sidebarWidth + 150}px)`;
+  const customHeight = '370px';
+
+  const aspectRatioValue = parseFloat(customWidth) / parseFloat(customHeight);
 
   const options = {
+    aspectRatio: aspectRatioValue,
     plugins: {
       title: {
         display: false
@@ -133,14 +150,13 @@ export const ChartView = ({ data }: ChartViewProps) => {
   };
 
   return (
-    <div
-      className="my-8"
-      style={{
-        minWidth: '1280px',
-        width: `calc(100vw - ${sidebarWidth + 150}px`
-      }}
-    >
-      <Line data={dataSource} options={options as any} />
+    <div className="my-8">
+      <Line
+        data={dataSource}
+        options={options as any}
+        width={customWidth}
+        height={customHeight}
+      />
     </div>
   );
 };

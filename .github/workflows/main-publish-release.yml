@@ -37,8 +37,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.read_version.outputs.content }}
-          tag_name: ${{ steps.read_version.outputs.content }}
+          release_name: v${{ steps.read_version.outputs.content }}
+          tag_name: v${{ steps.read_version.outputs.content }}
           body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}

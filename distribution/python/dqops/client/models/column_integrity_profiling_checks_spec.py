@@ -20,34 +20,42 @@ T = TypeVar("T", bound="ColumnIntegrityProfilingChecksSpec")
 class ColumnIntegrityProfilingChecksSpec:
     """
     Attributes:
-        foreign_key_not_match_count (Union[Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec]):
-        foreign_key_match_percent (Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]):
+        profile_foreign_key_not_match_count (Union[Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec]):
+        profile_foreign_key_match_percent (Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]):
     """
 
-    foreign_key_not_match_count: Union[
+    profile_foreign_key_not_match_count: Union[
         Unset, "ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
     ] = UNSET
-    foreign_key_match_percent: Union[
+    profile_foreign_key_match_percent: Union[
         Unset, "ColumnIntegrityForeignKeyMatchPercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        foreign_key_not_match_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.foreign_key_not_match_count, Unset):
-            foreign_key_not_match_count = self.foreign_key_not_match_count.to_dict()
+        profile_foreign_key_not_match_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_foreign_key_not_match_count, Unset):
+            profile_foreign_key_not_match_count = (
+                self.profile_foreign_key_not_match_count.to_dict()
+            )
 
-        foreign_key_match_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.foreign_key_match_percent, Unset):
-            foreign_key_match_percent = self.foreign_key_match_percent.to_dict()
+        profile_foreign_key_match_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_foreign_key_match_percent, Unset):
+            profile_foreign_key_match_percent = (
+                self.profile_foreign_key_match_percent.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if foreign_key_not_match_count is not UNSET:
-            field_dict["foreign_key_not_match_count"] = foreign_key_not_match_count
-        if foreign_key_match_percent is not UNSET:
-            field_dict["foreign_key_match_percent"] = foreign_key_match_percent
+        if profile_foreign_key_not_match_count is not UNSET:
+            field_dict[
+                "profile_foreign_key_not_match_count"
+            ] = profile_foreign_key_not_match_count
+        if profile_foreign_key_match_percent is not UNSET:
+            field_dict[
+                "profile_foreign_key_match_percent"
+            ] = profile_foreign_key_match_percent
 
         return field_dict
 
@@ -61,35 +69,39 @@ class ColumnIntegrityProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _foreign_key_not_match_count = d.pop("foreign_key_not_match_count", UNSET)
-        foreign_key_not_match_count: Union[
+        _profile_foreign_key_not_match_count = d.pop(
+            "profile_foreign_key_not_match_count", UNSET
+        )
+        profile_foreign_key_not_match_count: Union[
             Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec
         ]
-        if isinstance(_foreign_key_not_match_count, Unset):
-            foreign_key_not_match_count = UNSET
+        if isinstance(_profile_foreign_key_not_match_count, Unset):
+            profile_foreign_key_not_match_count = UNSET
         else:
-            foreign_key_not_match_count = (
+            profile_foreign_key_not_match_count = (
                 ColumnIntegrityForeignKeyNotMatchCountCheckSpec.from_dict(
-                    _foreign_key_not_match_count
+                    _profile_foreign_key_not_match_count
                 )
             )
 
-        _foreign_key_match_percent = d.pop("foreign_key_match_percent", UNSET)
-        foreign_key_match_percent: Union[
+        _profile_foreign_key_match_percent = d.pop(
+            "profile_foreign_key_match_percent", UNSET
+        )
+        profile_foreign_key_match_percent: Union[
             Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec
         ]
-        if isinstance(_foreign_key_match_percent, Unset):
-            foreign_key_match_percent = UNSET
+        if isinstance(_profile_foreign_key_match_percent, Unset):
+            profile_foreign_key_match_percent = UNSET
         else:
-            foreign_key_match_percent = (
+            profile_foreign_key_match_percent = (
                 ColumnIntegrityForeignKeyMatchPercentCheckSpec.from_dict(
-                    _foreign_key_match_percent
+                    _profile_foreign_key_match_percent
                 )
             )
 
         column_integrity_profiling_checks_spec = cls(
-            foreign_key_not_match_count=foreign_key_not_match_count,
-            foreign_key_match_percent=foreign_key_match_percent,
+            profile_foreign_key_not_match_count=profile_foreign_key_not_match_count,
+            profile_foreign_key_match_percent=profile_foreign_key_match_percent,
         )
 
         column_integrity_profiling_checks_spec.additional_properties = d

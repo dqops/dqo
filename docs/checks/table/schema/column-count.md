@@ -5,42 +5,42 @@ Table level check that retrieves the metadata of the monitored table from the da
 
 ___
 
-## **column count**  
+## **profile column count**  
   
 **Check description**  
 Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|column_count|profiling| |[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|profile_column_count|profiling| |[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=column_count
+dqo> check enable -c=connection_name -ch=profile_column_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=column_count
+dqo> check run -ch=profile_column_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=column_count
+dqo> check run -c=connection_name -ch=profile_column_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=column_count
+dqo> check run -c=connection_name -t=table_name -ch=profile_column_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=column_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_count
 ```
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
     schema:
-      column_count:
+      profile_column_count:
         warning:
           expected_value: 10
         error:
@@ -62,7 +62,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     schema:
-      column_count:
+      profile_column_count:
         warning:
           expected_value: 10
         error:

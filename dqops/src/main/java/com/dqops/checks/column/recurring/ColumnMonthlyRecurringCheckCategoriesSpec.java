@@ -23,7 +23,7 @@ import com.dqops.checks.column.recurring.accuracy.ColumnAccuracyMonthlyRecurring
 import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.bool.ColumnBoolMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.comparison.ColumnComparisonMonthlyRecurringChecksSpecMap;
-import com.dqops.checks.column.recurring.consistency.ColumnConsistencyMonthlyRecurringChecksSpec;
+import com.dqops.checks.column.recurring.datatype.ColumnDatatypeMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.datetime.ColumnDatetimeMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.integrity.ColumnIntegrityMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.nulls.ColumnNullsMonthlyRecurringChecksSpec;
@@ -33,7 +33,6 @@ import com.dqops.checks.column.recurring.schema.ColumnSchemaMonthlyRecurringChec
 import com.dqops.checks.column.recurring.sql.ColumnSqlMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.strings.ColumnStringsMonthlyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.uniqueness.ColumnUniquenessMonthlyRecurringChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -58,7 +57,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
@@ -71,7 +70,7 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
-            put("consistency", o -> o.consistency);
+            put("datatype", o -> o.datatype);
             put("anomaly", o -> o.anomaly);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
@@ -128,10 +127,10 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyMonthlyRecurringChecksSpec accuracy;
 
-    @JsonPropertyDescription("Monthly recurring checks of consistency in the column")
+    @JsonPropertyDescription("Monthly recurring checks of datatype in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyMonthlyRecurringChecksSpec consistency;
+    private ColumnDatatypeMonthlyRecurringChecksSpec datatype;
 
     @JsonPropertyDescription("Monthly recurring checks of anomaly in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -333,18 +332,18 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnConsistencyMonthlyRecurringChecksSpec getConsistency() {
-        return consistency;
+    public ColumnDatatypeMonthlyRecurringChecksSpec getDatatype() {
+        return datatype;
     }
 
     /**
-     * Sets the container of consistency data quality checks (recurring).
-     * @param consistency New consistency checks.
+     * Sets the container of datatype data quality checks (recurring).
+     * @param datatype New datatype checks.
      */
-    public void setConsistency(ColumnConsistencyMonthlyRecurringChecksSpec consistency) {
-        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
-        this.consistency = consistency;
-        this.propagateHierarchyIdToField(consistency, "consistency");
+    public void setDatatype(ColumnDatatypeMonthlyRecurringChecksSpec datatype) {
+        this.setDirtyIf(!Objects.equals(this.datatype, datatype));
+        this.datatype = datatype;
+        this.propagateHierarchyIdToField(datatype, "datatype");
     }
 
     /**
@@ -435,7 +434,7 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.RECURRING;
+        return CheckType.recurring;
     }
 
     /**

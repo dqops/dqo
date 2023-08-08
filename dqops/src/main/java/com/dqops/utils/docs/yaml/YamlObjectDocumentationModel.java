@@ -17,6 +17,7 @@ package com.dqops.utils.docs.yaml;
 
 import lombok.Data;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -33,13 +34,17 @@ public class YamlObjectDocumentationModel {
      */
     private String classSimpleName;
     /**
-     * Object class simple name.
+     * Object class description.
      */
     private String classDescription;
     /**
      * Object class.
      */
     private Class<?> reflectedClass;
+    /**
+     * Object class path.
+     */
+    private Path objectClassPath;
     /**
      * List of all object fields.
      */

@@ -15,6 +15,7 @@
  */
 package com.dqops.data.readouts.models;
 
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.models.ParquetDataFragmentFilter;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class SensorReadoutsFragmentFilter extends ParquetDataFragmentFilter {
     private String sensorName;
     private String qualityDimension;
     private String timeGradient;
+    private String tableComparisonName;
 
     /**
      * Tell which additional columns should be read from the parquet, and what their value should be.
@@ -67,7 +69,9 @@ public class SensorReadoutsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Strings.isNullOrEmpty(timeGradient)) {
             result.put(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, timeGradient);
         }
-
+        if (!Strings.isNullOrEmpty(tableComparisonName)) {
+            result.put(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, tableComparisonName);
+        }
         return result;
     }
 
@@ -89,6 +93,7 @@ public class SensorReadoutsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Objects.equals(sensorName, that.sensorName)) return false;
         if (!Objects.equals(qualityDimension, that.qualityDimension))
             return false;
+        if (!Objects.equals(tableComparisonName, that.tableComparisonName)) return false;
         return Objects.equals(timeGradient, that.timeGradient);
     }
 
@@ -102,6 +107,7 @@ public class SensorReadoutsFragmentFilter extends ParquetDataFragmentFilter {
         result = 31 * result + (dataStreamName != null ? dataStreamName.hashCode() : 0);
         result = 31 * result + (sensorName != null ? sensorName.hashCode() : 0);
         result = 31 * result + (qualityDimension != null ? qualityDimension.hashCode() : 0);
+        result = 31 * result + (tableComparisonName != null ? tableComparisonName.hashCode() : 0);
         result = 31 * result + (timeGradient != null ? timeGradient.hashCode() : 0);
         return result;
     }

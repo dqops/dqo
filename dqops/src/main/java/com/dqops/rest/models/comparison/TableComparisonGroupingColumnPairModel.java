@@ -60,9 +60,9 @@ public class TableComparisonGroupingColumnPairModel {
      * @return Grouping column pair specification.
      */
     public TableComparisonGroupingColumnsPairSpec createColumnsPairSpec() {
-        return new TableComparisonGroupingColumnsPairSpec() {{
-            setComparedTableColumnName(this.getComparedTableColumnName());
-            setReferenceTableColumnName(this.getReferenceTableColumnName());
-        }};
+        TableComparisonGroupingColumnsPairSpec result = new TableComparisonGroupingColumnsPairSpec();
+        result.setComparedTableColumnName(this.getComparedTableColumnName());
+        result.setReferenceTableColumnName(this.getReferenceTableColumnName());
+        return result;
     }
 }

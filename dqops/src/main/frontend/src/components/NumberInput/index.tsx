@@ -1,4 +1,4 @@
-import React, { FocusEvent, useCallback, KeyboardEvent, ChangeEvent } from 'react';
+import React, { FocusEvent, KeyboardEvent, ChangeEvent } from 'react';
 
 import clsx from 'clsx';
 
@@ -48,24 +48,6 @@ const NumberInput = ({
     }
   };
 
-  const increase = useCallback(() => {
-    if (!value) {
-      onChange(1);
-    } else {
-      onChange(Number(value) + 1);
-    }
-  }, [onChange, value]);
-
-  const decrease = useCallback(() => {
-    if (!value) {
-      if (min === undefined || min <= -1) {
-        onChange(-1);
-      }
-    } else if (min === undefined || min <= Number(value) - 1) {
-      onChange(Number(value) - 1);
-    }
-  }, [onChange, value]);
-
   const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (!/[0-9]/.test(event.key)) {
       event.preventDefault();
@@ -79,7 +61,7 @@ const NumberInput = ({
           <label
             htmlFor={name}
             className={clsx(
-              'block font-regular text-gray-700 mb-1 text-sm flex space-x-1',
+              ' font-regular text-gray-700 mb-1 text-sm flex space-x-1',
               error ? 'text-red-500' : ''
             )}
           >
@@ -109,7 +91,7 @@ const NumberInput = ({
             error
               ? 'border border-red-500'
               : 'focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-none border-gray-300',
-            'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block w-full text-sm rounded',
+            'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block text-sm rounded',
             className
           )}
           value={value}
@@ -122,18 +104,6 @@ const NumberInput = ({
           step={step}
           onKeyPress={onKeyPress}
         />
-        <div className="flex flex-col absolute top-1/2 transform -translate-y-1/2 right-2">
-          <SvgIcon
-            className="cursor-pointer w-4"
-            name="chevron-up"
-            onClick={increase}
-          />
-          <SvgIcon
-            className="cursor-pointer w-4"
-            name="chevron-down"
-            onClick={decrease}
-          />
-        </div>
       </div>
     </div>
   );

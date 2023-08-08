@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
  * Parameters object for the run checks job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RunChecksQueueJobParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
+@ApiModel(value = "RunChecksParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
 @EqualsAndHashCode(callSuper = false)
 public class RunChecksParameters implements Cloneable {
     /**

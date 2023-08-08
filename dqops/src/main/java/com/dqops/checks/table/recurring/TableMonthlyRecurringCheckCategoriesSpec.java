@@ -26,7 +26,6 @@ import com.dqops.checks.table.recurring.schema.TableSchemaMonthlyRecurringChecks
 import com.dqops.checks.table.recurring.sql.TableSqlMonthlyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.timeliness.TableTimelinessMonthlyRecurringChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -51,7 +50,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);
@@ -259,7 +258,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.RECURRING;
+        return CheckType.recurring;
     }
 
     /**

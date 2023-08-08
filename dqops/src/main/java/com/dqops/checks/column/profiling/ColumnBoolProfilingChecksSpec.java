@@ -18,7 +18,6 @@ package com.dqops.checks.column.profiling;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,51 +37,51 @@ import java.util.Objects;
 public class ColumnBoolProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("true_percent", o -> o.truePercent);
-            put("false_percent", o -> o.falsePercent);
+            put("profile_true_percent", o -> o.profileTruePercent);
+            put("profile_false_percent", o -> o.profileFalsePercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.")
-    private ColumnTruePercentCheckSpec truePercent;
+    private ColumnTruePercentCheckSpec profileTruePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.")
-    private ColumnFalsePercentCheckSpec falsePercent;
+    private ColumnFalsePercentCheckSpec profileFalsePercent;
 
     /**
      * Returns a true percent check specification.
      * @return True percent check specification.
      */
-    public ColumnTruePercentCheckSpec getTruePercent() {
-        return truePercent;
+    public ColumnTruePercentCheckSpec getProfileTruePercent() {
+        return profileTruePercent;
     }
 
     /**
      * Sets true percent check specification.
-     * @param truePercent True percent check specification.
+     * @param profileTruePercent True percent check specification.
      */
-    public void setTruePercent(ColumnTruePercentCheckSpec truePercent) {
-        this.setDirtyIf(!Objects.equals(this.truePercent, truePercent));
-        this.truePercent = truePercent;
-        propagateHierarchyIdToField(truePercent, "true_percent");
+    public void setProfileTruePercent(ColumnTruePercentCheckSpec profileTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTruePercent, profileTruePercent));
+        this.profileTruePercent = profileTruePercent;
+        propagateHierarchyIdToField(profileTruePercent, "profile_true_percent");
     }
 
     /**
      * Returns a false percent check specification.
      * @return False percent check specification.
      */
-    public ColumnFalsePercentCheckSpec getFalsePercent() {
-        return falsePercent;
+    public ColumnFalsePercentCheckSpec getProfileFalsePercent() {
+        return profileFalsePercent;
     }
 
     /**
      * Sets a new false percent check specification.
-     * @param falsePercent False percent check specification.
+     * @param profileFalsePercent False percent check specification.
      */
-    public void setFalsePercent(ColumnFalsePercentCheckSpec falsePercent) {
-        this.setDirtyIf(!Objects.equals(this.falsePercent, falsePercent));
-        this.falsePercent = falsePercent;
-        propagateHierarchyIdToField(falsePercent, "false_percent");
+    public void setProfileFalsePercent(ColumnFalsePercentCheckSpec profileFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileFalsePercent, profileFalsePercent));
+        this.profileFalsePercent = profileFalsePercent;
+        propagateHierarchyIdToField(profileFalsePercent, "profile_false_percent");
     }
 
     /**

@@ -225,11 +225,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns a text column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static TextColumn getOrAddTextColumn(Table table, String columnName) {
+    public static TextColumn getOrAddTextColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (TextColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         TextColumn newColumn = TextColumn.create(columnName);
@@ -241,11 +246,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns a double column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static DoubleColumn getOrAddDoubleColumn(Table table, String columnName) {
+    public static DoubleColumn getOrAddDoubleColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (DoubleColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         DoubleColumn newColumn = DoubleColumn.create(columnName);
@@ -257,11 +267,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns a long column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static LongColumn getOrAddLongColumn(Table table, String columnName) {
+    public static LongColumn getOrAddLongColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (LongColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         LongColumn newColumn = LongColumn.create(columnName);
@@ -273,11 +288,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns an int column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static IntColumn getOrAddIntColumn(Table table, String columnName) {
+    public static IntColumn getOrAddIntColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (IntColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         IntColumn newColumn = IntColumn.create(columnName);
@@ -289,11 +309,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns a boolean column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static BooleanColumn getOrAddBooleanColumn(Table table, String columnName) {
+    public static BooleanColumn getOrAddBooleanColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (BooleanColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         BooleanColumn newColumn = BooleanColumn.create(columnName);
@@ -305,11 +330,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns a datetime column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static DateTimeColumn getOrAddDateTimeColumn(Table table, String columnName) {
+    public static DateTimeColumn getOrAddDateTimeColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (DateTimeColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         DateTimeColumn newColumn = DateTimeColumn.create(columnName);
@@ -321,11 +351,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns a date column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static DateColumn getOrAddDateColumn(Table table, String columnName) {
+    public static DateColumn getOrAddDateColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (DateColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         DateColumn newColumn = DateColumn.create(columnName);
@@ -337,11 +372,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns a time column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static TimeColumn getOrAddTimeColumn(Table table, String columnName) {
+    public static TimeColumn getOrAddTimeColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (TimeColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         TimeColumn newColumn = TimeColumn.create(columnName);
@@ -353,11 +393,16 @@ public final class TableColumnUtility {
      * Retrieves or adds and returns an instant column from a table.
      * @param table Table.
      * @param columnName Column name.
+     * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static InstantColumn getOrAddInstantColumn(Table table, String columnName) {
+    public static InstantColumn getOrAddInstantColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
             return (InstantColumn) table.column(columnName);
+        }
+
+        if (!addColumWhenMissing) {
+            return null;
         }
 
         InstantColumn newColumn = InstantColumn.create(columnName);

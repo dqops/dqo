@@ -26,7 +26,7 @@ def _get_kwargs(
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/profiling/model".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/profiling/model".format(
         client.base_url, connectionName=connection_name, schemaName=schema_name
     )
 

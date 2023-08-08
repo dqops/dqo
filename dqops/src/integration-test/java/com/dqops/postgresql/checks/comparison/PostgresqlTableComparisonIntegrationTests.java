@@ -21,7 +21,19 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.*;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
+import com.dqops.core.configuration.DqoIncidentsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
+import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
+import com.dqops.data.checkresults.services.models.ComparisonCheckResultModel;
+import com.dqops.data.checkresults.services.models.TableComparisonResultsModel;
+import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactoryImpl;
+import com.dqops.data.errors.factory.ErrorsTableFactoryImpl;
+import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
+import com.dqops.data.readouts.factory.SensorReadoutsTableFactoryImpl;
+import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
+import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.TableCheckExecutionServiceImpl;
@@ -29,7 +41,6 @@ import com.dqops.execution.checks.TableCheckExecutionServiceObjectMother;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerStub;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
-import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -42,6 +53,8 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,6 +75,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
     private ConnectionWrapper comparedConnectionWrapper;
     private TableWrapper comparedTableWrapper;
     private CheckSearchFilters checkSearchFilters;
+    private CheckResultsDataServiceImpl checkResultsDataService;
 
     @BeforeEach
     void setUp() {
@@ -94,12 +108,22 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         this.tableCheckExecutionService = TableCheckExecutionServiceObjectMother.createCheckExecutionServiceOnUserHomeContext(userHomeContext);
 
         checkSearchFilters = new CheckSearchFilters();
+
+        ParquetPartitionStorageServiceImpl parquetPartitionStorageService = ParquetPartitionStorageServiceObjectMother.create(userHomeContext);
+        DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
+        DqoIncidentsConfigurationProperties incidentsConfigurationProperties = DqoIncidentsConfigurationPropertiesObjectMother.getDefault();
+        CheckResultsSnapshotFactoryImpl checkResultsSnapshotFactory = new CheckResultsSnapshotFactoryImpl(parquetPartitionStorageService,
+                new CheckResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl()));
+        ErrorsSnapshotFactoryImpl errorsSnapshotFactory = new ErrorsSnapshotFactoryImpl(parquetPartitionStorageService,
+                new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl()));
+        checkResultsDataService = new CheckResultsDataServiceImpl(checkResultsSnapshotFactory, errorsSnapshotFactory,
+                defaultTimeZoneProvider, incidentsConfigurationProperties);
     }
 
     @Test
     void profiling_whenComparingRowCountNoGroupingSameTable_thenValuesMatch() {
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
-                .getTableCheckRootContainer(CheckType.PROFILING, null, true);
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
         AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
                 (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
         ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);
@@ -125,6 +149,13 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
+
+        TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
+                comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
+                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME);
+        Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
+        ComparisonCheckResultModel rowCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("row_count_match");
+        Assertions.assertEquals(1, rowCountMatchResultsModel.getValidResults());
     }
 
     @Test
@@ -133,7 +164,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "null_placeholder_ok"));
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
-                .getTableCheckRootContainer(CheckType.PROFILING, null, true);
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
         AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
                 (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
         ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);
@@ -166,7 +197,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         this.tableComparisonConfigurationSpec.getGroupingColumns().add(
                 new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "email_ok"));
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
-                .getTableCheckRootContainer(CheckType.PROFILING, null, true);
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
         AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
                 (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
         ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);
@@ -204,7 +235,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "null_placeholder_ok_recalculated"));
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
-                .getTableCheckRootContainer(CheckType.PROFILING, null, true);
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
         AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
                 (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
         ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);
@@ -238,7 +269,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 new TableComparisonGroupingColumnsPairSpec("boolean_placeholder", "null_placeholder"));
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
-                .getTableCheckRootContainer(CheckType.PROFILING, null, true);
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
         AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
                 (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
         ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);
@@ -270,7 +301,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
     void profiling_whenComparingSumOnColumnNoGroupingSameTable_thenValuesMatch() {
         ColumnSpec comparedColumn = this.comparedSampleTable.getTableSpec().getColumns().get("range_integers");
         AbstractRootChecksContainerSpec columnCheckRootContainer =
-                comparedColumn.getColumnCheckRootContainer(CheckType.PROFILING, null, true);
+                comparedColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
         AbstractColumnComparisonCheckCategorySpec columnComparisonChecks =
                 (AbstractColumnComparisonCheckCategorySpec) columnCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
         columnComparisonChecks.setReferenceColumn("range_integers");
@@ -302,7 +333,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
     @Test
     void partitionedDaily_whenComparingRowCountNoGroupingSameTable_thenValuesMatch() {
         AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
-                .getTableCheckRootContainer(CheckType.PARTITIONED, CheckTimeScale.daily, true);
+                .getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
         AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
                 (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
         ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, true);

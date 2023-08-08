@@ -20,7 +20,8 @@ import {
   DataGroupingConfigurationSpec,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
-  DqoJobQueueInitialSnapshotModel
+  DqoJobQueueInitialSnapshotModel,
+  ImportTablesQueueJobParameters
 } from '../../api';
 
 export interface IJobsState {
@@ -38,9 +39,12 @@ export interface IJobsState {
   areSettingsOpen: boolean;
   job_dictionary_state: Record<string, DqoJobHistoryEntryModel>;
   bool?: boolean;
-  dataStreamName: string;
+  dataGrouping: string;
   spec: DataGroupingConfigurationSpec;
   isAdvisorOpen: boolean;
+  advisorObject: ImportTablesQueueJobParameters;
+  advisorListener: boolean;
+  advisorJobId: number;
   isCronScheduled: boolean;
   isLicenseFree: boolean;
 }
@@ -56,9 +60,12 @@ const initialState: IJobsState = {
   areSettingsOpen: false,
   job_dictionary_state: {},
   bool: false,
-  dataStreamName: '',
+  dataGrouping: '',
   spec: {},
   isAdvisorOpen: false,
+  advisorObject: {},
+  advisorListener: false,
+  advisorJobId: 0,
   isCronScheduled: true,
   isLicenseFree: false
 };
@@ -108,22 +115,28 @@ const schemaReducer = (state = initialState, action: any) => {
       jobChanges.forEach((jobChange) => {
         if (!jobChange.jobId?.jobId) return;
         if (job_dictionary_state[jobChange.jobId?.jobId]) {
+          const newJobState = Object.assign(
+            {},
+            job_dictionary_state[jobChange.jobId?.jobId]
+          );
+          job_dictionary_state[jobChange.jobId?.jobId] = newJobState;
+
           if (jobChange.status) {
-            job_dictionary_state[jobChange.jobId?.jobId].status =
-              jobChange.status;
+            newJobState.status = jobChange.status;
           }
           if (jobChange.statusChangedAt) {
-            job_dictionary_state[jobChange.jobId?.jobId].statusChangedAt =
-              jobChange.statusChangedAt;
+            newJobState.statusChangedAt = jobChange.statusChangedAt;
           }
           if (jobChange.updatedModel) {
-            Object.assign(
-              job_dictionary_state[jobChange.jobId?.jobId],
-              jobChange.updatedModel
-            );
+            Object.assign(newJobState, jobChange.updatedModel);
           }
         } else {
-          job_dictionary_state[jobChange.jobId.jobId] = jobChange;
+          const newJobState = Object.assign({}, jobChange);
+          if (jobChange.updatedModel) {
+            Object.assign(newJobState, jobChange.updatedModel);
+            delete newJobState.updatedModel;
+          }
+          job_dictionary_state[jobChange.jobId.jobId] = newJobState;
         }
       });
 
@@ -171,7 +184,7 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         bool: action.bool,
-        dataStreamName: action.dataStreamName,
+        dataGrouping: action.dataGrouping,
         spec: action.spec
       };
     }
@@ -180,6 +193,17 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         isAdvisorOpen: action.isOpen
       };
+    case JOB_ACTION.SET_ADVISOR_OBJECT:
+      return {
+        ...state,
+        advisorObject: action.obj
+      };
+    case JOB_ACTION.SET_ADVISOR_JOBID:
+      return {
+        ...state,
+        advisorJobId: action.num
+      };
+
     case JOB_ACTION.SET_CRON_SCHEDULER: {
       return {
         ...state,

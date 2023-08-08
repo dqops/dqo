@@ -82,7 +82,15 @@ public class DqoTablesawParquetWriter extends TablesawParquetWriter {
             if (nioCurrentFile.exists()) {
                 nioCurrentFile.delete();
             }
-            inMemoryFileSystem.copyToLocalFile(false, inMemoryParquetPath, new Path(options.getOutputFile()), true);
+            try {
+                inMemoryFileSystem.copyToLocalFile(false, inMemoryParquetPath, new Path(options.getOutputFile()), true);
+            }
+            catch (Exception ex) {
+                if (nioCurrentFile.exists()) {
+                    nioCurrentFile.delete();
+                }
+                throw ex;
+            }
         }
         catch (IOException e) {
             throw new RuntimeIOException(e);

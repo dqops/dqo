@@ -29,7 +29,6 @@ import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheck
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
@@ -96,8 +95,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         // Table level checks
         tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
-        tableSpec.getProfilingChecks().getVolume().setRowCount(new TableRowCountCheckSpec());
-        tableSpec.getProfilingChecks().getVolume().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
+        tableSpec.getProfilingChecks().getVolume().setProfileRowCount(new TableRowCountCheckSpec());
+        tableSpec.getProfilingChecks().getVolume().getProfileRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
         tableSpec.setRecurringChecks(new TableRecurringChecksSpec());
         tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCheckCategoriesSpec());
@@ -113,7 +112,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         ColumnNullsProfilingChecksSpec columnNullsProfilingChecksSpec = new ColumnNullsProfilingChecksSpec();
         ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
         columnNullsCountCheckSpec.setError(new MaxCountRule10ParametersSpec());
-        columnNullsProfilingChecksSpec.setNullsCount(columnNullsCountCheckSpec);
+        columnNullsProfilingChecksSpec.setProfileNullsCount(columnNullsCountCheckSpec);
         columnProfilingCheckCategoriesSpec.setNulls(columnNullsProfilingChecksSpec);
         columnSpec.setProfilingChecks(columnProfilingCheckCategoriesSpec);
         tableWrapper.getSpec().getColumns().put("col1", columnSpec);
@@ -174,13 +173,13 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         }};
 
         CheckSearchFilters profilingFilters = allFilters.clone();
-        profilingFilters.setCheckType(CheckType.PROFILING);
+        profilingFilters.setCheckType(CheckType.profiling);
 
         CheckSearchFilters recurringFilters = allFilters.clone();
-        recurringFilters.setCheckType(CheckType.RECURRING);
+        recurringFilters.setCheckType(CheckType.recurring);
 
         CheckSearchFilters partitionedFilters = allFilters.clone();
-        partitionedFilters.setCheckType(CheckType.PARTITIONED);
+        partitionedFilters.setCheckType(CheckType.partitioned);
 
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
                 this.executionContext, profilingFilters, null, this.progressListener, true,

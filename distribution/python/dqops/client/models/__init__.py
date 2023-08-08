@@ -234,6 +234,12 @@ from .column_anomaly_stationary_median_30_days_check_spec import (
 from .column_anomaly_stationary_median_check_spec import (
     ColumnAnomalyStationaryMedianCheckSpec,
 )
+from .column_anomaly_stationary_null_percent_30_days_check_spec import (
+    ColumnAnomalyStationaryNullPercent30DaysCheckSpec,
+)
+from .column_anomaly_stationary_null_percent_check_spec import (
+    ColumnAnomalyStationaryNullPercentCheckSpec,
+)
 from .column_anomaly_stationary_partition_sum_30_days_check_spec import (
     ColumnAnomalyStationaryPartitionSum30DaysCheckSpec,
 )
@@ -278,6 +284,16 @@ from .column_change_median_since_30_days_check_spec import (
 from .column_change_median_since_yesterday_check_spec import (
     ColumnChangeMedianSinceYesterdayCheckSpec,
 )
+from .column_change_null_percent_check_spec import ColumnChangeNullPercentCheckSpec
+from .column_change_null_percent_since_7_days_check_spec import (
+    ColumnChangeNullPercentSince7DaysCheckSpec,
+)
+from .column_change_null_percent_since_30_days_check_spec import (
+    ColumnChangeNullPercentSince30DaysCheckSpec,
+)
+from .column_change_null_percent_since_yesterday_check_spec import (
+    ColumnChangeNullPercentSinceYesterdayCheckSpec,
+)
 from .column_change_sum_check_spec import ColumnChangeSumCheckSpec
 from .column_change_sum_since_7_days_check_spec import (
     ColumnChangeSumSince7DaysCheckSpec,
@@ -318,30 +334,6 @@ from .column_comparison_null_count_match_check_spec import (
 )
 from .column_comparison_profiling_checks_spec import ColumnComparisonProfilingChecksSpec
 from .column_comparison_sum_match_check_spec import ColumnComparisonSumMatchCheckSpec
-from .column_consistency_daily_partitioned_checks_spec import (
-    ColumnConsistencyDailyPartitionedChecksSpec,
-)
-from .column_consistency_daily_recurring_checks_spec import (
-    ColumnConsistencyDailyRecurringChecksSpec,
-)
-from .column_consistency_date_match_format_percent_check_spec import (
-    ColumnConsistencyDateMatchFormatPercentCheckSpec,
-)
-from .column_consistency_date_match_format_percent_sensor_parameters_spec import (
-    ColumnConsistencyDateMatchFormatPercentSensorParametersSpec,
-)
-from .column_consistency_date_match_format_percent_sensor_parameters_spec_date_formats import (
-    ColumnConsistencyDateMatchFormatPercentSensorParametersSpecDateFormats,
-)
-from .column_consistency_monthly_partitioned_checks_spec import (
-    ColumnConsistencyMonthlyPartitionedChecksSpec,
-)
-from .column_consistency_monthly_recurring_checks_spec import (
-    ColumnConsistencyMonthlyRecurringChecksSpec,
-)
-from .column_consistency_profiling_checks_spec import (
-    ColumnConsistencyProfilingChecksSpec,
-)
 from .column_daily_partitioned_check_categories_spec import (
     ColumnDailyPartitionedCheckCategoriesSpec,
 )
@@ -359,6 +351,31 @@ from .column_daily_recurring_check_categories_spec_comparisons import (
 )
 from .column_daily_recurring_check_categories_spec_custom import (
     ColumnDailyRecurringCheckCategoriesSpecCustom,
+)
+from .column_datatype_daily_partitioned_checks_spec import (
+    ColumnDatatypeDailyPartitionedChecksSpec,
+)
+from .column_datatype_daily_recurring_checks_spec import (
+    ColumnDatatypeDailyRecurringChecksSpec,
+)
+from .column_datatype_date_match_format_percent_check_spec import (
+    ColumnDatatypeDateMatchFormatPercentCheckSpec,
+)
+from .column_datatype_date_match_format_percent_sensor_parameters_spec import (
+    ColumnDatatypeDateMatchFormatPercentSensorParametersSpec,
+)
+from .column_datatype_date_match_format_percent_sensor_parameters_spec_date_formats import (
+    ColumnDatatypeDateMatchFormatPercentSensorParametersSpecDateFormats,
+)
+from .column_datatype_monthly_partitioned_checks_spec import (
+    ColumnDatatypeMonthlyPartitionedChecksSpec,
+)
+from .column_datatype_monthly_recurring_checks_spec import (
+    ColumnDatatypeMonthlyRecurringChecksSpec,
+)
+from .column_datatype_profiling_checks_spec import ColumnDatatypeProfilingChecksSpec
+from .column_datatype_string_datatype_changed_check_spec import (
+    ColumnDatatypeStringDatatypeChangedCheckSpec,
 )
 from .column_date_values_in_future_percent_check_spec import (
     ColumnDateValuesInFuturePercentCheckSpec,
@@ -771,9 +788,6 @@ from .column_statistics_collectors_root_categories_spec import (
 from .column_statistics_model import ColumnStatisticsModel
 from .column_string_boolean_placeholder_percent_check_spec import (
     ColumnStringBooleanPlaceholderPercentCheckSpec,
-)
-from .column_string_datatype_changed_check_spec import (
-    ColumnStringDatatypeChangedCheckSpec,
 )
 from .column_string_datatype_detected_check_spec import (
     ColumnStringDatatypeDetectedCheckSpec,
@@ -1223,12 +1237,22 @@ from .get_table_columns_partitioned_checks_model_time_scale import (
 from .get_table_columns_recurring_checks_model_time_scale import (
     GetTableColumnsRecurringChecksModelTimeScale,
 )
+from .get_table_comparison_configurations_check_time_scale import (
+    GetTableComparisonConfigurationsCheckTimeScale,
+)
+from .get_table_comparison_configurations_check_type import (
+    GetTableComparisonConfigurationsCheckType,
+)
 from .get_table_comparison_partitioned_results_time_scale import (
     GetTableComparisonPartitionedResultsTimeScale,
 )
 from .get_table_comparison_recurring_results_time_scale import (
     GetTableComparisonRecurringResultsTimeScale,
 )
+from .get_table_data_quality_status_check_time_scale import (
+    GetTableDataQualityStatusCheckTimeScale,
+)
+from .get_table_data_quality_status_check_type import GetTableDataQualityStatusCheckType
 from .get_table_partitioned_checks_basic_model_time_scale import (
     GetTablePartitionedChecksBasicModelTimeScale,
 )
@@ -1408,12 +1432,12 @@ from .rule_time_window_settings_spec import RuleTimeWindowSettingsSpec
 from .rule_time_window_settings_spec_historic_data_point_grouping import (
     RuleTimeWindowSettingsSpecHistoricDataPointGrouping,
 )
-from .run_checks_on_table_queue_job_parameters import RunChecksOnTableQueueJobParameters
-from .run_checks_queue_job_parameters import RunChecksQueueJobParameters
+from .run_checks_job_result import RunChecksJobResult
+from .run_checks_job_result_highest_severity import RunChecksJobResultHighestSeverity
+from .run_checks_on_table_parameters import RunChecksOnTableParameters
+from .run_checks_parameters import RunChecksParameters
 from .run_checks_queue_job_result import RunChecksQueueJobResult
-from .run_checks_queue_job_result_highest_severity import (
-    RunChecksQueueJobResultHighestSeverity,
-)
+from .run_checks_queue_job_result_status import RunChecksQueueJobResultStatus
 from .schema_model import SchemaModel
 from .schema_remote_model import SchemaRemoteModel
 from .sensor_basic_folder_model import SensorBasicFolderModel
@@ -1522,7 +1546,19 @@ from .table_column_types_hash_sensor_parameters_spec import (
 )
 from .table_columns_statistics_model import TableColumnsStatisticsModel
 from .table_comparison_configuration_model import TableComparisonConfigurationModel
+from .table_comparison_configuration_model_check_type import (
+    TableComparisonConfigurationModelCheckType,
+)
+from .table_comparison_configuration_model_time_scale import (
+    TableComparisonConfigurationModelTimeScale,
+)
 from .table_comparison_configuration_spec import TableComparisonConfigurationSpec
+from .table_comparison_configuration_spec_check_type import (
+    TableComparisonConfigurationSpecCheckType,
+)
+from .table_comparison_configuration_spec_time_scale import (
+    TableComparisonConfigurationSpecTimeScale,
+)
 from .table_comparison_daily_partitioned_checks_spec import (
     TableComparisonDailyPartitionedChecksSpec,
 )
@@ -1576,6 +1612,13 @@ from .table_daily_recurring_check_categories_spec_custom import (
 )
 from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
+from .table_data_quality_status_model import TableDataQualityStatusModel
+from .table_data_quality_status_model_failed_checks_statuses import (
+    TableDataQualityStatusModelFailedChecksStatuses,
+)
+from .table_data_quality_status_model_failed_checks_statuses_additional_property import (
+    TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty,
+)
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_incident_grouping_spec_grouping_level import (
@@ -1613,6 +1656,9 @@ from .table_profiling_check_categories_spec_comparisons import (
 )
 from .table_profiling_check_categories_spec_custom import (
     TableProfilingCheckCategoriesSpecCustom,
+)
+from .table_profiling_check_categories_spec_result_truncation import (
+    TableProfilingCheckCategoriesSpecResultTruncation,
 )
 from .table_recurring_checks_spec import TableRecurringChecksSpec
 from .table_remote_basic_model import TableRemoteBasicModel
@@ -1839,6 +1885,8 @@ __all__ = (
     "ColumnAnomalyStationaryMeanCheckSpec",
     "ColumnAnomalyStationaryMedian30DaysCheckSpec",
     "ColumnAnomalyStationaryMedianCheckSpec",
+    "ColumnAnomalyStationaryNullPercent30DaysCheckSpec",
+    "ColumnAnomalyStationaryNullPercentCheckSpec",
     "ColumnAnomalyStationaryPartitionSum30DaysCheckSpec",
     "ColumnAnomalyStationaryPartitionSumCheckSpec",
     "ColumnBasicModel",
@@ -1857,6 +1905,10 @@ __all__ = (
     "ColumnChangeMedianSince30DaysCheckSpec",
     "ColumnChangeMedianSince7DaysCheckSpec",
     "ColumnChangeMedianSinceYesterdayCheckSpec",
+    "ColumnChangeNullPercentCheckSpec",
+    "ColumnChangeNullPercentSince30DaysCheckSpec",
+    "ColumnChangeNullPercentSince7DaysCheckSpec",
+    "ColumnChangeNullPercentSinceYesterdayCheckSpec",
     "ColumnChangeSumCheckSpec",
     "ColumnChangeSumSince30DaysCheckSpec",
     "ColumnChangeSumSince7DaysCheckSpec",
@@ -1875,20 +1927,21 @@ __all__ = (
     "ColumnComparisonNullCountMatchCheckSpec",
     "ColumnComparisonProfilingChecksSpec",
     "ColumnComparisonSumMatchCheckSpec",
-    "ColumnConsistencyDailyPartitionedChecksSpec",
-    "ColumnConsistencyDailyRecurringChecksSpec",
-    "ColumnConsistencyDateMatchFormatPercentCheckSpec",
-    "ColumnConsistencyDateMatchFormatPercentSensorParametersSpec",
-    "ColumnConsistencyDateMatchFormatPercentSensorParametersSpecDateFormats",
-    "ColumnConsistencyMonthlyPartitionedChecksSpec",
-    "ColumnConsistencyMonthlyRecurringChecksSpec",
-    "ColumnConsistencyProfilingChecksSpec",
     "ColumnDailyPartitionedCheckCategoriesSpec",
     "ColumnDailyPartitionedCheckCategoriesSpecComparisons",
     "ColumnDailyPartitionedCheckCategoriesSpecCustom",
     "ColumnDailyRecurringCheckCategoriesSpec",
     "ColumnDailyRecurringCheckCategoriesSpecComparisons",
     "ColumnDailyRecurringCheckCategoriesSpecCustom",
+    "ColumnDatatypeDailyPartitionedChecksSpec",
+    "ColumnDatatypeDailyRecurringChecksSpec",
+    "ColumnDatatypeDateMatchFormatPercentCheckSpec",
+    "ColumnDatatypeDateMatchFormatPercentSensorParametersSpec",
+    "ColumnDatatypeDateMatchFormatPercentSensorParametersSpecDateFormats",
+    "ColumnDatatypeMonthlyPartitionedChecksSpec",
+    "ColumnDatatypeMonthlyRecurringChecksSpec",
+    "ColumnDatatypeProfilingChecksSpec",
+    "ColumnDatatypeStringDatatypeChangedCheckSpec",
     "ColumnDatetimeDailyPartitionedChecksSpec",
     "ColumnDatetimeDailyRecurringChecksSpec",
     "ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec",
@@ -2055,7 +2108,6 @@ __all__ = (
     "ColumnStatisticsCollectorsRootCategoriesSpec",
     "ColumnStatisticsModel",
     "ColumnStringBooleanPlaceholderPercentCheckSpec",
-    "ColumnStringDatatypeChangedCheckSpec",
     "ColumnStringDatatypeDetectedCheckSpec",
     "ColumnStringEmptyCountCheckSpec",
     "ColumnStringEmptyPercentCheckSpec",
@@ -2244,8 +2296,12 @@ __all__ = (
     "GetSchemaRecurringChecksTemplatesTimeScale",
     "GetTableColumnsPartitionedChecksModelTimeScale",
     "GetTableColumnsRecurringChecksModelTimeScale",
+    "GetTableComparisonConfigurationsCheckTimeScale",
+    "GetTableComparisonConfigurationsCheckType",
     "GetTableComparisonPartitionedResultsTimeScale",
     "GetTableComparisonRecurringResultsTimeScale",
+    "GetTableDataQualityStatusCheckTimeScale",
+    "GetTableDataQualityStatusCheckType",
     "GetTablePartitionedChecksBasicModelTimeScale",
     "GetTablePartitionedChecksModelFilterTimeScale",
     "GetTablePartitionedChecksModelTimeScale",
@@ -2365,10 +2421,12 @@ __all__ = (
     "RuleThresholdsModel",
     "RuleTimeWindowSettingsSpec",
     "RuleTimeWindowSettingsSpecHistoricDataPointGrouping",
-    "RunChecksOnTableQueueJobParameters",
-    "RunChecksQueueJobParameters",
+    "RunChecksJobResult",
+    "RunChecksJobResultHighestSeverity",
+    "RunChecksOnTableParameters",
+    "RunChecksParameters",
     "RunChecksQueueJobResult",
-    "RunChecksQueueJobResultHighestSeverity",
+    "RunChecksQueueJobResultStatus",
     "SchemaModel",
     "SchemaRemoteModel",
     "SensorBasicFolderModel",
@@ -2425,7 +2483,11 @@ __all__ = (
     "TableColumnsStatisticsModel",
     "TableColumnTypesHashSensorParametersSpec",
     "TableComparisonConfigurationModel",
+    "TableComparisonConfigurationModelCheckType",
+    "TableComparisonConfigurationModelTimeScale",
     "TableComparisonConfigurationSpec",
+    "TableComparisonConfigurationSpecCheckType",
+    "TableComparisonConfigurationSpecTimeScale",
     "TableComparisonDailyPartitionedChecksSpec",
     "TableComparisonDailyRecurringChecksSpec",
     "TableComparisonGroupingColumnPairModel",
@@ -2447,6 +2509,9 @@ __all__ = (
     "TableDailyRecurringCheckCategoriesSpecCustom",
     "TableDataFreshnessCheckSpec",
     "TableDataIngestionDelayCheckSpec",
+    "TableDataQualityStatusModel",
+    "TableDataQualityStatusModelFailedChecksStatuses",
+    "TableDataQualityStatusModelFailedChecksStatusesAdditionalProperty",
     "TableDataStalenessCheckSpec",
     "TableIncidentGroupingSpec",
     "TableIncidentGroupingSpecGroupingLevel",
@@ -2465,6 +2530,7 @@ __all__ = (
     "TableProfilingCheckCategoriesSpec",
     "TableProfilingCheckCategoriesSpecComparisons",
     "TableProfilingCheckCategoriesSpecCustom",
+    "TableProfilingCheckCategoriesSpecResultTruncation",
     "TableRecurringChecksSpec",
     "TableRemoteBasicModel",
     "TableRowCountCheckSpec",

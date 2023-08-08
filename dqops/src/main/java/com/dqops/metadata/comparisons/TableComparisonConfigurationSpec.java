@@ -16,8 +16,9 @@
 
 package com.dqops.metadata.comparisons;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.metadata.basespecs.AbstractSpec;
-import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
@@ -66,12 +67,19 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
             "This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.")
     private String referenceTableFilter;
 
+    @JsonPropertyDescription("The type of checks (profiling, recurring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
+    private CheckType checkType = CheckType.profiling;
+
+    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or an empty value for profiling checks.")
+    private CheckTimeScale timeScale;
+
     @JsonPropertyDescription("List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  " +
             "for grouping both the compared table and the reference table (the source of truth). " +
             "The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableComparisonGroupingColumnsPairsListSpec groupingColumns = new TableComparisonGroupingColumnsPairsListSpec();
+
 
     /**
      * Returns the name of the connection (data source) in DQO where the reference table is imported.
@@ -156,6 +164,40 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     public void setReferenceTableFilter(String referenceTableFilter) {
         this.setDirtyIf(!Objects.equals(this.referenceTableFilter, referenceTableFilter));
         this.referenceTableFilter = referenceTableFilter;
+    }
+
+    /**
+     * Returns the check type that this table comparison configuration is applicable to.
+     * @return The type of checks where this comparison is used.
+     */
+    public CheckType getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * Sets the type of checks where this comparison is used.
+     * @param checkType Type of checks.
+     */
+    public void setCheckType(CheckType checkType) {
+        this.setDirtyIf(!Objects.equals(this.checkType, checkType));
+        this.checkType = checkType;
+    }
+
+    /**
+     * Returns the time scale that this table comparison is applicable to.
+     * @return Time scale.
+     */
+    public CheckTimeScale getTimeScale() {
+        return timeScale;
+    }
+
+    /**
+     * Sets the time scale of the checks (recurring, partitioned) that are used.
+     * @param timeScale Time scale.
+     */
+    public void setTimeScale(CheckTimeScale timeScale) {
+        this.setDirtyIf(!Objects.equals(this.timeScale, timeScale));
+        this.timeScale = timeScale;
     }
 
     /**

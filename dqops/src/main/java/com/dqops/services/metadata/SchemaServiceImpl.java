@@ -35,10 +35,7 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,7 +109,7 @@ public class SchemaServiceImpl implements SchemaService {
             // Connection name, schema name and check type have to be provided.
             return null;
         }
-        if ((checkType == CheckType.PARTITIONED || checkType == CheckType.RECURRING) && checkTimeScale == null) {
+        if ((checkType == CheckType.partitioned || checkType == CheckType.recurring) && checkTimeScale == null) {
             // Time scale has to be provided for partitioned and recurring checks.
             return null;
         }

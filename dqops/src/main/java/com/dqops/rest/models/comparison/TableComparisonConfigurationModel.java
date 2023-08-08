@@ -15,6 +15,8 @@
  */
 package com.dqops.rest.models.comparison;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
@@ -69,16 +71,11 @@ public class TableComparisonConfigurationModel {
     @JsonPropertyDescription("The schema and table name of the reference table that has the expected data.")
     private PhysicalTableName referenceTable;
 
-    @JsonPropertyDescription("The name of the data grouping configuration on the parent table that will be used for comparison. " +
-            "When the parent table has no data grouping configurations, compares the whole table without grouping.")
-    @Deprecated
-    private String comparedTableGroupingName;
+    @JsonPropertyDescription("The type of checks (profiling, recurring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
+    private CheckType checkType = CheckType.profiling;
 
-    @JsonPropertyDescription("The name of the data grouping configuration on the referenced name that will be used for comparison. " +
-            "When the reference table has no data grouping configurations, compares the whole table without grouping. " +
-            "The data grouping configurations on the compared table and the reference table must have the same grouping dimension levels configured, but the configuration (the names of the columns) could be different.")
-    @Deprecated
-    private String referenceTableGroupingName;
+    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or an empty value for profiling checks.")
+    private CheckTimeScale timeScale;
 
     /**
      * List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause.
@@ -105,6 +102,8 @@ public class TableComparisonConfigurationModel {
         model.setComparedTable(comparedTableHierarchyId.getPhysicalTableName());
         model.setReferenceConnection(comparisonSpec.getReferenceTableConnectionName());
         model.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
+        model.setCheckType(comparisonSpec.getCheckType());
+        model.setTimeScale(comparisonSpec.getTimeScale());
 
         for (TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec : comparisonSpec.getGroupingColumns()) {
             TableComparisonGroupingColumnPairModel tableComparisonGroupingColumnPairModel =
@@ -120,6 +119,8 @@ public class TableComparisonConfigurationModel {
      * @param comparisonSpec Target comparison specification to copy values to.
      */
     public void copyToTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
+        comparisonSpec.setCheckType(this.getCheckType());
+        comparisonSpec.setTimeScale(this.getTimeScale());
         comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
         if (this.getReferenceTable() != null) {
             comparisonSpec.setReferenceTableSchemaName(this.getReferenceTable().getSchemaName());

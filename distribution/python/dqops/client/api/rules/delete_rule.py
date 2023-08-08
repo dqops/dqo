@@ -14,7 +14,7 @@ def _get_kwargs(
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/api/rules/{fullRuleName}".format(
+    url = "{}api/rules/{fullRuleName}".format(
         client.base_url, fullRuleName=full_rule_name
     )
 

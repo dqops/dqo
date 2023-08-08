@@ -13,8 +13,9 @@ export interface CheckboxProps {
   tooltipText?: string;
   disabled?: boolean;
   error?: boolean;
-  labelPosition?: "left" | "right";
+  labelPosition?: 'left' | 'right';
   checkClassName?: string;
+  isDisabled?: boolean;
 }
 
 const Checkbox = ({
@@ -25,11 +26,18 @@ const Checkbox = ({
   tooltipText,
   disabled,
   error,
-  labelPosition = "right",
+  labelPosition = 'right',
   checkClassName,
+  isDisabled
 }: CheckboxProps) => {
   return (
-    <label className={clsx('block relative cursor-pointer rounded-sm inline-flex items-center select-none', className, labelPosition === "left" ? 'flex-row-reverse' : '' )}>
+    <label
+      className={clsx(
+        'block relative cursor-pointer rounded-sm inline-flex items-center select-none',
+        className,
+        labelPosition === 'left' ? 'flex-row-reverse' : ''
+      )}
+    >
       <div className="relative">
         <input
           disabled={disabled}
@@ -42,7 +50,8 @@ const Checkbox = ({
           className={clsx(
             'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center text-sm',
             checked ? checkClassName + ' bg-teal-500 border-0' : 'border',
-            error ? 'border-red-500' : 'border-gray-150'
+            error ? 'border-red-500' : 'border-gray-150',
+            isDisabled ? 'bg-gray-200' : ''
           )}
         >
           {checked && (
@@ -54,7 +63,12 @@ const Checkbox = ({
         </span>
       </div>
       {label && (
-        <div className={clsx('inline-flex space-x-1 items-center', labelPosition === "left" ? "mr-2" : "ml-5")}>
+        <div
+          className={clsx(
+            'inline-flex space-x-1 items-center',
+            labelPosition === 'left' ? 'mr-2' : 'ml-5'
+          )}
+        >
           <span className="text-sm">{label}</span>
           {!!tooltipText && (
             <Tooltip

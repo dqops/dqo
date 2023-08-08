@@ -55,7 +55,7 @@ public class OracleTableVolumeRowCountSensorParametersSpecIntegrationTest extend
         this.checkSpec.setParameters(this.sut);
         TableVolumeProfilingChecksSpec category = new TableVolumeProfilingChecksSpec();
         this.sampleTableMetadata.getTableSpec().getProfilingChecks().setVolume(category);
-        category.setRowCount(this.checkSpec);
+        category.setProfileRowCount(this.checkSpec);
     }
 
     @Test

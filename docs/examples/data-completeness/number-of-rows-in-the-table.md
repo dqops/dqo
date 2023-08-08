@@ -11,14 +11,14 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-Here is a table with some sample customer data. In this example, we will verify if the number of rows in a table does not exceed the minimum accepted count.
+In this example, we will verify if the number of rows in a table does not exceed the minimum accepted count.
 
 We want to verify that the number of rows in a table does not exceed the minimum accepted count.
 
 **SOLUTION**
 
 We will verify the data using profiling [row_count](../../checks/table/volume/row-count.md) table check.
-Our goal is to verify if number of rows does not fall below setup thresholds.
+Our goal is to verify if the number of rows does not fall below setup thresholds.
 
 In this example, we will set three minimum count thresholds levels for the check:
 
@@ -30,7 +30,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the number of rows falls below 150, a warning alert will be triggered.
+If the number of rows falls below 692, a warning alert will be triggered.
 
 ## Data structure
 
@@ -101,7 +101,45 @@ spec:
         column_type: STRING
         nullable: true
 ```
-## Running the checks in the example and evaluating the results
+
+
+## Running the checks in the example and evaluating the results using the graphical interface
+
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
+
+1. Go to the **Profiling** section. 
+
+2. Select the table or column mentioned in the example description from the tree view on the left.
+
+3. Select the **Advanced Profiling** tab.
+
+4. Run the enabled check using the **Run check** button.
+    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
+
+5. Review the results by opening the **Check details** button.
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details.png)
+
+6. You should see the results as the one below.
+    The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (692).
+    The check gives a valid result (notice the green square on the left of the name of the check).
+    
+    ![Row-count check results](https://dqops.com/docs/images/examples/row-count-check-results.png)
+
+7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button 
+    located in the upper right corner of the graphical interface.
+
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
+    the results displayed on the Issues dashboard showing results by check, number of issues per connection, and number 
+    of issues per table.
+
+    ![Row-count results on Issues dashboard](https://dqops.com/docs/images/examples/row-count-results-on-issues-dashboard.png)
+
+## Running the checks in the example and evaluating the results using DQO Shell
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 

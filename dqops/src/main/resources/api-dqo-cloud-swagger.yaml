@@ -18,6 +18,7 @@ tags:
 - name: "AccessTokenIssue"
 - name: "ApiKeyRequest"
 - name: "LookerStudioKeyRequest"
+- name: "RefreshTokenIssue"
 - name: "TenantDataWarehouse"
 schemes:
 - "https"
@@ -304,6 +305,30 @@ paths:
             type: "string"
       security:
       - api_key: []
+  /api/v1/refreshtokens/login_tgt:
+    post:
+      tags:
+      - "RefreshTokenIssue"
+      summary: "issueLoginTicketGrantingTicketToken"
+      description: "Issues a ticket granting ticket that authorizes DQO Cloud to issue\
+        \ a DQO instance refresh token for a user that logs into DQO Cloud."
+      operationId: "issueLoginTicketGrantingTicketToken"
+      produces:
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "tgtRequest"
+        required: false
+        schema:
+          $ref: "#/definitions/UserLoginTicketGrantingTicketRequest"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - api_key: []
   /api/v1/tenantdatawarehouse/refresh/table:
     post:
       tags:
@@ -314,6 +339,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
+        description: "refreshTableRequest"
         required: false
         schema:
           $ref: "#/definitions/RefreshTableRequest"
@@ -422,3 +448,20 @@ definitions:
         type: "string"
     description: "Model that returns an AccessToken used by Looker Studio to query\
       \ the data warehouse."
+  UserLoginTicketGrantingTicketRequest:
+    type: "object"
+    properties:
+      tid:
+        type: "string"
+        description: "Tenant id."
+      tg:
+        type: "integer"
+        format: "int32"
+        description: "Tenant group."
+      url:
+        type: "string"
+        description: "The base return url that is authorized."
+      cs:
+        type: "string"
+        description: "Client secret - a passcode used to sign and verify the token\
+          \ by the DQO instance, encoded with Base64 encodig."

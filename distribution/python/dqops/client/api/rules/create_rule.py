@@ -16,7 +16,7 @@ def _get_kwargs(
     client: Client,
     json_body: RuleModel,
 ) -> Dict[str, Any]:
-    url = "{}/api/rules/{fullRuleName}".format(
+    url = "{}api/rules/{fullRuleName}".format(
         client.base_url, fullRuleName=full_rule_name
     )
 

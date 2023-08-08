@@ -54,30 +54,39 @@ public class IncidentsNormalizedResults {
      * @param table Tablesaw table with incidents.
      */
     public IncidentsNormalizedResults(Table table) {
+        this(table, true);
+    }
+
+    /**
+     * Creates a normalized results wrapper over a table. As a side result, creates also missing columns.
+     * @param table Tablesaw table with incidents.
+     * @param addColumWhenMissing Adds columns if they are missing.
+     */
+    public IncidentsNormalizedResults(Table table, boolean addColumWhenMissing) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.ID_COLUMN_NAME);
-        this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(table, IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME);
-        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
-        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
-        this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
-        this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
-        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
-        this.highestSeverityColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
-        this.minimumSeverityColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME);
-        this.firstSeenColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
-        this.lastSeenColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
-        this.incidentUntilColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
-        this.failedChecksCountColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
-        this.issueUrlColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
-        this.resolvedByColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.RESOLVED_BY_COLUMN_NAME);
-        this.statusColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.STATUS_COLUMN_NAME);
-        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.CREATED_AT_COLUMN_NAME);
-        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.UPDATED_AT_COLUMN_NAME);
-        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CREATED_BY_COLUMN_NAME);
-        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.UPDATED_BY_COLUMN_NAME);
+        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
+        this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(table, IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, addColumWhenMissing);
+        this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
+        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
+        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.highestSeverityColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME, addColumWhenMissing);
+        this.minimumSeverityColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME, addColumWhenMissing);
+        this.firstSeenColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME, addColumWhenMissing);
+        this.lastSeenColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.LAST_SEEN_COLUMN_NAME, addColumWhenMissing);
+        this.incidentUntilColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME, addColumWhenMissing);
+        this.failedChecksCountColumn = TableColumnUtility.getOrAddIntColumn(table, IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME, addColumWhenMissing);
+        this.issueUrlColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.ISSUE_URL_COLUMN_NAME, addColumWhenMissing);
+        this.resolvedByColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.RESOLVED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.statusColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.STATUS_COLUMN_NAME, addColumWhenMissing);
+        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, IncidentsColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, IncidentsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
     }
 
     /**

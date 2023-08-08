@@ -7,8 +7,9 @@ datasets from [Google Cloud](https://cloud.google.com/datasets).
 
 To use the examples you need:
 
+- [Installed DQO](../getting-started/installation/installation.md).
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](./#using-google-application-credentials-authentication).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).).
 
 After installing Google Cloud CLI, log in to your GCP account, by running:
 
@@ -31,17 +32,8 @@ While it is not necessary to manually add the connection in our examples, you ca
 
 To run the examples, follow the steps below. 
 
-1. If you have not installed DQO, create an empty catalogue.
-
-
-2. Open a terminal, navigate to the created directory and clone the DQO repository from [GitHub](https://github.com/dqops/dqo).
-
-    ```
-    git clone https://github.com/dqops/dqo.git
-    ```
-
-3. To run a specific example, go to the directory where it is located. For instance, you can navigate to 
-    `examples/data-reasonability/percentage-of-false-values-bigquery`.  
+1. Go to the directory where you installed DQO and navigate, for example, to 
+    `examples/data-completeness/number-of-rows-in-the-table-bigquery`.  
     
     Run the command provided below. 
 
@@ -56,13 +48,13 @@ To run the examples, follow the steps below.
         ./run_dqo
         ```
 
-4. Create DQO `userhome` folder.
+2. Create DQO `userhome` folder.
 
     After installation, you will be asked whether to initialize the DQO userhome folder in the default location. Type Y to create the folder.  
     The userhome folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
 
 
-5. Login to DQO Cloud.
+3. Login to DQO Cloud.
 
     To use DQO features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
     must create a DQO cloud account.
@@ -74,21 +66,35 @@ To run the examples, follow the steps below.
     The API Key is now stored in the configuration file.
 
 
-6. To execute the checks that were prepared in the example, run the following command in DQO Shell:
+4. To execute the checks that were prepared in the example, run the following command in DQO Shell:
 
     ```
     check run
     ```
-    You can also execute the checks using the graphical interface.
+   
+    You can also execute the checks using the [graphical interface](../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md).
+    Simply, open the DQO User Interface Console (http://localhost:8888).
+
+    Go to the **Profiling** section. Select the table or column mentioned in the example description from the tree view on the left. 
+
+    Select the **Advanced Profiling** tab.
+    ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
+
+    Run the enabled check using the **Run check** button.
+    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
+
+    Review the results by opening the **Check details** button.
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details.png)
 
 
-7. After executing the checks, synchronize the results with your DQO cloud account by running the following command.
+5. After executing the checks, synchronize the results with your DQO cloud account by running the following command or 
+    using the **Synchronize** button located in the upper right corner of the graphical interface.
 
     ```
     cloud sync all
     ``` 
 
-8. You can now review the results on the data quality dashboards as described in [getting started section](../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
+6. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
 
 ## List of the use cases
 

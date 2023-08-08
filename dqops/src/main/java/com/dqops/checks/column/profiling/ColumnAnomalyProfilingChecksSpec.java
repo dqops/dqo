@@ -17,7 +17,6 @@ package com.dqops.checks.column.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.anomaly.*;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,421 +37,421 @@ import java.util.Objects;
 public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("mean_anomaly_stationary_30_days", o -> o.meanAnomalyStationary30Days);
-            put("mean_anomaly_stationary", o -> o.meanAnomalyStationary);
+            put("profile_mean_anomaly_stationary_30_days", o -> o.profileMeanAnomalyStationary30Days);
+            put("profile_mean_anomaly_stationary", o -> o.profileMeanAnomalyStationary);
 
-            put("median_anomaly_stationary_30_days", o -> o.medianAnomalyStationary30Days);
-            put("median_anomaly_stationary", o -> o.medianAnomalyStationary);
+            put("profile_median_anomaly_stationary_30_days", o -> o.profileMedianAnomalyStationary30Days);
+            put("profile_median_anomaly_stationary", o -> o.profileMedianAnomalyStationary);
 
-            put("sum_anomaly_differencing_30_days", o -> o.sumAnomalyDifferencing30Days);
-            put("sum_anomaly_differencing", o -> o.sumAnomalyDifferencing);
+            put("profile_sum_anomaly_differencing_30_days", o -> o.profileSumAnomalyDifferencing30Days);
+            put("profile_sum_anomaly_differencing", o -> o.profileSumAnomalyDifferencing);
 
-            put("mean_change", o -> o.meanChange);
-            put("mean_change_yesterday", o -> o.meanChangeYesterday);
-            put("mean_change_7_days", o -> o.meanChange7Days);
-            put("mean_change_30_days", o -> o.meanChange30Days);
+            put("profile_mean_change", o -> o.profileMeanChange);
+            put("profile_mean_change_yesterday", o -> o.profileMeanChangeYesterday);
+            put("profile_mean_change_7_days", o -> o.profileMeanChange7Days);
+            put("profile_mean_change_30_days", o -> o.profileMeanChange30Days);
 
-            put("median_change", o -> o.medianChange);
-            put("median_change_yesterday", o -> o.medianChangeYesterday);
-            put("median_change_7_days", o -> o.medianChange7Days);
-            put("median_change_30_days", o -> o.medianChange30Days);
+            put("profile_median_change", o -> o.profileMedianChange);
+            put("profile_median_change_yesterday", o -> o.profileMedianChangeYesterday);
+            put("profile_median_change_7_days", o -> o.profileMedianChange7Days);
+            put("profile_median_change_30_days", o -> o.profileMedianChange30Days);
 
-            put("sum_change", o -> o.sumChange);
-            put("sum_change_yesterday", o -> o.sumChangeYesterday);
-            put("sum_change_7_days", o -> o.sumChange7Days);
-            put("sum_change_30_days", o -> o.sumChange30Days);
+            put("profile_sum_change", o -> o.profileSumChange);
+            put("profile_sum_change_yesterday", o -> o.profileSumChangeYesterday);
+            put("profile_sum_change_7_days", o -> o.profileSumChange7Days);
+            put("profile_sum_change_30_days", o -> o.profileSumChange30Days);
         }
     };
 
-    @JsonProperty("mean_anomaly_stationary_30_days")
+    @JsonProperty("profile_mean_anomaly_stationary_30_days")
     @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnAnomalyStationaryMean30DaysCheckSpec meanAnomalyStationary30Days;
+    private ColumnAnomalyStationaryMean30DaysCheckSpec profileMeanAnomalyStationary30Days;
 
-    @JsonProperty("mean_anomaly_stationary")
+    @JsonProperty("profile_mean_anomaly_stationary")
     @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnAnomalyStationaryMeanCheckSpec meanAnomalyStationary;
+    private ColumnAnomalyStationaryMeanCheckSpec profileMeanAnomalyStationary;
 
-    @JsonProperty("median_anomaly_stationary_30_days")
+    @JsonProperty("profile_median_anomaly_stationary_30_days")
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnAnomalyStationaryMedian30DaysCheckSpec medianAnomalyStationary30Days;
+    private ColumnAnomalyStationaryMedian30DaysCheckSpec profileMedianAnomalyStationary30Days;
 
-    @JsonProperty("median_anomaly_stationary")
+    @JsonProperty("profile_median_anomaly_stationary")
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnAnomalyStationaryMedianCheckSpec medianAnomalyStationary;
+    private ColumnAnomalyStationaryMedianCheckSpec profileMedianAnomalyStationary;
 
-    @JsonProperty("sum_anomaly_differencing_30_days")
+    @JsonProperty("profile_sum_anomaly_differencing_30_days")
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnAnomalyDifferencingSum30DaysCheckSpec sumAnomalyDifferencing30Days;
+    private ColumnAnomalyDifferencingSum30DaysCheckSpec profileSumAnomalyDifferencing30Days;
 
-    @JsonProperty("sum_anomaly_differencing")
+    @JsonProperty("profile_sum_anomaly_differencing")
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnAnomalyDifferencingSumCheckSpec sumAnomalyDifferencing;
+    private ColumnAnomalyDifferencingSumCheckSpec profileSumAnomalyDifferencing;
     
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
-    private ColumnChangeMeanCheckSpec meanChange;
+    private ColumnChangeMeanCheckSpec profileMeanChange;
 
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.")
-    private ColumnChangeMeanSinceYesterdayCheckSpec meanChangeYesterday;
+    private ColumnChangeMeanSinceYesterdayCheckSpec profileMeanChangeYesterday;
 
-    @JsonProperty("mean_change_7_days")
+    @JsonProperty("profile_mean_change_7_days")
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from last week.")
-    private ColumnChangeMeanSince7DaysCheckSpec meanChange7Days;
+    private ColumnChangeMeanSince7DaysCheckSpec profileMeanChange7Days;
 
-    @JsonProperty("mean_change_30_days")
+    @JsonProperty("profile_mean_change_30_days")
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from last month.")
-    private ColumnChangeMeanSince30DaysCheckSpec meanChange30Days;
+    private ColumnChangeMeanSince30DaysCheckSpec profileMeanChange30Days;
 
     @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout.")
-    private ColumnChangeMedianCheckSpec medianChange;
+    private ColumnChangeMedianCheckSpec profileMedianChange;
 
     @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from yesterday.")
-    private ColumnChangeMedianSinceYesterdayCheckSpec medianChangeYesterday;
+    private ColumnChangeMedianSinceYesterdayCheckSpec profileMedianChangeYesterday;
 
-    @JsonProperty("median_change_7_days")
+    @JsonProperty("profile_median_change_7_days")
     @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from last week.")
-    private ColumnChangeMedianSince7DaysCheckSpec medianChange7Days;
+    private ColumnChangeMedianSince7DaysCheckSpec profileMedianChange7Days;
 
-    @JsonProperty("median_change_30_days")
+    @JsonProperty("profile_median_change_30_days")
     @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from last month.")
-    private ColumnChangeMedianSince30DaysCheckSpec medianChange30Days;
+    private ColumnChangeMedianSince30DaysCheckSpec profileMedianChange30Days;
 
     @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout.")
-    private ColumnChangeSumCheckSpec sumChange;
+    private ColumnChangeSumCheckSpec profileSumChange;
 
     @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.")
-    private ColumnChangeSumSinceYesterdayCheckSpec sumChangeYesterday;
+    private ColumnChangeSumSinceYesterdayCheckSpec profileSumChangeYesterday;
 
-    @JsonProperty("sum_change_7_days")
+    @JsonProperty("profile_sum_change_7_days")
     @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from last week.")
-    private ColumnChangeSumSince7DaysCheckSpec sumChange7Days;
+    private ColumnChangeSumSince7DaysCheckSpec profileSumChange7Days;
 
-    @JsonProperty("sum_change_30_days")
+    @JsonProperty("profile_sum_change_30_days")
     @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from last month.")
-    private ColumnChangeSumSince30DaysCheckSpec sumChange30Days;
+    private ColumnChangeSumSince30DaysCheckSpec profileSumChange30Days;
 
 
     /**
      * Returns a mean value anomaly 30 days check specification.
      * @return Mean value anomaly 30 days check specification.
      */
-    public ColumnAnomalyStationaryMean30DaysCheckSpec getMeanAnomalyStationary30Days() {
-        return meanAnomalyStationary30Days;
+    public ColumnAnomalyStationaryMean30DaysCheckSpec getProfileMeanAnomalyStationary30Days() {
+        return profileMeanAnomalyStationary30Days;
     }
 
     /**
      * Sets a new specification of a mean value anomaly 30 days check.
-     * @param meanAnomalyStationary30Days Mean value anomaly 30 days check specification.
+     * @param profileMeanAnomalyStationary30Days Mean value anomaly 30 days check specification.
      */
-    public void setMeanAnomalyStationary30Days(ColumnAnomalyStationaryMean30DaysCheckSpec meanAnomalyStationary30Days) {
-        this.setDirtyIf(!Objects.equals(this.meanAnomalyStationary30Days, meanAnomalyStationary30Days));
-        this.meanAnomalyStationary30Days = meanAnomalyStationary30Days;
-        propagateHierarchyIdToField(meanAnomalyStationary30Days, "mean_anomaly_stationary_30_days");
+    public void setProfileMeanAnomalyStationary30Days(ColumnAnomalyStationaryMean30DaysCheckSpec profileMeanAnomalyStationary30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanAnomalyStationary30Days, profileMeanAnomalyStationary30Days));
+        this.profileMeanAnomalyStationary30Days = profileMeanAnomalyStationary30Days;
+        propagateHierarchyIdToField(profileMeanAnomalyStationary30Days, "profile_mean_anomaly_stationary_30_days");
     }
 
     /**
-     * Returns a mean value anomaly 60 days check specification.
-     * @return Mean value anomaly 60 days check specification.
+     * Returns a mean value anomaly 90 days check specification.
+     * @return Mean value anomaly 90 days check specification.
      */
-    public ColumnAnomalyStationaryMeanCheckSpec getMeanAnomalyStationary() {
-        return meanAnomalyStationary;
+    public ColumnAnomalyStationaryMeanCheckSpec getProfileMeanAnomalyStationary() {
+        return profileMeanAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a mean value anomaly 60 days check.
-     * @param meanAnomalyStationary Mean value anomaly 60 days check specification.
+     * Sets a new specification of a mean value anomaly 90 days check.
+     * @param profileMeanAnomalyStationary Mean value anomaly 90 days check specification.
      */
-    public void setMeanAnomalyStationary(ColumnAnomalyStationaryMeanCheckSpec meanAnomalyStationary) {
-        this.setDirtyIf(!Objects.equals(this.meanAnomalyStationary, meanAnomalyStationary));
-        this.meanAnomalyStationary = meanAnomalyStationary;
-        propagateHierarchyIdToField(meanAnomalyStationary, "mean_anomaly_stationary");
+    public void setProfileMeanAnomalyStationary(ColumnAnomalyStationaryMeanCheckSpec profileMeanAnomalyStationary) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanAnomalyStationary, profileMeanAnomalyStationary));
+        this.profileMeanAnomalyStationary = profileMeanAnomalyStationary;
+        propagateHierarchyIdToField(profileMeanAnomalyStationary, "profile_mean_anomaly_stationary");
     }
 
     /**
      * Returns a median anomaly 30 days check specification.
      * @return Median anomaly 30 days check specification.
      */
-    public ColumnAnomalyStationaryMedian30DaysCheckSpec getMedianAnomalyStationary30Days() {
-        return medianAnomalyStationary30Days;
+    public ColumnAnomalyStationaryMedian30DaysCheckSpec getProfileMedianAnomalyStationary30Days() {
+        return profileMedianAnomalyStationary30Days;
     }
 
     /**
      * Sets a new specification of a median anomaly 30 days check.
-     * @param medianAnomalyStationary30Days Median anomaly 30 days check specification.
+     * @param profileMedianAnomalyStationary30Days Median anomaly 30 days check specification.
      */
-    public void setMedianAnomalyStationary30Days(ColumnAnomalyStationaryMedian30DaysCheckSpec medianAnomalyStationary30Days) {
-        this.setDirtyIf(!Objects.equals(this.medianAnomalyStationary30Days, medianAnomalyStationary30Days));
-        this.medianAnomalyStationary30Days = medianAnomalyStationary30Days;
-        propagateHierarchyIdToField(medianAnomalyStationary30Days, "median_anomaly_stationary_30_days");
+    public void setProfileMedianAnomalyStationary30Days(ColumnAnomalyStationaryMedian30DaysCheckSpec profileMedianAnomalyStationary30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileMedianAnomalyStationary30Days, profileMedianAnomalyStationary30Days));
+        this.profileMedianAnomalyStationary30Days = profileMedianAnomalyStationary30Days;
+        propagateHierarchyIdToField(profileMedianAnomalyStationary30Days, "profile_median_anomaly_stationary_30_days");
     }
 
     /**
-     * Returns a median anomaly 60 days check specification.
-     * @return Median anomaly 60 days check specification.
+     * Returns a median anomaly 90 days check specification.
+     * @return Median anomaly 90 days check specification.
      */
-    public ColumnAnomalyStationaryMedianCheckSpec getMedianAnomalyStationary() {
-        return medianAnomalyStationary;
+    public ColumnAnomalyStationaryMedianCheckSpec getProfileMedianAnomalyStationary() {
+        return profileMedianAnomalyStationary;
     }
 
     /**
-     * Sets a new specification of a median anomaly 60 days check.
-     * @param medianAnomalyStationary Median anomaly 60 days check specification.
+     * Sets a new specification of a median anomaly 90 days check.
+     * @param profileMedianAnomalyStationary Median anomaly 90 days check specification.
      */
-    public void setMedianAnomalyStationary(ColumnAnomalyStationaryMedianCheckSpec medianAnomalyStationary) {
-        this.setDirtyIf(!Objects.equals(this.medianAnomalyStationary, medianAnomalyStationary));
-        this.medianAnomalyStationary = medianAnomalyStationary;
-        propagateHierarchyIdToField(medianAnomalyStationary, "median_anomaly_stationary");
+    public void setProfileMedianAnomalyStationary(ColumnAnomalyStationaryMedianCheckSpec profileMedianAnomalyStationary) {
+        this.setDirtyIf(!Objects.equals(this.profileMedianAnomalyStationary, profileMedianAnomalyStationary));
+        this.profileMedianAnomalyStationary = profileMedianAnomalyStationary;
+        propagateHierarchyIdToField(profileMedianAnomalyStationary, "profile_median_anomaly_stationary");
     }
 
     /**
      * Returns a sum anomaly 30 days check specification.
      * @return Sum anomaly 30 days check specification.
      */
-    public ColumnAnomalyDifferencingSum30DaysCheckSpec getSumAnomalyDifferencing30Days() {
-        return sumAnomalyDifferencing30Days;
+    public ColumnAnomalyDifferencingSum30DaysCheckSpec getProfileSumAnomalyDifferencing30Days() {
+        return profileSumAnomalyDifferencing30Days;
     }
 
     /**
      * Sets a new specification of a sum anomaly 30 days check.
-     * @param sumAnomalyDifferencing30Days Sum anomaly 30 days check specification.
+     * @param profileSumAnomalyDifferencing30Days Sum anomaly 30 days check specification.
      */
-    public void setSumAnomalyDifferencing30Days(ColumnAnomalyDifferencingSum30DaysCheckSpec sumAnomalyDifferencing30Days) {
-        this.setDirtyIf(!Objects.equals(this.sumAnomalyDifferencing30Days, sumAnomalyDifferencing30Days));
-        this.sumAnomalyDifferencing30Days = sumAnomalyDifferencing30Days;
-        propagateHierarchyIdToField(sumAnomalyDifferencing30Days, "sum_anomaly_differencing_30_days");
+    public void setProfileSumAnomalyDifferencing30Days(ColumnAnomalyDifferencingSum30DaysCheckSpec profileSumAnomalyDifferencing30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileSumAnomalyDifferencing30Days, profileSumAnomalyDifferencing30Days));
+        this.profileSumAnomalyDifferencing30Days = profileSumAnomalyDifferencing30Days;
+        propagateHierarchyIdToField(profileSumAnomalyDifferencing30Days, "profile_sum_anomaly_differencing_30_days");
     }
 
     /**
-     * Returns a sum anomaly 60 days check specification.
-     * @return Sum anomaly 60 days check specification.
+     * Returns a sum anomaly 90 days check specification.
+     * @return Sum anomaly 90 days check specification.
      */
-    public ColumnAnomalyDifferencingSumCheckSpec getSumAnomalyDifferencing() {
-        return sumAnomalyDifferencing;
+    public ColumnAnomalyDifferencingSumCheckSpec getProfileSumAnomalyDifferencing() {
+        return profileSumAnomalyDifferencing;
     }
     
     /**
-     * Sets a new specification of a sum anomaly 60 days check.
-     * @param sumAnomalyDifferencing Sum anomaly 60 days check specification.
+     * Sets a new specification of a sum anomaly 90 days check.
+     * @param profileSumAnomalyDifferencing Sum anomaly 90 days check specification.
      */
-    public void setSumAnomalyDifferencing(ColumnAnomalyDifferencingSumCheckSpec sumAnomalyDifferencing) {
-        this.setDirtyIf(!Objects.equals(this.sumAnomalyDifferencing, sumAnomalyDifferencing));
-        this.sumAnomalyDifferencing = sumAnomalyDifferencing;
-        propagateHierarchyIdToField(sumAnomalyDifferencing, "sum_anomaly_differencing");
+    public void setProfileSumAnomalyDifferencing(ColumnAnomalyDifferencingSumCheckSpec profileSumAnomalyDifferencing) {
+        this.setDirtyIf(!Objects.equals(this.profileSumAnomalyDifferencing, profileSumAnomalyDifferencing));
+        this.profileSumAnomalyDifferencing = profileSumAnomalyDifferencing;
+        propagateHierarchyIdToField(profileSumAnomalyDifferencing, "profile_sum_anomaly_differencing");
     }
 
     /**
      * Returns the mean value change check.
      * @return Mean value change check.
      */
-    public ColumnChangeMeanCheckSpec getMeanChange() {
-        return meanChange;
+    public ColumnChangeMeanCheckSpec getProfileMeanChange() {
+        return profileMeanChange;
     }
 
     /**
      * Sets a new mean value change check.
-     * @param meanChange Mean value change check.
+     * @param profileMeanChange Mean value change check.
      */
-    public void setMeanChange(ColumnChangeMeanCheckSpec meanChange) {
-        this.setDirtyIf(!Objects.equals(this.meanChange, meanChange));
-        this.meanChange = meanChange;
-        propagateHierarchyIdToField(meanChange, "mean_change");
+    public void setProfileMeanChange(ColumnChangeMeanCheckSpec profileMeanChange) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanChange, profileMeanChange));
+        this.profileMeanChange = profileMeanChange;
+        propagateHierarchyIdToField(profileMeanChange, "profile_mean_change");
     }
 
     /**
      * Returns the mean value change yesterday check.
      * @return Mean value change yesterday check.
      */
-    public ColumnChangeMeanSinceYesterdayCheckSpec getMeanChangeYesterday() {
-        return meanChangeYesterday;
+    public ColumnChangeMeanSinceYesterdayCheckSpec getProfileMeanChangeYesterday() {
+        return profileMeanChangeYesterday;
     }
 
     /**
      * Sets a new mean value change yesterday check.
-     * @param meanChangeYesterday Mean value change yesterday check.
+     * @param profileMeanChangeYesterday Mean value change yesterday check.
      */
-    public void setMeanChangeYesterday(ColumnChangeMeanSinceYesterdayCheckSpec meanChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.meanChangeYesterday, meanChangeYesterday));
-        this.meanChangeYesterday = meanChangeYesterday;
-        propagateHierarchyIdToField(meanChangeYesterday, "mean_change_yesterday");
+    public void setProfileMeanChangeYesterday(ColumnChangeMeanSinceYesterdayCheckSpec profileMeanChangeYesterday) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanChangeYesterday, profileMeanChangeYesterday));
+        this.profileMeanChangeYesterday = profileMeanChangeYesterday;
+        propagateHierarchyIdToField(profileMeanChangeYesterday, "profile_mean_change_yesterday");
     }
 
     /**
      * Returns the mean value change 7 days check.
      * @return Mean value change 7 days check.
      */
-    public ColumnChangeMeanSince7DaysCheckSpec getMeanChange7Days() {
-        return meanChange7Days;
+    public ColumnChangeMeanSince7DaysCheckSpec getProfileMeanChange7Days() {
+        return profileMeanChange7Days;
     }
 
     /**
      * Sets a new mean value change 7 days check.
-     * @param meanChange7Days Mean value change 7 days check.
+     * @param profileMeanChange7Days Mean value change 7 days check.
      */
-    public void setMeanChange7Days(ColumnChangeMeanSince7DaysCheckSpec meanChange7Days) {
-        this.setDirtyIf(!Objects.equals(this.meanChange7Days, meanChange7Days));
-        this.meanChange7Days = meanChange7Days;
-        propagateHierarchyIdToField(meanChange7Days, "mean_change_7_days");
+    public void setProfileMeanChange7Days(ColumnChangeMeanSince7DaysCheckSpec profileMeanChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanChange7Days, profileMeanChange7Days));
+        this.profileMeanChange7Days = profileMeanChange7Days;
+        propagateHierarchyIdToField(profileMeanChange7Days, "profile_mean_change_7_days");
     }
 
     /**
      * Returns the mean value change 30 days check.
      * @return Mean value change 30 days check.
      */
-    public ColumnChangeMeanSince30DaysCheckSpec getMeanChange30Days() {
-        return meanChange30Days;
+    public ColumnChangeMeanSince30DaysCheckSpec getProfileMeanChange30Days() {
+        return profileMeanChange30Days;
     }
 
     /**
      * Sets a new mean value change 30 days check.
-     * @param meanChange30Days Mean value change 30 days check.
+     * @param profileMeanChange30Days Mean value change 30 days check.
      */
-    public void setMeanChange30Days(ColumnChangeMeanSince30DaysCheckSpec meanChange30Days) {
-        this.setDirtyIf(!Objects.equals(this.meanChange30Days, meanChange30Days));
-        this.meanChange30Days = meanChange30Days;
-        propagateHierarchyIdToField(meanChange30Days, "mean_change_30_days");
+    public void setProfileMeanChange30Days(ColumnChangeMeanSince30DaysCheckSpec profileMeanChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanChange30Days, profileMeanChange30Days));
+        this.profileMeanChange30Days = profileMeanChange30Days;
+        propagateHierarchyIdToField(profileMeanChange30Days, "profile_mean_change_30_days");
     }
 
     /**
      * Returns the median change check.
      * @return Median change check.
      */
-    public ColumnChangeMedianCheckSpec getMedianChange() {
-        return medianChange;
+    public ColumnChangeMedianCheckSpec getProfileMedianChange() {
+        return profileMedianChange;
     }
 
     /**
      * Sets a new median change check.
-     * @param medianChange Median change check.
+     * @param profileMedianChange Median change check.
      */
-    public void setMedianChange(ColumnChangeMedianCheckSpec medianChange) {
-        this.setDirtyIf(!Objects.equals(this.medianChange, medianChange));
-        this.medianChange = medianChange;
-        propagateHierarchyIdToField(medianChange, "median_change");
+    public void setProfileMedianChange(ColumnChangeMedianCheckSpec profileMedianChange) {
+        this.setDirtyIf(!Objects.equals(this.profileMedianChange, profileMedianChange));
+        this.profileMedianChange = profileMedianChange;
+        propagateHierarchyIdToField(profileMedianChange, "profile_median_change");
     }
 
     /**
      * Returns the median change yesterday check.
      * @return Median change yesterday check.
      */
-    public ColumnChangeMedianSinceYesterdayCheckSpec getMedianChangeYesterday() {
-        return medianChangeYesterday;
+    public ColumnChangeMedianSinceYesterdayCheckSpec getProfileMedianChangeYesterday() {
+        return profileMedianChangeYesterday;
     }
 
     /**
      * Sets a new median change yesterday check.
-     * @param medianChangeYesterday Median change yesterday check.
+     * @param profileMedianChangeYesterday Median change yesterday check.
      */
-    public void setMedianChangeYesterday(ColumnChangeMedianSinceYesterdayCheckSpec medianChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.medianChangeYesterday, medianChangeYesterday));
-        this.medianChangeYesterday = medianChangeYesterday;
-        propagateHierarchyIdToField(medianChangeYesterday, "median_change_yesterday");
+    public void setProfileMedianChangeYesterday(ColumnChangeMedianSinceYesterdayCheckSpec profileMedianChangeYesterday) {
+        this.setDirtyIf(!Objects.equals(this.profileMedianChangeYesterday, profileMedianChangeYesterday));
+        this.profileMedianChangeYesterday = profileMedianChangeYesterday;
+        propagateHierarchyIdToField(profileMedianChangeYesterday, "profile_median_change_yesterday");
     }
 
     /**
      * Returns the median change 7 days check.
      * @return Median change 7 days check.
      */
-    public ColumnChangeMedianSince7DaysCheckSpec getMedianChange7Days() {
-        return medianChange7Days;
+    public ColumnChangeMedianSince7DaysCheckSpec getProfileMedianChange7Days() {
+        return profileMedianChange7Days;
     }
 
     /**
      * Sets a new median change 7 days check.
-     * @param medianChange7Days Median change 7 days check.
+     * @param profileMedianChange7Days Median change 7 days check.
      */
-    public void setMedianChange7Days(ColumnChangeMedianSince7DaysCheckSpec medianChange7Days) {
-        this.setDirtyIf(!Objects.equals(this.medianChange7Days, medianChange7Days));
-        this.medianChange7Days = medianChange7Days;
-        propagateHierarchyIdToField(medianChange7Days, "median_change_7_days");
+    public void setProfileMedianChange7Days(ColumnChangeMedianSince7DaysCheckSpec profileMedianChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.profileMedianChange7Days, profileMedianChange7Days));
+        this.profileMedianChange7Days = profileMedianChange7Days;
+        propagateHierarchyIdToField(profileMedianChange7Days, "profile_median_change_7_days");
     }
 
     /**
      * Returns the median change 30 days check.
      * @return Median change 30 days check.
      */
-    public ColumnChangeMedianSince30DaysCheckSpec getMedianChange30Days() {
-        return medianChange30Days;
+    public ColumnChangeMedianSince30DaysCheckSpec getProfileMedianChange30Days() {
+        return profileMedianChange30Days;
     }
 
     /**
      * Sets a new median change 30 days check.
-     * @param medianChange30Days Median change 30 days check.
+     * @param profileMedianChange30Days Median change 30 days check.
      */
-    public void setMedianChange30Days(ColumnChangeMedianSince30DaysCheckSpec medianChange30Days) {
-        this.setDirtyIf(!Objects.equals(this.medianChange30Days, medianChange30Days));
-        this.medianChange30Days = medianChange30Days;
-        propagateHierarchyIdToField(medianChange30Days, "median_change_30_days");
+    public void setProfileMedianChange30Days(ColumnChangeMedianSince30DaysCheckSpec profileMedianChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileMedianChange30Days, profileMedianChange30Days));
+        this.profileMedianChange30Days = profileMedianChange30Days;
+        propagateHierarchyIdToField(profileMedianChange30Days, "profile_median_change_30_days");
     }
 
     /**
      * Returns the sum change check.
      * @return Sum change check.
      */
-    public ColumnChangeSumCheckSpec getSumChange() {
-        return sumChange;
+    public ColumnChangeSumCheckSpec getProfileSumChange() {
+        return profileSumChange;
     }
 
     /**
      * Sets a new sum change check.
-     * @param sumChange Sum change check.
+     * @param profileSumChange Sum change check.
      */
-    public void setSumChange(ColumnChangeSumCheckSpec sumChange) {
-        this.setDirtyIf(!Objects.equals(this.sumChange, sumChange));
-        this.sumChange = sumChange;
-        propagateHierarchyIdToField(sumChange, "sum_change");
+    public void setProfileSumChange(ColumnChangeSumCheckSpec profileSumChange) {
+        this.setDirtyIf(!Objects.equals(this.profileSumChange, profileSumChange));
+        this.profileSumChange = profileSumChange;
+        propagateHierarchyIdToField(profileSumChange, "profile_sum_change");
     }
 
     /**
      * Returns the sum change yesterday check.
      * @return Sum change yesterday check.
      */
-    public ColumnChangeSumSinceYesterdayCheckSpec getSumChangeYesterday() {
-        return sumChangeYesterday;
+    public ColumnChangeSumSinceYesterdayCheckSpec getProfileSumChangeYesterday() {
+        return profileSumChangeYesterday;
     }
 
     /**
      * Sets a new sum change yesterday check.
-     * @param sumChangeYesterday Sum change yesterday check.
+     * @param profileSumChangeYesterday Sum change yesterday check.
      */
-    public void setSumChangeYesterday(ColumnChangeSumSinceYesterdayCheckSpec sumChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.sumChangeYesterday, sumChangeYesterday));
-        this.sumChangeYesterday = sumChangeYesterday;
-        propagateHierarchyIdToField(sumChangeYesterday, "sum_change_yesterday");
+    public void setProfileSumChangeYesterday(ColumnChangeSumSinceYesterdayCheckSpec profileSumChangeYesterday) {
+        this.setDirtyIf(!Objects.equals(this.profileSumChangeYesterday, profileSumChangeYesterday));
+        this.profileSumChangeYesterday = profileSumChangeYesterday;
+        propagateHierarchyIdToField(profileSumChangeYesterday, "profile_sum_change_yesterday");
     }
 
     /**
      * Returns the sum change 7 days check.
      * @return Sum change 7 days check.
      */
-    public ColumnChangeSumSince7DaysCheckSpec getSumChange7Days() {
-        return sumChange7Days;
+    public ColumnChangeSumSince7DaysCheckSpec getProfileSumChange7Days() {
+        return profileSumChange7Days;
     }
 
     /**
      * Sets a new sum change 7 days check.
-     * @param sumChange7Days Sum change 7 days check.
+     * @param profileSumChange7Days Sum change 7 days check.
      */
-    public void setSumChange7Days(ColumnChangeSumSince7DaysCheckSpec sumChange7Days) {
-        this.setDirtyIf(!Objects.equals(this.sumChange7Days, sumChange7Days));
-        this.sumChange7Days = sumChange7Days;
-        propagateHierarchyIdToField(sumChange7Days, "sum_change_7_days");
+    public void setProfileSumChange7Days(ColumnChangeSumSince7DaysCheckSpec profileSumChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.profileSumChange7Days, profileSumChange7Days));
+        this.profileSumChange7Days = profileSumChange7Days;
+        propagateHierarchyIdToField(profileSumChange7Days, "profile_sum_change_7_days");
     }
 
     /**
      * Returns the sum change 30 days check.
      * @return Sum change 30 days check.
      */
-    public ColumnChangeSumSince30DaysCheckSpec getSumChange30Days() {
-        return sumChange30Days;
+    public ColumnChangeSumSince30DaysCheckSpec getProfileSumChange30Days() {
+        return profileSumChange30Days;
     }
 
     /**
      * Sets a new sum change 30 days check.
-     * @param sumChange30Days Sum change 30 days check.
+     * @param profileSumChange30Days Sum change 30 days check.
      */
-    public void setSumChange30Days(ColumnChangeSumSince30DaysCheckSpec sumChange30Days) {
-        this.setDirtyIf(!Objects.equals(this.sumChange30Days, sumChange30Days));
-        this.sumChange30Days = sumChange30Days;
-        propagateHierarchyIdToField(sumChange30Days, "sum_change_30_days");
+    public void setProfileSumChange30Days(ColumnChangeSumSince30DaysCheckSpec profileSumChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileSumChange30Days, profileSumChange30Days));
+        this.profileSumChange30Days = profileSumChange30Days;
+        propagateHierarchyIdToField(profileSumChange30Days, "profile_sum_change_30_days");
     }
 
     /**

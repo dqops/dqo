@@ -15,11 +15,7 @@
  */
 package com.dqops.checks.table.profiling;
 
-import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.CheckTarget;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
+import com.dqops.checks.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -44,8 +40,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec
-        implements TimeSeriesConfigurationProvider {
+public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);
@@ -57,6 +52,11 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
             put("comparisons", o -> o.comparisons);
         }
     };
+
+    @JsonPropertyDescription("Defines how many advanced profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent " +
+         "advanced profiling result executed during the month. By changing this value, it is possible to store one value per day or even store all advanced profiling results.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ProfilingTimePeriod resultTruncation;
 
     @JsonPropertyDescription("Configuration of volume data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -92,6 +92,23 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableComparisonProfilingChecksSpecMap comparisons = new TableComparisonProfilingChecksSpecMap();
+
+    /**
+     * Returns the result truncation configuration.
+     * @return Result truncation policy.
+     */
+    public ProfilingTimePeriod getResultTruncation() {
+        return resultTruncation;
+    }
+
+    /**
+     * Sets the result truncation configuration.
+     * @param resultTruncation New result truncation configuration.
+     */
+    public void setResultTruncation(ProfilingTimePeriod resultTruncation) {
+        this.setDirtyIf(!Objects.equals(this.resultTruncation, resultTruncation));
+        this.resultTruncation = resultTruncation;
+    }
 
     /**
      * Returns a container of volume check configuration on a table level.
@@ -238,10 +255,12 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      */
     @Override
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
+        ProfilingTimePeriod profilingTimePeriod = this.resultTruncation != null ? this.resultTruncation : ProfilingTimePeriod.one_per_month;
+
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimePeriodGradient.millisecond);
+            setTimeGradient(profilingTimePeriod.toTimePeriodGradient());
         }};
     }
 
@@ -253,7 +272,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.PROFILING;
+        return CheckType.profiling;
     }
 
     /**

@@ -57,7 +57,7 @@ public class CheckResultsOverviewParameters {
     public static CheckResultsOverviewParameters createForRecentMonths(long months, int resultsCount) {
         CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
         checkResultsOverviewParameters.setResultsCount(resultsCount);
-        checkResultsOverviewParameters.setEndMonth(checkResultsOverviewParameters.getStartMonth().minusMonths(months - 1));
+        checkResultsOverviewParameters.setStartMonth(checkResultsOverviewParameters.getEndMonth().minusMonths(months - 1));
         return checkResultsOverviewParameters;
     }
 }

@@ -17,7 +17,6 @@ package com.dqops.checks.column.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.pii.*;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,228 +36,228 @@ import java.util.Objects;
 public class ColumnPiiProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("valid_usa_phone_percent", o -> o.validUsaPhonePercent);
-            put("contains_usa_phone_percent", o -> o.containsUsaPhonePercent);
-            put("valid_usa_zipcode_percent", o -> o.validUsaZipcodePercent);
-            put("contains_usa_zipcode_percent", o -> o.containsUsaZipcodePercent);
-            put("valid_email_percent", o -> o.validEmailPercent);
-            put("contains_email_percent", o -> o.containsEmailPercent);
-            put("valid_ip4_address_percent", o -> o.validIp4AddressPercent);
-            put("contains_ip4_percent", o -> o.containsIp4Percent);
-            put("valid_ip6_address_percent", o -> o.validIp6AddressPercent);
-            put("contains_ip6_percent", o -> o.containsIp6Percent);
+            put("profile_valid_usa_phone_percent", o -> o.profileValidUsaPhonePercent);
+            put("profile_contains_usa_phone_percent", o -> o.profileContainsUsaPhonePercent);
+            put("profile_valid_usa_zipcode_percent", o -> o.profileValidUsaZipcodePercent);
+            put("profile_contains_usa_zipcode_percent", o -> o.profileContainsUsaZipcodePercent);
+            put("profile_valid_email_percent", o -> o.profileValidEmailPercent);
+            put("profile_contains_email_percent", o -> o.profileContainsEmailPercent);
+            put("profile_valid_ip4_address_percent", o -> o.profileValidIp4AddressPercent);
+            put("profile_contains_ip4_percent", o -> o.profileContainsIp4Percent);
+            put("profile_valid_ip6_address_percent", o -> o.profileValidIp6AddressPercent);
+            put("profile_contains_ip6_percent", o -> o.profileContainsIp6Percent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage.")
-    private ColumnPiiValidUsaPhonePercentCheckSpec validUsaPhonePercent;
+    private ColumnPiiValidUsaPhonePercentCheckSpec profileValidUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.")
-    private ColumnPiiContainsUsaPhonePercentCheckSpec containsUsaPhonePercent;
+    private ColumnPiiContainsUsaPhonePercentCheckSpec profileContainsUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage.")
-    private ColumnPiiValidUsaZipcodePercentCheckSpec validUsaZipcodePercent;
+    private ColumnPiiValidUsaZipcodePercentCheckSpec profileValidUsaZipcodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.")
-    private ColumnPiiContainsUsaZipcodePercentCheckSpec containsUsaZipcodePercent;
+    private ColumnPiiContainsUsaZipcodePercentCheckSpec profileContainsUsaZipcodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage.")
-    private ColumnPiiValidEmailPercentCheckSpec validEmailPercent;
+    private ColumnPiiValidEmailPercentCheckSpec profileValidEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.")
-    private ColumnPiiContainsEmailPercentCheckSpec containsEmailPercent;
+    private ColumnPiiContainsEmailPercentCheckSpec profileContainsEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage.")
-    private ColumnPiiValidIp4AddressPercentCheckSpec validIp4AddressPercent;
+    private ColumnPiiValidIp4AddressPercentCheckSpec profileValidIp4AddressPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.")
-    private ColumnPiiContainsIp4PercentCheckSpec containsIp4Percent;
+    private ColumnPiiContainsIp4PercentCheckSpec profileContainsIp4Percent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage.")
-    private ColumnPiiValidIp6AddressPercentCheckSpec validIp6AddressPercent;
+    private ColumnPiiValidIp6AddressPercentCheckSpec profileValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.")
-    private ColumnPiiContainsIp6PercentCheckSpec containsIp6Percent;
+    private ColumnPiiContainsIp6PercentCheckSpec profileContainsIp6Percent;
 
 
     /**
      * Returns a minimum valid currency code percent check.
      * @return Minimum valid currency code percent check.
      */
-    public ColumnPiiValidUsaPhonePercentCheckSpec getValidUsaPhonePercent() {
-        return validUsaPhonePercent;
+    public ColumnPiiValidUsaPhonePercentCheckSpec getProfileValidUsaPhonePercent() {
+        return profileValidUsaPhonePercent;
     }
 
     /**
      * Sets a new definition of a valid USA phone percent check.
-     * @param validUsaPhonePercent valid USA phone percent check.
+     * @param profileValidUsaPhonePercent valid USA phone percent check.
      */
-    public void setValidUsaPhonePercent(ColumnPiiValidUsaPhonePercentCheckSpec validUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.validUsaPhonePercent, validUsaPhonePercent));
-        this.validUsaPhonePercent = validUsaPhonePercent;
-        propagateHierarchyIdToField(validUsaPhonePercent, "valid_usa_phone_percent");
+    public void setProfileValidUsaPhonePercent(ColumnPiiValidUsaPhonePercentCheckSpec profileValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidUsaPhonePercent, profileValidUsaPhonePercent));
+        this.profileValidUsaPhonePercent = profileValidUsaPhonePercent;
+        propagateHierarchyIdToField(profileValidUsaPhonePercent, "profile_valid_usa_phone_percent");
     }
 
     /**
      * Returns contains USA phone number percent check specification.
      * @return Contains USA phone number percent check specification.
      */
-    public ColumnPiiContainsUsaPhonePercentCheckSpec getContainsUsaPhonePercent() {
-        return containsUsaPhonePercent;
+    public ColumnPiiContainsUsaPhonePercentCheckSpec getProfileContainsUsaPhonePercent() {
+        return profileContainsUsaPhonePercent;
     }
 
     /**
      * Sets a new contains USA phone number percent check specification.
-     * @param containsUsaPhonePercent Contains USA phone number percent check specification.
+     * @param profileContainsUsaPhonePercent Contains USA phone number percent check specification.
      */
-    public void setContainsUsaPhonePercent(ColumnPiiContainsUsaPhonePercentCheckSpec containsUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.containsUsaPhonePercent, containsUsaPhonePercent));
-        this.containsUsaPhonePercent = containsUsaPhonePercent;
-        propagateHierarchyIdToField(containsUsaPhonePercent, "contains_usa_phone_percent");
+    public void setProfileContainsUsaPhonePercent(ColumnPiiContainsUsaPhonePercentCheckSpec profileContainsUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileContainsUsaPhonePercent, profileContainsUsaPhonePercent));
+        this.profileContainsUsaPhonePercent = profileContainsUsaPhonePercent;
+        propagateHierarchyIdToField(profileContainsUsaPhonePercent, "profile_contains_usa_phone_percent");
     }
 
     /**
      * Returns a minimum valid usa zip code percent check.
      * @return Minimum Valid usa zip code percent check.
      */
-    public ColumnPiiValidUsaZipcodePercentCheckSpec getValidUsaZipcodePercent() {
-        return validUsaZipcodePercent;
+    public ColumnPiiValidUsaZipcodePercentCheckSpec getProfileValidUsaZipcodePercent() {
+        return profileValidUsaZipcodePercent;
     }
 
     /**
      * Sets a new definition of a valid usa zip code percent check.
-     * @param validUsaZipcodePercent valid usa zip code percent check.
+     * @param profileValidUsaZipcodePercent valid usa zip code percent check.
      */
-    public void setValidUsaZipcodePercent(ColumnPiiValidUsaZipcodePercentCheckSpec validUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.validUsaZipcodePercent, validUsaZipcodePercent));
-        this.validUsaZipcodePercent = validUsaZipcodePercent;
-        propagateHierarchyIdToField(validUsaZipcodePercent, "valid_usa_zipcode_percent");
+    public void setProfileValidUsaZipcodePercent(ColumnPiiValidUsaZipcodePercentCheckSpec profileValidUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidUsaZipcodePercent, profileValidUsaZipcodePercent));
+        this.profileValidUsaZipcodePercent = profileValidUsaZipcodePercent;
+        propagateHierarchyIdToField(profileValidUsaZipcodePercent, "profile_valid_usa_zipcode_percent");
     }
 
     /**
      * Returns contains USA zip code percent check specification.
      * @return Contains USA zip code percent check specification.
      */
-    public ColumnPiiContainsUsaZipcodePercentCheckSpec getContainsUsaZipcodePercent() {
-        return containsUsaZipcodePercent;
+    public ColumnPiiContainsUsaZipcodePercentCheckSpec getProfileContainsUsaZipcodePercent() {
+        return profileContainsUsaZipcodePercent;
     }
 
     /**
      * Sets contains USA zip code percent check specification.
-     * @param containsUsaZipcodePercent Contains USA zip code percent check specification.
+     * @param profileContainsUsaZipcodePercent Contains USA zip code percent check specification.
      */
-    public void setContainsUsaZipcodePercent(ColumnPiiContainsUsaZipcodePercentCheckSpec containsUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.containsUsaZipcodePercent, containsUsaZipcodePercent));
-        this.containsUsaZipcodePercent = containsUsaZipcodePercent;
-        propagateHierarchyIdToField(containsUsaZipcodePercent, "contains_usa_zipcode_percent");
+    public void setProfileContainsUsaZipcodePercent(ColumnPiiContainsUsaZipcodePercentCheckSpec profileContainsUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileContainsUsaZipcodePercent, profileContainsUsaZipcodePercent));
+        this.profileContainsUsaZipcodePercent = profileContainsUsaZipcodePercent;
+        propagateHierarchyIdToField(profileContainsUsaZipcodePercent, "profile_contains_usa_zipcode_percent");
     }
 
     /**
      * Returns a valid email percent check.
      * @return Valid email percent check.
      */
-    public ColumnPiiValidEmailPercentCheckSpec getValidEmailPercent() {
-        return validEmailPercent;
+    public ColumnPiiValidEmailPercentCheckSpec getProfileValidEmailPercent() {
+        return profileValidEmailPercent;
     }
 
     /**
      * Sets a new definition of a valid email percent check.
-     * @param validEmailPercent Valid email percent check.
+     * @param profileValidEmailPercent Valid email percent check.
      */
-    public void setValidEmailPercent(ColumnPiiValidEmailPercentCheckSpec validEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.validEmailPercent, validEmailPercent));
-        this.validEmailPercent = validEmailPercent;
-        propagateHierarchyIdToField(validEmailPercent, "valid_email_percent");
+    public void setProfileValidEmailPercent(ColumnPiiValidEmailPercentCheckSpec profileValidEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidEmailPercent, profileValidEmailPercent));
+        this.profileValidEmailPercent = profileValidEmailPercent;
+        propagateHierarchyIdToField(profileValidEmailPercent, "profile_valid_email_percent");
     }
 
     /**
      * Returns a contains email percent check.
      * @return Contains email percent check.
      */
-    public ColumnPiiContainsEmailPercentCheckSpec getContainsEmailPercent() {
-        return containsEmailPercent;
+    public ColumnPiiContainsEmailPercentCheckSpec getProfileContainsEmailPercent() {
+        return profileContainsEmailPercent;
     }
 
     /**
      * Sets a new definition of a contains email percent check.
-     * @param containsEmailPercent Contains email percent check.
+     * @param profileContainsEmailPercent Contains email percent check.
      */
-    public void setContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec containsEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.containsEmailPercent, containsEmailPercent));
-        this.containsEmailPercent = containsEmailPercent;
-        propagateHierarchyIdToField(containsEmailPercent, "contains_email_percent");
+    public void setProfileContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec profileContainsEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileContainsEmailPercent, profileContainsEmailPercent));
+        this.profileContainsEmailPercent = profileContainsEmailPercent;
+        propagateHierarchyIdToField(profileContainsEmailPercent, "profile_contains_email_percent");
     }
 
     /**
      * Returns a minimum valid IP4 address percent check.
      * @return Minimum valid IP4 address percent check.
      */
-    public ColumnPiiValidIp4AddressPercentCheckSpec getValidIp4AddressPercent() {
-        return validIp4AddressPercent;
+    public ColumnPiiValidIp4AddressPercentCheckSpec getProfileValidIp4AddressPercent() {
+        return profileValidIp4AddressPercent;
     }
 
     /**
      * Sets a new definition of a valid IP4 address percent check.
-     * @param validIp4AddressPercent valid IP4 address percent check.
+     * @param profileValidIp4AddressPercent valid IP4 address percent check.
      */
-    public void setValidIp4AddressPercent(ColumnPiiValidIp4AddressPercentCheckSpec validIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.validIp4AddressPercent, validIp4AddressPercent));
-        this.validIp4AddressPercent = validIp4AddressPercent;
-        propagateHierarchyIdToField(validIp4AddressPercent, "ip4_address_percent");
+    public void setProfileValidIp4AddressPercent(ColumnPiiValidIp4AddressPercentCheckSpec profileValidIp4AddressPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidIp4AddressPercent, profileValidIp4AddressPercent));
+        this.profileValidIp4AddressPercent = profileValidIp4AddressPercent;
+        propagateHierarchyIdToField(profileValidIp4AddressPercent, "ip4_address_percent");
     }
 
     /**
      * Returns a contains IP4 percent check.
      * @return Contains IP4 percent check.
      */
-    public ColumnPiiContainsIp4PercentCheckSpec getContainsIp4Percent() {
-        return containsIp4Percent;
+    public ColumnPiiContainsIp4PercentCheckSpec getProfileContainsIp4Percent() {
+        return profileContainsIp4Percent;
     }
 
     /**
      * Sets a new definition of a contains IP4 percent check.
-     * @param containsIp4Percent Contains IP4 percent check.
+     * @param profileContainsIp4Percent Contains IP4 percent check.
      */
-    public void setContainsIp4Percent(ColumnPiiContainsIp4PercentCheckSpec containsIp4Percent) {
-        this.setDirtyIf(!Objects.equals(this.containsIp4Percent, containsIp4Percent));
-        this.containsIp4Percent = containsIp4Percent;
-        propagateHierarchyIdToField(containsIp4Percent, "contains_ip4_percent");
+    public void setProfileContainsIp4Percent(ColumnPiiContainsIp4PercentCheckSpec profileContainsIp4Percent) {
+        this.setDirtyIf(!Objects.equals(this.profileContainsIp4Percent, profileContainsIp4Percent));
+        this.profileContainsIp4Percent = profileContainsIp4Percent;
+        propagateHierarchyIdToField(profileContainsIp4Percent, "profile_contains_ip4_percent");
     }
 
     /**
      * Returns a minimum valid IP6 address percent check.
      * @return Minimum valid IP6 address percent check.
      */
-    public ColumnPiiValidIp6AddressPercentCheckSpec getValidIp6AddressPercent() {
-        return validIp6AddressPercent;
+    public ColumnPiiValidIp6AddressPercentCheckSpec getProfileValidIp6AddressPercent() {
+        return profileValidIp6AddressPercent;
     }
 
     /**
      * Sets a new definition of a valid IP6 address percent check.
-     * @param validIp6AddressPercent valid IP6 address percent check.
+     * @param profileValidIp6AddressPercent valid IP6 address percent check.
      */
-    public void setValidIp6AddressPercent(ColumnPiiValidIp6AddressPercentCheckSpec validIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.validIp6AddressPercent, validIp6AddressPercent));
-        this.validIp6AddressPercent = validIp6AddressPercent;
-        propagateHierarchyIdToField(validIp6AddressPercent, "valid_ip6_address_percent");
+    public void setProfileValidIp6AddressPercent(ColumnPiiValidIp6AddressPercentCheckSpec profileValidIp6AddressPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidIp6AddressPercent, profileValidIp6AddressPercent));
+        this.profileValidIp6AddressPercent = profileValidIp6AddressPercent;
+        propagateHierarchyIdToField(profileValidIp6AddressPercent, "profile_valid_ip6_address_percent");
     }
 
     /**
      * Returns a contains IP6 percent check.
      * @return Contains IP6 percent check.
      */
-    public ColumnPiiContainsIp6PercentCheckSpec getContainsIp6Percent() {
-        return containsIp6Percent;
+    public ColumnPiiContainsIp6PercentCheckSpec getProfileContainsIp6Percent() {
+        return profileContainsIp6Percent;
     }
 
     /**
      * Sets a new definition of a contains IP6 percent check.
-     * @param containsIp6Percent Contains IP6 percent check.
+     * @param profileContainsIp6Percent Contains IP6 percent check.
      */
-    public void setContainsIp6Percent(ColumnPiiContainsIp6PercentCheckSpec containsIp6Percent) {
-        this.setDirtyIf(!Objects.equals(this.containsIp6Percent, containsIp6Percent));
-        this.containsIp6Percent = containsIp6Percent;
-        propagateHierarchyIdToField(containsIp6Percent, "contains_ip6_percent");
+    public void setProfileContainsIp6Percent(ColumnPiiContainsIp6PercentCheckSpec profileContainsIp6Percent) {
+        this.setDirtyIf(!Objects.equals(this.profileContainsIp6Percent, profileContainsIp6Percent));
+        this.profileContainsIp6Percent = profileContainsIp6Percent;
+        propagateHierarchyIdToField(profileContainsIp6Percent, "profile_contains_ip6_percent");
     }
 
     /**

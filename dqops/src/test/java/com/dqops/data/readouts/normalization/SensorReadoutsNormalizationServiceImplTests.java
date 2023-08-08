@@ -29,7 +29,6 @@ import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.groupings.DataGroupingConfigurationSpecObjectMother;
 import com.dqops.metadata.groupings.DataStreamLevelSpecObjectMother;
 import com.dqops.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -75,12 +74,12 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
 		checkSpec = new TableRowCountCheckSpec();
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
-		tableSpec.getProfilingChecks().getVolume().setRowCount(checkSpec);
+		tableSpec.getProfilingChecks().getVolume().setProfileRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
                 new EffectiveSensorRuleNames(checkSpec.getParameters().getSensorDefinitionName(), checkSpec.getRuleDefinitionName()),
-                CheckType.PROFILING,
+                CheckType.profiling,
                 null, // time series
                 new TimeWindowFilterParameters(),
                 tableSpec.getDefaultDataGroupingConfiguration(),
@@ -209,7 +208,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(expectedTimePeriod.toInstant(TimeZone.getDefault().toZoneId().getRules().getOffset(expectedTimePeriod)), results.getTimePeriodUtcColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
@@ -231,7 +230,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
     }
 
     @Test
@@ -250,7 +249,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getDataGroupHashColumn());
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
         Assertions.assertEquals("5e66efdc-b585-6460-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
         Assertions.assertEquals("60685857-4b08-6610-b6b0-03adefaca0c1", results.getIdColumn().get(0));
     }
@@ -274,7 +273,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         Assertions.assertEquals(LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
-        Assertions.assertEquals("all data", results.getDataGroupNameColumn().get(0));
+        Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
     }
 
     @Test

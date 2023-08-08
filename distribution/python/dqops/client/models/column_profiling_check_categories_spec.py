@@ -12,8 +12,8 @@ if TYPE_CHECKING:
         ColumnAnomalyProfilingChecksSpec,
     )
     from ..models.column_bool_profiling_checks_spec import ColumnBoolProfilingChecksSpec
-    from ..models.column_consistency_profiling_checks_spec import (
-        ColumnConsistencyProfilingChecksSpec,
+    from ..models.column_datatype_profiling_checks_spec import (
+        ColumnDatatypeProfilingChecksSpec,
     )
     from ..models.column_datetime_profiling_checks_spec import (
         ColumnDatetimeProfilingChecksSpec,
@@ -65,7 +65,7 @@ class ColumnProfilingCheckCategoriesSpec:
         bool_ (Union[Unset, ColumnBoolProfilingChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityProfilingChecksSpec]):
         accuracy (Union[Unset, ColumnAccuracyProfilingChecksSpec]):
-        consistency (Union[Unset, ColumnConsistencyProfilingChecksSpec]):
+        datatype (Union[Unset, ColumnDatatypeProfilingChecksSpec]):
         anomaly (Union[Unset, ColumnAnomalyProfilingChecksSpec]):
         schema (Union[Unset, ColumnSchemaProfilingChecksSpec]):
         comparisons (Union[Unset, ColumnProfilingCheckCategoriesSpecComparisons]): Dictionary of configuration of checks
@@ -84,7 +84,7 @@ class ColumnProfilingCheckCategoriesSpec:
     bool_: Union[Unset, "ColumnBoolProfilingChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityProfilingChecksSpec"] = UNSET
     accuracy: Union[Unset, "ColumnAccuracyProfilingChecksSpec"] = UNSET
-    consistency: Union[Unset, "ColumnConsistencyProfilingChecksSpec"] = UNSET
+    datatype: Union[Unset, "ColumnDatatypeProfilingChecksSpec"] = UNSET
     anomaly: Union[Unset, "ColumnAnomalyProfilingChecksSpec"] = UNSET
     schema: Union[Unset, "ColumnSchemaProfilingChecksSpec"] = UNSET
     comparisons: Union[Unset, "ColumnProfilingCheckCategoriesSpecComparisons"] = UNSET
@@ -135,9 +135,9 @@ class ColumnProfilingCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        consistency: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.consistency, Unset):
-            consistency = self.consistency.to_dict()
+        datatype: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.datatype, Unset):
+            datatype = self.datatype.to_dict()
 
         anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.anomaly, Unset):
@@ -176,8 +176,8 @@ class ColumnProfilingCheckCategoriesSpec:
             field_dict["integrity"] = integrity
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if consistency is not UNSET:
-            field_dict["consistency"] = consistency
+        if datatype is not UNSET:
+            field_dict["datatype"] = datatype
         if anomaly is not UNSET:
             field_dict["anomaly"] = anomaly
         if schema is not UNSET:
@@ -198,8 +198,8 @@ class ColumnProfilingCheckCategoriesSpec:
         from ..models.column_bool_profiling_checks_spec import (
             ColumnBoolProfilingChecksSpec,
         )
-        from ..models.column_consistency_profiling_checks_spec import (
-            ColumnConsistencyProfilingChecksSpec,
+        from ..models.column_datatype_profiling_checks_spec import (
+            ColumnDatatypeProfilingChecksSpec,
         )
         from ..models.column_datetime_profiling_checks_spec import (
             ColumnDatetimeProfilingChecksSpec,
@@ -313,12 +313,12 @@ class ColumnProfilingCheckCategoriesSpec:
         else:
             accuracy = ColumnAccuracyProfilingChecksSpec.from_dict(_accuracy)
 
-        _consistency = d.pop("consistency", UNSET)
-        consistency: Union[Unset, ColumnConsistencyProfilingChecksSpec]
-        if isinstance(_consistency, Unset):
-            consistency = UNSET
+        _datatype = d.pop("datatype", UNSET)
+        datatype: Union[Unset, ColumnDatatypeProfilingChecksSpec]
+        if isinstance(_datatype, Unset):
+            datatype = UNSET
         else:
-            consistency = ColumnConsistencyProfilingChecksSpec.from_dict(_consistency)
+            datatype = ColumnDatatypeProfilingChecksSpec.from_dict(_datatype)
 
         _anomaly = d.pop("anomaly", UNSET)
         anomaly: Union[Unset, ColumnAnomalyProfilingChecksSpec]
@@ -355,7 +355,7 @@ class ColumnProfilingCheckCategoriesSpec:
             bool_=bool_,
             integrity=integrity,
             accuracy=accuracy,
-            consistency=consistency,
+            datatype=datatype,
             anomaly=anomaly,
             schema=schema,
             comparisons=comparisons,

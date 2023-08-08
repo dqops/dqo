@@ -74,7 +74,7 @@ public class SensorExecutionRunParametersObjectMother {
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(
                 connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, null, checkType, null,
-                timeSeriesConfigurationSpec, null, dialectSettings);
+                null, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -94,7 +94,8 @@ public class SensorExecutionRunParametersObjectMother {
          TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
          SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, null, CheckType.PROFILING, null, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.profiling, null, null,
+                 timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -117,7 +118,8 @@ public class SensorExecutionRunParametersObjectMother {
                 TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForRecurring(timeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, null, CheckType.RECURRING, null, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.recurring, null, null,
+                timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -150,7 +152,8 @@ public class SensorExecutionRunParametersObjectMother {
         }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, null, CheckType.PARTITIONED, null, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+                checkSpec, null, CheckType.partitioned, null, null,
+                timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -180,7 +183,8 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, null, checkType, null, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, checkType, null, null,
+                timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -203,7 +207,8 @@ public class SensorExecutionRunParametersObjectMother {
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, null, CheckType.PROFILING, null, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.profiling, null, null,
+                timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -228,7 +233,8 @@ public class SensorExecutionRunParametersObjectMother {
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForRecurring(checkTimeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, null, CheckType.RECURRING, null, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.recurring, null, null,
+                timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -264,7 +270,8 @@ public class SensorExecutionRunParametersObjectMother {
         }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, null, CheckType.PARTITIONED, null, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+                checkSpec, null, CheckType.partitioned, null, null,
+                timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;
     }
 }

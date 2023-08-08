@@ -83,21 +83,21 @@ public class SchemaModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.PROFILING);
+                setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.RECURRING);
+                setCheckType(CheckType.recurring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.PARTITIONED);
+                setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()

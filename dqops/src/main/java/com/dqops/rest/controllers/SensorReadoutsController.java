@@ -18,8 +18,9 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.readouts.services.SensorReadoutsDataService;
-import com.dqops.data.readouts.services.SensorReadoutsDetailedParameters;
+import com.dqops.data.readouts.services.SensorReadoutsDetailedFilterParameters;
 import com.dqops.data.readouts.services.models.SensorReadoutsDetailedDataModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -83,9 +84,14 @@ public class SensorReadoutsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -106,11 +112,15 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
-        SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
                 checks, loadParams);
@@ -143,9 +153,14 @@ public class SensorReadoutsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -166,11 +181,15 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
-        SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
+        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
                 recurringPartition, loadParams);
@@ -202,9 +221,14 @@ public class SensorReadoutsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -225,14 +249,18 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
-        SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
+        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, new SensorReadoutsDetailedParameters());
+                partitionedCheckPartition, new SensorReadoutsDetailedFilterParameters());
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -262,9 +290,14 @@ public class SensorReadoutsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -290,11 +323,15 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
-        SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
                 checks, loadParams);
@@ -329,9 +366,14 @@ public class SensorReadoutsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -357,11 +399,15 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
-        SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
+        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
                 recurringPartition, loadParams);
@@ -396,9 +442,14 @@ public class SensorReadoutsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -424,11 +475,15 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
-        SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
+        AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
                 partitionedCheckPartition, loadParams);

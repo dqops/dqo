@@ -19,7 +19,7 @@ def _get_kwargs(
     client: Client,
     json_body: List["CommentSpec"],
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

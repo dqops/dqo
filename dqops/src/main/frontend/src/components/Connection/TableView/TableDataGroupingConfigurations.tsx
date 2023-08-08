@@ -18,7 +18,7 @@ const TableDataGroupingConfiguration = () => {
   }: { connection: string; schema: string; table: string } = useParams();
   const location = useLocation();
   const [isEditing, setIsEditing] = useState(false);
-  const { dataStreamName, bool } = useSelector(
+  const { dataGrouping, bool } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const history = useHistory();
@@ -71,7 +71,7 @@ const TableDataGroupingConfiguration = () => {
     connection_name: connectionName,
     schema_name: schemaName,
     table_name: tableName,
-    data_grouping_configuration_name: dataStreamName
+    data_grouping_configuration_name: dataGrouping
   };
 
   const onBack = () => {
@@ -96,7 +96,7 @@ const TableDataGroupingConfiguration = () => {
         <DataGroupingConfigurationEditView
           onBack={onBack}
           selectedGroupingConfiguration={
-            dataStreamName.length !== 0
+            dataGrouping.length !== 0
               ? myObj
               : selectedDataGroupingConfiguration
           }

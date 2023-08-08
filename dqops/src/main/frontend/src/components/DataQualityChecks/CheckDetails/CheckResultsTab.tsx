@@ -28,6 +28,8 @@ interface CheckResultsTabProps {
   timeScale?: 'daily' | 'monthly';
   checkName: string;
   isChartOpen: (arg: boolean) => void;
+  category?: string;
+  comparisonName?: string;
 }
 
 const CheckResultsTab = ({
@@ -39,7 +41,9 @@ const CheckResultsTab = ({
   runCheckType,
   timeScale,
   checkName,
-  isChartOpen
+  isChartOpen,
+  category,
+  comparisonName
 }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
   const [mode, setMode] = useState('table');
@@ -71,18 +75,13 @@ const CheckResultsTab = ({
 
   const columns = [
     {
-      label: 'Id',
-      value: 'id',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
-      label: 'Check Name',
-      value: 'checkName',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
-      label: 'Executed At',
-      value: 'executedAt',
+      label:
+        checkTypes === 'profiling'
+          ? 'Profile date (local time)'
+          : checkTypes === 'partitioned'
+          ? 'Partition Date'
+          : 'Checkpoint date',
+      value: 'timePeriod',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
@@ -91,8 +90,8 @@ const CheckResultsTab = ({
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Time Period',
-      value: 'timePeriod',
+      label: 'Executed At',
+      value: 'executedAt',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
@@ -249,6 +248,11 @@ const CheckResultsTab = ({
       label: 'Data Group',
       value: 'dataGroup',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
+    },
+    {
+      label: 'Id',
+      value: 'id',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     }
   ];
 
@@ -268,50 +272,28 @@ const CheckResultsTab = ({
   }, []);
 
   useEffect(() => {
-    if (mode === 'chart') {
-      const startDate = moment()
-        .subtract(5, 'month')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-      const endDate = moment().format('YYYY-MM-DD');
+    const startDate = month
+      ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
+      : '';
+    const endDate = month
+      ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+      : '';
 
-      dispatch(
-        getCheckResults(checkTypes, firstLevelActiveTab, {
-          connection,
-          schema,
-          table,
-          column,
-
-          runCheckType,
-          checkName,
-          timeScale,
-          startDate,
-          endDate
-        })
-      );
-    } else {
-      const startDate = month
-        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-        : '';
-      const endDate = month
-        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-        : '';
-
-      dispatch(
-        getCheckResults(checkTypes, firstLevelActiveTab, {
-          connection,
-          schema,
-          table,
-          column,
-
-          runCheckType,
-          checkName,
-          timeScale,
-          startDate,
-          endDate
-        })
-      );
-    }
+    dispatch(
+      getCheckResults(checkTypes, firstLevelActiveTab, {
+        connection,
+        schema,
+        table,
+        column,
+        runCheckType,
+        checkName,
+        timeScale,
+        startDate,
+        endDate,
+        category,
+        comparisonName
+      })
+    );
   }, [mode]);
 
   const allResults = results

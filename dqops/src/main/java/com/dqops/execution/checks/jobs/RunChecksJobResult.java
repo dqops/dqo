@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
  * Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RunChecksQueueJobResult", description = "Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.")
+@ApiModel(value = "RunChecksJobResult", description = "Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.")
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class RunChecksJobResult {
