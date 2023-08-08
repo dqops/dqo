@@ -24,8 +24,8 @@ import java.util.List;
 public interface YamlDocumentationModelFactory {
     /**
      * Create a yaml documentation models.
-     *
+     * @param yamlDocumentationSchema Yaml documentation schema.
      * @return Yaml superior documentation models.
      */
-    List<YamlSuperiorObjectDocumentationModel> createDocumentationForYaml();
+    List<YamlSuperiorObjectDocumentationModel> createDocumentationForYaml(List<YamlDocumentationSchemaNode> yamlDocumentationSchema);
 }

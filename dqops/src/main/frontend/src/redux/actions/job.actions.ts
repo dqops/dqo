@@ -21,7 +21,8 @@ import { JOB_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
   DqoJobQueueIncrementalSnapshotModel,
-  DqoJobQueueInitialSnapshotModel
+  DqoJobQueueInitialSnapshotModel,
+  ImportTablesQueueJobParameters
 } from '../../api';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
 
@@ -109,6 +110,16 @@ export const toggleSettings = (areSettingsOpen: boolean) => ({
 export const toggleAdvisor = (isOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_ADVISOR,
   isOpen
+});
+
+export const setAdvisorObject = (obj: ImportTablesQueueJobParameters) => ({
+  type: JOB_ACTION.SET_ADVISOR_OBJECT,
+  obj
+});
+
+export const setAdvisorJobId = (num: number) => ({
+  type: JOB_ACTION.SET_ADVISOR_JOBID,
+  num
 });
 
 export const setCronScheduler = (isCronScheduled: boolean) => ({

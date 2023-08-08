@@ -12,6 +12,7 @@ import { IRootState } from './redux/reducers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LogErrorsApi } from './services/apiClient';
+import axios from 'axios';
 
 import Chart from 'chart.js/auto';
 import { CategoryScale } from 'chart.js';
@@ -20,6 +21,14 @@ Chart.register(CategoryScale);
 // import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, TimeScale } from "chart.js";
 import 'chartjs-adapter-moment';
 // ChartJS.register(LinearScale, PointElement, Tooltip, Legend, TimeScale);
+
+axios.interceptors.response.use(undefined, function (error) {
+  const statusCode = error.response ? error.response.status : null;
+  if (statusCode === 403) {
+    window.location.reload();
+  }
+  return Promise.reject(error);
+});
 
 const App = () => {
   const dispatch = useActionDispatch();

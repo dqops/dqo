@@ -30,7 +30,7 @@ def _get_kwargs(
     order: Union[Unset, None, FindRecentIncidentsOnConnectionOrder] = UNSET,
     direction: Union[Unset, None, FindRecentIncidentsOnConnectionDirection] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/incidents/{connectionName}".format(
+    url = "{}api/incidents/{connectionName}".format(
         client.base_url, connectionName=connection_name
     )
 

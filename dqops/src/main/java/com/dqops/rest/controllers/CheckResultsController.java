@@ -19,8 +19,10 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
-import com.dqops.data.checkresults.services.CheckResultsDetailedParameters;
+import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
+import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.checkresults.services.models.CheckResultsDetailedDataModel;
+import com.dqops.data.checkresults.services.models.TableDataQualityStatusModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -32,6 +34,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -60,6 +63,68 @@ public class CheckResultsController {
     }
 
     /**
+     * Read the most recent results of executed data quality checks on the table and return the current table's data quality status - the number of failed data quality
+     * checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently.
+     * This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param months         The number of months to load.
+     * @param checkType      Optional check type filter.
+     * @param checkTimeScale Optional check time scale filter.
+     * @return The most recent table's data quality status.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/status", produces = "application/json")
+    @ApiOperation(value = "getTableDataQualityStatus", notes = "Read the most recent results of executed data quality checks on the table and return the current table's data quality status - the number of failed data quality " +
+            "checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. " +
+            "This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.",
+            response = TableDataQualityStatusModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The most recent data quality status of the requested table",
+                    response = TableDataQualityStatusModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TableDataQualityStatusModel>> getTableDataQualityStatus(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "months", value = "Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).", required = false)
+            @RequestParam(required = false) Optional<Integer> months,
+            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, recurring, partitioned).", required = false)
+            @RequestParam(required = false) Optional<CheckType> checkType,
+            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for recurring and partitioned checks (values: daily or monthly).", required = false)
+            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                physicalTableName, true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService.analyzeTableMostRecentQualityStatus(
+                connectionName, physicalTableName,
+                months.orElse(1), checkType.orElse(null), checkTimeScale.orElse(null));
+
+        return new ResponseEntity<>(Mono.just(tableDataQualityStatusModel), HttpStatus.OK); // 200
+    }
+
+    /**
      * Retrieves the complete results of the recent check executions on a table given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
@@ -83,9 +148,14 @@ public class CheckResultsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -106,11 +176,15 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
-        CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+        CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
@@ -143,9 +217,14 @@ public class CheckResultsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -166,11 +245,15 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
-        CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
+        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 recurringPartition, loadParams);
@@ -202,9 +285,14 @@ public class CheckResultsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group",required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -225,14 +313,18 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
-        CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
+        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+        CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                partitionedCheckPartition, new CheckResultsDetailedParameters());
+                partitionedCheckPartition, new CheckResultsDetailedFilterParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -263,9 +355,14 @@ public class CheckResultsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -291,11 +388,15 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
-        CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
@@ -330,9 +431,14 @@ public class CheckResultsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -358,11 +464,15 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
-        CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
+        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 recurringPartition, loadParams);
@@ -397,9 +507,14 @@ public class CheckResultsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
-            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
-            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -425,11 +540,15 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
-        CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
+        AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
+        checkName.ifPresent(loadParams::setCheckName);
+        category.ifPresent(loadParams::setCheckCategory);
+        tableComparison.ifPresent(loadParams::setTableComparison);
         dataGroup.ifPresent(loadParams::setDataGroupName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
+        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 partitionedCheckPartition, loadParams);

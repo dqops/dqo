@@ -92,8 +92,8 @@ spec:
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-        ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+        ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - folder_name: KPIs per Day
     dashboards:
       - dashboard_name: Daily KPI per Table
@@ -103,8 +103,8 @@ spec:
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-          ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+          ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
       - dashboard_name: Daily KPI per Column
         url: https://lookerstudio.google.com/embed/reporting/9c4baa39-8876-4cde-8906-7ecb4df81344/page/c5B8C
         width: 1400
@@ -112,8 +112,8 @@ spec:
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-          ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+          ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
       - dashboard_name: Daily KPI per Check
         url: https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
         width: 1400
@@ -121,17 +121,17 @@ spec:
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-          ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
-      - dashboard_name: Daily KPI per Data Stream
+          ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
+      - dashboard_name: Daily KPI per Data Grouping
         url: https://lookerstudio.google.com/embed/reporting/0b397977-89a3-4ffe-8c80-da96b240494b/page/c5B8C
         width: 1400
         height: 1600
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-          ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+          ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+          ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
 - folder_name: Operational
   folders:
   - folder_name:  Issues per day
@@ -143,8 +143,8 @@ spec:
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-        ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+        ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
     - dashboard_name: Issues per Check and day
       url: https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/c5B8C
       width: 1400
@@ -152,17 +152,17 @@ spec:
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-        ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
-    - dashboard_name: Issues per Data Stream and day
+        ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
+    - dashboard_name: Issues per data grouping and day
       url: https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/c5B8C
       width: 1400
       height: 1600
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-        ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+        ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
     - dashboard_name: Issues per Column and day
       url: https://lookerstudio.google.com/embed/reporting/474cb75b-e9f0-486b-bf12-e910d0330d8b/page/c5B8C
       width: 1400
@@ -170,8 +170,8 @@ spec:
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-        ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+        ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   dashboards:
     - dashboard_name: Affected Tables per KPI
       url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
@@ -180,8 +180,8 @@ spec:
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-        ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+        ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
     - dashboard_name: Affected Tables
       url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
       width: 1400
@@ -189,8 +189,8 @@ spec:
       parameters:
         ds0.token: '%DQO_CLOUD_TOKEN%'
         ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-        ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+        ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+        ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
 - folder_name: Data Quality Issue Details
   dashboards:
   - dashboard_name: Issues
@@ -200,8 +200,8 @@ spec:
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+      ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Issues per Check
     url: https://lookerstudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
     width: 1400
@@ -209,8 +209,8 @@ spec:
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+      ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Issues per Table
     url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
     width: 1400
@@ -218,8 +218,8 @@ spec:
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+      ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
 - folder_name: Data Sources State
   folders:
   - folder_name: Volume
@@ -304,8 +304,8 @@ spec:
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+      ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Daily Tests per Column
     url: https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/c5B8C
     width: 1400
@@ -313,8 +313,8 @@ spec:
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+      ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
   - dashboard_name: Daily Tests per Check
     url: https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
     width: 1400
@@ -322,14 +322,14 @@ spec:
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
-  - dashboard_name: Daily Tests per Data Stream
+      ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"
+  - dashboard_name: Daily Tests per Data Grouping
     url: https://lookerstudio.google.com/embed/reporting/93ab5017-f7a6-4ee4-8c51-6d0a24880cf6/page/c5B8C
     width: 1400
     height: 1600
     parameters:
       ds0.token: '%DQO_CLOUD_TOKEN%'
       ds0.p_check_type: "*$Check Type:all,profiling,recurring,partitioned$"
-      ds0.p_quality_dimension: "$Dimension:all,Validity,Reasonableness,Completeness,Uniqueness,Timeliness,Consistency$"
-      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,standard,pii,numeric,nulls,datetime,bool$"
+      ds0.p_quality_dimension: "$Dimension:all,Accuracy,Availability,Completeness,Consistency,Integrity,Reasonableness,Timeliness,Uniqueness,Validity$"
+      ds0.p_check_category: "$Category:all,uniqueness,timeliness,strings,volume,pii,numeric,nulls,datetime,bool$"

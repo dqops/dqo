@@ -22,7 +22,7 @@ def _get_kwargs(
     client: Client,
     json_body: RecurringScheduleSpec,
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}".format(
+    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}".format(
         client.base_url,
         connectionName=connection_name,
         schemaName=schema_name,

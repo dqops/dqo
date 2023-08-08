@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
  * Parameters object for the run checks on a single table job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RunChecksOnTableQueueJobParameters", description = "Run checks configuration for a job that will run checks on a single table, specifies the target table and the target checks that should be executed and an optional time window.")
+@ApiModel(value = "RunChecksOnTableParameters", description = "Run checks configuration for a job that will run checks on a single table, specifies the target table and the target checks that should be executed and an optional time window.")
 @EqualsAndHashCode(callSuper = false)
 public class RunChecksOnTableParameters implements Cloneable {
     /**

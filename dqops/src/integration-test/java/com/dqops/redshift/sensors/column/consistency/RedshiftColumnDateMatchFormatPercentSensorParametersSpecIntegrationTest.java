@@ -16,7 +16,7 @@
 package com.dqops.redshift.sensors.column.consistency;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.consistency.ColumnConsistencyDateMatchFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDateMatchFormatPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,8 +29,8 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.consistency.ColumnConsistencyDateMatchFormatPercentSensorParametersSpec;
-import com.dqops.sensors.column.consistency.ConsistencyBuiltInDateFormats;
+import com.dqops.sensors.column.datatype.ColumnDatatypeDateMatchFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.datatype.DatatypeBuiltInDateFormats;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,9 +40,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class RedshiftColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
-    private ColumnConsistencyDateMatchFormatPercentSensorParametersSpec sut;
+    private ColumnDatatypeDateMatchFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnConsistencyDateMatchFormatPercentCheckSpec checkSpec;
+    private ColumnDatatypeDateMatchFormatPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,14 +50,14 @@ public class RedshiftColumnDateMatchFormatPercentSensorParametersSpecIntegration
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnConsistencyDateMatchFormatPercentSensorParametersSpec();
-        this.checkSpec = new ColumnConsistencyDateMatchFormatPercentCheckSpec();
+        this.sut = new ColumnDatatypeDateMatchFormatPercentSensorParametersSpec();
+        this.checkSpec = new ColumnDatatypeDateMatchFormatPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(DatatypeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_text", this.checkSpec);
@@ -72,7 +72,7 @@ public class RedshiftColumnDateMatchFormatPercentSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormats(DatatypeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily);
@@ -87,7 +87,7 @@ public class RedshiftColumnDateMatchFormatPercentSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormats(DatatypeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly);
@@ -102,7 +102,7 @@ public class RedshiftColumnDateMatchFormatPercentSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormats(DatatypeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily,"date");
@@ -117,7 +117,7 @@ public class RedshiftColumnDateMatchFormatPercentSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormats(DatatypeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly,"date");

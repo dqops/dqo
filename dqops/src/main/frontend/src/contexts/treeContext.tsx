@@ -8,7 +8,7 @@ import {
   SchemaModel,
   TableBasicModel,
   CheckBasicModel,
-  RunChecksQueueJobParameters
+  RunChecksParameters
 } from '../api';
 import {
   ColumnApiClient,
@@ -885,7 +885,7 @@ function TreeProvider(props: any) {
     return newItems;
   };
 
-  const runPartitionedChecks = async (obj: RunChecksQueueJobParameters) => {
+  const runPartitionedChecks = async (obj: RunChecksParameters) => {
     await JobApiClient.runChecks(false, undefined, obj);
   };
 

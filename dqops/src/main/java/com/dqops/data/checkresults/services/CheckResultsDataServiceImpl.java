@@ -37,8 +37,12 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
+import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
+import com.dqops.utils.tables.TableColumnUtility;
 import com.dqops.utils.tables.TableRowUtility;
 import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +60,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CheckResultsDataServiceImpl implements CheckResultsDataService {
+    public static final int DEFAULT_MAX_RECENT_LOADED_MONTHS = 3;
+
     private CheckResultsSnapshotFactory checkResultsSnapshotFactory;
     private ErrorsSnapshotFactory errorsSnapshotFactory;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
@@ -206,7 +212,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      */
     @Override
     public CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                     CheckResultsDetailedParameters loadParameters) {
+                                                                     CheckResultsDetailedFilterParameters loadParameters) {
         Map<Long, CheckResultsDetailedDataModel> resultMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
@@ -217,52 +223,69 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
 
-        Table filteredTable = filterTableToRootChecksContainer(rootChecksContainerSpec, ruleResultsTable);
+        Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, ruleResultsTable, loadParameters);
         if (filteredTable.isEmpty()) {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
 
-        TextColumn dataGroupNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        List<String> dataGroups = dataGroupNameColumn.unique().asList().stream().sorted().collect(Collectors.toList());
-
-        if (dataGroups.size() > 1 && dataGroups.contains(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME)) {
-            dataGroups.remove(CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
-            dataGroups.add(0, CommonTableNormalizationService.ALL_DATA_DATA_GROUP_NAME);
+        if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            filteredTable = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
-        
-        String selectedDataGroup = Objects.requireNonNullElse(loadParameters.getDataGroupName(), dataGroups.get(0));
-        Table filteredByDataGroup = filteredTable.where(dataGroupNameColumn.isEqualTo(selectedDataGroup));
 
-        if (filteredByDataGroup.isEmpty()) {
+        if (filteredTable.isEmpty()) {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredByDataGroup.sortDescendingOn(
+        Table sortedTable = filteredTable.sortDescendingOn(
                 SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                 CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
 
-        Table workingTable = sortedTable;
-        if (loadParameters.getResultsCount() < sortedTable.rowCount()) {
-            workingTable = sortedTable.dropRange(loadParameters.getResultsCount(), sortedTable.rowCount());
-        }
+        LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn dataGroupSortedColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
-        for (Row row : workingTable) {
-            CheckResultDetailedSingleModel singleModel = createSingleCheckResultDetailedModel(row);
+        int rowCount = sortedTable.rowCount();
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+            Long checkHash = checkHashColumn.get(rowIndex);
+            String dataGroupNameForCheck = dataGroupSortedColumn.get(rowIndex);
+            CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(checkHash);
 
-            CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(singleModel.getCheckHash());
-            if (checkResultsDetailedDataModel == null) {
-                checkResultsDetailedDataModel = new CheckResultsDetailedDataModel() {{
-                    setCheckCategory(singleModel.getCheckCategory());
-                    setCheckName(singleModel.getCheckName());
-                    setCheckHash(singleModel.getCheckHash());
-                    setCheckType(singleModel.getCheckType());
-                    setCheckDisplayName(singleModel.getCheckDisplayName());
-                    setDataGroups(dataGroups);
-                    setDataGroup(singleModel.getDataGroup());
-                    setSingleCheckResults(new ArrayList<>());
-                }};
+            CheckResultDetailedSingleModel singleModel = null;
+
+            if (checkResultsDetailedDataModel != null) {
+                if (checkResultsDetailedDataModel.getSingleCheckResults().size() >= loadParameters.getMaxResultsPerCheck()) {
+                    continue; // enough results loaded
+                }
+
+                if (!Objects.equals(dataGroupNameForCheck, checkResultsDetailedDataModel.getDataGroup())) {
+                    continue; // we are not mixing groups, results for a different group were already loaded
+                }
+            } else {
+                singleModel = createSingleCheckResultDetailedModel(sortedTable.row(rowIndex));
+                checkResultsDetailedDataModel = new CheckResultsDetailedDataModel();
+                checkResultsDetailedDataModel.setCheckCategory(singleModel.getCheckCategory());
+                checkResultsDetailedDataModel.setCheckName(singleModel.getCheckName());
+                checkResultsDetailedDataModel.setCheckHash(singleModel.getCheckHash());
+                checkResultsDetailedDataModel.setCheckType(singleModel.getCheckType());
+                checkResultsDetailedDataModel.setCheckDisplayName(singleModel.getCheckDisplayName());
+                checkResultsDetailedDataModel.setDataGroup(dataGroupNameForCheck);
+
+                Selection resultsForCheckHash = checkHashColumn.isIn(checkHash);
+                List<String> dataGroupsForCheck = dataGroupSortedColumn.where(resultsForCheckHash)
+                        .unique().asList().stream().sorted().collect(Collectors.toList());
+
+                if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+                    dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                    dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                }
+
+                checkResultsDetailedDataModel.setDataGroups(dataGroupsForCheck);
                 resultMap.put(singleModel.getCheckHash(), checkResultsDetailedDataModel);
+            }
+
+            if (singleModel == null) {
+                singleModel = createSingleCheckResultDetailedModel(sortedTable.row(rowIndex));
             }
 
             checkResultsDetailedDataModel.getSingleCheckResults().add(singleModel);
@@ -476,11 +499,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      */
     @Override
     public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                           PhysicalTableName physicalTableName,
-                                                                           long incidentHash,
-                                                                           Instant firstSeen,
-                                                                           Instant incidentUntil,
-                                                                           int minSeverity,
+                                                                            PhysicalTableName physicalTableName,
+                                                                            long incidentHash,
+                                                                            Instant firstSeen,
+                                                                            Instant incidentUntil,
+                                                                            int minSeverity,
                                                                             IncidentHistogramFilterParameters filterParameters) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
 
@@ -575,6 +598,131 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     }
 
     /**
+     * Analyzes the table to find the status of the most recent data quality check for each time series
+     * and asses the most current status.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param lastMonths The number of recent months to load the data. 1 means the current month and 1 last month.
+     * @param checkType Check type (optional filter).
+     * @param checkTimeScale Check time scale (optional filter).
+     * @return The table status.
+     */
+    @Override
+    public TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(String connectionName,
+                                                                           PhysicalTableName physicalTableName,
+                                                                           int lastMonths,
+                                                                           CheckType checkType,
+                                                                           CheckTimeScale checkTimeScale) {
+        TableDataQualityStatusModel statusModel = new TableDataQualityStatusModel();
+        statusModel.setConnectionName(connectionName);
+        statusModel.setSchemaName(physicalTableName.getSchemaName());
+        statusModel.setTableName(physicalTableName.getTableName());
+        CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters.createForRecentMonths(lastMonths, 1);
+
+        Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName);
+        Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName);
+        Table combinedTable = errorsTable != null ?
+                (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
+                ruleResultsTable;
+
+        if (combinedTable == null) {
+            return statusModel;
+        }
+
+        Selection rowSelection = Selection.withRange(0, combinedTable.rowCount());
+        if (checkType != null) {
+            String checkTypeString = checkType.getDisplayName();
+            rowSelection = combinedTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+                    .isEqualTo(checkTypeString);
+        }
+
+        if (checkTimeScale != null) {
+            TextColumn timeGradientColumn = combinedTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = checkTimeScale.toTimeSeriesGradient();
+            String timeSeriesGradientName = timePeriodGradient.name();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradientName));
+        }
+
+        Table filteredTable = combinedTable.where(rowSelection);
+        Table sortedTable = filteredTable.sortDescendingOn(
+                CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME,
+                CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME,
+                CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+
+        LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+        LongColumn timeSeriesIdColumn = sortedTable.longColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
+        InstantColumn executedAtColumn = sortedTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        TextColumn checkNameColumn = sortedTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sortedTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+
+        long lastCheckHash = Long.MIN_VALUE;
+        long lastTimeSeriesId = Long.MIN_VALUE;
+        int rowCount = sortedTable.rowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            long currentCheckHash = checkHashColumn.getLong(i);
+            long currentTimeSeriesId = timeSeriesIdColumn.getLong(i);
+
+            if (lastCheckHash == currentCheckHash && lastTimeSeriesId == currentTimeSeriesId) {
+                continue;
+            }
+
+            Integer severity = severityColumn.get(i);
+            if (severity == null) {
+                continue;
+            }
+
+            if (severity > statusModel.getHighestSeverityIssue() && severity != 4) {
+                statusModel.setHighestSeverityIssue(severity);
+            }
+
+            statusModel.setExecutedChecks(statusModel.getExecutedChecks() + 1);
+            switch (severity) {
+                case 0:
+                    statusModel.setValidResults(statusModel.getValidResults() + 1);
+                    break;
+                case 1:
+                    statusModel.setWarnings(statusModel.getWarnings() + 1);
+                    break;
+                case 2:
+                    statusModel.setErrors(statusModel.getErrors() + 1);
+                    break;
+                case 3:
+                    statusModel.setFatals(statusModel.getFatals() + 1);
+                    break;
+                case 4:
+                    statusModel.setExecutionErrors(statusModel.getExecutionErrors() + 1);
+                    break;
+            }
+
+            Instant executedAt = executedAtColumn.get(i);
+            if (statusModel.getLastCheckExecutedAt() != null) {
+                if (executedAt != null && executedAt.isAfter(statusModel.getLastCheckExecutedAt())) {
+                    statusModel.setLastCheckExecutedAt(executedAt);
+                }
+            } else {
+                statusModel.setLastCheckExecutedAt(executedAt);
+            }
+
+            if (severity > 0) {
+                String checkName = checkNameColumn.get(i);
+                String columnName = columnNameColumn.get(i);
+                String reportedCheckNameWithColumn = Strings.isNullOrEmpty(columnName) ? checkName :
+                        checkName + "[" + columnName + "]";
+
+                CheckResultStatus checkResultStatus = CheckResultStatus.fromSeverity(severity);
+                CheckResultStatus currentHighestSeverity = statusModel.getFailedChecksStatuses().get(reportedCheckNameWithColumn);
+                if (currentHighestSeverity == null || currentHighestSeverity.getSeverity() < checkResultStatus.getSeverity()) {
+                    statusModel.getFailedChecksStatuses().put(reportedCheckNameWithColumn, checkResultStatus);
+                }
+            }
+        }
+
+        return statusModel;
+    }
+
+    /**
      * Filters the results to only the results for the target object.
      * @param rootChecksContainerSpec Root checks container to identify the parent column, check type and time scale.
      * @param sourceTable Source table to be filtered.
@@ -596,6 +744,60 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
+
+        Table filteredTable = sourceTable.where(rowSelection);
+        return filteredTable;
+    }
+
+    /**
+     * Filters the results to only the results for the target object.
+     * @param rootChecksContainerSpec Root checks container to identify the parent column, check type and time scale.
+     * @param sourceTable Source table to be filtered.
+     * @param filterParameters Filter parameters.
+     * @return Filtered table.
+     */
+    protected Table filterTableToRootChecksContainerAndFilterParameters(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                                        Table sourceTable,
+                                                                        CheckResultsDetailedFilterParameters filterParameters) {
+        String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
+        String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
+        CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
+
+        Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+
+        if (timeScale != null) {
+            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
+        }
+
+        TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
+
+        if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
+            TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
+        }
+
+        String checkCategory = filterParameters.getCheckCategory();
+        String tableComparison = filterParameters.getTableComparison();
+
+        if (!Strings.isNullOrEmpty(checkCategory)) {
+            if (checkCategory.startsWith(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME + "/")) {
+                // this code will support receiving combined category names for table comparisons
+                String[] columnCategorySplits = StringUtils.split(checkCategory, '/');
+                checkCategory = columnCategorySplits[0];
+                tableComparison = columnCategorySplits[1];
+            }
+
+            TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
+        }
+
+        if (!Strings.isNullOrEmpty(tableComparison)) {
+            TextColumn tableComparisonNameColumn = sourceTable.textColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
+        }
 
         Table filteredTable = sourceTable.where(rowSelection);
         return filteredTable;
@@ -628,8 +830,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME));
 
         if (!Strings.isNullOrEmpty(tableComparisonName)) {
-            TextColumn tableComparisonNameColumn = sourceTable.textColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
-            rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparisonName));
+            TextColumn tableComparisonNameColumn = (TextColumn) TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            if (tableComparisonNameColumn != null) {
+                rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparisonName));
+            } else {
+                rowSelection = Selection.with(); // empty selection, because there is no column
+            }
         }
 
         Table filteredTable = sourceTable.where(rowSelection);
@@ -683,11 +889,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param physicalTableName Physical table name.
      * @return Table with rule results for the most recent two months inside the specified range or null when no data found.
      */
-    protected Table loadRecentRuleResults(CheckResultsDetailedParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
+    protected Table loadRecentRuleResults(CheckResultsDetailedFilterParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_DETAILED);
-        int monthsToLoad = 2;
-        checkResultsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), monthsToLoad);
+        int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
+
+        if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {
+            LocalDate startMonthTruncated = LocalDateTimeTruncateUtility.truncateMonth(loadParameters.getStartMonth());
+            LocalDate endMonthTruncated = LocalDateTimeTruncateUtility.truncateMonth(loadParameters.getEndMonth());
+
+            maxMonthsToLoad =
+                    (int)LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(
+                            startMonthTruncated.atStartOfDay(), endMonthTruncated.atStartOfDay(), TimePeriodGradient.month) + 1;
+        }
+
+        checkResultsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), maxMonthsToLoad);
         Table ruleResultsData = checkResultsSnapshot.getAllData();
         return ruleResultsData;
     }

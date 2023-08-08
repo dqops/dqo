@@ -181,8 +181,8 @@ const NotificationMenu = () => {
         </IconButton>
       </PopoverHandler>
       <PopoverContent
-        className="z-30 min-w-120 max-w-120 px-0 relative"
-        style={{ position: 'relative' }}
+        className="min-w-120 max-w-120 px-0 relative z-50"
+        style={{ position: 'relative', zIndex: '100000' }}
       >
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
           <div onClick={() => setNewJobArray()}>

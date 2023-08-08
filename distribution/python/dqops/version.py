@@ -15,8 +15,8 @@
 # limit
 
 # WARNING: the next two lines with the version numbers (VERSION =, PIP_VERSION =) should not be modified manually. They are changed by a maven profile at compile time.
-VERSION = "0.2.0-beta2"
-PIP_VERSION = "0.2.0.2"
+VERSION = "0.2.0-beta3"
+PIP_VERSION = "0.2.0.3"
 GITHUB_RELEASE = "v" + VERSION + ""
 JAVA_VERSION = "17"
 

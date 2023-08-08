@@ -19,12 +19,19 @@ import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
 import Tabs from '../../Tabs';
 
 import TableStatisticsView from '../../../pages/TableStatisticsView';
-import { DataGroupingConfigurationSpec } from '../../../api';
+import {
+  DataGroupingConfigurationSpec,
+  TableColumnsStatisticsModel
+} from '../../../api';
 
 import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
-import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import {
+  ColumnApiClient,
+  DataGroupingConfigurationsApi
+} from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
+import { AxiosResponse } from 'axios';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -68,6 +75,26 @@ const ProfilingView = () => {
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
   const history = useHistory();
+  const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const fetchColumns = async () => {
+    try {
+      const res: AxiosResponse<TableColumnsStatisticsModel> =
+        await ColumnApiClient.getColumnsStatistics(
+          connectionName,
+          schemaName,
+          tableName
+        );
+      setStatistics(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'statistics') {
+      fetchColumns();
+    }
+  }, [connectionName, schemaName, tableName, activeTab]);
 
   useEffect(() => {
     dispatch(
@@ -126,6 +153,7 @@ const ProfilingView = () => {
   };
 
   const doNothing = (): void => {};
+
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       'sources',
@@ -200,6 +228,7 @@ const ProfilingView = () => {
           createDataStream={selected > 0 && selected <= 9 && true}
           createDataStreamFunc={postDataStream}
           maxToCreateDataStream={selected > 9 && true}
+          statistics={statistics}
         />
       )}
       {activeTab === 'advanced' && (
@@ -219,11 +248,16 @@ const ProfilingView = () => {
           updateData2={updateData2}
           setLevelsData2={setLevelsData2}
           setNumberOfSelected2={setNumberOfSelected2}
+          statistics={statistics}
         />
       )}
       {activeTab === 'advanced' && <TableAdvancedProfiling />}
       {activeTab === 'reference-comparisons' && (
-        <TableReferenceComparisons checkTypes={checkTypes} />
+        <TableReferenceComparisons
+          checkTypes={checkTypes}
+          checksUI={checksUI}
+          fetchChecks={onUpdate}
+        />
       )}
     </div>
   );

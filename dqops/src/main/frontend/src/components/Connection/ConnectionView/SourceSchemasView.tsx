@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { isEqual } from 'lodash';
 import SourceTablesView from './SourceTablesView';
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 interface SourceSchemasViewProps {
   defaultSchema?: string;
@@ -35,15 +35,15 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
   ]);
 
   const [selectedSchema, setSelectedSchema] = useState<string>();
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
-
-  const isImported = !!schemas.find(item => item.alreadyImported);
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   useEffect(() => {
     if (defaultSchema) {
       setSelectedSchema(defaultSchema);
     }
-  }, [defaultSchema])
+  }, [defaultSchema]);
 
   useEffect(() => {
     setLoading(true);
@@ -81,7 +81,6 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
         connectionName={connection}
         schemaName={selectedSchema ?? ''}
         onBack={() => setSelectedSchema(undefined)}
-        isImported={isImported}
       />
     );
   }

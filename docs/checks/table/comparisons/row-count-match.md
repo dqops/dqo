@@ -5,43 +5,43 @@ Table level comparison check compares the row count of the current (parent) tabl
 
 ___
 
-## **row count match**  
+## **profile row count match**  
   
 **Check description**  
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_match|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_row_count_match|profiling| |[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=row_count_match
+dqo> check enable -c=connection_name -ch=profile_row_count_match
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=row_count_match
+dqo> check run -ch=profile_row_count_match
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=row_count_match
+dqo> check run -c=connection_name -ch=profile_row_count_match
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=row_count_match
+dqo> check run -c=connection_name -t=table_name -ch=profile_row_count_match
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_match
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_row_count_match
 ```
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
     comparisons:
       compare_to_source_of_truth_table:
-        row_count_match:
+        profile_row_count_match:
           warning:
             max_diff_percent: 0.0
           error:
@@ -50,7 +50,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_m
             max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="21-30"
+```yaml hl_lines="22-31"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -66,6 +66,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -74,7 +75,7 @@ spec:
   profiling_checks:
     comparisons:
       compare_to_source_of_truth_table:
-        row_count_match:
+        profile_row_count_match:
           warning:
             max_diff_percent: 0.0
           error:
@@ -117,8 +118,8 @@ spec:
     ```sql
     SELECT
         COUNT(*) AS actual_value,
-        CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -142,8 +143,8 @@ spec:
     ```sql
     SELECT
         COUNT(*) AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -176,8 +177,8 @@ spec:
         time_period_utc
     FROM (
         SELECT 1 AS actual_value,
-        CURRENT_TIMESTAMP AS time_period,
-        CAST(CURRENT_TIMESTAMP AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -201,8 +202,8 @@ spec:
     ```sql
     SELECT
         COUNT(*) AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -226,8 +227,8 @@ spec:
     ```sql
     SELECT
         COUNT(*) AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -251,8 +252,8 @@ spec:
     ```sql
     SELECT
         COUNT(*) AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -276,8 +277,8 @@ spec:
     ```sql
     SELECT
         COUNT_BIG(*) AS actual_value,
-        SYSDATETIMEOFFSET() AS time_period,
-        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 
@@ -335,7 +336,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="21-31"
+```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -351,6 +352,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -621,7 +623,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="21-31"
+```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -637,6 +639,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -907,7 +910,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="21-31"
+```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -923,6 +926,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -1197,7 +1201,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
               max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="21-31"
+```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1213,6 +1217,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table

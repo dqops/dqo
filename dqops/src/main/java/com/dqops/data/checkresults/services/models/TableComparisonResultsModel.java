@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.apache.parquet.Strings;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -58,7 +59,7 @@ public class TableComparisonResultsModel {
      */
     public void appendResult(Instant executedAt, String checkName, String columnName, Integer severity, String dataGroupingName) {
         Map<String, ComparisonCheckResultModel> checkResultModelMap;
-        if (columnName == null) {
+        if (Strings.isNullOrEmpty(columnName)) {
             checkResultModelMap = tableComparisonResults;
         } else {
             checkResultModelMap = this.columnComparisonResults.get(columnName);

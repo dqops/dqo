@@ -162,6 +162,6 @@ public class ColumnStringMatchRegexPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

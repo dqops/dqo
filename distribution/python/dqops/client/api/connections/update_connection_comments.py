@@ -16,7 +16,7 @@ def _get_kwargs(
     client: Client,
     json_body: List["CommentSpec"],
 ) -> Dict[str, Any]:
-    url = "{}/api/connections/{connectionName}/comments".format(
+    url = "{}api/connections/{connectionName}/comments".format(
         client.base_url, connectionName=connection_name
     )
 

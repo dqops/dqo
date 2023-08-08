@@ -7,31 +7,23 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import Checkbox from '../../Checkbox';
 import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleAdvisor, toggleMenu } from '../../../redux/actions/job.actions';
+import { toggleAdvisor } from '../../../redux/actions/job.actions';
 
 interface ISourceSchemasViewProps {
   connectionName: string;
   schemaName: string;
   onBack: () => void;
-  isImported?: boolean;
 }
 
 const SourceTablesView = ({
   connectionName,
   schemaName,
-  onBack,
-  isImported,
+  onBack
 }: ISourceSchemasViewProps) => {
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
   const dispatch = useActionDispatch();
-
-  useEffect(() => {
-    if (!isImported) {
-      dispatch(toggleAdvisor(true));
-    }
-  }, [isImported]);
 
   const fetchSourceTables = async () => {
     setLoading(true);
@@ -65,7 +57,7 @@ const SourceTablesView = ({
     }).then(() => {
       fetchSourceTables();
     });
-    dispatch(toggleMenu(true));
+    dispatch(toggleAdvisor(true));
   };
 
   const importAllTables = async () => {
@@ -76,7 +68,7 @@ const SourceTablesView = ({
     }).then(() => {
       fetchSourceTables();
     });
-    dispatch(toggleMenu(true));
+    dispatch(toggleAdvisor(true));
   };
 
   const onSelectChange = (tableName: string) => {
@@ -91,8 +83,18 @@ const SourceTablesView = ({
     <div className="py-4 px-8">
       <ConnectionActionGroup onImport={onBack} />
       <div className="flex justify-end space-x-4 mb-4">
-        <Button color="primary" label="Select All" onClick={selectAll} disabled={selectedTables.length === tables.length} />
-        <Button color="primary" label="Unselect All" onClick={unselectAll} disabled={selectedTables.length === 0} />
+        <Button
+          color="primary"
+          label="Select All"
+          onClick={selectAll}
+          disabled={selectedTables.length === tables.length}
+        />
+        <Button
+          color="primary"
+          label="Unselect All"
+          onClick={unselectAll}
+          disabled={selectedTables.length === 0}
+        />
         <Button
           color="primary"
           label="Import selected tables"
@@ -128,7 +130,9 @@ const SourceTablesView = ({
                   <div className="flex">
                     <Checkbox
                       onChange={() => onSelectChange(item.tableName ?? '')}
-                      checked={selectedTables.indexOf(item.tableName ?? '') > -1}
+                      checked={
+                        selectedTables.indexOf(item.tableName ?? '') > -1
+                      }
                     />
                   </div>
                 </td>

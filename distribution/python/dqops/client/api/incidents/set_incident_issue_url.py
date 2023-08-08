@@ -19,7 +19,7 @@ def _get_kwargs(
     issue_url: str,
 ) -> Dict[str, Any]:
     url = (
-        "{}/api/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl".format(
+        "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl".format(
             client.base_url,
             connectionName=connection_name,
             year=year,

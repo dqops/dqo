@@ -92,288 +92,378 @@ T = TypeVar("T", bound="ColumnNumericProfilingChecksSpec")
 class ColumnNumericProfilingChecksSpec:
     """
     Attributes:
-        negative_count (Union[Unset, ColumnNegativeCountCheckSpec]):
-        negative_percent (Union[Unset, ColumnNegativePercentCheckSpec]):
-        non_negative_count (Union[Unset, ColumnNonNegativeCountCheckSpec]):
-        non_negative_percent (Union[Unset, ColumnNonNegativePercentCheckSpec]):
-        expected_numbers_in_use_count (Union[Unset, ColumnExpectedNumbersInUseCountCheckSpec]):
-        number_value_in_set_percent (Union[Unset, ColumnNumberValueInSetPercentCheckSpec]):
-        values_in_range_numeric_percent (Union[Unset, ColumnValuesInRangeNumericPercentCheckSpec]):
-        values_in_range_integers_percent (Union[Unset, ColumnValuesInRangeIntegersPercentCheckSpec]):
-        value_below_min_value_count (Union[Unset, ColumnValueBelowMinValueCountCheckSpec]):
-        value_below_min_value_percent (Union[Unset, ColumnValueBelowMinValuePercentCheckSpec]):
-        value_above_max_value_count (Union[Unset, ColumnValueAboveMaxValueCountCheckSpec]):
-        value_above_max_value_percent (Union[Unset, ColumnValueAboveMaxValuePercentCheckSpec]):
-        max_in_range (Union[Unset, ColumnMaxInRangeCheckSpec]):
-        min_in_range (Union[Unset, ColumnMinInRangeCheckSpec]):
-        mean_in_range (Union[Unset, ColumnMeanInRangeCheckSpec]):
-        percentile_in_range (Union[Unset, ColumnPercentileInRangeCheckSpec]):
-        median_in_range (Union[Unset, ColumnMedianInRangeCheckSpec]):
-        percentile_10_in_range (Union[Unset, ColumnPercentile10InRangeCheckSpec]):
-        percentile_25_in_range (Union[Unset, ColumnPercentile25InRangeCheckSpec]):
-        percentile_75_in_range (Union[Unset, ColumnPercentile75InRangeCheckSpec]):
-        percentile_90_in_range (Union[Unset, ColumnPercentile90InRangeCheckSpec]):
-        sample_stddev_in_range (Union[Unset, ColumnSampleStddevInRangeCheckSpec]):
-        population_stddev_in_range (Union[Unset, ColumnPopulationStddevInRangeCheckSpec]):
-        sample_variance_in_range (Union[Unset, ColumnSampleVarianceInRangeCheckSpec]):
-        population_variance_in_range (Union[Unset, ColumnPopulationVarianceInRangeCheckSpec]):
-        sum_in_range (Union[Unset, ColumnSumInRangeCheckSpec]):
-        invalid_latitude_count (Union[Unset, ColumnInvalidLatitudeCountCheckSpec]):
-        valid_latitude_percent (Union[Unset, ColumnValidLatitudePercentCheckSpec]):
-        invalid_longitude_count (Union[Unset, ColumnInvalidLongitudeCountCheckSpec]):
-        valid_longitude_percent (Union[Unset, ColumnValidLongitudePercentCheckSpec]):
+        profile_negative_count (Union[Unset, ColumnNegativeCountCheckSpec]):
+        profile_negative_percent (Union[Unset, ColumnNegativePercentCheckSpec]):
+        profile_non_negative_count (Union[Unset, ColumnNonNegativeCountCheckSpec]):
+        profile_non_negative_percent (Union[Unset, ColumnNonNegativePercentCheckSpec]):
+        profile_expected_numbers_in_use_count (Union[Unset, ColumnExpectedNumbersInUseCountCheckSpec]):
+        profile_number_value_in_set_percent (Union[Unset, ColumnNumberValueInSetPercentCheckSpec]):
+        profile_values_in_range_numeric_percent (Union[Unset, ColumnValuesInRangeNumericPercentCheckSpec]):
+        profile_values_in_range_integers_percent (Union[Unset, ColumnValuesInRangeIntegersPercentCheckSpec]):
+        profile_value_below_min_value_count (Union[Unset, ColumnValueBelowMinValueCountCheckSpec]):
+        profile_value_below_min_value_percent (Union[Unset, ColumnValueBelowMinValuePercentCheckSpec]):
+        profile_value_above_max_value_count (Union[Unset, ColumnValueAboveMaxValueCountCheckSpec]):
+        profile_value_above_max_value_percent (Union[Unset, ColumnValueAboveMaxValuePercentCheckSpec]):
+        profile_max_in_range (Union[Unset, ColumnMaxInRangeCheckSpec]):
+        profile_min_in_range (Union[Unset, ColumnMinInRangeCheckSpec]):
+        profile_mean_in_range (Union[Unset, ColumnMeanInRangeCheckSpec]):
+        profile_percentile_in_range (Union[Unset, ColumnPercentileInRangeCheckSpec]):
+        profile_median_in_range (Union[Unset, ColumnMedianInRangeCheckSpec]):
+        profile_percentile_10_in_range (Union[Unset, ColumnPercentile10InRangeCheckSpec]):
+        profile_percentile_25_in_range (Union[Unset, ColumnPercentile25InRangeCheckSpec]):
+        profile_percentile_75_in_range (Union[Unset, ColumnPercentile75InRangeCheckSpec]):
+        profile_percentile_90_in_range (Union[Unset, ColumnPercentile90InRangeCheckSpec]):
+        profile_sample_stddev_in_range (Union[Unset, ColumnSampleStddevInRangeCheckSpec]):
+        profile_population_stddev_in_range (Union[Unset, ColumnPopulationStddevInRangeCheckSpec]):
+        profile_sample_variance_in_range (Union[Unset, ColumnSampleVarianceInRangeCheckSpec]):
+        profile_population_variance_in_range (Union[Unset, ColumnPopulationVarianceInRangeCheckSpec]):
+        profile_sum_in_range (Union[Unset, ColumnSumInRangeCheckSpec]):
+        profile_invalid_latitude_count (Union[Unset, ColumnInvalidLatitudeCountCheckSpec]):
+        profile_valid_latitude_percent (Union[Unset, ColumnValidLatitudePercentCheckSpec]):
+        profile_invalid_longitude_count (Union[Unset, ColumnInvalidLongitudeCountCheckSpec]):
+        profile_valid_longitude_percent (Union[Unset, ColumnValidLongitudePercentCheckSpec]):
     """
 
-    negative_count: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
-    negative_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = UNSET
-    non_negative_count: Union[Unset, "ColumnNonNegativeCountCheckSpec"] = UNSET
-    non_negative_percent: Union[Unset, "ColumnNonNegativePercentCheckSpec"] = UNSET
-    expected_numbers_in_use_count: Union[
+    profile_negative_count: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
+    profile_negative_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = UNSET
+    profile_non_negative_count: Union[Unset, "ColumnNonNegativeCountCheckSpec"] = UNSET
+    profile_non_negative_percent: Union[
+        Unset, "ColumnNonNegativePercentCheckSpec"
+    ] = UNSET
+    profile_expected_numbers_in_use_count: Union[
         Unset, "ColumnExpectedNumbersInUseCountCheckSpec"
     ] = UNSET
-    number_value_in_set_percent: Union[
+    profile_number_value_in_set_percent: Union[
         Unset, "ColumnNumberValueInSetPercentCheckSpec"
     ] = UNSET
-    values_in_range_numeric_percent: Union[
+    profile_values_in_range_numeric_percent: Union[
         Unset, "ColumnValuesInRangeNumericPercentCheckSpec"
     ] = UNSET
-    values_in_range_integers_percent: Union[
+    profile_values_in_range_integers_percent: Union[
         Unset, "ColumnValuesInRangeIntegersPercentCheckSpec"
     ] = UNSET
-    value_below_min_value_count: Union[
+    profile_value_below_min_value_count: Union[
         Unset, "ColumnValueBelowMinValueCountCheckSpec"
     ] = UNSET
-    value_below_min_value_percent: Union[
+    profile_value_below_min_value_percent: Union[
         Unset, "ColumnValueBelowMinValuePercentCheckSpec"
     ] = UNSET
-    value_above_max_value_count: Union[
+    profile_value_above_max_value_count: Union[
         Unset, "ColumnValueAboveMaxValueCountCheckSpec"
     ] = UNSET
-    value_above_max_value_percent: Union[
+    profile_value_above_max_value_percent: Union[
         Unset, "ColumnValueAboveMaxValuePercentCheckSpec"
     ] = UNSET
-    max_in_range: Union[Unset, "ColumnMaxInRangeCheckSpec"] = UNSET
-    min_in_range: Union[Unset, "ColumnMinInRangeCheckSpec"] = UNSET
-    mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
-    percentile_in_range: Union[Unset, "ColumnPercentileInRangeCheckSpec"] = UNSET
-    median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = UNSET
-    percentile_10_in_range: Union[Unset, "ColumnPercentile10InRangeCheckSpec"] = UNSET
-    percentile_25_in_range: Union[Unset, "ColumnPercentile25InRangeCheckSpec"] = UNSET
-    percentile_75_in_range: Union[Unset, "ColumnPercentile75InRangeCheckSpec"] = UNSET
-    percentile_90_in_range: Union[Unset, "ColumnPercentile90InRangeCheckSpec"] = UNSET
-    sample_stddev_in_range: Union[Unset, "ColumnSampleStddevInRangeCheckSpec"] = UNSET
-    population_stddev_in_range: Union[
+    profile_max_in_range: Union[Unset, "ColumnMaxInRangeCheckSpec"] = UNSET
+    profile_min_in_range: Union[Unset, "ColumnMinInRangeCheckSpec"] = UNSET
+    profile_mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
+    profile_percentile_in_range: Union[
+        Unset, "ColumnPercentileInRangeCheckSpec"
+    ] = UNSET
+    profile_median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = UNSET
+    profile_percentile_10_in_range: Union[
+        Unset, "ColumnPercentile10InRangeCheckSpec"
+    ] = UNSET
+    profile_percentile_25_in_range: Union[
+        Unset, "ColumnPercentile25InRangeCheckSpec"
+    ] = UNSET
+    profile_percentile_75_in_range: Union[
+        Unset, "ColumnPercentile75InRangeCheckSpec"
+    ] = UNSET
+    profile_percentile_90_in_range: Union[
+        Unset, "ColumnPercentile90InRangeCheckSpec"
+    ] = UNSET
+    profile_sample_stddev_in_range: Union[
+        Unset, "ColumnSampleStddevInRangeCheckSpec"
+    ] = UNSET
+    profile_population_stddev_in_range: Union[
         Unset, "ColumnPopulationStddevInRangeCheckSpec"
     ] = UNSET
-    sample_variance_in_range: Union[
+    profile_sample_variance_in_range: Union[
         Unset, "ColumnSampleVarianceInRangeCheckSpec"
     ] = UNSET
-    population_variance_in_range: Union[
+    profile_population_variance_in_range: Union[
         Unset, "ColumnPopulationVarianceInRangeCheckSpec"
     ] = UNSET
-    sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
-    invalid_latitude_count: Union[Unset, "ColumnInvalidLatitudeCountCheckSpec"] = UNSET
-    valid_latitude_percent: Union[Unset, "ColumnValidLatitudePercentCheckSpec"] = UNSET
-    invalid_longitude_count: Union[
+    profile_sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
+    profile_invalid_latitude_count: Union[
+        Unset, "ColumnInvalidLatitudeCountCheckSpec"
+    ] = UNSET
+    profile_valid_latitude_percent: Union[
+        Unset, "ColumnValidLatitudePercentCheckSpec"
+    ] = UNSET
+    profile_invalid_longitude_count: Union[
         Unset, "ColumnInvalidLongitudeCountCheckSpec"
     ] = UNSET
-    valid_longitude_percent: Union[
+    profile_valid_longitude_percent: Union[
         Unset, "ColumnValidLongitudePercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        negative_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.negative_count, Unset):
-            negative_count = self.negative_count.to_dict()
+        profile_negative_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_negative_count, Unset):
+            profile_negative_count = self.profile_negative_count.to_dict()
 
-        negative_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.negative_percent, Unset):
-            negative_percent = self.negative_percent.to_dict()
+        profile_negative_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_negative_percent, Unset):
+            profile_negative_percent = self.profile_negative_percent.to_dict()
 
-        non_negative_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.non_negative_count, Unset):
-            non_negative_count = self.non_negative_count.to_dict()
+        profile_non_negative_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_non_negative_count, Unset):
+            profile_non_negative_count = self.profile_non_negative_count.to_dict()
 
-        non_negative_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.non_negative_percent, Unset):
-            non_negative_percent = self.non_negative_percent.to_dict()
+        profile_non_negative_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_non_negative_percent, Unset):
+            profile_non_negative_percent = self.profile_non_negative_percent.to_dict()
 
-        expected_numbers_in_use_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.expected_numbers_in_use_count, Unset):
-            expected_numbers_in_use_count = self.expected_numbers_in_use_count.to_dict()
-
-        number_value_in_set_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.number_value_in_set_percent, Unset):
-            number_value_in_set_percent = self.number_value_in_set_percent.to_dict()
-
-        values_in_range_numeric_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.values_in_range_numeric_percent, Unset):
-            values_in_range_numeric_percent = (
-                self.values_in_range_numeric_percent.to_dict()
+        profile_expected_numbers_in_use_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_expected_numbers_in_use_count, Unset):
+            profile_expected_numbers_in_use_count = (
+                self.profile_expected_numbers_in_use_count.to_dict()
             )
 
-        values_in_range_integers_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.values_in_range_integers_percent, Unset):
-            values_in_range_integers_percent = (
-                self.values_in_range_integers_percent.to_dict()
+        profile_number_value_in_set_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_number_value_in_set_percent, Unset):
+            profile_number_value_in_set_percent = (
+                self.profile_number_value_in_set_percent.to_dict()
             )
 
-        value_below_min_value_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.value_below_min_value_count, Unset):
-            value_below_min_value_count = self.value_below_min_value_count.to_dict()
+        profile_values_in_range_numeric_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_values_in_range_numeric_percent, Unset):
+            profile_values_in_range_numeric_percent = (
+                self.profile_values_in_range_numeric_percent.to_dict()
+            )
 
-        value_below_min_value_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.value_below_min_value_percent, Unset):
-            value_below_min_value_percent = self.value_below_min_value_percent.to_dict()
+        profile_values_in_range_integers_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_values_in_range_integers_percent, Unset):
+            profile_values_in_range_integers_percent = (
+                self.profile_values_in_range_integers_percent.to_dict()
+            )
 
-        value_above_max_value_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.value_above_max_value_count, Unset):
-            value_above_max_value_count = self.value_above_max_value_count.to_dict()
+        profile_value_below_min_value_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_value_below_min_value_count, Unset):
+            profile_value_below_min_value_count = (
+                self.profile_value_below_min_value_count.to_dict()
+            )
 
-        value_above_max_value_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.value_above_max_value_percent, Unset):
-            value_above_max_value_percent = self.value_above_max_value_percent.to_dict()
+        profile_value_below_min_value_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_value_below_min_value_percent, Unset):
+            profile_value_below_min_value_percent = (
+                self.profile_value_below_min_value_percent.to_dict()
+            )
 
-        max_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.max_in_range, Unset):
-            max_in_range = self.max_in_range.to_dict()
+        profile_value_above_max_value_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_value_above_max_value_count, Unset):
+            profile_value_above_max_value_count = (
+                self.profile_value_above_max_value_count.to_dict()
+            )
 
-        min_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.min_in_range, Unset):
-            min_in_range = self.min_in_range.to_dict()
+        profile_value_above_max_value_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_value_above_max_value_percent, Unset):
+            profile_value_above_max_value_percent = (
+                self.profile_value_above_max_value_percent.to_dict()
+            )
 
-        mean_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.mean_in_range, Unset):
-            mean_in_range = self.mean_in_range.to_dict()
+        profile_max_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_max_in_range, Unset):
+            profile_max_in_range = self.profile_max_in_range.to_dict()
 
-        percentile_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.percentile_in_range, Unset):
-            percentile_in_range = self.percentile_in_range.to_dict()
+        profile_min_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_min_in_range, Unset):
+            profile_min_in_range = self.profile_min_in_range.to_dict()
 
-        median_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.median_in_range, Unset):
-            median_in_range = self.median_in_range.to_dict()
+        profile_mean_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_mean_in_range, Unset):
+            profile_mean_in_range = self.profile_mean_in_range.to_dict()
 
-        percentile_10_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.percentile_10_in_range, Unset):
-            percentile_10_in_range = self.percentile_10_in_range.to_dict()
+        profile_percentile_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_percentile_in_range, Unset):
+            profile_percentile_in_range = self.profile_percentile_in_range.to_dict()
 
-        percentile_25_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.percentile_25_in_range, Unset):
-            percentile_25_in_range = self.percentile_25_in_range.to_dict()
+        profile_median_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_median_in_range, Unset):
+            profile_median_in_range = self.profile_median_in_range.to_dict()
 
-        percentile_75_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.percentile_75_in_range, Unset):
-            percentile_75_in_range = self.percentile_75_in_range.to_dict()
+        profile_percentile_10_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_percentile_10_in_range, Unset):
+            profile_percentile_10_in_range = (
+                self.profile_percentile_10_in_range.to_dict()
+            )
 
-        percentile_90_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.percentile_90_in_range, Unset):
-            percentile_90_in_range = self.percentile_90_in_range.to_dict()
+        profile_percentile_25_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_percentile_25_in_range, Unset):
+            profile_percentile_25_in_range = (
+                self.profile_percentile_25_in_range.to_dict()
+            )
 
-        sample_stddev_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sample_stddev_in_range, Unset):
-            sample_stddev_in_range = self.sample_stddev_in_range.to_dict()
+        profile_percentile_75_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_percentile_75_in_range, Unset):
+            profile_percentile_75_in_range = (
+                self.profile_percentile_75_in_range.to_dict()
+            )
 
-        population_stddev_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.population_stddev_in_range, Unset):
-            population_stddev_in_range = self.population_stddev_in_range.to_dict()
+        profile_percentile_90_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_percentile_90_in_range, Unset):
+            profile_percentile_90_in_range = (
+                self.profile_percentile_90_in_range.to_dict()
+            )
 
-        sample_variance_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sample_variance_in_range, Unset):
-            sample_variance_in_range = self.sample_variance_in_range.to_dict()
+        profile_sample_stddev_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sample_stddev_in_range, Unset):
+            profile_sample_stddev_in_range = (
+                self.profile_sample_stddev_in_range.to_dict()
+            )
 
-        population_variance_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.population_variance_in_range, Unset):
-            population_variance_in_range = self.population_variance_in_range.to_dict()
+        profile_population_stddev_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_population_stddev_in_range, Unset):
+            profile_population_stddev_in_range = (
+                self.profile_population_stddev_in_range.to_dict()
+            )
 
-        sum_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sum_in_range, Unset):
-            sum_in_range = self.sum_in_range.to_dict()
+        profile_sample_variance_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sample_variance_in_range, Unset):
+            profile_sample_variance_in_range = (
+                self.profile_sample_variance_in_range.to_dict()
+            )
 
-        invalid_latitude_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.invalid_latitude_count, Unset):
-            invalid_latitude_count = self.invalid_latitude_count.to_dict()
+        profile_population_variance_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_population_variance_in_range, Unset):
+            profile_population_variance_in_range = (
+                self.profile_population_variance_in_range.to_dict()
+            )
 
-        valid_latitude_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.valid_latitude_percent, Unset):
-            valid_latitude_percent = self.valid_latitude_percent.to_dict()
+        profile_sum_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sum_in_range, Unset):
+            profile_sum_in_range = self.profile_sum_in_range.to_dict()
 
-        invalid_longitude_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.invalid_longitude_count, Unset):
-            invalid_longitude_count = self.invalid_longitude_count.to_dict()
+        profile_invalid_latitude_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_invalid_latitude_count, Unset):
+            profile_invalid_latitude_count = (
+                self.profile_invalid_latitude_count.to_dict()
+            )
 
-        valid_longitude_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.valid_longitude_percent, Unset):
-            valid_longitude_percent = self.valid_longitude_percent.to_dict()
+        profile_valid_latitude_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_valid_latitude_percent, Unset):
+            profile_valid_latitude_percent = (
+                self.profile_valid_latitude_percent.to_dict()
+            )
+
+        profile_invalid_longitude_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_invalid_longitude_count, Unset):
+            profile_invalid_longitude_count = (
+                self.profile_invalid_longitude_count.to_dict()
+            )
+
+        profile_valid_longitude_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_valid_longitude_percent, Unset):
+            profile_valid_longitude_percent = (
+                self.profile_valid_longitude_percent.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if negative_count is not UNSET:
-            field_dict["negative_count"] = negative_count
-        if negative_percent is not UNSET:
-            field_dict["negative_percent"] = negative_percent
-        if non_negative_count is not UNSET:
-            field_dict["non_negative_count"] = non_negative_count
-        if non_negative_percent is not UNSET:
-            field_dict["non_negative_percent"] = non_negative_percent
-        if expected_numbers_in_use_count is not UNSET:
-            field_dict["expected_numbers_in_use_count"] = expected_numbers_in_use_count
-        if number_value_in_set_percent is not UNSET:
-            field_dict["number_value_in_set_percent"] = number_value_in_set_percent
-        if values_in_range_numeric_percent is not UNSET:
+        if profile_negative_count is not UNSET:
+            field_dict["profile_negative_count"] = profile_negative_count
+        if profile_negative_percent is not UNSET:
+            field_dict["profile_negative_percent"] = profile_negative_percent
+        if profile_non_negative_count is not UNSET:
+            field_dict["profile_non_negative_count"] = profile_non_negative_count
+        if profile_non_negative_percent is not UNSET:
+            field_dict["profile_non_negative_percent"] = profile_non_negative_percent
+        if profile_expected_numbers_in_use_count is not UNSET:
             field_dict[
-                "values_in_range_numeric_percent"
-            ] = values_in_range_numeric_percent
-        if values_in_range_integers_percent is not UNSET:
+                "profile_expected_numbers_in_use_count"
+            ] = profile_expected_numbers_in_use_count
+        if profile_number_value_in_set_percent is not UNSET:
             field_dict[
-                "values_in_range_integers_percent"
-            ] = values_in_range_integers_percent
-        if value_below_min_value_count is not UNSET:
-            field_dict["value_below_min_value_count"] = value_below_min_value_count
-        if value_below_min_value_percent is not UNSET:
-            field_dict["value_below_min_value_percent"] = value_below_min_value_percent
-        if value_above_max_value_count is not UNSET:
-            field_dict["value_above_max_value_count"] = value_above_max_value_count
-        if value_above_max_value_percent is not UNSET:
-            field_dict["value_above_max_value_percent"] = value_above_max_value_percent
-        if max_in_range is not UNSET:
-            field_dict["max_in_range"] = max_in_range
-        if min_in_range is not UNSET:
-            field_dict["min_in_range"] = min_in_range
-        if mean_in_range is not UNSET:
-            field_dict["mean_in_range"] = mean_in_range
-        if percentile_in_range is not UNSET:
-            field_dict["percentile_in_range"] = percentile_in_range
-        if median_in_range is not UNSET:
-            field_dict["median_in_range"] = median_in_range
-        if percentile_10_in_range is not UNSET:
-            field_dict["percentile_10_in_range"] = percentile_10_in_range
-        if percentile_25_in_range is not UNSET:
-            field_dict["percentile_25_in_range"] = percentile_25_in_range
-        if percentile_75_in_range is not UNSET:
-            field_dict["percentile_75_in_range"] = percentile_75_in_range
-        if percentile_90_in_range is not UNSET:
-            field_dict["percentile_90_in_range"] = percentile_90_in_range
-        if sample_stddev_in_range is not UNSET:
-            field_dict["sample_stddev_in_range"] = sample_stddev_in_range
-        if population_stddev_in_range is not UNSET:
-            field_dict["population_stddev_in_range"] = population_stddev_in_range
-        if sample_variance_in_range is not UNSET:
-            field_dict["sample_variance_in_range"] = sample_variance_in_range
-        if population_variance_in_range is not UNSET:
-            field_dict["population_variance_in_range"] = population_variance_in_range
-        if sum_in_range is not UNSET:
-            field_dict["sum_in_range"] = sum_in_range
-        if invalid_latitude_count is not UNSET:
-            field_dict["invalid_latitude_count"] = invalid_latitude_count
-        if valid_latitude_percent is not UNSET:
-            field_dict["valid_latitude_percent"] = valid_latitude_percent
-        if invalid_longitude_count is not UNSET:
-            field_dict["invalid_longitude_count"] = invalid_longitude_count
-        if valid_longitude_percent is not UNSET:
-            field_dict["valid_longitude_percent"] = valid_longitude_percent
+                "profile_number_value_in_set_percent"
+            ] = profile_number_value_in_set_percent
+        if profile_values_in_range_numeric_percent is not UNSET:
+            field_dict[
+                "profile_values_in_range_numeric_percent"
+            ] = profile_values_in_range_numeric_percent
+        if profile_values_in_range_integers_percent is not UNSET:
+            field_dict[
+                "profile_values_in_range_integers_percent"
+            ] = profile_values_in_range_integers_percent
+        if profile_value_below_min_value_count is not UNSET:
+            field_dict[
+                "profile_value_below_min_value_count"
+            ] = profile_value_below_min_value_count
+        if profile_value_below_min_value_percent is not UNSET:
+            field_dict[
+                "profile_value_below_min_value_percent"
+            ] = profile_value_below_min_value_percent
+        if profile_value_above_max_value_count is not UNSET:
+            field_dict[
+                "profile_value_above_max_value_count"
+            ] = profile_value_above_max_value_count
+        if profile_value_above_max_value_percent is not UNSET:
+            field_dict[
+                "profile_value_above_max_value_percent"
+            ] = profile_value_above_max_value_percent
+        if profile_max_in_range is not UNSET:
+            field_dict["profile_max_in_range"] = profile_max_in_range
+        if profile_min_in_range is not UNSET:
+            field_dict["profile_min_in_range"] = profile_min_in_range
+        if profile_mean_in_range is not UNSET:
+            field_dict["profile_mean_in_range"] = profile_mean_in_range
+        if profile_percentile_in_range is not UNSET:
+            field_dict["profile_percentile_in_range"] = profile_percentile_in_range
+        if profile_median_in_range is not UNSET:
+            field_dict["profile_median_in_range"] = profile_median_in_range
+        if profile_percentile_10_in_range is not UNSET:
+            field_dict[
+                "profile_percentile_10_in_range"
+            ] = profile_percentile_10_in_range
+        if profile_percentile_25_in_range is not UNSET:
+            field_dict[
+                "profile_percentile_25_in_range"
+            ] = profile_percentile_25_in_range
+        if profile_percentile_75_in_range is not UNSET:
+            field_dict[
+                "profile_percentile_75_in_range"
+            ] = profile_percentile_75_in_range
+        if profile_percentile_90_in_range is not UNSET:
+            field_dict[
+                "profile_percentile_90_in_range"
+            ] = profile_percentile_90_in_range
+        if profile_sample_stddev_in_range is not UNSET:
+            field_dict[
+                "profile_sample_stddev_in_range"
+            ] = profile_sample_stddev_in_range
+        if profile_population_stddev_in_range is not UNSET:
+            field_dict[
+                "profile_population_stddev_in_range"
+            ] = profile_population_stddev_in_range
+        if profile_sample_variance_in_range is not UNSET:
+            field_dict[
+                "profile_sample_variance_in_range"
+            ] = profile_sample_variance_in_range
+        if profile_population_variance_in_range is not UNSET:
+            field_dict[
+                "profile_population_variance_in_range"
+            ] = profile_population_variance_in_range
+        if profile_sum_in_range is not UNSET:
+            field_dict["profile_sum_in_range"] = profile_sum_in_range
+        if profile_invalid_latitude_count is not UNSET:
+            field_dict[
+                "profile_invalid_latitude_count"
+            ] = profile_invalid_latitude_count
+        if profile_valid_latitude_percent is not UNSET:
+            field_dict[
+                "profile_valid_latitude_percent"
+            ] = profile_valid_latitude_percent
+        if profile_invalid_longitude_count is not UNSET:
+            field_dict[
+                "profile_invalid_longitude_count"
+            ] = profile_invalid_longitude_count
+        if profile_valid_longitude_percent is not UNSET:
+            field_dict[
+                "profile_valid_longitude_percent"
+            ] = profile_valid_longitude_percent
 
         return field_dict
 
@@ -463,337 +553,403 @@ class ColumnNumericProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _negative_count = d.pop("negative_count", UNSET)
-        negative_count: Union[Unset, ColumnNegativeCountCheckSpec]
-        if isinstance(_negative_count, Unset):
-            negative_count = UNSET
+        _profile_negative_count = d.pop("profile_negative_count", UNSET)
+        profile_negative_count: Union[Unset, ColumnNegativeCountCheckSpec]
+        if isinstance(_profile_negative_count, Unset):
+            profile_negative_count = UNSET
         else:
-            negative_count = ColumnNegativeCountCheckSpec.from_dict(_negative_count)
-
-        _negative_percent = d.pop("negative_percent", UNSET)
-        negative_percent: Union[Unset, ColumnNegativePercentCheckSpec]
-        if isinstance(_negative_percent, Unset):
-            negative_percent = UNSET
-        else:
-            negative_percent = ColumnNegativePercentCheckSpec.from_dict(
-                _negative_percent
+            profile_negative_count = ColumnNegativeCountCheckSpec.from_dict(
+                _profile_negative_count
             )
 
-        _non_negative_count = d.pop("non_negative_count", UNSET)
-        non_negative_count: Union[Unset, ColumnNonNegativeCountCheckSpec]
-        if isinstance(_non_negative_count, Unset):
-            non_negative_count = UNSET
+        _profile_negative_percent = d.pop("profile_negative_percent", UNSET)
+        profile_negative_percent: Union[Unset, ColumnNegativePercentCheckSpec]
+        if isinstance(_profile_negative_percent, Unset):
+            profile_negative_percent = UNSET
         else:
-            non_negative_count = ColumnNonNegativeCountCheckSpec.from_dict(
-                _non_negative_count
+            profile_negative_percent = ColumnNegativePercentCheckSpec.from_dict(
+                _profile_negative_percent
             )
 
-        _non_negative_percent = d.pop("non_negative_percent", UNSET)
-        non_negative_percent: Union[Unset, ColumnNonNegativePercentCheckSpec]
-        if isinstance(_non_negative_percent, Unset):
-            non_negative_percent = UNSET
+        _profile_non_negative_count = d.pop("profile_non_negative_count", UNSET)
+        profile_non_negative_count: Union[Unset, ColumnNonNegativeCountCheckSpec]
+        if isinstance(_profile_non_negative_count, Unset):
+            profile_non_negative_count = UNSET
         else:
-            non_negative_percent = ColumnNonNegativePercentCheckSpec.from_dict(
-                _non_negative_percent
+            profile_non_negative_count = ColumnNonNegativeCountCheckSpec.from_dict(
+                _profile_non_negative_count
             )
 
-        _expected_numbers_in_use_count = d.pop("expected_numbers_in_use_count", UNSET)
-        expected_numbers_in_use_count: Union[
+        _profile_non_negative_percent = d.pop("profile_non_negative_percent", UNSET)
+        profile_non_negative_percent: Union[Unset, ColumnNonNegativePercentCheckSpec]
+        if isinstance(_profile_non_negative_percent, Unset):
+            profile_non_negative_percent = UNSET
+        else:
+            profile_non_negative_percent = ColumnNonNegativePercentCheckSpec.from_dict(
+                _profile_non_negative_percent
+            )
+
+        _profile_expected_numbers_in_use_count = d.pop(
+            "profile_expected_numbers_in_use_count", UNSET
+        )
+        profile_expected_numbers_in_use_count: Union[
             Unset, ColumnExpectedNumbersInUseCountCheckSpec
         ]
-        if isinstance(_expected_numbers_in_use_count, Unset):
-            expected_numbers_in_use_count = UNSET
+        if isinstance(_profile_expected_numbers_in_use_count, Unset):
+            profile_expected_numbers_in_use_count = UNSET
         else:
-            expected_numbers_in_use_count = (
+            profile_expected_numbers_in_use_count = (
                 ColumnExpectedNumbersInUseCountCheckSpec.from_dict(
-                    _expected_numbers_in_use_count
+                    _profile_expected_numbers_in_use_count
                 )
             )
 
-        _number_value_in_set_percent = d.pop("number_value_in_set_percent", UNSET)
-        number_value_in_set_percent: Union[
+        _profile_number_value_in_set_percent = d.pop(
+            "profile_number_value_in_set_percent", UNSET
+        )
+        profile_number_value_in_set_percent: Union[
             Unset, ColumnNumberValueInSetPercentCheckSpec
         ]
-        if isinstance(_number_value_in_set_percent, Unset):
-            number_value_in_set_percent = UNSET
+        if isinstance(_profile_number_value_in_set_percent, Unset):
+            profile_number_value_in_set_percent = UNSET
         else:
-            number_value_in_set_percent = (
+            profile_number_value_in_set_percent = (
                 ColumnNumberValueInSetPercentCheckSpec.from_dict(
-                    _number_value_in_set_percent
+                    _profile_number_value_in_set_percent
                 )
             )
 
-        _values_in_range_numeric_percent = d.pop(
-            "values_in_range_numeric_percent", UNSET
+        _profile_values_in_range_numeric_percent = d.pop(
+            "profile_values_in_range_numeric_percent", UNSET
         )
-        values_in_range_numeric_percent: Union[
+        profile_values_in_range_numeric_percent: Union[
             Unset, ColumnValuesInRangeNumericPercentCheckSpec
         ]
-        if isinstance(_values_in_range_numeric_percent, Unset):
-            values_in_range_numeric_percent = UNSET
+        if isinstance(_profile_values_in_range_numeric_percent, Unset):
+            profile_values_in_range_numeric_percent = UNSET
         else:
-            values_in_range_numeric_percent = (
+            profile_values_in_range_numeric_percent = (
                 ColumnValuesInRangeNumericPercentCheckSpec.from_dict(
-                    _values_in_range_numeric_percent
+                    _profile_values_in_range_numeric_percent
                 )
             )
 
-        _values_in_range_integers_percent = d.pop(
-            "values_in_range_integers_percent", UNSET
+        _profile_values_in_range_integers_percent = d.pop(
+            "profile_values_in_range_integers_percent", UNSET
         )
-        values_in_range_integers_percent: Union[
+        profile_values_in_range_integers_percent: Union[
             Unset, ColumnValuesInRangeIntegersPercentCheckSpec
         ]
-        if isinstance(_values_in_range_integers_percent, Unset):
-            values_in_range_integers_percent = UNSET
+        if isinstance(_profile_values_in_range_integers_percent, Unset):
+            profile_values_in_range_integers_percent = UNSET
         else:
-            values_in_range_integers_percent = (
+            profile_values_in_range_integers_percent = (
                 ColumnValuesInRangeIntegersPercentCheckSpec.from_dict(
-                    _values_in_range_integers_percent
+                    _profile_values_in_range_integers_percent
                 )
             )
 
-        _value_below_min_value_count = d.pop("value_below_min_value_count", UNSET)
-        value_below_min_value_count: Union[
+        _profile_value_below_min_value_count = d.pop(
+            "profile_value_below_min_value_count", UNSET
+        )
+        profile_value_below_min_value_count: Union[
             Unset, ColumnValueBelowMinValueCountCheckSpec
         ]
-        if isinstance(_value_below_min_value_count, Unset):
-            value_below_min_value_count = UNSET
+        if isinstance(_profile_value_below_min_value_count, Unset):
+            profile_value_below_min_value_count = UNSET
         else:
-            value_below_min_value_count = (
+            profile_value_below_min_value_count = (
                 ColumnValueBelowMinValueCountCheckSpec.from_dict(
-                    _value_below_min_value_count
+                    _profile_value_below_min_value_count
                 )
             )
 
-        _value_below_min_value_percent = d.pop("value_below_min_value_percent", UNSET)
-        value_below_min_value_percent: Union[
+        _profile_value_below_min_value_percent = d.pop(
+            "profile_value_below_min_value_percent", UNSET
+        )
+        profile_value_below_min_value_percent: Union[
             Unset, ColumnValueBelowMinValuePercentCheckSpec
         ]
-        if isinstance(_value_below_min_value_percent, Unset):
-            value_below_min_value_percent = UNSET
+        if isinstance(_profile_value_below_min_value_percent, Unset):
+            profile_value_below_min_value_percent = UNSET
         else:
-            value_below_min_value_percent = (
+            profile_value_below_min_value_percent = (
                 ColumnValueBelowMinValuePercentCheckSpec.from_dict(
-                    _value_below_min_value_percent
+                    _profile_value_below_min_value_percent
                 )
             )
 
-        _value_above_max_value_count = d.pop("value_above_max_value_count", UNSET)
-        value_above_max_value_count: Union[
+        _profile_value_above_max_value_count = d.pop(
+            "profile_value_above_max_value_count", UNSET
+        )
+        profile_value_above_max_value_count: Union[
             Unset, ColumnValueAboveMaxValueCountCheckSpec
         ]
-        if isinstance(_value_above_max_value_count, Unset):
-            value_above_max_value_count = UNSET
+        if isinstance(_profile_value_above_max_value_count, Unset):
+            profile_value_above_max_value_count = UNSET
         else:
-            value_above_max_value_count = (
+            profile_value_above_max_value_count = (
                 ColumnValueAboveMaxValueCountCheckSpec.from_dict(
-                    _value_above_max_value_count
+                    _profile_value_above_max_value_count
                 )
             )
 
-        _value_above_max_value_percent = d.pop("value_above_max_value_percent", UNSET)
-        value_above_max_value_percent: Union[
+        _profile_value_above_max_value_percent = d.pop(
+            "profile_value_above_max_value_percent", UNSET
+        )
+        profile_value_above_max_value_percent: Union[
             Unset, ColumnValueAboveMaxValuePercentCheckSpec
         ]
-        if isinstance(_value_above_max_value_percent, Unset):
-            value_above_max_value_percent = UNSET
+        if isinstance(_profile_value_above_max_value_percent, Unset):
+            profile_value_above_max_value_percent = UNSET
         else:
-            value_above_max_value_percent = (
+            profile_value_above_max_value_percent = (
                 ColumnValueAboveMaxValuePercentCheckSpec.from_dict(
-                    _value_above_max_value_percent
+                    _profile_value_above_max_value_percent
                 )
             )
 
-        _max_in_range = d.pop("max_in_range", UNSET)
-        max_in_range: Union[Unset, ColumnMaxInRangeCheckSpec]
-        if isinstance(_max_in_range, Unset):
-            max_in_range = UNSET
+        _profile_max_in_range = d.pop("profile_max_in_range", UNSET)
+        profile_max_in_range: Union[Unset, ColumnMaxInRangeCheckSpec]
+        if isinstance(_profile_max_in_range, Unset):
+            profile_max_in_range = UNSET
         else:
-            max_in_range = ColumnMaxInRangeCheckSpec.from_dict(_max_in_range)
-
-        _min_in_range = d.pop("min_in_range", UNSET)
-        min_in_range: Union[Unset, ColumnMinInRangeCheckSpec]
-        if isinstance(_min_in_range, Unset):
-            min_in_range = UNSET
-        else:
-            min_in_range = ColumnMinInRangeCheckSpec.from_dict(_min_in_range)
-
-        _mean_in_range = d.pop("mean_in_range", UNSET)
-        mean_in_range: Union[Unset, ColumnMeanInRangeCheckSpec]
-        if isinstance(_mean_in_range, Unset):
-            mean_in_range = UNSET
-        else:
-            mean_in_range = ColumnMeanInRangeCheckSpec.from_dict(_mean_in_range)
-
-        _percentile_in_range = d.pop("percentile_in_range", UNSET)
-        percentile_in_range: Union[Unset, ColumnPercentileInRangeCheckSpec]
-        if isinstance(_percentile_in_range, Unset):
-            percentile_in_range = UNSET
-        else:
-            percentile_in_range = ColumnPercentileInRangeCheckSpec.from_dict(
-                _percentile_in_range
+            profile_max_in_range = ColumnMaxInRangeCheckSpec.from_dict(
+                _profile_max_in_range
             )
 
-        _median_in_range = d.pop("median_in_range", UNSET)
-        median_in_range: Union[Unset, ColumnMedianInRangeCheckSpec]
-        if isinstance(_median_in_range, Unset):
-            median_in_range = UNSET
+        _profile_min_in_range = d.pop("profile_min_in_range", UNSET)
+        profile_min_in_range: Union[Unset, ColumnMinInRangeCheckSpec]
+        if isinstance(_profile_min_in_range, Unset):
+            profile_min_in_range = UNSET
         else:
-            median_in_range = ColumnMedianInRangeCheckSpec.from_dict(_median_in_range)
-
-        _percentile_10_in_range = d.pop("percentile_10_in_range", UNSET)
-        percentile_10_in_range: Union[Unset, ColumnPercentile10InRangeCheckSpec]
-        if isinstance(_percentile_10_in_range, Unset):
-            percentile_10_in_range = UNSET
-        else:
-            percentile_10_in_range = ColumnPercentile10InRangeCheckSpec.from_dict(
-                _percentile_10_in_range
+            profile_min_in_range = ColumnMinInRangeCheckSpec.from_dict(
+                _profile_min_in_range
             )
 
-        _percentile_25_in_range = d.pop("percentile_25_in_range", UNSET)
-        percentile_25_in_range: Union[Unset, ColumnPercentile25InRangeCheckSpec]
-        if isinstance(_percentile_25_in_range, Unset):
-            percentile_25_in_range = UNSET
+        _profile_mean_in_range = d.pop("profile_mean_in_range", UNSET)
+        profile_mean_in_range: Union[Unset, ColumnMeanInRangeCheckSpec]
+        if isinstance(_profile_mean_in_range, Unset):
+            profile_mean_in_range = UNSET
         else:
-            percentile_25_in_range = ColumnPercentile25InRangeCheckSpec.from_dict(
-                _percentile_25_in_range
+            profile_mean_in_range = ColumnMeanInRangeCheckSpec.from_dict(
+                _profile_mean_in_range
             )
 
-        _percentile_75_in_range = d.pop("percentile_75_in_range", UNSET)
-        percentile_75_in_range: Union[Unset, ColumnPercentile75InRangeCheckSpec]
-        if isinstance(_percentile_75_in_range, Unset):
-            percentile_75_in_range = UNSET
+        _profile_percentile_in_range = d.pop("profile_percentile_in_range", UNSET)
+        profile_percentile_in_range: Union[Unset, ColumnPercentileInRangeCheckSpec]
+        if isinstance(_profile_percentile_in_range, Unset):
+            profile_percentile_in_range = UNSET
         else:
-            percentile_75_in_range = ColumnPercentile75InRangeCheckSpec.from_dict(
-                _percentile_75_in_range
+            profile_percentile_in_range = ColumnPercentileInRangeCheckSpec.from_dict(
+                _profile_percentile_in_range
             )
 
-        _percentile_90_in_range = d.pop("percentile_90_in_range", UNSET)
-        percentile_90_in_range: Union[Unset, ColumnPercentile90InRangeCheckSpec]
-        if isinstance(_percentile_90_in_range, Unset):
-            percentile_90_in_range = UNSET
+        _profile_median_in_range = d.pop("profile_median_in_range", UNSET)
+        profile_median_in_range: Union[Unset, ColumnMedianInRangeCheckSpec]
+        if isinstance(_profile_median_in_range, Unset):
+            profile_median_in_range = UNSET
         else:
-            percentile_90_in_range = ColumnPercentile90InRangeCheckSpec.from_dict(
-                _percentile_90_in_range
+            profile_median_in_range = ColumnMedianInRangeCheckSpec.from_dict(
+                _profile_median_in_range
             )
 
-        _sample_stddev_in_range = d.pop("sample_stddev_in_range", UNSET)
-        sample_stddev_in_range: Union[Unset, ColumnSampleStddevInRangeCheckSpec]
-        if isinstance(_sample_stddev_in_range, Unset):
-            sample_stddev_in_range = UNSET
+        _profile_percentile_10_in_range = d.pop("profile_percentile_10_in_range", UNSET)
+        profile_percentile_10_in_range: Union[Unset, ColumnPercentile10InRangeCheckSpec]
+        if isinstance(_profile_percentile_10_in_range, Unset):
+            profile_percentile_10_in_range = UNSET
         else:
-            sample_stddev_in_range = ColumnSampleStddevInRangeCheckSpec.from_dict(
-                _sample_stddev_in_range
+            profile_percentile_10_in_range = (
+                ColumnPercentile10InRangeCheckSpec.from_dict(
+                    _profile_percentile_10_in_range
+                )
             )
 
-        _population_stddev_in_range = d.pop("population_stddev_in_range", UNSET)
-        population_stddev_in_range: Union[Unset, ColumnPopulationStddevInRangeCheckSpec]
-        if isinstance(_population_stddev_in_range, Unset):
-            population_stddev_in_range = UNSET
+        _profile_percentile_25_in_range = d.pop("profile_percentile_25_in_range", UNSET)
+        profile_percentile_25_in_range: Union[Unset, ColumnPercentile25InRangeCheckSpec]
+        if isinstance(_profile_percentile_25_in_range, Unset):
+            profile_percentile_25_in_range = UNSET
         else:
-            population_stddev_in_range = (
+            profile_percentile_25_in_range = (
+                ColumnPercentile25InRangeCheckSpec.from_dict(
+                    _profile_percentile_25_in_range
+                )
+            )
+
+        _profile_percentile_75_in_range = d.pop("profile_percentile_75_in_range", UNSET)
+        profile_percentile_75_in_range: Union[Unset, ColumnPercentile75InRangeCheckSpec]
+        if isinstance(_profile_percentile_75_in_range, Unset):
+            profile_percentile_75_in_range = UNSET
+        else:
+            profile_percentile_75_in_range = (
+                ColumnPercentile75InRangeCheckSpec.from_dict(
+                    _profile_percentile_75_in_range
+                )
+            )
+
+        _profile_percentile_90_in_range = d.pop("profile_percentile_90_in_range", UNSET)
+        profile_percentile_90_in_range: Union[Unset, ColumnPercentile90InRangeCheckSpec]
+        if isinstance(_profile_percentile_90_in_range, Unset):
+            profile_percentile_90_in_range = UNSET
+        else:
+            profile_percentile_90_in_range = (
+                ColumnPercentile90InRangeCheckSpec.from_dict(
+                    _profile_percentile_90_in_range
+                )
+            )
+
+        _profile_sample_stddev_in_range = d.pop("profile_sample_stddev_in_range", UNSET)
+        profile_sample_stddev_in_range: Union[Unset, ColumnSampleStddevInRangeCheckSpec]
+        if isinstance(_profile_sample_stddev_in_range, Unset):
+            profile_sample_stddev_in_range = UNSET
+        else:
+            profile_sample_stddev_in_range = (
+                ColumnSampleStddevInRangeCheckSpec.from_dict(
+                    _profile_sample_stddev_in_range
+                )
+            )
+
+        _profile_population_stddev_in_range = d.pop(
+            "profile_population_stddev_in_range", UNSET
+        )
+        profile_population_stddev_in_range: Union[
+            Unset, ColumnPopulationStddevInRangeCheckSpec
+        ]
+        if isinstance(_profile_population_stddev_in_range, Unset):
+            profile_population_stddev_in_range = UNSET
+        else:
+            profile_population_stddev_in_range = (
                 ColumnPopulationStddevInRangeCheckSpec.from_dict(
-                    _population_stddev_in_range
+                    _profile_population_stddev_in_range
                 )
             )
 
-        _sample_variance_in_range = d.pop("sample_variance_in_range", UNSET)
-        sample_variance_in_range: Union[Unset, ColumnSampleVarianceInRangeCheckSpec]
-        if isinstance(_sample_variance_in_range, Unset):
-            sample_variance_in_range = UNSET
+        _profile_sample_variance_in_range = d.pop(
+            "profile_sample_variance_in_range", UNSET
+        )
+        profile_sample_variance_in_range: Union[
+            Unset, ColumnSampleVarianceInRangeCheckSpec
+        ]
+        if isinstance(_profile_sample_variance_in_range, Unset):
+            profile_sample_variance_in_range = UNSET
         else:
-            sample_variance_in_range = ColumnSampleVarianceInRangeCheckSpec.from_dict(
-                _sample_variance_in_range
+            profile_sample_variance_in_range = (
+                ColumnSampleVarianceInRangeCheckSpec.from_dict(
+                    _profile_sample_variance_in_range
+                )
             )
 
-        _population_variance_in_range = d.pop("population_variance_in_range", UNSET)
-        population_variance_in_range: Union[
+        _profile_population_variance_in_range = d.pop(
+            "profile_population_variance_in_range", UNSET
+        )
+        profile_population_variance_in_range: Union[
             Unset, ColumnPopulationVarianceInRangeCheckSpec
         ]
-        if isinstance(_population_variance_in_range, Unset):
-            population_variance_in_range = UNSET
+        if isinstance(_profile_population_variance_in_range, Unset):
+            profile_population_variance_in_range = UNSET
         else:
-            population_variance_in_range = (
+            profile_population_variance_in_range = (
                 ColumnPopulationVarianceInRangeCheckSpec.from_dict(
-                    _population_variance_in_range
+                    _profile_population_variance_in_range
                 )
             )
 
-        _sum_in_range = d.pop("sum_in_range", UNSET)
-        sum_in_range: Union[Unset, ColumnSumInRangeCheckSpec]
-        if isinstance(_sum_in_range, Unset):
-            sum_in_range = UNSET
+        _profile_sum_in_range = d.pop("profile_sum_in_range", UNSET)
+        profile_sum_in_range: Union[Unset, ColumnSumInRangeCheckSpec]
+        if isinstance(_profile_sum_in_range, Unset):
+            profile_sum_in_range = UNSET
         else:
-            sum_in_range = ColumnSumInRangeCheckSpec.from_dict(_sum_in_range)
-
-        _invalid_latitude_count = d.pop("invalid_latitude_count", UNSET)
-        invalid_latitude_count: Union[Unset, ColumnInvalidLatitudeCountCheckSpec]
-        if isinstance(_invalid_latitude_count, Unset):
-            invalid_latitude_count = UNSET
-        else:
-            invalid_latitude_count = ColumnInvalidLatitudeCountCheckSpec.from_dict(
-                _invalid_latitude_count
+            profile_sum_in_range = ColumnSumInRangeCheckSpec.from_dict(
+                _profile_sum_in_range
             )
 
-        _valid_latitude_percent = d.pop("valid_latitude_percent", UNSET)
-        valid_latitude_percent: Union[Unset, ColumnValidLatitudePercentCheckSpec]
-        if isinstance(_valid_latitude_percent, Unset):
-            valid_latitude_percent = UNSET
+        _profile_invalid_latitude_count = d.pop("profile_invalid_latitude_count", UNSET)
+        profile_invalid_latitude_count: Union[
+            Unset, ColumnInvalidLatitudeCountCheckSpec
+        ]
+        if isinstance(_profile_invalid_latitude_count, Unset):
+            profile_invalid_latitude_count = UNSET
         else:
-            valid_latitude_percent = ColumnValidLatitudePercentCheckSpec.from_dict(
-                _valid_latitude_percent
+            profile_invalid_latitude_count = (
+                ColumnInvalidLatitudeCountCheckSpec.from_dict(
+                    _profile_invalid_latitude_count
+                )
             )
 
-        _invalid_longitude_count = d.pop("invalid_longitude_count", UNSET)
-        invalid_longitude_count: Union[Unset, ColumnInvalidLongitudeCountCheckSpec]
-        if isinstance(_invalid_longitude_count, Unset):
-            invalid_longitude_count = UNSET
+        _profile_valid_latitude_percent = d.pop("profile_valid_latitude_percent", UNSET)
+        profile_valid_latitude_percent: Union[
+            Unset, ColumnValidLatitudePercentCheckSpec
+        ]
+        if isinstance(_profile_valid_latitude_percent, Unset):
+            profile_valid_latitude_percent = UNSET
         else:
-            invalid_longitude_count = ColumnInvalidLongitudeCountCheckSpec.from_dict(
-                _invalid_longitude_count
+            profile_valid_latitude_percent = (
+                ColumnValidLatitudePercentCheckSpec.from_dict(
+                    _profile_valid_latitude_percent
+                )
             )
 
-        _valid_longitude_percent = d.pop("valid_longitude_percent", UNSET)
-        valid_longitude_percent: Union[Unset, ColumnValidLongitudePercentCheckSpec]
-        if isinstance(_valid_longitude_percent, Unset):
-            valid_longitude_percent = UNSET
+        _profile_invalid_longitude_count = d.pop(
+            "profile_invalid_longitude_count", UNSET
+        )
+        profile_invalid_longitude_count: Union[
+            Unset, ColumnInvalidLongitudeCountCheckSpec
+        ]
+        if isinstance(_profile_invalid_longitude_count, Unset):
+            profile_invalid_longitude_count = UNSET
         else:
-            valid_longitude_percent = ColumnValidLongitudePercentCheckSpec.from_dict(
-                _valid_longitude_percent
+            profile_invalid_longitude_count = (
+                ColumnInvalidLongitudeCountCheckSpec.from_dict(
+                    _profile_invalid_longitude_count
+                )
+            )
+
+        _profile_valid_longitude_percent = d.pop(
+            "profile_valid_longitude_percent", UNSET
+        )
+        profile_valid_longitude_percent: Union[
+            Unset, ColumnValidLongitudePercentCheckSpec
+        ]
+        if isinstance(_profile_valid_longitude_percent, Unset):
+            profile_valid_longitude_percent = UNSET
+        else:
+            profile_valid_longitude_percent = (
+                ColumnValidLongitudePercentCheckSpec.from_dict(
+                    _profile_valid_longitude_percent
+                )
             )
 
         column_numeric_profiling_checks_spec = cls(
-            negative_count=negative_count,
-            negative_percent=negative_percent,
-            non_negative_count=non_negative_count,
-            non_negative_percent=non_negative_percent,
-            expected_numbers_in_use_count=expected_numbers_in_use_count,
-            number_value_in_set_percent=number_value_in_set_percent,
-            values_in_range_numeric_percent=values_in_range_numeric_percent,
-            values_in_range_integers_percent=values_in_range_integers_percent,
-            value_below_min_value_count=value_below_min_value_count,
-            value_below_min_value_percent=value_below_min_value_percent,
-            value_above_max_value_count=value_above_max_value_count,
-            value_above_max_value_percent=value_above_max_value_percent,
-            max_in_range=max_in_range,
-            min_in_range=min_in_range,
-            mean_in_range=mean_in_range,
-            percentile_in_range=percentile_in_range,
-            median_in_range=median_in_range,
-            percentile_10_in_range=percentile_10_in_range,
-            percentile_25_in_range=percentile_25_in_range,
-            percentile_75_in_range=percentile_75_in_range,
-            percentile_90_in_range=percentile_90_in_range,
-            sample_stddev_in_range=sample_stddev_in_range,
-            population_stddev_in_range=population_stddev_in_range,
-            sample_variance_in_range=sample_variance_in_range,
-            population_variance_in_range=population_variance_in_range,
-            sum_in_range=sum_in_range,
-            invalid_latitude_count=invalid_latitude_count,
-            valid_latitude_percent=valid_latitude_percent,
-            invalid_longitude_count=invalid_longitude_count,
-            valid_longitude_percent=valid_longitude_percent,
+            profile_negative_count=profile_negative_count,
+            profile_negative_percent=profile_negative_percent,
+            profile_non_negative_count=profile_non_negative_count,
+            profile_non_negative_percent=profile_non_negative_percent,
+            profile_expected_numbers_in_use_count=profile_expected_numbers_in_use_count,
+            profile_number_value_in_set_percent=profile_number_value_in_set_percent,
+            profile_values_in_range_numeric_percent=profile_values_in_range_numeric_percent,
+            profile_values_in_range_integers_percent=profile_values_in_range_integers_percent,
+            profile_value_below_min_value_count=profile_value_below_min_value_count,
+            profile_value_below_min_value_percent=profile_value_below_min_value_percent,
+            profile_value_above_max_value_count=profile_value_above_max_value_count,
+            profile_value_above_max_value_percent=profile_value_above_max_value_percent,
+            profile_max_in_range=profile_max_in_range,
+            profile_min_in_range=profile_min_in_range,
+            profile_mean_in_range=profile_mean_in_range,
+            profile_percentile_in_range=profile_percentile_in_range,
+            profile_median_in_range=profile_median_in_range,
+            profile_percentile_10_in_range=profile_percentile_10_in_range,
+            profile_percentile_25_in_range=profile_percentile_25_in_range,
+            profile_percentile_75_in_range=profile_percentile_75_in_range,
+            profile_percentile_90_in_range=profile_percentile_90_in_range,
+            profile_sample_stddev_in_range=profile_sample_stddev_in_range,
+            profile_population_stddev_in_range=profile_population_stddev_in_range,
+            profile_sample_variance_in_range=profile_sample_variance_in_range,
+            profile_population_variance_in_range=profile_population_variance_in_range,
+            profile_sum_in_range=profile_sum_in_range,
+            profile_invalid_latitude_count=profile_invalid_latitude_count,
+            profile_valid_latitude_percent=profile_valid_latitude_percent,
+            profile_invalid_longitude_count=profile_invalid_longitude_count,
+            profile_valid_longitude_percent=profile_valid_longitude_percent,
         )
 
         column_numeric_profiling_checks_spec.additional_properties = d

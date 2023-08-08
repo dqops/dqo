@@ -1,9 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../../redux/reducers";
-import SvgIcon from "../../SvgIcon";
-import { useDashboard } from "../../../contexts/dashboardContext";
-import { DashboardsFolderSpec } from "../../../api";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import SvgIcon from '../../SvgIcon';
+import { useDashboard } from '../../../contexts/dashboardContext';
+import { DashboardsFolderSpec } from '../../../api';
 
 interface FolderLevelProps {
   folder: DashboardsFolderSpec;
@@ -96,9 +102,21 @@ const LeftView = () => {
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300'
                 }
                 onClick={() => {
-                  changeActiveTab(dashboard, folder.folder_name, parents, [key, dashboard.dashboard_name ? dashboard.dashboard_name : ''].join('-'), true);
+                  changeActiveTab(
+                    dashboard,
+                    folder.folder_name,
+                    parents,
+                    [
+                      key,
+                      dashboard.dashboard_name ? dashboard.dashboard_name : ''
+                    ].join('-'),
+                    true
+                  );
                   setSelected(
-                    [key, dashboard.dashboard_name ? dashboard.dashboard_name : ''].join('-')
+                    [
+                      key,
+                      dashboard.dashboard_name ? dashboard.dashboard_name : ''
+                    ].join('-')
                   );
                 }}
               >
@@ -129,7 +147,7 @@ const LeftView = () => {
       ))}
 
       <div
-        className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-50 top-16"
+        className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-20 top-16"
         onMouseDown={startResizing}
         style={{ left: sidebarWidth }}
       />

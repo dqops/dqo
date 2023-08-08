@@ -50,7 +50,6 @@ import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -65,6 +64,7 @@ import com.dqops.services.check.matching.SimilarCheckMatchingService;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.services.check.matching.SimilarChecksContainer;
 import com.dqops.services.check.matching.SimilarChecksGroup;
+import com.dqops.utils.docs.HandledClassesLinkageStore;
 import com.dqops.utils.docs.ProviderTypeModel;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactory;
 import com.dqops.utils.docs.sensors.SensorDocumentationModel;
@@ -78,12 +78,12 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
 import java.util.*;
 
 /**
  * Check documentation model factory. Creates documentation objects for each check.
  */
-@Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final String COMPARISON_NAME = "compare_to_source_of_truth_table";
 
@@ -119,29 +119,33 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private YamlSerializer yamlSerializer;
     private JinjaTemplateRenderService jinjaTemplateRenderService;
+    private final HandledClassesLinkageStore linkageStore;
 
     /**
      * Creates a check documentation service.
-     * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
+     *
+     * @param similarCheckMatchingService     Service that finds all similar checks that share the same sensor and rule.
      * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
-     * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
-     * @param modelToSpecCheckMappingService UI check model to specification adapter that can generate a sample usage for us.
-     * @param yamlSerializer Yaml serializer, used to render the table yaml files with a sample usage.
-     * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
+     * @param ruleDocumentationModelFactory   Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
+     * @param modelToSpecCheckMappingService  UI check model to specification adapter that can generate a sample usage for us.
+     * @param yamlSerializer                  Yaml serializer, used to render the table yaml files with a sample usage.
+     * @param jinjaTemplateRenderService      Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
+     * @param linkageStore
      */
-    @Autowired
     public CheckDocumentationModelFactoryImpl(SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
                                               ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
-                                              JinjaTemplateRenderService jinjaTemplateRenderService) {
+                                              JinjaTemplateRenderService jinjaTemplateRenderService,
+                                              HandledClassesLinkageStore linkageStore) {
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.yamlSerializer = yamlSerializer;
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
+        this.linkageStore = linkageStore;
     }
 
     /**
@@ -250,7 +254,20 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 SimilarCheckModel firstCheckModel = similarChecksGroup.getSimilarChecks().get(0);
                 similarChecksDocumentationModel.setCategory(firstCheckModel.getCategory()); // the category of the first check, the other similar checks should be in the same category
                 similarChecksDocumentationModel.setTarget(target.name());
-                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckModel.getCheckModel().getCheckName().replace('_', ' '));
+                String firstCheckName = firstCheckModel.getCheckModel().getCheckName();
+                if (firstCheckName.startsWith("profile_")) {
+                    firstCheckName = firstCheckName.substring("profile_".length());
+                } else if ((firstCheckName.startsWith("daily_partition_"))) {
+                    firstCheckName = firstCheckName.substring("daily_partition_".length());
+                } else if ((firstCheckName.startsWith("monthly_partition_"))) {
+                    firstCheckName = firstCheckName.substring("monthly_partition_".length());
+                } else if ((firstCheckName.startsWith("daily_"))) {
+                    firstCheckName = firstCheckName.substring("daily_".length());
+                } else if ((firstCheckName.startsWith("monthly_"))) {
+                    firstCheckName = firstCheckName.substring("monthly_".length());
+                }
+
+                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckName.replace('_', ' '));
 
                 ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(firstCheckModel.getCheckModel().getCheckSpec().getClass());
                 if (checkClassJavadoc != null) {
@@ -272,6 +289,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }
 
                 categoryDocumentationModel.getCheckGroups().add(similarChecksDocumentationModel);
+                Class<?> checkSpecClass = similarChecksDocumentationModel.getAllChecks().stream().findAny().get().getCheckModel().getCheckSpec().getClass();
+                this.linkageStore.put(checkSpecClass, Path.of(
+                        "/docs","checks",
+                        target.name(), categoryName,
+                        similarChecksDocumentationModel.getPrimaryCheckName().replace(' ', '-')
+                ));
             }
 
             resultList.add(categoryDocumentationModel);
@@ -597,7 +620,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setProviderType(providerType);
 
-                TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
 
                 EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
@@ -610,7 +632,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         null,
                         effectiveSensorRuleNames,
                         checkRootContainer.getCheckType(),
-                        timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
+                        checkRootContainer.getTimeSeriesConfiguration(tableSpec),
                         null,
                         tableSpec.getDefaultDataGroupingConfiguration(),
                         null,

@@ -25,6 +25,7 @@ import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
+import com.dqops.utils.docs.HandledClassesLinkageStore;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -61,8 +62,8 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToModelCheckMappingService),
                 uiToSpecCheckMappingService,
                 YamlSerializerObjectMother.getDefault(),
-                JinjaTemplateRenderServiceObjectMother.getDefault()
-        );
+                JinjaTemplateRenderServiceObjectMother.getDefault(),
+                new HandledClassesLinkageStore());
 
         try {
             String mavenTargetFolderPath = System.getenv("DQO_TEST_TEMPORARY_FOLDER");

@@ -121,7 +121,7 @@ public class TableSpecTests extends BaseTest {
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
-        profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
+        profilingChecks.getVolume().setProfileRowCount(new TableRowCountCheckSpec());
 		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertEquals(this.sut.getProfilingChecks(), profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
@@ -131,7 +131,7 @@ public class TableSpecTests extends BaseTest {
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
-        profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
+        profilingChecks.getVolume().setProfileRowCount(new TableRowCountCheckSpec());
 		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
@@ -149,7 +149,7 @@ public class TableSpecTests extends BaseTest {
     void hasAnyChecksConfigured_whenOneProfilingCheckConfigured_thenReturnsTrue() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
-        profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
+        profilingChecks.getVolume().setProfileRowCount(new TableRowCountCheckSpec());
         this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }

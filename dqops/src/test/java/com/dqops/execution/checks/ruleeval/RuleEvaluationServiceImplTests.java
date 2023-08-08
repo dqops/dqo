@@ -89,12 +89,12 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
 		checkSpec = new TableRowCountCheckSpec();
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
-		tableSpec.getProfilingChecks().getVolume().setRowCount(this.checkSpec);
+		tableSpec.getProfilingChecks().getVolume().setProfileRowCount(this.checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
                 new EffectiveSensorRuleNames(checkSpec.getParameters().getSensorDefinitionName(), new MinCountRuleWarningParametersSpec().getRuleDefinitionName()),
-                CheckType.PROFILING,
+                CheckType.profiling,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),
                 tableSpec.getDefaultDataGroupingConfiguration(),

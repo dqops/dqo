@@ -22,46 +22,46 @@ T = TypeVar("T", bound="ColumnUniquenessProfilingChecksSpec")
 class ColumnUniquenessProfilingChecksSpec:
     """
     Attributes:
-        distinct_count (Union[Unset, ColumnDistinctCountCheckSpec]):
-        distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
-        duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
-        duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
+        profile_distinct_count (Union[Unset, ColumnDistinctCountCheckSpec]):
+        profile_distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
+        profile_duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
+        profile_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
     """
 
-    distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
-    distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
-    duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
-    duplicate_percent: Union[Unset, "ColumnDuplicatePercentCheckSpec"] = UNSET
+    profile_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
+    profile_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
+    profile_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
+    profile_duplicate_percent: Union[Unset, "ColumnDuplicatePercentCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        distinct_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.distinct_count, Unset):
-            distinct_count = self.distinct_count.to_dict()
+        profile_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_count, Unset):
+            profile_distinct_count = self.profile_distinct_count.to_dict()
 
-        distinct_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.distinct_percent, Unset):
-            distinct_percent = self.distinct_percent.to_dict()
+        profile_distinct_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_percent, Unset):
+            profile_distinct_percent = self.profile_distinct_percent.to_dict()
 
-        duplicate_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.duplicate_count, Unset):
-            duplicate_count = self.duplicate_count.to_dict()
+        profile_duplicate_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_duplicate_count, Unset):
+            profile_duplicate_count = self.profile_duplicate_count.to_dict()
 
-        duplicate_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.duplicate_percent, Unset):
-            duplicate_percent = self.duplicate_percent.to_dict()
+        profile_duplicate_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_duplicate_percent, Unset):
+            profile_duplicate_percent = self.profile_duplicate_percent.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if distinct_count is not UNSET:
-            field_dict["distinct_count"] = distinct_count
-        if distinct_percent is not UNSET:
-            field_dict["distinct_percent"] = distinct_percent
-        if duplicate_count is not UNSET:
-            field_dict["duplicate_count"] = duplicate_count
-        if duplicate_percent is not UNSET:
-            field_dict["duplicate_percent"] = duplicate_percent
+        if profile_distinct_count is not UNSET:
+            field_dict["profile_distinct_count"] = profile_distinct_count
+        if profile_distinct_percent is not UNSET:
+            field_dict["profile_distinct_percent"] = profile_distinct_percent
+        if profile_duplicate_count is not UNSET:
+            field_dict["profile_duplicate_count"] = profile_duplicate_count
+        if profile_duplicate_percent is not UNSET:
+            field_dict["profile_duplicate_percent"] = profile_duplicate_percent
 
         return field_dict
 
@@ -81,43 +81,47 @@ class ColumnUniquenessProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _distinct_count = d.pop("distinct_count", UNSET)
-        distinct_count: Union[Unset, ColumnDistinctCountCheckSpec]
-        if isinstance(_distinct_count, Unset):
-            distinct_count = UNSET
+        _profile_distinct_count = d.pop("profile_distinct_count", UNSET)
+        profile_distinct_count: Union[Unset, ColumnDistinctCountCheckSpec]
+        if isinstance(_profile_distinct_count, Unset):
+            profile_distinct_count = UNSET
         else:
-            distinct_count = ColumnDistinctCountCheckSpec.from_dict(_distinct_count)
-
-        _distinct_percent = d.pop("distinct_percent", UNSET)
-        distinct_percent: Union[Unset, ColumnDistinctPercentCheckSpec]
-        if isinstance(_distinct_percent, Unset):
-            distinct_percent = UNSET
-        else:
-            distinct_percent = ColumnDistinctPercentCheckSpec.from_dict(
-                _distinct_percent
+            profile_distinct_count = ColumnDistinctCountCheckSpec.from_dict(
+                _profile_distinct_count
             )
 
-        _duplicate_count = d.pop("duplicate_count", UNSET)
-        duplicate_count: Union[Unset, ColumnDuplicateCountCheckSpec]
-        if isinstance(_duplicate_count, Unset):
-            duplicate_count = UNSET
+        _profile_distinct_percent = d.pop("profile_distinct_percent", UNSET)
+        profile_distinct_percent: Union[Unset, ColumnDistinctPercentCheckSpec]
+        if isinstance(_profile_distinct_percent, Unset):
+            profile_distinct_percent = UNSET
         else:
-            duplicate_count = ColumnDuplicateCountCheckSpec.from_dict(_duplicate_count)
+            profile_distinct_percent = ColumnDistinctPercentCheckSpec.from_dict(
+                _profile_distinct_percent
+            )
 
-        _duplicate_percent = d.pop("duplicate_percent", UNSET)
-        duplicate_percent: Union[Unset, ColumnDuplicatePercentCheckSpec]
-        if isinstance(_duplicate_percent, Unset):
-            duplicate_percent = UNSET
+        _profile_duplicate_count = d.pop("profile_duplicate_count", UNSET)
+        profile_duplicate_count: Union[Unset, ColumnDuplicateCountCheckSpec]
+        if isinstance(_profile_duplicate_count, Unset):
+            profile_duplicate_count = UNSET
         else:
-            duplicate_percent = ColumnDuplicatePercentCheckSpec.from_dict(
-                _duplicate_percent
+            profile_duplicate_count = ColumnDuplicateCountCheckSpec.from_dict(
+                _profile_duplicate_count
+            )
+
+        _profile_duplicate_percent = d.pop("profile_duplicate_percent", UNSET)
+        profile_duplicate_percent: Union[Unset, ColumnDuplicatePercentCheckSpec]
+        if isinstance(_profile_duplicate_percent, Unset):
+            profile_duplicate_percent = UNSET
+        else:
+            profile_duplicate_percent = ColumnDuplicatePercentCheckSpec.from_dict(
+                _profile_duplicate_percent
             )
 
         column_uniqueness_profiling_checks_spec = cls(
-            distinct_count=distinct_count,
-            distinct_percent=distinct_percent,
-            duplicate_count=duplicate_count,
-            duplicate_percent=duplicate_percent,
+            profile_distinct_count=profile_distinct_count,
+            profile_distinct_percent=profile_distinct_percent,
+            profile_duplicate_count=profile_duplicate_count,
+            profile_duplicate_percent=profile_duplicate_percent,
         )
 
         column_uniqueness_profiling_checks_spec.additional_properties = d

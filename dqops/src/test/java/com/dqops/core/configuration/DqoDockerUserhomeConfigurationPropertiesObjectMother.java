@@ -15,10 +15,7 @@
  */
 package com.dqops.core.configuration;
 
-import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
-import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
-import org.apache.parquet.Strings;
 
 /**
  * Object mother for the configuration.

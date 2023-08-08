@@ -1,106 +1,92 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.run_checks_queue_job_result_highest_severity import (
-    RunChecksQueueJobResultHighestSeverity,
-)
+from ..models.run_checks_queue_job_result_status import RunChecksQueueJobResultStatus
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.dqo_queue_job_id import DqoQueueJobId
+    from ..models.run_checks_job_result import RunChecksJobResult
+
 
 T = TypeVar("T", bound="RunChecksQueueJobResult")
 
 
 @attr.s(auto_attribs=True)
 class RunChecksQueueJobResult:
-    """Returns the result (highest data quality check severity and the finished checks count) for the checks that were
-    recently executed.
+    """Object returned from the operation that queues a "run checks" job. The result contains the job id that was started
+    and optionally can also contain the result of running the checks if the operation was started with wait=true
+    parameter to wait for the "run checks" job to finish.
 
         Attributes:
-            highest_severity (Union[Unset, RunChecksQueueJobResultHighestSeverity]): The highest check severity for the data
-                quality checks executed in this batch.
-            executed_checks (Union[Unset, int]): The total count of all executed checks.
-            valid_results (Union[Unset, int]): The total count of all checks that finished successfully (with no data
-                quality issues).
-            warnings (Union[Unset, int]): The total count of all invalid data quality checks that finished raising a
-                warning.
-            errors (Union[Unset, int]): The total count of all invalid data quality checks that finished raising an error.
-            fatals (Union[Unset, int]): The total count of all invalid data quality checks that finished raising a fatal
-                error.
-            execution_errors (Union[Unset, int]): The total number of checks that failed to execute due to some execution
-                errors.
+            job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
+            result (Union[Unset, RunChecksJobResult]): Returns the result (highest data quality check severity and the
+                finished checks count) for the checks that were recently executed.
+            status (Union[Unset, RunChecksQueueJobResultStatus]): Job status
     """
 
-    highest_severity: Union[Unset, RunChecksQueueJobResultHighestSeverity] = UNSET
-    executed_checks: Union[Unset, int] = UNSET
-    valid_results: Union[Unset, int] = UNSET
-    warnings: Union[Unset, int] = UNSET
-    errors: Union[Unset, int] = UNSET
-    fatals: Union[Unset, int] = UNSET
-    execution_errors: Union[Unset, int] = UNSET
+    job_id: Union[Unset, "DqoQueueJobId"] = UNSET
+    result: Union[Unset, "RunChecksJobResult"] = UNSET
+    status: Union[Unset, RunChecksQueueJobResultStatus] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        highest_severity: Union[Unset, str] = UNSET
-        if not isinstance(self.highest_severity, Unset):
-            highest_severity = self.highest_severity.value
+        job_id: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.job_id, Unset):
+            job_id = self.job_id.to_dict()
 
-        executed_checks = self.executed_checks
-        valid_results = self.valid_results
-        warnings = self.warnings
-        errors = self.errors
-        fatals = self.fatals
-        execution_errors = self.execution_errors
+        result: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.result, Unset):
+            result = self.result.to_dict()
+
+        status: Union[Unset, str] = UNSET
+        if not isinstance(self.status, Unset):
+            status = self.status.value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if highest_severity is not UNSET:
-            field_dict["highestSeverity"] = highest_severity
-        if executed_checks is not UNSET:
-            field_dict["executedChecks"] = executed_checks
-        if valid_results is not UNSET:
-            field_dict["validResults"] = valid_results
-        if warnings is not UNSET:
-            field_dict["warnings"] = warnings
-        if errors is not UNSET:
-            field_dict["errors"] = errors
-        if fatals is not UNSET:
-            field_dict["fatals"] = fatals
-        if execution_errors is not UNSET:
-            field_dict["executionErrors"] = execution_errors
+        if job_id is not UNSET:
+            field_dict["jobId"] = job_id
+        if result is not UNSET:
+            field_dict["result"] = result
+        if status is not UNSET:
+            field_dict["status"] = status
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.dqo_queue_job_id import DqoQueueJobId
+        from ..models.run_checks_job_result import RunChecksJobResult
+
         d = src_dict.copy()
-        _highest_severity = d.pop("highestSeverity", UNSET)
-        highest_severity: Union[Unset, RunChecksQueueJobResultHighestSeverity]
-        if isinstance(_highest_severity, Unset):
-            highest_severity = UNSET
+        _job_id = d.pop("jobId", UNSET)
+        job_id: Union[Unset, DqoQueueJobId]
+        if isinstance(_job_id, Unset):
+            job_id = UNSET
         else:
-            highest_severity = RunChecksQueueJobResultHighestSeverity(_highest_severity)
+            job_id = DqoQueueJobId.from_dict(_job_id)
 
-        executed_checks = d.pop("executedChecks", UNSET)
+        _result = d.pop("result", UNSET)
+        result: Union[Unset, RunChecksJobResult]
+        if isinstance(_result, Unset):
+            result = UNSET
+        else:
+            result = RunChecksJobResult.from_dict(_result)
 
-        valid_results = d.pop("validResults", UNSET)
-
-        warnings = d.pop("warnings", UNSET)
-
-        errors = d.pop("errors", UNSET)
-
-        fatals = d.pop("fatals", UNSET)
-
-        execution_errors = d.pop("executionErrors", UNSET)
+        _status = d.pop("status", UNSET)
+        status: Union[Unset, RunChecksQueueJobResultStatus]
+        if isinstance(_status, Unset):
+            status = UNSET
+        else:
+            status = RunChecksQueueJobResultStatus(_status)
 
         run_checks_queue_job_result = cls(
-            highest_severity=highest_severity,
-            executed_checks=executed_checks,
-            valid_results=valid_results,
-            warnings=warnings,
-            errors=errors,
-            fatals=fatals,
-            execution_errors=execution_errors,
+            job_id=job_id,
+            result=result,
+            status=status,
         )
 
         run_checks_queue_job_result.additional_properties = d

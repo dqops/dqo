@@ -13,8 +13,8 @@ import StringListField from '../StringListField';
 import ColumnSelect from './ColumnSelect';
 import TextArea from '../TextArea';
 import IntegerListField from '../IntegerListField';
-import FieldDatePicker from "../FieldDatePicker";
-import clsx from "clsx";
+import FieldDatePicker from '../FieldDatePicker';
+import clsx from 'clsx';
 
 interface ISensorParametersFieldSettingsProps {
   field: FieldModel;
@@ -22,6 +22,7 @@ interface ISensorParametersFieldSettingsProps {
   disabled?: boolean;
   className?: string;
   onSave?: () => void;
+  checkBoxNotRed?: boolean;
 }
 
 const FieldControl = ({
@@ -30,6 +31,7 @@ const FieldControl = ({
   disabled,
   className,
   onSave,
+  checkBoxNotRed
 }: ISensorParametersFieldSettingsProps) => {
   const type = field?.definition?.data_type;
   const label = field?.definition?.display_name;
@@ -82,7 +84,7 @@ const FieldControl = ({
           label={label}
           tooltipText={tooltip}
           disabled={disabled}
-          error={isInvalid}
+          error={checkBoxNotRed ? false : isInvalid}
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.string && (
@@ -93,7 +95,7 @@ const FieldControl = ({
               label={label}
               value={value}
               tooltipText={tooltip}
-              className="!min-w-40 !max-w-40 !text-xs"
+              className="!min-w-30 !max-w-30 !text-xs"
               onChange={(e) => handleChange({ string_value: e.target.value })}
               disabled={disabled}
               error={isInvalid}
@@ -104,7 +106,10 @@ const FieldControl = ({
               label={label}
               value={value}
               tooltipText={tooltip}
-              className={clsx("!h-8 !text-xs", className ? className : "!min-w-40 !max-w-40")}
+              className={clsx(
+                '!h-8 !text-xs',
+                className ? className : '!min-w-30 !max-w-30'
+              )}
               onChange={(e) => handleChange({ string_value: e.target.value })}
               disabled={disabled}
               error={isInvalid}
@@ -118,7 +123,10 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ integer_value: value })}
           tooltipText={tooltip}
-          className={clsx("!h-8 !text-xs", className ? className : "!min-w-40 !max-w-40")}
+          className={clsx(
+            '!h-8 !text-xs !min-w-30 !max-w-30',
+            className ? className : '!min-w-30 !max-w-30'
+          )}
           disabled={disabled}
           error={isInvalid}
         />
@@ -129,7 +137,11 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ long_value: value })}
           tooltipText={tooltip}
-          className={clsx("!h-8 !text-xs", className ? className : "!min-w-40 !max-w-40")}
+          className={clsx(
+            '!h-8 !text-xs !min-w-30 !max-w-30',
+
+            className ? className : '!min-w-30 !max-w-30'
+          )}
           disabled={disabled}
           error={isInvalid}
         />
@@ -140,7 +152,11 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ double_value: value })}
           tooltipText={tooltip}
-          className={clsx("!h-8 !text-xs", className ? className : "!min-w-40 !max-w-40")}
+          className={clsx(
+            '!h-8 !text-xs !min-w-30 !max-w-30',
+
+            className ? className : '!min-w-30 !max-w-30'
+          )}
           disabled={disabled}
           error={isInvalid}
         />
@@ -157,7 +173,11 @@ const FieldControl = ({
             })) || []
           }
           tooltipText={tooltip}
-          triggerClassName={clsx("!h-8 !text-xs", className ? className : "!min-w-40 !max-w-40")}
+          triggerClassName={clsx(
+            '!h-8 !text-xs !min-w-30 !max-w-30',
+
+            className ? className : '!min-w-30 !max-w-30'
+          )}
           onChange={(value) => handleChange({ enum_value: value })}
           disabled={disabled}
           error={isInvalid}
@@ -193,7 +213,11 @@ const FieldControl = ({
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.column_name && (
         <ColumnSelect
-          triggerClassName={clsx("!h-8 !text-xs", className ? className : "!min-w-40 !max-w-40")}
+          triggerClassName={clsx(
+            '!h-8 !text-xs !min-w-30 !max-w-30',
+
+            className ? className : '!min-w-30 !max-w-30'
+          )}
           label={label}
           value={value}
           tooltipText={tooltip}
@@ -211,7 +235,7 @@ const FieldControl = ({
             label={label}
             value={value}
             onChange={(date_value) => handleChange({ date_value })}
-            className={clsx("!h-8 !text-xs", className ? className : "!min-w-40 !max-w-40")}
+            className={clsx('!h-8 !text-xs min-w-30 max-w-30')}
             tooltipText={tooltip}
             disabled={disabled}
             error={isInvalid}

@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.sensors;
 
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
+import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.utils.docs.ProviderTypeModel;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ import java.util.Map;
  */
 @Data
 public class SensorDocumentationModel {
+    private Class<? extends AbstractSensorParametersSpec> sensorParametersClazz;
     /**
      * Sensor description extracted from the JavaDoc comment for the whole sensor definition parameter.
      */

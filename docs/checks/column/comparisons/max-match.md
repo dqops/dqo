@@ -6,36 +6,36 @@ Column level check that ensures that compares the maximum value in the tested co
 
 ___
 
-## **max match**  
+## **profile max match**  
   
 **Check description**  
 Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|max_match|profiling| |[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_max_match|profiling| |[max_value](../../../../reference/sensors/Column/range-column-sensors/#max-value)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=max_match
+dqo> check enable -c=connection_name -ch=profile_max_match
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=max_match
+dqo> check run -ch=profile_max_match
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=max_match
+dqo> check run -c=connection_name -ch=profile_max_match
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=max_match
+dqo> check run -c=connection_name -t=table_name -ch=profile_max_match
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=max_match
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_max_match
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -43,7 +43,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=max_match
         comparisons:
           compare_to_source_of_truth_table:
             reference_column: source_of_truth_column_name
-            max_match:
+            profile_max_match:
               warning:
                 max_diff_percent: 0.0
               error:
@@ -52,7 +52,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=max_match
                 max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-33"
+```yaml hl_lines="24-34"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -68,6 +68,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -79,7 +80,7 @@ spec:
         comparisons:
           compare_to_source_of_truth_table:
             reference_column: source_of_truth_column_name
-            max_match:
+            profile_max_match:
               warning:
                 max_diff_percent: 0.0
               error:
@@ -123,8 +124,8 @@ spec:
     ```sql
     SELECT
         MAX(analyzed_table.`target_column`) AS actual_value,
-        CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -148,8 +149,8 @@ spec:
     ```sql
     SELECT
         MAX(analyzed_table.`target_column`) AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -173,8 +174,8 @@ spec:
     ```sql
     SELECT
         MAX(analyzed_table."target_column") AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -198,8 +199,8 @@ spec:
     ```sql
     SELECT
         MAX(analyzed_table."target_column") AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -223,8 +224,8 @@ spec:
     ```sql
     SELECT
         MAX(analyzed_table."target_column") AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -248,8 +249,8 @@ spec:
     ```sql
     SELECT
         MAX(analyzed_table.[target_column]) AS actual_value,
-        SYSDATETIMEOFFSET() AS time_period,
-        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 
@@ -308,7 +309,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_max_m
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -324,6 +325,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -565,7 +567,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_max
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -581,6 +583,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -822,7 +825,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -838,6 +841,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table
@@ -1083,7 +1087,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
                   max_diff_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="23-34"
+```yaml hl_lines="24-35"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1099,6 +1103,7 @@ spec:
       reference_table_connection_name: <source_of_truth_connection_name>
       reference_table_schema_name: <source_of_truth_schema_name>
       reference_table_name: <source_of_truth_table_name>
+      check_type: profiling
       grouping_columns:
       - compared_table_column_name: country
         reference_table_column_name: country_column_name_on_reference_table

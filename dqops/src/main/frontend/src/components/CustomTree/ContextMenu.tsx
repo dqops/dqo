@@ -15,7 +15,7 @@ import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import {
   TimeWindowFilterParameters,
-  RunChecksQueueJobParameters
+  RunChecksParameters
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
@@ -105,7 +105,7 @@ const ContextMenu = ({
   };
 
   const setSetectedRun = (selected: TimeWindowFilterParameters) => {
-    const obj: RunChecksQueueJobParameters = {
+    const obj: RunChecksParameters = {
       timeWindowFilter: selected,
       checkSearchFilters: node.run_checks_job_template
     };

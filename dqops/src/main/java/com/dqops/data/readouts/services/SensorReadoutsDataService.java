@@ -30,5 +30,5 @@ public interface SensorReadoutsDataService {
      * @return Complete model of the sensor readouts.
      */
     SensorReadoutsDetailedDataModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                SensorReadoutsDetailedParameters loadParameters);
+                                                                SensorReadoutsDetailedFilterParameters loadParameters);
 }

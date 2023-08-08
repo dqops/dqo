@@ -22,7 +22,6 @@ import TableNavigation from '../../components/TableNavigation';
 import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import TableReferences from '../../components/Connection/TableView/TableReferences';
 
 const initTabs = [
   {
@@ -44,10 +43,6 @@ const initTabs = [
   {
     label: 'Data Groupings',
     value: 'data-streams'
-  },
-  {
-    label: 'Table Comparisons',
-    value: 'table-comparisons'
   },
   {
     label: 'Date and time columns',
@@ -264,7 +259,7 @@ const TablePage = () => {
                 <TableDataGroupingConfiguration />
               )}
             </div>
-            <div>{activeTab === 'table-comparisons' && <TableReferences />}</div>
+
             <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
             <div>
               {activeTab === 'incident_configuration' && (

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  CheckResultsOverviewDataModel,
-  CheckContainerModel
-} from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import TableActionGroup from '../../components/Connection/TableView/TableActionGroup';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -100,7 +97,10 @@ const TableAdvancedProfiling = () => {
   };
 
   return (
-    <div className="flex-grow min-h-0 flex flex-col">
+    <div
+      className=" flex flex-col overflow-x-auto overflow-y-hidden"
+      style={{ height: `calc(100vh - 350px` }}
+    >
       <TableActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}

@@ -165,6 +165,17 @@ public class SensorExecutionRunParameters {
     }
 
     /**
+     * Checks if the sensor run parameters preparation failed late enough to know the connection and table name,
+     * in order to generate an entry for the error table.
+     * @return True when the sensor readout normalization service will be able to generate the error.
+     */
+    @JsonIgnore
+    public boolean hasEnoughInformationForReportingDetailedError() {
+        return this.connection != null && this.table != null && this.sensorParameters != null &&
+                (this.check != null || this.profiler != null);
+    }
+
+    /**
      * Returns an exception that was thrown when the sensor was prepared.
      * @return Sensor preparation exception.
      */

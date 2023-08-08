@@ -7,42 +7,42 @@ Table level check that detects if the number of columns in the table has changed
 
 ___
 
-## **column count changed**  
+## **profile column count changed**  
   
 **Check description**  
 Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|column_count_changed|profiling| |[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|profile_column_count_changed|profiling| |[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=column_count_changed
+dqo> check enable -c=connection_name -ch=profile_column_count_changed
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=column_count_changed
+dqo> check run -ch=profile_column_count_changed
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=column_count_changed
+dqo> check run -c=connection_name -ch=profile_column_count_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=column_count_changed
+dqo> check run -c=connection_name -t=table_name -ch=profile_column_count_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=column_count_changed
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_count_changed
 ```
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
     schema:
-      column_count_changed:
+      profile_column_count_changed:
         warning: {}
         error: {}
         fatal: {}
@@ -61,7 +61,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     schema:
-      column_count_changed:
+      profile_column_count_changed:
         warning: {}
         error: {}
         fatal: {}
