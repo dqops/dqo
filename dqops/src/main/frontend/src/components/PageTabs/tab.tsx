@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import clsx from 'clsx';
 
@@ -25,6 +25,12 @@ const Tab = ({ tab, active, onChange, onRemove }: TabProps) => {
     e.stopPropagation();
     onRemove();
   };
+
+  useEffect(() => {
+    if (tab.label === '') {
+      onRemove();
+    }
+  }, [tab]);
 
   const content = (
     <div
