@@ -1,47 +1,47 @@
-**daily partition row count anomaly stationary 30 days** checks  
+**row count anomaly stationary** checks  
 
 **Description**  
-Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
+Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
 
 ___
 
-## **daily partition row count anomaly stationary 30 days**  
+## **daily partition row count anomaly stationary**  
   
 **Check description**  
-Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.  
+Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_anomaly_stationary_30_days|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
+|daily_partition_row_count_anomaly_stationary|partitioned|daily|[row_count](../../../../reference/sensors/Table/volume-table-sensors/#row-count)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=daily_partition_row_count_anomaly_stationary_30_days
+dqo> check enable -c=connection_name -ch=daily_partition_row_count_anomaly_stationary
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=daily_partition_row_count_anomaly_stationary_30_days
+dqo> check run -ch=daily_partition_row_count_anomaly_stationary
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=daily_partition_row_count_anomaly_stationary_30_days
+dqo> check run -c=connection_name -ch=daily_partition_row_count_anomaly_stationary
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_partition_row_count_anomaly_stationary_30_days
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_row_count_anomaly_stationary
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_row_count_anomaly_stationary_30_days
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_row_count_anomaly_stationary
 ```
 **Check structure (Yaml)**
 ```yaml
   partitioned_checks:
     daily:
       volume:
-        daily_partition_row_count_anomaly_stationary_30_days:
+        daily_partition_row_count_anomaly_stationary:
           warning:
             anomaly_percent: 0.1
           error:
@@ -64,7 +64,7 @@ spec:
   partitioned_checks:
     daily:
       volume:
-        daily_partition_row_count_anomaly_stationary_30_days:
+        daily_partition_row_count_anomaly_stationary:
           warning:
             anomaly_percent: 0.1
           error:
@@ -293,7 +293,7 @@ spec:
       partitioned_checks:
         daily:
           volume:
-            daily_partition_row_count_anomaly_stationary_30_days:
+            daily_partition_row_count_anomaly_stationary:
               warning:
                 anomaly_percent: 0.1
               error:

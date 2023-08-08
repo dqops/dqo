@@ -5,42 +5,42 @@ Column level check that ensures that there are no more than a maximum percentage
 
 ___
 
-## **total min match percent**  
+## **profile total min match percent**  
   
 **Check description**  
 Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|total_min_match_percent|profiling| |[total_min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|profile_total_min_match_percent|profiling| |[total_min_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#total-min-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=total_min_match_percent
+dqo> check enable -c=connection_name -ch=profile_total_min_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=total_min_match_percent
+dqo> check run -ch=profile_total_min_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=total_min_match_percent
+dqo> check run -c=connection_name -ch=profile_total_min_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=total_min_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=profile_total_min_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=total_min_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_total_min_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
       profiling_checks:
         accuracy:
-          total_min_match_percent:
+          profile_total_min_match_percent:
             parameters:
               referenced_table: dim_customer
               referenced_column: customer_id
@@ -67,7 +67,7 @@ spec:
     target_column:
       profiling_checks:
         accuracy:
-          total_min_match_percent:
+          profile_total_min_match_percent:
             parameters:
               referenced_table: dim_customer
               referenced_column: customer_id

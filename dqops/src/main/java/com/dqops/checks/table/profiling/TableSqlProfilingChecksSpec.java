@@ -38,74 +38,74 @@ import java.util.Objects;
 public class TableSqlProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("sql_condition_passed_percent_on_table", o -> o.sqlConditionPassedPercentOnTable);
-            put("sql_condition_failed_count_on_table", o -> o.sqlConditionFailedCountOnTable);
+            put("profile_sql_condition_passed_percent_on_table", o -> o.profileSqlConditionPassedPercentOnTable);
+            put("profile_sql_condition_failed_count_on_table", o -> o.profileSqlConditionFailedCountOnTable);
 
-            put("sql_aggregate_expr_table", o -> o.sqlAggregateExprTable);
+            put("profile_sql_aggregate_expr_table", o -> o.profileSqlAggregateExprTable);
         }
     };
 
     @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
-    private TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable;
+    private TableSqlConditionPassedPercentCheckSpec profileSqlConditionPassedPercentOnTable;
 
     @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
-    private TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable;
+    private TableSqlConditionFailedCountCheckSpec profileSqlConditionFailedCountOnTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
-    private TableSqlAggregateExprCheckSpec sqlAggregateExprTable;
+    private TableSqlAggregateExprCheckSpec profileSqlAggregateExprTable;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlConditionPassedPercentCheckSpec getSqlConditionPassedPercentOnTable() {
-        return sqlConditionPassedPercentOnTable;
+    public TableSqlConditionPassedPercentCheckSpec getProfileSqlConditionPassedPercentOnTable() {
+        return profileSqlConditionPassedPercentOnTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param sqlConditionPassedPercentOnTable Check specification.
+     * @param profileSqlConditionPassedPercentOnTable Check specification.
      */
-    public void setSqlConditionPassedPercentOnTable(TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionPassedPercentOnTable, sqlConditionPassedPercentOnTable));
-        this.sqlConditionPassedPercentOnTable = sqlConditionPassedPercentOnTable;
-        propagateHierarchyIdToField(sqlConditionPassedPercentOnTable, "sql_condition_passed_percent_on_table");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getSqlConditionFailedCountOnTable() {
-        return sqlConditionFailedCountOnTable;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param sqlConditionFailedCountOnTable Check specification.
-     */
-    public void setSqlConditionFailedCountOnTable(TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionFailedCountOnTable, sqlConditionFailedCountOnTable));
-        this.sqlConditionFailedCountOnTable = sqlConditionFailedCountOnTable;
-        propagateHierarchyIdToField(sqlConditionFailedCountOnTable, "sql_condition_failed_count_on_table");
+    public void setProfileSqlConditionPassedPercentOnTable(TableSqlConditionPassedPercentCheckSpec profileSqlConditionPassedPercentOnTable) {
+        this.setDirtyIf(!Objects.equals(this.profileSqlConditionPassedPercentOnTable, profileSqlConditionPassedPercentOnTable));
+        this.profileSqlConditionPassedPercentOnTable = profileSqlConditionPassedPercentOnTable;
+        propagateHierarchyIdToField(profileSqlConditionPassedPercentOnTable, "profile_sql_condition_passed_percent_on_table");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregateExprCheckSpec getSqlAggregateExprTable() {
-        return sqlAggregateExprTable;
+    public TableSqlConditionFailedCountCheckSpec getProfileSqlConditionFailedCountOnTable() {
+        return profileSqlConditionFailedCountOnTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param sqlAggregateExprTable Check specification.
+     * @param profileSqlConditionFailedCountOnTable Check specification.
      */
-    public void setSqlAggregateExprTable(TableSqlAggregateExprCheckSpec sqlAggregateExprTable) {
-        this.setDirtyIf(!Objects.equals(this.sqlAggregateExprTable, sqlAggregateExprTable));
-        this.sqlAggregateExprTable = sqlAggregateExprTable;
-        propagateHierarchyIdToField(sqlAggregateExprTable, "sql_aggregate_expr_table");
+    public void setProfileSqlConditionFailedCountOnTable(TableSqlConditionFailedCountCheckSpec profileSqlConditionFailedCountOnTable) {
+        this.setDirtyIf(!Objects.equals(this.profileSqlConditionFailedCountOnTable, profileSqlConditionFailedCountOnTable));
+        this.profileSqlConditionFailedCountOnTable = profileSqlConditionFailedCountOnTable;
+        propagateHierarchyIdToField(profileSqlConditionFailedCountOnTable, "profile_sql_condition_failed_count_on_table");
+    }
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public TableSqlAggregateExprCheckSpec getProfileSqlAggregateExprTable() {
+        return profileSqlAggregateExprTable;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param profileSqlAggregateExprTable Check specification.
+     */
+    public void setProfileSqlAggregateExprTable(TableSqlAggregateExprCheckSpec profileSqlAggregateExprTable) {
+        this.setDirtyIf(!Objects.equals(this.profileSqlAggregateExprTable, profileSqlAggregateExprTable));
+        this.profileSqlAggregateExprTable = profileSqlAggregateExprTable;
+        propagateHierarchyIdToField(profileSqlAggregateExprTable, "profile_sql_aggregate_expr_table");
     }
 
     /**

@@ -1,4 +1,4 @@
-**daily partition sum anomaly stationary** checks  
+**sum anomaly stationary** checks  
 
 **Description**  
 Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.

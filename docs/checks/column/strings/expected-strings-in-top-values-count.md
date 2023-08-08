@@ -9,42 +9,42 @@ Column level check that counts how many expected string values are among the TOP
 
 ___
 
-## **expected strings in top values count**  
+## **profile expected strings in top values count**  
   
 **Check description**  
 Verifies that the top X most popular column values contain all values from a list of expected values.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|expected_strings_in_top_values_count|profiling| |[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
+|profile_expected_strings_in_top_values_count|profiling| |[expected_strings_in_top_values_count](../../../../reference/sensors/Column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=expected_strings_in_top_values_count
+dqo> check enable -c=connection_name -ch=profile_expected_strings_in_top_values_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=expected_strings_in_top_values_count
+dqo> check run -ch=profile_expected_strings_in_top_values_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=expected_strings_in_top_values_count
+dqo> check run -c=connection_name -ch=profile_expected_strings_in_top_values_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=expected_strings_in_top_values_count
+dqo> check run -c=connection_name -t=table_name -ch=profile_expected_strings_in_top_values_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=expected_strings_in_top_values_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_expected_strings_in_top_values_count
 ```
 **Check structure (Yaml)**
 ```yaml
       profiling_checks:
         strings:
-          expected_strings_in_top_values_count:
+          profile_expected_strings_in_top_values_count:
             parameters:
               expected_values:
               - USD
@@ -73,7 +73,7 @@ spec:
     target_column:
       profiling_checks:
         strings:
-          expected_strings_in_top_values_count:
+          profile_expected_strings_in_top_values_count:
             parameters:
               expected_values:
               - USD
@@ -201,8 +201,8 @@ spec:
             SELECT
                 analyzed_table.`target_column` AS top_value,
                 COUNT(*) AS total_values,
-                CURRENT_TIMESTAMP() AS time_period,
-                TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM
                 `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
@@ -319,8 +319,8 @@ spec:
             SELECT
                 analyzed_table.`target_column` AS top_value,
                 COUNT(*) AS total_values,
-                LOCALTIMESTAMP AS time_period,
-                LOCALTIMESTAMP AS time_period_utc
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM
                 `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
@@ -437,8 +437,8 @@ spec:
             SELECT
                 analyzed_table."target_column" AS top_value,
                 COUNT(*) AS total_values,
-                LOCALTIMESTAMP AS time_period,
-                CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM
                 "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
@@ -555,8 +555,8 @@ spec:
             SELECT
                 analyzed_table."target_column" AS top_value,
                 COUNT(*) AS total_values,
-                LOCALTIMESTAMP AS time_period,
-                CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM
                 "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
@@ -673,8 +673,8 @@ spec:
             SELECT
                 analyzed_table."target_column" AS top_value,
                 COUNT(*) AS total_values,
-                TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-                TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM
                 "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc, top_value
@@ -801,8 +801,8 @@ spec:
             SELECT
                 analyzed_table.[target_column] AS top_value,
                 COUNT_BIG(*) AS total_values,
-                SYSDATETIMEOFFSET() AS time_period,
-                CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM
                 [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[target_column]
@@ -839,7 +839,7 @@ spec:
         target_column:
           profiling_checks:
             strings:
-              expected_strings_in_top_values_count:
+              profile_expected_strings_in_top_values_count:
                 parameters:
                   expected_values:
                   - USD
@@ -975,8 +975,8 @@ spec:
                     COUNT(*) AS total_values,
                     analyzed_table.`country` AS grouping_level_1,
                     analyzed_table.`state` AS grouping_level_2,
-                    CURRENT_TIMESTAMP() AS time_period,
-                    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM
                     `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
@@ -1096,8 +1096,8 @@ spec:
                     COUNT(*) AS total_values,
                     analyzed_table.`country` AS grouping_level_1,
                     analyzed_table.`state` AS grouping_level_2,
-                    LOCALTIMESTAMP AS time_period,
-                    LOCALTIMESTAMP AS time_period_utc
+                    DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                 FROM
                     `<target_table>` AS analyzed_table
                 GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
@@ -1217,8 +1217,8 @@ spec:
                     COUNT(*) AS total_values,
                     analyzed_table."country" AS grouping_level_1,
                     analyzed_table."state" AS grouping_level_2,
-                    LOCALTIMESTAMP AS time_period,
-                    CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                    CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM
                     "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
                 GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
@@ -1338,8 +1338,8 @@ spec:
                     COUNT(*) AS total_values,
                     analyzed_table."country" AS grouping_level_1,
                     analyzed_table."state" AS grouping_level_2,
-                    LOCALTIMESTAMP AS time_period,
-                    CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                    CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM
                     "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
                 GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
@@ -1459,8 +1459,8 @@ spec:
                     COUNT(*) AS total_values,
                     analyzed_table."country" AS grouping_level_1,
                     analyzed_table."state" AS grouping_level_2,
-                    TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-                    TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                    TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
                 FROM
                     "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
                 GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
@@ -1588,8 +1588,8 @@ spec:
                     COUNT_BIG(*) AS total_values,
                     analyzed_table.[country] AS grouping_level_1,
                     analyzed_table.[state] AS grouping_level_2,
-                    SYSDATETIMEOFFSET() AS time_period,
-                    CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+                    DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                    CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
                 FROM
                     [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 GROUP BY analyzed_table.[country], analyzed_table.[state], analyzed_table.[target_column]

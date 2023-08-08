@@ -37,215 +37,215 @@ import java.util.Objects;
 public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("nulls_count", o -> o.nullsCount);
-            put("nulls_percent", o -> o.nullsPercent);
+            put("profile_nulls_count", o -> o.profileNullsCount);
+            put("profile_nulls_percent", o -> o.profileNullsPercent);
             
-            put("nulls_percent_anomaly_stationary_30_days", o ->o.nullsPercentAnomalyStationary30Days);
-            put("nulls_percent_anomaly_stationary", o ->o.nullsPercentAnomalyStationary);
+            put("profile_nulls_percent_anomaly_stationary_30_days", o ->o.profileNullsPercentAnomalyStationary30Days);
+            put("profile_nulls_percent_anomaly_stationary", o ->o.profileNullsPercentAnomalyStationary);
             
-            put("nulls_percent_change", o ->o.nullsPercentChange);
-            put("nulls_percent_change_yesterday", o ->o.nullsPercentChangeYesterday);
-            put("nulls_percent_change_7_days", o ->o.nullsPercentChange7Days);
-            put("nulls_percent_change_30_days", o ->o.nullsPercentChange30Days);
+            put("profile_nulls_percent_change", o ->o.profileNullsPercentChange);
+            put("profile_nulls_percent_change_yesterday", o ->o.profileNullsPercentChangeYesterday);
+            put("profile_nulls_percent_change_7_days", o ->o.profileNullsPercentChange7Days);
+            put("profile_nulls_percent_change_30_days", o ->o.ProfileNullsPercentChange30Days);
             
-            put("not_nulls_count", o -> o.notNullsCount);
-            put("not_nulls_percent", o -> o.notNullsPercent);
+            put("profile_not_nulls_count", o -> o.profileNotNullsCount);
+            put("profile_not_nulls_percent", o -> o.profileNotNullsPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the maximum accepted count.")
-    private ColumnNullsCountCheckSpec nullsCount;
+    private ColumnNullsCountCheckSpec profileNullsCount;
 
     @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.")
-    private ColumnNullsPercentCheckSpec nullsPercent;
+    private ColumnNullsPercentCheckSpec profileNullsPercent;
 
-    @JsonProperty("nulls_percent_anomaly_stationary_30_days")
+    @JsonProperty("profile_nulls_percent_anomaly_stationary_30_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnAnomalyStationaryNullPercent30DaysCheckSpec nullsPercentAnomalyStationary30Days;
+    private ColumnAnomalyStationaryNullPercent30DaysCheckSpec profileNullsPercentAnomalyStationary30Days;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnAnomalyStationaryNullPercentCheckSpec nullsPercentAnomalyStationary;
+    private ColumnAnomalyStationaryNullPercentCheckSpec profileNullsPercentAnomalyStationary;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
-    private ColumnChangeNullPercentCheckSpec nullsPercentChange;
+    private ColumnChangeNullPercentCheckSpec profileNullsPercentChange;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.")
-    private ColumnChangeNullPercentSinceYesterdayCheckSpec nullsPercentChangeYesterday;
+    private ColumnChangeNullPercentSinceYesterdayCheckSpec profileNullsPercentChangeYesterday;
 
-    @JsonProperty("nulls_percent_change_7_days")
+    @JsonProperty("profile_nulls_percent_change_7_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.")
-    private ColumnChangeNullPercentSince7DaysCheckSpec nullsPercentChange7Days;
+    private ColumnChangeNullPercentSince7DaysCheckSpec profileNullsPercentChange7Days;
 
-    @JsonProperty("nulls_percent_change_30_days")
+    @JsonProperty("profile_nulls_percent_change_30_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
-    private ColumnChangeNullPercentSince30DaysCheckSpec nullsPercentChange30Days;
+    private ColumnChangeNullPercentSince30DaysCheckSpec ProfileNullsPercentChange30Days;
 
     @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the minimum accepted count.")
-    private ColumnNotNullsCountCheckSpec notNullsCount;
+    private ColumnNotNullsCountCheckSpec profileNotNullsCount;
 
     @JsonPropertyDescription("Verifies that the percent of not null values in a column does not exceed the minimum accepted percentage.")
-    private ColumnNotNullsPercentCheckSpec notNullsPercent;
+    private ColumnNotNullsPercentCheckSpec profileNotNullsPercent;
 
     /**
      * Returns a nulls count check specification.
      * @return Nulls count check specification.
      */
-    public ColumnNullsCountCheckSpec getNullsCount() {
-        return nullsCount;
+    public ColumnNullsCountCheckSpec getProfileNullsCount() {
+        return profileNullsCount;
     }
 
     /**
      * Sets a new nulls count check  specification.
-     * @param nullsCount Nulls count check specification.
+     * @param profileNullsCount Nulls count check specification.
      */
-    public void setNullsCount(ColumnNullsCountCheckSpec nullsCount) {
-        this.setDirtyIf(!Objects.equals(this.nullsCount, nullsCount));
-        this.nullsCount = nullsCount;
-        propagateHierarchyIdToField(nullsCount, "nulls_count");
+    public void setProfileNullsCount(ColumnNullsCountCheckSpec profileNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsCount, profileNullsCount));
+        this.profileNullsCount = profileNullsCount;
+        propagateHierarchyIdToField(profileNullsCount, "profile_nulls_count");
     }
 
     /**
      * Returns a nulls percent check specification.
      * @return Nulls percent check specification.
      */
-    public ColumnNullsPercentCheckSpec getNullsPercent() {
-        return nullsPercent;
+    public ColumnNullsPercentCheckSpec getProfileNullsPercent() {
+        return profileNullsPercent;
     }
 
     /**
      * Sets a new percent check specification.
-     * @param nullsPercent Nulls percent check specification.
+     * @param profileNullsPercent Nulls percent check specification.
      */
-    public void setNullsPercent(ColumnNullsPercentCheckSpec nullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercent, nullsPercent));
-        this.nullsPercent = nullsPercent;
-        propagateHierarchyIdToField(nullsPercent, "nulls_percent");
+    public void setProfileNullsPercent(ColumnNullsPercentCheckSpec profileNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercent, profileNullsPercent));
+        this.profileNullsPercent = profileNullsPercent;
+        propagateHierarchyIdToField(profileNullsPercent, "profile_nulls_percent");
     }
     
     /**
      * Returns a null percent value anomaly 30 days check specification.
      * @return Null percent value anomaly 30 days check specification.
      */
-    public ColumnAnomalyStationaryNullPercent30DaysCheckSpec getNullsPercentAnomalyStationary30Days() {
-        return nullsPercentAnomalyStationary30Days;
+    public ColumnAnomalyStationaryNullPercent30DaysCheckSpec getProfileNullsPercentAnomalyStationary30Days() {
+        return profileNullsPercentAnomalyStationary30Days;
     }
 
     /**
      * Sets a new specification of a null percent value anomaly 30 days check.
-     * @param nullsPercentAnomalyStationary30Days Null percent value anomaly 30 days check specification.
+     * @param profileNullsPercentAnomalyStationary30Days Null percent value anomaly 30 days check specification.
      */
-    public void setNullsPercentAnomalyStationary30Days(ColumnAnomalyStationaryNullPercent30DaysCheckSpec nullsPercentAnomalyStationary30Days) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercentAnomalyStationary30Days, nullsPercentAnomalyStationary30Days));
-        this.nullsPercentAnomalyStationary30Days = nullsPercentAnomalyStationary30Days;
-        propagateHierarchyIdToField(nullsPercentAnomalyStationary30Days, "nulls_percent_anomaly_stationary_30_days");
+    public void setProfileNullsPercentAnomalyStationary30Days(ColumnAnomalyStationaryNullPercent30DaysCheckSpec profileNullsPercentAnomalyStationary30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentAnomalyStationary30Days, profileNullsPercentAnomalyStationary30Days));
+        this.profileNullsPercentAnomalyStationary30Days = profileNullsPercentAnomalyStationary30Days;
+        propagateHierarchyIdToField(profileNullsPercentAnomalyStationary30Days, "profile_nulls_percent_anomaly_stationary_30_days");
     }
 
     /**
      * Returns a null percent value anomaly 90 days check specification.
      * @return Null percent value anomaly 90 days check specification.
      */
-    public ColumnAnomalyStationaryNullPercentCheckSpec getNullsPercentAnomalyStationary() {
-        return nullsPercentAnomalyStationary;
+    public ColumnAnomalyStationaryNullPercentCheckSpec getProfileNullsPercentAnomalyStationary() {
+        return profileNullsPercentAnomalyStationary;
     }
 
     /**
      * Sets a new specification of a null percent value anomaly 90 days check.
-     * @param nullsPercentAnomalyStationary Null percent value anomaly 90 days check specification.
+     * @param profileNullsPercentAnomalyStationary Null percent value anomaly 90 days check specification.
      */
-    public void setNullsPercentAnomalyStationary(ColumnAnomalyStationaryNullPercentCheckSpec nullsPercentAnomalyStationary) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercentAnomalyStationary, nullsPercentAnomalyStationary));
-        this.nullsPercentAnomalyStationary = nullsPercentAnomalyStationary;
-        propagateHierarchyIdToField(nullsPercentAnomalyStationary, "nulls_percent_anomaly_stationary");
+    public void setProfileNullsPercentAnomalyStationary(ColumnAnomalyStationaryNullPercentCheckSpec profileNullsPercentAnomalyStationary) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentAnomalyStationary, profileNullsPercentAnomalyStationary));
+        this.profileNullsPercentAnomalyStationary = profileNullsPercentAnomalyStationary;
+        propagateHierarchyIdToField(profileNullsPercentAnomalyStationary, "profile_nulls_percent_anomaly_stationary");
     }
 
     /**
      * Returns the null percent value change check.
      * @return Null percent value change check.
      */
-    public ColumnChangeNullPercentCheckSpec getNullsPercentChange() {
-        return nullsPercentChange;
+    public ColumnChangeNullPercentCheckSpec getProfileNullsPercentChange() {
+        return profileNullsPercentChange;
     }
 
     /**
      * Sets a new null percent value change check.
-     * @param nullsPercentChange Null percent value change check.
+     * @param profileNullsPercentChange Null percent value change check.
      */
-    public void setNullsPercentChange(ColumnChangeNullPercentCheckSpec nullsPercentChange) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercentChange, nullsPercentChange));
-        this.nullsPercentChange = nullsPercentChange;
-        propagateHierarchyIdToField(nullsPercentChange, "nulls_percent_change");
+    public void setProfileNullsPercentChange(ColumnChangeNullPercentCheckSpec profileNullsPercentChange) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentChange, profileNullsPercentChange));
+        this.profileNullsPercentChange = profileNullsPercentChange;
+        propagateHierarchyIdToField(profileNullsPercentChange, "profile_nulls_percent_change");
     }
 
     /**
      * Returns the null percent value change yesterday check.
      * @return Null percent value change yesterday check.
      */
-    public ColumnChangeNullPercentSinceYesterdayCheckSpec getNullsPercentChangeYesterday() {
-        return nullsPercentChangeYesterday;
+    public ColumnChangeNullPercentSinceYesterdayCheckSpec getProfileNullsPercentChangeYesterday() {
+        return profileNullsPercentChangeYesterday;
     }
 
     /**
      * Sets a new null percent value change yesterday check.
-     * @param nullsPercentChangeYesterday Null percent value change yesterday check.
+     * @param profileNullsPercentChangeYesterday Null percent value change yesterday check.
      */
-    public void setNullsPercentChangeYesterday(ColumnChangeNullPercentSinceYesterdayCheckSpec nullsPercentChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercentChangeYesterday, nullsPercentChangeYesterday));
-        this.nullsPercentChangeYesterday = nullsPercentChangeYesterday;
-        propagateHierarchyIdToField(nullsPercentChangeYesterday, "nulls_percent_change_yesterday");
+    public void setProfileNullsPercentChangeYesterday(ColumnChangeNullPercentSinceYesterdayCheckSpec profileNullsPercentChangeYesterday) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentChangeYesterday, profileNullsPercentChangeYesterday));
+        this.profileNullsPercentChangeYesterday = profileNullsPercentChangeYesterday;
+        propagateHierarchyIdToField(profileNullsPercentChangeYesterday, "profile_nulls_percent_change_yesterday");
     }
 
     /**
      * Returns the null percent value change 7 days check.
      * @return Null percent value change 7 days check.
      */
-    public ColumnChangeNullPercentSince7DaysCheckSpec getNullsPercentChange7Days() {
-        return nullsPercentChange7Days;
+    public ColumnChangeNullPercentSince7DaysCheckSpec getProfileNullsPercentChange7Days() {
+        return profileNullsPercentChange7Days;
     }
 
     /**
      * Sets a new null percent value change 7 days check.
-     * @param nullsPercentChange7Days Null percent value change 7 days check.
+     * @param profileNullsPercentChange7Days Null percent value change 7 days check.
      */
-    public void setNullsPercentChange7Days(ColumnChangeNullPercentSince7DaysCheckSpec nullsPercentChange7Days) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercentChange7Days, nullsPercentChange7Days));
-        this.nullsPercentChange7Days = nullsPercentChange7Days;
-        propagateHierarchyIdToField(nullsPercentChange7Days, "nulls_percent_change_7_days");
+    public void setProfileNullsPercentChange7Days(ColumnChangeNullPercentSince7DaysCheckSpec profileNullsPercentChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentChange7Days, profileNullsPercentChange7Days));
+        this.profileNullsPercentChange7Days = profileNullsPercentChange7Days;
+        propagateHierarchyIdToField(profileNullsPercentChange7Days, "profile_nulls_percent_change_7_days");
     }
 
     /**
      * Returns the null percent value change 30 days check.
      * @return Null percent value change 30 days check.
      */
-    public ColumnChangeNullPercentSince30DaysCheckSpec getNullsPercentChange30Days() {
-        return nullsPercentChange30Days;
+    public ColumnChangeNullPercentSince30DaysCheckSpec getProfileNullsPercentChange30Days() {
+        return ProfileNullsPercentChange30Days;
     }
 
     /**
      * Sets a new null percent value change 30 days check.
-     * @param nullsPercentChange30Days Null percent value change 30 days check.
+     * @param profileNullsPercentChange30Days Null percent value change 30 days check.
      */
-    public void setNullsPercentChange30Days(ColumnChangeNullPercentSince30DaysCheckSpec nullsPercentChange30Days) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercentChange30Days, nullsPercentChange30Days));
-        this.nullsPercentChange30Days = nullsPercentChange30Days;
-        propagateHierarchyIdToField(nullsPercentChange30Days, "nulls_percent_change_30_days");
+    public void setProfileNullsPercentChange30Days(ColumnChangeNullPercentSince30DaysCheckSpec profileNullsPercentChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.ProfileNullsPercentChange30Days, profileNullsPercentChange30Days));
+        this.ProfileNullsPercentChange30Days = profileNullsPercentChange30Days;
+        propagateHierarchyIdToField(profileNullsPercentChange30Days, "profile_nulls_percent_change_30_days");
     }
 
     /**
      * Returns a not nulls count check specification.
      * @return Not nulls count check specification.
      */
-    public ColumnNotNullsCountCheckSpec getNotNullsCount() {
-        return notNullsCount;
+    public ColumnNotNullsCountCheckSpec getProfileNotNullsCount() {
+        return profileNotNullsCount;
     }
 
     /**
      * Sets a new not nulls count check  specification.
-     * @param notNullsCount Not nulls count check specification.
+     * @param profileNotNullsCount Not nulls count check specification.
      */
-    public void setNotNullsCount(ColumnNotNullsCountCheckSpec notNullsCount) {
-        this.setDirtyIf(!Objects.equals(this.notNullsCount, notNullsCount));
-        this.notNullsCount = notNullsCount;
-        propagateHierarchyIdToField(notNullsCount, "not_nulls_count");
+    public void setProfileNotNullsCount(ColumnNotNullsCountCheckSpec profileNotNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.profileNotNullsCount, profileNotNullsCount));
+        this.profileNotNullsCount = profileNotNullsCount;
+        propagateHierarchyIdToField(profileNotNullsCount, "profile_not_nulls_count");
     }
 
 
@@ -253,18 +253,18 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns a not nulls percent check specification.
      * @return Not nulls percent check specification.
      */
-    public ColumnNotNullsPercentCheckSpec getNotNullsPercent() {
-        return notNullsPercent;
+    public ColumnNotNullsPercentCheckSpec getProfileNotNullsPercent() {
+        return profileNotNullsPercent;
     }
 
     /**
      * Sets a new not null percent check specification.
-     * @param notNullsPercent Not nulls percent check specification.
+     * @param profileNotNullsPercent Not nulls percent check specification.
      */
-    public void setNotNullsPercent(ColumnNotNullsPercentCheckSpec notNullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.notNullsPercent, notNullsPercent));
-        this.notNullsPercent = notNullsPercent;
-        propagateHierarchyIdToField(notNullsPercent, "not_nulls_percent");
+    public void setProfileNotNullsPercent(ColumnNotNullsPercentCheckSpec profileNotNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNotNullsPercent, profileNotNullsPercent));
+        this.profileNotNullsPercent = profileNotNullsPercent;
+        propagateHierarchyIdToField(profileNotNullsPercent, "profile_not_nulls_percent");
     }
 
     /**

@@ -287,7 +287,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setFatal(maxCountRule3);
 
         ColumnNullsProfilingChecksSpec nullChecks = new ColumnNullsProfilingChecksSpec();
-        nullChecks.setNullsCount(nullsChecksSpec);
+        nullChecks.setProfileNullsCount(nullsChecksSpec);
         ColumnProfilingCheckCategoriesSpec sampleProfilingCheck = new ColumnProfilingCheckCategoriesSpec();
         sampleProfilingCheck.setNulls(nullChecks);
         

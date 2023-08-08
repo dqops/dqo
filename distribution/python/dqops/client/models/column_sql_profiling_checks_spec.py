@@ -23,50 +23,60 @@ T = TypeVar("T", bound="ColumnSqlProfilingChecksSpec")
 class ColumnSqlProfilingChecksSpec:
     """
     Attributes:
-        sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
-        sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
-        sql_aggregate_expr_column (Union[Unset, ColumnSqlAggregateExprCheckSpec]):
+        profile_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
+        profile_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
+        profile_sql_aggregate_expr_column (Union[Unset, ColumnSqlAggregateExprCheckSpec]):
     """
 
-    sql_condition_passed_percent_on_column: Union[
+    profile_sql_condition_passed_percent_on_column: Union[
         Unset, "ColumnSqlConditionPassedPercentCheckSpec"
     ] = UNSET
-    sql_condition_failed_count_on_column: Union[
+    profile_sql_condition_failed_count_on_column: Union[
         Unset, "ColumnSqlConditionFailedCountCheckSpec"
     ] = UNSET
-    sql_aggregate_expr_column: Union[Unset, "ColumnSqlAggregateExprCheckSpec"] = UNSET
+    profile_sql_aggregate_expr_column: Union[
+        Unset, "ColumnSqlAggregateExprCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        sql_condition_passed_percent_on_column: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sql_condition_passed_percent_on_column, Unset):
-            sql_condition_passed_percent_on_column = (
-                self.sql_condition_passed_percent_on_column.to_dict()
+        profile_sql_condition_passed_percent_on_column: Union[
+            Unset, Dict[str, Any]
+        ] = UNSET
+        if not isinstance(self.profile_sql_condition_passed_percent_on_column, Unset):
+            profile_sql_condition_passed_percent_on_column = (
+                self.profile_sql_condition_passed_percent_on_column.to_dict()
             )
 
-        sql_condition_failed_count_on_column: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sql_condition_failed_count_on_column, Unset):
-            sql_condition_failed_count_on_column = (
-                self.sql_condition_failed_count_on_column.to_dict()
+        profile_sql_condition_failed_count_on_column: Union[
+            Unset, Dict[str, Any]
+        ] = UNSET
+        if not isinstance(self.profile_sql_condition_failed_count_on_column, Unset):
+            profile_sql_condition_failed_count_on_column = (
+                self.profile_sql_condition_failed_count_on_column.to_dict()
             )
 
-        sql_aggregate_expr_column: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sql_aggregate_expr_column, Unset):
-            sql_aggregate_expr_column = self.sql_aggregate_expr_column.to_dict()
+        profile_sql_aggregate_expr_column: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sql_aggregate_expr_column, Unset):
+            profile_sql_aggregate_expr_column = (
+                self.profile_sql_aggregate_expr_column.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if sql_condition_passed_percent_on_column is not UNSET:
+        if profile_sql_condition_passed_percent_on_column is not UNSET:
             field_dict[
-                "sql_condition_passed_percent_on_column"
-            ] = sql_condition_passed_percent_on_column
-        if sql_condition_failed_count_on_column is not UNSET:
+                "profile_sql_condition_passed_percent_on_column"
+            ] = profile_sql_condition_passed_percent_on_column
+        if profile_sql_condition_failed_count_on_column is not UNSET:
             field_dict[
-                "sql_condition_failed_count_on_column"
-            ] = sql_condition_failed_count_on_column
-        if sql_aggregate_expr_column is not UNSET:
-            field_dict["sql_aggregate_expr_column"] = sql_aggregate_expr_column
+                "profile_sql_condition_failed_count_on_column"
+            ] = profile_sql_condition_failed_count_on_column
+        if profile_sql_aggregate_expr_column is not UNSET:
+            field_dict[
+                "profile_sql_aggregate_expr_column"
+            ] = profile_sql_aggregate_expr_column
 
         return field_dict
 
@@ -83,49 +93,53 @@ class ColumnSqlProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _sql_condition_passed_percent_on_column = d.pop(
-            "sql_condition_passed_percent_on_column", UNSET
+        _profile_sql_condition_passed_percent_on_column = d.pop(
+            "profile_sql_condition_passed_percent_on_column", UNSET
         )
-        sql_condition_passed_percent_on_column: Union[
+        profile_sql_condition_passed_percent_on_column: Union[
             Unset, ColumnSqlConditionPassedPercentCheckSpec
         ]
-        if isinstance(_sql_condition_passed_percent_on_column, Unset):
-            sql_condition_passed_percent_on_column = UNSET
+        if isinstance(_profile_sql_condition_passed_percent_on_column, Unset):
+            profile_sql_condition_passed_percent_on_column = UNSET
         else:
-            sql_condition_passed_percent_on_column = (
+            profile_sql_condition_passed_percent_on_column = (
                 ColumnSqlConditionPassedPercentCheckSpec.from_dict(
-                    _sql_condition_passed_percent_on_column
+                    _profile_sql_condition_passed_percent_on_column
                 )
             )
 
-        _sql_condition_failed_count_on_column = d.pop(
-            "sql_condition_failed_count_on_column", UNSET
+        _profile_sql_condition_failed_count_on_column = d.pop(
+            "profile_sql_condition_failed_count_on_column", UNSET
         )
-        sql_condition_failed_count_on_column: Union[
+        profile_sql_condition_failed_count_on_column: Union[
             Unset, ColumnSqlConditionFailedCountCheckSpec
         ]
-        if isinstance(_sql_condition_failed_count_on_column, Unset):
-            sql_condition_failed_count_on_column = UNSET
+        if isinstance(_profile_sql_condition_failed_count_on_column, Unset):
+            profile_sql_condition_failed_count_on_column = UNSET
         else:
-            sql_condition_failed_count_on_column = (
+            profile_sql_condition_failed_count_on_column = (
                 ColumnSqlConditionFailedCountCheckSpec.from_dict(
-                    _sql_condition_failed_count_on_column
+                    _profile_sql_condition_failed_count_on_column
                 )
             )
 
-        _sql_aggregate_expr_column = d.pop("sql_aggregate_expr_column", UNSET)
-        sql_aggregate_expr_column: Union[Unset, ColumnSqlAggregateExprCheckSpec]
-        if isinstance(_sql_aggregate_expr_column, Unset):
-            sql_aggregate_expr_column = UNSET
+        _profile_sql_aggregate_expr_column = d.pop(
+            "profile_sql_aggregate_expr_column", UNSET
+        )
+        profile_sql_aggregate_expr_column: Union[Unset, ColumnSqlAggregateExprCheckSpec]
+        if isinstance(_profile_sql_aggregate_expr_column, Unset):
+            profile_sql_aggregate_expr_column = UNSET
         else:
-            sql_aggregate_expr_column = ColumnSqlAggregateExprCheckSpec.from_dict(
-                _sql_aggregate_expr_column
+            profile_sql_aggregate_expr_column = (
+                ColumnSqlAggregateExprCheckSpec.from_dict(
+                    _profile_sql_aggregate_expr_column
+                )
             )
 
         column_sql_profiling_checks_spec = cls(
-            sql_condition_passed_percent_on_column=sql_condition_passed_percent_on_column,
-            sql_condition_failed_count_on_column=sql_condition_failed_count_on_column,
-            sql_aggregate_expr_column=sql_aggregate_expr_column,
+            profile_sql_condition_passed_percent_on_column=profile_sql_condition_passed_percent_on_column,
+            profile_sql_condition_failed_count_on_column=profile_sql_condition_failed_count_on_column,
+            profile_sql_aggregate_expr_column=profile_sql_aggregate_expr_column,
         )
 
         column_sql_profiling_checks_spec.additional_properties = d

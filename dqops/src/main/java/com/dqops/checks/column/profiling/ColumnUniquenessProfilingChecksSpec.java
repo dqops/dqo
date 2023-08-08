@@ -20,7 +20,6 @@ import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpe
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,95 +39,95 @@ import java.util.Objects;
 public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("distinct_count", o -> o.distinctCount);
-            put("distinct_percent", o -> o.distinctPercent);
-            put("duplicate_count", o -> o.duplicateCount);
-            put("duplicate_percent", o -> o.duplicatePercent);
+            put("profile_distinct_count", o -> o.profileDistinctCount);
+            put("profile_distinct_percent", o -> o.profileDistinctPercent);
+            put("profile_duplicate_count", o -> o.profileDuplicateCount);
+            put("profile_duplicate_percent", o -> o.profileDuplicatePercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count.")
-    private ColumnDistinctCountCheckSpec distinctCount;
+    private ColumnDistinctCountCheckSpec profileDistinctCount;
 
     @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.")
-    private ColumnDistinctPercentCheckSpec distinctPercent;
+    private ColumnDistinctPercentCheckSpec profileDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.")
-    private ColumnDuplicateCountCheckSpec duplicateCount;
+    private ColumnDuplicateCountCheckSpec profileDuplicateCount;
 
     @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.")
-    private ColumnDuplicatePercentCheckSpec duplicatePercent;
+    private ColumnDuplicatePercentCheckSpec profileDuplicatePercent;
 
     /**
      * Returns a distinct count check specification.
      * @return Distinct count check specification.
      */
-    public ColumnDistinctCountCheckSpec getDistinctCount() {
-        return distinctCount;
+    public ColumnDistinctCountCheckSpec getProfileDistinctCount() {
+        return profileDistinctCount;
     }
 
     /**
      * Sets a new specification of a distinct count check.
-     * @param distinctCount Distinct count check specification.
+     * @param profileDistinctCount Distinct count check specification.
      */
-    public void setDistinctCount(ColumnDistinctCountCheckSpec distinctCount) {
-        this.setDirtyIf(!Objects.equals(this.distinctCount, distinctCount));
-        this.distinctCount = distinctCount;
-        propagateHierarchyIdToField(distinctCount, "distinct_count");
+    public void setProfileDistinctCount(ColumnDistinctCountCheckSpec profileDistinctCount) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctCount, profileDistinctCount));
+        this.profileDistinctCount = profileDistinctCount;
+        propagateHierarchyIdToField(profileDistinctCount, "profile_distinct_count");
     }
 
     /**
      * Returns a distinct percent check specification.
      * @return Distinct percent check specification.
      */
-    public ColumnDistinctPercentCheckSpec getDistinctPercent() {
-        return distinctPercent;
+    public ColumnDistinctPercentCheckSpec getProfileDistinctPercent() {
+        return profileDistinctPercent;
     }
 
     /**
      * Sets a new specification of a distinct percent check.
-     * @param distinctPercent Distinct percent check specification.
+     * @param profileDistinctPercent Distinct percent check specification.
      */
-    public void setDistinctPercent(ColumnDistinctPercentCheckSpec distinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.distinctPercent, distinctPercent));
-        this.distinctPercent = distinctPercent;
-        propagateHierarchyIdToField(distinctPercent, "distinct_percent");
+    public void setProfileDistinctPercent(ColumnDistinctPercentCheckSpec profileDistinctPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctPercent, profileDistinctPercent));
+        this.profileDistinctPercent = profileDistinctPercent;
+        propagateHierarchyIdToField(profileDistinctPercent, "profile_distinct_percent");
     }
 
     /**
      * Returns a duplicate count check specification.
      * @return Duplicate count check specification.
      */
-    public ColumnDuplicateCountCheckSpec getDuplicateCount() {
-        return duplicateCount;
+    public ColumnDuplicateCountCheckSpec getProfileDuplicateCount() {
+        return profileDuplicateCount;
     }
 
     /**
      * Sets a new specification of a duplicate count check.
-     * @param duplicateCount Duplicate count check specification.
+     * @param profileDuplicateCount Duplicate count check specification.
      */
-    public void setDuplicateCount(ColumnDuplicateCountCheckSpec duplicateCount) {
-        this.setDirtyIf(!Objects.equals(this.duplicateCount, duplicateCount));
-        this.duplicateCount = duplicateCount;
-        propagateHierarchyIdToField(duplicateCount, "duplicate_count");
+    public void setProfileDuplicateCount(ColumnDuplicateCountCheckSpec profileDuplicateCount) {
+        this.setDirtyIf(!Objects.equals(this.profileDuplicateCount, profileDuplicateCount));
+        this.profileDuplicateCount = profileDuplicateCount;
+        propagateHierarchyIdToField(profileDuplicateCount, "profile_duplicate_count");
     }
 
     /**
      * Returns a duplicate percent check specification.
      * @return Duplicate percent check specification.
      */
-    public ColumnDuplicatePercentCheckSpec getDuplicatePercent() {
-        return duplicatePercent;
+    public ColumnDuplicatePercentCheckSpec getProfileDuplicatePercent() {
+        return profileDuplicatePercent;
     }
 
     /**
      * Sets a new specification of a duplicate percent check.
-     * @param duplicatePercent Duplicate percent check specification.
+     * @param profileDuplicatePercent Duplicate percent check specification.
      */
-    public void setDuplicatePercent(ColumnDuplicatePercentCheckSpec duplicatePercent) {
-        this.setDirtyIf(!Objects.equals(this.duplicatePercent, duplicatePercent));
-        this.duplicatePercent = duplicatePercent;
-        propagateHierarchyIdToField(duplicatePercent, "duplicate_percent");
+    public void setProfileDuplicatePercent(ColumnDuplicatePercentCheckSpec profileDuplicatePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDuplicatePercent, profileDuplicatePercent));
+        this.profileDuplicatePercent = profileDuplicatePercent;
+        propagateHierarchyIdToField(profileDuplicatePercent, "profile_duplicate_percent");
     }
 
     /**

@@ -37,51 +37,51 @@ import java.util.Objects;
 public class ColumnDatatypeProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("date_match_format_percent", o -> o.dateMatchFormatPercent);
-            put("string_datatype_changed", o -> o.stringDatatypeChanged);
+            put("profile_date_match_format_percent", o -> o.profileDateMatchFormatPercent);
+            put("profile_string_datatype_changed", o -> o.profileStringDatatypeChanged);
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the minimum accepted percentage.")
-    private ColumnDatatypeDateMatchFormatPercentCheckSpec dateMatchFormatPercent;
+    private ColumnDatatypeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent;
 
     @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec stringDatatypeChanged;
+    private ColumnDatatypeStringDatatypeChangedCheckSpec profileStringDatatypeChanged;
 
     /**
      * Returns a date match format percentage check.
      * @return Maximum date match format percentage check.
      */
-    public ColumnDatatypeDateMatchFormatPercentCheckSpec getDateMatchFormatPercent() {
-        return dateMatchFormatPercent;
+    public ColumnDatatypeDateMatchFormatPercentCheckSpec getProfileDateMatchFormatPercent() {
+        return profileDateMatchFormatPercent;
     }
 
     /**
      * Sets a new definition of a date match format percentage check.
-     * @param dateMatchFormatPercent Date match format percentage check.
+     * @param profileDateMatchFormatPercent Date match format percentage check.
      */
-    public void setDateMatchFormatPercent(ColumnDatatypeDateMatchFormatPercentCheckSpec dateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dateMatchFormatPercent, dateMatchFormatPercent));
-        this.dateMatchFormatPercent = dateMatchFormatPercent;
-        propagateHierarchyIdToField(dateMatchFormatPercent, "date_match_format_percent");
+    public void setProfileDateMatchFormatPercent(ColumnDatatypeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDateMatchFormatPercent, profileDateMatchFormatPercent));
+        this.profileDateMatchFormatPercent = profileDateMatchFormatPercent;
+        propagateHierarchyIdToField(profileDateMatchFormatPercent, "profile_date_match_format_percent");
     }
 
     /**
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getStringDatatypeChanged() {
-        return stringDatatypeChanged;
+    public ColumnDatatypeStringDatatypeChangedCheckSpec getProfileStringDatatypeChanged() {
+        return profileStringDatatypeChanged;
     }
 
     /**
      * Sets a new definition of a datatype changed check.
-     * @param stringDatatypeChanged Datatype changed check.
+     * @param profileStringDatatypeChanged Datatype changed check.
      */
-    public void setStringDatatypeChanged(ColumnDatatypeStringDatatypeChangedCheckSpec stringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.stringDatatypeChanged, stringDatatypeChanged));
-        this.stringDatatypeChanged = stringDatatypeChanged;
-        propagateHierarchyIdToField(stringDatatypeChanged, "string_datatype_changed");
+    public void setProfileStringDatatypeChanged(ColumnDatatypeStringDatatypeChangedCheckSpec profileStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.profileStringDatatypeChanged, profileStringDatatypeChanged));
+        this.profileStringDatatypeChanged = profileStringDatatypeChanged;
+        propagateHierarchyIdToField(profileStringDatatypeChanged, "profile_string_datatype_changed");
     }
 
     /**
