@@ -124,7 +124,7 @@ nav:
         - data freshness: 'checks/table/timeliness/data-freshness.md'
         - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
-        - daily partition reload lag: 'checks/table/timeliness/daily-partition-reload-lag.md'
+        - reload lag: 'checks/table/timeliness/reload-lag.md'
       - volume:
         - row count: 'checks/table/volume/row-count.md'
         - row count anomaly differencing 30 days: 'checks/table/volume/row-count-anomaly-differencing-30-days.md'
@@ -133,8 +133,8 @@ nav:
         - row count change yesterday: 'checks/table/volume/row-count-change-yesterday.md'
         - row count change 7 days: 'checks/table/volume/row-count-change-7-days.md'
         - row count change 30 days: 'checks/table/volume/row-count-change-30-days.md'
-        - daily partition row count anomaly stationary 30 days: 'checks/table/volume/daily-partition-row-count-anomaly-stationary-30-days.md'
-        - daily partition row count anomaly stationary: 'checks/table/volume/daily-partition-row-count-anomaly-stationary.md'
+        - row count anomaly stationary 30 days: 'checks/table/volume/row-count-anomaly-stationary-30-days.md'
+        - row count anomaly stationary: 'checks/table/volume/row-count-anomaly-stationary.md'
     - column:
       - accuracy:
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
@@ -161,8 +161,8 @@ nav:
         - sum change yesterday: 'checks/column/anomaly/sum-change-yesterday.md'
         - sum change 7 days: 'checks/column/anomaly/sum-change-7-days.md'
         - sum change 30 days: 'checks/column/anomaly/sum-change-30-days.md'
-        - daily partition sum anomaly stationary 30 days: 'checks/column/anomaly/daily-partition-sum-anomaly-stationary-30-days.md'
-        - daily partition sum anomaly stationary: 'checks/column/anomaly/daily-partition-sum-anomaly-stationary.md'
+        - sum anomaly stationary 30 days: 'checks/column/anomaly/sum-anomaly-stationary-30-days.md'
+        - sum anomaly stationary: 'checks/column/anomaly/sum-anomaly-stationary.md'
       - bool:
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'

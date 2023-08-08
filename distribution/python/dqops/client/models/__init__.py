@@ -1657,6 +1657,9 @@ from .table_profiling_check_categories_spec_comparisons import (
 from .table_profiling_check_categories_spec_custom import (
     TableProfilingCheckCategoriesSpecCustom,
 )
+from .table_profiling_check_categories_spec_result_truncation import (
+    TableProfilingCheckCategoriesSpecResultTruncation,
+)
 from .table_recurring_checks_spec import TableRecurringChecksSpec
 from .table_remote_basic_model import TableRemoteBasicModel
 from .table_row_count_check_spec import TableRowCountCheckSpec
@@ -2527,6 +2530,7 @@ __all__ = (
     "TableProfilingCheckCategoriesSpec",
     "TableProfilingCheckCategoriesSpecComparisons",
     "TableProfilingCheckCategoriesSpecCustom",
+    "TableProfilingCheckCategoriesSpecResultTruncation",
     "TableRecurringChecksSpec",
     "TableRemoteBasicModel",
     "TableRowCountCheckSpec",

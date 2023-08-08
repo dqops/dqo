@@ -38,29 +38,29 @@ import java.util.Objects;
 public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableComparisonProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableComparisonCheckCategorySpec.FIELDS) {
         {
-            put("row_count_match", o -> o.rowCountMatch);
+            put("profile_row_count_match", o -> o.profileRowCountMatch);
         }
     };
 
     @JsonPropertyDescription("Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.")
-    private TableComparisonRowCountMatchCheckSpec rowCountMatch;
+    private TableComparisonRowCountMatchCheckSpec profileRowCountMatch;
 
     /**
      * Returns the row count match check.
      * @return Row count match check.
      */
-    public TableComparisonRowCountMatchCheckSpec getRowCountMatch() {
-        return rowCountMatch;
+    public TableComparisonRowCountMatchCheckSpec getProfileRowCountMatch() {
+        return profileRowCountMatch;
     }
 
     /**
      * Sets a new row count match check.
-     * @param rowCountMatch Row count match check.
+     * @param profileRowCountMatch Row count match check.
      */
-    public void setRowCountMatch(TableComparisonRowCountMatchCheckSpec rowCountMatch) {
-        this.setDirtyIf(!Objects.equals(this.rowCountMatch, rowCountMatch));
-        this.rowCountMatch = rowCountMatch;
-        propagateHierarchyIdToField(rowCountMatch, "row_count_match");
+    public void setProfileRowCountMatch(TableComparisonRowCountMatchCheckSpec profileRowCountMatch) {
+        this.setDirtyIf(!Objects.equals(this.profileRowCountMatch, profileRowCountMatch));
+        this.profileRowCountMatch = profileRowCountMatch;
+        propagateHierarchyIdToField(profileRowCountMatch, "profile_row_count_match");
     }
 
     /**
@@ -74,13 +74,13 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
     public ComparisonCheckRules getCheckSpec(TableCompareCheckType tableCompareCheckType, boolean createWhenMissing) {
         switch (tableCompareCheckType) {
             case row_count_match: {
-                if (this.rowCountMatch == null) {
+                if (this.profileRowCountMatch == null) {
                     if (createWhenMissing) {
-                        this.setRowCountMatch(new TableComparisonRowCountMatchCheckSpec());
+                        this.setProfileRowCountMatch(new TableComparisonRowCountMatchCheckSpec());
                     }
                 }
 
-                return this.rowCountMatch;
+                return this.profileRowCountMatch;
             }
             default:
                 return null;
@@ -96,7 +96,7 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
     public void removeCheckSpec(TableCompareCheckType tableCompareCheckType) {
         switch (tableCompareCheckType) {
             case row_count_match:
-                this.setRowCountMatch(null);
+                this.setProfileRowCountMatch(null);
                 break;
         }
     }

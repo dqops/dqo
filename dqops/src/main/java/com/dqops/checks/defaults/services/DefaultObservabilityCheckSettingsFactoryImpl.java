@@ -139,35 +139,35 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     protected DefaultProfilingObservabilityCheckSettingsSpec createDefaultProfilingChecks() {
         DefaultProfilingObservabilityCheckSettingsSpec defaultSettings = new DefaultProfilingObservabilityCheckSettingsSpec();
         TableAvailabilityProfilingChecksSpec tableAvailability = new TableAvailabilityProfilingChecksSpec();
-        tableAvailability.setTableAvailability(new TableAvailabilityCheckSpec() {{
+        tableAvailability.setProfileTableAvailability(new TableAvailabilityCheckSpec() {{
             setWarning(new MaxFailuresRule0ParametersSpec());
         }});
         defaultSettings.setTableAvailability(tableAvailability);
 
         TableVolumeProfilingChecksSpec tableVolume = new TableVolumeProfilingChecksSpec();
-        tableVolume.setRowCount(new TableRowCountCheckSpec()); // no rules, just monitoring
+        tableVolume.setProfileRowCount(new TableRowCountCheckSpec()); // no rules, just monitoring
         defaultSettings.setTableVolume(tableVolume);
 
         TableSchemaProfilingChecksSpec tableSchema = new TableSchemaProfilingChecksSpec();
-        tableSchema.setColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
+        tableSchema.setProfileColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        tableSchema.setColumnListChanged(new TableSchemaColumnListChangedCheckSpec() {{
+        tableSchema.setProfileColumnListChanged(new TableSchemaColumnListChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        tableSchema.setColumnListOrOrderChanged(new TableSchemaColumnListOrOrderChangedCheckSpec() {{
+        tableSchema.setProfileColumnListOrOrderChanged(new TableSchemaColumnListOrOrderChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        tableSchema.setColumnTypesChanged(new TableSchemaColumnTypesChangedCheckSpec() {{
+        tableSchema.setProfileColumnTypesChanged(new TableSchemaColumnTypesChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
         defaultSettings.setTableSchema(tableSchema);
 
         ColumnSchemaProfilingChecksSpec columnSchema = new ColumnSchemaProfilingChecksSpec();
-        columnSchema.setColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
+        columnSchema.setProfileColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
             setWarning(new EqualsInteger1RuleParametersSpec());
         }});
-        columnSchema.setColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
+        columnSchema.setProfileColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
         defaultSettings.setColumnSchema(columnSchema);

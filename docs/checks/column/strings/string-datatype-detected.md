@@ -6,42 +6,42 @@ Table level check that scans all values in a string column and detects the data 
 
 ___
 
-## **string datatype detected**  
+## **profile string datatype detected**  
   
 **Check description**  
 Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_datatype_detected|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
+|profile_string_datatype_detected|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=string_datatype_detected
+dqo> check enable -c=connection_name -ch=profile_string_datatype_detected
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=string_datatype_detected
+dqo> check run -ch=profile_string_datatype_detected
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=string_datatype_detected
+dqo> check run -c=connection_name -ch=profile_string_datatype_detected
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=string_datatype_detected
+dqo> check run -c=connection_name -t=table_name -ch=profile_string_datatype_detected
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_datatype_detected
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_string_datatype_detected
 ```
 **Check structure (Yaml)**
 ```yaml
       profiling_checks:
         strings:
-          string_datatype_detected:
+          profile_string_datatype_detected:
             warning:
               expected_datatype: 1
             error:
@@ -65,7 +65,7 @@ spec:
     target_column:
       profiling_checks:
         strings:
-          string_datatype_detected:
+          profile_string_datatype_detected:
             warning:
               expected_datatype: 1
             error:
@@ -230,8 +230,8 @@ spec:
                 THEN 6
             ELSE 7
         END AS actual_value,
-        CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -384,8 +384,8 @@ spec:
                 THEN 6
             ELSE 7
         END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -538,8 +538,8 @@ spec:
                 THEN 6
             ELSE 7
         END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -692,8 +692,8 @@ spec:
                 THEN 6
             ELSE 7
         END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -846,8 +846,8 @@ spec:
                 THEN 6
             ELSE 7
         END AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1007,8 +1007,8 @@ spec:
                 THEN 6
             ELSE 7
         END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1041,7 +1041,7 @@ spec:
         target_column:
           profiling_checks:
             strings:
-              string_datatype_detected:
+              profile_string_datatype_detected:
                 warning:
                   expected_datatype: 1
                 error:
@@ -1212,8 +1212,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            CURRENT_TIMESTAMP() AS time_period,
-            TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1367,8 +1367,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            LOCALTIMESTAMP AS time_period_utc
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1522,8 +1522,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1677,8 +1677,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1832,8 +1832,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1994,8 +1994,8 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

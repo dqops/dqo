@@ -1,6 +1,6 @@
 
-## ConnectionYaml  
-Connection definition for a data source connection that is covered by data quality checks.  
+## SqlServerParametersSpec  
+Microsoft SQL Server connection parameters.  
   
 
 
@@ -14,41 +14,13 @@ Connection definition for a data source connection that is covered by data quali
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
-|[spec](#connectionspec)||[ConnectionSpec](#connectionspec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## BigQueryParametersSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|source_project_id|Source GCP project ID. This is the project that has datasets that will be imported.|string| | | |
-|billing_project_id|Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.|string| | | |
-|authentication_mode|Authentication mode to the Google Cloud.|enum|json_key_content<br/>json_key_path<br/>google_application_credentials<br/>| | |
-|json_key_content|JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.|string| | | |
-|json_key_path|A path to the JSON key file. Requires the authentication-mode: json_key_path.|string| | | |
-|quota_project_id|Quota GCP project ID.|string| | | |
+|host|SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.|string| | | |
+|port|SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.|string| | | |
+|database|SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|string| | | |
+|ssl|Connecting to SQL Server with SSL disabled. The default value is false.|boolean| | | |
 
 
 
@@ -61,7 +33,7 @@ ___
 ___  
 
 ## MysqlParametersSpec  
-  
+MySql connection parameters.  
   
 
 
@@ -93,12 +65,8 @@ ___
 
 ___  
 
-## DataGroupingConfigurationSpec  
-Configuration of the data groupings that is used to calculate data quality checks with a GROUP BY clause.
- Data grouping levels may be hardcoded if we have different (but similar) tables for different business areas (countries, product groups).
- We can also pull data grouping levels directly from the database if a table has a column that identifies a business area.
- Data quality results for new groups are dynamically identified in the database by the GROUP BY clause. Sensor values are extracted for each data group separately,
- a time series is build for each data group separately.  
+## DataGroupingDimensionSpec  
+Single data grouping dimension configuration. A data grouping dimension may be configured as a hardcoded value or a mapping to a column.  
   
 
 
@@ -112,15 +80,106 @@ Configuration of the data groupings that is used to calculate data quality check
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[level_1](#datagroupingdimensionspec)|Data grouping dimension level 1 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_2](#datagroupingdimensionspec)|Data grouping dimension level 2 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_3](#datagroupingdimensionspec)|Data grouping dimension level 3 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_4](#datagroupingdimensionspec)|Data grouping dimension level 4 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_5](#datagroupingdimensionspec)|Data grouping dimension level 5 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_6](#datagroupingdimensionspec)|Data grouping dimension level 6 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_7](#datagroupingdimensionspec)|Data grouping dimension level 7 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_8](#datagroupingdimensionspec)|Data grouping dimension level 8 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
-|[level_9](#datagroupingdimensionspec)|Data grouping dimension level 9 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|source|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|enum|tag<br/>column_value<br/>| | |
+|tag|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|string| | | |
+|column|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|column_name| | | |
+|name|Data grouping dimension name.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## RecurringSchedulesSpec  
+Container of all recurring schedules (cron expressions) for each type of checks.
+ Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
+ Each group of checks could be divided additionally by time scale (daily, monthly, etc).
+ Each time scale has a different recurring schedule used by the job scheduler to run the checks.
+ These schedules are defined in this object.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[profiling](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running profiling data quality checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
+|[recurring_daily](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running daily recurring checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
+|[recurring_monthly](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running monthly recurring checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
+|[partitioned_daily](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running daily partitioned checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
+|[partitioned_monthly](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running monthly partitioned checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ConnectionYaml  
+Connection definition for a data source connection that is covered by data quality checks.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
+|[spec](#connectionspec)||[ConnectionSpec](#connectionspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## BigQueryParametersSpec  
+BigQuery connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|source_project_id|Source GCP project ID. This is the project that has datasets that will be imported.|string| | | |
+|billing_project_id|Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.|string| | | |
+|authentication_mode|Authentication mode to the Google Cloud.|enum|json_key_content<br/>json_key_path<br/>google_application_credentials<br/>| | |
+|json_key_content|JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.|string| | | |
+|json_key_path|A path to the JSON key file. Requires the authentication-mode: json_key_path.|string| | | |
+|quota_project_id|Quota GCP project ID.|string| | | |
 
 
 
@@ -133,7 +192,7 @@ Configuration of the data groupings that is used to calculate data quality check
 ___  
 
 ## PostgresqlParametersSpec  
-  
+Postgresql connection parameters.  
   
 
 
@@ -154,6 +213,37 @@ ___
 |password|PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |options|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.|string| | | |
 |ssl|Connect to PostgreSQL using SSL. The default value is false.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## IncidentWebhookNotificationsSpec  
+Configuration of Webhook URLs used for new or updated incident&#x27;s notifications.
+ Specifies the URLs of webhooks where the notification messages are sent.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|incident_opened_webhook_url|Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
+|incident_acknowledged_webhook_url|Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
+|incident_resolved_webhook_url|Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
+|incident_muted_webhook_url|Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
 
 
 
@@ -205,9 +295,33 @@ Data source (connection) specification.
 
 ___  
 
-## LabelSetSpec  
-Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.  
+## RedshiftParametersSpec  
+Redshift connection parameters.  
   
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.|string| | | |
+|port|Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.|string| | | |
+|database|Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
+|ssl|Connect to Redshift using SSL. The default value is false.|boolean| | | |
+
+
+
+
+
 
 
 
@@ -215,7 +329,7 @@ Collection of unique labels assigned to items (tables, columns, checks) that cou
 ___  
 
 ## SnowflakeParametersSpec  
-  
+Snowflake connection parameters.  
   
 
 
@@ -246,12 +360,21 @@ ___
 
 ___  
 
-## RecurringSchedulesSpec  
-Container of all recurring schedules (cron expressions) for each type of checks.
- Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
- Each group of checks could be divided additionally by time scale (daily, monthly, etc).
- Each time scale has a different recurring schedule used by the job scheduler to run the checks.
- These schedules are defined in this object.  
+## LabelSetSpec  
+Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.  
+  
+
+
+
+
+___  
+
+## DataGroupingConfigurationSpec  
+Configuration of the data groupings that is used to calculate data quality checks with a GROUP BY clause.
+ Data grouping levels may be hardcoded if we have different (but similar) tables for different business areas (countries, product groups).
+ We can also pull data grouping levels directly from the database if a table has a column that identifies a business area.
+ Data quality results for new groups are dynamically identified in the database by the GROUP BY clause. Sensor values are extracted for each data group separately,
+ a time series is build for each data group separately.  
   
 
 
@@ -265,11 +388,15 @@ Container of all recurring schedules (cron expressions) for each type of checks.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profiling](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running profiling data quality checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
-|[recurring_daily](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running daily recurring checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
-|[recurring_monthly](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running monthly recurring checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
-|[partitioned_daily](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running daily partitioned checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
-|[partitioned_monthly](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)|Schedule for running monthly partitioned checks.|[RecurringScheduleSpec](\docs\reference\yaml\profiling\table-profiling-checks\#recurringschedulespec)| | | |
+|[level_1](#datagroupingdimensionspec)|Data grouping dimension level 1 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_2](#datagroupingdimensionspec)|Data grouping dimension level 2 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_3](#datagroupingdimensionspec)|Data grouping dimension level 3 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_4](#datagroupingdimensionspec)|Data grouping dimension level 4 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_5](#datagroupingdimensionspec)|Data grouping dimension level 5 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_6](#datagroupingdimensionspec)|Data grouping dimension level 6 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_7](#datagroupingdimensionspec)|Data grouping dimension level 7 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_8](#datagroupingdimensionspec)|Data grouping dimension level 8 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
+|[level_9](#datagroupingdimensionspec)|Data grouping dimension level 9 configuration.|[DataGroupingDimensionSpec](#datagroupingdimensionspec)| | | |
 
 
 
@@ -314,41 +441,8 @@ Configuration of data quality incident grouping on a connection level. Defines h
 
 ___  
 
-## RedshiftParametersSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.|string| | | |
-|port|Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.|string| | | |
-|database|Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
-|ssl|Connect to Redshift using SSL. The default value is false.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## OracleParametersSpec  
-  
+Oracle connection parameters.  
   
 
 
@@ -369,100 +463,6 @@ ___
 |password|Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |options|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.|string| | | |
 |ssl|Connect to Oracle using SSL. The default value is false.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## SqlServerParametersSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.|string| | | |
-|port|SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.|string| | | |
-|database|SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|string| | | |
-|ssl|Connecting to SQL Server with SSL disabled. The default value is false.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## IncidentWebhookNotificationsSpec  
-Configuration of Webhook URLs used for new or updated incident&#x27;s notifications.
- Specifies the URLs of webhooks where the notification messages are sent.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|incident_opened_webhook_url|Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
-|incident_acknowledged_webhook_url|Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
-|incident_resolved_webhook_url|Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
-|incident_muted_webhook_url|Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DataGroupingDimensionSpec  
-Single data grouping dimension configuration. A data grouping dimension may be configured as a hardcoded value or a mapping to a column.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|source|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|enum|tag<br/>column_value<br/>| | |
-|tag|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|string| | | |
-|column|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|column_name| | | |
-|name|Data grouping dimension name.|string| | | |
 
 
 

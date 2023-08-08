@@ -5,42 +5,42 @@ Column check that calculates percentage of strings with a length below the indic
 
 ___
 
-## **string length in range percent**  
+## **profile string length in range percent**  
   
 **Check description**  
 The check counts the percentage of those strings with length in the range provided by the user in the column.   
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_length_in_range_percent|profiling| |[string_length_in_range_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|profile_string_length_in_range_percent|profiling| |[string_length_in_range_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=string_length_in_range_percent
+dqo> check enable -c=connection_name -ch=profile_string_length_in_range_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=string_length_in_range_percent
+dqo> check run -ch=profile_string_length_in_range_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=string_length_in_range_percent
+dqo> check run -c=connection_name -ch=profile_string_length_in_range_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=string_length_in_range_percent
+dqo> check run -c=connection_name -t=table_name -ch=profile_string_length_in_range_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_length_in_range_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_string_length_in_range_percent
 ```
 **Check structure (Yaml)**
 ```yaml
       profiling_checks:
         strings:
-          string_length_in_range_percent:
+          profile_string_length_in_range_percent:
             parameters:
               min_length: 5
               max_length: 10
@@ -67,7 +67,7 @@ spec:
     target_column:
       profiling_checks:
         strings:
-          string_length_in_range_percent:
+          profile_string_length_in_range_percent:
             parameters:
               min_length: 5
               max_length: 10
@@ -157,8 +157,8 @@ spec:
                     END
             ) / COUNT(analyzed_table.`target_column`)
         END AS actual_value,
-        CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -201,8 +201,8 @@ spec:
                     END
             ) / COUNT(analyzed_table.`target_column`)
         END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -255,8 +255,8 @@ spec:
     FROM(
         SELECT
             analyzed_table."target_column",
-        CURRENT_TIMESTAMP AS time_period,
-        CAST(CURRENT_TIMESTAMP AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -298,8 +298,8 @@ spec:
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -342,8 +342,8 @@ spec:
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -386,8 +386,8 @@ spec:
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -429,8 +429,8 @@ spec:
                     END
             ) / COUNT_BIG(analyzed_table.[target_column])
         END AS actual_value,
-        SYSDATETIMEOFFSET() AS time_period,
-        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 
@@ -461,7 +461,7 @@ spec:
         target_column:
           profiling_checks:
             strings:
-              string_length_in_range_percent:
+              profile_string_length_in_range_percent:
                 parameters:
                   min_length: 5
                   max_length: 10
@@ -557,8 +557,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            CURRENT_TIMESTAMP() AS time_period,
-            TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -602,8 +602,8 @@ spec:
             END AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            LOCALTIMESTAMP AS time_period_utc
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -657,8 +657,8 @@ spec:
                 analyzed_table."target_column",
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            CURRENT_TIMESTAMP AS time_period,
-            CAST(CURRENT_TIMESTAMP AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -701,8 +701,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -746,8 +746,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -791,8 +791,8 @@ spec:
             END AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -835,8 +835,8 @@ spec:
             END AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            SYSDATETIMEOFFSET() AS time_period,
-            CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2

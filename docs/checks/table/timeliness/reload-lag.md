@@ -1,4 +1,4 @@
-**daily partition reload lag** checks  
+**reload lag** checks  
 
 **Description**  
 Table level check that calculates maximum difference in days between ingestion timestamp and event timestamp rows.
