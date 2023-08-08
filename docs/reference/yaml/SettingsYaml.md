@@ -1,4 +1,44 @@
 
+## DefaultDailyRecurringObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability daily recurring checks that will be detecting anomalies
+ for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for daily recurring checks only.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[table_volume](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tablevolumedailyrecurringchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tablevolumedailyrecurringchecksspec)| | | |
+|[table_availability](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableavailabilitydailyrecurringchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableavailabilitydailyrecurringchecksspec)| | | |
+|[table_schema](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableschemadailyrecurringchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableschemadailyrecurringchecksspec)| | | |
+|[column_nulls](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnullsdailyrecurringchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnullsdailyrecurringchecksspec)| | | |
+|[column_numeric](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnumericdailyrecurringchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnumericdailyrecurringchecksspec)| | | |
+|[column_strings](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnstringsdailyrecurringchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnstringsdailyrecurringchecksspec)| | | |
+|[column_uniqueness](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnuniquenessdailyrecurringchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnuniquenessdailyrecurringchecksspec)| | | |
+|[column_datetime](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatetimedailyrecurringchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatetimedailyrecurringchecksspec)| | | |
+|[column_pii](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnpiidailyrecurringchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnpiidailyrecurringchecksspec)| | | |
+|[column_bool](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnbooldailyrecurringchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnbooldailyrecurringchecksspec)| | | |
+|[column_datatype](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatatypedailyrecurringchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatatypedailyrecurringchecksspec)| | | |
+|[column_anomaly](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnanomalydailyrecurringchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnanomalydailyrecurringchecksspec)| | | |
+|[column_schema](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnschemadailyrecurringchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnschemadailyrecurringchecksspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## SettingsSpec  
 Settings specification.  
   
@@ -72,9 +112,10 @@ The default configuration of checks that are enabled as data observability advan
 
 ___  
 
-## DefaultObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability checks that will be detecting anomalies
- for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported.  
+## SettingsYaml  
+DQO local settings that are stored in the .localsettings.dqosettings.yaml file in the user&#x27;s DQO home folder.
+ The local settings contain the current DQO Cloud API Key and other settings. The local settings take precedence over parameters
+ passed when starting DQO.  
   
 
 
@@ -88,9 +129,9 @@ The default configuration of checks that are enabled as data observability check
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profiling](#defaultprofilingobservabilitychecksettingsspec)|Default configuration of advanced profiling checks that are enabled on tables and columns that are imported into DQO.|[DefaultProfilingObservabilityCheckSettingsSpec](#defaultprofilingobservabilitychecksettingsspec)| | | |
-|[recurring_daily](#defaultdailyrecurringobservabilitychecksettingsspec)|Default configuration of daily recurring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQO.|[DefaultDailyRecurringObservabilityCheckSettingsSpec](#defaultdailyrecurringobservabilitychecksettingsspec)| | | |
-|[recurring_monthly](#defaultmonthlyrecurringobservabilitychecksettingsspec)|Default configuration of daily recurring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQO.|[DefaultMonthlyRecurringObservabilityCheckSettingsSpec](#defaultmonthlyrecurringobservabilitychecksettingsspec)| | | |
+|api_version||string| | | |
+|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
+|[spec](#settingsspec)||[SettingsSpec](#settingsspec)| | | |
 
 
 
@@ -142,9 +183,9 @@ The default configuration of checks that are enabled as data observability month
 
 ___  
 
-## DefaultDailyRecurringObservabilityCheckSettingsSpec  
-The default configuration of checks that are enabled as data observability daily recurring checks that will be detecting anomalies
- for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for daily recurring checks only.  
+## DefaultObservabilityCheckSettingsSpec  
+The default configuration of checks that are enabled as data observability checks that will be detecting anomalies
+ for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported.  
   
 
 
@@ -158,50 +199,9 @@ The default configuration of checks that are enabled as data observability daily
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[table_volume](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tablevolumedailyrecurringchecksspec)|The default configuration of volume data quality checks on a table level.|[TableVolumeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tablevolumedailyrecurringchecksspec)| | | |
-|[table_availability](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableavailabilitydailyrecurringchecksspec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableavailabilitydailyrecurringchecksspec)| | | |
-|[table_schema](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableschemadailyrecurringchecksspec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaDailyRecurringChecksSpec](\docs\reference\yaml\recurring\table-daily-recurring-checks\#tableschemadailyrecurringchecksspec)| | | |
-|[column_nulls](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnullsdailyrecurringchecksspec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnullsdailyrecurringchecksspec)| | | |
-|[column_numeric](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnumericdailyrecurringchecksspec)|The default configuration of column level checks that verify negative values.|[ColumnNumericDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnnumericdailyrecurringchecksspec)| | | |
-|[column_strings](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnstringsdailyrecurringchecksspec)|The default configuration of strings checks on a column level.|[ColumnStringsDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnstringsdailyrecurringchecksspec)| | | |
-|[column_uniqueness](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnuniquenessdailyrecurringchecksspec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnuniquenessdailyrecurringchecksspec)| | | |
-|[column_datetime](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatetimedailyrecurringchecksspec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatetimedailyrecurringchecksspec)| | | |
-|[column_pii](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnpiidailyrecurringchecksspec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnpiidailyrecurringchecksspec)| | | |
-|[column_bool](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnbooldailyrecurringchecksspec)|The default configuration of booleans checks on a column level.|[ColumnBoolDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnbooldailyrecurringchecksspec)| | | |
-|[column_datatype](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatatypedailyrecurringchecksspec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columndatatypedailyrecurringchecksspec)| | | |
-|[column_anomaly](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnanomalydailyrecurringchecksspec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnanomalydailyrecurringchecksspec)| | | |
-|[column_schema](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnschemadailyrecurringchecksspec)|The default configuration of schema checks on a column level.|[ColumnSchemaDailyRecurringChecksSpec](\docs\reference\yaml\recurring\column-daily-recurring-checks\#columnschemadailyrecurringchecksspec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## SettingsYaml  
-DQO local settings that are stored in the .localsettings.dqosettings.yaml file in the user&#x27;s DQO home folder.
- The local settings contain the current DQO Cloud API Key and other settings. The local settings take precedence over parameters
- passed when starting DQO.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
-|[spec](#settingsspec)||[SettingsSpec](#settingsspec)| | | |
+|[profiling](#defaultprofilingobservabilitychecksettingsspec)|Default configuration of advanced profiling checks that are enabled on tables and columns that are imported into DQO.|[DefaultProfilingObservabilityCheckSettingsSpec](#defaultprofilingobservabilitychecksettingsspec)| | | |
+|[recurring_daily](#defaultdailyrecurringobservabilitychecksettingsspec)|Default configuration of daily recurring checks (executed once a day, storing or overriding one result per day) that are enabled on tables and columns that are imported into DQO.|[DefaultDailyRecurringObservabilityCheckSettingsSpec](#defaultdailyrecurringobservabilitychecksettingsspec)| | | |
+|[recurring_monthly](#defaultmonthlyrecurringobservabilitychecksettingsspec)|Default configuration of daily recurring checks (executed once a day, storing or overriding one result per month) that are enabled on tables and columns that are imported into DQO.|[DefaultMonthlyRecurringObservabilityCheckSettingsSpec](#defaultmonthlyrecurringobservabilitychecksettingsspec)| | | |
 
 
 
