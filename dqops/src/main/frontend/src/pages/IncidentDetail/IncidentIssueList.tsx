@@ -134,7 +134,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
               checkName={issue.checkName}
               runCheckType={issue.checkType}
               onClose={closeCheckDetails}
-              defaultFilters={moment(issue.timePeriod).format("MMMM YYYY")}
+              category={incidentDetail?.checkCategory}
             />
           </td>
         </tr>

@@ -74,6 +74,7 @@ public class OracleConnectionSpecObjectMother {
                 setDatabase(testContainer.getDatabaseName());
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
+                setInitializationSql("alter session set NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'");
                 setSsl(false);
 //                setProperties(new LinkedHashMap<>(){{
 //                    put()

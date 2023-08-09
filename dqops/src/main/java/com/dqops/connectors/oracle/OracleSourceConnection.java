@@ -59,6 +59,19 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Opens a connection before it can be used for executing any statements.
+     */
+    @Override
+    public void open() {
+        super.open();
+
+        OracleParametersSpec oracleParametersSpec = this.getConnectionSpec().getOracle();
+        if (!Strings.isNullOrEmpty(oracleParametersSpec.getInitializationSql())) {
+            this.executeCommand(oracleParametersSpec.getInitializationSql(), JobCancellationToken.createDummyJobCancellationToken());
+        }
+    }
+
+    /**
      * Returns the schema name of the INFORMATION_SCHEMA. Derived classes may return a databasename.INFORMATION_SCHEMA
      * if the information schema must be retrieved at a database level.
      * @return Information schema name.

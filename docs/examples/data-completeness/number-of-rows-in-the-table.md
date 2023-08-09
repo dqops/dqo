@@ -71,7 +71,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     volume:
-      row_count:
+      profile_row_count:
         comments:
         - date: 2023-05-05T12:19:34.814+00:00
           comment_by: user

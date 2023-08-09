@@ -101,7 +101,7 @@ spec:
         nullable: true
       profiling_checks:
         numeric:
-          negative_percent:
+          profile_negative_percent:
             comments:
             - date: 2023-05-16T08:44:53.730+00:00
               comment_by: user
@@ -144,7 +144,11 @@ To execute the check prepared in the example using the [graphical interface](../
 7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
    located in the upper right corner of the graphical interface.
 
-8. You can now [review the results on the data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
+   the results displayed on the Affected tables per KPI dashboard showing results by issues per connection, issues per schema, issues per quality dimension and issues per check category.
+
+   ![Negative-percent check results on affected tables per KPI dashboard](https://dqops.com/docs/images/examples/negative-percent-check-results-on-affected-tables-per-KPI-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 
