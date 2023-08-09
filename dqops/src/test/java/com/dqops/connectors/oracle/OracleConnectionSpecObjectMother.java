@@ -21,6 +21,9 @@ import com.dqops.connectors.testcontainers.TestContainersObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.testcontainers.containers.OracleContainer;
 
+import java.util.LinkedHashMap;
+import java.util.Locale;
+
 public class OracleConnectionSpecObjectMother {
     private static OracleContainer sharedContainer;
 
@@ -28,10 +31,18 @@ public class OracleConnectionSpecObjectMother {
     private static final int PORT = 1521;
 
     /**
+     * Connection name to Oracle.
+     */
+    public static final String CONNECTION_NAME = "oracle_connection";
+
+    /**
      * Creates a shared Oracle container using Testcontainers. The container will be stopped when the unit/integration session will finish.
      * @return Shared container with a started Oracle instance.
      */
     public static OracleContainer getSharedContainer() {
+        Locale localDate = Locale.getDefault();
+        Locale.setDefault(Locale.JAPAN);
+        Locale localDate2 = Locale.getDefault();
         if (sharedContainer == null) {
             //noinspection resource
             sharedContainer = new OracleContainer(ORACLE_IMAGE)
@@ -45,11 +56,6 @@ public class OracleConnectionSpecObjectMother {
 
         return sharedContainer;
     }
-
-    /**
-     * Connection name to Oracle.
-     */
-    public static final String CONNECTION_NAME = "oracle_connection";
 
     /**
      * Creates a default connection spec to Oracle database that should be started by test containers.
@@ -69,6 +75,9 @@ public class OracleConnectionSpecObjectMother {
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
                 setSsl(false);
+//                setProperties(new LinkedHashMap<>(){{
+//                    put()
+//                }});
             }});
         }};
         return connectionSpec;
