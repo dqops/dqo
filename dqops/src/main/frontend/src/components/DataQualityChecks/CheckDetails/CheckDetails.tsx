@@ -77,7 +77,6 @@ const CheckDetails = ({
   comparisonName
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
-  const [isChartOpenState, setIsChartOpenState] = useState(false);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const {
     checkResults: resultsData,
@@ -215,7 +214,7 @@ const CheckDetails = ({
         })
       );
     },
-    [runCheckType, checkName, timeScale, connection, schema, table, column]
+    [runCheckType, checkName, timeScale, connection, schema, table, column, category]
   );
 
   useEffect(() => {
@@ -275,10 +274,6 @@ const CheckDetails = ({
     fetchCheckReadouts(month, name);
   };
 
-  const isChartOpen = (arg: boolean): void => {
-    setIsChartOpenState(arg);
-  };
-
   return (
     <div
       className="my-4"
@@ -316,7 +311,6 @@ const CheckDetails = ({
             month={filters.month}
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
-            isChartOpen={isChartOpen}
             category={category}
             comparisonName={comparisonName}
           />
