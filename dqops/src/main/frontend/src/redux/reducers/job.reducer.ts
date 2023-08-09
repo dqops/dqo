@@ -116,15 +116,16 @@ const schemaReducer = (state = initialState, action: any) => {
       const filterObject = <T extends Record<string, DqoJobHistoryEntryModel>>(
         obj: T
       ): Record<string, DqoJobHistoryEntryModel> => {
-        const filteredObject: Record<string, DqoJobHistoryEntryModel> = {};
-
-        const keys = Object.keys(obj);
-
-        for (let i = keys.length - 1; i >= 0; i--) {
-          const key = keys[i];
-
-          if (moment().diff(obj[key].statusChangedAt, 'minutes') < 30) {
-            filteredObject[key] = obj[key];
+        const filteredObject: Record<string, DqoJobHistoryEntryModel> =
+          Object.assign({}, obj);
+        for (const key in obj) {
+          if (
+            moment().diff(obj[key].statusChangedAt, 'minutes') > 30 &&
+            obj[key].status !== 'running' &&
+            obj[key].status !== 'queued' &&
+            obj[key].status !== 'waiting'
+          ) {
+            delete filteredObject[key];
           } else {
             break;
           }
@@ -161,9 +162,9 @@ const schemaReducer = (state = initialState, action: any) => {
             newJobState;
         }
       });
-      const job_dictionary_state = filterObject(
-        not_filtered_job_dictionary_state
-      );
+      const job_dictionary_state =
+        filterObject(not_filtered_job_dictionary_state) ??
+        not_filtered_job_dictionary_state;
 
       return {
         ...state,
