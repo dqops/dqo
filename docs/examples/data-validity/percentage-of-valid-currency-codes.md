@@ -98,7 +98,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_valid_currency_code_percent:
+          profile_string_valid_currency_code_percent:
             comments:
             - date: 2023-05-19T09:27:25.655+00:00
               comment_by: user

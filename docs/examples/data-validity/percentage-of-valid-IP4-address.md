@@ -80,7 +80,7 @@ spec:
         nullable: true
       profiling_checks:
         pii:
-          valid_ip4_address_percent:
+          profile_valid_ip4_address_percent:
             comments:
             - date: 2023-05-11T08:28:27.484+00:00
               comment_by: user

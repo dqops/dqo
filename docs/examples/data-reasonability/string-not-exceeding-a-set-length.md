@@ -79,7 +79,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_max_length:
+          profile_string_max_length:
             comments:
             - date: 2023-04-14T09:11:51.993+00:00
               comment_by: user

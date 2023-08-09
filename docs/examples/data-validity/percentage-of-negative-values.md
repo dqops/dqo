@@ -101,7 +101,7 @@ spec:
         nullable: true
       profiling_checks:
         numeric:
-          negative_percent:
+          profile_negative_percent:
             comments:
             - date: 2023-05-16T08:44:53.730+00:00
               comment_by: user

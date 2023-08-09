@@ -130,7 +130,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_value_in_set_percent:
+          profile_string_value_in_set_percent:
             parameters:
               values:
               - services

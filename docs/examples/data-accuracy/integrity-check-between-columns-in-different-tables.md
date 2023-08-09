@@ -113,7 +113,7 @@ spec:
         nullable: true
       profiling_checks:
         integrity:
-          foreign_key_match_percent:
+          profile_foreign_key_match_percent:
             comments:
             - date: 2023-04-27T09:46:53.075+00:00
               comment_by: user

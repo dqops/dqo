@@ -80,7 +80,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_valid_uuid_percent:
+          profile_string_valid_uuid_percent:
             comments:
             - date: 2023-05-22T12:08:09.275+00:00
               comment_by: user

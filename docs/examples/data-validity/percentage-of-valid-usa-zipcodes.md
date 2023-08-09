@@ -74,7 +74,7 @@ spec:
         nullable: true
       profiling_checks:
         pii:
-          valid_usa_zipcode_percent:
+          profile_valid_usa_zipcode_percent:
             comments:
               - date: 2023-04-14T09:06:29.764+00:00
                 comment_by: user
