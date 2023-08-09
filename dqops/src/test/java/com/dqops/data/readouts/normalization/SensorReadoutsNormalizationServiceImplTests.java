@@ -74,7 +74,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         tableSpec.setDefaultDataGroupingConfiguration(new DataGroupingConfigurationSpec());
 		checkSpec = new TableRowCountCheckSpec();
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
-		tableSpec.getProfilingChecks().getVolume().setRowCount(checkSpec);
+		tableSpec.getProfilingChecks().getVolume().setProfileRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,

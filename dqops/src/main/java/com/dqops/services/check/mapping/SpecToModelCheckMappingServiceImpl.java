@@ -163,6 +163,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
+            if (categoryFieldInfo.getDataType() != ParameterDataType.object_type) {
+                continue;
+            }
+
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
                 AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap = (AbstractComparisonCheckCategorySpecMap<?>)categoryFieldValue;
@@ -271,6 +275,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
+            if (categoryFieldInfo.getDataType() != ParameterDataType.object_type) {
+                continue;
+            }
+
             Object checkCategoryParentNode = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             if (checkCategoryParentNode instanceof AbstractComparisonCheckCategorySpecMap<?>) {
                 continue; // not supported

@@ -6,7 +6,7 @@ docs
 .idea
 .vscode
 dqoai/target
-distribution/target
+dqops/target
 lib/target
 home/venv
 dqoai/src/main/frontend/build

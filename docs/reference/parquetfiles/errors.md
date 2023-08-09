@@ -47,6 +47,7 @@ The data quality execution errors table that stores execution errors captured du
  | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
  | check_type | The data quality check type (profiling, recurring, partitioned). | text |
  | check_category | The data quality check category name. | text |
+ | table_comparison | The name of a table comparison configuration used for a data comparison (accuracy) check. | text |
  | quality_dimension | The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness. | text |
  | sensor_name | The data quality sensor name. | text |
  | time_series_id | The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash. | text |

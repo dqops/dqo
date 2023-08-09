@@ -836,6 +836,33 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_target_column('grouping_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -1512,6 +1539,32 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('grouping_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}} ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -1692,6 +1745,34 @@ Column level sensor that calculates the percentage of rows with an empty string.
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -2406,6 +2487,31 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) >= {{(parameters.max_length)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -2588,6 +2694,34 @@ Column level sensor that calculates the percentage of values that are longer tha
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) >= {{(parameters.max_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value,
+       time_period,
+       time_period_utc
+    FROM(
+       SELECT
+           {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -2782,6 +2916,31 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) <= {{(parameters.min_length)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+         {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}}) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -2964,6 +3123,34 @@ Column level sensor that calculates the percentage of values that are shorter th
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) <= {{(parameters.min_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+        {{ lib.render_target_column('analyzed_table')}}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3152,6 +3339,34 @@ Column level sensor that calculates percentage of strings with a length below th
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('grouping_table') }}) = 0 THEN NULL
+            ELSE
+                100.0 * SUM(
+                    CASE
+                        WHEN LENGTH( {{ lib.render_target_column('grouping_table')}} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        ELSE 0
+                    END
+            ) / COUNT({{ lib.render_target_column('grouping_table') }})
+        END AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3924,6 +4139,27 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        MAX(
+            LENGTH({{ lib.render_target_column('grouping_table') }})
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -4072,6 +4308,27 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        AVG(
+            LENGTH({{ lib.render_target_column('grouping_table') }})
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -4217,6 +4474,27 @@ Column level sensor that ensures that the length of string in a column does not 
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        MIN(
+            LENGTH({{ lib.render_target_column('grouping_table') }})
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -4820,6 +5098,31 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN LOWER({{ lib.render_target_column('grouping_table') }}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '''', '-', '')
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -5001,6 +5304,31 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN LOWER({{ lib.render_target_column('analyzed_table') }}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '''', '-', '')
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -5142,6 +5470,30 @@ Column level sensor that calculates the percentage of rows with parsable to floa
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                {{ lib.render_target_column('grouping_table') }}
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+           {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -6775,6 +7127,33 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('grouping_table') }} <> ''
+                AND TRIM({{ lib.render_target_column('grouping_table') }}) = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }}  analyzed_table
+        {{- lib.render_where_clause() -}} ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "PostgreSQL"
       
     ```sql+jinja
@@ -6962,6 +7341,36 @@ Column level sensor that calculates the percentage of rows with a whitespace str
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('grouping_table') }} <> ''
+                    AND TRIM({{ lib.render_target_column('grouping_table') }}) = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        time_period,
+        time_period_utc
+    FROM(
+        SELECT
+            {{ lib.render_target_column('analyzed_table')}}
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+    {{- lib.render_where_clause() -}}) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

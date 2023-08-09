@@ -16,11 +16,8 @@
 package com.dqops.checks.column.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,52 +37,52 @@ import java.util.Objects;
 public class ColumnSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSchemaProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("column_exists", o -> o.columnExists);
-            put("column_type_changed", o -> o.columnTypeChanged);
+            put("profile_column_exists", o -> o.profileColumnExists);
+            put("profile_column_type_changed", o -> o.profileColumnTypeChanged);
         }
     };
 
     @JsonPropertyDescription("Checks the metadata of the monitored table and verifies if the column exists.")
-    private ColumnSchemaColumnExistsCheckSpec columnExists;
+    private ColumnSchemaColumnExistsCheckSpec profileColumnExists;
 
     @JsonPropertyDescription("Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.")
-    private ColumnSchemaTypeChangedCheckSpec columnTypeChanged;
+    private ColumnSchemaTypeChangedCheckSpec profileColumnTypeChanged;
 
 
     /**
      * Returns a column exists check specification.
      * @return Column exists check specification.
      */
-    public ColumnSchemaColumnExistsCheckSpec getColumnExists() {
-        return columnExists;
+    public ColumnSchemaColumnExistsCheckSpec getProfileColumnExists() {
+        return profileColumnExists;
     }
 
     /**
      * Sets the column exists check specification.
-     * @param columnExists Column exists check specification.
+     * @param profileColumnExists Column exists check specification.
      */
-    public void setColumnExists(ColumnSchemaColumnExistsCheckSpec columnExists) {
-        this.setDirtyIf(!Objects.equals(this.columnExists, columnExists));
-        this.columnExists = columnExists;
-        propagateHierarchyIdToField(columnExists, "column_exists");
+    public void setProfileColumnExists(ColumnSchemaColumnExistsCheckSpec profileColumnExists) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnExists, profileColumnExists));
+        this.profileColumnExists = profileColumnExists;
+        propagateHierarchyIdToField(profileColumnExists, "profile_column_exists");
     }
 
     /**
      * Returns the check configuration that detects if the column type has changed.
      * @return Column type has changed.
      */
-    public ColumnSchemaTypeChangedCheckSpec getColumnTypeChanged() {
-        return columnTypeChanged;
+    public ColumnSchemaTypeChangedCheckSpec getProfileColumnTypeChanged() {
+        return profileColumnTypeChanged;
     }
 
     /**
      * Sets the check that detects if the column type hash changed.
-     * @param columnTypeChanged Column type has changed check.
+     * @param profileColumnTypeChanged Column type has changed check.
      */
-    public void setColumnTypeChanged(ColumnSchemaTypeChangedCheckSpec columnTypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.columnTypeChanged, columnTypeChanged));
-        this.columnTypeChanged = columnTypeChanged;
-        propagateHierarchyIdToField(columnTypeChanged, "column_type_changed");
+    public void setProfileColumnTypeChanged(ColumnSchemaTypeChangedCheckSpec profileColumnTypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnTypeChanged, profileColumnTypeChanged));
+        this.profileColumnTypeChanged = profileColumnTypeChanged;
+        propagateHierarchyIdToField(profileColumnTypeChanged, "profile_column_type_changed");
     }
 
     /**

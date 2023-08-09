@@ -95,8 +95,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         // Table level checks
         tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
         tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
-        tableSpec.getProfilingChecks().getVolume().setRowCount(new TableRowCountCheckSpec());
-        tableSpec.getProfilingChecks().getVolume().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
+        tableSpec.getProfilingChecks().getVolume().setProfileRowCount(new TableRowCountCheckSpec());
+        tableSpec.getProfilingChecks().getVolume().getProfileRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
         tableSpec.setRecurringChecks(new TableRecurringChecksSpec());
         tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCheckCategoriesSpec());
@@ -112,7 +112,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         ColumnNullsProfilingChecksSpec columnNullsProfilingChecksSpec = new ColumnNullsProfilingChecksSpec();
         ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
         columnNullsCountCheckSpec.setError(new MaxCountRule10ParametersSpec());
-        columnNullsProfilingChecksSpec.setNullsCount(columnNullsCountCheckSpec);
+        columnNullsProfilingChecksSpec.setProfileNullsCount(columnNullsCountCheckSpec);
         columnProfilingCheckCategoriesSpec.setNulls(columnNullsProfilingChecksSpec);
         columnSpec.setProfilingChecks(columnProfilingCheckCategoriesSpec);
         tableWrapper.getSpec().getColumns().put("col1", columnSpec);

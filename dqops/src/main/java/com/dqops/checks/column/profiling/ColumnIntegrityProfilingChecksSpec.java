@@ -37,51 +37,51 @@ import java.util.Objects;
 public class ColumnIntegrityProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("foreign_key_not_match_count", o -> o.foreignKeyNotMatchCount);
-            put("foreign_key_match_percent", o -> o.foreignKeyMatchPercent);
+            put("profile_foreign_key_not_match_count", o -> o.profileForeignKeyNotMatchCount);
+            put("profile_foreign_key_match_percent", o -> o.profileForeignKeyMatchPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec foreignKeyNotMatchCount;
+    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec profileForeignKeyNotMatchCount;
 
     @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.")
-    private ColumnIntegrityForeignKeyMatchPercentCheckSpec foreignKeyMatchPercent;
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec profileForeignKeyMatchPercent;
 
     /**
      * Returns an integrity value not match count check specification.
      * @return Integrity value not match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getForeignKeyNotMatchCount() {
-        return foreignKeyNotMatchCount;
+    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getProfileForeignKeyNotMatchCount() {
+        return profileForeignKeyNotMatchCount;
     }
 
     /**
      * Sets integrity value not match count check specification.
-     * @param foreignKeyNotMatchCount Integrity value not match count check specification.
+     * @param profileForeignKeyNotMatchCount Integrity value not match count check specification.
      */
-    public void setForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec foreignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.foreignKeyNotMatchCount, foreignKeyNotMatchCount));
-        this.foreignKeyNotMatchCount = foreignKeyNotMatchCount;
-        propagateHierarchyIdToField(foreignKeyNotMatchCount, "foreign_key_not_match_count");
+    public void setProfileForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec profileForeignKeyNotMatchCount) {
+        this.setDirtyIf(!Objects.equals(this.profileForeignKeyNotMatchCount, profileForeignKeyNotMatchCount));
+        this.profileForeignKeyNotMatchCount = profileForeignKeyNotMatchCount;
+        propagateHierarchyIdToField(profileForeignKeyNotMatchCount, "profile_foreign_key_not_match_count");
     }
 
     /**
      * Returns an integrity value match percent check specification.
      * @return Integrity value match percent check specification.
      */
-    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getForeignKeyMatchPercent() {
-        return foreignKeyMatchPercent;
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getProfileForeignKeyMatchPercent() {
+        return profileForeignKeyMatchPercent;
     }
 
     /**
      * Sets integrity value match percent check specification.
-     * @param foreignKeyMatchPercent Integrity value match percent check specification.
+     * @param profileForeignKeyMatchPercent Integrity value match percent check specification.
      */
-    public void setForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec foreignKeyMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.foreignKeyMatchPercent, foreignKeyMatchPercent));
-        this.foreignKeyMatchPercent = foreignKeyMatchPercent;
-        propagateHierarchyIdToField(foreignKeyMatchPercent, "foreign_key_match_percent");
+    public void setProfileForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec profileForeignKeyMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileForeignKeyMatchPercent, profileForeignKeyMatchPercent));
+        this.profileForeignKeyMatchPercent = profileForeignKeyMatchPercent;
+        propagateHierarchyIdToField(profileForeignKeyMatchPercent, "profile_foreign_key_match_percent");
     }
 
     /**

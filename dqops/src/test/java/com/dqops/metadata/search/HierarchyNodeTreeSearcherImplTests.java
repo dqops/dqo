@@ -215,7 +215,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        volume.setRowCount(check);
+        volume.setProfileRowCount(check);
         table.setSpec(tableSpec);
         ArrayList<TableRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
@@ -230,7 +230,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        volume.setRowCount(check);
+        volume.setProfileRowCount(check);
         table.setSpec(tableSpec);
         ArrayList<TableRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
@@ -246,7 +246,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        volume.setRowCount(check);
+        volume.setProfileRowCount(check);
 		table.setSpec(tableSpec);
 
         ArrayList<AbstractCheckSpec<?,?,?,?>> expectedList = new ArrayList<>();

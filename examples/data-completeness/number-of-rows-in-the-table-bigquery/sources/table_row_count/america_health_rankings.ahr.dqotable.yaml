@@ -6,8 +6,8 @@ spec:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
   profiling_checks:
-    standard:
-      row_count:
+    volume:
+      profile_row_count:
         comments:
           - date: 2023-07-27T13:08:53.189+00:00
             comment_by: user

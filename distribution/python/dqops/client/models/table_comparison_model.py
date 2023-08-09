@@ -8,6 +8,9 @@ if TYPE_CHECKING:
     from ..models.check_search_filters import CheckSearchFilters
     from ..models.column_comparison_model import ColumnComparisonModel
     from ..models.compare_thresholds_model import CompareThresholdsModel
+    from ..models.delete_stored_data_queue_job_parameters import (
+        DeleteStoredDataQueueJobParameters,
+    )
     from ..models.physical_table_name import PhysicalTableName
     from ..models.table_comparison_grouping_column_pair_model import (
         TableComparisonGroupingColumnPairModel,
@@ -47,6 +50,7 @@ class TableComparisonModel:
             column and the enabled comparisons.
         compare_table_run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
             identifies which checks on which tables and columns should be executed.
+        compare_table_clean_data_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
     """
 
     table_comparison_configuration_name: Union[Unset, str] = UNSET
@@ -61,6 +65,9 @@ class TableComparisonModel:
     compare_row_count: Union[Unset, "CompareThresholdsModel"] = UNSET
     columns: Union[Unset, List["ColumnComparisonModel"]] = UNSET
     compare_table_run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
+    compare_table_clean_data_job_template: Union[
+        Unset, "DeleteStoredDataQueueJobParameters"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -105,6 +112,12 @@ class TableComparisonModel:
                 self.compare_table_run_checks_job_template.to_dict()
             )
 
+        compare_table_clean_data_job_template: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.compare_table_clean_data_job_template, Unset):
+            compare_table_clean_data_job_template = (
+                self.compare_table_clean_data_job_template.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -132,6 +145,10 @@ class TableComparisonModel:
             field_dict[
                 "compare_table_run_checks_job_template"
             ] = compare_table_run_checks_job_template
+        if compare_table_clean_data_job_template is not UNSET:
+            field_dict[
+                "compare_table_clean_data_job_template"
+            ] = compare_table_clean_data_job_template
 
         return field_dict
 
@@ -140,6 +157,9 @@ class TableComparisonModel:
         from ..models.check_search_filters import CheckSearchFilters
         from ..models.column_comparison_model import ColumnComparisonModel
         from ..models.compare_thresholds_model import CompareThresholdsModel
+        from ..models.delete_stored_data_queue_job_parameters import (
+            DeleteStoredDataQueueJobParameters,
+        )
         from ..models.physical_table_name import PhysicalTableName
         from ..models.table_comparison_grouping_column_pair_model import (
             TableComparisonGroupingColumnPairModel,
@@ -211,6 +231,21 @@ class TableComparisonModel:
                 _compare_table_run_checks_job_template
             )
 
+        _compare_table_clean_data_job_template = d.pop(
+            "compare_table_clean_data_job_template", UNSET
+        )
+        compare_table_clean_data_job_template: Union[
+            Unset, DeleteStoredDataQueueJobParameters
+        ]
+        if isinstance(_compare_table_clean_data_job_template, Unset):
+            compare_table_clean_data_job_template = UNSET
+        else:
+            compare_table_clean_data_job_template = (
+                DeleteStoredDataQueueJobParameters.from_dict(
+                    _compare_table_clean_data_job_template
+                )
+            )
+
         table_comparison_model = cls(
             table_comparison_configuration_name=table_comparison_configuration_name,
             compared_connection=compared_connection,
@@ -222,6 +257,7 @@ class TableComparisonModel:
             compare_row_count=compare_row_count,
             columns=columns,
             compare_table_run_checks_job_template=compare_table_run_checks_job_template,
+            compare_table_clean_data_job_template=compare_table_clean_data_job_template,
         )
 
         table_comparison_model.additional_properties = d

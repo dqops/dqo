@@ -208,7 +208,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         // Check attached to table.
         this.tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec() {{
             setVolume(new TableVolumeProfilingChecksSpec() {{
-                setRowCount(new TableRowCountCheckSpec() {{
+                setProfileRowCount(new TableRowCountCheckSpec() {{
                     setError(new MinCountRule0ParametersSpec(10L));
                 }});
             }});
@@ -217,7 +217,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         // Check attached to column.
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec() {{
             setNulls(new ColumnNullsProfilingChecksSpec() {{
-                setNullsCount(new ColumnNullsCountCheckSpec() {{
+                setProfileNullsCount(new ColumnNullsCountCheckSpec() {{
                     setError(new MaxCountRule10ParametersSpec(20L));
                 }});
             }});
@@ -269,7 +269,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptAbstractCheckSpec_whenCalledForSelectedColumnCheckOnColumn_thenSkipChildrenReturnCheck() {
         this.structure1Setup();
-        AbstractCheckSpec columnCheckSpec = this.columnSpec.getProfilingChecks().getNulls().getNullsCount();
+        AbstractCheckSpec columnCheckSpec = this.columnSpec.getProfilingChecks().getNulls().getProfileNullsCount();
 
         SearchParameterObject searchParameterObject = new SearchParameterObject();
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckSpec, searchParameterObject);

@@ -51,7 +51,7 @@ dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (volume, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |profiling<br/>recurring<br/>partitioned<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`--daily-partitioning-include-today`<br/>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.| ||
@@ -116,7 +116,7 @@ dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |profiling<br/>recurring<br/>partitioned<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to enable checks.| ||
@@ -168,7 +168,7 @@ dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |profiling<br/>recurring<br/>partitioned<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to disable checks.| ||

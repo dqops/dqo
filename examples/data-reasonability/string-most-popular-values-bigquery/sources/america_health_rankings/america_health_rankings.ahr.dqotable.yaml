@@ -20,17 +20,19 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          expected_strings_in_top_values_count:
+          profile_string_most_popular_values:
             parameters:
               expected_values:
+              - Gender Pay Gap
               - Able-Bodied
-              top: 100
+              - Dedicated Health Care Provider
+              top_values: 3
             warning:
-              max_missing: 3
+              min_count: 3
             error:
-              max_missing: 5
+              min_count: 2
             fatal:
-              max_missing: 7
+              min_count: 1
     state_name:
       type_snapshot:
         column_type: STRING

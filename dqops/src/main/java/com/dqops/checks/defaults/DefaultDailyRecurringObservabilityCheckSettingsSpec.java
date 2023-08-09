@@ -16,12 +16,11 @@
 
 package com.dqops.checks.defaults;
 
-import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.bool.ColumnBoolDailyRecurringChecksSpec;
-import com.dqops.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringChecksSpec;
+import com.dqops.checks.column.recurring.datatype.ColumnDatatypeDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.datetime.ColumnDatetimeDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
@@ -29,7 +28,6 @@ import com.dqops.checks.column.recurring.pii.ColumnPiiDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.strings.ColumnStringsDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringChecksSpec;
-import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
@@ -73,7 +71,7 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
             put("column_datetime", o -> o.columnDatetime);
             put("column_pii", o -> o.columnPii);
             put("column_bool", o -> o.columnBool);
-            put("column_consistency", o -> o.columnConsistency);
+            put("column_datatype", o -> o.columnDatatype);
             put("column_anomaly", o -> o.columnAnomaly);
             put("column_schema", o -> o.columnSchema);
         }
@@ -129,10 +127,10 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyRecurringChecksSpec columnBool;
 
-    @JsonPropertyDescription("The default configuration of consistency checks on a column level.")
+    @JsonPropertyDescription("The default configuration of datatype checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyDailyRecurringChecksSpec columnConsistency;
+    private ColumnDatatypeDailyRecurringChecksSpec columnDatatype;
 
     @JsonPropertyDescription("The default configuration of anomaly checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -326,21 +324,21 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
     }
 
     /**
-     * Returns the consistency check configuration on a column level.
+     * Returns the datatype check configuration on a column level.
      * @return Consistency check configuration.
      */
-    public ColumnConsistencyDailyRecurringChecksSpec getColumnConsistency() {
-        return columnConsistency;
+    public ColumnDatatypeDailyRecurringChecksSpec getColumnDatatype() {
+        return columnDatatype;
     }
 
     /**
-     * Sets the consistency check configuration on a column level.
-     * @param columnConsistency New consistency checks configuration.
+     * Sets the datatype check configuration on a column level.
+     * @param columnDatatype New datatype checks configuration.
      */
-    public void setColumnConsistency(ColumnConsistencyDailyRecurringChecksSpec columnConsistency) {
-        this.setDirtyIf(!Objects.equals(this.columnConsistency, columnConsistency));
-        this.columnConsistency = columnConsistency;
-        this.propagateHierarchyIdToField(columnConsistency, "column_consistency");
+    public void setColumnDatatype(ColumnDatatypeDailyRecurringChecksSpec columnDatatype) {
+        this.setDirtyIf(!Objects.equals(this.columnDatatype, columnDatatype));
+        this.columnDatatype = columnDatatype;
+        this.propagateHierarchyIdToField(columnDatatype, "column_datatype");
     }
 
     /**
@@ -502,8 +500,8 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
             this.getColumnCheckCategories(targetColumn).setBool(this.columnBool.deepClone());
         }
 
-        if (this.columnConsistency != null && !this.columnConsistency.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setConsistency(this.columnConsistency.deepClone());
+        if (this.columnDatatype != null && !this.columnDatatype.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setDatatype(this.columnDatatype.deepClone());
         }
 
         if (this.columnAnomaly != null && !this.columnAnomaly.isDefault() && DataTypeCategory.isNumericType(dataTypeCategory)) {

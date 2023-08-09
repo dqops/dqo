@@ -23,7 +23,7 @@ import com.dqops.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartition
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.comparison.ColumnComparisonDailyPartitionedChecksSpecMap;
-import com.dqops.checks.column.partitioned.consistency.ColumnConsistencyDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.datatype.ColumnDatatypeDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
@@ -32,7 +32,6 @@ import com.dqops.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSp
 import com.dqops.checks.column.partitioned.sql.ColumnSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -57,7 +56,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
@@ -70,7 +69,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
-            put("consistency", o -> o.consistency);
+            put("datatype", o -> o.datatype);
             put("anomaly", o -> o.anomaly);
             put("comparisons", o -> o.comparisons);
         }
@@ -126,10 +125,10 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyDailyPartitionedChecksSpec accuracy;
 
-    @JsonPropertyDescription("Daily partitioned checks for consistency in the column")
+    @JsonPropertyDescription("Daily partitioned checks for datatype in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyDailyPartitionedChecksSpec consistency;
+    private ColumnDatatypeDailyPartitionedChecksSpec datatype;
 
     @JsonPropertyDescription("Daily partitioned checks for anomaly in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -325,18 +324,18 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Returns a container of custom accuracy checks on a column.
      * @return Custom accuracy checks.
      */
-    public ColumnConsistencyDailyPartitionedChecksSpec getConsistency() {
-        return consistency;
+    public ColumnDatatypeDailyPartitionedChecksSpec getDatatype() {
+        return datatype;
     }
 
     /**
-     * Sets a reference to a container of custom consistency checks.
-     * @param consistency Custom consistency checks.
+     * Sets a reference to a container of custom datatype checks.
+     * @param datatype Custom datatype checks.
      */
-    public void setConsistency(ColumnConsistencyDailyPartitionedChecksSpec consistency) {
-        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
-        this.consistency = consistency;
-        propagateHierarchyIdToField(consistency, "consistency");
+    public void setDatatype(ColumnDatatypeDailyPartitionedChecksSpec datatype) {
+        this.setDirtyIf(!Objects.equals(this.datatype, datatype));
+        this.datatype = datatype;
+        propagateHierarchyIdToField(datatype, "datatype");
     }
 
     /**

@@ -44,7 +44,7 @@ spec:
         nullable: true
       profiling_checks:
         nulls:
-          nulls_count:
+          profile_nulls_count:
             comments:
             - date: 2023-05-08T12:08:21.558+00:00
               comment_by: user
