@@ -146,7 +146,7 @@ spec:
         nullable: true
       profiling_checks:
         numeric:
-          valid_latitude_percent:
+          profile_valid_latitude_percent:
             comments:
             - date: 2023-04-14T09:03:21.495+00:00
               comment_by: user

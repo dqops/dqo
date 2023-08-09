@@ -86,7 +86,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     availability:
-      table_availability:
+      profile_table_availability:
         comments:
         - date: 2023-05-09T11:05:06.960+00:00
           comment_by: user

@@ -72,7 +72,7 @@ spec:
         nullable: true
       profiling_checks:
         pii:
-          valid_email_percent:
+          profile_valid_email_percent:
             comments:
             - date: 2023-05-04T11:13:34.182+00:00
               comment_by: user

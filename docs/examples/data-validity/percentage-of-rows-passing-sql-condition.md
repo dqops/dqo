@@ -92,7 +92,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     sql:
-      sql_condition_passed_percent_on_table:
+      profile_sql_condition_passed_percent_on_table:
         parameters:
           sql_condition: upper_ci >= lower_ci
         warning:

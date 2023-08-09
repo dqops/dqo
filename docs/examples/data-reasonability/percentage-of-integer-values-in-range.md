@@ -96,7 +96,7 @@ spec:
         nullable: true
       profiling_checks:
         numeric:
-          values_in_range_numeric_percent:
+          profile_values_in_range_numeric_percent:
             comments:
             - date: 2023-05-09T07:28:29.188+00:00
               comment_by: user
