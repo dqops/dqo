@@ -17,24 +17,28 @@ T = TypeVar("T", bound="TableAccuracyProfilingChecksSpec")
 class TableAccuracyProfilingChecksSpec:
     """
     Attributes:
-        total_row_count_match_percent (Union[Unset, TableAccuracyTotalRowCountMatchPercentCheckSpec]):
+        profile_total_row_count_match_percent (Union[Unset, TableAccuracyTotalRowCountMatchPercentCheckSpec]):
     """
 
-    total_row_count_match_percent: Union[
+    profile_total_row_count_match_percent: Union[
         Unset, "TableAccuracyTotalRowCountMatchPercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        total_row_count_match_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.total_row_count_match_percent, Unset):
-            total_row_count_match_percent = self.total_row_count_match_percent.to_dict()
+        profile_total_row_count_match_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_total_row_count_match_percent, Unset):
+            profile_total_row_count_match_percent = (
+                self.profile_total_row_count_match_percent.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if total_row_count_match_percent is not UNSET:
-            field_dict["total_row_count_match_percent"] = total_row_count_match_percent
+        if profile_total_row_count_match_percent is not UNSET:
+            field_dict[
+                "profile_total_row_count_match_percent"
+            ] = profile_total_row_count_match_percent
 
         return field_dict
 
@@ -45,21 +49,23 @@ class TableAccuracyProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _total_row_count_match_percent = d.pop("total_row_count_match_percent", UNSET)
-        total_row_count_match_percent: Union[
+        _profile_total_row_count_match_percent = d.pop(
+            "profile_total_row_count_match_percent", UNSET
+        )
+        profile_total_row_count_match_percent: Union[
             Unset, TableAccuracyTotalRowCountMatchPercentCheckSpec
         ]
-        if isinstance(_total_row_count_match_percent, Unset):
-            total_row_count_match_percent = UNSET
+        if isinstance(_profile_total_row_count_match_percent, Unset):
+            profile_total_row_count_match_percent = UNSET
         else:
-            total_row_count_match_percent = (
+            profile_total_row_count_match_percent = (
                 TableAccuracyTotalRowCountMatchPercentCheckSpec.from_dict(
-                    _total_row_count_match_percent
+                    _profile_total_row_count_match_percent
                 )
             )
 
         table_accuracy_profiling_checks_spec = cls(
-            total_row_count_match_percent=total_row_count_match_percent,
+            profile_total_row_count_match_percent=profile_total_row_count_match_percent,
         )
 
         table_accuracy_profiling_checks_spec.additional_properties = d

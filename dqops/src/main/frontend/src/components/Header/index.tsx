@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import NotificationMenu from '../NotificationMenu';
 import Logo from '../Logo';
 import clsx from 'clsx';
@@ -22,8 +22,12 @@ import {
 } from '../../shared/constants';
 import { SynchronizeButton } from './SynchronizeButton';
 import UserProfile from '../UserProfile';
-import { HeaderBanner } from "./HeaderBanner";
-import { toggleAdvisor } from "../../redux/actions/job.actions";
+import { HeaderBanner } from './HeaderBanner';
+import {
+  toggleAdvisor,
+  setAdvisorObject,
+  setAdvisorJobId
+} from '../../redux/actions/job.actions';
 
 const Header = () => {
   const history = useHistory();
@@ -53,7 +57,8 @@ const Header = () => {
   );
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
-  const { isAdvisorOpen } = useSelector((state: IRootState) => state.job)
+  const { isAdvisorOpen, job_dictionary_state, advisorObject, advisorJobId } =
+    useSelector((state: IRootState) => state.job);
 
   const onClick = (newCheckTypes: CheckTypes) => () => {
     let url = '';
@@ -103,7 +108,12 @@ const Header = () => {
         table
       );
     } else if (match.path === ROUTES.PATTERNS.TABLE_INCIDENTS_NOTIFICATION) {
-      url = ROUTES.TABLE_INCIDENTS_NOTIFICATION(newCheckTypes, connection, schema, table);
+      url = ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+        newCheckTypes,
+        connection,
+        schema,
+        table
+      );
       value = ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(
         newCheckTypes,
         connection,
@@ -155,6 +165,55 @@ const Header = () => {
   const onCloseAdvisor = () => {
     dispatch(toggleAdvisor(false));
   };
+
+  useEffect(() => {
+    if (
+      Object.values(job_dictionary_state)
+        .filter((x) => x.jobType === 'import selected tables')
+        .find(
+          (y) =>
+            y.status === 'queued' ||
+            y.status === 'waiting' ||
+            y.status === 'running'
+        )
+    ) {
+      dispatch(
+        setAdvisorJobId(
+          Number(
+            Object.keys(job_dictionary_state).find(
+              (key) =>
+                job_dictionary_state[key] ===
+                Object.values(job_dictionary_state)
+                  .filter((x) => x.jobType === 'import selected tables')
+                  ?.find(
+                    (y) =>
+                      y.status === 'queued' ||
+                      y.status === 'waiting' ||
+                      y.status === 'running'
+                  )
+            )
+          )
+        )
+      );
+      dispatch(
+        setAdvisorObject(
+          Object.values(job_dictionary_state).find(
+            (x) => x.jobType === 'import selected tables'
+          )?.parameters?.importTableParameters ?? {}
+        )
+      );
+    }
+  }, [job_dictionary_state]);
+
+  useEffect(() => {
+    if (
+      advisorJobId !== 0 &&
+      job_dictionary_state[advisorJobId].status === 'succeeded'
+    ) {
+      dispatch(setAdvisorJobId(0));
+      dispatch(toggleAdvisor(true));
+    }
+  }, [advisorObject]);
 
   return (
     <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4">

@@ -17,7 +17,6 @@ package com.dqops.checks.column.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.numeric.*;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,668 +36,668 @@ import java.util.Objects;
 public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("negative_count", o -> o.negativeCount);
-            put("negative_percent", o -> o.negativePercent);
-            put("non_negative_count", o -> o.nonNegativeCount);
-            put("non_negative_percent", o -> o.nonNegativePercent);
-            put("expected_numbers_in_use_count", o -> o.expectedNumbersInUseCount);
-            put("number_value_in_set_percent", o -> o.numberValueInSetPercent);
-            put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
-            put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
-            put("value_below_min_value_count", o -> o.valueBelowMinValueCount);
-            put("value_below_min_value_percent", o -> o.valueBelowMinValuePercent);
-            put("value_above_max_value_count", o -> o.valueAboveMaxValueCount);
-            put("value_above_max_value_percent", o -> o.valueAboveMaxValuePercent);
-            put("max_in_range", o -> o.maxInRange);
-            put("min_in_range", o -> o.minInRange);
-            put("mean_in_range", o -> o.meanInRange);
-            put("percentile_in_range", o -> o.percentileInRange);
-            put("median_in_range", o -> o.medianInRange);
-            put("percentile_10_in_range", o -> o.percentile_10InRange);
-            put("percentile_25_in_range", o -> o.percentile_25InRange);
-            put("percentile_75_in_range", o -> o.percentile_75InRange);
-            put("percentile_90_in_range", o -> o.percentile_90InRange);
-            put("sample_stddev_in_range", o -> o.sampleStddevInRange);
-            put("population_stddev_in_range", o -> o.populationStddevInRange);
-            put("sample_variance_in_range", o -> o.sampleVarianceInRange);
-            put("population_variance_in_range", o -> o.populationVarianceInRange);
-            put("sum_in_range", o -> o.sumInRange);
-            put("invalid_latitude_count", o -> o.invalidLatitudeCount);
-            put("valid_latitude_percent", o -> o.validLatitudePercent);
-            put("invalid_longitude_count", o -> o.invalidLongitudeCount);
-            put("valid_longitude_percent", o -> o.validLongitudePercent);
+            put("profile_negative_count", o -> o.profileNegativeCount);
+            put("profile_negative_percent", o -> o.profileNegativePercent);
+            put("profile_non_negative_count", o -> o.profileNonNegativeCount);
+            put("profile_non_negative_percent", o -> o.profileNonNegativePercent);
+            put("profile_expected_numbers_in_use_count", o -> o.profileExpectedNumbersInUseCount);
+            put("profile_number_value_in_set_percent", o -> o.profileNumberValueInSetPercent);
+            put("profile_values_in_range_numeric_percent", o -> o.profileValuesInRangeNumericPercent);
+            put("profile_values_in_range_integers_percent", o -> o.profileValuesInRangeIntegersPercent);
+            put("profile_value_below_min_value_count", o -> o.profileValueBelowMinValueCount);
+            put("profile_value_below_min_value_percent", o -> o.profileValueBelowMinValuePercent);
+            put("profile_value_above_max_value_count", o -> o.profileValueAboveMaxValueCount);
+            put("profile_value_above_max_value_percent", o -> o.profileValueAboveMaxValuePercent);
+            put("profile_max_in_range", o -> o.profileMaxInRange);
+            put("profile_min_in_range", o -> o.profileMinInRange);
+            put("profile_mean_in_range", o -> o.profileMeanInRange);
+            put("profile_percentile_in_range", o -> o.profilePercentileInRange);
+            put("profile_median_in_range", o -> o.profileMedianInRange);
+            put("profile_percentile_10_in_range", o -> o.profilePercentile_10InRange);
+            put("profile_percentile_25_in_range", o -> o.profilePercentile_25InRange);
+            put("profile_percentile_75_in_range", o -> o.profilePercentile_75InRange);
+            put("profile_percentile_90_in_range", o -> o.profilePercentile_90InRange);
+            put("profile_sample_stddev_in_range", o -> o.profileSampleStddevInRange);
+            put("profile_population_stddev_in_range", o -> o.profilePopulationStddevInRange);
+            put("profile_sample_variance_in_range", o -> o.profileSampleVarianceInRange);
+            put("profile_population_variance_in_range", o -> o.profilePopulationVarianceInRange);
+            put("profile_sum_in_range", o -> o.profileSumInRange);
+            put("profile_invalid_latitude_count", o -> o.profileInvalidLatitudeCount);
+            put("profile_valid_latitude_percent", o -> o.profileValidLatitudePercent);
+            put("profile_invalid_longitude_count", o -> o.profileInvalidLongitudeCount);
+            put("profile_valid_longitude_percent", o -> o.profileValidLongitudePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
-    private ColumnNegativeCountCheckSpec negativeCount;
+    private ColumnNegativeCountCheckSpec profileNegativeCount;
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
-    private ColumnNegativePercentCheckSpec negativePercent;
+    private ColumnNegativePercentCheckSpec profileNegativePercent;
 
     @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.")
-    private ColumnNonNegativeCountCheckSpec nonNegativeCount;
+    private ColumnNonNegativeCountCheckSpec profileNonNegativeCount;
 
     @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.")
-    private ColumnNonNegativePercentCheckSpec nonNegativePercent;
+    private ColumnNonNegativePercentCheckSpec profileNonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
-    private ColumnExpectedNumbersInUseCountCheckSpec expectedNumbersInUseCount;
+    private ColumnExpectedNumbersInUseCountCheckSpec profileExpectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
-    private ColumnNumberValueInSetPercentCheckSpec numberValueInSetPercent;
+    private ColumnNumberValueInSetPercentCheckSpec profileNumberValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnValuesInRangeNumericPercentCheckSpec valuesInRangeNumericPercent;
+    private ColumnValuesInRangeNumericPercentCheckSpec profileValuesInRangeNumericPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent;
+    private ColumnValuesInRangeIntegersPercentCheckSpec profileValuesInRangeIntegersPercent;
 
     @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter.")
-    private ColumnValueBelowMinValueCountCheckSpec valueBelowMinValueCount;
+    private ColumnValueBelowMinValueCountCheckSpec profileValueBelowMinValueCount;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter.")
-    private ColumnValueBelowMinValuePercentCheckSpec valueBelowMinValuePercent;
+    private ColumnValueBelowMinValuePercentCheckSpec profileValueBelowMinValuePercent;
 
     @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter.")
-    private ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount;
+    private ColumnValueAboveMaxValueCountCheckSpec profileValueAboveMaxValueCount;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter.")
-    private ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent;
+    private ColumnValueAboveMaxValuePercentCheckSpec profileValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
-    private ColumnMaxInRangeCheckSpec maxInRange;
+    private ColumnMaxInRangeCheckSpec profileMaxInRange;
 
     @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range.")
-    private ColumnMinInRangeCheckSpec minInRange;
+    private ColumnMinInRangeCheckSpec profileMinInRange;
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range.")
-    private ColumnMeanInRangeCheckSpec meanInRange;
+    private ColumnMeanInRangeCheckSpec profileMeanInRange;
 
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range.")
-    private ColumnPercentileInRangeCheckSpec percentileInRange;
+    private ColumnPercentileInRangeCheckSpec profilePercentileInRange;
 
     @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range.")
-    private ColumnMedianInRangeCheckSpec medianInRange;
+    private ColumnMedianInRangeCheckSpec profileMedianInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range.")
-    private ColumnPercentile10InRangeCheckSpec percentile_10InRange;
+    private ColumnPercentile10InRangeCheckSpec profilePercentile_10InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range.")
-    private ColumnPercentile25InRangeCheckSpec percentile_25InRange;
+    private ColumnPercentile25InRangeCheckSpec profilePercentile_25InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range.")
-    private ColumnPercentile75InRangeCheckSpec percentile_75InRange;
+    private ColumnPercentile75InRangeCheckSpec profilePercentile_75InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range.")
-    private ColumnPercentile90InRangeCheckSpec percentile_90InRange;
+    private ColumnPercentile90InRangeCheckSpec profilePercentile_90InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range.")
-    private ColumnSampleStddevInRangeCheckSpec sampleStddevInRange;
+    private ColumnSampleStddevInRangeCheckSpec profileSampleStddevInRange;
 
     @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range.")
-    private ColumnPopulationStddevInRangeCheckSpec populationStddevInRange;
+    private ColumnPopulationStddevInRangeCheckSpec profilePopulationStddevInRange;
 
     @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range.")
-    private ColumnSampleVarianceInRangeCheckSpec sampleVarianceInRange;
+    private ColumnSampleVarianceInRangeCheckSpec profileSampleVarianceInRange;
 
     @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range.")
-    private ColumnPopulationVarianceInRangeCheckSpec populationVarianceInRange;
+    private ColumnPopulationVarianceInRangeCheckSpec profilePopulationVarianceInRange;
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
-    private ColumnSumInRangeCheckSpec sumInRange;
+    private ColumnSumInRangeCheckSpec profileSumInRange;
 
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.")
-    private ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount;
+    private ColumnInvalidLatitudeCountCheckSpec profileInvalidLatitudeCount;
 
     @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage.")
-    private ColumnValidLatitudePercentCheckSpec validLatitudePercent;
+    private ColumnValidLatitudePercentCheckSpec profileValidLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.")
-    private ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount;
+    private ColumnInvalidLongitudeCountCheckSpec profileInvalidLongitudeCount;
 
     @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage.")
-    private ColumnValidLongitudePercentCheckSpec validLongitudePercent;
+    private ColumnValidLongitudePercentCheckSpec profileValidLongitudePercent;
 
     /**
      * Returns a negative count check specification.
      * @return Negative count check specification.
      */
-    public ColumnNegativeCountCheckSpec getNegativeCount() {
-        return negativeCount;
+    public ColumnNegativeCountCheckSpec getProfileNegativeCount() {
+        return profileNegativeCount;
     }
 
     /**
      * Sets a new specification of a negative count check.
-     * @param negativeCount Negative count check specification.
+     * @param profileNegativeCount Negative count check specification.
      */
-    public void setNegativeCount(ColumnNegativeCountCheckSpec negativeCount) {
-        this.setDirtyIf(!Objects.equals(this.negativeCount, negativeCount));
-        this.negativeCount = negativeCount;
-        propagateHierarchyIdToField(negativeCount, "negative_count");
+    public void setProfileNegativeCount(ColumnNegativeCountCheckSpec profileNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.profileNegativeCount, profileNegativeCount));
+        this.profileNegativeCount = profileNegativeCount;
+        propagateHierarchyIdToField(profileNegativeCount, "profile_negative_count");
     }
 
     /**
      * Returns a negative percentage check specification.
      * @return Negative percentage check specification.
      */
-    public ColumnNegativePercentCheckSpec getNegativePercent() {
-        return negativePercent;
+    public ColumnNegativePercentCheckSpec getProfileNegativePercent() {
+        return profileNegativePercent;
     }
 
     /**
      * Sets a new specification of a negative percentage check.
-     * @param negativePercent Negative percentage check specification.
+     * @param profileNegativePercent Negative percentage check specification.
      */
-    public void setNegativePercent(ColumnNegativePercentCheckSpec negativePercent) {
-        this.setDirtyIf(!Objects.equals(this.negativePercent, negativePercent));
-        this.negativePercent = negativePercent;
-        propagateHierarchyIdToField(negativePercent, "negative_percent");
+    public void setProfileNegativePercent(ColumnNegativePercentCheckSpec profileNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNegativePercent, profileNegativePercent));
+        this.profileNegativePercent = profileNegativePercent;
+        propagateHierarchyIdToField(profileNegativePercent, "profile_negative_percent");
     }
 
     /**
      * Returns a non-negative count check specification.
      * @return Non-negative count check specification.
      */
-    public ColumnNonNegativeCountCheckSpec getNonNegativeCount() {
-        return nonNegativeCount;
+    public ColumnNonNegativeCountCheckSpec getProfileNonNegativeCount() {
+        return profileNonNegativeCount;
     }
 
     /**
      * Sets a new specification of a non-negative count check.
-     * @param nonNegativeCount Non-negative count check specification.
+     * @param profileNonNegativeCount Non-negative count check specification.
      */
-    public void setNonNegativeCount(ColumnNonNegativeCountCheckSpec nonNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.nonNegativeCount, nonNegativeCount));
-        this.nonNegativeCount = nonNegativeCount;
-        propagateHierarchyIdToField(nonNegativeCount, "non_negative_count");
+    public void setProfileNonNegativeCount(ColumnNonNegativeCountCheckSpec profileNonNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.profileNonNegativeCount, profileNonNegativeCount));
+        this.profileNonNegativeCount = profileNonNegativeCount;
+        propagateHierarchyIdToField(profileNonNegativeCount, "profile_non_negative_count");
     }
 
     /**
      * Returns a negative percentage check specification.
      * @return Negative percentage check specification.
      */
-    public ColumnNonNegativePercentCheckSpec getNonNegativePercent() {
-        return nonNegativePercent;
+    public ColumnNonNegativePercentCheckSpec getProfileNonNegativePercent() {
+        return profileNonNegativePercent;
     }
 
     /**
      * Sets a new specification of a negative percentage check.
-     * @param nonNegativePercent Negative percentage check specification.
+     * @param profileNonNegativePercent Negative percentage check specification.
      */
-    public void setNonNegativePercent(ColumnNonNegativePercentCheckSpec nonNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.nonNegativePercent, nonNegativePercent));
-        this.nonNegativePercent = nonNegativePercent;
-        propagateHierarchyIdToField(nonNegativePercent, "non_negative_percent");
+    public void setProfileNonNegativePercent(ColumnNonNegativePercentCheckSpec profileNonNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNonNegativePercent, profileNonNegativePercent));
+        this.profileNonNegativePercent = profileNonNegativePercent;
+        propagateHierarchyIdToField(profileNonNegativePercent, "profile_non_negative_percent");
     }
 
     /**
      * Returns a numbers in set count check specification.
      * @return Numbers in set count check specification.
      */
-    public ColumnExpectedNumbersInUseCountCheckSpec getExpectedNumbersInUseCount() {
-        return expectedNumbersInUseCount;
+    public ColumnExpectedNumbersInUseCountCheckSpec getProfileExpectedNumbersInUseCount() {
+        return profileExpectedNumbersInUseCount;
     }
 
     /**
      * Sets a new specification of a numbers in set count check specification.
-     * @param expectedNumbersInUseCount Numbers in set count check specification.
+     * @param profileExpectedNumbersInUseCount Numbers in set count check specification.
      */
-    public void setExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec expectedNumbersInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.expectedNumbersInUseCount, expectedNumbersInUseCount));
-        this.expectedNumbersInUseCount = expectedNumbersInUseCount;
-        propagateHierarchyIdToField(expectedNumbersInUseCount, "expected_numbers_in_use_count");
+    public void setProfileExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec profileExpectedNumbersInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.profileExpectedNumbersInUseCount, profileExpectedNumbersInUseCount));
+        this.profileExpectedNumbersInUseCount = profileExpectedNumbersInUseCount;
+        propagateHierarchyIdToField(profileExpectedNumbersInUseCount, "profile_expected_numbers_in_use_count");
     }
 
     /**
      * Returns a numbers valid percent check specification.
      * @return Numbers valid percent check specification.
      */
-    public ColumnNumberValueInSetPercentCheckSpec getNumberValueInSetPercent() {
-        return numberValueInSetPercent;
+    public ColumnNumberValueInSetPercentCheckSpec getProfileNumberValueInSetPercent() {
+        return profileNumberValueInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers valid percent check specification.
-     * @param numberValueInSetPercent Numbers valid percent check specification.
+     * @param profileNumberValueInSetPercent Numbers valid percent check specification.
      */
-    public void setNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec numberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.numberValueInSetPercent, numberValueInSetPercent));
-        this.numberValueInSetPercent = numberValueInSetPercent;
-        propagateHierarchyIdToField(numberValueInSetPercent, "number_value_in_set_percent");
+    public void setProfileNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec profileNumberValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNumberValueInSetPercent, profileNumberValueInSetPercent));
+        this.profileNumberValueInSetPercent = profileNumberValueInSetPercent;
+        propagateHierarchyIdToField(profileNumberValueInSetPercent, "profile_number_value_in_set_percent");
     }
 
     /**
      * Returns a numbers in set percent check specification.
      * @return Numbers in set percent check specification.
      */
-    public ColumnValuesInRangeNumericPercentCheckSpec getValuesInRangeNumericPercent() {
-        return valuesInRangeNumericPercent;
+    public ColumnValuesInRangeNumericPercentCheckSpec getProfileValuesInRangeNumericPercent() {
+        return profileValuesInRangeNumericPercent;
     }
 
     /**
      * Sets a new specification of a numbers in set percent check.
-     * @param valuesInRangeNumericPercent Numbers in set percent check specification.
+     * @param profileValuesInRangeNumericPercent Numbers in set percent check specification.
      */
-    public void setValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec valuesInRangeNumericPercent) {
-        this.setDirtyIf(!Objects.equals(this.valuesInRangeNumericPercent, valuesInRangeNumericPercent));
-        this.valuesInRangeNumericPercent = valuesInRangeNumericPercent;
-        propagateHierarchyIdToField(valuesInRangeNumericPercent, "values_in_range_numeric_percent");
+    public void setProfileValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec profileValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValuesInRangeNumericPercent, profileValuesInRangeNumericPercent));
+        this.profileValuesInRangeNumericPercent = profileValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(profileValuesInRangeNumericPercent, "profile_values_in_range_numeric_percent");
     }
 
     /**
      * Returns a numbers in set percent check specification.
      * @return Numbers in set percent check specification.
      */
-    public ColumnValuesInRangeIntegersPercentCheckSpec getValuesInRangeIntegersPercent() {
-        return valuesInRangeIntegersPercent;
+    public ColumnValuesInRangeIntegersPercentCheckSpec getProfileValuesInRangeIntegersPercent() {
+        return profileValuesInRangeIntegersPercent;
     }
 
     /**
      * Sets a new specification of a numbers in set percent check.
-     * @param valuesInRangeIntegersPercent Numbers in set percent check specification.
+     * @param profileValuesInRangeIntegersPercent Numbers in set percent check specification.
      */
-    public void setValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent) {
-        this.setDirtyIf(!Objects.equals(this.valuesInRangeIntegersPercent, valuesInRangeIntegersPercent));
-        this.valuesInRangeIntegersPercent = valuesInRangeIntegersPercent;
-        propagateHierarchyIdToField(valuesInRangeIntegersPercent, "values_in_range_integers_percent");
+    public void setProfileValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec profileValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValuesInRangeIntegersPercent, profileValuesInRangeIntegersPercent));
+        this.profileValuesInRangeIntegersPercent = profileValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(profileValuesInRangeIntegersPercent, "profile_values_in_range_integers_percent");
     }
 
     /**
      * Returns a numeric value below min value count check.
      * @return Numeric value below min value count check.
      */
-    public ColumnValueBelowMinValueCountCheckSpec getValueBelowMinValueCount() {
-        return valueBelowMinValueCount;
+    public ColumnValueBelowMinValueCountCheckSpec getProfileValueBelowMinValueCount() {
+        return profileValueBelowMinValueCount;
     }
 
     /**
      * Sets a new definition of a numeric value below min value count check.
-     * @param valueBelowMinValueCount Numeric value below min value count check.
+     * @param profileValueBelowMinValueCount Numeric value below min value count check.
      */
-    public void setValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec valueBelowMinValueCount) {
-        this.setDirtyIf(!Objects.equals(this.valueBelowMinValueCount, valueBelowMinValueCount));
-        this.valueBelowMinValueCount = valueBelowMinValueCount;
-        propagateHierarchyIdToField(valueBelowMinValueCount, "value_below_min_value_count");
+    public void setProfileValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec profileValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.profileValueBelowMinValueCount, profileValueBelowMinValueCount));
+        this.profileValueBelowMinValueCount = profileValueBelowMinValueCount;
+        propagateHierarchyIdToField(profileValueBelowMinValueCount, "profile_value_below_min_value_count");
     }
 
     /**
      * Returns a numeric value below min value percent check.
      * @return Numeric value below min value percent check.
      */
-    public ColumnValueBelowMinValuePercentCheckSpec getValueBelowMinValuePercent() {
-        return valueBelowMinValuePercent;
+    public ColumnValueBelowMinValuePercentCheckSpec getProfileValueBelowMinValuePercent() {
+        return profileValueBelowMinValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value below min value percent check.
-     * @param valueBelowMinValuePercent Numeric value below min value percent check.
+     * @param profileValueBelowMinValuePercent Numeric value below min value percent check.
      */
-    public void setValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec valueBelowMinValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.valueBelowMinValuePercent, valueBelowMinValuePercent));
-        this.valueBelowMinValuePercent = valueBelowMinValuePercent;
-        propagateHierarchyIdToField(valueBelowMinValuePercent, "value_below_min_value_percent");
+    public void setProfileValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec profileValueBelowMinValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValueBelowMinValuePercent, profileValueBelowMinValuePercent));
+        this.profileValueBelowMinValuePercent = profileValueBelowMinValuePercent;
+        propagateHierarchyIdToField(profileValueBelowMinValuePercent, "profile_value_below_min_value_percent");
     }
 
     /**
      * Returns a numeric value above max value count check.
      * @return Numeric value above max value count check.
      */
-    public ColumnValueAboveMaxValueCountCheckSpec getValueAboveMaxValueCount() {
-        return valueAboveMaxValueCount;
+    public ColumnValueAboveMaxValueCountCheckSpec getProfileValueAboveMaxValueCount() {
+        return profileValueAboveMaxValueCount;
     }
 
     /**
      * Sets a new definition of a numeric value above max value count check.
-     * @param valueAboveMaxValueCount Numeric value above max value count check.
+     * @param profileValueAboveMaxValueCount Numeric value above max value count check.
      */
-    public void setValueAboveMaxValueCount(ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount) {
-        this.setDirtyIf(!Objects.equals(this.valueAboveMaxValueCount, valueAboveMaxValueCount));
-        this.valueAboveMaxValueCount = valueAboveMaxValueCount;
-        propagateHierarchyIdToField(valueAboveMaxValueCount, "value_above_max_value_count");
+    public void setProfileValueAboveMaxValueCount(ColumnValueAboveMaxValueCountCheckSpec profileValueAboveMaxValueCount) {
+        this.setDirtyIf(!Objects.equals(this.profileValueAboveMaxValueCount, profileValueAboveMaxValueCount));
+        this.profileValueAboveMaxValueCount = profileValueAboveMaxValueCount;
+        propagateHierarchyIdToField(profileValueAboveMaxValueCount, "profile_value_above_max_value_count");
     }
 
     /**
      * Returns a numeric value above max value percent check.
      * @return Numeric value above max value percent check.
      */
-    public ColumnValueAboveMaxValuePercentCheckSpec getValueAboveMaxValuePercent() {
-        return valueAboveMaxValuePercent;
+    public ColumnValueAboveMaxValuePercentCheckSpec getProfileValueAboveMaxValuePercent() {
+        return profileValueAboveMaxValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value above max value percent check.
-     * @param valueAboveMaxValuePercent Numeric value above max value percent check.
+     * @param profileValueAboveMaxValuePercent Numeric value above max value percent check.
      */
-    public void setValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.valueAboveMaxValuePercent, valueAboveMaxValuePercent));
-        this.valueAboveMaxValuePercent = valueAboveMaxValuePercent;
-        propagateHierarchyIdToField(valueAboveMaxValuePercent, "value_above_max_value_percent");
+    public void setProfileValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec profileValueAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValueAboveMaxValuePercent, profileValueAboveMaxValuePercent));
+        this.profileValueAboveMaxValuePercent = profileValueAboveMaxValuePercent;
+        propagateHierarchyIdToField(profileValueAboveMaxValuePercent, "profile_value_above_max_value_percent");
     }
 
     /**
      * Returns a max in range check specification.
      * @return Max in range check specification.
      */
-    public ColumnMaxInRangeCheckSpec getMaxInRange() {
-        return maxInRange;
+    public ColumnMaxInRangeCheckSpec getProfileMaxInRange() {
+        return profileMaxInRange;
     }
 
     /**
      * Sets a max in range percent check.
-     * @param maxInRange Max in range check specification.
+     * @param profileMaxInRange Max in range check specification.
      */
-    public void setMaxInRange(ColumnMaxInRangeCheckSpec maxInRange) {
-        this.setDirtyIf(!Objects.equals(this.maxInRange, maxInRange));
-        this.maxInRange = maxInRange;
-        propagateHierarchyIdToField(maxInRange, "max_in_range");
+    public void setProfileMaxInRange(ColumnMaxInRangeCheckSpec profileMaxInRange) {
+        this.setDirtyIf(!Objects.equals(this.profileMaxInRange, profileMaxInRange));
+        this.profileMaxInRange = profileMaxInRange;
+        propagateHierarchyIdToField(profileMaxInRange, "profile_max_in_range");
     }
 
     /**
      * Returns a min in range check specification.
      * @return Min in range check specification.
      */
-    public ColumnMinInRangeCheckSpec getMinInRange() {
-        return minInRange;
+    public ColumnMinInRangeCheckSpec getProfileMinInRange() {
+        return profileMinInRange;
     }
 
     /**
      * Sets a new specification of a min in range check.
-     * @param minInRange Min in range check specification.
+     * @param profileMinInRange Min in range check specification.
      */
-    public void setMinInRange(ColumnMinInRangeCheckSpec minInRange) {
-        this.setDirtyIf(!Objects.equals(this.minInRange, minInRange));
-        this.minInRange = minInRange;
-        propagateHierarchyIdToField(minInRange, "min_in_range");
+    public void setProfileMinInRange(ColumnMinInRangeCheckSpec profileMinInRange) {
+        this.setDirtyIf(!Objects.equals(this.profileMinInRange, profileMinInRange));
+        this.profileMinInRange = profileMinInRange;
+        propagateHierarchyIdToField(profileMinInRange, "profile_min_in_range");
     }
 
     /**
      * Returns a mean in range check specification.
      * @return Mean in range check specification.
      */
-    public ColumnMeanInRangeCheckSpec getMeanInRange() {
-        return meanInRange;
+    public ColumnMeanInRangeCheckSpec getProfileMeanInRange() {
+        return profileMeanInRange;
     }
 
     /**
      * Sets a new specification of a mean in range check.
-     * @param meanInRange Mean in range check specification.
+     * @param profileMeanInRange Mean in range check specification.
      */
-    public void setMeanInRange(ColumnMeanInRangeCheckSpec meanInRange) {
-        this.setDirtyIf(!Objects.equals(this.meanInRange, meanInRange));
-        this.meanInRange = meanInRange;
-        propagateHierarchyIdToField(meanInRange, "mean_in_range");
+    public void setProfileMeanInRange(ColumnMeanInRangeCheckSpec profileMeanInRange) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanInRange, profileMeanInRange));
+        this.profileMeanInRange = profileMeanInRange;
+        propagateHierarchyIdToField(profileMeanInRange, "profile_mean_in_range");
     }
 
     /**
      * Returns a percentile in range check specification.
      * @return Percentile in range check specification.
      */
-    public ColumnPercentileInRangeCheckSpec getPercentileInRange() {
-        return percentileInRange;
+    public ColumnPercentileInRangeCheckSpec getProfilePercentileInRange() {
+        return profilePercentileInRange;
     }
 
     /**
      * Sets a new specification of a percentile in range check.
-     * @param percentileInRange Percentile in range check specification.
+     * @param profilePercentileInRange Percentile in range check specification.
      */
-    public void setPercentileInRange(ColumnPercentileInRangeCheckSpec percentileInRange) {
-        this.setDirtyIf(!Objects.equals(this.percentileInRange, percentileInRange));
-        this.percentileInRange = percentileInRange;
-        propagateHierarchyIdToField(percentileInRange, "percentile_in_range");
+    public void setProfilePercentileInRange(ColumnPercentileInRangeCheckSpec profilePercentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.profilePercentileInRange, profilePercentileInRange));
+        this.profilePercentileInRange = profilePercentileInRange;
+        propagateHierarchyIdToField(profilePercentileInRange, "profile_percentile_in_range");
     }
 
     /**
      * Returns a median in range check specification.
      * @return median in range check specification.
      */
-    public ColumnMedianInRangeCheckSpec getMedianInRange() {
-        return medianInRange;
+    public ColumnMedianInRangeCheckSpec getProfileMedianInRange() {
+        return profileMedianInRange;
     }
 
     /**
      * Sets a new specification of a median in range check.
-     * @param medianInRange median in range check specification.
+     * @param profileMedianInRange median in range check specification.
      */
-    public void setMedianInRange(ColumnMedianInRangeCheckSpec medianInRange) {
-        this.setDirtyIf(!Objects.equals(this.medianInRange, medianInRange));
-        this.medianInRange = medianInRange;
-        propagateHierarchyIdToField(medianInRange, "median_in_range");
+    public void setProfileMedianInRange(ColumnMedianInRangeCheckSpec profileMedianInRange) {
+        this.setDirtyIf(!Objects.equals(this.profileMedianInRange, profileMedianInRange));
+        this.profileMedianInRange = profileMedianInRange;
+        propagateHierarchyIdToField(profileMedianInRange, "profile_median_in_range");
     }
 
     /**
      * Returns a percentile 10 in range check specification.
      * @return Percentile 10 in range check specification.
      */
-    public ColumnPercentile10InRangeCheckSpec getPercentile_10InRange() {
-        return percentile_10InRange;
+    public ColumnPercentile10InRangeCheckSpec getProfilePercentile_10InRange() {
+        return profilePercentile_10InRange;
     }
 
     /**
      * Sets a new specification of a percentile 10 in range check.
-     * @param percentile_10InRange Percentile 10 in range check specification.
+     * @param profilePercentile_10InRange Percentile 10 in range check specification.
      */
-    public void setPercentile_10InRange(ColumnPercentile10InRangeCheckSpec percentile_10InRange) {
-        this.setDirtyIf(!Objects.equals(this.percentile_10InRange, percentile_10InRange));
-        this.percentile_10InRange = percentile_10InRange;
-        propagateHierarchyIdToField(percentile_10InRange, "percentile_10_in_range");
+    public void setProfilePercentile_10InRange(ColumnPercentile10InRangeCheckSpec profilePercentile_10InRange) {
+        this.setDirtyIf(!Objects.equals(this.profilePercentile_10InRange, profilePercentile_10InRange));
+        this.profilePercentile_10InRange = profilePercentile_10InRange;
+        propagateHierarchyIdToField(profilePercentile_10InRange, "profile_percentile_10_in_range");
     }
 
     /**
      * Returns a percentile 25 in range check specification.
      * @return Percentile 25 in range check specification.
      */
-    public ColumnPercentile25InRangeCheckSpec getPercentile_25InRange() {
-        return percentile_25InRange;
+    public ColumnPercentile25InRangeCheckSpec getProfilePercentile_25InRange() {
+        return profilePercentile_25InRange;
     }
 
     /**
      * Sets a new specification of a percentile 25 in range check.
-     * @param percentile_25InRange Percentile 25 in range check specification.
+     * @param profilePercentile_25InRange Percentile 25 in range check specification.
      */
-    public void setPercentile_25InRange(ColumnPercentile25InRangeCheckSpec percentile_25InRange) {
-        this.setDirtyIf(!Objects.equals(this.percentile_25InRange, percentile_25InRange));
-        this.percentile_25InRange = percentile_25InRange;
-        propagateHierarchyIdToField(percentile_25InRange, "percentile_25_in_range");
+    public void setProfilePercentile_25InRange(ColumnPercentile25InRangeCheckSpec profilePercentile_25InRange) {
+        this.setDirtyIf(!Objects.equals(this.profilePercentile_25InRange, profilePercentile_25InRange));
+        this.profilePercentile_25InRange = profilePercentile_25InRange;
+        propagateHierarchyIdToField(profilePercentile_25InRange, "profile_percentile_25_in_range");
     }
 
     /**
      * Returns a percentile 75 in range check specification.
      * @return Percentile 75 in range check specification.
      */
-    public ColumnPercentile75InRangeCheckSpec getPercentile_75InRange() {
-        return percentile_75InRange;
+    public ColumnPercentile75InRangeCheckSpec getProfilePercentile_75InRange() {
+        return profilePercentile_75InRange;
     }
 
     /**
      * Sets a new specification of a percentile 75 in range check.
-     * @param percentile_75InRange Percentile 75 in range check specification.
+     * @param profilePercentile_75InRange Percentile 75 in range check specification.
      */
-    public void setPercentile_75InRange(ColumnPercentile75InRangeCheckSpec percentile_75InRange) {
-        this.setDirtyIf(!Objects.equals(this.percentile_75InRange, percentile_75InRange));
-        this.percentile_75InRange = percentile_75InRange;
-        propagateHierarchyIdToField(percentile_75InRange, "percentile_75_in_range");
+    public void setProfilePercentile_75InRange(ColumnPercentile75InRangeCheckSpec profilePercentile_75InRange) {
+        this.setDirtyIf(!Objects.equals(this.profilePercentile_75InRange, profilePercentile_75InRange));
+        this.profilePercentile_75InRange = profilePercentile_75InRange;
+        propagateHierarchyIdToField(profilePercentile_75InRange, "profile_percentile_75_in_range");
     }
 
     /**
      * Returns a percentile 90 in range check specification.
      * @return Percentile 90 in range check specification.
      */
-    public ColumnPercentile90InRangeCheckSpec getPercentile_90InRange() {
-        return percentile_90InRange;
+    public ColumnPercentile90InRangeCheckSpec getProfilePercentile_90InRange() {
+        return profilePercentile_90InRange;
     }
 
     /**
      * Sets a new specification of a percentile 90 in range check.
-     * @param percentile_90InRange Percentile 90 in range check specification.
+     * @param profilePercentile_90InRange Percentile 90 in range check specification.
      */
-    public void setPercentile_90InRange(ColumnPercentile90InRangeCheckSpec percentile_90InRange) {
-        this.setDirtyIf(!Objects.equals(this.percentile_90InRange, percentile_90InRange));
-        this.percentile_90InRange = percentile_90InRange;
-        propagateHierarchyIdToField(percentile_90InRange, "percentile_90_in_range");
+    public void setProfilePercentile_90InRange(ColumnPercentile90InRangeCheckSpec profilePercentile_90InRange) {
+        this.setDirtyIf(!Objects.equals(this.profilePercentile_90InRange, profilePercentile_90InRange));
+        this.profilePercentile_90InRange = profilePercentile_90InRange;
+        propagateHierarchyIdToField(profilePercentile_90InRange, "profile_percentile_90_in_range");
     }
 
     /**
      * Returns a sample standard deviation in range check specification.
      * @return Sample standard deviation in range check specification.
      */
-    public ColumnSampleStddevInRangeCheckSpec getSampleStddevInRange() {
-        return sampleStddevInRange;
+    public ColumnSampleStddevInRangeCheckSpec getProfileSampleStddevInRange() {
+        return profileSampleStddevInRange;
     }
 
     /**
      * Sets a new specification of a sample standard deviation in range check.
-     * @param sampleStddevInRange Sample standard deviation in range check specification.
+     * @param profileSampleStddevInRange Sample standard deviation in range check specification.
      */
-    public void setSampleStddevInRange(ColumnSampleStddevInRangeCheckSpec sampleStddevInRange) {
-        this.setDirtyIf(!Objects.equals(this.sampleStddevInRange, sampleStddevInRange));
-        this.sampleStddevInRange = sampleStddevInRange;
-        propagateHierarchyIdToField(sampleStddevInRange, "sample_stddev_in_range");
+    public void setProfileSampleStddevInRange(ColumnSampleStddevInRangeCheckSpec profileSampleStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.profileSampleStddevInRange, profileSampleStddevInRange));
+        this.profileSampleStddevInRange = profileSampleStddevInRange;
+        propagateHierarchyIdToField(profileSampleStddevInRange, "profile_sample_stddev_in_range");
     }
 
     /**
      * Returns a population standard deviation in range check specification.
      * @return Population standard deviation in range check specification.
      */
-    public ColumnPopulationStddevInRangeCheckSpec getPopulationStddevInRange() {
-        return populationStddevInRange;
+    public ColumnPopulationStddevInRangeCheckSpec getProfilePopulationStddevInRange() {
+        return profilePopulationStddevInRange;
     }
 
     /**
      * Sets a new specification of a population standard deviation in range check.
-     * @param populationStddevInRange Population standard deviation in range check specification.
+     * @param profilePopulationStddevInRange Population standard deviation in range check specification.
      */
-    public void setPopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec populationStddevInRange) {
-        this.setDirtyIf(!Objects.equals(this.populationStddevInRange, populationStddevInRange));
-        this.populationStddevInRange = populationStddevInRange;
-        propagateHierarchyIdToField(populationStddevInRange, "population_stddev_in_range");
+    public void setProfilePopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec profilePopulationStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.profilePopulationStddevInRange, profilePopulationStddevInRange));
+        this.profilePopulationStddevInRange = profilePopulationStddevInRange;
+        propagateHierarchyIdToField(profilePopulationStddevInRange, "profile_population_stddev_in_range");
     }
 
     /**
      * Returns a sample variance in range check specification.
      * @return Sample variance in range check specification.
      */
-    public ColumnSampleVarianceInRangeCheckSpec getSampleVarianceInRange() {
-        return sampleVarianceInRange;
+    public ColumnSampleVarianceInRangeCheckSpec getProfileSampleVarianceInRange() {
+        return profileSampleVarianceInRange;
     }
 
     /**
      * Sets a new specification of a sample variance in range check.
-     * @param sampleVarianceInRange Sample variance in range check specification.
+     * @param profileSampleVarianceInRange Sample variance in range check specification.
      */
-    public void setSampleVarianceInRange(ColumnSampleVarianceInRangeCheckSpec sampleVarianceInRange) {
-        this.setDirtyIf(!Objects.equals(this.sampleVarianceInRange, sampleVarianceInRange));
-        this.sampleVarianceInRange = sampleVarianceInRange;
-        propagateHierarchyIdToField(sampleVarianceInRange, "sample_variance_in_range");
+    public void setProfileSampleVarianceInRange(ColumnSampleVarianceInRangeCheckSpec profileSampleVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.profileSampleVarianceInRange, profileSampleVarianceInRange));
+        this.profileSampleVarianceInRange = profileSampleVarianceInRange;
+        propagateHierarchyIdToField(profileSampleVarianceInRange, "profile_sample_variance_in_range");
     }
 
     /**
      * Returns a population variance in range check specification.
      * @return Population variance in range check specification.
      */
-    public ColumnPopulationVarianceInRangeCheckSpec getPopulationVarianceInRange() {
-        return populationVarianceInRange;
+    public ColumnPopulationVarianceInRangeCheckSpec getProfilePopulationVarianceInRange() {
+        return profilePopulationVarianceInRange;
     }
 
     /**
      * Sets a new specification of a population variance in range check.
-     * @param populationVarianceInRange Population variance in range check specification.
+     * @param profilePopulationVarianceInRange Population variance in range check specification.
      */
-    public void setPopulationVarianceInRange(ColumnPopulationVarianceInRangeCheckSpec populationVarianceInRange) {
-        this.setDirtyIf(!Objects.equals(this.populationVarianceInRange, populationVarianceInRange));
-        this.populationVarianceInRange = populationVarianceInRange;
-        propagateHierarchyIdToField(populationVarianceInRange, "population_variance_in_range");
+    public void setProfilePopulationVarianceInRange(ColumnPopulationVarianceInRangeCheckSpec profilePopulationVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.profilePopulationVarianceInRange, profilePopulationVarianceInRange));
+        this.profilePopulationVarianceInRange = profilePopulationVarianceInRange;
+        propagateHierarchyIdToField(profilePopulationVarianceInRange, "profile_population_variance_in_range");
     }
 
     /**
      * Returns a sum in range check specification.
      * @return Sum in range check specification.
      */
-    public ColumnSumInRangeCheckSpec getSumInRange() {
-        return sumInRange;
+    public ColumnSumInRangeCheckSpec getProfileSumInRange() {
+        return profileSumInRange;
     }
 
     /**
      * Sets a new specification of a sum in range check.
-     * @param sumInRange Sum in range check specification.
+     * @param profileSumInRange Sum in range check specification.
      */
-    public void setSumInRange(ColumnSumInRangeCheckSpec sumInRange) {
-        this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
-        this.sumInRange = sumInRange;
-        propagateHierarchyIdToField(sumInRange, "sum_in_range");
+    public void setProfileSumInRange(ColumnSumInRangeCheckSpec profileSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.profileSumInRange, profileSumInRange));
+        this.profileSumInRange = profileSumInRange;
+        propagateHierarchyIdToField(profileSumInRange, "profile_sum_in_range");
     }
 
     /**
      * Returns an invalid latitude count check specification.
      * @return Invalid latitude count check specification.
      */
-    public ColumnInvalidLatitudeCountCheckSpec getInvalidLatitudeCount() {
-        return invalidLatitudeCount;
+    public ColumnInvalidLatitudeCountCheckSpec getProfileInvalidLatitudeCount() {
+        return profileInvalidLatitudeCount;
     }
 
     /**
      * Sets a new specification of an invalid latitude count check.
-     * @param invalidLatitudeCount Invalid latitude count check specification.
+     * @param profileInvalidLatitudeCount Invalid latitude count check specification.
      */
-    public void setInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount) {
-        this.setDirtyIf(!Objects.equals(this.invalidLatitudeCount, invalidLatitudeCount));
-        this.invalidLatitudeCount = invalidLatitudeCount;
-        propagateHierarchyIdToField(invalidLatitudeCount, "invalid_latitude_count");
+    public void setProfileInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec profileInvalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidLatitudeCount, profileInvalidLatitudeCount));
+        this.profileInvalidLatitudeCount = profileInvalidLatitudeCount;
+        propagateHierarchyIdToField(profileInvalidLatitudeCount, "profile_invalid_latitude_count");
     }
 
     /**
      * Returns a valid latitude percent check specification.
      * @return Valid latitude percent check specification.
      */
-    public ColumnValidLatitudePercentCheckSpec getValidLatitudePercent() {
-        return validLatitudePercent;
+    public ColumnValidLatitudePercentCheckSpec getProfileValidLatitudePercent() {
+        return profileValidLatitudePercent;
     }
 
     /**
      * Sets a new specification of a valid latitude percent check.
-     * @param validLatitudePercent Valid latitude count percent specification.
+     * @param profileValidLatitudePercent Valid latitude count percent specification.
      */
-    public void setValidLatitudePercent(ColumnValidLatitudePercentCheckSpec validLatitudePercent) {
-        this.setDirtyIf(!Objects.equals(this.validLatitudePercent, validLatitudePercent));
-        this.validLatitudePercent = validLatitudePercent;
-        propagateHierarchyIdToField(validLatitudePercent, "valid_latitude_percent");
+    public void setProfileValidLatitudePercent(ColumnValidLatitudePercentCheckSpec profileValidLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidLatitudePercent, profileValidLatitudePercent));
+        this.profileValidLatitudePercent = profileValidLatitudePercent;
+        propagateHierarchyIdToField(profileValidLatitudePercent, "profile_valid_latitude_percent");
     }
 
     /**
      * Returns an invalid longitude count check specification.
      * @return Invalid longitude count check specification.
      */
-    public ColumnInvalidLongitudeCountCheckSpec getInvalidLongitudeCount() {
-        return invalidLongitudeCount;
+    public ColumnInvalidLongitudeCountCheckSpec getProfileInvalidLongitudeCount() {
+        return profileInvalidLongitudeCount;
     }
 
     /**
      * Sets a new specification of an invalid longitude count check.
-     * @param invalidLongitudeCount Invalid longitude count check specification.
+     * @param profileInvalidLongitudeCount Invalid longitude count check specification.
      */
-    public void setInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount) {
-        this.setDirtyIf(!Objects.equals(this.invalidLongitudeCount, invalidLongitudeCount));
-        this.invalidLongitudeCount = invalidLongitudeCount;
-        propagateHierarchyIdToField(invalidLongitudeCount, "invalid_longitude_count");
+    public void setProfileInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec profileInvalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidLongitudeCount, profileInvalidLongitudeCount));
+        this.profileInvalidLongitudeCount = profileInvalidLongitudeCount;
+        propagateHierarchyIdToField(profileInvalidLongitudeCount, "profile_invalid_longitude_count");
     }
 
     /**
      * Returns a valid longitude percent check specification.
      * @return Valid longitude percent check specification.
      */
-    public ColumnValidLongitudePercentCheckSpec getValidLongitudePercent() {
-        return validLongitudePercent;
+    public ColumnValidLongitudePercentCheckSpec getProfileValidLongitudePercent() {
+        return profileValidLongitudePercent;
     }
 
     /**
      * Sets a new specification of a valid longitude percent check.
-     * @param validLongitudePercent Valid longitude count percent specification.
+     * @param profileValidLongitudePercent Valid longitude count percent specification.
      */
-    public void setValidLongitudePercent(ColumnValidLongitudePercentCheckSpec validLongitudePercent) {
-        this.setDirtyIf(!Objects.equals(this.validLongitudePercent, validLongitudePercent));
-        this.validLongitudePercent = validLongitudePercent;
-        propagateHierarchyIdToField(validLongitudePercent, "valid_longitude_percent");
+    public void setProfileValidLongitudePercent(ColumnValidLongitudePercentCheckSpec profileValidLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidLongitudePercent, profileValidLongitudePercent));
+        this.profileValidLongitudePercent = profileValidLongitudePercent;
+        propagateHierarchyIdToField(profileValidLongitudePercent, "profile_valid_longitude_percent");
     }
 
     /**

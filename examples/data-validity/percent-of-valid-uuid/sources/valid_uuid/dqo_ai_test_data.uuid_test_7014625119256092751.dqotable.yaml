@@ -12,7 +12,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_valid_uuid_percent:
+          profile_string_valid_uuid_percent:
             warning:
               min_percent: 100.0
             error:

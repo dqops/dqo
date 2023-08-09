@@ -55,7 +55,7 @@ public class UserHomeImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        volume.setRowCount(check);
+        volume.setProfileRowCount(check);
 
         ConnectionWrapper result = this.sut.findConnectionFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -70,7 +70,7 @@ public class UserHomeImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        volume.setRowCount(check);
+        volume.setProfileRowCount(check);
 
         TableWrapper result = this.sut.findTableFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -85,7 +85,7 @@ public class UserHomeImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        volume.setRowCount(check);
+        volume.setProfileRowCount(check);
 
         ColumnSpec result = this.sut.findColumnFor(check.getHierarchyId());
         Assertions.assertNull(result);

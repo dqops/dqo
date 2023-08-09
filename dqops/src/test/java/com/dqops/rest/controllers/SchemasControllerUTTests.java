@@ -121,7 +121,7 @@ public class SchemasControllerUTTests extends BaseTest {
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
         t1rowCountSpec.setFatal(t1rowCountFatalSpec);
-        t1volumeChecksSpec.setRowCount(t1rowCountSpec);
+        t1volumeChecksSpec.setProfileRowCount(t1rowCountSpec);
         t1categoriesSpec.setVolume(t1volumeChecksSpec);
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
@@ -134,7 +134,7 @@ public class SchemasControllerUTTests extends BaseTest {
         t2rowCountFatalSpec.setMinCount(10L);
         t2rowCountSpec.setError(t2rowCountErrorSpec);
         t2rowCountSpec.setFatal(t2rowCountFatalSpec);
-        t2volumeChecksSpec.setRowCount(t2rowCountSpec);
+        t2volumeChecksSpec.setProfileRowCount(t2rowCountSpec);
         t2categoriesSpec.setVolume(t2volumeChecksSpec);
         table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
@@ -147,7 +147,7 @@ public class SchemasControllerUTTests extends BaseTest {
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
-        col21stringChecksSpec.setStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
+        col21stringChecksSpec.setProfileStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
         col21categoriesSpec.setStrings(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
@@ -156,7 +156,7 @@ public class SchemasControllerUTTests extends BaseTest {
         ColumnNumericProfilingChecksSpec col23numericChecksSpec = new ColumnNumericProfilingChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setNegativeCount(columnNegativeCountCheckSpec);
+        col23numericChecksSpec.setProfileNegativeCount(columnNegativeCountCheckSpec);
         MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);

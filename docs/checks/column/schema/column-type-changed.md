@@ -7,42 +7,42 @@ Column level check that detects if the data type of the column has changed since
 
 ___
 
-## **column type changed**  
+## **profile column type changed**  
   
 **Check description**  
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|column_type_changed|profiling| |[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|profile_column_type_changed|profiling| |[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=column_type_changed
+dqo> check enable -c=connection_name -ch=profile_column_type_changed
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=column_type_changed
+dqo> check run -ch=profile_column_type_changed
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=column_type_changed
+dqo> check run -c=connection_name -ch=profile_column_type_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=column_type_changed
+dqo> check run -c=connection_name -t=table_name -ch=profile_column_type_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=column_type_changed
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_type_changed
 ```
 **Check structure (Yaml)**
 ```yaml
       profiling_checks:
         schema:
-          column_type_changed:
+          profile_column_type_changed:
             warning: {}
             error: {}
             fatal: {}
@@ -63,7 +63,7 @@ spec:
     target_column:
       profiling_checks:
         schema:
-          column_type_changed:
+          profile_column_type_changed:
             warning: {}
             error: {}
             fatal: {}

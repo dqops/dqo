@@ -27,7 +27,6 @@ interface CheckResultsTabProps {
   runCheckType: string;
   timeScale?: 'daily' | 'monthly';
   checkName: string;
-  isChartOpen: (arg: boolean) => void;
   category?: string;
   comparisonName?: string;
 }
@@ -41,7 +40,6 @@ const CheckResultsTab = ({
   runCheckType,
   timeScale,
   checkName,
-  isChartOpen,
   category,
   comparisonName
 }: CheckResultsTabProps) => {
@@ -341,7 +339,7 @@ const CheckResultsTab = ({
                 : 'bg-teal-500'
             }
             onClick={() => {
-              isChartOpen(false), setMode('table');
+               setMode('table');
             }}
           >
             <SvgIcon
@@ -360,7 +358,7 @@ const CheckResultsTab = ({
                 : 'bg-teal-500'
             }
             onClick={() => {
-              isChartOpen(true), setMode('chart');
+             setMode('chart');
             }}
           >
             <SvgIcon

@@ -32,7 +32,7 @@ spec:
         nullable: true
       profiling_checks:
         bool:
-          false_percent:
+          profile_false_percent:
             warning:
               min_percent: 99.0
             error:

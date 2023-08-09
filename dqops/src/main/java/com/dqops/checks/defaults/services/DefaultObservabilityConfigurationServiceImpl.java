@@ -18,6 +18,7 @@ package com.dqops.checks.defaults.services;
 
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.userhome.UserHome;
 import org.springframework.stereotype.Component;
@@ -46,7 +47,9 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         for (TableSpec targetTableSpec :  tableSpecList) {
             defaultDataObservabilityChecks.applyOnTable(targetTableSpec, providerDialectSettings);
 
-            // TODO: iterate over columns and apply on columns
+            for (ColumnSpec targetColumnSpec : targetTableSpec.getColumns().values()) {
+                defaultDataObservabilityChecks.applyOnColumn(targetColumnSpec, providerDialectSettings);
+            }
         }
     }
 }

@@ -258,10 +258,51 @@ spec:
       type_snapshot:
         column_type: TIMESTAMP
         nullable: true
-
 ```
 
-## Starting a scheduler
+
+## Evaluating the schedule settings using the graphical interface
+
+To evaluate schedule settings that have been configured in YAML files open the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md)
+
+To view the connection-level schedule:
+
+1. Go to the Data Source section and select the "thelook_ecommerce" connection from the tree view on the left. 
+
+2. In the main workspace select the **Schedule** tab and the **Recurring Daily** tab. 
+    Here, you can see that a schedule has been set to "Run every day at 8:00".
+
+    ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule.png)
+
+In the example, we want to verify the availability of the `users` table every 30 minutes using the **daily_table_availability** check.
+DQO allows to set check-level schedules and override the connection level settings.
+
+To view and modify individual check-level schedules:
+
+1. Go to the section with a list of checks. In our example, we have set recurring checks, so go to the **Recurring Checks** section.
+
+2. In the main workspace select the table "users" from the tree view on the left. 
+
+3. Click on the **Settings** icon to the left of the daily_table_availability check name. 
+
+    ![Navigating to a check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-check-level-schedule.png)
+
+4. Select the **Schedule Override** tab to see that the check-level schedule is set to run every 30 minutes.
+
+    ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override.png)
+
+
+## Starting a scheduler using the graphical interface
+
+To start a scheduler using the graphical interface, simply select the **Notification** icon in the upper right corner and
+toggle the button next to the **Jobs scheduler**.
+
+![Starting scheduler](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-starting-scheduler.png)
+
+The scheduler has been initiated and will run checks based on the set schedules. Data synchronization will
+take place every 10 minutes.
+
+## Starting a scheduler using DQO Shell
 
 To initiate a scheduler in the DQO Shell, simply enter the command `scheduler start`. To stop the scheduler, use the
 command `scheduler stop`.
