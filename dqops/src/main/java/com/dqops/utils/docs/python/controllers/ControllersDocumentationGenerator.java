@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.rules;
+package com.dqops.utils.docs.python.controllers;
 
-import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
+import io.swagger.v3.oas.models.OpenAPI;
 
 import java.nio.file.Path;
 
 /**
- * Rule documentation generator that generates documentation for rules.
+ * Yaml documentation generator that generate documentation for yaml.
  */
-public interface RuleDocumentationGenerator {
+public interface ControllersDocumentationGenerator {
     /**
-     * Renders documentation for all rules as markdown files.
+     * Renders documentation for all yaml classes as markdown files.
      *
-     * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
+     * @param projectRootPath         Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @param linkageStore
-     * @param dqoHome         DQOps home.
+     * @param openAPI
      * @return Folder structure with rendered markdown files.
      */
-    DocumentationFolder renderRuleDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome);
+    DocumentationFolder renderControllersDocumentation(Path projectRootPath, LinkageStore<String> linkageStore, OpenAPI openAPI);
 }

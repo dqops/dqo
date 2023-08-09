@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class HandledClassesLinkageStore implements Map<Class<?>, Path> {
-    private final Map<Class<?>, Path> linkage = new HashMap<>();
+public class LinkageStore<T> implements Map<T, Path> {
+    private final Map<T, Path> linkage = new HashMap<>();
 
     @Override
     public int size() {
@@ -55,9 +55,9 @@ public class HandledClassesLinkageStore implements Map<Class<?>, Path> {
 
     @Nullable
     @Override
-    public Path put(Class<?> key, Path value) {
+    public Path put(T key, Path value) {
         if (linkage.containsKey(key)) {
-            throw new IllegalArgumentException("Linkage already exists for " + key.getSimpleName());
+            throw new IllegalArgumentException("Linkage already exists for " + key.toString());
         }
         return linkage.put(key, value);
     }
@@ -68,7 +68,7 @@ public class HandledClassesLinkageStore implements Map<Class<?>, Path> {
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends Class<?>, ? extends Path> m) {
+    public void putAll(@NotNull Map<? extends T, ? extends Path> m) {
         m.forEach(this::put);
     }
 
@@ -79,7 +79,7 @@ public class HandledClassesLinkageStore implements Map<Class<?>, Path> {
 
     @NotNull
     @Override
-    public Set<Class<?>> keySet() {
+    public Set<T> keySet() {
         return linkage.keySet();
     }
 
@@ -91,7 +91,7 @@ public class HandledClassesLinkageStore implements Map<Class<?>, Path> {
 
     @NotNull
     @Override
-    public Set<Entry<Class<?>, Path>> entrySet() {
+    public Set<Entry<T, Path>> entrySet() {
         return linkage.entrySet();
     }
 }

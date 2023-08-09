@@ -79,7 +79,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Class called from the maven build. Generates documentation.
@@ -107,7 +106,7 @@ public class GenerateDocumentationPostProcessor {
 
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-            HandledClassesLinkageStore linkageStore = new HandledClassesLinkageStore();
+            LinkageStore<Class<?>> linkageStore = new LinkageStore<>();
 
             pythonCaller = createPythonCaller(projectDir);
 
@@ -136,7 +135,7 @@ public class GenerateDocumentationPostProcessor {
      * @param linkageStore
      * @param dqoHomeContext DQOps home instance with access to the sensor references and SQLs.
      */
-    public static void generateDocumentationForSensors(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForSensors(Path projectRoot, LinkageStore<Class<?>> linkageStore, DqoHomeContext dqoHomeContext) {
         Path sensorsDocPath = projectRoot.resolve("../docs/reference/sensors").toAbsolutePath().normalize();
         DocumentationFolder currentSensorDocFiles = DocumentationFolderFactory.loadCurrentFiles(sensorsDocPath);
         SensorDocumentationModelFactory sensorDocumentationModelFactory = createSensorDocumentationModelFactory(dqoHomeContext);
@@ -171,7 +170,7 @@ public class GenerateDocumentationPostProcessor {
      * @param linkageStore
      * @param dqoHomeContext DQOps home instance with access to the rule references.
      */
-    public static void generateDocumentationForRules(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForRules(Path projectRoot, LinkageStore<Class<?>> linkageStore, DqoHomeContext dqoHomeContext) {
         Path rulesDocPath = projectRoot.resolve("../docs/reference/rules").toAbsolutePath().normalize();
         DocumentationFolder currentRuleDocFiles = DocumentationFolderFactory.loadCurrentFiles(rulesDocPath);
         RuleDocumentationModelFactory ruleDocumentationModelFactory = createRuleDocumentationModelFactory(projectRoot, dqoHomeContext);
@@ -205,7 +204,7 @@ public class GenerateDocumentationPostProcessor {
      * @param projectRoot  Path to the project root.
      * @param linkageStore
      */
-    public static void generateDocumentationForCliCommands(Path projectRoot, HandledClassesLinkageStore linkageStore) {
+    public static void generateDocumentationForCliCommands(Path projectRoot, LinkageStore<Class<?>> linkageStore) {
         Path cliDocPath = projectRoot.resolve("../docs/command-line-interface").toAbsolutePath().normalize();
         DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
         CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
@@ -220,9 +219,8 @@ public class GenerateDocumentationPostProcessor {
                 "########## END INCLUDE CLI COMMANDS");
     }
 
-
     public static void generateDocumentationForChecks(Path projectRoot,
-                                                      HandledClassesLinkageStore linkageStore,
+                                                      LinkageStore<Class<?>> linkageStore,
                                                       DqoHomeContext dqoHomeContext,
                                                       PythonCallerServiceImpl pythonCallerService) {
         Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
@@ -281,9 +279,9 @@ public class GenerateDocumentationPostProcessor {
      * @return Check documentation model factory.
      */
     public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot,
-                                                                                      HandledClassesLinkageStore linkageStore,
+                                                                                      LinkageStore<Class<?>> linkageStore,
                                                                                       final DqoHomeContext dqoHomeContext,
-                                                                                      PythonCallerServiceImpl pythonCallerService){
+                                                                                      PythonCallerServiceImpl pythonCallerService) {
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
         configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
@@ -298,7 +296,8 @@ public class GenerateDocumentationPostProcessor {
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
                 new ModelToSpecCheckMappingServiceImpl(reflectionService),
                 new YamlSerializerImpl(configurationProperties, null),
-                new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties), linkageStore);
+                new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties),
+                linkageStore);
         return checkDocumentationModelFactory;
     }
 
@@ -319,12 +318,12 @@ public class GenerateDocumentationPostProcessor {
      * @param projectRoot  Path to the project root.
      * @param linkageStore
      */
-    public static void generateDocumentationForYaml(Path projectRoot, HandledClassesLinkageStore linkageStore, DqoHomeContext dqoHomeContext) {
+    public static void generateDocumentationForYaml(Path projectRoot, LinkageStore<Class<?>> linkageStore, DqoHomeContext dqoHomeContext) {
         Path yamlDocPath = projectRoot.resolve("../docs/reference/yaml").toAbsolutePath().normalize();
         DocumentationFolder currentYamlDocFiles = DocumentationFolderFactory.loadCurrentFiles(yamlDocPath);
         YamlDocumentationGenerator yamlDocumentationGenerator = new YamlDocumentationGeneratorImpl(new YamlDocumentationModelFactoryImpl(linkageStore));
 
-        List<YamlDocumentationSchemaNode> yamlDocumentationSchema = getYamlDocumentationSchema(dqoHomeContext);
+        List<YamlDocumentationSchemaNode> yamlDocumentationSchema = getYamlDocumentationSchema();
         DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot, linkageStore, yamlDocumentationSchema);
         renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
 
@@ -339,13 +338,7 @@ public class GenerateDocumentationPostProcessor {
      * Gets the schema describing the layout of files in documentation for Yaml.
      * @return List of Yaml documentation schema nodes, containing data about the layout.
      */
-    protected static List<YamlDocumentationSchemaNode> getYamlDocumentationSchema(DqoHomeContext dqoHomeContext) {
-//        ReflectionService reflectionService = new ReflectionServiceImpl();
-//        SimilarCheckMatchingService similarCheckMatchingService = createSimilarCheckMatchingService(
-//                reflectionService, dqoHomeContext);
-//
-//        List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = getYamlChecksDocumentationSchema(similarCheckMatchingService);
-
+    protected static List<YamlDocumentationSchemaNode> getYamlDocumentationSchema() {
         List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = new ArrayList<>();
         Path profilingPath = Path.of("profiling");
         Path monitoringPath = Path.of("monitoring");
@@ -417,56 +410,13 @@ public class GenerateDocumentationPostProcessor {
         return yamlDocumentationSchemaNodes;
     }
 
-    protected static List<YamlDocumentationSchemaNode> getYamlChecksDocumentationSchema(SimilarCheckMatchingService similarCheckMatchingService) {
-        Path checksPath = Path.of("checks");
-
-        Collection<SimilarChecksGroup> tableChecks = similarCheckMatchingService.findSimilarTableChecks().getSimilarCheckGroups();
-        List<YamlDocumentationSchemaNode> tableChecksNodes = getYamlCheckGroupsSchema(tableChecks, checksPath.resolve("table"));
-
-        Collection<SimilarChecksGroup> columnChecks = similarCheckMatchingService.findSimilarColumnChecks().getSimilarCheckGroups();
-        return new ArrayList<>();
-    }
-
-    protected static List<YamlDocumentationSchemaNode> getYamlCheckGroupsSchema(Collection<SimilarChecksGroup> checksGroups, Path schemaNodePathPrefix) {
-        List<YamlDocumentationSchemaNode> nodesForChecksGroups = new ArrayList<>();
-        List<String> categories = checksGroups.stream().map(SimilarChecksGroup::getFirstCheckCategory).distinct().sorted().collect(Collectors.toList());
-        for (String category : categories) {
-            Path categoryPath = schemaNodePathPrefix.resolve(category);
-            List<SimilarChecksGroup> similarChecksInCategory = checksGroups.stream().filter(checksGroup -> checksGroup.getFirstCheckCategory().equals(category)).collect(Collectors.toList());
-
-        }
-
-        for (SimilarChecksGroup checksGroup : checksGroups) {
-            String checkCategoryName = checksGroup.getFirstCheckCategory();
-            //if (handledCategories.contains(checkCategoryName)) {
-              //  continue;
-            //}
-
-            List<SimilarCheckModel> similarCheckModels = checksGroup.getSimilarChecks();
-
-            YamlDocumentationSchemaNode schemaNode = new YamlDocumentationSchemaNode(
-                    null,
-                    schemaNodePathPrefix.resolve(checkCategoryName)
-            );
-
-
-
-            //handledCategories.add(checkCategoryName);
-        }
-        List<String> r = checksGroups.stream().map(similarChecksGroup -> similarChecksGroup.getFirstCheckCategory())
-
-
-                .distinct().sorted().collect(Collectors.toList());
-        return null;
-    }
-
     /**
      * Generates documentation for parquet files classes.
      *
      * @param projectRoot  Path to the project root.
      * @param linkageStore
      */
-    public static void generateDocumentationForParquetFiles(Path projectRoot, HandledClassesLinkageStore linkageStore) {
+    public static void generateDocumentationForParquetFiles(Path projectRoot, LinkageStore<Class<?>> linkageStore) {
         Path parquetsDocPath = projectRoot.resolve("../docs/reference/parquets").toAbsolutePath().normalize();
         DocumentationFolder currentParquetsDocFiles = DocumentationFolderFactory.loadCurrentFiles(parquetsDocPath);
         ParquetFilesDocumentationGenerator parquetFilesDocumentationGenerator = new ParquetFilesDocumentationGeneratorImpl(new ParquetFilesDocumentationModelFactoryImpl());
