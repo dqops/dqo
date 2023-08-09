@@ -48,7 +48,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_value_in_set_percent:
+          profile_string_value_in_set_percent:
             error:
               min_percent: 99.0
     reason:
