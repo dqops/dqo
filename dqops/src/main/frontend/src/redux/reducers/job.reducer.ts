@@ -118,9 +118,10 @@ const schemaReducer = (state = initialState, action: any) => {
       ): Record<string, DqoJobHistoryEntryModel> => {
         const filteredObject: Record<string, DqoJobHistoryEntryModel> =
           Object.assign({}, obj);
+          const nowDate = moment();
         for (const key in obj) {
           if (
-            moment().diff(obj[key].statusChangedAt, 'minutes') > 30 &&
+            nowDate.diff(obj[key].statusChangedAt, 'minutes') > 30 &&
             obj[key].status !== 'running' &&
             obj[key].status !== 'queued' &&
             obj[key].status !== 'waiting'
