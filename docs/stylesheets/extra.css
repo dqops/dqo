@@ -2,7 +2,9 @@
   width: 95%;
   max-width: 95%;
 }
-
+.md-typeset :not(h1):not(h2) {
+  font-size: 0.6rem;
+}
 .md-nav {
   font-size: 0.6rem;
 }
