@@ -250,8 +250,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataGroupHashColumn().get(0));
         Assertions.assertEquals("no grouping", results.getDataGroupNameColumn().get(0));
-        Assertions.assertEquals("5e66efdc-b585-6460-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
-        Assertions.assertEquals("60685857-4b08-6610-b6b0-03adefaca0c1", results.getIdColumn().get(0));
+        Assertions.assertEquals("2ba1c831-8156-f37f-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
+        Assertions.assertEquals("15af7fba-7fdb-f10f-b6b0-03adefaca0c1", results.getIdColumn().get(0));
     }
 
     @Test

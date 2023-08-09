@@ -272,7 +272,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
-            setCheckName("row_count");
+            setCheckName("profile_row_count");
         }};
 
         TableRowCountCheckSpec tableRowCountCheckSpec = userHome
@@ -325,7 +325,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
-            setCheckName("row_count");
+            setCheckName("profile_row_count");
         }};
 
         TableRowCountCheckSpec tableRowCountCheckSpec = userHome
