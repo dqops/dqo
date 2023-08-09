@@ -50,7 +50,6 @@ import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -255,7 +254,20 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 SimilarCheckModel firstCheckModel = similarChecksGroup.getSimilarChecks().get(0);
                 similarChecksDocumentationModel.setCategory(firstCheckModel.getCategory()); // the category of the first check, the other similar checks should be in the same category
                 similarChecksDocumentationModel.setTarget(target.name());
-                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckModel.getCheckModel().getCheckName().replace('_', ' '));
+                String firstCheckName = firstCheckModel.getCheckModel().getCheckName();
+                if (firstCheckName.startsWith("profile_")) {
+                    firstCheckName = firstCheckName.substring("profile_".length());
+                } else if ((firstCheckName.startsWith("daily_partition_"))) {
+                    firstCheckName = firstCheckName.substring("daily_partition_".length());
+                } else if ((firstCheckName.startsWith("monthly_partition_"))) {
+                    firstCheckName = firstCheckName.substring("monthly_partition_".length());
+                } else if ((firstCheckName.startsWith("daily_"))) {
+                    firstCheckName = firstCheckName.substring("daily_".length());
+                } else if ((firstCheckName.startsWith("monthly_"))) {
+                    firstCheckName = firstCheckName.substring("monthly_".length());
+                }
+
+                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckName.replace('_', ' '));
 
                 ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(firstCheckModel.getCheckModel().getCheckSpec().getClass());
                 if (checkClassJavadoc != null) {
@@ -608,7 +620,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setProviderType(providerType);
 
-                TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
 
                 EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
@@ -621,7 +632,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         null,
                         effectiveSensorRuleNames,
                         checkRootContainer.getCheckType(),
-                        timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
+                        checkRootContainer.getTimeSeriesConfiguration(tableSpec),
                         null,
                         tableSpec.getDefaultDataGroupingConfiguration(),
                         null,

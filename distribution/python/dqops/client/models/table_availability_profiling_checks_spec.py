@@ -15,22 +15,22 @@ T = TypeVar("T", bound="TableAvailabilityProfilingChecksSpec")
 class TableAvailabilityProfilingChecksSpec:
     """
     Attributes:
-        table_availability (Union[Unset, TableAvailabilityCheckSpec]):
+        profile_table_availability (Union[Unset, TableAvailabilityCheckSpec]):
     """
 
-    table_availability: Union[Unset, "TableAvailabilityCheckSpec"] = UNSET
+    profile_table_availability: Union[Unset, "TableAvailabilityCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        table_availability: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.table_availability, Unset):
-            table_availability = self.table_availability.to_dict()
+        profile_table_availability: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_table_availability, Unset):
+            profile_table_availability = self.profile_table_availability.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if table_availability is not UNSET:
-            field_dict["table_availability"] = table_availability
+        if profile_table_availability is not UNSET:
+            field_dict["profile_table_availability"] = profile_table_availability
 
         return field_dict
 
@@ -39,17 +39,17 @@ class TableAvailabilityProfilingChecksSpec:
         from ..models.table_availability_check_spec import TableAvailabilityCheckSpec
 
         d = src_dict.copy()
-        _table_availability = d.pop("table_availability", UNSET)
-        table_availability: Union[Unset, TableAvailabilityCheckSpec]
-        if isinstance(_table_availability, Unset):
-            table_availability = UNSET
+        _profile_table_availability = d.pop("profile_table_availability", UNSET)
+        profile_table_availability: Union[Unset, TableAvailabilityCheckSpec]
+        if isinstance(_profile_table_availability, Unset):
+            profile_table_availability = UNSET
         else:
-            table_availability = TableAvailabilityCheckSpec.from_dict(
-                _table_availability
+            profile_table_availability = TableAvailabilityCheckSpec.from_dict(
+                _profile_table_availability
             )
 
         table_availability_profiling_checks_spec = cls(
-            table_availability=table_availability,
+            profile_table_availability=profile_table_availability,
         )
 
         table_availability_profiling_checks_spec.additional_properties = d

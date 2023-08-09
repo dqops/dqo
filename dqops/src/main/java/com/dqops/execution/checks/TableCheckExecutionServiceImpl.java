@@ -59,7 +59,6 @@ import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.HierarchyId;
@@ -809,11 +808,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(userHome));
             Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)
                     .stream()
-                    .filter(n -> n instanceof TimeSeriesConfigurationProvider)
+                    .filter(n -> n instanceof AbstractRootChecksContainerSpec)
                     .findFirst();
             assert timeSeriesProvider.isPresent();
 
-            TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider) timeSeriesProvider.get();
+            AbstractRootChecksContainerSpec timeSeriesConfigurationProvider = (AbstractRootChecksContainerSpec) timeSeriesProvider.get();
             TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec);
 
             Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)
@@ -934,11 +933,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     .createDataGroupingConfigurationForReferenceTable();
             Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)
                     .stream()
-                    .filter(n -> n instanceof TimeSeriesConfigurationProvider)
+                    .filter(n -> n instanceof AbstractRootChecksContainerSpec)
                     .findFirst();
             assert timeSeriesProvider.isPresent();
 
-            TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider) timeSeriesProvider.get();
+            AbstractRootChecksContainerSpec timeSeriesConfigurationProvider = (AbstractRootChecksContainerSpec) timeSeriesProvider.get();
             TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = timeSeriesConfigurationProvider.getTimeSeriesConfiguration(comparedTableSpec);
 
             Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)

@@ -48,7 +48,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_match_date_regex_percent:
+          profile_string_match_date_regex_percent:
             comments:
             - date: 2023-04-14T09:09:15.387+00:00
               comment_by: user

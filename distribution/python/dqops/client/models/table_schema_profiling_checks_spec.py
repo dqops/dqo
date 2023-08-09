@@ -29,56 +29,66 @@ T = TypeVar("T", bound="TableSchemaProfilingChecksSpec")
 class TableSchemaProfilingChecksSpec:
     """
     Attributes:
-        column_count (Union[Unset, TableSchemaColumnCountCheckSpec]):
-        column_count_changed (Union[Unset, TableSchemaColumnCountChangedCheckSpec]):
-        column_list_changed (Union[Unset, TableSchemaColumnListChangedCheckSpec]):
-        column_list_or_order_changed (Union[Unset, TableSchemaColumnListOrOrderChangedCheckSpec]):
-        column_types_changed (Union[Unset, TableSchemaColumnTypesChangedCheckSpec]):
+        profile_column_count (Union[Unset, TableSchemaColumnCountCheckSpec]):
+        profile_column_count_changed (Union[Unset, TableSchemaColumnCountChangedCheckSpec]):
+        profile_column_list_changed (Union[Unset, TableSchemaColumnListChangedCheckSpec]):
+        profile_column_list_or_order_changed (Union[Unset, TableSchemaColumnListOrOrderChangedCheckSpec]):
+        profile_column_types_changed (Union[Unset, TableSchemaColumnTypesChangedCheckSpec]):
     """
 
-    column_count: Union[Unset, "TableSchemaColumnCountCheckSpec"] = UNSET
-    column_count_changed: Union[Unset, "TableSchemaColumnCountChangedCheckSpec"] = UNSET
-    column_list_changed: Union[Unset, "TableSchemaColumnListChangedCheckSpec"] = UNSET
-    column_list_or_order_changed: Union[
+    profile_column_count: Union[Unset, "TableSchemaColumnCountCheckSpec"] = UNSET
+    profile_column_count_changed: Union[
+        Unset, "TableSchemaColumnCountChangedCheckSpec"
+    ] = UNSET
+    profile_column_list_changed: Union[
+        Unset, "TableSchemaColumnListChangedCheckSpec"
+    ] = UNSET
+    profile_column_list_or_order_changed: Union[
         Unset, "TableSchemaColumnListOrOrderChangedCheckSpec"
     ] = UNSET
-    column_types_changed: Union[Unset, "TableSchemaColumnTypesChangedCheckSpec"] = UNSET
+    profile_column_types_changed: Union[
+        Unset, "TableSchemaColumnTypesChangedCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        column_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.column_count, Unset):
-            column_count = self.column_count.to_dict()
+        profile_column_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_column_count, Unset):
+            profile_column_count = self.profile_column_count.to_dict()
 
-        column_count_changed: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.column_count_changed, Unset):
-            column_count_changed = self.column_count_changed.to_dict()
+        profile_column_count_changed: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_column_count_changed, Unset):
+            profile_column_count_changed = self.profile_column_count_changed.to_dict()
 
-        column_list_changed: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.column_list_changed, Unset):
-            column_list_changed = self.column_list_changed.to_dict()
+        profile_column_list_changed: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_column_list_changed, Unset):
+            profile_column_list_changed = self.profile_column_list_changed.to_dict()
 
-        column_list_or_order_changed: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.column_list_or_order_changed, Unset):
-            column_list_or_order_changed = self.column_list_or_order_changed.to_dict()
+        profile_column_list_or_order_changed: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_column_list_or_order_changed, Unset):
+            profile_column_list_or_order_changed = (
+                self.profile_column_list_or_order_changed.to_dict()
+            )
 
-        column_types_changed: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.column_types_changed, Unset):
-            column_types_changed = self.column_types_changed.to_dict()
+        profile_column_types_changed: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_column_types_changed, Unset):
+            profile_column_types_changed = self.profile_column_types_changed.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if column_count is not UNSET:
-            field_dict["column_count"] = column_count
-        if column_count_changed is not UNSET:
-            field_dict["column_count_changed"] = column_count_changed
-        if column_list_changed is not UNSET:
-            field_dict["column_list_changed"] = column_list_changed
-        if column_list_or_order_changed is not UNSET:
-            field_dict["column_list_or_order_changed"] = column_list_or_order_changed
-        if column_types_changed is not UNSET:
-            field_dict["column_types_changed"] = column_types_changed
+        if profile_column_count is not UNSET:
+            field_dict["profile_column_count"] = profile_column_count
+        if profile_column_count_changed is not UNSET:
+            field_dict["profile_column_count_changed"] = profile_column_count_changed
+        if profile_column_list_changed is not UNSET:
+            field_dict["profile_column_list_changed"] = profile_column_list_changed
+        if profile_column_list_or_order_changed is not UNSET:
+            field_dict[
+                "profile_column_list_or_order_changed"
+            ] = profile_column_list_or_order_changed
+        if profile_column_types_changed is not UNSET:
+            field_dict["profile_column_types_changed"] = profile_column_types_changed
 
         return field_dict
 
@@ -101,59 +111,73 @@ class TableSchemaProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _column_count = d.pop("column_count", UNSET)
-        column_count: Union[Unset, TableSchemaColumnCountCheckSpec]
-        if isinstance(_column_count, Unset):
-            column_count = UNSET
+        _profile_column_count = d.pop("profile_column_count", UNSET)
+        profile_column_count: Union[Unset, TableSchemaColumnCountCheckSpec]
+        if isinstance(_profile_column_count, Unset):
+            profile_column_count = UNSET
         else:
-            column_count = TableSchemaColumnCountCheckSpec.from_dict(_column_count)
-
-        _column_count_changed = d.pop("column_count_changed", UNSET)
-        column_count_changed: Union[Unset, TableSchemaColumnCountChangedCheckSpec]
-        if isinstance(_column_count_changed, Unset):
-            column_count_changed = UNSET
-        else:
-            column_count_changed = TableSchemaColumnCountChangedCheckSpec.from_dict(
-                _column_count_changed
+            profile_column_count = TableSchemaColumnCountCheckSpec.from_dict(
+                _profile_column_count
             )
 
-        _column_list_changed = d.pop("column_list_changed", UNSET)
-        column_list_changed: Union[Unset, TableSchemaColumnListChangedCheckSpec]
-        if isinstance(_column_list_changed, Unset):
-            column_list_changed = UNSET
-        else:
-            column_list_changed = TableSchemaColumnListChangedCheckSpec.from_dict(
-                _column_list_changed
-            )
-
-        _column_list_or_order_changed = d.pop("column_list_or_order_changed", UNSET)
-        column_list_or_order_changed: Union[
-            Unset, TableSchemaColumnListOrOrderChangedCheckSpec
+        _profile_column_count_changed = d.pop("profile_column_count_changed", UNSET)
+        profile_column_count_changed: Union[
+            Unset, TableSchemaColumnCountChangedCheckSpec
         ]
-        if isinstance(_column_list_or_order_changed, Unset):
-            column_list_or_order_changed = UNSET
+        if isinstance(_profile_column_count_changed, Unset):
+            profile_column_count_changed = UNSET
         else:
-            column_list_or_order_changed = (
-                TableSchemaColumnListOrOrderChangedCheckSpec.from_dict(
-                    _column_list_or_order_changed
+            profile_column_count_changed = (
+                TableSchemaColumnCountChangedCheckSpec.from_dict(
+                    _profile_column_count_changed
                 )
             )
 
-        _column_types_changed = d.pop("column_types_changed", UNSET)
-        column_types_changed: Union[Unset, TableSchemaColumnTypesChangedCheckSpec]
-        if isinstance(_column_types_changed, Unset):
-            column_types_changed = UNSET
+        _profile_column_list_changed = d.pop("profile_column_list_changed", UNSET)
+        profile_column_list_changed: Union[Unset, TableSchemaColumnListChangedCheckSpec]
+        if isinstance(_profile_column_list_changed, Unset):
+            profile_column_list_changed = UNSET
         else:
-            column_types_changed = TableSchemaColumnTypesChangedCheckSpec.from_dict(
-                _column_types_changed
+            profile_column_list_changed = (
+                TableSchemaColumnListChangedCheckSpec.from_dict(
+                    _profile_column_list_changed
+                )
+            )
+
+        _profile_column_list_or_order_changed = d.pop(
+            "profile_column_list_or_order_changed", UNSET
+        )
+        profile_column_list_or_order_changed: Union[
+            Unset, TableSchemaColumnListOrOrderChangedCheckSpec
+        ]
+        if isinstance(_profile_column_list_or_order_changed, Unset):
+            profile_column_list_or_order_changed = UNSET
+        else:
+            profile_column_list_or_order_changed = (
+                TableSchemaColumnListOrOrderChangedCheckSpec.from_dict(
+                    _profile_column_list_or_order_changed
+                )
+            )
+
+        _profile_column_types_changed = d.pop("profile_column_types_changed", UNSET)
+        profile_column_types_changed: Union[
+            Unset, TableSchemaColumnTypesChangedCheckSpec
+        ]
+        if isinstance(_profile_column_types_changed, Unset):
+            profile_column_types_changed = UNSET
+        else:
+            profile_column_types_changed = (
+                TableSchemaColumnTypesChangedCheckSpec.from_dict(
+                    _profile_column_types_changed
+                )
             )
 
         table_schema_profiling_checks_spec = cls(
-            column_count=column_count,
-            column_count_changed=column_count_changed,
-            column_list_changed=column_list_changed,
-            column_list_or_order_changed=column_list_or_order_changed,
-            column_types_changed=column_types_changed,
+            profile_column_count=profile_column_count,
+            profile_column_count_changed=profile_column_count_changed,
+            profile_column_list_changed=profile_column_list_changed,
+            profile_column_list_or_order_changed=profile_column_list_or_order_changed,
+            profile_column_types_changed=profile_column_types_changed,
         )
 
         table_schema_profiling_checks_spec.additional_properties = d

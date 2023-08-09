@@ -18,7 +18,6 @@ package com.dqops.checks.column.profiling;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,52 +37,52 @@ import java.util.Objects;
 public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("date_values_in_future_percent", o -> o.dateValuesInFuturePercent);
-            put("datetime_value_in_range_date_percent", o -> o.datetimeValueInRangeDatePercent);
+            put("profile_date_values_in_future_percent", o -> o.profileDateValuesInFuturePercent);
+            put("profile_datetime_value_in_range_date_percent", o -> o.profileDatetimeValueInRangeDatePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage.")
-    private ColumnDateValuesInFuturePercentCheckSpec dateValuesInFuturePercent;
+    private ColumnDateValuesInFuturePercentCheckSpec profileDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.")
-    private ColumnDatetimeValueInRangeDatePercentCheckSpec datetimeValueInRangeDatePercent;
+    private ColumnDatetimeValueInRangeDatePercentCheckSpec profileDatetimeValueInRangeDatePercent;
 
     /**
      * Returns a date values in future percent check specification.
      * @return Date values in future percent check specification.
      */
-    public ColumnDateValuesInFuturePercentCheckSpec getDateValuesInFuturePercent() {
-        return dateValuesInFuturePercent;
+    public ColumnDateValuesInFuturePercentCheckSpec getProfileDateValuesInFuturePercent() {
+        return profileDateValuesInFuturePercent;
     }
 
     /**
      * Sets a new date values in future percent check specification.
-     * @param dateValuesInFuturePercent Date values in future percent check specification.
+     * @param profileDateValuesInFuturePercent Date values in future percent check specification.
      */
-    public void setDateValuesInFuturePercent(ColumnDateValuesInFuturePercentCheckSpec dateValuesInFuturePercent) {
-        this.setDirtyIf(!Objects.equals(this.dateValuesInFuturePercent, dateValuesInFuturePercent));
-        this.dateValuesInFuturePercent = dateValuesInFuturePercent;
-        propagateHierarchyIdToField(dateValuesInFuturePercent, "date_values_in_future_percent");
+    public void setProfileDateValuesInFuturePercent(ColumnDateValuesInFuturePercentCheckSpec profileDateValuesInFuturePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDateValuesInFuturePercent, profileDateValuesInFuturePercent));
+        this.profileDateValuesInFuturePercent = profileDateValuesInFuturePercent;
+        propagateHierarchyIdToField(profileDateValuesInFuturePercent, "profile_date_values_in_future_percent");
     }
 
     /**
      * Returns a datetime value in range date percentage check.
      * @return Maximum datetime value in range date percentage check.
      */
-    public ColumnDatetimeValueInRangeDatePercentCheckSpec getDatetimeValueInRangeDatePercent() {
-        return datetimeValueInRangeDatePercent;
+    public ColumnDatetimeValueInRangeDatePercentCheckSpec getProfileDatetimeValueInRangeDatePercent() {
+        return profileDatetimeValueInRangeDatePercent;
     }
 
     /**
      * Sets a new definition of a datetime value in range date percentage check.
-     * @param datetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     * @param profileDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
      */
-    public void setDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec datetimeValueInRangeDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.datetimeValueInRangeDatePercent, datetimeValueInRangeDatePercent));
-        this.datetimeValueInRangeDatePercent = datetimeValueInRangeDatePercent;
-        propagateHierarchyIdToField(datetimeValueInRangeDatePercent, "datetime_value_in_range_date_percent");
+    public void setProfileDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec profileDatetimeValueInRangeDatePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDatetimeValueInRangeDatePercent, profileDatetimeValueInRangeDatePercent));
+        this.profileDatetimeValueInRangeDatePercent = profileDatetimeValueInRangeDatePercent;
+        propagateHierarchyIdToField(profileDatetimeValueInRangeDatePercent, "profile_datetime_value_in_range_date_percent");
     }
 
     /**

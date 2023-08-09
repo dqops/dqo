@@ -29,7 +29,11 @@ if [ ! -d "$DQO_USER_HOME" ]; then
 fi
 
 if [ -z "$DQO_JAVA_OPTS" ]; then
-  export DQO_JAVA_OPTS=-Xmx2048m
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    export DQO_JAVA_OPTS=-Xmx2048m -Djavax.net.ssl.trustStoreType=KeychainStore
+  else
+    export DQO_JAVA_OPTS=-Xmx2048m
+  fi
 fi
 
 # Figure out where java is.

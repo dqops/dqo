@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.table_profiling_check_categories_spec_result_truncation import (
+    TableProfilingCheckCategoriesSpecResultTruncation,
+)
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -38,6 +41,10 @@ class TableProfilingCheckCategoriesSpec:
     Attributes:
         custom (Union[Unset, TableProfilingCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are check
             names.
+        result_truncation (Union[Unset, TableProfilingCheckCategoriesSpecResultTruncation]): Defines how many advanced
+            profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration
+            and store only the most recent advanced profiling result executed during the month. By changing this value, it
+            is possible to store one value per day or even store all advanced profiling results.
         volume (Union[Unset, TableVolumeProfilingChecksSpec]):
         timeliness (Union[Unset, TableTimelinessProfilingChecksSpec]):
         accuracy (Union[Unset, TableAccuracyProfilingChecksSpec]):
@@ -50,6 +57,9 @@ class TableProfilingCheckCategoriesSpec:
     """
 
     custom: Union[Unset, "TableProfilingCheckCategoriesSpecCustom"] = UNSET
+    result_truncation: Union[
+        Unset, TableProfilingCheckCategoriesSpecResultTruncation
+    ] = UNSET
     volume: Union[Unset, "TableVolumeProfilingChecksSpec"] = UNSET
     timeliness: Union[Unset, "TableTimelinessProfilingChecksSpec"] = UNSET
     accuracy: Union[Unset, "TableAccuracyProfilingChecksSpec"] = UNSET
@@ -63,6 +73,10 @@ class TableProfilingCheckCategoriesSpec:
         custom: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.custom, Unset):
             custom = self.custom.to_dict()
+
+        result_truncation: Union[Unset, str] = UNSET
+        if not isinstance(self.result_truncation, Unset):
+            result_truncation = self.result_truncation.value
 
         volume: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.volume, Unset):
@@ -97,6 +111,8 @@ class TableProfilingCheckCategoriesSpec:
         field_dict.update({})
         if custom is not UNSET:
             field_dict["custom"] = custom
+        if result_truncation is not UNSET:
+            field_dict["result_truncation"] = result_truncation
         if volume is not UNSET:
             field_dict["volume"] = volume
         if timeliness is not UNSET:
@@ -146,6 +162,17 @@ class TableProfilingCheckCategoriesSpec:
             custom = UNSET
         else:
             custom = TableProfilingCheckCategoriesSpecCustom.from_dict(_custom)
+
+        _result_truncation = d.pop("result_truncation", UNSET)
+        result_truncation: Union[
+            Unset, TableProfilingCheckCategoriesSpecResultTruncation
+        ]
+        if isinstance(_result_truncation, Unset):
+            result_truncation = UNSET
+        else:
+            result_truncation = TableProfilingCheckCategoriesSpecResultTruncation(
+                _result_truncation
+            )
 
         _volume = d.pop("volume", UNSET)
         volume: Union[Unset, TableVolumeProfilingChecksSpec]
@@ -200,6 +227,7 @@ class TableProfilingCheckCategoriesSpec:
 
         table_profiling_check_categories_spec = cls(
             custom=custom,
+            result_truncation=result_truncation,
             volume=volume,
             timeliness=timeliness,
             accuracy=accuracy,

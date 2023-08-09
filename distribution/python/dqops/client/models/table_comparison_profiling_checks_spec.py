@@ -17,22 +17,24 @@ T = TypeVar("T", bound="TableComparisonProfilingChecksSpec")
 class TableComparisonProfilingChecksSpec:
     """
     Attributes:
-        row_count_match (Union[Unset, TableComparisonRowCountMatchCheckSpec]):
+        profile_row_count_match (Union[Unset, TableComparisonRowCountMatchCheckSpec]):
     """
 
-    row_count_match: Union[Unset, "TableComparisonRowCountMatchCheckSpec"] = UNSET
+    profile_row_count_match: Union[
+        Unset, "TableComparisonRowCountMatchCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        row_count_match: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.row_count_match, Unset):
-            row_count_match = self.row_count_match.to_dict()
+        profile_row_count_match: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_row_count_match, Unset):
+            profile_row_count_match = self.profile_row_count_match.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if row_count_match is not UNSET:
-            field_dict["row_count_match"] = row_count_match
+        if profile_row_count_match is not UNSET:
+            field_dict["profile_row_count_match"] = profile_row_count_match
 
         return field_dict
 
@@ -43,17 +45,17 @@ class TableComparisonProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _row_count_match = d.pop("row_count_match", UNSET)
-        row_count_match: Union[Unset, TableComparisonRowCountMatchCheckSpec]
-        if isinstance(_row_count_match, Unset):
-            row_count_match = UNSET
+        _profile_row_count_match = d.pop("profile_row_count_match", UNSET)
+        profile_row_count_match: Union[Unset, TableComparisonRowCountMatchCheckSpec]
+        if isinstance(_profile_row_count_match, Unset):
+            profile_row_count_match = UNSET
         else:
-            row_count_match = TableComparisonRowCountMatchCheckSpec.from_dict(
-                _row_count_match
+            profile_row_count_match = TableComparisonRowCountMatchCheckSpec.from_dict(
+                _profile_row_count_match
             )
 
         table_comparison_profiling_checks_spec = cls(
-            row_count_match=row_count_match,
+            profile_row_count_match=profile_row_count_match,
         )
 
         table_comparison_profiling_checks_spec.additional_properties = d

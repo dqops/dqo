@@ -161,6 +161,6 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Reasonableness;
+        return DefaultDataQualityDimensions.Availability;
     }
 }

@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useState, useLayoutEffect } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
-import { AxiosResponse } from 'axios';
 import {
   ColumnStatisticsModel,
   DataGroupingConfigurationSpec,
@@ -75,7 +74,18 @@ interface ITableColumnsProps {
   updateData: (arg: string) => void;
   setLevelsData: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected: (arg: number) => void;
+  statistics?: TableColumnsStatisticsModel;
 }
+
+const labels = [
+  'Column name',
+  'Detected data type',
+  'Imported data type',
+  'Length',
+  'Scale',
+  'Minimal value',
+  'Null count'
+];
 
 const TableColumns = ({
   connectionName,
@@ -83,12 +93,11 @@ const TableColumns = ({
   tableName,
   updateData,
   setLevelsData,
-  setNumberOfSelected
+  setNumberOfSelected,
+  statistics
 }: ITableColumnsProps) => {
-  const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
-  const [columnToDelete, setColumnToDelete] = useState<ColumnStatisticsModel>();
   const [dataArray1, setDataArray1] = useState<MyData[]>();
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>(
@@ -121,20 +130,6 @@ const TableColumns = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
-  const fetchColumns = async () => {
-    try {
-      const res: AxiosResponse<TableColumnsStatisticsModel> =
-        await ColumnApiClient.getColumnsStatistics(
-          connectionName,
-          schemaName,
-          tableName
-        );
-      setStatistics(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
     setIsOpen(true);
@@ -176,7 +171,6 @@ const TableColumns = ({
         tableName,
         selectedColumn?.column_name
       );
-      await fetchColumns();
     }
   };
 
@@ -193,7 +187,6 @@ const TableColumns = ({
   };
 
   useEffect(() => {
-    fetchColumns();
     setShouldResetCheckboxes(true);
   }, [connectionName, schemaName, tableName]);
 
@@ -222,15 +215,6 @@ const TableColumns = ({
     }
   };
 
-  const labels = [
-    'Column name',
-    'Detected data type',
-    'Imported data type',
-    'Length',
-    'Scale',
-    'Minimal value',
-    'Null count'
-  ];
   const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
     if (uniqueCount === 0) {
       return 'rgba(255, 255, 255, 1)';
@@ -515,7 +499,6 @@ const TableColumns = ({
 
     if (columnToDelete) {
       Promise.resolve()
-        .then(() => setColumnToDelete(columnToDelete))
         .then(() => onRemoveColumn(columnToDelete))
         .catch((error) => console.error(error));
     }

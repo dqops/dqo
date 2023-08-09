@@ -23,7 +23,6 @@ import com.dqops.checks.table.partitioned.comparison.TableComparisonDailyPartiti
 import com.dqops.checks.table.partitioned.sql.TableSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -48,7 +47,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);

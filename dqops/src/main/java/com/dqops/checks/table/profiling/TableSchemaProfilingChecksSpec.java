@@ -17,7 +17,6 @@ package com.dqops.checks.table.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.table.checkspecs.schema.*;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,117 +36,117 @@ import java.util.Objects;
 public class TableSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSchemaProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("column_count", o -> o.columnCount);
-            put("column_count_changed", o -> o.columnCountChanged);
-            put("column_list_changed", o -> o.columnListChanged);
-            put("column_list_or_order_changed", o -> o.columnListOrOrderChanged);
-            put("column_types_changed", o -> o.columnTypesChanged);
+            put("profile_column_count", o -> o.profileColumnCount);
+            put("profile_column_count_changed", o -> o.profileColumnCountChanged);
+            put("profile_column_list_changed", o -> o.profileColumnListChanged);
+            put("profile_column_list_or_order_changed", o -> o.profileColumnListOrOrderChanged);
+            put("profile_column_types_changed", o -> o.profileColumnTypesChanged);
         }
     };
 
     @JsonPropertyDescription("Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).")
-    private TableSchemaColumnCountCheckSpec columnCount;
+    private TableSchemaColumnCountCheckSpec profileColumnCount;
 
     @JsonPropertyDescription("Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.")
-    private TableSchemaColumnCountChangedCheckSpec columnCountChanged;
+    private TableSchemaColumnCountChangedCheckSpec profileColumnCountChanged;
 
     @JsonPropertyDescription("Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.")
-    private TableSchemaColumnListChangedCheckSpec columnListChanged;
+    private TableSchemaColumnListChangedCheckSpec profileColumnListChanged;
 
     @JsonPropertyDescription("Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.")
-    private TableSchemaColumnListOrOrderChangedCheckSpec columnListOrOrderChanged;
+    private TableSchemaColumnListOrOrderChangedCheckSpec profileColumnListOrOrderChanged;
 
     @JsonPropertyDescription("Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.")
-    private TableSchemaColumnTypesChangedCheckSpec columnTypesChanged;
+    private TableSchemaColumnTypesChangedCheckSpec profileColumnTypesChanged;
 
     /**
      * Returns a column count check.
      * @return Column count check.
      */
-    public TableSchemaColumnCountCheckSpec getColumnCount() {
-        return columnCount;
+    public TableSchemaColumnCountCheckSpec getProfileColumnCount() {
+        return profileColumnCount;
     }
 
     /**
      * Sets a new definition of a column count check.
-     * @param columnCount Column count check.
+     * @param profileColumnCount Column count check.
      */
-    public void setColumnCount(TableSchemaColumnCountCheckSpec columnCount) {
-        this.setDirtyIf(!Objects.equals(this.columnCount, columnCount));
-        this.columnCount = columnCount;
-        propagateHierarchyIdToField(columnCount, "column_count");
+    public void setProfileColumnCount(TableSchemaColumnCountCheckSpec profileColumnCount) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnCount, profileColumnCount));
+        this.profileColumnCount = profileColumnCount;
+        propagateHierarchyIdToField(profileColumnCount, "profile_column_count");
     }
 
     /**
      * Returns the configuration of a column count changed check.
      * @return Column count changed check.
      */
-    public TableSchemaColumnCountChangedCheckSpec getColumnCountChanged() {
-        return columnCountChanged;
+    public TableSchemaColumnCountChangedCheckSpec getProfileColumnCountChanged() {
+        return profileColumnCountChanged;
     }
 
     /**
      * Sets the new definition of a column count changed check.
-     * @param columnCountChanged Column count changed check.
+     * @param profileColumnCountChanged Column count changed check.
      */
-    public void setColumnCountChanged(TableSchemaColumnCountChangedCheckSpec columnCountChanged) {
-        this.setDirtyIf(!Objects.equals(this.columnCountChanged, columnCountChanged));
-        this.columnCountChanged = columnCountChanged;
-        propagateHierarchyIdToField(columnCountChanged, "column_count_changed");
+    public void setProfileColumnCountChanged(TableSchemaColumnCountChangedCheckSpec profileColumnCountChanged) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnCountChanged, profileColumnCountChanged));
+        this.profileColumnCountChanged = profileColumnCountChanged;
+        propagateHierarchyIdToField(profileColumnCountChanged, "profile_column_count_changed");
     }
 
     /**
      * Returns the configuration of the column list changed check.
      * @return Column list changed check.
      */
-    public TableSchemaColumnListChangedCheckSpec getColumnListChanged() {
-        return columnListChanged;
+    public TableSchemaColumnListChangedCheckSpec getProfileColumnListChanged() {
+        return profileColumnListChanged;
     }
 
     /**
      * Sets the check that detects changes to the list of columns.
-     * @param columnListChanged Column list changed check.
+     * @param profileColumnListChanged Column list changed check.
      */
-    public void setColumnListChanged(TableSchemaColumnListChangedCheckSpec columnListChanged) {
-        this.setDirtyIf(!Objects.equals(this.columnListChanged, columnListChanged));
-        this.columnListChanged = columnListChanged;
-        propagateHierarchyIdToField(columnListChanged, "column_list_changed");
+    public void setProfileColumnListChanged(TableSchemaColumnListChangedCheckSpec profileColumnListChanged) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnListChanged, profileColumnListChanged));
+        this.profileColumnListChanged = profileColumnListChanged;
+        propagateHierarchyIdToField(profileColumnListChanged, "profile_column_list_changed");
     }
 
     /**
      * Returns the check that detects if the list or order of columns have changed.
      * @return List or order of columns changed check.
      */
-    public TableSchemaColumnListOrOrderChangedCheckSpec getColumnListOrOrderChanged() {
-        return columnListOrOrderChanged;
+    public TableSchemaColumnListOrOrderChangedCheckSpec getProfileColumnListOrOrderChanged() {
+        return profileColumnListOrOrderChanged;
     }
 
     /**
      * Sets the check that detects if the list or order of columns have changed.
-     * @param columnListOrOrderChanged List or order of columns changed check.
+     * @param profileColumnListOrOrderChanged List or order of columns changed check.
      */
-    public void setColumnListOrOrderChanged(TableSchemaColumnListOrOrderChangedCheckSpec columnListOrOrderChanged) {
-        this.setDirtyIf(!Objects.equals(this.columnListOrOrderChanged, columnListOrOrderChanged));
-        this.columnListOrOrderChanged = columnListOrOrderChanged;
-        propagateHierarchyIdToField(columnListOrOrderChanged, "column_list_or_order_changed");
+    public void setProfileColumnListOrOrderChanged(TableSchemaColumnListOrOrderChangedCheckSpec profileColumnListOrOrderChanged) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnListOrOrderChanged, profileColumnListOrOrderChanged));
+        this.profileColumnListOrOrderChanged = profileColumnListOrOrderChanged;
+        propagateHierarchyIdToField(profileColumnListOrOrderChanged, "profile_column_list_or_order_changed");
     }
 
     /**
      * Returns the column types changed check.
      * @return Column types changed check.
      */
-    public TableSchemaColumnTypesChangedCheckSpec getColumnTypesChanged() {
-        return columnTypesChanged;
+    public TableSchemaColumnTypesChangedCheckSpec getProfileColumnTypesChanged() {
+        return profileColumnTypesChanged;
     }
 
     /**
      * Sets the column types changed check.
-     * @param columnTypesChanged Column types changed check.
+     * @param profileColumnTypesChanged Column types changed check.
      */
-    public void setColumnTypesChanged(TableSchemaColumnTypesChangedCheckSpec columnTypesChanged) {
-        this.setDirtyIf(!Objects.equals(this.columnTypesChanged, columnTypesChanged));
-        this.columnTypesChanged = columnTypesChanged;
-        propagateHierarchyIdToField(columnTypesChanged, "column_types_changed");
+    public void setProfileColumnTypesChanged(TableSchemaColumnTypesChangedCheckSpec profileColumnTypesChanged) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnTypesChanged, profileColumnTypesChanged));
+        this.profileColumnTypesChanged = profileColumnTypesChanged;
+        propagateHierarchyIdToField(profileColumnTypesChanged, "profile_column_types_changed");
     }
 
     /**

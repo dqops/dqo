@@ -26,7 +26,6 @@ import com.dqops.checks.table.recurring.schema.TableSchemaDailyRecurringChecksSp
 import com.dqops.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import com.dqops.checks.table.recurring.timeliness.TableTimelinessDailyRecurringChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -51,7 +50,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+public class TableDailyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);

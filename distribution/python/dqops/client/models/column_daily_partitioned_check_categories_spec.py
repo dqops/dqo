@@ -14,14 +14,14 @@ if TYPE_CHECKING:
     from ..models.column_bool_daily_partitioned_checks_spec import (
         ColumnBoolDailyPartitionedChecksSpec,
     )
-    from ..models.column_consistency_daily_partitioned_checks_spec import (
-        ColumnConsistencyDailyPartitionedChecksSpec,
-    )
     from ..models.column_daily_partitioned_check_categories_spec_comparisons import (
         ColumnDailyPartitionedCheckCategoriesSpecComparisons,
     )
     from ..models.column_daily_partitioned_check_categories_spec_custom import (
         ColumnDailyPartitionedCheckCategoriesSpecCustom,
+    )
+    from ..models.column_datatype_daily_partitioned_checks_spec import (
+        ColumnDatatypeDailyPartitionedChecksSpec,
     )
     from ..models.column_datetime_daily_partitioned_checks_spec import (
         ColumnDatetimeDailyPartitionedChecksSpec,
@@ -68,7 +68,7 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         bool_ (Union[Unset, ColumnBoolDailyPartitionedChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityDailyPartitionedChecksSpec]):
         accuracy (Union[Unset, ColumnAccuracyDailyPartitionedChecksSpec]):
-        consistency (Union[Unset, ColumnConsistencyDailyPartitionedChecksSpec]):
+        datatype (Union[Unset, ColumnDatatypeDailyPartitionedChecksSpec]):
         anomaly (Union[Unset, ColumnAnomalyDailyPartitionedChecksSpec]):
         comparisons (Union[Unset, ColumnDailyPartitionedCheckCategoriesSpecComparisons]): Dictionary of configuration of
             checks for table comparisons at a column level. The key that identifies each comparison must match the name of a
@@ -86,7 +86,7 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
     bool_: Union[Unset, "ColumnBoolDailyPartitionedChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityDailyPartitionedChecksSpec"] = UNSET
     accuracy: Union[Unset, "ColumnAccuracyDailyPartitionedChecksSpec"] = UNSET
-    consistency: Union[Unset, "ColumnConsistencyDailyPartitionedChecksSpec"] = UNSET
+    datatype: Union[Unset, "ColumnDatatypeDailyPartitionedChecksSpec"] = UNSET
     anomaly: Union[Unset, "ColumnAnomalyDailyPartitionedChecksSpec"] = UNSET
     comparisons: Union[
         Unset, "ColumnDailyPartitionedCheckCategoriesSpecComparisons"
@@ -138,9 +138,9 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        consistency: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.consistency, Unset):
-            consistency = self.consistency.to_dict()
+        datatype: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.datatype, Unset):
+            datatype = self.datatype.to_dict()
 
         anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.anomaly, Unset):
@@ -175,8 +175,8 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
             field_dict["integrity"] = integrity
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if consistency is not UNSET:
-            field_dict["consistency"] = consistency
+        if datatype is not UNSET:
+            field_dict["datatype"] = datatype
         if anomaly is not UNSET:
             field_dict["anomaly"] = anomaly
         if comparisons is not UNSET:
@@ -195,14 +195,14 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         from ..models.column_bool_daily_partitioned_checks_spec import (
             ColumnBoolDailyPartitionedChecksSpec,
         )
-        from ..models.column_consistency_daily_partitioned_checks_spec import (
-            ColumnConsistencyDailyPartitionedChecksSpec,
-        )
         from ..models.column_daily_partitioned_check_categories_spec_comparisons import (
             ColumnDailyPartitionedCheckCategoriesSpecComparisons,
         )
         from ..models.column_daily_partitioned_check_categories_spec_custom import (
             ColumnDailyPartitionedCheckCategoriesSpecCustom,
+        )
+        from ..models.column_datatype_daily_partitioned_checks_spec import (
+            ColumnDatatypeDailyPartitionedChecksSpec,
         )
         from ..models.column_datetime_daily_partitioned_checks_spec import (
             ColumnDatetimeDailyPartitionedChecksSpec,
@@ -309,14 +309,12 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         else:
             accuracy = ColumnAccuracyDailyPartitionedChecksSpec.from_dict(_accuracy)
 
-        _consistency = d.pop("consistency", UNSET)
-        consistency: Union[Unset, ColumnConsistencyDailyPartitionedChecksSpec]
-        if isinstance(_consistency, Unset):
-            consistency = UNSET
+        _datatype = d.pop("datatype", UNSET)
+        datatype: Union[Unset, ColumnDatatypeDailyPartitionedChecksSpec]
+        if isinstance(_datatype, Unset):
+            datatype = UNSET
         else:
-            consistency = ColumnConsistencyDailyPartitionedChecksSpec.from_dict(
-                _consistency
-            )
+            datatype = ColumnDatatypeDailyPartitionedChecksSpec.from_dict(_datatype)
 
         _anomaly = d.pop("anomaly", UNSET)
         anomaly: Union[Unset, ColumnAnomalyDailyPartitionedChecksSpec]
@@ -348,7 +346,7 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
             bool_=bool_,
             integrity=integrity,
             accuracy=accuracy,
-            consistency=consistency,
+            datatype=datatype,
             anomaly=anomaly,
             comparisons=comparisons,
         )

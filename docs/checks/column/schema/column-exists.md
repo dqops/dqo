@@ -6,42 +6,42 @@ Column level check that reads the metadata of the monitored table and verifies t
 
 ___
 
-## **column exists**  
+## **profile column exists**  
   
 **Check description**  
 Checks the metadata of the monitored table and verifies if the column exists.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|column_exists|profiling| |[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|profile_column_exists|profiling| |[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=column_exists
+dqo> check enable -c=connection_name -ch=profile_column_exists
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=column_exists
+dqo> check run -ch=profile_column_exists
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=column_exists
+dqo> check run -c=connection_name -ch=profile_column_exists
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=column_exists
+dqo> check run -c=connection_name -t=table_name -ch=profile_column_exists
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=column_exists
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_exists
 ```
 **Check structure (Yaml)**
 ```yaml
       profiling_checks:
         schema:
-          column_exists:
+          profile_column_exists:
             warning:
               expected_value: 1
             error:
@@ -65,7 +65,7 @@ spec:
     target_column:
       profiling_checks:
         schema:
-          column_exists:
+          profile_column_exists:
             warning:
               expected_value: 1
             error:
