@@ -52,6 +52,12 @@ const OracleConnection = ({
         value={oracle?.password}
         onChange={(value) => handleChange({ password: value })}
       />
+      <FieldTypeInput
+        label="Initialization SQL"
+        className="mb-4"
+        value={oracle?.initialization_sql}
+        onChange={(value) => handleChange({ initialization_sql: value })}
+      />
       <Checkbox
         checked={oracle?.ssl}
         onChange={(checked) => handleChange({ ssl: checked })}

@@ -68,6 +68,10 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
+    @CommandLine.Option(names = {"--oracle-initialization-sql"}, description = "Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'")
+    @JsonPropertyDescription("Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'")
+    private String initializationSql;
+
     @CommandLine.Option(names = {"--oracle-ssl"}, description = "Connect to Oracle using SSL")
     @JsonPropertyDescription("Connect to Oracle using SSL. The default value is false.")
     private Boolean ssl;
@@ -176,6 +180,23 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     public void setOptions(String options) {
         setDirtyIf(!Objects.equals(this.options, options));
         this.options = options;
+    }
+
+    /**
+     * Returns an initialization SQL that is executed after opening the connection.
+     * @return
+     */
+    public String getInitializationSql() {
+        return initializationSql;
+    }
+
+    /**
+     * Sets an SQL query that is executed after opening a connection.
+     * @param initializationSql Initialization sql.
+     */
+    public void setInitializationSql(String initializationSql) {
+        this.setDirtyIf(!Objects.equals(this.initializationSql, initializationSql));
+        this.initializationSql = initializationSql;
     }
 
     /**
