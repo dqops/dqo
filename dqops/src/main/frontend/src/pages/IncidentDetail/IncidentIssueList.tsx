@@ -5,7 +5,10 @@ import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckD
 import { SortableColumn } from "../IncidentConnection/SortableColumn";
 import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
 import moment from "moment";
-import { CheckTypes } from "../../shared/routes";
+import { CheckTypes, ROUTES } from "../../shared/routes";
+import { addFirstLevelTab } from "../../redux/actions/source.actions";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 type IncidentIssueRowProps = {
   issue: CheckResultDetailedSingleModel;
@@ -14,6 +17,8 @@ type IncidentIssueRowProps = {
 
 export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProps) => {
   const [open, setOpen] = useState(false);
+  const history = useHistory()
+  const dispatch = useDispatch();
 
   const getIssueSeverityLevel = (value?: number) => {
     let name = '';
@@ -53,6 +58,33 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
     setOpen(prev => !prev);
   };
 
+  const navigate = () => {
+    const url = ROUTES.COLUMN_LEVEL_PAGE(
+      incidentDetail?.checkType ?? "profiling",
+      incidentDetail?.connection ?? "",
+      incidentDetail?.schema ?? "",
+      incidentDetail?.table ?? "",
+      issue.columnName ?? "",
+      'detail'
+    );
+    const value = ROUTES.COLUMN_LEVEL_VALUE(
+      incidentDetail?.checkType ?? "profiling",
+      incidentDetail?.connection ?? "",
+      incidentDetail?.schema ?? "",
+      incidentDetail?.table ?? "",
+      issue.columnName ?? ""
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.PROFILING, {
+        url,
+        value,
+        state: {},
+        label: issue.columnName
+      })
+    );
+    history.push(url);
+  };
+
   return (
     <>
       <tr className={getSeverityClass(issue)}>
@@ -67,7 +99,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          <a className="text-blue-700 underline" href={`/${issue.checkType}/connection/${incidentDetail?.connection || ""}/schema/${incidentDetail?.schema || ""}/table/${incidentDetail?.table}/columns/${issue.columnName}/detail`}>
+          <a className="text-blue-700 underline" onClick={navigate}>
             {issue.checkName}
           </a>
         </td>
