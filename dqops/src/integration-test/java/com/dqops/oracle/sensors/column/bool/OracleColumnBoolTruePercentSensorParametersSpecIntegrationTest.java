@@ -1,6 +1,20 @@
+/*
+ * Copyright © 2021 DQOps (support@dqops.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.dqops.oracle.sensors.column.bool;
 
-import com.dqops.oracle.BaseOracleIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -49,7 +63,7 @@ public class OracleColumnBoolTruePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(13.333, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -62,7 +76,7 @@ public class OracleColumnBoolTruePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(13.333, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -75,7 +89,7 @@ public class OracleColumnBoolTruePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(13.333, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -88,7 +102,7 @@ public class OracleColumnBoolTruePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(16.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(16.666, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -101,6 +115,6 @@ public class OracleColumnBoolTruePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(13.333, (float) resultTable.column(0).get(0), 0.001);
     }
 }
