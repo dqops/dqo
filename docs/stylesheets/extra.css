@@ -3,7 +3,7 @@
   max-width: 95%;
 }
 .md-typeset :not(h1):not(h2) {
-  font-size: 0.7rem;
+  font-size: 16px;
 }
 .md-typeset h1{
   font-size: 1.7em;
@@ -12,7 +12,7 @@
   font-size: 1.4em;
 }
 .md-nav {
-  font-size: 0.7rem;
+  font-size: 16px;
 }
 .md-sidebar__scrollwrap{
   white-space: normal; 
