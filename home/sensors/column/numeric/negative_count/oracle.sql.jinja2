@@ -6,9 +6,9 @@ SELECT
             WHEN {{ lib.render_target_column('grouping_table') }} < 0 THEN 1
             ELSE 0
         END
-    ) AS actual_value,
-    time_period,
-    time_period_utc
+    ) AS actual_value
+    {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+    {{- lib.render_time_dimension_projection_reference('grouping_table') }}
 FROM(
     SELECT
                 {{ lib.render_target_column('analyzed_table') }}

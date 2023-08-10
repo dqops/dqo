@@ -3,9 +3,9 @@
 SELECT
     AVG(
     {{ lib.render_target_column('grouping_table') }}
-    ) AS actual_value,
-     time_period,
-     time_period_utc
+    ) AS actual_value
+    {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+    {{- lib.render_time_dimension_projection_reference('grouping_table') }}
 FROM(
     SELECT
             {{ lib.render_target_column('analyzed_table') }}
