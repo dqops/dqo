@@ -22,7 +22,13 @@ Try our [tutorial](./getting-started/index.md) to learn how to start monitoring 
 
 You can use DQO with the most popular databases. [Learn here how to connect a data source to DQO](./working-with-dqo/adding-data-source-connection/index.md).
 
-![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png) &nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png) &nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift.png) &nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png) &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png) &nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
+![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png)
+&nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png)
+&nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift.png)
+&nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png)
+&nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
+&nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
+&nbsp; &nbsp; &nbsp; ![Oracle](https://dqops.com/docs/images/connections/oracle.png)
 
 ## DQO user interface
 
