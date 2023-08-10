@@ -21,9 +21,6 @@ import com.dqops.connectors.testcontainers.TestContainersObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.testcontainers.containers.OracleContainer;
 
-import java.util.LinkedHashMap;
-import java.util.Locale;
-
 public class OracleConnectionSpecObjectMother {
     private static OracleContainer sharedContainer;
 
@@ -40,9 +37,7 @@ public class OracleConnectionSpecObjectMother {
      * @return Shared container with a started Oracle instance.
      */
     public static OracleContainer getSharedContainer() {
-        Locale localDate = Locale.getDefault();
-        Locale.setDefault(Locale.JAPAN);
-        Locale localDate2 = Locale.getDefault();
+
         if (sharedContainer == null) {
             //noinspection resource
             sharedContainer = new OracleContainer(ORACLE_IMAGE)
