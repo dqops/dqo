@@ -94,7 +94,6 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     if (selectedReference) {
       const callback = (res: { data: TableComparisonModel }) => {
-        console.log(res.data);
         setReference(res.data);
       };
       if (checkTypes === CheckTypes.PROFILING) {
