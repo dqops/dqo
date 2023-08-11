@@ -16,6 +16,7 @@
 package com.dqops.sampledata;
 
 import com.dqops.connectors.ProviderType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class IntegrationTestSampleDataObjectMother {
      * @param sampleTableMetadata Metadata and data of the sample table to make.
      * @return Provided sample table metadata or a cached copy if a table with the same name is already present in the target database.
      */
-    public static SampleTableMetadata ensureTableExists(SampleTableMetadata sampleTableMetadata) {
+    public static SampleTableMetadata ensureTableExists(@NotNull SampleTableMetadata sampleTableMetadata) {
         ProviderType providerType = sampleTableMetadata.getConnectionSpec().getProviderType();
         ProviderTestDataProxy providerTestDataProxy = providerTestData.get(providerType);
         if (providerTestDataProxy == null) {

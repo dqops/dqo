@@ -28,10 +28,16 @@ public class OracleConnectionSpecObjectMother {
     private static final int PORT = 1521;
 
     /**
+     * Connection name to Oracle.
+     */
+    public static final String CONNECTION_NAME = "oracle_connection";
+
+    /**
      * Creates a shared Oracle container using Testcontainers. The container will be stopped when the unit/integration session will finish.
      * @return Shared container with a started Oracle instance.
      */
     public static OracleContainer getSharedContainer() {
+
         if (sharedContainer == null) {
             //noinspection resource
             sharedContainer = new OracleContainer(ORACLE_IMAGE)
@@ -45,11 +51,6 @@ public class OracleConnectionSpecObjectMother {
 
         return sharedContainer;
     }
-
-    /**
-     * Connection name to Oracle.
-     */
-    public static final String CONNECTION_NAME = "oracle_connection";
 
     /**
      * Creates a default connection spec to Oracle database that should be started by test containers.
