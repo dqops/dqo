@@ -37,15 +37,17 @@ policies that restrict this communication. In case of restrictions you need to a
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
-    ![Adding connection settings - environmnetal variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake-envvar.jpg)
+
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake-envvar.jpg)
 
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value 
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.   
     
     For example:
+
     ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
 
-    To remove the property click on the trash icon add the end of the input field. 
+    To remove the property click on the trash icon at the end of the input field. 
 
 
 4. After filling in the connection settings, click the **Test Connection** button to test the connection.
@@ -62,6 +64,7 @@ policies that restrict this communication. In case of restrictions you need to a
 ## Adding Snowflake connection using DQO Shell
 
 To add a connection run the following command in DQO Shell.
+
 ```
 dqo> connection add
 ```
@@ -77,6 +80,7 @@ Database provider type (--provider):
  [ 4] redshift
  [ 5] sqlserver
  [ 6] mysql
+ [ 7] oracle
 Please enter one of the [] values: 2
 Snowflake account name (--snowflake-account) [${SNOWFLAKE_ACCOUNT}]: xx-kh8138
 Snowflake warehouse name (--snowflake-warehouse) [${SNOWFLAKE_WAREHOUSE}]: OMPUTE_WH

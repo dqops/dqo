@@ -57,12 +57,6 @@ const PostgreSQLConnection = ({
         value={postgresql?.password}
         onChange={(value) => handleChange({ password: value })}
       />
-      <Checkbox
-        checked={postgresql?.ssl}
-        onChange={(checked) => handleChange({ ssl: checked })}
-        label="Use SSL"
-        labelPosition="left"
-      />
       <JdbcPropertiesView
         properties={postgresql?.properties}
         onChange={(properties) => handleChange({ properties })}
