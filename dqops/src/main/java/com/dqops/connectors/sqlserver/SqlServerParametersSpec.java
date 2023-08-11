@@ -49,7 +49,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--sqlserver-port"}, description = "SQL Server port number")
-    @JsonPropertyDescription("SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("SQL Server port number. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.")
     private String port;
 
     @CommandLine.Option(names = {"--sqlserver-database"}, description = "SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -68,9 +68,9 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--sqlserver-ssl"}, description = "Connecting to SQL Server with SSL disabled")
-    @JsonPropertyDescription("Connecting to SQL Server with SSL disabled. The default value is false.")
-    private Boolean ssl;
+    @CommandLine.Option(names = {"--sqlserver-disable-encryption"}, description = "Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.")
+    @JsonPropertyDescription("Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.")
+    private Boolean disableEncryption;
 
     @CommandLine.Option(names = {"-S"}, description = "SQL Server additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -94,7 +94,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric MS SQL Server port name.
+     * Returns the port number. The value should store an environment variable expression or a numeric MS SQL Server port number.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
@@ -102,7 +102,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Sets the port name.
+     * Sets the port number.
      * @param port Port name.
      */
     public void setPort(String port) {
@@ -179,20 +179,20 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the flag to require SSL connection.
-     * @return True - require an SSL connection.
+     * Returns the flag to disable SSL encryption.
+     * @return True - disable SSL encryption.
      */
-    public Boolean getSsl() {
-        return ssl;
+    public Boolean getDisableEncryption() {
+        return disableEncryption;
     }
 
     /**
-     * Sets a flag to require an SSL connection.
-     * @param ssl True - ssl connection is required.
+     * Sets a flag to disable SSL encryption.
+     * @param disableEncryption True - True - disable SSL encryption.
      */
-    public void setSsl(Boolean ssl) {
-        setDirtyIf(!Objects.equals(this.ssl, ssl));
-        this.ssl = ssl;
+    public void setDisableEncryption(Boolean disableEncryption) {
+        setDirtyIf(!Objects.equals(this.disableEncryption, disableEncryption));
+        this.disableEncryption = disableEncryption;
     }
 
     /**

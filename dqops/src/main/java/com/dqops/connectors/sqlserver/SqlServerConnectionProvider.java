@@ -108,13 +108,14 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
             sqlserverSpec.setHost(terminalReader.prompt("SQL Server host name (--sqlserver-host)", "${SQLSERVER_HOST}", false));
         }
 
-        if (sqlserverSpec.getSsl() == null) {
+        if (Strings.isNullOrEmpty(sqlserverSpec.getPort())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--sqlserver-ssl");
+                throw new CliRequiredParameterMissingException("--sqlserver-port");
             }
 
-            sqlserverSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--sqlserver-ssl)", true));
+            sqlserverSpec.setPort(terminalReader.prompt("SQL Server port number (--sqlserver-port)", "${SQLSERVER_PORT}", false));
         }
+
 
         if (Strings.isNullOrEmpty(sqlserverSpec.getDatabase())) {
             if (isHeadless) {
@@ -138,6 +139,14 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
             }
 
             sqlserverSpec.setPassword(terminalReader.prompt("SQL Server user password (--sqlserver-password)", "${SQLSERVER_PASSWORD}", false));
+        }
+
+        if (sqlserverSpec.getDisableEncryption() == null) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--sqlserver-disable-encryption");
+            }
+
+            sqlserverSpec.setDisableEncryption(terminalReader.promptBoolean("Disable SSL encryption (--sqlserver-disable-encryption)", false));
         }
     }
 

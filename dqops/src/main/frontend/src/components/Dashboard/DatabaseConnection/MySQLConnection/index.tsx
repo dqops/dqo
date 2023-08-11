@@ -52,12 +52,6 @@ const MySQLConnection = ({
         value={mysql?.password}
         onChange={(value) => handleChange({ password: value })}
       />
-      <Checkbox
-        checked={mysql?.ssl}
-        onChange={(checked) => handleChange({ ssl: checked })}
-        label="Use SSL"
-        labelPosition="left"
-      />
       <JdbcPropertiesView
         properties={mysql?.properties}
         onChange={(properties) => handleChange({ properties })}

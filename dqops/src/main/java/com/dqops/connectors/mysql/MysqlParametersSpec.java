@@ -49,7 +49,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--mysql-port"}, description = "MySQL port number")
-    @JsonPropertyDescription("MySQL port name. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("MySQL port number. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.")
     private String port;
 
     @CommandLine.Option(names = {"--mysql-database"}, description = "MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -68,9 +68,9 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--mysql-ssl"}, description = "Connect to MySQL using SSL")
-    @JsonPropertyDescription("Connect to MySQL using SSL. The default value is false.")
-    private Boolean ssl;
+    @CommandLine.Option(names = {"--mysql-sslmode"}, description = "SslMode MySQL connection parameter")
+    @JsonPropertyDescription("SslMode MySQL connection parameter.")
+    private MySqlSslMode MySqlSslMode;
 
     @CommandLine.Option(names = {"-M"}, description = "MySQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -94,7 +94,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric mysql port name.
+     * Returns the port number. The value should store an environment variable expression or a numeric mysql port number.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
@@ -102,7 +102,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Sets the port name.
+     * Sets the port number.
      * @param port Port name.
      */
     public void setPort(String port) {
@@ -182,17 +182,17 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
      * Returns the flag to require SSL connection.
      * @return True - require an SSL connection.
      */
-    public Boolean getSsl() {
-        return ssl;
+    public MySqlSslMode getmySqlSslMode() {
+        return MySqlSslMode;
     }
 
     /**
      * Sets a flag to require an SSL connection.
-     * @param ssl True - ssl connection is required.
+     * @param MySqlSslMode True - ssl connection is required.
      */
-    public void setSsl(Boolean ssl) {
-        setDirtyIf(!Objects.equals(this.ssl, ssl));
-        this.ssl = ssl;
+    public void setMySqlSslMode(MySqlSslMode MySqlSslMode) {
+        setDirtyIf(!Objects.equals(this.MySqlSslMode, MySqlSslMode));
+        this.MySqlSslMode = MySqlSslMode;
     }
 
     /**

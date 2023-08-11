@@ -44,7 +44,6 @@ public class RedshiftConnectionSpecObjectMother {
                 setDatabase(DevelopmentCredentialsSecretNames.REDSHIFT_DATABASE);
                 setUser(DevelopmentCredentialsSecretNames.REDSHIFT_USERNAME);
                 setPassword(DevelopmentCredentialsSecretNames.REDSHIFT_PASSWORD);
-                setSsl(false);
             }});
         }};
         return connectionSpec;

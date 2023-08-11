@@ -49,7 +49,7 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--redshift-port"}, description = "Redshift port number")
-    @JsonPropertyDescription("Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("Redshift port number. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.")
     private String port;
 
     @CommandLine.Option(names = {"--redshift-database"}, description = "Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -67,10 +67,6 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--redshift-options"}, description = "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
     @JsonPropertyDescription("Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.")
     private String options;
-
-    @CommandLine.Option(names = {"--redshift-ssl"}, description = "Connect to Redshift using SSL")
-    @JsonPropertyDescription("Connect to Redshift using SSL. The default value is false.")
-    private Boolean ssl;
 
     @CommandLine.Option(names = {"-R"}, description = "Redshift additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -94,7 +90,7 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric redshift port name.
+     * Returns the port number. The value should store an environment variable expression or a numeric redshift port number.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
@@ -102,7 +98,7 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Sets the port name.
+     * Sets the port number.
      * @param port Port name.
      */
     public void setPort(String port) {
@@ -176,23 +172,6 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     public void setOptions(String options) {
         setDirtyIf(!Objects.equals(this.options, options));
         this.options = options;
-    }
-
-    /**
-     * Returns the flag to require SSL connection.
-     * @return True - require an SSL connection.
-     */
-    public Boolean getSsl() {
-        return ssl;
-    }
-
-    /**
-     * Sets a flag to require an SSL connection.
-     * @param ssl True - ssl connection is required.
-     */
-    public void setSsl(Boolean ssl) {
-        setDirtyIf(!Objects.equals(this.ssl, ssl));
-        this.ssl = ssl;
     }
 
     /**
