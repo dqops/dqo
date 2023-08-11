@@ -59,8 +59,8 @@ const SqlServerConnection = ({
         onChange={(value) => handleChange({ password: value })}
       />
       <Checkbox
-        checked={sqlserver?.disableEncryption}
-        onChange={(checked) => handleChange({ disableEncryption: checked })}
+        checked={sqlserver?.disable_encryption}
+        onChange={(checked) => handleChange({ disable_encryption: checked })}
         label="Disable SSL encryption"
         labelPosition="left"
       />
