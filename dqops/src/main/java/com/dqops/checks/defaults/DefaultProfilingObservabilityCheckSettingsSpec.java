@@ -16,7 +16,12 @@
 
 package com.dqops.checks.defaults;
 
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.profiling.*;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.table.profiling.TableAvailabilityProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
@@ -27,9 +32,12 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -46,8 +54,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<DefaultProfilingObservabilityCheckSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractRootChecksContainerSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<DefaultProfilingObservabilityCheckSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("table_volume", o -> o.tableVolume);
             put("table_availability", o -> o.tableAvailability);
@@ -488,5 +496,73 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
         if (this.columnSchema != null && !this.columnSchema.isDefault()) {
             this.getColumnCheckCategories(targetColumn).setSchema(this.columnSchema.deepClone());
         }
+    }
+
+    /**
+     * Returns the type of checks (profiling, recurring, partitioned).
+     *
+     * @return Check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return null;
+    }
+
+    /**
+     * Returns the time scale for recurring and partitioned checks (daily, monthly, etc.).
+     * Profiling checks do not have a time scale and return null.
+     *
+     * @return Time scale (daily, monthly, ...).
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return null;
+    }
+
+    /**
+     * Returns the check target, where the check could be applied.
+     *
+     * @return Check target, "table" or "column".
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return null;
+    }
+
+    /**
+     * Returns the name of the cron expression that is used to schedule checks in this check root object.
+     *
+     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     */
+    @Override
+    @JsonIgnore
+    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
+        return null;
+    }
+
+    /**
+     * Returns the comparisons container for table comparison checks, indexed by the reference table configuration name.
+     *
+     * @return Table comparison container.
+     */
+    @Override
+    @JsonIgnore
+    public AbstractComparisonCheckCategorySpecMap<?> getComparisons() {
+        return null;
+    }
+
+    /**
+     * Returns time series configuration for the given group of checks.
+     *
+     * @param tableSpec Parent table specification - used to get the details about the time partitioning column.
+     * @return Time series configuration.
+     */
+    @Override
+    @JsonIgnore
+    public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
+        return null;
     }
 }

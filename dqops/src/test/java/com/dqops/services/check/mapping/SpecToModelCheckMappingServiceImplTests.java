@@ -17,6 +17,9 @@ package com.dqops.services.check.mapping;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
@@ -164,5 +167,35 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 
         Assertions.assertIterableEquals(names.getKey(), names.getValue());
+    }
+
+    @Test
+    void createUiModel_whenDataObservabilityProfilingConfigurationGiven_thenCreatesUiModel() {
+        DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingChecks = new DefaultProfilingObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks, null,
+                null, null, this.executionContext, null);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(13, uiModel.getCategories().size());
+    }
+
+    @Test
+    void createUiModel_whenDataObservabilityDailyRecurringConfigurationGiven_thenCreatesUiModel() {
+        DefaultDailyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks, null,
+                null, null, this.executionContext, null);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(13, uiModel.getCategories().size());
+    }
+
+    @Test
+    void createUiModel_whenDataObservabilityMonthlyRecurringConfigurationGiven_thenCreatesUiModel() {
+        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks, null,
+                null, null, this.executionContext, null);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(13, uiModel.getCategories().size());
     }
 }
