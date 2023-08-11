@@ -61,7 +61,7 @@ const SqlServerConnection = ({
       <Checkbox
         checked={sqlserver?.disable_encryption}
         onChange={(checked) => handleChange({ disable_encryption: checked })}
-        label="Disable SSL encryption"
+        label="Disable encryption"
         labelPosition="left"
       />
       <JdbcPropertiesView

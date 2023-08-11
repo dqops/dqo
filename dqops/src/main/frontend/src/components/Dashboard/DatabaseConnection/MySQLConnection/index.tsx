@@ -1,15 +1,41 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
-import { MysqlParametersSpec } from "../../../../api";
+import { MysqlParametersSpec, MysqlParametersSpecSslmodeEnum } from "../../../../api";
 import JdbcPropertiesView from "../JdbcProperties";
-import Checkbox from "../../../Checkbox";
+import Select from '../../../Select';
+import SectionWrapper from '../../SectionWrapper';
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 
 interface IMySQLConnectionProps {
   mysql?: MysqlParametersSpec;
   onChange?: (obj: MysqlParametersSpec) => void;
 }
+
+const sslModes = [
+  {
+    label: '',
+  },  
+  {
+    label: 'DISABLED',
+    value: MysqlParametersSpecSslmodeEnum.DISABLED
+  },
+  {
+    label: 'PREFERRED',
+    value: MysqlParametersSpecSslmodeEnum.PREFERRED
+  },
+  {
+    label: 'REQUIRED',
+    value: MysqlParametersSpecSslmodeEnum.REQUIRED
+  },
+  {
+    label: 'VERIFY_CA',
+    value: MysqlParametersSpecSslmodeEnum.VERIFY_CA
+  },
+  {
+    label: 'VERIFY_IDENTITY',
+    value: MysqlParametersSpecSslmodeEnum.VERIFY_IDENTITY
+  }
+];
 
 const MySQLConnection = ({
   mysql,
@@ -51,6 +77,15 @@ const MySQLConnection = ({
         maskingType="password"
         value={mysql?.password}
         onChange={(value) => handleChange({ password: value })}
+      />
+      <Select
+        label="Ssl mode"
+        options={sslModes}
+        className="mb-4"
+        value={
+          mysql?.sslmode
+        }
+        onChange={(value) => handleChange({ sslmode: value })}
       />
       <JdbcPropertiesView
         properties={mysql?.properties}

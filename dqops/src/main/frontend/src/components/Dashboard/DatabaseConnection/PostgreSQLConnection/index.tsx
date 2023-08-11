@@ -1,15 +1,45 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
-import { PostgresqlParametersSpec } from '../../../../api';
+import { PostgresqlParametersSpec, PostgresqlParametersSpecSslmodeEnum } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
-import Checkbox from '../../../Checkbox';
+import Select from '../../../Select';
+import SectionWrapper from '../../SectionWrapper';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 
 interface IPostgreSQLConnectionProps {
   postgresql?: PostgresqlParametersSpec;
   onChange?: (obj: PostgresqlParametersSpec) => void;
 }
+
+const sslModes = [
+  {
+    label: '',
+  },  
+  {
+    label: 'disable',
+    value: PostgresqlParametersSpecSslmodeEnum.disable
+  },
+  {
+    label: 'allow',
+    value: PostgresqlParametersSpecSslmodeEnum.allow
+  },
+  {
+    label: 'prefer',
+    value: PostgresqlParametersSpecSslmodeEnum.prefer
+  },
+  {
+    label: 'require',
+    value: PostgresqlParametersSpecSslmodeEnum.require
+  },
+  {
+    label: 'verify-ca',
+    value: PostgresqlParametersSpecSslmodeEnum.verifyx2dca
+  },
+  {
+    label: 'verify-full',
+    value: PostgresqlParametersSpecSslmodeEnum.verifyx2dfull
+  }
+];
 
 const PostgreSQLConnection = ({
   postgresql,
@@ -56,6 +86,15 @@ const PostgreSQLConnection = ({
         maskingType="password"
         value={postgresql?.password}
         onChange={(value) => handleChange({ password: value })}
+      />
+      <Select
+        label="Ssl mode"
+        options={sslModes}
+        className="mb-4"
+        value={
+          postgresql?.sslmode
+        }
+        onChange={(value) => handleChange({ sslmode: value })}
       />
       <JdbcPropertiesView
         properties={postgresql?.properties}
