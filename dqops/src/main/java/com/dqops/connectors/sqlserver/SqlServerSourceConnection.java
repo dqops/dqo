@@ -97,7 +97,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         Properties dataSourceProperties = new Properties();
 
         if(sqlserverSpec.getDisableEncryption() != null && sqlserverSpec.getDisableEncryption()){
-            dataSourceProperties.put("disable-encryption", "false");
+            dataSourceProperties.put("encrypt", "false");
         }
 
         if (sqlserverSpec.getProperties() != null) {

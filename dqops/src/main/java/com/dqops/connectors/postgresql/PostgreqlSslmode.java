@@ -15,17 +15,30 @@
  */
 package com.dqops.connectors.postgresql;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Enumeration of sslmode connection parameters for finer control of the SSL connection in PostgreSql.
  */
 
 public enum PostgreqlSslmode {
-    DISABLE("disable"),
-    ALLOW("allow"),
-    PREFER("prefer"),
-    REQUIRE("require"),
-    VERIFY_CA("verify-ca"),
-    VERIFY_FULL("verify-full");
+    @JsonProperty("disable")
+    disable("disable"),
+
+    @JsonProperty("allow")
+    allow("allow"),
+
+    @JsonProperty("prefer")
+    prefer("prefer"),
+
+    @JsonProperty("require")
+    require("require"),
+
+    @JsonProperty("verify-ca")
+    verify_ca("verify-ca"),
+
+    @JsonProperty("verify-full")
+    verify_full("verify-full");
 
     private final String value;
 

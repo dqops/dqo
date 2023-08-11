@@ -137,7 +137,6 @@ spec:
     user: testing
     database: testing
     password: xxx
-    ssl: true
     properties:
       cacheDefaultTimeZone: "false"
   incident_grouping:

@@ -136,7 +136,6 @@ spec:
     database: TESTING
     user: testing
     password: xxx
-    ssl: true
     properties:
       lastUpdateCount: "false"
   incident_grouping:

@@ -152,6 +152,10 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
+        if (mysqlParametersSpec.getSslmode() != null){
+            dataSourceProperties.put("sslmode", mysqlParametersSpec.getSslmode().toString());
+        }
+
         if (mysqlParametersSpec.getProperties() != null) {
             dataSourceProperties.putAll(mysqlParametersSpec.getProperties());
         }

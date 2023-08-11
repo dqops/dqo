@@ -136,7 +136,6 @@ spec:
     database: testing
     user: testing
     password: xxx
-    ssl: false
     properties:
       'connectTimeout': 15
   incident_grouping:

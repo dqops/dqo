@@ -70,7 +70,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--mysql-sslmode"}, description = "SslMode MySQL connection parameter")
     @JsonPropertyDescription("SslMode MySQL connection parameter.")
-    private MySqlSslMode MySqlSslMode;
+    private MySqlSslMode sslmode;
 
     @CommandLine.Option(names = {"-M"}, description = "MySQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -182,17 +182,17 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
      * Returns the flag to require SSL connection.
      * @return True - require an SSL connection.
      */
-    public MySqlSslMode getmySqlSslMode() {
-        return MySqlSslMode;
+    public MySqlSslMode getSslmode() {
+        return sslmode;
     }
 
     /**
      * Sets a flag to require an SSL connection.
-     * @param MySqlSslMode True - ssl connection is required.
+     * @param sslmode True - ssl connection is required.
      */
-    public void setMySqlSslMode(MySqlSslMode MySqlSslMode) {
-        setDirtyIf(!Objects.equals(this.MySqlSslMode, MySqlSslMode));
-        this.MySqlSslMode = MySqlSslMode;
+    public void setSslmode(MySqlSslMode sslmode) {
+        setDirtyIf(!Objects.equals(this.sslmode, sslmode));
+        this.sslmode = sslmode;
     }
 
     /**

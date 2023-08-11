@@ -131,7 +131,6 @@ spec:
     port: 65234
     user: testing
     password: xxx
-    ssl: false
     properties:
       'connectTimeout ': 12
   incident_grouping:

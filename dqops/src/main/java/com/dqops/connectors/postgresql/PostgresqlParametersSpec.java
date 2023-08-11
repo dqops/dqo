@@ -70,7 +70,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--postgresql-sslmode"}, description = "Connect to PostgreSQL using sslmode connection parameter")
     @JsonPropertyDescription("Sslmode PostgreSQL connection parameter. The default value is disabled.")
-    private PostgreqlSslmode sslmode = PostgreqlSslmode.DISABLE;
+    private PostgreqlSslmode sslmode = PostgreqlSslmode.disable;
 
     @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
