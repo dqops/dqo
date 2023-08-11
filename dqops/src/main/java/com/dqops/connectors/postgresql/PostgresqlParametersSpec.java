@@ -49,7 +49,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--postgresql-port"}, description = "PostgreSQL port number")
-    @JsonPropertyDescription("PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("PostgreSQL port number. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.")
     private String port;
 
     @CommandLine.Option(names = {"--postgresql-database"}, description = "PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -68,9 +68,9 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--postgresql-ssl"}, description = "Connect to PostgreSQL using SSL")
-    @JsonPropertyDescription("Connect to PostgreSQL using SSL. The default value is false.")
-    private Boolean ssl;
+    @CommandLine.Option(names = {"--postgresql-sslmode"}, description = "Connect to PostgreSQL using sslmode connection parameter")
+    @JsonPropertyDescription("Sslmode PostgreSQL connection parameter. The default value is disabled.")
+    private PostgreqlSslmode sslmode = PostgreqlSslmode.DISABLE;
 
     @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -94,7 +94,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric postgresql port name.
+     * Returns the port number. The value should store an environment variable expression or a numeric postgresql port number.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
@@ -102,7 +102,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Sets the port name.
+     * Sets the port number.
      * @param port Port name.
      */
     public void setPort(String port) {
@@ -182,17 +182,17 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
      * Returns the flag to require SSL connection.
      * @return True - require an SSL connection.
      */
-    public Boolean getSsl() {
-        return ssl;
+    public PostgreqlSslmode getSslmode() {
+        return sslmode;
     }
 
     /**
      * Sets a flag to require an SSL connection.
      * @param ssl True - ssl connection is required.
      */
-    public void setSsl(Boolean ssl) {
-        setDirtyIf(!Objects.equals(this.ssl, ssl));
-        this.ssl = ssl;
+    public void setSslmode(PostgreqlSslmode sslmode) {
+        setDirtyIf(!Objects.equals(this.sslmode, sslmode));
+        this.sslmode = sslmode;
     }
 
     /**
