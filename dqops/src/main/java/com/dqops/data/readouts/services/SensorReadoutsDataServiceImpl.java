@@ -102,13 +102,16 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME); // then the most recent reading (for partitioned checks) when many partitions were captured
 
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn allDataGroupColumn = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        LongColumn checkHashColumnUnsorted = filteredTableWithAllDataGroups.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+
+        TextColumn allDataGroupColumnUnsorted = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        TextColumn allDataGroupColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         int rowCount = sortedTable.rowCount();
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            Row row = sortedTable.row(rowIndex);
-            Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-            String dataGroupNameForCheck = row.getText(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+            Long checkHash = checkHashColumn.get(rowIndex);
+            String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
             SensorReadoutsDetailedDataModel sensorReadoutDetailedDataModel = readoutMap.get(checkHash);
 
             SensorReadoutDetailedSingleModel singleModel = null;
@@ -122,6 +125,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                     continue; // we are not mixing groups, results for a different group were already loaded
                 }
             } else {
+                Row row = sortedTable.row(rowIndex);
                 singleModel = createSensorReadoutSingleRow(row);
                 String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
                 String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
@@ -136,9 +140,8 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 sensorReadoutDetailedDataModel.setCheckDisplayName(checkDisplayName);
                 sensorReadoutDetailedDataModel.setDataGroup(dataGroupNameForCheck);
 
-                Selection resultsForCheckHash = checkHashColumn.isEqualTo(checkHash);
-                List<String> dataGroupsForCheck = allDataGroupColumn.where(resultsForCheckHash).asList();
-                List<String>myList = dataGroupsForCheck.stream().distinct().sorted().collect(Collectors.toList());
+                Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
+                List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
 
                 if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
                     dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
