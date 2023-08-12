@@ -91,26 +91,29 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             return new ErrorsDetailedDataModel[0]; // empty array
         }
 
+        Table filteredTableByDataGroup = filteredTable;
         if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
             TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTable = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
 
-        if (filteredTable.isEmpty()) {
+        if (filteredTableByDataGroup.isEmpty()) {
             return new ErrorsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredTable.sortDescendingOn(
+        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
                 ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME); // then the most recent reading (for partitioned checks) when many partitions were captured
 
-        LongColumn checkHashColumn = sortedTable.longColumn(ErrorsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn dataGroupSortedColumn = sortedTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        LongColumn checkHashColumnUnsorted = filteredTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        TextColumn allDataGroupColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         int rowCount = sortedTable.rowCount();
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
             Long checkHash = checkHashColumn.get(rowIndex);
-            String dataGroupNameForCheck = dataGroupSortedColumn.get(rowIndex);
+            String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
             ErrorsDetailedDataModel errorsDetailedDataModel = errorMap.get(checkHash);
 
             ErrorDetailedSingleModel singleModel = null;
@@ -139,8 +142,8 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                 errorsDetailedDataModel.setCheckDisplayName(checkDisplayName);
                 errorsDetailedDataModel.setDataGroup(dataGroupNameForCheck);
 
-                Selection resultsForCheckHash = checkHashColumn.isIn(checkHash);
-                List<String> dataGroupsForCheck = dataGroupSortedColumn.where(resultsForCheckHash)
+                Selection resultsForCheckHash = checkHashColumnUnsorted.isIn(checkHash);
+                List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash)
                         .unique().asList().stream().sorted().collect(Collectors.toList());
 
                 if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {

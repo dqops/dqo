@@ -103,7 +103,6 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
         LongColumn checkHashColumnUnsorted = filteredTableWithAllDataGroups.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-
         TextColumn allDataGroupColumnUnsorted = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
         TextColumn allDataGroupColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
