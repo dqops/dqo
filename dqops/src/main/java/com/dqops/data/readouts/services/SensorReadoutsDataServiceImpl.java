@@ -85,31 +85,32 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             return new SensorReadoutsDetailedDataModel[0]; // empty array
         }
 
-        Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, sensorReadoutsTable, loadParameters);
-        if (filteredTable.isEmpty()) {
-            return new SensorReadoutsDetailedDataModel[0]; // empty array
-        }
+        Table filteredTableWithAllDataGroups = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, sensorReadoutsTable, loadParameters);
 
+        Table filteredTableByDataGroup = filteredTableWithAllDataGroups;
         if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTable = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            TextColumn dataGroupNameFilteredColumn = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            filteredTableByDataGroup = filteredTableWithAllDataGroups.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
 
-        if (filteredTable.isEmpty()) {
+        if (filteredTableByDataGroup.isEmpty()) {
             return new SensorReadoutsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredTable.sortDescendingOn(
+        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
                 SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME); // then the most recent reading (for partitioned checks) when many partitions were captured
 
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn dataGroupSortedColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        LongColumn checkHashColumnUnsorted = filteredTableWithAllDataGroups.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn allDataGroupColumnUnsorted = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        TextColumn allDataGroupColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         int rowCount = sortedTable.rowCount();
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+
             Long checkHash = checkHashColumn.get(rowIndex);
-            String dataGroupNameForCheck = dataGroupSortedColumn.get(rowIndex);
+            String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
             SensorReadoutsDetailedDataModel sensorReadoutDetailedDataModel = readoutMap.get(checkHash);
 
             SensorReadoutDetailedSingleModel singleModel = null;
@@ -138,9 +139,8 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 sensorReadoutDetailedDataModel.setCheckDisplayName(checkDisplayName);
                 sensorReadoutDetailedDataModel.setDataGroup(dataGroupNameForCheck);
 
-                Selection resultsForCheckHash = checkHashColumn.isIn(checkHash);
-                List<String> dataGroupsForCheck = dataGroupSortedColumn.where(resultsForCheckHash)
-                        .unique().asList().stream().sorted().collect(Collectors.toList());
+                Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
+                List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
 
                 if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
                     dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
@@ -296,12 +296,12 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
     }
 
     /**
-     * Loads sensor readouts for a maximum of two months available in the data, within the date range specified in {@code loadParameters}.
+     * Loads sensor readouts for a maximum of three months available in the data, within the date range specified in {@code loadParameters}.
      * If the date range is open-ended, only one or none of the range's boundaries are checked.
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
-     * @return Table with sensor readouts for the most recent two months inside the specified range or null when no data found.
+     * @return Table with sensor readouts for the most recent three months inside the specified range or null when no data found.
      */
     protected Table loadRecentSensorReadouts(SensorReadoutsDetailedFilterParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName,

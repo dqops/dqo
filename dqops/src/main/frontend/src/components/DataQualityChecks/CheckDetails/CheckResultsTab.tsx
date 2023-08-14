@@ -310,9 +310,9 @@ const CheckResultsTab = ({
     >
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Data group</div>
+          <div className="text-sm">Time series</div>
           <Select
-            value={dataGroup}
+            value={ dataGroup || results[0]?.dataGroup }
             options={
               (results[0]?.dataGroups || []).map((item) => ({
                 label: item,
