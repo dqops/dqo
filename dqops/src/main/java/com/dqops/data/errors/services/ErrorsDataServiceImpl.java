@@ -105,10 +105,10 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                 ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME); // then the most recent reading (for partitioned checks) when many partitions were captured
 
-        LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        LongColumn checkHashColumnUnsorted = filteredTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        TextColumn allDataGroupColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        LongColumn checkHashColumn = sortedTable.longColumn(ErrorsColumnNames.CHECK_HASH_COLUMN_NAME);
+        LongColumn checkHashColumnUnsorted = filteredTable.longColumn(ErrorsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        TextColumn allDataGroupColumn = sortedTable.textColumn(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         int rowCount = sortedTable.rowCount();
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
