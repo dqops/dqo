@@ -95,6 +95,7 @@ const EditReferenceTable = ({
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
     false
   );
+  const [resetDataGroup, setResetDataGroup] = useState<boolean>(false)
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -395,22 +396,16 @@ const EditReferenceTable = ({
   };
 
   const changePropsTable = (value: string) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setRefTable(value);
       setIsUpdated(true);
-    }
   };
   const changePropsSchema = (value: string) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setRefSchema(value);
       setIsUpdated(true);
-    }
   };
   const changePropsConnection = (value: string) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setRefConnection(value);
-      setIsUpdated(true);
-    }
+      setIsUpdated(true); 
   };
 
   const workOnMyObj = (
@@ -587,7 +582,7 @@ const EditReferenceTable = ({
     <div className="w-full">
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={isButtonEnabled}
+        isUpdated={true}
         isDisabled={!isButtonEnabled}
         isUpdating={isUpdating}
       />
