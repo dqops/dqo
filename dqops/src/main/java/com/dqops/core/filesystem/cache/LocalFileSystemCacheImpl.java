@@ -23,7 +23,6 @@ import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.apache.parquet.filter2.predicate.Operators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

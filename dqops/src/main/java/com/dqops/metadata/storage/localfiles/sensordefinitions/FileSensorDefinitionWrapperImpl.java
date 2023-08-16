@@ -72,13 +72,25 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
             FileTreeNode fileNode = this.sensorFolderNode.getChildFileByFileName(SpecFileNames.SENSOR_SPEC_FILE_NAME_YAML);
             FileContent fileContent = fileNode.getContent();
             String textContent = fileContent.getTextContent();
-            SensorDefinitionYaml deserialized = this.yamlSerializer.deserialize(textContent, SensorDefinitionYaml.class, fileNode.getPhysicalAbsolutePath());
-            SensorDefinitionSpec deserializedSpec = deserialized.getSpec();
-            if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
-                throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
-            }
-            if (deserialized.getKind() != SpecificationKind.SENSOR) {
-                throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+            SensorDefinitionSpec deserializedSpec = (SensorDefinitionSpec) fileContent.getCachedObjectInstance();
+
+            if (deserializedSpec == null) {
+                SensorDefinitionYaml deserialized = this.yamlSerializer.deserialize(textContent, SensorDefinitionYaml.class, fileNode.getPhysicalAbsolutePath());
+                deserializedSpec = deserialized.getSpec();
+                if (deserializedSpec == null) {
+                    deserializedSpec = new SensorDefinitionSpec();
+                }
+
+                if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
+                    throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
+                }
+                if (deserialized.getKind() != SpecificationKind.SENSOR) {
+                    throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                }
+
+                fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+            } else {
+                deserializedSpec = deserializedSpec.deepClone();
             }
 			this.setSpec(deserializedSpec);
 			this.clearDirty(true);
