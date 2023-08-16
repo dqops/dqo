@@ -446,6 +446,15 @@ export const EditProfilingReferenceTable = ({
   console.log(reference)
   console.log(columnOptions)
 
+  useEffect(() => {
+      const stringArr = columnOptions.map((x) => x.value)
+      if(reference?.columns){
+        reference?.columns.map((x, index) => 
+        !stringArr.includes(x.reference_column_name) ? onChangeColumn({compared_column_name : x.compared_column_name, reference_column_name: ""}, index) : "")
+      }
+
+  }, [1])
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
@@ -688,6 +697,7 @@ export const EditProfilingReferenceTable = ({
                             onChangeColumn({ reference_column_name: e }, index)
                           }
                           empty={true}
+                          placeholder=''
                         />
                       </td>
                       <td

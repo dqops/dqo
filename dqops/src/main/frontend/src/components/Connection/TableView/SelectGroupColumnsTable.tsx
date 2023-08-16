@@ -98,6 +98,7 @@ export const SelectGroupColumnsTable = ({
 
   const [ref, setRef] = useState(false);
 
+
   useEffect(() => {
     const fetchData = async () => {
       if (refConnection && refSchema && refTable) {

@@ -142,7 +142,7 @@ const EditReferenceTable = ({
         setTrueArray(res.data.grouping_columns ?? []);
       });
     }
-  }, [selectedReference]);
+  }, [selectedReference, refTable]);
 
   useEffect(() => {
     if (refConnection) {
@@ -405,7 +405,11 @@ const EditReferenceTable = ({
         onChange({reference_connection : refConnection, 
           reference_table: {schema_name: refSchema, table_name: value}},
           )
+          if(value !== refTable){
+            setDeleteDataDialogOpened(true)
+           }   
         }
+   
   };
   const changePropsSchema = (value: string) => {
       setRefSchema(value);
@@ -591,6 +595,7 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
+  console.log(splitArrays()?.refArr)
 
   return (
     <div className="w-full">
