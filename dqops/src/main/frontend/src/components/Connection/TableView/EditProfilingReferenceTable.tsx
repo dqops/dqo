@@ -444,6 +444,7 @@ export const EditProfilingReferenceTable = ({
   }, [isDataDeleted]);
 
   console.log(reference)
+  console.log(columnOptions)
 
   return (
     <div className="text-sm">
@@ -703,7 +704,7 @@ export const EditProfilingReferenceTable = ({
                             !!item.compare_min &&
                             !(
                               item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
+                              item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                             )
                           }
                           onChange={(checked) => {
@@ -718,11 +719,11 @@ export const EditProfilingReferenceTable = ({
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                           isDisabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name)
                           }
                         />
                       </td>
@@ -740,7 +741,7 @@ export const EditProfilingReferenceTable = ({
                             !!item.compare_max &&
                             !(
                               item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
+                              item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                             )
                           }
                           onChange={(checked) => {
@@ -755,11 +756,11 @@ export const EditProfilingReferenceTable = ({
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                           isDisabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                         />
                       </td>
@@ -777,7 +778,7 @@ export const EditProfilingReferenceTable = ({
                             !!item.compare_sum &&
                             !(
                               item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
+                              item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                             )
                           }
                           onChange={(checked) => {
@@ -792,11 +793,11 @@ export const EditProfilingReferenceTable = ({
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                           isDisabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                         />
                       </td>
@@ -814,7 +815,7 @@ export const EditProfilingReferenceTable = ({
                             !!item.compare_mean &&
                             !(
                               item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
+                              item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                             )
                           }
                           onChange={(checked) => {
@@ -829,11 +830,11 @@ export const EditProfilingReferenceTable = ({
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                           isDisabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                         />
                       </td>
@@ -851,7 +852,7 @@ export const EditProfilingReferenceTable = ({
                             !!item.compare_null_count &&
                             !(
                               item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
+                              item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                             )
                           }
                           onChange={(checked) => {
@@ -866,11 +867,11 @@ export const EditProfilingReferenceTable = ({
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                           isDisabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                         />
                       </td>
@@ -888,7 +889,7 @@ export const EditProfilingReferenceTable = ({
                             !!item.compare_not_null_count &&
                             !(
                               item.reference_column_name === undefined ||
-                              item.reference_column_name.length === 0
+                              item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                             )
                           }
                           onChange={(checked) => {
@@ -903,11 +904,11 @@ export const EditProfilingReferenceTable = ({
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                           isDisabled={
                             item.reference_column_name === undefined ||
-                            item.reference_column_name.length === 0
+                            item.reference_column_name.length === 0 || !columnOptions.find((x) =>x.label ===item.reference_column_name )
                           }
                         />
                       </td>

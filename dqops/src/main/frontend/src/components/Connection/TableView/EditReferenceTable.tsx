@@ -98,7 +98,6 @@ const EditReferenceTable = ({
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean | undefined>(
     false
   );
-  const [resetDataGroup, setResetDataGroup] = useState<boolean>(false)
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -402,7 +401,6 @@ const EditReferenceTable = ({
   const changePropsTable = (value: string) => {
       setRefTable(value);
       setIsUpdated(true);
-      setResetDataGroup(false)
       if(isCreating === false){
         onChange({reference_connection : refConnection, 
           reference_table: {schema_name: refSchema, table_name: value}},
@@ -412,14 +410,10 @@ const EditReferenceTable = ({
   const changePropsSchema = (value: string) => {
       setRefSchema(value);
       setIsUpdated(true);
-      setResetDataGroup(true)
   };
   const changePropsConnection = (value: string) => {
       setRefConnection(value);
       setIsUpdated(true); 
-      const updatedArr = trueArray?.map((item) => ({...item, reference_table_column_name: ""}))
-      setTrueArray(updatedArr)
-      setResetDataGroup(true)
   };
 
   const workOnMyObj = (
@@ -519,7 +513,7 @@ const EditReferenceTable = ({
           ? x.compared_table_column_name
           : ''
       );
-      if(resetDataGroup === false){
+   
 
         const refArr = trueArray.map((x) =>
         typeof x.reference_table_column_name === 'string'
@@ -527,11 +521,7 @@ const EditReferenceTable = ({
         : ''
         );
         return { comparedArr, refArr };
-      }else{
-        const refArr: Array<string> = []
-        return {comparedArr , refArr}
-
-      }
+     
     }
   };
 
@@ -601,7 +591,6 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
-  console.log(splitArrays()?.refArr)
 
   return (
     <div className="w-full">
