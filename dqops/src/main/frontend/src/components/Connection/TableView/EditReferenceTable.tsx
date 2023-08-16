@@ -403,9 +403,11 @@ const EditReferenceTable = ({
       setRefTable(value);
       setIsUpdated(true);
       setResetDataGroup(false)
-      onChange({reference_connection : refConnection, 
-        reference_table: {schema_name: refSchema, table_name: value}, grouping_columns: []},
-         )
+      if(isCreating === false){
+        onChange({reference_connection : refConnection, 
+          reference_table: {schema_name: refSchema, table_name: value}},
+          )
+        }
   };
   const changePropsSchema = (value: string) => {
       setRefSchema(value);
@@ -425,22 +427,24 @@ const EditReferenceTable = ({
   ): { [key: number]: number } => {
     const initialObject: { [key: number]: number } = {};
     let check = false;
+    if(listOfColumns && listOfColumns.length){
 
-    for (let i = listOfColumns.length - 1; i >= 0; i--) {
-      if (listOfColumns[i]?.length === 0 && !check) {
-        initialObject[i] = 2;
-      } else if (listOfColumns[i].length !== 0 && !check) {
+      for (let i = listOfColumns.length - 1; i >= 0; i--) {
+        if (listOfColumns[i]?.length === 0 && !check) {
+          initialObject[i] = 2;
+      } else if (listOfColumns[i]?.length !== 0 && !check) {
         check = true;
         initialObject[i] = 2;
-      } else if (check && listOfColumns[i].length === 0) {
+      } else if (check && listOfColumns[i]?.length === 0) {
         initialObject[i] = 1;
-      } else if (check && listOfColumns[i].length !== 0) {
+      } else if (check && listOfColumns[i]?.length !== 0) {
         initialObject[i] = 2;
       }
-      if (listOfColumns[i].length !== 0) {
+      if (listOfColumns[i]?.length !== 0) {
         initialObject[i] = 3;
       }
     }
+  }
     return initialObject;
   };
 
@@ -760,6 +764,7 @@ const EditReferenceTable = ({
               onSetRefList={onSetRefList}
               object={refObj}
               responseList={splitArrays()?.refArr}
+              
             />
           </div>
         ) : (

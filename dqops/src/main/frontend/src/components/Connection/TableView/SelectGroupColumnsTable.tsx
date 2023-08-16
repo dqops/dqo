@@ -151,7 +151,7 @@ export const SelectGroupColumnsTable = ({
     };
 
     fetchData();
-  }, [connection, schema, table, refConnection, refSchema, refTable, ref]);
+  }, [connection, schema, table, refTable, ref]);
 
 
   return (
