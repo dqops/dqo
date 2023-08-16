@@ -24,6 +24,7 @@ import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.tables.TableColumnUtility;
+import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.primitives.Doubles;
@@ -35,6 +36,7 @@ import tech.tablesaw.columns.Column;
 
 import java.nio.charset.StandardCharsets;
 import java.time.*;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -449,9 +451,76 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             return newTimestampColumn;
         }
 
+        if (currentColumn instanceof StringColumn) {
+            StringColumn stringColumn = (StringColumn)currentColumn;
+
+            for (int i = 0; i < stringColumn.size(); i++) {
+                LocalDateTime parsedDateTime = parseStringToDateTime(stringColumn.get(i));
+
+                if (parsedDateTime == null) {
+                    // we need a timestamp, we will use a truncated now instead
+                    newTimestampColumn.set(i, truncatedNow);
+                }
+                else {
+                    LocalDateTime truncatedInstant = timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(parsedDateTime, timePeriodGradient) : parsedDateTime;
+                    newTimestampColumn.set(i, truncatedInstant);
+                }
+            }
+            return newTimestampColumn;
+        }
+
+        if (currentColumn instanceof TextColumn) {
+            TextColumn stringColumn = (TextColumn)currentColumn;
+
+            for (int i = 0; i < stringColumn.size(); i++) {
+                LocalDateTime parsedDateTime = parseStringToDateTime(stringColumn.get(i));
+
+                if (parsedDateTime == null) {
+                    // we need a timestamp, we will use a truncated now instead
+                    newTimestampColumn.set(i, truncatedNow);
+                }
+                else {
+                    LocalDateTime truncatedInstant = timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(parsedDateTime, timePeriodGradient) : parsedDateTime;
+                    newTimestampColumn.set(i, truncatedInstant);
+                }
+            }
+            return newTimestampColumn;
+        }
+
         // NOTE: we could parse the string, but it is better if the user casts timestamp columns that are strings to a datetime column in the sensor SQL query
 
         throw new SensorResultNormalizeException(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME + " column must be a date, datetime or an instant (utc datetime).");
+    }
+
+    /**
+     * Parses an ISO datetime or date to a local date.
+     * @param text Text with an ISO date time or date.
+     * @return Null or a correct date.
+     */
+    protected LocalDateTime parseStringToDateTime(String text) {
+        if (Strings.isNullOrEmpty(text)) {
+            return null;
+        }
+
+        try {
+            if (text.indexOf(' ') > 0) {
+                text = text.replace(' ', 'T');
+            }
+
+            LocalDateTime dateTime = LocalDateTime.parse(text);
+            return dateTime;
+        }
+        catch (DateTimeParseException pex) {
+            try {
+                LocalDate date = LocalDate.parse(text);
+                return date.atStartOfDay();
+            }
+            catch (Exception ex) {
+                return null;
+            }
+        }
     }
 
     /**

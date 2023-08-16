@@ -25,6 +25,8 @@ import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorMo
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
 import SqlServerConnection from "../../Dashboard/DatabaseConnection/SqlServerConnection";
+import OracleConnection from "../../Dashboard/DatabaseConnection/OracleConnection";
+import MySQLConnection from "../../Dashboard/DatabaseConnection/MySQLConnection";
 import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
@@ -166,6 +168,22 @@ const ConnectionDetail = () => {
             <PostgreSQLConnection
               postgresql={connectionBasic?.postgresql}
               onChange={(postgresql) => onChange({ postgresql })}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.mysql && (
+            <MySQLConnection
+              mysql={connectionBasic?.mysql}
+              onChange={(mysql) => onChange({ mysql })}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.oracle && (
+            <OracleConnection
+              oracle={connectionBasic?.oracle}
+              onChange={(oracle) => onChange({ oracle })}
             />
           )
         }

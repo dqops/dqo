@@ -146,6 +146,8 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         String database = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getDatabase());
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);
+        } else {
+            throw new ConnectorOperationFailedException("Cannot create a connection to MySQL, the database name is not provided");
         }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
