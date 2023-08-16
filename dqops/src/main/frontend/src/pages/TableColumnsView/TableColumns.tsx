@@ -59,6 +59,7 @@ interface MyData {
   null_count?: number | undefined;
   nameOfCol?: string | undefined;
   minimalValue?: string | undefined;
+  maximumValue?: string | undefined;
   detectedDatatypeVar: number | undefined;
   length?: number | undefined;
   scale?: number | undefined;
@@ -84,6 +85,7 @@ const labels = [
   'Length',
   'Scale',
   'Minimal value',
+  'Maximum value',
   'Null count'
 ];
 
@@ -299,6 +301,12 @@ const TableColumns = ({
       ?.filter((item) => item.collector === 'min_value')
       .map((item) => item.result)
   );
+
+  const maximumValueData = statistics?.column_statistics?.map((x) =>
+  x.statistics
+    ?.filter((item) => item.collector === 'max_value')
+    .map((item) => item.result)
+);
   const lengthData = statistics?.column_statistics?.map(
     (x) => x.type_snapshot?.length
   );
@@ -325,6 +333,7 @@ const TableColumns = ({
         detectedDatatypeVar: Number(detectedDatatypeVar?.[i]),
         nameOfCol: columnNameData?.[i],
         minimalValue: renderValue(minimalValueData?.[i]),
+        maximumValue: renderValue(maximumValueData?.[i]),
         length: renderValue(lengthData?.[i]),
         scale: renderValue(scaleData?.[i]),
         importedDatatype: String(renderValue(typeData?.[i])),
@@ -336,11 +345,11 @@ const TableColumns = ({
     }
   }
 
-  const sortAlphabetictly = () => {
+  const sortAlphabetictly = (typ : keyof MyData) => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.nameOfCol);
-      const nullsCountB = String(b.nameOfCol);
+      const nullsCountA = String(a[typ]);
+      const nullsCountB = String(b[typ]);
 
       if (nullsCountA && nullsCountB) {
         return sortDirection === 'asc'
@@ -358,7 +367,7 @@ const TableColumns = ({
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
   };
 
-  const sortDataByMinimalValue = () => {
+  const sortDataByMinimalValue = (typ: keyof MyData) => {
     const sortedArray = [...dataArray];
     const BoolArray = [];
     const StringArray = [];
@@ -366,7 +375,7 @@ const TableColumns = ({
 
     for (let i = 0; i < sortedArray.length; i++) {
       const object = sortedArray[i];
-      const minimalValue = object?.minimalValue;
+      const minimalValue = object[typ];
 
       if (
         String(minimalValue)?.charAt(0) === '0' &&
@@ -389,8 +398,8 @@ const TableColumns = ({
       }
     }
     BoolArray.sort((a, b) => {
-      const nullsCountA = String(a.minimalValue);
-      const nullsCountB = String(b.minimalValue);
+      const nullsCountA = String(a[typ]);
+      const nullsCountB = String(b[typ]);
 
       if (nullsCountA && nullsCountB) {
         return sortDirection === 'asc'
@@ -406,8 +415,8 @@ const TableColumns = ({
     });
 
     StringArray.sort((a, b) => {
-      const nullsCountA = String(a.minimalValue);
-      const nullsCountB = String(b.minimalValue);
+      const nullsCountA = String(a[typ]);
+      const nullsCountB = String(b[typ]);
 
       if (nullsCountA && nullsCountB) {
         return sortDirection === 'asc'
@@ -423,8 +432,8 @@ const TableColumns = ({
     });
 
     NumberArray.sort((a, b) => {
-      const nullsPercentA = String(a.minimalValue);
-      const nullsPercentB = String(b.minimalValue);
+      const nullsPercentA = String(a[typ]);
+      const nullsPercentB = String(b[typ]);
 
       if (nullsPercentA && nullsPercentB) {
         return sortDirection === 'asc'
@@ -469,13 +478,13 @@ const TableColumns = ({
   const handleSorting = (param: string) => {
     switch (param) {
       case 'Column name':
-        sortAlphabetictly();
+        sortAlphabetictly("nameOfCol");
         break;
       case 'Detected data type':
         sortData<MyData>('detectedDatatypeVar');
         break;
       case 'Imported data type':
-        sortData<MyData>('importedDatatype');
+        sortAlphabetictly("importedDatatype");
         break;
       case 'Length':
         sortData<MyData>('length');
@@ -487,8 +496,11 @@ const TableColumns = ({
         sortData<MyData>('null_count');
         break;
       case 'Minimal value':
-        sortDataByMinimalValue();
+        sortDataByMinimalValue('minimalValue');
         break;
+      case 'Maximum value':
+        sortDataByMinimalValue('maximumValue');
+        break  
     }
   };
 
@@ -512,7 +524,6 @@ const TableColumns = ({
       }
     }
     setNumberOfSelected(count);
-
     return count;
   };
   const selectStrings = (obj: Record<string, boolean>) => {
@@ -607,6 +618,15 @@ const TableColumns = ({
               ? dateToString(String(column.minimalValue))
                 ? dateToString(String(column.minimalValue))
                 : cutString(String(column.minimalValue))
+              : ''}
+          </div>
+        </td>
+        <td className="border-b border-gray-100 text-left px-4 py-2">
+          <div key={index} className="text-right float-right">
+            {column.maximumValue
+              ? dateToString(String(column.maximumValue))
+                ? dateToString(String(column.maximumValue))
+                : cutString(String(column.maximumValue))
               : ''}
           </div>
         </td>
@@ -730,7 +750,7 @@ const TableColumns = ({
                   className="flex"
                   style={{
                     justifyContent:
-                      x === 'Minimal Value' || x === 'Null count'
+                      x === 'Minimal value' || x === 'Null count' || x==="Maximum value"
                         ? 'flex-end'
                         : 'flex-start'
                   }}
