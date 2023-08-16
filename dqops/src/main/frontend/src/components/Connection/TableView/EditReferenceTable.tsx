@@ -9,7 +9,8 @@ import {
 import {
   DeleteStoredDataQueueJobParameters,
   DqoJobHistoryEntryModelStatusEnum,
-  TableComparisonGroupingColumnPairModel
+  TableComparisonGroupingColumnPairModel,
+  TableComparisonModel
 } from '../../../api';
 import Button from '../../Button';
 import Input from '../../Input';
@@ -30,7 +31,6 @@ import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { set } from 'lodash';
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -45,6 +45,7 @@ type EditReferenceTableProps = {
   combinedFunc: (name: string) => void;
   cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
   onChangeIsDataDeleted: (arg: boolean) => void;
+  onChange: (obj: Partial<TableComparisonModel>) => void
 };
 
 const EditReferenceTable = ({
@@ -59,7 +60,8 @@ const EditReferenceTable = ({
   onChangeUpdatedParent,
   combinedFunc,
   cleanDataTemplate,
-  onChangeIsDataDeleted
+  onChangeIsDataDeleted,
+  onChange
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -393,31 +395,28 @@ const EditReferenceTable = ({
     if (selectedReference === undefined || selectedReference.length === 0) {
       setName(e.target.value);
       setIsUpdated(true);
+ 
     }
   };
 
   const changePropsTable = (value: string) => {
       setRefTable(value);
       setIsUpdated(true);
-      setRefList([])
       setResetDataGroup(false)
+      onChange({reference_connection : refConnection, 
+        reference_table: {schema_name: refSchema, table_name: value}, grouping_columns: []},
+         )
   };
   const changePropsSchema = (value: string) => {
       setRefSchema(value);
-      setRefTable("")
-      setRefList([])
       setIsUpdated(true);
       setResetDataGroup(true)
   };
   const changePropsConnection = (value: string) => {
       setRefConnection(value);
-      setRefSchema("")
-      setRefTable("")
-      setRefList([])
       setIsUpdated(true); 
       const updatedArr = trueArray?.map((item) => ({...item, reference_table_column_name: ""}))
       setTrueArray(updatedArr)
-      setRefList([])
       setResetDataGroup(true)
   };
 
@@ -428,7 +427,7 @@ const EditReferenceTable = ({
     let check = false;
 
     for (let i = listOfColumns.length - 1; i >= 0; i--) {
-      if (listOfColumns[i].length === 0 && !check) {
+      if (listOfColumns[i]?.length === 0 && !check) {
         initialObject[i] = 2;
       } else if (listOfColumns[i].length !== 0 && !check) {
         check = true;

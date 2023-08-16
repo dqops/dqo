@@ -67,14 +67,14 @@ export const SelectGroupColumnsTable = ({
 
   useEffect(() => {
     if (fetched === false && responseList?.length !== 0) {
-
       fillArray(9);
+    }else{
+      fillArray(0)
     }
   }, [
     connection,
     schema,
     table,
-    responseList,
     refConnection,
     refSchema,
     refTable
@@ -98,6 +98,8 @@ export const SelectGroupColumnsTable = ({
 
   const [ref, setRef] = useState(false);
 
+
+  console.log(refConnection, refSchema, refTable)
   useEffect(() => {
     const fetchData = async () => {
       if (refConnection && refSchema && refTable) {
