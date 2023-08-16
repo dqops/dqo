@@ -33,11 +33,6 @@ import com.dqops.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecks
 import com.dqops.checks.column.recurring.strings.ColumnStringsDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringChecksSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
-import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
-import com.dqops.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
-import com.dqops.checks.table.recurring.schema.TableSchemaDailyRecurringChecksSpec;
-import com.dqops.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;

@@ -170,32 +170,62 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     }
 
     @Test
-    void createUiModel_whenDataObservabilityProfilingConfigurationGiven_thenCreatesUiModel() {
+    void createUiModel_whenDataObservabilityProfilingTableConfigurationGiven_thenCreatesUiModel() {
         DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingChecks = new DefaultProfilingObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks, null,
+        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks.getTable(), null,
                 null, null, this.executionContext, null);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(13, uiModel.getCategories().size());
+        Assertions.assertEquals(3, uiModel.getCategories().size());
     }
 
     @Test
-    void createUiModel_whenDataObservabilityDailyRecurringConfigurationGiven_thenCreatesUiModel() {
+    void createUiModel_whenDataObservabilityProfilingColumnConfigurationGiven_thenCreatesUiModel() {
+        DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingChecks = new DefaultProfilingObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks.getColumn(), null,
+                null, null, this.executionContext, null);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(10, uiModel.getCategories().size());
+    }
+
+    @Test
+    void createUiModel_whenDataObservabilityDailyRecurringTableConfigurationGiven_thenCreatesUiModel() {
         DefaultDailyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks, null,
+        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getTable(), null,
                 null, null, this.executionContext, null);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(13, uiModel.getCategories().size());
+        Assertions.assertEquals(3, uiModel.getCategories().size());
     }
 
     @Test
-    void createUiModel_whenDataObservabilityMonthlyRecurringConfigurationGiven_thenCreatesUiModel() {
-        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks, null,
+    void createUiModel_whenDataObservabilityDailyRecurringColumnConfigurationGiven_thenCreatesUiModel() {
+        DefaultDailyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getColumn(), null,
                 null, null, this.executionContext, null);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(13, uiModel.getCategories().size());
+        Assertions.assertEquals(10, uiModel.getCategories().size());
+    }
+
+    @Test
+    void createUiModel_whenDataObservabilityMonthlyRecurringTableConfigurationGiven_thenCreatesUiModel() {
+        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getTable(), null,
+                null, null, this.executionContext, null);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(3, uiModel.getCategories().size());
+    }
+
+    @Test
+    void createUiModel_whenDataObservabilityMonthlyRecurringColumnConfigurationGiven_thenCreatesUiModel() {
+        DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultRecurringChecks = new DefaultMonthlyRecurringObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultRecurringChecks.getColumn(), null,
+                null, null, this.executionContext, null);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(10, uiModel.getCategories().size());
     }
 }
