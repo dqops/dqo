@@ -389,7 +389,16 @@ export const EditProfilingReferenceTable = ({
     nameOfCheck: string,
     bool?: boolean
   ): string => {
-    let colorVar = prepareData(nameOfCol)[nameOfCheck];
+
+    let newNameOfCheck = '';
+    if(checkTypes === CheckTypes.PROFILING){
+      newNameOfCheck = 'profile_'+nameOfCheck
+    }
+    if(checkTypes === CheckTypes.RECURRING || checkTypes === CheckTypes.PARTITIONED){
+      newNameOfCheck = nameOfCheck
+    }
+
+    let colorVar = prepareData(nameOfCol)[newNameOfCheck];
     if (
       bool &&
       tableComparisonResults?.table_comparison_results &&

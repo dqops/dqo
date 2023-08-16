@@ -1,6 +1,8 @@
 import React from 'react';
 import ResultBox from './ResultBox';
 import { ComparisonCheckResultModel, TableComparisonModel } from '../../../api';
+import { CheckTypes } from '../../../shared/routes';
+import { useParams } from 'react-router-dom';
 
 interface dataInterface {
   minBool?: boolean;
@@ -29,9 +31,18 @@ export default function ResultPanel({
 
   index
 }: dataInterface) {
+  const {checkTypes} : {checkTypes : CheckTypes} = useParams()
   const prepareObj = (key: string): ComparisonCheckResultModel => {
-    if (Object.keys(obj).find((x) => x === key)) {
-      return obj[key];
+    let newKey = ''
+
+    if(checkTypes == CheckTypes.PROFILING){
+      newKey = "profile_" + key
+    }else{
+      newKey = key;
+    }
+
+    if (Object.keys(obj).find((x) => x === newKey)) {
+      return obj[newKey];
     } else {
       return {};
     }
@@ -45,7 +56,7 @@ export default function ResultPanel({
         <ResultBox
           item={prepareObj('min_match')}
           bool={minBool}
-          secondBool={obj['min_match'] ? true : false}
+          secondBool={obj[ checkTypes === CheckTypes.PROFILING ?  'profile_min_match' : "min_match"] ? true : false}
           reference={reference}
           onChange={onChange}
           checkName="compare_min"
@@ -56,7 +67,7 @@ export default function ResultPanel({
         <ResultBox
           item={prepareObj('max_match')}
           bool={maxBool}
-          secondBool={obj['max_match'] ? true : false}
+          secondBool={obj[checkTypes === CheckTypes.PROFILING ?  'profile_max_match' : "max_match"] ? true : false}
           onChange={onChange}
           index={index}
           checkName="compare_max"
@@ -67,7 +78,7 @@ export default function ResultPanel({
         <ResultBox
           item={prepareObj('sum_match')}
           bool={sumBool}
-          secondBool={obj['sum_match'] ? true : false}
+          secondBool={obj[checkTypes === CheckTypes.PROFILING ?  'profile_sum_match' : "max_match"] ? true : false}
           onChange={onChange}
           index={index}
           checkName="compare_sum"
@@ -78,7 +89,7 @@ export default function ResultPanel({
         <ResultBox
           item={prepareObj('mean_match')}
           bool={meanBool}
-          secondBool={obj['mean_match'] ? true : false}
+          secondBool={obj[checkTypes === CheckTypes.PROFILING ?  'profile_mean_match' : "mean_match"] ? true : false}
           onChange={onChange}
           index={index}
           checkName="compare_mean"
@@ -89,7 +100,7 @@ export default function ResultPanel({
         <ResultBox
           item={prepareObj('null_count_match')}
           bool={nullCount}
-          secondBool={obj['null_count_match'] ? true : false}
+          secondBool={obj[checkTypes === CheckTypes.PROFILING ?  'profile_null_count_match' : "null_count_match"] ? true : false}
           onChange={onChange}
           index={index}
           checkName="compare_null_count"
@@ -100,7 +111,7 @@ export default function ResultPanel({
         <ResultBox
           item={prepareObj('not_null_count_match')}
           bool={notNullCount}
-          secondBool={obj['not_null_count_match'] ? true : false}
+          secondBool={obj[ checkTypes === CheckTypes.PROFILING ?'profile_not_null_count_match' :  'not_null_count_match'] ? true : false}
           onChange={onChange}
           index={index}
           checkName="compare_not_null_count"
