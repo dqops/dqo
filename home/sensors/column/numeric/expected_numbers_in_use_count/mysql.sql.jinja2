@@ -1,12 +1,12 @@
 {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
 
 {%- macro extract_in_list(values_list) -%}
-    {{ values_list|join(', ') -}}
+    {{values_list|join(', ')}}
 {% endmacro %}
 
-{%- macro actual_value() -%}
-    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-    NULL
+{%- macro render_else() -%}
+    {%- if parameters.expected_values|length == 0 -%}
+        0
     {%- else -%}
     COUNT(DISTINCT
         CASE
@@ -19,7 +19,10 @@
 {% endmacro -%}
 
 SELECT
-    {{ actual_value() }} AS actual_value,
+    CASE
+        WHEN COUNT(*) = 0 THEN NULL
+        ELSE {{render_else()}}
+    END AS actual_value,
     MAX({{ parameters.expected_values | length }}) AS expected_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
