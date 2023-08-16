@@ -30,6 +30,7 @@ import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
+import { set } from 'lodash';
 
 type EditReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -398,14 +399,26 @@ const EditReferenceTable = ({
   const changePropsTable = (value: string) => {
       setRefTable(value);
       setIsUpdated(true);
+      setRefList([])
+      setResetDataGroup(false)
   };
   const changePropsSchema = (value: string) => {
       setRefSchema(value);
+      setRefTable("")
+      setRefList([])
       setIsUpdated(true);
+      setResetDataGroup(true)
   };
   const changePropsConnection = (value: string) => {
       setRefConnection(value);
+      setRefSchema("")
+      setRefTable("")
+      setRefList([])
       setIsUpdated(true); 
+      const updatedArr = trueArray?.map((item) => ({...item, reference_table_column_name: ""}))
+      setTrueArray(updatedArr)
+      setRefList([])
+      setResetDataGroup(true)
   };
 
   const workOnMyObj = (
@@ -503,12 +516,19 @@ const EditReferenceTable = ({
           ? x.compared_table_column_name
           : ''
       );
-      const refArr = trueArray.map((x) =>
+      if(resetDataGroup === false){
+
+        const refArr = trueArray.map((x) =>
         typeof x.reference_table_column_name === 'string'
-          ? x.reference_table_column_name
-          : ''
-      );
-      return { comparedArr, refArr };
+        ? x.reference_table_column_name
+        : ''
+        );
+        return { comparedArr, refArr };
+      }else{
+        const refArr: Array<string> = []
+        return {comparedArr , refArr}
+
+      }
     }
   };
 
@@ -577,6 +597,8 @@ const EditReferenceTable = ({
       setDeletingData(false);
     }
   }, [job?.status]);
+
+  console.log(splitArrays()?.refArr)
 
   return (
     <div className="w-full">

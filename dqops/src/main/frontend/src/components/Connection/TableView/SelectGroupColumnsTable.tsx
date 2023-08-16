@@ -67,6 +67,7 @@ export const SelectGroupColumnsTable = ({
 
   useEffect(() => {
     if (fetched === false && responseList?.length !== 0) {
+
       fillArray(9);
     }
   }, [
@@ -149,6 +150,7 @@ export const SelectGroupColumnsTable = ({
 
     fetchData();
   }, [connection, schema, table, refConnection, refSchema, refTable, ref]);
+
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
