@@ -29,7 +29,7 @@ public abstract class FileSystemSynchronizationRoot {
      * @param rootPath Root file system path.
      */
     public FileSystemSynchronizationRoot(Path rootPath) {
-        this.rootPath = rootPath;
+        this.rootPath = rootPath.toAbsolutePath().normalize();
     }
 
     /**

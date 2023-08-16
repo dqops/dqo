@@ -15,10 +15,12 @@
  */
 package com.dqops.core.filesystem.localfiles;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FolderName;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.metadata.storage.localfiles.HomeType;
 import org.springframework.beans.factory.BeanInitializationException;
 
 import java.io.IOException;
@@ -36,22 +38,31 @@ import java.util.stream.Stream;
  * Local folder access service, manages files in a given folder. Manages files on the disk in the given file system folder.
  */
 public class LocalFileStorageServiceImpl implements LocalFileStorageService {
-    private final String homePath;
+    private final String homeRootDirectory;
+    private final Path homePath;
+    private final HomeType homeType;
+    private final LocalFileSystemCache localFileSystemCache;
 
     /**
      * Creates a local storage service that manages files in the given folder in the file system.
-     * @param homePath Path to the root file folder on the local machine that stores the files.
+     * @param homeRootDirectory Path to the root file folder on the local machine that stores the files.
+     * @param homeType DQO Home type (dqo system home or user home).
      */
-    public LocalFileStorageServiceImpl(String homePath) {
-        this.homePath = homePath;
+    public LocalFileStorageServiceImpl(String homeRootDirectory,
+                                       HomeType homeType,
+                                       LocalFileSystemCache localFileSystemCache) {
+        this.homeRootDirectory = homeRootDirectory;
+        this.homePath = Path.of(homeRootDirectory).toAbsolutePath().normalize();
+        this.homeType = homeType;
+        this.localFileSystemCache = localFileSystemCache;
     }
 
     /**
      * Returns a path to the home folder on the local machine.
      * @return Path to the home folder.
      */
-    public String getHomePath() {
-        return homePath;
+    public String getHomeRootDirectory() {
+        return homeRootDirectory;
     }
 
     /**
@@ -82,8 +93,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     @Override
     public boolean fileExists(HomeFilePath filePath) {
         Path relativeFilePath = filePath.toRelativePath();
-        Path homePath = Path.of(this.homePath);
-        Path absolutePath = homePath.resolve(relativeFilePath).toAbsolutePath();
+        Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
 
         return Files.exists(absolutePath) && !Files.isDirectory(absolutePath);
     }
@@ -97,8 +107,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     @Override
     public boolean folderExists(HomeFolderPath folderPath) {
         Path relativeFilePath = folderPath.toRelativePath();
-        Path homePath = Path.of(this.homePath);
-        Path absolutePath = homePath.resolve(relativeFilePath).toAbsolutePath();
+        Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
 
         return Files.exists(absolutePath) && Files.isDirectory(absolutePath);
     }
@@ -112,15 +121,15 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     @Override
     public boolean tryDeleteFolder(HomeFolderPath folderPath) {
         Path relativeFilePath = folderPath.toRelativePath();
-        Path homePath = Path.of(this.homePath);
-        Path absolutePath = homePath.resolve(relativeFilePath).toAbsolutePath();
+        Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
 
-        if( !Files.exists(absolutePath) || !Files.isDirectory(absolutePath)) {
+        if (!Files.exists(absolutePath) || !Files.isDirectory(absolutePath)) {
             return false;
         }
 
         try {
             Files.delete(absolutePath);
+            this.localFileSystemCache.removeFolder(absolutePath);
         } catch (IOException e) {
             return false;
         }
@@ -136,11 +145,20 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      */
     @Override
     public FileContent readTextFile(HomeFilePath filePath) {
-        try {
-            Path relativeFilePath = filePath.toRelativePath();
-            Path homePath = Path.of(this.homePath);
-            Path absolutePath = homePath.resolve(relativeFilePath).toAbsolutePath();
+        Path relativeFilePath = filePath.toRelativePath();
+        Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
+        FileContent fileContent = this.localFileSystemCache.loadFileContent(absolutePath, key -> this.readTextFileDirect(absolutePath));
+        return fileContent;
+    }
 
+    /**
+     * Reads a text file given the file name components. Skips the cache.
+     *
+     * @param absolutePath File path relative to the home root.
+     * @return File content or null when the file was not found.
+     */
+    public FileContent readTextFileDirect(Path absolutePath) {
+        try {
             if (!Files.exists(absolutePath)) {
                 return null;
             }
@@ -164,9 +182,8 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     public void saveFile(HomeFilePath filePath, FileContent fileContent) {
         try {
             Path relativeFilePath = filePath.toRelativePath();
-            Path homePath = Path.of(this.homePath);
-            Path absoluteFilePath = homePath.resolve(relativeFilePath).toAbsolutePath();
-            Path parentFolderPath = homePath.resolve(filePath.getFolder().toRelativePath()).toAbsolutePath();
+            Path absoluteFilePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
+            Path parentFolderPath = this.homePath.resolve(filePath.getFolder().toRelativePath()).toAbsolutePath();
 
             if (Files.notExists(parentFolderPath)) {
                 Files.createDirectories(parentFolderPath);
@@ -180,6 +197,8 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                 FileTime lastModifiedFileTime = Files.getLastModifiedTime(absoluteFilePath);
                 Instant lastModifiedInstant = lastModifiedFileTime.toInstant();
                 fileContent.setLastModified(lastModifiedInstant);
+
+                this.localFileSystemCache.storeTextFile(absoluteFilePath, fileContent);
             } else {
                 throw new LocalFileSystemException("File content type not supported");
             }
@@ -198,9 +217,10 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     public boolean deleteFile(HomeFilePath filePath) {
         try {
             Path relativeFilePath = filePath.toRelativePath();
-            Path homePath = Path.of(this.homePath);
-            Path absolutePath = homePath.resolve(relativeFilePath).toAbsolutePath();
-            return Files.deleteIfExists(absolutePath);
+            Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
+            boolean fileDeleted = Files.deleteIfExists(absolutePath);
+            this.localFileSystemCache.removeFile(absolutePath);
+            return fileDeleted;
         } catch (Exception ex) {
             throw new LocalFileSystemException("Cannot delete a file", ex);
         }
@@ -214,11 +234,22 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      */
     @Override
     public List<HomeFolderPath> listFolders(HomeFolderPath folderPath) {
-        try {
-            Path relativeFolderPath = folderPath.toRelativePath();
-            Path homePath = Path.of(this.homePath);
-            Path absolutePath = homePath.resolve(relativeFolderPath).toAbsolutePath();
+        Path relativeFolderPath = folderPath.toRelativePath();
+        Path absolutePath = this.homePath.resolve(relativeFolderPath).toAbsolutePath();
 
+        List<HomeFolderPath> listOfFolders = this.localFileSystemCache.getListOfFolders(absolutePath, key -> this.listFoldersDirect(folderPath, key));
+        return listOfFolders;
+    }
+
+    /**
+     * Lists direct subfolders inside a given folder skipping the cache.
+     *
+     * @param folderPath Path elements the folder whose content will be listed.
+     * @param absolutePath Path to the folder whose content will be listed.
+     * @return List of folder paths that are relative to the user home folder.
+     */
+    public List<HomeFolderPath> listFoldersDirect(HomeFolderPath folderPath, Path absolutePath) {
+        try {
             if (!Files.exists(absolutePath)) {
                 return null;
             }
@@ -248,11 +279,20 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      */
     @Override
     public List<HomeFilePath> listFiles(HomeFolderPath folderPath) {
-        try {
-            Path relativeFolderPath = folderPath.toRelativePath();
-            Path homePath = Path.of(this.homePath);
-            Path absolutePath = homePath.resolve(relativeFolderPath).toAbsolutePath();
+        Path relativeFolderPath = folderPath.toRelativePath();
+        Path absolutePath = this.homePath.resolve(relativeFolderPath).toAbsolutePath();
+        List<HomeFilePath> listOfFiles = this.localFileSystemCache.getListOfFiles(absolutePath, key -> this.listFilesDirect(folderPath, key));
+        return listOfFiles;
+    }
 
+    /**
+     * Lists direct files inside a given folder directly from the disk, skipping the cache.
+     *
+     * @param folderPath Path to the folder that will be listed.
+     * @return List of file paths that are relative to the user home folder.
+     */
+    public List<HomeFilePath> listFilesDirect(HomeFolderPath folderPath, Path absolutePath) {
+        try {
             if (!Files.exists(absolutePath)) {
                 return null;
             }

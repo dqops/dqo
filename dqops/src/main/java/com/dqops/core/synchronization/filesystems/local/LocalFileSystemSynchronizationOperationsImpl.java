@@ -15,6 +15,7 @@
  */
 package com.dqops.core.synchronization.filesystems.local;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.metadata.FileMetadata;
 import com.dqops.core.filesystem.metadata.FolderMetadata;
 import com.dqops.core.synchronization.contract.*;
@@ -25,6 +26,7 @@ import com.google.common.io.BaseEncoding;
 import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
@@ -43,6 +45,13 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSystemSynchronizationOperations {
+    private LocalFileSystemCache localFileSystemCache;
+
+    @Autowired
+    public LocalFileSystemSynchronizationOperationsImpl(LocalFileSystemCache localFileSystemCache) {
+        this.localFileSystemCache = localFileSystemCache;
+    }
+
     /**
      * Returns true if the file system represents a local file system.
      *
@@ -178,6 +187,7 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
         }
 
         file.delete();
+        this.localFileSystemCache.removeFile(fullPathToFile);
     }
 
     /**
@@ -205,8 +215,8 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
      */
     @Override
     public boolean deleteFolder(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFolderPath, boolean deleteNonEmptyFolder) {
-        Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFolderPath);
-        File file = fullPathToFile.toFile();
+        Path fullPathToFolder = fileSystemRoot.getRootPath().resolve(relativeFolderPath);
+        File file = fullPathToFolder.toFile();
         if (!file.exists()) {
             return true;
         }
@@ -215,9 +225,10 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
 
         try {
             FileUtils.deleteDirectory(file);
+            this.localFileSystemCache.invalidateFolder(fullPathToFolder);
             return true;
         } catch (IOException ex) {
-            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+            throw new FileSystemChangeException(fullPathToFolder, ex.getMessage(), ex);
         }
     }
 
@@ -308,6 +319,8 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                 fileOutputStream.close();
                 sourceStream.close();
             }
+
+            this.localFileSystemCache.invalidateFile(fullPathToFile);
 
             assert fullPathToFile.toFile().length() > 0;
         } catch (Exception ex) {
@@ -422,6 +435,8 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                                 }
 
                                 tempFile.renameTo(targetFile);
+
+                                this.localFileSystemCache.invalidateFile(fullPathToFile);
 
                                 long lastModifiedMillis = targetFile.lastModified();
                                 long now = Instant.now().toEpochMilli();

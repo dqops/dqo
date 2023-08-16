@@ -20,6 +20,7 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
@@ -76,7 +77,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoUserConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
-                homeLocationFindService, newLockManager, synchronizationStatusTracker);
+                homeLocationFindService, newLockManager, synchronizationStatusTracker, LocalFileSystemCacheObjectMother.createNewCache());
 
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
 
