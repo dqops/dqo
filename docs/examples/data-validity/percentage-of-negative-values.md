@@ -63,7 +63,7 @@ The highlighted fragments in the YAML file below represent the segment where the
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="32-50"
+```yaml hl_lines="38-50"
 apiVersion: dqo/v1
 kind: table
 spec:

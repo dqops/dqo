@@ -68,7 +68,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 
 The highlighted fragments in the YAML file below represent the segment where the profiling `bool_false_percent` check is configured.
 
-```yaml hl_lines="29-41"
+```yaml hl_lines="34-41"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
