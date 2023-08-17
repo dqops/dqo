@@ -68,7 +68,7 @@ public class SqlServerConnectionSpecObjectMother {
                 setDatabase("master");
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
-                setSsl(false);
+                setDisableEncryption(false);
                 setProperties(new LinkedHashMap<>() {{
                     put("trustServerCertificate", "true");
                 }});

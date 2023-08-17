@@ -43,7 +43,7 @@ import java.util.Optional;
  * Rest API controller that operates on target data sources, testing connections or retrieving the metadata.
  */
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "DataSources", description = "Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).")
 public class DataSourcesController {

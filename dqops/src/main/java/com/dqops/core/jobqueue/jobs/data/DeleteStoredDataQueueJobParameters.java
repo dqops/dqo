@@ -43,7 +43,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
 
     private List<String> columnNames;
     private String checkCategory;
-    private String dataComparisonName;
+    private String tableComparisonName;
     private String checkName;
     private String checkType;
     private String sensorName;
@@ -81,15 +81,20 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
      * @return Delete stored data job parameters based on the filters.
      */
     public static DeleteStoredDataQueueJobParameters fromCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
+        if (checkSearchFilters == null) {
+            return null;
+        }
+
         return new DeleteStoredDataQueueJobParameters() {{
             setConnectionName(checkSearchFilters.getConnectionName());
             setSchemaTableName(checkSearchFilters.getSchemaTableName());
             setColumnNames(checkSearchFilters.getColumnName() != null ? List.of(checkSearchFilters.getColumnName()) : null);
             setCheckType(checkSearchFilters.getCheckType() != null ? checkSearchFilters.getCheckType().getDisplayName() : null);
+            setTimeGradient(checkSearchFilters.getTimeScale() != null ? checkSearchFilters.getTimeScale().toTimeSeriesGradient().name() : null);
             setCheckName(checkSearchFilters.getCheckName());
             setSensorName(checkSearchFilters.getSensorName());
             setCheckCategory(checkSearchFilters.getCheckCategory());
-            setDataComparisonName(checkSearchFilters.getTableComparisonName());
+            setTableComparisonName(checkSearchFilters.getTableComparisonName());
 
             setDeleteCheckResults(true);
             setDeleteErrors(true);

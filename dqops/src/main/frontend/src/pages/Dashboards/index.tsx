@@ -31,7 +31,7 @@ const Dashboards = () => {
           onRemoveTab={closeTab}
           limit={8}
         />
-        <div className="flex-1 bg-white border border-gray-300 flex-auto relative">
+        <div className=" bg-white border border-gray-300 flex-auto relative">
           {!tabs?.length && (
             <div
               className={clsx(
@@ -55,7 +55,7 @@ const Dashboards = () => {
                 key={tab.value}
                 className={clsx(
                   'bg-white absolute top-0 left-0 w-full h-full flex items-center justify-center overflow-auto',
-                  activeTab === tab.value ? 'z-50' : 'z-0'
+                  activeTab === tab.value ? 'z-20' : 'z-0'
                 )}
               >
                 {dashboard?.authenticated_dashboard_url ? (
@@ -79,7 +79,7 @@ const Dashboards = () => {
         </div>
         {isLicenseFree && (
           <div
-            className="z-50 text-red-500 bg-white bg-opacity-50"
+            className="z-40 text-red-500 bg-white bg-opacity-50"
             style={{ position: 'fixed', top: '94%', right: '2%' }}
           >
             This DQO instance is not licensed. You are using a complimentary

@@ -57,6 +57,8 @@ interface CheckDetailsProps {
   onClose: () => void;
   data_clean_job_template?: DeleteStoredDataQueueJobParameters;
   defaultFilters?: any;
+  category?: string;
+  comparisonName?: string;
 }
 //deleted dataGroup from here
 const CheckDetails = ({
@@ -70,10 +72,11 @@ const CheckDetails = ({
   checkName,
   timeScale,
   onClose,
-  defaultFilters
+  defaultFilters,
+  category,
+  comparisonName
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
-  const [isChartOpenState, setIsChartOpenState] = useState(false);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const {
     checkResults: resultsData,
@@ -111,18 +114,13 @@ const CheckDetails = ({
 
     if (month === 'Last 3 months') {
       return {
-        startDate: moment()
-          .add(-2, 'month')
-          .startOf('month')
-          .format('YYYY-MM-DD'),
-        endDate: moment().endOf('month').format('YYYY-MM-DD')
+        startDate: moment().add(-3, 'month').format('YYYY-MM-DD'),
+        endDate: moment().format('YYYY-MM-DD')
       };
     }
 
     return {
-      startDate: moment(month, 'MMMM YYYY')
-        .startOf('month')
-        .format('YYYY-MM-DD'),
+      startDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD'),
       endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
     };
   };
@@ -142,11 +140,23 @@ const CheckDetails = ({
           endDate,
           runCheckType,
           timeScale,
-          checkName: checkName ?? ''
+          checkName: checkName ?? '',
+          category,
+          comparisonName
         })
       );
     },
-    [checkName, timeScale, runCheckType, connection, schema, table, column]
+    [
+      checkName,
+      timeScale,
+      runCheckType,
+      connection,
+      schema,
+      table,
+      column,
+      category,
+      comparisonName
+    ]
   );
 
   const fetchCheckReadouts = useCallback(
@@ -164,11 +174,23 @@ const CheckDetails = ({
           endDate,
           runCheckType,
           timeScale,
-          checkName: checkName ?? ''
+          checkName: checkName ?? '',
+          category,
+          comparisonName
         })
       );
     },
-    [runCheckType, checkName, timeScale, connection, schema, table, column]
+    [
+      runCheckType,
+      checkName,
+      timeScale,
+      connection,
+      schema,
+      table,
+      column,
+      category,
+      comparisonName
+    ]
   );
 
   const fetchCheckResults = useCallback(
@@ -186,11 +208,13 @@ const CheckDetails = ({
           endDate,
           runCheckType,
           checkName: checkName ?? '',
-          timeScale
+          timeScale,
+          category,
+          comparisonName
         })
       );
     },
-    [runCheckType, checkName, timeScale, connection, schema, table, column]
+    [runCheckType, checkName, timeScale, connection, schema, table, column, category]
   );
 
   useEffect(() => {
@@ -250,10 +274,6 @@ const CheckDetails = ({
     fetchCheckReadouts(month, name);
   };
 
-  const isChartOpen = (arg: boolean): void => {
-    setIsChartOpenState(arg);
-  };
-
   return (
     <div
       className="my-4"
@@ -291,7 +311,8 @@ const CheckDetails = ({
             month={filters.month}
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
-            isChartOpen={isChartOpen}
+            category={category}
+            comparisonName={comparisonName}
           />
         )}
         {activeTab === 'sensor_readouts' && (

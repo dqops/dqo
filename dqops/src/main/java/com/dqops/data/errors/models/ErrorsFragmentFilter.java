@@ -17,6 +17,7 @@ package com.dqops.data.errors.models;
 
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.models.ParquetDataFragmentFilter;
+import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
@@ -37,6 +38,7 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
     private String sensorName;
     private String qualityDimension;
     private String timeGradient;
+    private String tableComparisonName;
 
     /**
      * Tell which additional columns should be read from the parquet, and what their value should be.
@@ -63,7 +65,9 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Strings.isNullOrEmpty(timeGradient)) {
             result.put(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME, timeGradient);
         }
-
+        if (!Strings.isNullOrEmpty(tableComparisonName)) {
+            result.put(ErrorsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, tableComparisonName);
+        }
         return result;
     }
 
@@ -81,8 +85,8 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Objects.equals(checkType, that.checkType)) return false;
         if (!Objects.equals(columnNames, that.columnNames)) return false;
         if (!Objects.equals(sensorName, that.sensorName)) return false;
-        if (!Objects.equals(qualityDimension, that.qualityDimension))
-            return false;
+        if (!Objects.equals(qualityDimension, that.qualityDimension)) return false;
+        if (!Objects.equals(tableComparisonName, that.tableComparisonName)) return false;
         return Objects.equals(timeGradient, that.timeGradient);
     }
 
@@ -95,6 +99,7 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
         result = 31 * result + (columnNames != null ? columnNames.hashCode() : 0);
         result = 31 * result + (sensorName != null ? sensorName.hashCode() : 0);
         result = 31 * result + (qualityDimension != null ? qualityDimension.hashCode() : 0);
+        result = 31 * result + (tableComparisonName != null ? tableComparisonName.hashCode() : 0);
         result = 31 * result + (timeGradient != null ? timeGradient.hashCode() : 0);
         return result;
     }

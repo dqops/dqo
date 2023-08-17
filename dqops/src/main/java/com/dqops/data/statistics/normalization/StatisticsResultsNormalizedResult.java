@@ -82,56 +82,65 @@ public class StatisticsResultsNormalizedResult {
      * @param table Sorted table with statistics results - may be modified by adding missing columns.
      */
     public StatisticsResultsNormalizedResult(Table table) {
+        this(table, true);
+    }
+
+    /**
+     * Creates a statistics result dataset, extracting key columns.
+     * @param table Sorted table with statistics results - may be modified by adding missing columns.
+     * @param addColumWhenMissing Adds columns if they are missing.
+     */
+    public StatisticsResultsNormalizedResult(Table table, boolean addColumWhenMissing) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ID_COLUMN_NAME);
-        this.collectedAtColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
-        this.statusColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.STATUS_COLUMN_NAME);
-        this.resultTypeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME);
-        this.resultStringColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_STRING_COLUMN_NAME);
-        this.resultIntegerColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.RESULT_INTEGER_COLUMN_NAME);
-        this.resultFloatColumn = TableColumnUtility.getOrAddDoubleColumn(table, StatisticsColumnNames.RESULT_FLOAT_COLUMN_NAME);
-        this.resultBooleanColumn = TableColumnUtility.getOrAddBooleanColumn(table, StatisticsColumnNames.RESULT_BOOLEAN_COLUMN_NAME);
-        this.resultDateColumn = TableColumnUtility.getOrAddDateColumn(table, StatisticsColumnNames.RESULT_DATE_COLUMN_NAME);
-        this.resultDateTimeColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.RESULT_DATE_TIME_COLUMN_NAME);
-        this.resultInstantColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.RESULT_INSTANT_COLUMN_NAME);
-        this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, StatisticsColumnNames.RESULT_TIME_COLUMN_NAME);
-        this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
-        this.sampleCount = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
-        this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCOPE_COLUMN_NAME);
-        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1");
-        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2");
-        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3");
-        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4");
-        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5");
-        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6");
-        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7");
-        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8");
-        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9");
-        this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
-        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUP_COLUMN_NAME);
-        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME);
-        this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME);
-        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME);
-        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.PROVIDER_COLUMN_NAME);
-        this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.TABLE_HASH_COLUMN_NAME);
-        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME);
-        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_NAME_COLUMN_NAME);
-        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME);
-        this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLUMN_HASH_COLUMN_NAME);
-        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME);
-        this.collectorHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLLECTOR_HASH_COLUMN_NAME);
-        this.collectorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
-        this.collectorTargetColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME);
-        this.collectorCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
-        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME);
-        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
-        this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.DURATION_MS_COLUMN_NAME);
-        this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
-        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.CREATED_AT_COLUMN_NAME);
-        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.UPDATED_AT_COLUMN_NAME);
-        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CREATED_BY_COLUMN_NAME);
-        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.UPDATED_BY_COLUMN_NAME);
+        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
+        this.collectedAtColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.statusColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.STATUS_COLUMN_NAME, addColumWhenMissing);
+        this.resultTypeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.resultStringColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, addColumWhenMissing);
+        this.resultIntegerColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.RESULT_INTEGER_COLUMN_NAME, addColumWhenMissing);
+        this.resultFloatColumn = TableColumnUtility.getOrAddDoubleColumn(table, StatisticsColumnNames.RESULT_FLOAT_COLUMN_NAME, addColumWhenMissing);
+        this.resultBooleanColumn = TableColumnUtility.getOrAddBooleanColumn(table, StatisticsColumnNames.RESULT_BOOLEAN_COLUMN_NAME, addColumWhenMissing);
+        this.resultDateColumn = TableColumnUtility.getOrAddDateColumn(table, StatisticsColumnNames.RESULT_DATE_COLUMN_NAME, addColumWhenMissing);
+        this.resultDateTimeColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.RESULT_DATE_TIME_COLUMN_NAME, addColumWhenMissing);
+        this.resultInstantColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.RESULT_INSTANT_COLUMN_NAME, addColumWhenMissing);
+        this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, StatisticsColumnNames.RESULT_TIME_COLUMN_NAME, addColumWhenMissing);
+        this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME, addColumWhenMissing);
+        this.sampleCount = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME, addColumWhenMissing);
+        this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCOPE_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
+        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
+        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
+        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
+        this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUP_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
+        this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
+        this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.TABLE_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
+        this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLUMN_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.collectorHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLLECTOR_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.collectorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.collectorTargetColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, addColumWhenMissing);
+        this.collectorCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME, addColumWhenMissing);
+        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
+        this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.DURATION_MS_COLUMN_NAME, addColumWhenMissing);
+        this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME, addColumWhenMissing);
+        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
     }
 
 

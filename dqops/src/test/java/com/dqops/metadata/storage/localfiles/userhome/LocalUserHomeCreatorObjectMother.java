@@ -41,10 +41,14 @@ public class LocalUserHomeCreatorObjectMother {
         DqoDockerUserhomeConfigurationProperties defaultDockerUserhomeConfiguration = DqoDockerUserhomeConfigurationPropertiesObjectMother.createDefaultDockerUserhomeConfiguration();
         DqoSchedulerDefaultSchedulesConfigurationProperties defaultSchedulesConfigurationProperties = DqoSchedulerDefaultSchedulesConfigurationPropertiesObjectMother.getDefault();
         TerminalFactory terminalFactory = TerminalFactoryObjectMother.getDefault();
-        DefaultSchedulesProviderImpl defaultSchedulesProvider = new DefaultSchedulesProviderImpl(defaultSchedulesConfigurationProperties, UserHomeContextFactoryObjectMother.createWithInMemoryContext());
+        UserHomeContextFactory userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        DefaultSchedulesProviderImpl defaultSchedulesProvider = new DefaultSchedulesProviderImpl(defaultSchedulesConfigurationProperties,
+                userHomeContextFactory);
+        DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties = DqoInstanceConfigurationPropertiesObjectMother.getDefault();
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
-                homeLocationFindService, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration,
-                YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider, new DefaultObservabilityCheckSettingsFactoryImpl());
+                homeLocationFindService, userHomeContextFactory, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration,
+                dqoInstanceConfigurationProperties, YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider,
+                new DefaultObservabilityCheckSettingsFactoryImpl());
         return localUserHomeCreator;
     }
 

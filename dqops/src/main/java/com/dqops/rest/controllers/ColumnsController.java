@@ -69,7 +69,7 @@ import java.util.stream.Stream;
  * REST api controller to manage the list of columns inside a table.
  */
 @RestController
-@RequestMapping("api/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Columns", description = "Manages columns inside a table")
 public class ColumnsController {
@@ -1506,7 +1506,8 @@ public class ColumnsController {
         } else {
             recurringChecksSpec.setDaily(null);
         }
-        
+
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
@@ -1564,6 +1565,7 @@ public class ColumnsController {
             recurringChecksSpec.setMonthly(null);
         }
 
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
@@ -1620,7 +1622,8 @@ public class ColumnsController {
         } else {
             partitionedChecksSpec.setDaily(null);
         }
-        
+
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
@@ -1678,6 +1681,7 @@ public class ColumnsController {
             partitionedChecksSpec.setMonthly(null);
         }
 
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 

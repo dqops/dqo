@@ -37,6 +37,10 @@ export const TableReferenceComparisons = ({
   const [isCreating, setIsCreting] = useState(false);
   const location = useLocation();
 
+  const onChangeSelectedReference = (arg: string) => {
+    setSelectedReference(arg);
+  };
+
   useEffect(() => {
     const { isEditing: editing, reference } = qs.parse(location.search);
     setIsEditing(editing === 'true');
@@ -81,6 +85,8 @@ export const TableReferenceComparisons = ({
         setReferences(res.data);
       });
     }
+    setIsCreting(false);
+    fetchChecks();
   };
 
   const onEditReference = (reference: TableComparisonConfigurationModel) => {
@@ -237,6 +243,8 @@ export const TableReferenceComparisons = ({
               : undefined
           }
           isCreating={isCreating}
+          getNewTableComparison={getNewTableComparison}
+          onChangeSelectedReference={onChangeSelectedReference}
         />
       ) : (
         <ProfilingReferenceTableList

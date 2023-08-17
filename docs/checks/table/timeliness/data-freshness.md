@@ -7,42 +7,42 @@ Table level check that calculates the time difference between the most recent ro
 
 ___
 
-## **data freshness**  
+## **profile data freshness**  
   
 **Check description**  
 Calculates the number of days since the most recent event timestamp (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|data_freshness|profiling| |[data_freshness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
+|profile_data_freshness|profiling| |[data_freshness](../../../../reference/sensors/Table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=data_freshness
+dqo> check enable -c=connection_name -ch=profile_data_freshness
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=data_freshness
+dqo> check run -ch=profile_data_freshness
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=data_freshness
+dqo> check run -c=connection_name -ch=profile_data_freshness
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=data_freshness
+dqo> check run -c=connection_name -t=table_name -ch=profile_data_freshness
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=data_freshness
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_data_freshness
 ```
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
     timeliness:
-      data_freshness:
+      profile_data_freshness:
         warning:
           max_days: 1.0
         error:
@@ -64,7 +64,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     timeliness:
-      data_freshness:
+      profile_data_freshness:
         warning:
           max_days: 1.0
         error:
@@ -136,8 +136,8 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-        CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -194,8 +194,8 @@ spec:
             CURRENT_TIMESTAMP(),
             MAX(analyzed_table.`col_event_timestamp`)
         ) / 24.0 / 3600.0 AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
     FROM `<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -240,8 +240,8 @@ spec:
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -286,8 +286,8 @@ spec:
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
         )) / 24.0 / 3600.0 AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -347,8 +347,8 @@ spec:
             )
             CURRENT_TIMESTAMP
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-        TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-        TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -400,8 +400,8 @@ spec:
                 MAX(analyzed_table.[col_event_timestamp]),
                 SYSDATETIMEOFFSET()
             ) / 24.0 / 3600.0 AS actual_value,
-        SYSDATETIMEOFFSET() AS time_period,
-        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 
@@ -430,7 +430,7 @@ spec:
             column: state
       profiling_checks:
         timeliness:
-          data_freshness:
+          profile_data_freshness:
             warning:
               max_days: 1.0
             error:
@@ -508,8 +508,8 @@ spec:
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            CURRENT_TIMESTAMP() AS time_period,
-            TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -567,8 +567,8 @@ spec:
             ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            LOCALTIMESTAMP AS time_period_utc
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -614,8 +614,8 @@ spec:
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -661,8 +661,8 @@ spec:
             )) / 24.0 / 3600.0 AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -723,8 +723,8 @@ spec:
             ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
             analyzed_table."country" AS grouping_level_1,
             analyzed_table."state" AS grouping_level_2,
-            TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
-            TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -777,8 +777,8 @@ spec:
                 ) / 24.0 / 3600.0 AS actual_value,
             analyzed_table.[country] AS grouping_level_1,
             analyzed_table.[state] AS grouping_level_2,
-            SYSDATETIMEOFFSET() AS time_period,
-            CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2

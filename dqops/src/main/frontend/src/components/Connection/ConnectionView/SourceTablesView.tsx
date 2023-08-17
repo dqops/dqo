@@ -7,31 +7,40 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import Checkbox from '../../Checkbox';
 import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleAdvisor, toggleMenu } from '../../../redux/actions/job.actions';
+import { toggleAdvisor } from '../../../redux/actions/job.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { setCurrentJobId } from '../../../redux/actions/source.actions';
+import { useParams } from 'react-router-dom';
+import { CheckTypes } from '../../../shared/routes';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
 
 interface ISourceSchemasViewProps {
   connectionName: string;
   schemaName: string;
   onBack: () => void;
-  isImported?: boolean;
 }
 
 const SourceTablesView = ({
   connectionName,
   schemaName,
-  onBack,
-  isImported,
+  onBack
 }: ISourceSchemasViewProps) => {
+  const {
+    checkTypes,
+  }: {
+    checkTypes: CheckTypes;
+  } = useParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
+ 
   const dispatch = useActionDispatch();
-
-  useEffect(() => {
-    if (!isImported) {
-      dispatch(toggleAdvisor(true));
-    }
-  }, [isImported]);
+  const { job_dictionary_state } =
+  useSelector((state: IRootState) => state.job);
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const fetchSourceTables = async () => {
     setLoading(true);
@@ -58,25 +67,37 @@ const SourceTablesView = ({
   };
 
   const importSelectedTables = async () => {
-    JobApiClient.importTables({
+    const res = await JobApiClient.importTables({
       connectionName,
       schemaName,
       tableNames: selectedTables
-    }).then(() => {
-      fetchSourceTables();
-    });
-    dispatch(toggleMenu(true));
+    })
+      dispatch(
+        setCurrentJobId(
+          checkTypes,
+          firstLevelActiveTab,
+          (res.data as any)?.jobId?.jobId
+        )
+      );
+      setJobId((res.data as any)?.jobId);
+    dispatch(toggleAdvisor(true)); 
   };
 
   const importAllTables = async () => {
-    JobApiClient.importTables({
+    const res = await JobApiClient.importTables({
       connectionName,
       schemaName,
       tableNames: tables.map((item) => item.tableName ?? '')
-    }).then(() => {
-      fetchSourceTables();
-    });
-    dispatch(toggleMenu(true));
+    })
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        (res.data as any)?.jobId?.jobId
+      )
+    );
+    setJobId((res.data as any)?.jobId);
+    dispatch(toggleAdvisor(true));
   };
 
   const onSelectChange = (tableName: string) => {
@@ -87,12 +108,28 @@ const SourceTablesView = ({
     }
   };
 
+  useEffect(() => {
+    if(jobId !== 0 && jobId!== undefined && job?.status==="succeeded"){
+      fetchSourceTables()
+    }
+  }, [job?.status])
+
   return (
     <div className="py-4 px-8">
       <ConnectionActionGroup onImport={onBack} />
       <div className="flex justify-end space-x-4 mb-4">
-        <Button color="primary" label="Select All" onClick={selectAll} disabled={selectedTables.length === tables.length} />
-        <Button color="primary" label="Unselect All" onClick={unselectAll} disabled={selectedTables.length === 0} />
+        <Button
+          color="primary"
+          label="Select All"
+          onClick={selectAll}
+          disabled={selectedTables.length === tables.length}
+        />
+        <Button
+          color="primary"
+          label="Unselect All"
+          onClick={unselectAll}
+          disabled={selectedTables.length === 0}
+        />
         <Button
           color="primary"
           label="Import selected tables"
@@ -128,7 +165,9 @@ const SourceTablesView = ({
                   <div className="flex">
                     <Checkbox
                       onChange={() => onSelectChange(item.tableName ?? '')}
-                      checked={selectedTables.indexOf(item.tableName ?? '') > -1}
+                      checked={
+                        selectedTables.indexOf(item.tableName ?? '') > -1
+                      }
                     />
                   </div>
                 </td>

@@ -44,7 +44,7 @@ import java.util.*;
  * REST api controller to manage the configuration of table comparisons between data sources.
  */
 @RestController
-@RequestMapping("api/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "TableComparisons", description = "Manages the configuration of table comparisons between tables on the same or different data sources")
 public class TableComparisonsController {

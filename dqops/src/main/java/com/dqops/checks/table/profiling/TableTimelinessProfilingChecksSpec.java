@@ -38,73 +38,73 @@ import java.util.Objects;
 public class TableTimelinessProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("data_freshness", o -> o.dataFreshness);
-            put("data_staleness", o -> o.dataStaleness);
-            put("data_ingestion_delay", o -> o.dataIngestionDelay);
+            put("profile_data_freshness", o -> o.profileDataFreshness);
+            put("profile_data_staleness", o -> o.profileDataStaleness);
+            put("profile_data_ingestion_delay", o -> o.profileDataIngestionDelay);
         }
     };
 
     @JsonPropertyDescription("Calculates the number of days since the most recent event timestamp (freshness)")
-    private TableDataFreshnessCheckSpec dataFreshness;
+    private TableDataFreshnessCheckSpec profileDataFreshness;
 
     @JsonPropertyDescription("Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    private TableDataStalenessCheckSpec dataStaleness;
+    private TableDataStalenessCheckSpec profileDataStaleness;
 
     @JsonPropertyDescription("Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
-    private TableDataIngestionDelayCheckSpec dataIngestionDelay;
+    private TableDataIngestionDelayCheckSpec profileDataIngestionDelay;
 
     /**
      * Returns the number of days since the most recent event check configuration.
      * @return A number of days since the most recent event check configuration.
      */
-    public TableDataFreshnessCheckSpec getDataFreshness() {
-        return dataFreshness;
+    public TableDataFreshnessCheckSpec getProfileDataFreshness() {
+        return profileDataFreshness;
     }
 
     /**
      * Sets the number of days since the most recent event check configuration.
-     * @param dataFreshness Maximum days since the most recent event check configuration.
+     * @param profileDataFreshness Maximum days since the most recent event check configuration.
      */
-    public void setDataFreshness(TableDataFreshnessCheckSpec dataFreshness) {
-        this.setDirtyIf(!Objects.equals(this.dataFreshness, dataFreshness));
-        this.dataFreshness = dataFreshness;
-        propagateHierarchyIdToField(dataFreshness, "data_freshness");
+    public void setProfileDataFreshness(TableDataFreshnessCheckSpec profileDataFreshness) {
+        this.setDirtyIf(!Objects.equals(this.profileDataFreshness, profileDataFreshness));
+        this.profileDataFreshness = profileDataFreshness;
+        propagateHierarchyIdToField(profileDataFreshness, "profile_data_freshness");
     }
 
     /**
      * Returns a number of days since the last data ingestion check configuration.
      * @return A number of days since the last data ingestion check configuration.
      */
-    public TableDataStalenessCheckSpec getDataStaleness() {
-        return dataStaleness;
+    public TableDataStalenessCheckSpec getProfileDataStaleness() {
+        return profileDataStaleness;
     }
 
     /**
      * Sets a number of days since the last data ingestion check configuration.
-     * @param dataStaleness  A number of days since the last load check configuration.
+     * @param profileDataStaleness  A number of days since the last load check configuration.
      */
-    public void setDataStaleness(TableDataStalenessCheckSpec dataStaleness) {
-        this.setDirtyIf(!Objects.equals(this.dataStaleness, dataStaleness));
-        this.dataStaleness = dataStaleness;
-        propagateHierarchyIdToField(dataStaleness, "data_staleness");
+    public void setProfileDataStaleness(TableDataStalenessCheckSpec profileDataStaleness) {
+        this.setDirtyIf(!Objects.equals(this.profileDataStaleness, profileDataStaleness));
+        this.profileDataStaleness = profileDataStaleness;
+        propagateHierarchyIdToField(profileDataStaleness, "profile_data_staleness");
     }
 
     /**
      * Returns a data ingestion delay check configuration.
      * @return A data ingestion delay check configuration.
      */
-    public TableDataIngestionDelayCheckSpec getDataIngestionDelay() {
-        return dataIngestionDelay;
+    public TableDataIngestionDelayCheckSpec getProfileDataIngestionDelay() {
+        return profileDataIngestionDelay;
     }
 
     /**
      * Sets a data ingestion delay check configuration.
-     * @param dataIngestionDelay A data ingestion delay check configuration.
+     * @param profileDataIngestionDelay A data ingestion delay check configuration.
      */
-    public void setDataIngestionDelay(TableDataIngestionDelayCheckSpec dataIngestionDelay) {
-        this.setDirtyIf(!Objects.equals(this.dataIngestionDelay, dataIngestionDelay));
-        this.dataIngestionDelay = dataIngestionDelay;
-        propagateHierarchyIdToField(dataIngestionDelay, "data_ingestion_delay");
+    public void setProfileDataIngestionDelay(TableDataIngestionDelayCheckSpec profileDataIngestionDelay) {
+        this.setDirtyIf(!Objects.equals(this.profileDataIngestionDelay, profileDataIngestionDelay));
+        this.profileDataIngestionDelay = profileDataIngestionDelay;
+        propagateHierarchyIdToField(profileDataIngestionDelay, "profile_data_ingestion_delay");
     }
 
 

@@ -21,6 +21,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -153,6 +154,24 @@ public class DefaultObservabilityCheckSettingsSpec extends AbstractSpec {
         }
         if (this.recurringMonthly != null) {
             this.recurringMonthly.applyOnTable(targetTable, dialectSettings);
+        }
+    }
+
+
+    /**
+     * Applies the checks on a target column.
+     * @param targetColumn Target column.
+     * @param dialectSettings Dialect settings, to decide if the checks are applicable.
+     */
+    public void applyOnColumn(ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
+        if (this.profiling != null) {
+            this.profiling.applyOnColumn(targetColumn, dialectSettings);
+        }
+        if (this.recurringDaily != null) {
+            this.recurringDaily.applyOnColumn(targetColumn, dialectSettings);
+        }
+        if (this.recurringMonthly != null) {
+            this.recurringMonthly.applyOnColumn(targetColumn, dialectSettings);
         }
     }
 }

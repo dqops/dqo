@@ -68,7 +68,6 @@ public class PostgresqlConnectionSpecObjectMother {
                 setDatabase(testContainer.getDatabaseName());
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
-                setSsl(false);
             }});
         }};
         return connectionSpec;

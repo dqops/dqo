@@ -42,11 +42,6 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String INCIDENT_HASH_COLUMN_NAME = "incident_hash";
 
     /**
-     * The name of a table comparison configuration used for a data comparison (accuracy) check.
-     */
-    public static final String TABLE_COMPARISON_NAME_COLUMN_NAME = "table_comparison";
-
-    /**
      * The name of a connection to another data source that contains the reference data used as the expected values for accuracy checks.
      */
     public static final String REFERENCE_CONNECTION_COLUMN_NAME = "reference_connection";
@@ -149,6 +144,7 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
 
             COLUMN_NAME_COLUMN_NAME,
             DATA_GROUP_NAME_COLUMN_NAME,
+            TABLE_COMPARISON_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,

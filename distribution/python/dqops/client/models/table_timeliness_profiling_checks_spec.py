@@ -19,38 +19,40 @@ T = TypeVar("T", bound="TableTimelinessProfilingChecksSpec")
 class TableTimelinessProfilingChecksSpec:
     """
     Attributes:
-        data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
-        data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
-        data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
+        profile_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
+        profile_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
+        profile_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
     """
 
-    data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
-    data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
-    data_ingestion_delay: Union[Unset, "TableDataIngestionDelayCheckSpec"] = UNSET
+    profile_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
+    profile_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
+    profile_data_ingestion_delay: Union[
+        Unset, "TableDataIngestionDelayCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        data_freshness: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.data_freshness, Unset):
-            data_freshness = self.data_freshness.to_dict()
+        profile_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_data_freshness, Unset):
+            profile_data_freshness = self.profile_data_freshness.to_dict()
 
-        data_staleness: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.data_staleness, Unset):
-            data_staleness = self.data_staleness.to_dict()
+        profile_data_staleness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_data_staleness, Unset):
+            profile_data_staleness = self.profile_data_staleness.to_dict()
 
-        data_ingestion_delay: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.data_ingestion_delay, Unset):
-            data_ingestion_delay = self.data_ingestion_delay.to_dict()
+        profile_data_ingestion_delay: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_data_ingestion_delay, Unset):
+            profile_data_ingestion_delay = self.profile_data_ingestion_delay.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if data_freshness is not UNSET:
-            field_dict["data_freshness"] = data_freshness
-        if data_staleness is not UNSET:
-            field_dict["data_staleness"] = data_staleness
-        if data_ingestion_delay is not UNSET:
-            field_dict["data_ingestion_delay"] = data_ingestion_delay
+        if profile_data_freshness is not UNSET:
+            field_dict["profile_data_freshness"] = profile_data_freshness
+        if profile_data_staleness is not UNSET:
+            field_dict["profile_data_staleness"] = profile_data_staleness
+        if profile_data_ingestion_delay is not UNSET:
+            field_dict["profile_data_ingestion_delay"] = profile_data_ingestion_delay
 
         return field_dict
 
@@ -63,33 +65,37 @@ class TableTimelinessProfilingChecksSpec:
         from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
 
         d = src_dict.copy()
-        _data_freshness = d.pop("data_freshness", UNSET)
-        data_freshness: Union[Unset, TableDataFreshnessCheckSpec]
-        if isinstance(_data_freshness, Unset):
-            data_freshness = UNSET
+        _profile_data_freshness = d.pop("profile_data_freshness", UNSET)
+        profile_data_freshness: Union[Unset, TableDataFreshnessCheckSpec]
+        if isinstance(_profile_data_freshness, Unset):
+            profile_data_freshness = UNSET
         else:
-            data_freshness = TableDataFreshnessCheckSpec.from_dict(_data_freshness)
+            profile_data_freshness = TableDataFreshnessCheckSpec.from_dict(
+                _profile_data_freshness
+            )
 
-        _data_staleness = d.pop("data_staleness", UNSET)
-        data_staleness: Union[Unset, TableDataStalenessCheckSpec]
-        if isinstance(_data_staleness, Unset):
-            data_staleness = UNSET
+        _profile_data_staleness = d.pop("profile_data_staleness", UNSET)
+        profile_data_staleness: Union[Unset, TableDataStalenessCheckSpec]
+        if isinstance(_profile_data_staleness, Unset):
+            profile_data_staleness = UNSET
         else:
-            data_staleness = TableDataStalenessCheckSpec.from_dict(_data_staleness)
+            profile_data_staleness = TableDataStalenessCheckSpec.from_dict(
+                _profile_data_staleness
+            )
 
-        _data_ingestion_delay = d.pop("data_ingestion_delay", UNSET)
-        data_ingestion_delay: Union[Unset, TableDataIngestionDelayCheckSpec]
-        if isinstance(_data_ingestion_delay, Unset):
-            data_ingestion_delay = UNSET
+        _profile_data_ingestion_delay = d.pop("profile_data_ingestion_delay", UNSET)
+        profile_data_ingestion_delay: Union[Unset, TableDataIngestionDelayCheckSpec]
+        if isinstance(_profile_data_ingestion_delay, Unset):
+            profile_data_ingestion_delay = UNSET
         else:
-            data_ingestion_delay = TableDataIngestionDelayCheckSpec.from_dict(
-                _data_ingestion_delay
+            profile_data_ingestion_delay = TableDataIngestionDelayCheckSpec.from_dict(
+                _profile_data_ingestion_delay
             )
 
         table_timeliness_profiling_checks_spec = cls(
-            data_freshness=data_freshness,
-            data_staleness=data_staleness,
-            data_ingestion_delay=data_ingestion_delay,
+            profile_data_freshness=profile_data_freshness,
+            profile_data_staleness=profile_data_staleness,
+            profile_data_ingestion_delay=profile_data_ingestion_delay,
         )
 
         table_timeliness_profiling_checks_spec.additional_properties = d

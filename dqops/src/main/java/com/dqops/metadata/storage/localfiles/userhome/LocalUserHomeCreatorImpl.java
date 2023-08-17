@@ -15,16 +15,19 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactory;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoDockerUserhomeConfigurationProperties;
+import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
+import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
 import com.dqops.metadata.settings.SettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
@@ -34,6 +37,7 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
 import com.dqops.metadata.storage.localfiles.settings.SettingsYaml;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -44,6 +48,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.stream.Stream;
 
 /**
@@ -52,10 +58,12 @@ import java.util.stream.Stream;
 @Component
 public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private HomeLocationFindService homeLocationFindService;
+    private UserHomeContextFactory userHomeContextFactory;
     private TerminalFactory terminalFactory;
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
     private DqoUserConfigurationProperties userConfigurationProperties;
     private DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties;
+    private DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
     private YamlSerializer yamlSerializer;
     private DefaultSchedulesProvider defaultSchedulesProvider;
     private DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory;
@@ -63,29 +71,35 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     /**
      * Default constructor called by the IoC container.
      * @param homeLocationFindService User home location finder.
+     * @param userHomeContextFactory User home context factory.
      * @param terminalFactory Terminal factory, creates a terminal reader - used to prompt the user before the default user home is created,
      *                        and a terminal writer - used to notify the user that the default user home will not be created.
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
      * @param userConfigurationProperties DQO user home configuration parameters.
      * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
+     * @param dqoInstanceConfigurationProperties DQO instance configuration parameters.
      * @param yamlSerializer Yaml serializer.
      * @param defaultSchedulesProvider Default cron schedules provider.
      * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
+                                    UserHomeContextFactory userHomeContextFactory,
                                     TerminalFactory terminalFactory,
                                     DqoLoggingConfigurationProperties loggingConfigurationProperties,
                                     DqoUserConfigurationProperties userConfigurationProperties,
                                     DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties,
+                                    DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                     YamlSerializer yamlSerializer,
                                     DefaultSchedulesProvider defaultSchedulesProvider,
                                     DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory) {
         this.homeLocationFindService = homeLocationFindService;
+        this.userHomeContextFactory = userHomeContextFactory;
         this.terminalFactory = terminalFactory;
         this.loggingConfigurationProperties = loggingConfigurationProperties;
         this.userConfigurationProperties = userConfigurationProperties;
         this.dockerUserhomeConfigurationProperties = dockerUserhomeConfigurationProperties;
+        this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.yamlSerializer = yamlSerializer;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
         this.defaultObservabilityCheckSettingsFactory = defaultObservabilityCheckSettingsFactory;
@@ -251,6 +265,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
         if (this.isDefaultDqoUserHomeInitialized()) {
             activateFileLoggingInUserHome();
+            applyDefaultConfigurationWhenMissing();
             return;
         }
 
@@ -281,6 +296,48 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             this.terminalFactory.getWriter().writeLine("DQO user home will not be created, exiting.");
             System.exit(100);
         }
+    }
+
+    /**
+     * Verifies if the user home configuration (and the local settings) are valid and are not missing configuration.
+     * Applies missing default observability check configuration when it is not configured.
+     */
+    public void applyDefaultConfigurationWhenMissing() {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        SettingsSpec settingsSpec = userHome.getSettings().getSpec();
+        if (settingsSpec != null &&
+                settingsSpec.getDefaultDataObservabilityChecks() != null &&
+                settingsSpec.getDefaultSchedules() != null &&
+                (settingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
+            return;
+        }
+
+        if (settingsSpec == null) {
+            settingsSpec = new SettingsSpec();
+            userHome.getSettings().setSpec(settingsSpec);
+        }
+
+        if (settingsSpec.getDefaultDataObservabilityChecks() == null) {
+            DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
+            settingsSpec.setDefaultDataObservabilityChecks(defaultObservabilityCheckSettingsSpec);
+        }
+
+        if (settingsSpec.getDefaultSchedules() == null) {
+            RecurringSchedulesSpec defaultRecurringSchedules = this.defaultSchedulesProvider.createDefaultRecurringSchedules();
+            settingsSpec.setDefaultSchedules(defaultRecurringSchedules);
+        }
+
+        if (settingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {
+            SecureRandom secureRandom = new SecureRandom();
+            byte[] instanceKeyBytes = new byte[32];
+            secureRandom.nextBytes(instanceKeyBytes);
+
+            String encodedNewKey = Base64.getEncoder().encodeToString(instanceKeyBytes);
+            settingsSpec.setInstanceSignatureKey(encodedNewKey);
+        }
+
+        userHomeContext.flush();
     }
 
     /**

@@ -17,7 +17,6 @@ package com.dqops.checks.table.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,29 +36,29 @@ import java.util.Objects;
 public class TableAvailabilityProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("table_availability", o -> o.tableAvailability);
+            put("profile_table_availability", o -> o.profileTableAvailability);
         }
     };
 
     @JsonPropertyDescription("Verifies availability of the table in a database using a simple row count.")
-    private TableAvailabilityCheckSpec tableAvailability;
+    private TableAvailabilityCheckSpec profileTableAvailability;
 
     /**
      * Returns a row count check.
      * @return Row count check.
      */
-    public TableAvailabilityCheckSpec getTableAvailability() {
-        return tableAvailability;
+    public TableAvailabilityCheckSpec getProfileTableAvailability() {
+        return profileTableAvailability;
     }
 
     /**
      * Sets a new definition of a row count check.
-     * @param tableAvailability Row count check.
+     * @param profileTableAvailability Row count check.
      */
-    public void setTableAvailability(TableAvailabilityCheckSpec tableAvailability) {
-        this.setDirtyIf(!Objects.equals(this.tableAvailability, tableAvailability));
-        this.tableAvailability = tableAvailability;
-        propagateHierarchyIdToField(tableAvailability, "table_availability");
+    public void setProfileTableAvailability(TableAvailabilityCheckSpec profileTableAvailability) {
+        this.setDirtyIf(!Objects.equals(this.profileTableAvailability, profileTableAvailability));
+        this.profileTableAvailability = profileTableAvailability;
+        propagateHierarchyIdToField(profileTableAvailability, "profile_table_availability");
     }
 
     /**

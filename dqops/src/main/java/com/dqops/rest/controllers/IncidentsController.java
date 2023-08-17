@@ -46,7 +46,7 @@ import java.util.Optional;
  * Data quality incidents REST API controller.
  */
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Incidents", description = "Data quality incidents controller that supports loading incidents and changing the status of an incident.")
 public class IncidentsController {

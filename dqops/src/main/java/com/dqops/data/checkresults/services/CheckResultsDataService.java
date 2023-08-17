@@ -65,7 +65,7 @@ public interface CheckResultsDataService {
      * @return Complete model of the check results.
      */
     CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                              CheckResultsDetailedParameters loadParameters);
+                                                              CheckResultsDetailedFilterParameters loadParameters);
 
     /**
      * Loads the results of failed data quality checks that are attached to the given incident, identified by the incident hash, first seen and incident until timestamps.

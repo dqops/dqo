@@ -35,7 +35,7 @@ import reactor.core.publisher.Mono;
  * Controller that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).
  */
 @RestController
-@RequestMapping("api/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "TableComparisonResults", description = "Controller that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).")
 public class TableComparisonResultsController {

@@ -31,6 +31,7 @@ export const Table: React.FC<TableProps> = ({
   loading,
   getRowClass
 }) => {
+
   return (
     <div className="w-full">
       <table className={className}>
@@ -96,6 +97,11 @@ export const Table: React.FC<TableProps> = ({
                         >
                           {column.render
                             ? column.render(item[column.value], item, index)
+                            : column.value === 'timePeriod' ||
+                              column.value === 'executedAt'
+                            ? (item[column.value] as string)
+                                .replace(/T/gi, ' ')
+                                .replace(/Z/gi, '')
                             : item[column.value]}
                         </td>
                       ))}

@@ -108,13 +108,14 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
             mysqlParametersSpec.setHost(terminalReader.prompt("MySQL host name (--mysql-host)", "${MYSQL_HOST}", false));
         }
 
-        if (mysqlParametersSpec.getSsl() == null) {
+        if (Strings.isNullOrEmpty(mysqlParametersSpec.getPort())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--mysql-ssl");
+                throw new CliRequiredParameterMissingException("--mysql-port");
             }
 
-            mysqlParametersSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--mysql-ssl)", true));
+            mysqlParametersSpec.setPort(terminalReader.prompt("MySQL port number (--mysql-port)", "${MYSQL_PORT}", false));
         }
+
 
         if (Strings.isNullOrEmpty(mysqlParametersSpec.getDatabase())) {
             if (isHeadless) {

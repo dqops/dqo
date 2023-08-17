@@ -19,7 +19,7 @@ class TableIncidentGroupingSpec:
     Attributes:
         grouping_level (Union[Unset, TableIncidentGroupingSpecGroupingLevel]): Grouping level of failed data quality
             checks for creating higher level data quality incidents. The default grouping level is by a table, a data
-            quality dimension and a check category (i.e. a consistency data quality incident detected on a table X in the
+            quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the
             numeric checks category).
         minimum_severity (Union[Unset, TableIncidentGroupingSpecMinimumSeverity]): Minimum severity level of data
             quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported

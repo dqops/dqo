@@ -14,14 +14,14 @@ if TYPE_CHECKING:
     from ..models.column_bool_daily_recurring_checks_spec import (
         ColumnBoolDailyRecurringChecksSpec,
     )
-    from ..models.column_consistency_daily_recurring_checks_spec import (
-        ColumnConsistencyDailyRecurringChecksSpec,
-    )
     from ..models.column_daily_recurring_check_categories_spec_comparisons import (
         ColumnDailyRecurringCheckCategoriesSpecComparisons,
     )
     from ..models.column_daily_recurring_check_categories_spec_custom import (
         ColumnDailyRecurringCheckCategoriesSpecCustom,
+    )
+    from ..models.column_datatype_daily_recurring_checks_spec import (
+        ColumnDatatypeDailyRecurringChecksSpec,
     )
     from ..models.column_datetime_daily_recurring_checks_spec import (
         ColumnDatetimeDailyRecurringChecksSpec,
@@ -71,7 +71,7 @@ class ColumnDailyRecurringCheckCategoriesSpec:
         bool_ (Union[Unset, ColumnBoolDailyRecurringChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityDailyRecurringChecksSpec]):
         accuracy (Union[Unset, ColumnAccuracyDailyRecurringChecksSpec]):
-        consistency (Union[Unset, ColumnConsistencyDailyRecurringChecksSpec]):
+        datatype (Union[Unset, ColumnDatatypeDailyRecurringChecksSpec]):
         anomaly (Union[Unset, ColumnAnomalyDailyRecurringChecksSpec]):
         schema (Union[Unset, ColumnSchemaDailyRecurringChecksSpec]):
         comparisons (Union[Unset, ColumnDailyRecurringCheckCategoriesSpecComparisons]): Dictionary of configuration of
@@ -90,7 +90,7 @@ class ColumnDailyRecurringCheckCategoriesSpec:
     bool_: Union[Unset, "ColumnBoolDailyRecurringChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityDailyRecurringChecksSpec"] = UNSET
     accuracy: Union[Unset, "ColumnAccuracyDailyRecurringChecksSpec"] = UNSET
-    consistency: Union[Unset, "ColumnConsistencyDailyRecurringChecksSpec"] = UNSET
+    datatype: Union[Unset, "ColumnDatatypeDailyRecurringChecksSpec"] = UNSET
     anomaly: Union[Unset, "ColumnAnomalyDailyRecurringChecksSpec"] = UNSET
     schema: Union[Unset, "ColumnSchemaDailyRecurringChecksSpec"] = UNSET
     comparisons: Union[
@@ -143,9 +143,9 @@ class ColumnDailyRecurringCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        consistency: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.consistency, Unset):
-            consistency = self.consistency.to_dict()
+        datatype: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.datatype, Unset):
+            datatype = self.datatype.to_dict()
 
         anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.anomaly, Unset):
@@ -184,8 +184,8 @@ class ColumnDailyRecurringCheckCategoriesSpec:
             field_dict["integrity"] = integrity
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if consistency is not UNSET:
-            field_dict["consistency"] = consistency
+        if datatype is not UNSET:
+            field_dict["datatype"] = datatype
         if anomaly is not UNSET:
             field_dict["anomaly"] = anomaly
         if schema is not UNSET:
@@ -206,14 +206,14 @@ class ColumnDailyRecurringCheckCategoriesSpec:
         from ..models.column_bool_daily_recurring_checks_spec import (
             ColumnBoolDailyRecurringChecksSpec,
         )
-        from ..models.column_consistency_daily_recurring_checks_spec import (
-            ColumnConsistencyDailyRecurringChecksSpec,
-        )
         from ..models.column_daily_recurring_check_categories_spec_comparisons import (
             ColumnDailyRecurringCheckCategoriesSpecComparisons,
         )
         from ..models.column_daily_recurring_check_categories_spec_custom import (
             ColumnDailyRecurringCheckCategoriesSpecCustom,
+        )
+        from ..models.column_datatype_daily_recurring_checks_spec import (
+            ColumnDatatypeDailyRecurringChecksSpec,
         )
         from ..models.column_datetime_daily_recurring_checks_spec import (
             ColumnDatetimeDailyRecurringChecksSpec,
@@ -321,14 +321,12 @@ class ColumnDailyRecurringCheckCategoriesSpec:
         else:
             accuracy = ColumnAccuracyDailyRecurringChecksSpec.from_dict(_accuracy)
 
-        _consistency = d.pop("consistency", UNSET)
-        consistency: Union[Unset, ColumnConsistencyDailyRecurringChecksSpec]
-        if isinstance(_consistency, Unset):
-            consistency = UNSET
+        _datatype = d.pop("datatype", UNSET)
+        datatype: Union[Unset, ColumnDatatypeDailyRecurringChecksSpec]
+        if isinstance(_datatype, Unset):
+            datatype = UNSET
         else:
-            consistency = ColumnConsistencyDailyRecurringChecksSpec.from_dict(
-                _consistency
-            )
+            datatype = ColumnDatatypeDailyRecurringChecksSpec.from_dict(_datatype)
 
         _anomaly = d.pop("anomaly", UNSET)
         anomaly: Union[Unset, ColumnAnomalyDailyRecurringChecksSpec]
@@ -365,7 +363,7 @@ class ColumnDailyRecurringCheckCategoriesSpec:
             bool_=bool_,
             integrity=integrity,
             accuracy=accuracy,
-            consistency=consistency,
+            datatype=datatype,
             anomaly=anomaly,
             schema=schema,
             comparisons=comparisons,

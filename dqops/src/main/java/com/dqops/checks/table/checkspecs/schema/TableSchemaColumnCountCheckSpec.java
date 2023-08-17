@@ -159,6 +159,6 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

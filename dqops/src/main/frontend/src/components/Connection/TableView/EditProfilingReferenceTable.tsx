@@ -40,6 +40,8 @@ type EditProfilingReferenceTableProps = {
   timePartitioned?: 'daily' | 'monthly';
   categoryCheck?: QualityCategoryModel;
   isCreating?: boolean;
+  getNewTableComparison: () => void;
+  onChangeSelectedReference: (arg: string) => void;
 };
 
 export const EditProfilingReferenceTable = ({
@@ -48,7 +50,9 @@ export const EditProfilingReferenceTable = ({
   onBack,
   selectedReference,
   categoryCheck,
-  isCreating
+  isCreating,
+  getNewTableComparison,
+  onChangeSelectedReference
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -73,11 +77,15 @@ export const EditProfilingReferenceTable = ({
   const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
-  const [changes, setChanges] = useState(false);
   const [rowCountExtended, setRowCountExtended] = useState(false);
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [isDataDeleted, setIsDataDeleted] = useState(false);
+
+  const onChangeIsDataDeleted = (arg: boolean): void => {
+    setIsDataDeleted(arg);
+  };
 
   const onChangeUpdatedParent = (variable: boolean): void => {
     setIsUpdated(variable);
@@ -143,7 +151,7 @@ export const EditProfilingReferenceTable = ({
         );
       });
     }
-  }, []);
+  }, [selectedReference]);
 
   useEffect(() => {
     if (reference) {
@@ -420,13 +428,18 @@ export const EditProfilingReferenceTable = ({
     onUpdate();
   }, [reference, table, schema, connection]);
 
+  useEffect(() => {
+    if (isDataDeleted === true) {
+      getResultsData();
+    }
+  }, [isDataDeleted]);
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable
           onBack={onBack}
           selectedReference={selectedReference}
-          changes={changes}
           isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
           onRunChecksRowCount={onRunChecksRowCount}
@@ -434,6 +447,11 @@ export const EditProfilingReferenceTable = ({
           isCreating={isCreating}
           goToRefTable={goToRefTable}
           onChangeUpdatedParent={onChangeUpdatedParent}
+          combinedFunc={(name: string) => {
+            onChangeSelectedReference(name), getNewTableComparison();
+          }}
+          cleanDataTemplate={reference?.compare_table_clean_data_job_template}
+          onChangeIsDataDeleted={onChangeIsDataDeleted}
         />
       </div>
       {reference && (
@@ -480,7 +498,7 @@ export const EditProfilingReferenceTable = ({
                       <Checkbox
                         checked={showRowCount}
                         onChange={(checked) => {
-                          setShowRowCount(checked), setChanges(true);
+                          setShowRowCount(checked);
                         }}
                       />{' '}
                     </th>
@@ -684,8 +702,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -722,8 +739,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -760,8 +776,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -798,8 +813,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -836,8 +850,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||
@@ -874,8 +887,7 @@ export const EditProfilingReferenceTable = ({
                                   : undefined
                               },
                               index
-                            ),
-                              setChanges(true);
+                            );
                           }}
                           disabled={
                             item.reference_column_name === undefined ||

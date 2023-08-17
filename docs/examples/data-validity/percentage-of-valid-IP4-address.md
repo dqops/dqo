@@ -80,7 +80,7 @@ spec:
         nullable: true
       profiling_checks:
         pii:
-          valid_ip4_address_percent:
+          profile_valid_ip4_address_percent:
             comments:
             - date: 2023-05-11T08:28:27.484+00:00
               comment_by: user
@@ -101,7 +101,42 @@ spec:
         column_type: DATE
         nullable: true
 ```
-## Running the checks in the example and evaluating the results
+## Running the checks in the example and evaluating the results using the graphical interface
+
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-valid-ip4-address-percent-check.png)
+
+1. Go to **Profiling** section.
+
+2. Select the table or column mentioned in the example description from the tree view on the left.
+
+3. Select **Advanced Profiling** tab.
+
+4. Run the enabled check using the **Run check** button.
+   ![Run check](https://dqops.com/docs/images/examples/valid-ip4-address-percent-run-check.png)
+
+5. Review the results by opening the **Check details** button.
+   ![Check details](https://dqops.com/docs/images/examples/valid-ip4-address-percent-check-details.png)
+
+6. You should see the results as the one below.
+   The actual value in this example is 50, which is below the minimum threshold level set in the warning (99.0%).
+   The check gives a fatal error (notice the red square on the left of the name of the check).
+
+   ![Valid-ip4-address-percent check results](https://dqops.com/docs/images/examples/valid-ip4-address-percent-check-results.png)
+
+7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
+   located in the upper right corner of the graphical interface.
+
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
+   the results displayed on the Current column status by dimension dashboard showing results by connection, schema, dimension and data group.
+
+   ![Valid-ip4-address-percent check on Current column status by dimension dashboard](https://dqops.com/docs/images/examples/valid-ip4-address-percent-on-current-column-status-by-dimension-dashboard.png)
+
+## Running the checks in the example and evaluating the results using DQO Shell
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 

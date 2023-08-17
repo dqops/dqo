@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
-import { ErrorsDetailedDataModel } from "../../../api";
-import Select from "../../Select";
-import { Table } from "../../Table";
-import { useTree } from "../../../contexts/treeContext";
-import moment from "moment/moment";
-import ErrorText from "./ErrorText";
+import React, { useMemo } from 'react';
+import { ErrorsDetailedDataModel } from '../../../api';
+import Select from '../../Select';
+import { Table } from '../../Table';
+import { useTree } from '../../../contexts/treeContext';
+import moment from 'moment/moment';
+import ErrorText from './ErrorText';
 
 interface CheckErrorsTabProps {
   errors: ErrorsDetailedDataModel[];
@@ -14,24 +14,25 @@ interface CheckErrorsTabProps {
   onChangeDataGroup: (name: string) => void;
 }
 
-const CheckErrorsTab = ({ errors, dataGroup, onChangeDataGroup, month, onChangeMonth }: CheckErrorsTabProps) => {
+const CheckErrorsTab = ({
+  errors,
+  dataGroup,
+  onChangeDataGroup,
+  month,
+  onChangeMonth
+}: CheckErrorsTabProps) => {
   const { sidebarWidth } = useTree();
 
   const columns = [
     {
-      label: 'Check Name',
-      value: 'checkName',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80',
-    },
-    {
       label: 'Executed At',
       value: 'executedAt',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-60',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-60'
     },
     {
       label: 'Error Source',
       value: 'errorSource',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
     },
     {
       label: 'Error Message',
@@ -42,25 +43,41 @@ const CheckErrorsTab = ({ errors, dataGroup, onChangeDataGroup, month, onChangeM
     {
       label: 'Readout Id',
       value: 'readoutId',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80 text-right',
-    },
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80 text-right'
+    }
   ];
 
   const monthOptions = useMemo(() => {
-    return Array(24).fill('').map((item, index) => ({
-      label: moment().subtract(index, 'months').format('MMMM YYYY'),
-      value: moment().subtract(index, 'months').format('MMMM YYYY')
-    }))
+    return [
+      {
+        label: 'Last 3 months',
+        value: 'Last 3 months'
+      },
+      ...Array(24)
+        .fill('')
+        .map((item, index) => ({
+          label: moment().subtract(index, 'months').format('MMMM YYYY'),
+          value: moment().subtract(index, 'months').format('MMMM YYYY')
+        }))
+    ];
   }, []);
 
   return (
-    <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
+    <div
+      className="py-3 overflow-auto"
+      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
+    >
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group</div>
           <Select
-            value={dataGroup}
-            options={(errors[0]?.dataGroupsNames || []).map((item) => ({ label: item, value: item })) || []}
+            value={ dataGroup || errors[0]?.dataGroup}
+            options={
+              (errors[0]?.dataGroupsNames || []).map((item) => ({
+                label: item,
+                value: item
+              })) || []
+            }
             onChange={onChangeDataGroup}
           />
         </div>
@@ -73,15 +90,16 @@ const CheckErrorsTab = ({ errors, dataGroup, onChangeDataGroup, month, onChangeM
           />
         </div>
       </div>
-      {errors.length === 0 && (
-        <div className="text-gray-700 mt-5">No Data</div>
-      )}
+      {errors.length === 0 && <div className="text-gray-700 mt-5">No Data</div>}
       {errors.map((result, index) => (
         <div key={index} className="mb-4">
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={(result.singleErrors || []).map((item) => ({ ...item, checkName: result.checkName }))}
+            data={(result.singleErrors || []).map((item) => ({
+              ...item,
+              checkName: result.checkName
+            }))}
             emptyMessage="No Data"
           />
         </div>

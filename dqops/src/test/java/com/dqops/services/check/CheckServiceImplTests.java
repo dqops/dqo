@@ -147,7 +147,7 @@ public class CheckServiceImplTests extends BaseTest {
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
         t1rowCountSpec.setFatal(t1rowCountFatalSpec);
-        t1volumeChecksSpec.setRowCount(t1rowCountSpec);
+        t1volumeChecksSpec.setProfileRowCount(t1rowCountSpec);
         t1categoriesSpec.setVolume(t1volumeChecksSpec);
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
@@ -160,7 +160,7 @@ public class CheckServiceImplTests extends BaseTest {
         t2rowCountFatalSpec.setMinCount(10L);
         t2rowCountSpec.setError(t2rowCountErrorSpec);
         t2rowCountSpec.setFatal(t2rowCountFatalSpec);
-        t2volumeChecksSpec.setRowCount(t2rowCountSpec);
+        t2volumeChecksSpec.setProfileRowCount(t2rowCountSpec);
         t2categoriesSpec.setVolume(t2volumeChecksSpec);
         table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
@@ -173,7 +173,7 @@ public class CheckServiceImplTests extends BaseTest {
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
-        col21stringChecksSpec.setStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
+        col21stringChecksSpec.setProfileStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
         col21categoriesSpec.setStrings(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
@@ -272,13 +272,13 @@ public class CheckServiceImplTests extends BaseTest {
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
-            setCheckName("row_count");
+            setCheckName("profile_row_count");
         }};
 
         TableRowCountCheckSpec tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getVolume().getRowCount();
+                .getProfilingChecks().getVolume().getProfileRowCount();
 
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
@@ -308,7 +308,7 @@ public class CheckServiceImplTests extends BaseTest {
         tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getVolume().getRowCount();
+                .getProfilingChecks().getVolume().getProfileRowCount();
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
         Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
@@ -325,13 +325,13 @@ public class CheckServiceImplTests extends BaseTest {
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
-            setCheckName("row_count");
+            setCheckName("profile_row_count");
         }};
 
         TableRowCountCheckSpec tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getVolume().getRowCount();
+                .getProfilingChecks().getVolume().getProfileRowCount();
 
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
@@ -364,7 +364,7 @@ public class CheckServiceImplTests extends BaseTest {
         tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getVolume().getRowCount();
+                .getProfilingChecks().getVolume().getProfileRowCount();
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
         Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
@@ -381,7 +381,7 @@ public class CheckServiceImplTests extends BaseTest {
         AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
-            setCheckName("nulls_count");
+            setCheckName("profile_nulls_count");
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
@@ -425,7 +425,7 @@ public class CheckServiceImplTests extends BaseTest {
         AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnectionName("conn");
-            setCheckName("nulls_count");
+            setCheckName("profile_nulls_count");
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 

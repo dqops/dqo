@@ -49,7 +49,7 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--oracle-port"}, description = "Oracle port number")
-    @JsonPropertyDescription("Oracle port name. The default port is 1521. Supports also a ${ORACLE_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("Oracle port number. The default port is 1521. Supports also a ${ORACLE_PORT} configuration with a custom environment variable.")
     private String port;
 
     @CommandLine.Option(names = {"--oracle-database"}, description = "Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -68,9 +68,9 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--oracle-ssl"}, description = "Connect to Oracle using SSL")
-    @JsonPropertyDescription("Connect to Oracle using SSL. The default value is false.")
-    private Boolean ssl;
+    @CommandLine.Option(names = {"--oracle-initialization-sql"}, description = "Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'")
+    @JsonPropertyDescription("Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'")
+    private String initializationSql;
 
     @CommandLine.Option(names = {"-O"}, description = "Oracle's additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -94,7 +94,7 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric oracle port name.
+     * Returns the port number. The value should store an environment variable expression or a numeric oracle port number.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
@@ -102,7 +102,7 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Sets the port name.
+     * Sets the port number.
      * @param port Port name.
      */
     public void setPort(String port) {
@@ -179,20 +179,20 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the flag to require SSL connection.
-     * @return True - require an SSL connection.
+     * Returns an initialization SQL that is executed after opening the connection.
+     * @return
      */
-    public Boolean getSsl() {
-        return ssl;
+    public String getInitializationSql() {
+        return initializationSql;
     }
 
     /**
-     * Sets a flag to require an SSL connection.
-     * @param ssl True - ssl connection is required.
+     * Sets an SQL query that is executed after opening a connection.
+     * @param initializationSql Initialization sql.
      */
-    public void setSsl(Boolean ssl) {
-        setDirtyIf(!Objects.equals(this.ssl, ssl));
-        this.ssl = ssl;
+    public void setInitializationSql(String initializationSql) {
+        this.setDirtyIf(!Objects.equals(this.initializationSql, initializationSql));
+        this.initializationSql = initializationSql;
     }
 
     /**

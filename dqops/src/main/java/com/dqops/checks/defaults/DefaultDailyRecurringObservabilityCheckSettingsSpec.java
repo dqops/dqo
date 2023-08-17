@@ -16,12 +16,15 @@
 
 package com.dqops.checks.defaults;
 
-import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import com.dqops.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.bool.ColumnBoolDailyRecurringChecksSpec;
-import com.dqops.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringChecksSpec;
+import com.dqops.checks.column.recurring.datatype.ColumnDatatypeDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.datetime.ColumnDatetimeDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
@@ -29,7 +32,7 @@ import com.dqops.checks.column.recurring.pii.ColumnPiiDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.strings.ColumnStringsDailyRecurringChecksSpec;
 import com.dqops.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringChecksSpec;
-import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.table.recurring.TableDailyRecurringCheckCategoriesSpec;
 import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
 import com.dqops.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
@@ -41,9 +44,12 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -60,8 +66,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<DefaultDailyRecurringObservabilityCheckSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends AbstractRootChecksContainerSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<DefaultDailyRecurringObservabilityCheckSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("table_volume", o -> o.tableVolume);
             put("table_availability", o -> o.tableAvailability);
@@ -73,7 +79,7 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
             put("column_datetime", o -> o.columnDatetime);
             put("column_pii", o -> o.columnPii);
             put("column_bool", o -> o.columnBool);
-            put("column_consistency", o -> o.columnConsistency);
+            put("column_datatype", o -> o.columnDatatype);
             put("column_anomaly", o -> o.columnAnomaly);
             put("column_schema", o -> o.columnSchema);
         }
@@ -129,10 +135,10 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyRecurringChecksSpec columnBool;
 
-    @JsonPropertyDescription("The default configuration of consistency checks on a column level.")
+    @JsonPropertyDescription("The default configuration of datatype checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyDailyRecurringChecksSpec columnConsistency;
+    private ColumnDatatypeDailyRecurringChecksSpec columnDatatype;
 
     @JsonPropertyDescription("The default configuration of anomaly checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -326,21 +332,21 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
     }
 
     /**
-     * Returns the consistency check configuration on a column level.
+     * Returns the datatype check configuration on a column level.
      * @return Consistency check configuration.
      */
-    public ColumnConsistencyDailyRecurringChecksSpec getColumnConsistency() {
-        return columnConsistency;
+    public ColumnDatatypeDailyRecurringChecksSpec getColumnDatatype() {
+        return columnDatatype;
     }
 
     /**
-     * Sets the consistency check configuration on a column level.
-     * @param columnConsistency New consistency checks configuration.
+     * Sets the datatype check configuration on a column level.
+     * @param columnDatatype New datatype checks configuration.
      */
-    public void setColumnConsistency(ColumnConsistencyDailyRecurringChecksSpec columnConsistency) {
-        this.setDirtyIf(!Objects.equals(this.columnConsistency, columnConsistency));
-        this.columnConsistency = columnConsistency;
-        this.propagateHierarchyIdToField(columnConsistency, "column_consistency");
+    public void setColumnDatatype(ColumnDatatypeDailyRecurringChecksSpec columnDatatype) {
+        this.setDirtyIf(!Objects.equals(this.columnDatatype, columnDatatype));
+        this.columnDatatype = columnDatatype;
+        this.propagateHierarchyIdToField(columnDatatype, "column_datatype");
     }
 
     /**
@@ -502,8 +508,8 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
             this.getColumnCheckCategories(targetColumn).setBool(this.columnBool.deepClone());
         }
 
-        if (this.columnConsistency != null && !this.columnConsistency.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setConsistency(this.columnConsistency.deepClone());
+        if (this.columnDatatype != null && !this.columnDatatype.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setDatatype(this.columnDatatype.deepClone());
         }
 
         if (this.columnAnomaly != null && !this.columnAnomaly.isDefault() && DataTypeCategory.isNumericType(dataTypeCategory)) {
@@ -513,5 +519,73 @@ public class DefaultDailyRecurringObservabilityCheckSettingsSpec extends Abstrac
         if (this.columnSchema != null && !this.columnSchema.isDefault()) {
             this.getColumnCheckCategories(targetColumn).setSchema(this.columnSchema.deepClone());
         }
+    }
+
+    /**
+     * Returns the type of checks (profiling, recurring, partitioned).
+     *
+     * @return Check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return null;
+    }
+
+    /**
+     * Returns the time scale for recurring and partitioned checks (daily, monthly, etc.).
+     * Profiling checks do not have a time scale and return null.
+     *
+     * @return Time scale (daily, monthly, ...).
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return null;
+    }
+
+    /**
+     * Returns the check target, where the check could be applied.
+     *
+     * @return Check target, "table" or "column".
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return null;
+    }
+
+    /**
+     * Returns the name of the cron expression that is used to schedule checks in this check root object.
+     *
+     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     */
+    @Override
+    @JsonIgnore
+    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
+        return null;
+    }
+
+    /**
+     * Returns the comparisons container for table comparison checks, indexed by the reference table configuration name.
+     *
+     * @return Table comparison container.
+     */
+    @Override
+    @JsonIgnore
+    public AbstractComparisonCheckCategorySpecMap<?> getComparisons() {
+        return null;
+    }
+
+    /**
+     * Returns time series configuration for the given group of checks.
+     *
+     * @param tableSpec Parent table specification - used to get the details about the time partitioning column.
+     * @return Time series configuration.
+     */
+    @Override
+    @JsonIgnore
+    public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
+        return null;
     }
 }

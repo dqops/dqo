@@ -36,117 +36,117 @@ import java.util.Objects;
 public class ColumnAccuracyProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("total_sum_match_percent", o -> o.totalSumMatchPercent);
-            put("total_min_match_percent", o -> o.totalMinMatchPercent);
-            put("total_max_match_percent", o -> o.totalMaxMatchPercent);
-            put("total_average_match_percent", o -> o.totalAverageMatchPercent);
-            put("total_not_null_count_match_percent", o -> o.totalNotNullCountMatchPercent);
+            put("profile_total_sum_match_percent", o -> o.profileTotalSumMatchPercent);
+            put("profile_total_min_match_percent", o -> o.profileTotalMinMatchPercent);
+            put("profile_total_max_match_percent", o -> o.profileTotalMaxMatchPercent);
+            put("profile_total_average_match_percent", o -> o.profileTotalAverageMatchPercent);
+            put("profile_total_not_null_count_match_percent", o -> o.profileTotalNotNullCountMatchPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.")
-    private ColumnAccuracyTotalSumMatchPercentCheckSpec totalSumMatchPercent;
+    private ColumnAccuracyTotalSumMatchPercentCheckSpec profileTotalSumMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number.")
-    private ColumnAccuracyTotalMinMatchPercentCheckSpec totalMinMatchPercent;
+    private ColumnAccuracyTotalMinMatchPercentCheckSpec profileTotalMinMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number.")
-    private ColumnAccuracyTotalMaxMatchPercentCheckSpec totalMaxMatchPercent;
+    private ColumnAccuracyTotalMaxMatchPercentCheckSpec profileTotalMaxMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number.")
-    private ColumnAccuracyTotalAverageMatchPercentCheckSpec totalAverageMatchPercent;
+    private ColumnAccuracyTotalAverageMatchPercentCheckSpec profileTotalAverageMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec totalNotNullCountMatchPercent;
+    private ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec profileTotalNotNullCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
      * @return Accuracy total sum match percent check specification.
      */
-    public ColumnAccuracyTotalSumMatchPercentCheckSpec getTotalSumMatchPercent() {
-        return totalSumMatchPercent;
+    public ColumnAccuracyTotalSumMatchPercentCheckSpec getProfileTotalSumMatchPercent() {
+        return profileTotalSumMatchPercent;
     }
 
     /**
      * Sets a new definition of an Accuracy total sum match percent check.
-     * @param totalSumMatchPercent accuracy total sum match percent check specification.
+     * @param profileTotalSumMatchPercent accuracy total sum match percent check specification.
      */
-    public void setTotalSumMatchPercent(ColumnAccuracyTotalSumMatchPercentCheckSpec totalSumMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.totalSumMatchPercent, totalSumMatchPercent));
-        this.totalSumMatchPercent = totalSumMatchPercent;
-        propagateHierarchyIdToField(totalSumMatchPercent, "total_sum_match_percent");
+    public void setProfileTotalSumMatchPercent(ColumnAccuracyTotalSumMatchPercentCheckSpec profileTotalSumMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTotalSumMatchPercent, profileTotalSumMatchPercent));
+        this.profileTotalSumMatchPercent = profileTotalSumMatchPercent;
+        propagateHierarchyIdToField(profileTotalSumMatchPercent, "profile_total_sum_match_percent");
     }
 
     /**
      * Returns an accuracy min percent check specification.
      * @return Accuracy min percent check specification.
      */
-    public ColumnAccuracyTotalMinMatchPercentCheckSpec getTotalMinMatchPercent() {
-        return totalMinMatchPercent;
+    public ColumnAccuracyTotalMinMatchPercentCheckSpec getProfileTotalMinMatchPercent() {
+        return profileTotalMinMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy min percent check.
-     * @param totalMinMatchPercent Accuracy min percent check specification.
+     * @param profileTotalMinMatchPercent Accuracy min percent check specification.
      */
-    public void setTotalMinMatchPercent(ColumnAccuracyTotalMinMatchPercentCheckSpec totalMinMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.totalMinMatchPercent, totalMinMatchPercent));
-        this.totalMinMatchPercent = totalMinMatchPercent;
-        propagateHierarchyIdToField(totalMinMatchPercent, "total_min_match_percent");
+    public void setProfileTotalMinMatchPercent(ColumnAccuracyTotalMinMatchPercentCheckSpec profileTotalMinMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTotalMinMatchPercent, profileTotalMinMatchPercent));
+        this.profileTotalMinMatchPercent = profileTotalMinMatchPercent;
+        propagateHierarchyIdToField(profileTotalMinMatchPercent, "profile_total_min_match_percent");
     }
 
     /**
      * Returns an accuracy max percent check specification.
      * @return Accuracy max percent check specification.
      */
-    public ColumnAccuracyTotalMaxMatchPercentCheckSpec getTotalMaxMatchPercent() {
-        return totalMaxMatchPercent;
+    public ColumnAccuracyTotalMaxMatchPercentCheckSpec getProfileTotalMaxMatchPercent() {
+        return profileTotalMaxMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy max percent check.
-     * @param totalMaxMatchPercent Accuracy max percent check specification.
+     * @param profileTotalMaxMatchPercent Accuracy max percent check specification.
      */
-    public void setTotalMaxMatchPercent(ColumnAccuracyTotalMaxMatchPercentCheckSpec totalMaxMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.totalMaxMatchPercent, totalMaxMatchPercent));
-        this.totalMaxMatchPercent = totalMaxMatchPercent;
-        propagateHierarchyIdToField(totalMaxMatchPercent, "total_max_match_percent");
+    public void setProfileTotalMaxMatchPercent(ColumnAccuracyTotalMaxMatchPercentCheckSpec profileTotalMaxMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTotalMaxMatchPercent, profileTotalMaxMatchPercent));
+        this.profileTotalMaxMatchPercent = profileTotalMaxMatchPercent;
+        propagateHierarchyIdToField(profileTotalMaxMatchPercent, "profile_total_max_match_percent");
     }
 
     /**
      * Returns an accuracy average percent check specification.
      * @return Accuracy average percent check specification.
      */
-    public ColumnAccuracyTotalAverageMatchPercentCheckSpec getTotalAverageMatchPercent() {
-        return totalAverageMatchPercent;
+    public ColumnAccuracyTotalAverageMatchPercentCheckSpec getProfileTotalAverageMatchPercent() {
+        return profileTotalAverageMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy average percent check.
-     * @param totalAverageMatchPercent Accuracy average percent check specification.
+     * @param profileTotalAverageMatchPercent Accuracy average percent check specification.
      */
-    public void setTotalAverageMatchPercent(ColumnAccuracyTotalAverageMatchPercentCheckSpec totalAverageMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.totalAverageMatchPercent, totalAverageMatchPercent));
-        this.totalAverageMatchPercent = totalAverageMatchPercent;
-        propagateHierarchyIdToField(totalAverageMatchPercent, "total_average_match_percent");
+    public void setProfileTotalAverageMatchPercent(ColumnAccuracyTotalAverageMatchPercentCheckSpec profileTotalAverageMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTotalAverageMatchPercent, profileTotalAverageMatchPercent));
+        this.profileTotalAverageMatchPercent = profileTotalAverageMatchPercent;
+        propagateHierarchyIdToField(profileTotalAverageMatchPercent, "profile_total_average_match_percent");
     }
 
     /**
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec getTotalNotNullCountMatchPercent() {
-        return totalNotNullCountMatchPercent;
+    public ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec getProfileTotalNotNullCountMatchPercent() {
+        return profileTotalNotNullCountMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy row count percent check.
-     * @param totalNotNullCountMatchPercent Accuracy row count percent check specification.
+     * @param profileTotalNotNullCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setTotalNotNullCountMatchPercent(ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec totalNotNullCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.totalNotNullCountMatchPercent, totalNotNullCountMatchPercent));
-        this.totalNotNullCountMatchPercent = totalNotNullCountMatchPercent;
-        propagateHierarchyIdToField(totalNotNullCountMatchPercent, "total_not_null_count_match_percent");
+    public void setProfileTotalNotNullCountMatchPercent(ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec profileTotalNotNullCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTotalNotNullCountMatchPercent, profileTotalNotNullCountMatchPercent));
+        this.profileTotalNotNullCountMatchPercent = profileTotalNotNullCountMatchPercent;
+        propagateHierarchyIdToField(profileTotalNotNullCountMatchPercent, "profile_total_not_null_count_match_percent");
     }
 
     /**

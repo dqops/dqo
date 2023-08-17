@@ -85,7 +85,7 @@ dqo:
       parallel-delete-operations: 2000
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
   cloud:
-    ui-base-url: http://cloud.dqo.ai
+    ui-base-url: https://cloud.dqo.ai
     rest-api-base-url: https://api.dqo.ai
     #ui-base-url: http://localhost:8080
     #rest-api-base-url: http://localhost:8080

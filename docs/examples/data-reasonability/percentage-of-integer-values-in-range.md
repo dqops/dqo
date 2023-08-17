@@ -96,7 +96,7 @@ spec:
         nullable: true
       profiling_checks:
         numeric:
-          values_in_range_numeric_percent:
+          profile_values_in_range_numeric_percent:
             comments:
             - date: 2023-05-09T07:28:29.188+00:00
               comment_by: user
@@ -129,7 +129,42 @@ spec:
         column_type: STRING
         nullable: true
 ```
-## Running the checks in the example and evaluating the results
+## Running the checks in the example and evaluating the results using the graphical interface
+
+The detailed explanation of how to run the example is described [here](../#running-the-examples).
+
+To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-values-in-range-numeric-percent-check.png)
+
+1. Go to **Profiling** section.
+
+2. Select the table or column mentioned in the example description from the tree view on the left.
+
+3. Select **Advanced Profiling** tab.
+
+4. Run the enabled check using the **Run check** button.
+   ![Run check](https://dqops.com/docs/images/examples/values-in-range-numeric-percent-run-check.png)
+
+5. Review the results by opening the **Check details** button.
+   ![Check details](https://dqops.com/docs/images/examples/values-in-range-numeric-percent-check-details.png)
+
+6. You should see the results as the one below.
+   The actual value in this example is 92, which is below the minimum threshold level set in the warning (99.0%).
+   The check gives a warning (notice the orange square on the left of the name of the check).
+
+   ![Values-in-range-numeric-percent check results](https://dqops.com/docs/images/examples/values-in-range-numeric-percent-check-results.png)
+
+7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
+   located in the upper right corner of the graphical interface.
+
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
+   the results displayed on the DQ KPIs per check type dashboard showing results by KPI, KPI per check type, profiling KPI, recurring KPI and partitioned KPI.
+
+   ![Values-in-range-numeric-percent check results on DQ KPIs per check type dashboard](https://dqops.com/docs/images/examples/values-in-range-numeric-percent-check-results-on-DQ-KPIs-per-check-type-dashboard.png)
+
+## Running the checks in the example and evaluating the results using DQO Shell
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 

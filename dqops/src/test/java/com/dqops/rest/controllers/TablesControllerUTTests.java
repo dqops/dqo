@@ -368,7 +368,7 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setFatal(minRule3);
 
         TableVolumeProfilingChecksSpec volumeChecksSpec = new TableVolumeProfilingChecksSpec();
-        volumeChecksSpec.setRowCount(minRowCountSpec);
+        volumeChecksSpec.setProfileRowCount(minRowCountSpec);
         TableProfilingCheckCategoriesSpec sampleProfilingCheck = new TableProfilingCheckCategoriesSpec();
         sampleProfilingCheck.setVolume(volumeChecksSpec);
 

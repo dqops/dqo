@@ -115,6 +115,7 @@ const CheckRuleItem = ({
                 }
                 disabled={disabled}
                 onSave={onUpdate}
+                checkBoxNotRed={true}
               />
             </div>
           ))}

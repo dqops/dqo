@@ -118,51 +118,61 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                            ExecutionContext executionContext,
                                            ProviderType providerType) {
         CheckContainerModel checkContainerModel = new CheckContainerModel();
-        checkContainerModel.setRunChecksJobTemplate(runChecksTemplate.clone());
-        checkContainerModel.setPartitionByColumn(tableSpec.getTimestampColumns() != null ?
-                tableSpec.getTimestampColumns().getPartitionByColumn() : null);
-        checkContainerModel.setDataCleanJobTemplate(
-                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                        checkContainerModel.getRunChecksJobTemplate()));
+        if (runChecksTemplate != null) {
+            checkContainerModel.setRunChecksJobTemplate(runChecksTemplate.clone());
 
-        EffectiveScheduleModel effectiveScheduleModel = getEffectiveScheduleModel(
-                tableSpec.getSchedulesOverride(),
-                checkCategoriesSpec.getSchedulingGroup(),
-                EffectiveScheduleLevelModel.table_override
-        );
-        ScheduleEnabledStatusModel scheduleEnabledStatus = getScheduleEnabledStatus(
-                tableSpec.getSchedulesOverride() != null ?
-                    tableSpec.getSchedulesOverride()
-                        .getScheduleForCheckSchedulingGroup(
-                                checkCategoriesSpec.getSchedulingGroup()
-                        )
-                    : null
-        );
-        if (effectiveScheduleModel == null && connectionSpec != null) {
-            effectiveScheduleModel = getEffectiveScheduleModel(
-                    connectionSpec.getSchedules(),
-                    checkCategoriesSpec.getSchedulingGroup(),
-                    EffectiveScheduleLevelModel.connection
-            );
-            scheduleEnabledStatus = getScheduleEnabledStatus(
-                    connectionSpec.getSchedules() != null ?
-                        connectionSpec.getSchedules()
-                            .getScheduleForCheckSchedulingGroup(
-                                    checkCategoriesSpec.getSchedulingGroup()
-                            )
-                        : null
-            );
+            checkContainerModel.setDataCleanJobTemplate(
+                    DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
+                            checkContainerModel.getRunChecksJobTemplate()));
         }
-        checkContainerModel.setEffectiveSchedule(effectiveScheduleModel);
-        checkContainerModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
+
+        if (tableSpec != null) {
+            checkContainerModel.setPartitionByColumn(tableSpec.getTimestampColumns() != null ?
+                    tableSpec.getTimestampColumns().getPartitionByColumn() : null);
+
+            EffectiveScheduleModel effectiveScheduleModel = getEffectiveScheduleModel(
+                    tableSpec.getSchedulesOverride(),
+                    checkCategoriesSpec.getSchedulingGroup(),
+                    EffectiveScheduleLevelModel.table_override
+            );
+            ScheduleEnabledStatusModel scheduleEnabledStatus = getScheduleEnabledStatus(
+                    tableSpec.getSchedulesOverride() != null ?
+                            tableSpec.getSchedulesOverride()
+                                    .getScheduleForCheckSchedulingGroup(
+                                            checkCategoriesSpec.getSchedulingGroup()
+                                    )
+                            : null
+            );
+            if (effectiveScheduleModel == null && connectionSpec != null) {
+                effectiveScheduleModel = getEffectiveScheduleModel(
+                        connectionSpec.getSchedules(),
+                        checkCategoriesSpec.getSchedulingGroup(),
+                        EffectiveScheduleLevelModel.connection
+                );
+                scheduleEnabledStatus = getScheduleEnabledStatus(
+                        connectionSpec.getSchedules() != null ?
+                                connectionSpec.getSchedules()
+                                        .getScheduleForCheckSchedulingGroup(
+                                                checkCategoriesSpec.getSchedulingGroup()
+                                        )
+                                : null
+                );
+            }
+            checkContainerModel.setEffectiveSchedule(effectiveScheduleModel);
+            checkContainerModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
+        }
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
-        Optional<String> categoryNameFilter = Optional.ofNullable(checkContainerModel.getRunChecksJobTemplate().getCheckCategory());
+        Optional<String> categoryNameFilter = Optional.ofNullable(checkContainerModel.getRunChecksJobTemplate()).map(ct -> ct.getCheckCategory());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
         CheckType checkType = checkCategoriesSpec.getCheckType();
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
+            if (categoryFieldInfo.getDataType() != ParameterDataType.object_type) {
+                continue;
+            }
+
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
                 AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap = (AbstractComparisonCheckCategorySpecMap<?>)categoryFieldValue;
@@ -170,7 +180,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 Class<?> comparisonContainerClassType = (Class<?>) actualTypeArgument;
                 ClassInfo comparisonChecksCategoryClassInfo = reflectionService.getClassInfoForClass(comparisonContainerClassType);
 
-                if (tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().size() > 0) {
+                if (tableSpec != null && tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().size() > 0) {
                     for (String comparisonName : tableSpec.getTableComparisons().keySet()) {
                         AbstractComparisonCheckCategorySpec configuredComparisonChecksCategory = comparisonCheckCategorySpecMap.get(comparisonName);
                         if (configuredComparisonChecksCategory == null) {
@@ -197,7 +207,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 }
 
                 for (AbstractComparisonCheckCategorySpec configuredComparisonChecks : comparisonCheckCategorySpecMap.values()) {
-                    if (tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().get(configuredComparisonChecks.getComparisonName()) != null) {
+                    if (tableSpec == null || (tableSpec.getTableComparisons() != null && tableSpec.getTableComparisons().get(configuredComparisonChecks.getComparisonName()) != null)) {
                         continue; // already added, we are adding only orphaned check configuration for reference table configurations no longer configured
                         // TODO: assign some boolean flag to the model to identify misconfigured (orphaned) checks, because they will fail to run anyway
                     }
@@ -271,6 +281,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
+            if (categoryFieldInfo.getDataType() != ParameterDataType.object_type) {
+                continue;
+            }
+
             Object checkCategoryParentNode = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             if (checkCategoryParentNode instanceof AbstractComparisonCheckCategorySpecMap<?>) {
                 continue; // not supported
@@ -319,7 +333,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                                        CheckType checkType,
                                                        CheckTimeScale checkTimeScale) {
         QualityCategoryModel categoryModel = new QualityCategoryModel();
-        CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate.clone();
+        CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate != null ? runChecksTemplate.clone() : null;
+
         if (checkCategoryParentNode instanceof AbstractComparisonCheckCategorySpec) {
             AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = (AbstractComparisonCheckCategorySpec)checkCategoryParentNode;
             String comparisonName = comparisonCheckCategorySpec.getComparisonName();
@@ -335,7 +350,9 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         }
 
         categoryModel.setHelpText(categoryFieldInfo.getHelpText());
-        runChecksCategoryTemplate.setCheckCategory(categoryFieldInfo.getYamlFieldName());
+        if (runChecksCategoryTemplate != null) {
+            runChecksCategoryTemplate.setCheckCategory(categoryFieldInfo.getYamlFieldName());
+        }
         categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
         categoryModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
@@ -344,7 +361,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         );
 
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
-        Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate().getCheckName());
+        Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate()).map(ct -> ct.getCheckName());
         List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
 
         for (FieldInfo checkFieldInfo : checksFields) {
@@ -451,17 +468,20 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         String checkName = checkFieldInfo.getYamlFieldName();
         checkModel.setCheckName(checkName);
         checkModel.setHelpText(checkFieldInfo.getHelpText());
-        CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();
-        runOneCheckTemplate.setCheckName(checkName);
-        checkModel.setRunChecksJobTemplate(runOneCheckTemplate);
 
-        if (this.similarCheckCache != null) {
-            checkModel.setSimilarChecks(this.similarCheckCache.findSimilarChecksTo(checkTarget, checkName));
+        if (runChecksCategoryTemplate != null) {
+            CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();
+            runOneCheckTemplate.setCheckName(checkName);
+            checkModel.setRunChecksJobTemplate(runOneCheckTemplate);
+
+            DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate);
+            dataCleanJobTemplate.setDataGroupTag(checkSpec.getDataGrouping());
+            checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
         }
 
-        DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate);
-        dataCleanJobTemplate.setDataGroupTag(checkSpec.getDataGrouping());
-        checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
+        if (checkTarget != null && this.similarCheckCache != null) {
+            checkModel.setSimilarChecks(this.similarCheckCache.findSimilarChecksTo(checkTarget, checkName));
+        }
 
         RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
         checkModel.setScheduleOverride(scheduleOverride);

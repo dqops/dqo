@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAccuracyProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAccuracyProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("total_row_count_match_percent", o -> o.totalRowCountMatchPercent);
+            put("profile_total_row_count_match_percent", o -> o.profileTotalRowCountMatchPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table matches the total row count of another (reference) table.")
-    private TableAccuracyTotalRowCountMatchPercentCheckSpec totalRowCountMatchPercent;
+    private TableAccuracyTotalRowCountMatchPercentCheckSpec profileTotalRowCountMatchPercent;
 
     /**
      * Returns the total row count match check.
      * @return Total row count match check.
      */
-    public TableAccuracyTotalRowCountMatchPercentCheckSpec getTotalRowCountMatchPercent() {
-        return totalRowCountMatchPercent;
+    public TableAccuracyTotalRowCountMatchPercentCheckSpec getProfileTotalRowCountMatchPercent() {
+        return profileTotalRowCountMatchPercent;
     }
 
     /**
      * Sets a new total row count match check.
-     * @param totalRowCountMatchPercent Total row count match check.
+     * @param profileTotalRowCountMatchPercent Total row count match check.
      */
-    public void setTotalRowCountMatchPercent(TableAccuracyTotalRowCountMatchPercentCheckSpec totalRowCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.totalRowCountMatchPercent, totalRowCountMatchPercent));
-        this.totalRowCountMatchPercent = totalRowCountMatchPercent;
-        propagateHierarchyIdToField(totalRowCountMatchPercent, "total_row_count_match_percent");
+    public void setProfileTotalRowCountMatchPercent(TableAccuracyTotalRowCountMatchPercentCheckSpec profileTotalRowCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTotalRowCountMatchPercent, profileTotalRowCountMatchPercent));
+        this.profileTotalRowCountMatchPercent = profileTotalRowCountMatchPercent;
+        propagateHierarchyIdToField(profileTotalRowCountMatchPercent, "profile_total_row_count_match_percent");
     }
 
     /**

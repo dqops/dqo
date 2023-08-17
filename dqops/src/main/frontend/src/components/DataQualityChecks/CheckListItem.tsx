@@ -45,6 +45,7 @@ interface ICheckListItemProps {
   mode?: string;
   changeCopyUI: (checked: boolean) => void;
   checkedCopyUI?: boolean;
+  comparisonName?: string;
 }
 
 const CheckListItem = ({
@@ -56,7 +57,9 @@ const CheckListItem = ({
   onUpdate,
   timeWindowFilter,
   changeCopyUI,
-  checkedCopyUI
+  checkedCopyUI,
+  category,
+  comparisonName
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
@@ -445,7 +448,7 @@ const CheckListItem = ({
               </Tooltip>
             )}
             <Tooltip
-              content="Check Details"
+              content="Results"
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
               <div className="w-5 h-5">
@@ -620,6 +623,8 @@ const CheckListItem = ({
               timeScale={check.run_checks_job_template?.timeScale}
               check={check}
               onClose={closeCheckDetails}
+              category={category}
+              comparisonName={comparisonName}
             />
           </td>
         </tr>

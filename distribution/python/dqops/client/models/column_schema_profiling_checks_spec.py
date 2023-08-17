@@ -20,30 +20,32 @@ T = TypeVar("T", bound="ColumnSchemaProfilingChecksSpec")
 class ColumnSchemaProfilingChecksSpec:
     """
     Attributes:
-        column_exists (Union[Unset, ColumnSchemaColumnExistsCheckSpec]):
-        column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
+        profile_column_exists (Union[Unset, ColumnSchemaColumnExistsCheckSpec]):
+        profile_column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
     """
 
-    column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
-    column_type_changed: Union[Unset, "ColumnSchemaTypeChangedCheckSpec"] = UNSET
+    profile_column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
+    profile_column_type_changed: Union[
+        Unset, "ColumnSchemaTypeChangedCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        column_exists: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.column_exists, Unset):
-            column_exists = self.column_exists.to_dict()
+        profile_column_exists: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_column_exists, Unset):
+            profile_column_exists = self.profile_column_exists.to_dict()
 
-        column_type_changed: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.column_type_changed, Unset):
-            column_type_changed = self.column_type_changed.to_dict()
+        profile_column_type_changed: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_column_type_changed, Unset):
+            profile_column_type_changed = self.profile_column_type_changed.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if column_exists is not UNSET:
-            field_dict["column_exists"] = column_exists
-        if column_type_changed is not UNSET:
-            field_dict["column_type_changed"] = column_type_changed
+        if profile_column_exists is not UNSET:
+            field_dict["profile_column_exists"] = profile_column_exists
+        if profile_column_type_changed is not UNSET:
+            field_dict["profile_column_type_changed"] = profile_column_type_changed
 
         return field_dict
 
@@ -57,25 +59,27 @@ class ColumnSchemaProfilingChecksSpec:
         )
 
         d = src_dict.copy()
-        _column_exists = d.pop("column_exists", UNSET)
-        column_exists: Union[Unset, ColumnSchemaColumnExistsCheckSpec]
-        if isinstance(_column_exists, Unset):
-            column_exists = UNSET
+        _profile_column_exists = d.pop("profile_column_exists", UNSET)
+        profile_column_exists: Union[Unset, ColumnSchemaColumnExistsCheckSpec]
+        if isinstance(_profile_column_exists, Unset):
+            profile_column_exists = UNSET
         else:
-            column_exists = ColumnSchemaColumnExistsCheckSpec.from_dict(_column_exists)
+            profile_column_exists = ColumnSchemaColumnExistsCheckSpec.from_dict(
+                _profile_column_exists
+            )
 
-        _column_type_changed = d.pop("column_type_changed", UNSET)
-        column_type_changed: Union[Unset, ColumnSchemaTypeChangedCheckSpec]
-        if isinstance(_column_type_changed, Unset):
-            column_type_changed = UNSET
+        _profile_column_type_changed = d.pop("profile_column_type_changed", UNSET)
+        profile_column_type_changed: Union[Unset, ColumnSchemaTypeChangedCheckSpec]
+        if isinstance(_profile_column_type_changed, Unset):
+            profile_column_type_changed = UNSET
         else:
-            column_type_changed = ColumnSchemaTypeChangedCheckSpec.from_dict(
-                _column_type_changed
+            profile_column_type_changed = ColumnSchemaTypeChangedCheckSpec.from_dict(
+                _profile_column_type_changed
             )
 
         column_schema_profiling_checks_spec = cls(
-            column_exists=column_exists,
-            column_type_changed=column_type_changed,
+            profile_column_exists=profile_column_exists,
+            profile_column_type_changed=profile_column_type_changed,
         )
 
         column_schema_profiling_checks_spec.additional_properties = d
