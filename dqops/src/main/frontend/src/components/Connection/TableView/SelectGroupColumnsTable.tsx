@@ -163,7 +163,7 @@ export const SelectGroupColumnsTable = ({
                   triggerClassName={clsx(
                     object && object[index] === 1
                       ? 'my-0.5 border border-red-500'
-                      : options.find((x) => x.label === listOfColumns[index]) ?'my-0.5' :  "my-0.5 text-red-500"  
+                      : options.find((x) => x.label === listOfColumns[index] || listOfColumns[index].length === 0) ?'my-0.5' :  "my-0.5 text-red-500"  
                   )}
                   value={listOfColumns[index] ?? ""}
                   onChange={(value: string) =>

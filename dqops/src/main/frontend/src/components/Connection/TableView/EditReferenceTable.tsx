@@ -46,6 +46,9 @@ type EditReferenceTableProps = {
   cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
   onChangeIsDataDeleted: (arg: boolean) => void;
   onChange: (obj: Partial<TableComparisonModel>) => void
+  isDataDeleted : boolean
+  onChangeRefTableChanged: (arg: boolean) => void
+  refTableChanged: boolean
 };
 
 const EditReferenceTable = ({
@@ -61,7 +64,10 @@ const EditReferenceTable = ({
   combinedFunc,
   cleanDataTemplate,
   onChangeIsDataDeleted,
-  onChange
+  onChange,
+  isDataDeleted,
+  onChangeRefTableChanged,
+  refTableChanged
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -407,7 +413,9 @@ const EditReferenceTable = ({
           )
           if(value !== refTable){
             setDeleteDataDialogOpened(true)
+            onChangeRefTableChanged(!refTableChanged)
            }   
+           
         }
    
   };
@@ -533,6 +541,8 @@ const EditReferenceTable = ({
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
     combinedArray();
     splitArrays();
+
+    onChange({grouping_columns: doubleArray})
   }, [normalList, refList]);
 
   const saveRun = () => {
@@ -563,7 +573,7 @@ const EditReferenceTable = ({
   }) => {
     setDeleteDataDialogOpened(false);
     try {
-      setDeletingData(true);
+      setDeletingData(!isDataDeleted);
       const res = await JobApiClient.deleteStoredData({
         ...(cleanDataTemplate || {}),
         ...params
@@ -590,12 +600,12 @@ const EditReferenceTable = ({
       job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
-      onChangeIsDataDeleted(true);
+      onChangeIsDataDeleted(!isDataDeleted);
       setDeletingData(false);
     }
   }, [job?.status]);
 
-  console.log(splitArrays()?.refArr)
+  console.log(doubleArray)
 
   return (
     <div className="w-full">
@@ -625,12 +635,15 @@ const EditReferenceTable = ({
               disabledDeleting || deletingData ? 'animate-spin' : 'hidden'
             )}
           />
-          <Button
+          {isCreating === false &&
+            <Button
             color="primary"
             variant="contained"
+            disabled={  disabledDeleting || deletingData || disabled}
             label="Delete results"
             onClick={() => setDeleteDataDialogOpened(true)}
-          />
+            />
+          }
           <SvgIcon
             name="sync"
             className={clsx(
@@ -644,7 +657,7 @@ const EditReferenceTable = ({
               color="primary"
               variant="contained"
               onClick={saveRun}
-              disabled={disabled}
+              disabled={disabledDeleting || deletingData || disabled}
             />
           )}
           <Button

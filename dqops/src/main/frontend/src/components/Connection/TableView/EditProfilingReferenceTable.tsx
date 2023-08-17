@@ -82,6 +82,11 @@ export const EditProfilingReferenceTable = ({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
+  const [refTableChanged, setRefTableChanged] = useState(false)
+
+  const onChangeRefTableChanged = (arg : boolean) =>{
+    setRefTableChanged(arg)
+  }
 
   const onChangeIsDataDeleted = (arg: boolean): void => {
     setIsDataDeleted(arg);
@@ -137,7 +142,7 @@ export const EditProfilingReferenceTable = ({
         }
       }
     }
-    if (reference) {
+    if (reference !== undefined && Object.keys(reference).length > 0 && isCreating ===false) {
       ColumnApiClient.getColumns(
         reference.reference_connection ?? '',
         reference.reference_table?.schema_name ?? '',
@@ -154,7 +159,7 @@ export const EditProfilingReferenceTable = ({
   }, [selectedReference]);
 
   useEffect(() => {
-    if (reference) {
+    if (reference !== undefined && Object.keys(reference).length > 0 && isCreating ===false) {
       ColumnApiClient.getColumns(
         reference.reference_connection ?? '',
         reference.reference_table?.schema_name ?? '',
@@ -197,7 +202,7 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdate = () => {
-    if (reference) {
+    if (reference !== undefined && Object.keys(reference).length > 0 ) {
       if (checkTypes === CheckTypes.PROFILING) {
         TableComparisonsApi.updateTableComparisonProfiling(
           connection,
@@ -277,6 +282,7 @@ export const EditProfilingReferenceTable = ({
     obj: Partial<ColumnComparisonModel>,
     columnIndex: number
   ) => {
+    console.log(obj)
     const newColumns = reference?.columns?.map((item, index) =>
       index === columnIndex
         ? {
@@ -285,7 +291,7 @@ export const EditProfilingReferenceTable = ({
           }
         : item
     );
-
+    console.log(newColumns)
     onChange({
       columns: newColumns
     });
@@ -306,30 +312,32 @@ export const EditProfilingReferenceTable = ({
   };
 
   const getResultsData = async () => {
-    if (checkTypes === 'profiling') {
-      await TableComparisonResultsApi.getTableComparisonProfilingResults(
-        connection,
-        schema,
-        table,
-        selectedReference ?? ''
-      ).then((res) => setTableComparisonResults(res.data));
-    } else if (checkTypes === 'recurring') {
-      await TableComparisonResultsApi.getTableComparisonRecurringResults(
-        connection,
-        schema,
-        table,
-        timePartitioned === 'daily' ? 'daily' : 'monthly',
-        selectedReference ?? ''
-      ).then((res) => setTableComparisonResults(res.data));
-    } else if (checkTypes === 'partitioned') {
-      await TableComparisonResultsApi.getTableComparisonPartitionedResults(
-        connection,
-        schema,
-        table,
-        timePartitioned === 'daily' ? 'daily' : 'monthly',
-        selectedReference ?? ''
-      ).then((res) => setTableComparisonResults(res.data));
-    }
+    if(isCreating === false){
+      if (checkTypes === 'profiling') {
+        await TableComparisonResultsApi.getTableComparisonProfilingResults(
+          connection,
+          schema,
+          table,
+          selectedReference ?? ''
+          ).then((res) => setTableComparisonResults(res.data))
+        } else if (checkTypes === 'recurring') {
+          await TableComparisonResultsApi.getTableComparisonRecurringResults(
+            connection,
+            schema,
+            table,
+            timePartitioned === 'daily' ? 'daily' : 'monthly',
+            selectedReference ?? ''
+            ).then((res) => setTableComparisonResults(res.data));
+          } else if (checkTypes === 'partitioned') {
+            await TableComparisonResultsApi.getTableComparisonPartitionedResults(
+              connection,
+              schema,
+              table,
+              timePartitioned === 'daily' ? 'daily' : 'monthly',
+              selectedReference ?? ''
+              ).then((res) => setTableComparisonResults(res.data));
+            }
+          }
   };
 
   const onRunChecksRowCount = async () => {
@@ -434,26 +442,33 @@ export const EditProfilingReferenceTable = ({
   };
 
   useEffect(() => {
-    onUpdate();
+    if(isCreating === false){
+      onUpdate();
+    }
   }, [reference, table, schema, connection]);
 
   useEffect(() => {
-    if (isDataDeleted === true) {
+
       getResultsData();
-    }
   }, [isDataDeleted]);
 
-  console.log(reference)
-  console.log(columnOptions)
 
-  useEffect(() => {
-      const stringArr = columnOptions.map((x) => x.value)
-      if(reference?.columns){
-        reference?.columns.map((x, index) => 
-        !stringArr.includes(x.reference_column_name) ? onChangeColumn({compared_column_name : x.compared_column_name, reference_column_name: ""}, index) : "")
+function replaceStringWithUndefined(arr: TableComparisonModel): TableComparisonModel {
+  const columnValues = columnOptions.map((x) => x.value)
+  if (arr.columns) {
+    arr.columns = arr.columns.map(obj => {
+      if(!columnValues.includes(obj.reference_column_name)){
+        return { ...obj, reference_column_name: undefined };
+      }else{
+        return {...obj}
       }
-
-  }, [1])
+    });
+  }
+  return arr;
+}
+  useEffect(() => {
+    setReference(replaceStringWithUndefined(reference ?? {}))
+}, [refTableChanged]);
 
   return (
     <div className="text-sm">
@@ -474,6 +489,9 @@ export const EditProfilingReferenceTable = ({
           }}
           cleanDataTemplate={reference?.compare_table_clean_data_job_template}
           onChangeIsDataDeleted={onChangeIsDataDeleted}
+          isDataDeleted = {isDataDeleted}
+          onChangeRefTableChanged = {onChangeRefTableChanged}
+          refTableChanged ={refTableChanged}
         />
       </div>
       {reference && (
