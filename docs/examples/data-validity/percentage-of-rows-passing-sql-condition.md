@@ -83,7 +83,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 The data quality check must be configured as presented in the following YAML file:
 
-```yaml hl_lines="7-17"
+```yaml hl_lines="9-17"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -213,7 +213,7 @@ The expression `upper_ci >=lower_ci` was false for almost 7.4% rows probably bec
 
 Let's update the SQL expression and count rows with NULL values as valid.
 
-```yaml hl_lines="7-17"
+```yaml hl_lines="9-17"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -222,7 +222,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     sql:
-      sql_condition_passed_percent_on_table:
+      profile_sql_condition_passed_percent_on_table:
         parameters:
           sql_condition: upper_ci >= lower_ci or upper_ci is NULL or lower_ci is NULL
         warning:

@@ -170,6 +170,10 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                                                       SensorPrepareResult sensorPrepareResult,
                                                       SensorExecutionProgressListener progressListener,
                                                       JobCancellationToken jobCancellationToken) {
+        if (!groupedSensorExecutionResult.isSuccess()) {
+            return new SensorExecutionResult(sensorPrepareResult.getSensorRunParameters(), groupedSensorExecutionResult.getException());
+        }
+
         Table multiSensorTableResult = groupedSensorExecutionResult.getTableResult();
         Table sensorResultRows = Table.create(multiSensorTableResult.name());
         Column<?> actualValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getActualValueAlias());

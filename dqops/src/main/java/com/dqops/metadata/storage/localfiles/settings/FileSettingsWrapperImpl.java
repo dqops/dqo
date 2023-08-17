@@ -58,10 +58,19 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 			if (fileNode != null) {
 				FileContent fileContent = fileNode.getContent();
 				String textContent = fileContent.getTextContent();
-				SettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, SettingsYaml.class, fileNode.getPhysicalAbsolutePath());
-				SettingsSpec deserializedSpec = deserialized.getSpec();
-				if (deserialized.getKind() != SpecificationKind.SETTINGS) {
-					throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+				SettingsSpec deserializedSpec = (SettingsSpec) fileContent.getCachedObjectInstance();
+
+				if (deserializedSpec == null) {
+					SettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, SettingsYaml.class, fileNode.getPhysicalAbsolutePath());
+					deserializedSpec = deserialized.getSpec();
+					if (deserialized.getKind() != SpecificationKind.SETTINGS) {
+						throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+					}
+					if (deserializedSpec != null) {
+						fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+					}
+				} else {
+					deserializedSpec = deserializedSpec.deepClone();
 				}
 				this.setSpec(deserializedSpec);
 				deserializedSpec.clearDirty(true);

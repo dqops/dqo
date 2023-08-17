@@ -78,6 +78,12 @@ const MySQLConnection = ({
         value={mysql?.password}
         onChange={(value) => handleChange({ password: value })}
       />
+      <FieldTypeInput
+        label="Database"
+        className="mb-4"
+        value={mysql?.database}
+        onChange={(value) => handleChange({ database: value })}
+      />
       <Select
         label="Ssl mode"
         options={sslModes}

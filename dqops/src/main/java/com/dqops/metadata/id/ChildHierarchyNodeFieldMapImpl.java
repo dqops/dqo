@@ -15,6 +15,12 @@
  */
 package com.dqops.metadata.id;
 
+import com.dqops.utils.reflection.ClassInfo;
+import com.dqops.utils.reflection.ReflectionService;
+import com.dqops.utils.reflection.ReflectionServiceSingleton;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -23,11 +29,15 @@ import java.util.*;
  */
 public class ChildHierarchyNodeFieldMapImpl<T extends HierarchyNode>
         extends HashMap<String, GetHierarchyChildNodeFunc<T>> implements ChildHierarchyNodeFieldMap {
+    private final ClassInfo reflectionClassInfo;
+
     /**
      * Creates a new field map and copies the field map from a superclass field map.
      * @param baseClassFields Field map from a direct superclass.
      */
     public ChildHierarchyNodeFieldMapImpl(ChildHierarchyNodeFieldMap baseClassFields) {
+        this();
+
         for(ChildFieldEntry childFieldEntry : baseClassFields.getChildEntries()) {
 			this.put(childFieldEntry.getChildName(), (GetHierarchyChildNodeFunc<T>) childFieldEntry.getGetChildFunc());
         }
@@ -38,6 +48,26 @@ public class ChildHierarchyNodeFieldMapImpl<T extends HierarchyNode>
      * NOTE: this method should always be private, always - to avoid missing subclass properties when a field map from a base class was not taken.
      */
     private ChildHierarchyNodeFieldMapImpl() {
+        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+        Type[] typeArguments = genericSuperclass.getActualTypeArguments();
+
+        Type typeArgument1 = typeArguments[0];
+        if (typeArgument1 instanceof Class<?> && typeArgument1 != String.class) {
+            Class<?> targetClass = (Class<?>) typeArgument1;
+
+            ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+            this.reflectionClassInfo = reflectionService.getClassInfoForClass(targetClass);
+        } else {
+            this.reflectionClassInfo = null;
+        }
+    }
+
+    /**
+     * Returns the reflection class info - a reflected information about the class, its fields.
+     * @return Reflection class info.
+     */
+    public ClassInfo getReflectionClassInfo() {
+        return reflectionClassInfo;
     }
 
     /**

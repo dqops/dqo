@@ -50,8 +50,7 @@ Creates a new connection to the database with the specified details such as conn
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
-                [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
+$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -60,17 +59,20 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-s
                 [--bigquery-source-project-id=<sourceProjectId>]
                 [--mysql-database=<database>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                [-of=<outputFormat>] [--oracle-database=<database>]
-                [--oracle-host=<host>] [--oracle-options=<options>]
-                [--oracle-password=<password>] [--oracle-port=<port>]
-                [--oracle-user=<user>] [--postgresql-database=<database>]
-                [--postgresql-host=<host>] [--postgresql-options=<options>]
+                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
+                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--oracle-initialization-sql=<initializationSql>]
+                [--oracle-options=<options>] [--oracle-password=<password>]
+                [--oracle-port=<port>] [--oracle-user=<user>]
+                [--postgresql-database=<database>] [--postgresql-host=<host>]
+                [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
-                [--postgresql-user=<user>] [--redshift-database=<database>]
-                [--redshift-host=<host>] [--redshift-options=<options>]
-                [--redshift-password=<password>] [--redshift-port=<port>]
-                [--redshift-user=<user>] [--snowflake-account=<account>]
+                [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
+                [--redshift-database=<database>] [--redshift-host=<host>]
+                [--redshift-options=<options>] [--redshift-password=<password>]
+                [--redshift-port=<port>] [--redshift-user=<user>]
+                [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
@@ -85,8 +87,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-s
 ```
 **DQO Shell synopsis**
 ```
-dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
-                [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
+dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -95,17 +96,20 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
                 [--bigquery-source-project-id=<sourceProjectId>]
                 [--mysql-database=<database>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                [-of=<outputFormat>] [--oracle-database=<database>]
-                [--oracle-host=<host>] [--oracle-options=<options>]
-                [--oracle-password=<password>] [--oracle-port=<port>]
-                [--oracle-user=<user>] [--postgresql-database=<database>]
-                [--postgresql-host=<host>] [--postgresql-options=<options>]
+                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
+                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--oracle-initialization-sql=<initializationSql>]
+                [--oracle-options=<options>] [--oracle-password=<password>]
+                [--oracle-port=<port>] [--oracle-user=<user>]
+                [--postgresql-database=<database>] [--postgresql-host=<host>]
+                [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
-                [--postgresql-user=<user>] [--redshift-database=<database>]
-                [--redshift-host=<host>] [--redshift-options=<options>]
-                [--redshift-password=<password>] [--redshift-port=<port>]
-                [--redshift-user=<user>] [--snowflake-account=<account>]
+                [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
+                [--redshift-database=<database>] [--redshift-host=<host>]
+                [--redshift-options=<options>] [--redshift-password=<password>]
+                [--redshift-port=<port>] [--redshift-user=<user>]
+                [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
@@ -137,15 +141,15 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
 |`--mysql-options`<br/>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--mysql-password`<br/>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
 |`--mysql-port`<br/>|MySQL port number| ||
-|`--mysql-ssl`<br/>|Connect to MySQL using SSL| ||
+|`--mysql-sslmode`<br/>|SslMode MySQL connection parameter| |DISABLED<br/>PREFERRED<br/>REQUIRED<br/>VERIFY_CA<br/>VERIFY_IDENTITY<br/>|
 |`--mysql-user`<br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-n`<br/>`--name`<br/>|Connection name| ||
 |`--oracle-database`<br/>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
 |`--oracle-host`<br/>|Oracle host name| ||
+|`--oracle-initialization-sql`<br/>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;| ||
 |`--oracle-options`<br/>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--oracle-password`<br/>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
 |`--oracle-port`<br/>|Oracle port number| ||
-|`--oracle-ssl`<br/>|Connect to Oracle using SSL| ||
 |`--oracle-user`<br/>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--postgresql-database`<br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
@@ -153,7 +157,7 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
 |`--postgresql-options`<br/>|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--postgresql-password`<br/>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
 |`--postgresql-port`<br/>|PostgreSQL port number| ||
-|`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
+|`--postgresql-sslmode`<br/>|Connect to PostgreSQL using sslmode connection parameter| |disable<br/>allow<br/>prefer<br/>require<br/>verify_ca<br/>verify_full<br/>|
 |`--postgresql-user`<br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>oracle<br/>|
 |`--redshift-database`<br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
@@ -161,7 +165,6 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
 |`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--redshift-password`<br/>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-port`<br/>|Redshift port number| ||
-|`--redshift-ssl`<br/>|Connect to Redshift using SSL| ||
 |`--redshift-user`<br/>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-account`<br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
 |`--snowflake-database`<br/>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
@@ -170,11 +173,11 @@ dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
 |`--snowflake-user`<br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-warehouse`<br/>|Snowflake warehouse name.| ||
 |`--sqlserver-database`<br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
+|`--sqlserver-disable-encryption`<br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |`--sqlserver-host`<br/>|SQL Server host name| ||
 |`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--sqlserver-password`<br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-port`<br/>|SQL Server port number| ||
-|`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
 |`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-M`<br/>|MySQL additional properties that are added to the JDBC connection string| ||
@@ -232,8 +235,7 @@ Update the connection or connections that match the conditions specified in the 
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
-                   [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
+$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -242,16 +244,18 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracl
                    [--bigquery-source-project-id=<sourceProjectId>]
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
-                   [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                   [-of=<outputFormat>] [--oracle-database=<database>]
-                   [--oracle-host=<host>] [--oracle-options=<options>]
-                   [--oracle-password=<password>] [--oracle-port=<port>]
-                   [--oracle-user=<user>] [--postgresql-database=<database>]
+                   [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
+                   [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                   [--oracle-database=<database>] [--oracle-host=<host>]
+                   [--oracle-initialization-sql=<initializationSql>]
+                   [--oracle-options=<options>] [--oracle-password=<password>]
+                   [--oracle-port=<port>] [--oracle-user=<user>]
+                   [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
-                   [--postgresql-port=<port>] [--postgresql-user=<user>]
-                   [--redshift-database=<database>] [--redshift-host=<host>]
-                   [--redshift-options=<options>]
+                   [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
+                   [--postgresql-user=<user>] [--redshift-database=<database>]
+                   [--redshift-host=<host>] [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
@@ -269,8 +273,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracl
 ```
 **DQO Shell synopsis**
 ```
-dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
-                   [--postgresql-ssl] [--redshift-ssl] [--sqlserver-ssl]
+dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -279,16 +282,18 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
                    [--bigquery-source-project-id=<sourceProjectId>]
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
-                   [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
-                   [-of=<outputFormat>] [--oracle-database=<database>]
-                   [--oracle-host=<host>] [--oracle-options=<options>]
-                   [--oracle-password=<password>] [--oracle-port=<port>]
-                   [--oracle-user=<user>] [--postgresql-database=<database>]
+                   [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
+                   [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                   [--oracle-database=<database>] [--oracle-host=<host>]
+                   [--oracle-initialization-sql=<initializationSql>]
+                   [--oracle-options=<options>] [--oracle-password=<password>]
+                   [--oracle-port=<port>] [--oracle-user=<user>]
+                   [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
-                   [--postgresql-port=<port>] [--postgresql-user=<user>]
-                   [--redshift-database=<database>] [--redshift-host=<host>]
-                   [--redshift-options=<options>]
+                   [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
+                   [--postgresql-user=<user>] [--redshift-database=<database>]
+                   [--redshift-host=<host>] [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
@@ -323,15 +328,15 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
 |`--mysql-options`<br/>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--mysql-password`<br/>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
 |`--mysql-port`<br/>|MySQL port number| ||
-|`--mysql-ssl`<br/>|Connect to MySQL using SSL| ||
+|`--mysql-sslmode`<br/>|SslMode MySQL connection parameter| |DISABLED<br/>PREFERRED<br/>REQUIRED<br/>VERIFY_CA<br/>VERIFY_IDENTITY<br/>|
 |`--mysql-user`<br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-n`<br/>`--name`<br/>|Connection name, supports wildcards for changing multiple connections at once, i.e. &quot;conn*&quot;| ||
 |`--oracle-database`<br/>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
 |`--oracle-host`<br/>|Oracle host name| ||
+|`--oracle-initialization-sql`<br/>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;| ||
 |`--oracle-options`<br/>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--oracle-password`<br/>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
 |`--oracle-port`<br/>|Oracle port number| ||
-|`--oracle-ssl`<br/>|Connect to Oracle using SSL| ||
 |`--oracle-user`<br/>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--postgresql-database`<br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
@@ -339,14 +344,13 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
 |`--postgresql-options`<br/>|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--postgresql-password`<br/>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
 |`--postgresql-port`<br/>|PostgreSQL port number| ||
-|`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
+|`--postgresql-sslmode`<br/>|Connect to PostgreSQL using sslmode connection parameter| |disable<br/>allow<br/>prefer<br/>require<br/>verify_ca<br/>verify_full<br/>|
 |`--postgresql-user`<br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-database`<br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-host`<br/>|Redshift host name| ||
 |`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--redshift-password`<br/>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-port`<br/>|Redshift port number| ||
-|`--redshift-ssl`<br/>|Connect to Redshift using SSL| ||
 |`--redshift-user`<br/>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-account`<br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
 |`--snowflake-database`<br/>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
@@ -355,11 +359,11 @@ dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--oracle-ssl]
 |`--snowflake-user`<br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-warehouse`<br/>|Snowflake warehouse name.| ||
 |`--sqlserver-database`<br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
+|`--sqlserver-disable-encryption`<br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |`--sqlserver-host`<br/>|SQL Server host name| ||
 |`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--sqlserver-password`<br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-port`<br/>|SQL Server port number| ||
-|`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
 |`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-M`<br/>|MySQL additional properties that are added to the JDBC connection string| ||

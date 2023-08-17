@@ -103,7 +103,7 @@ spec:
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -150,12 +150,12 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
+        {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro actual_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -168,7 +168,10 @@ spec:
     {% endmacro -%}
     
     SELECT
-        {{ actual_value() }} AS actual_value,
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -181,13 +184,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(DISTINCT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE COUNT(DISTINCT
             CASE
-                WHEN analyzed_table.`target_column` IN (2, 3)
+                WHEN analyzed_table.`target_column` IN (2, 3
+    )
                     THEN analyzed_table.`target_column`
                 ELSE NULL
             END
-        ) AS actual_value,
+        )
+        END AS actual_value,
         MAX(2) AS expected_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -207,7 +214,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -266,7 +273,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -325,7 +332,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -384,7 +391,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT_BIG(DISTINCT
             CASE
@@ -495,7 +502,7 @@ spec:
         
         {%- macro actual_value() -%}
             {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-            NULL
+            0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -543,12 +550,12 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
-            {{ values_list|join(', ') -}}
+            {{values_list|join(', ')}}
         {% endmacro %}
         
-        {%- macro actual_value() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            NULL
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -561,7 +568,10 @@ spec:
         {% endmacro -%}
         
         SELECT
-            {{ actual_value() }} AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{render_else()}}
+            END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
             {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -573,13 +583,17 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            COUNT(DISTINCT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
                 CASE
-                    WHEN analyzed_table.`target_column` IN (2, 3)
+                    WHEN analyzed_table.`target_column` IN (2, 3
+        )
                         THEN analyzed_table.`target_column`
                     ELSE NULL
                 END
-            ) AS actual_value,
+            )
+            END AS actual_value,
             MAX(2) AS expected_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
@@ -601,7 +615,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -661,7 +675,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -721,7 +735,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -781,7 +795,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT_BIG(DISTINCT
                 CASE
@@ -940,7 +954,7 @@ spec:
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -987,12 +1001,12 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
+        {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro actual_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1005,7 +1019,10 @@ spec:
     {% endmacro -%}
     
     SELECT
-        {{ actual_value() }} AS actual_value,
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1018,13 +1035,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(DISTINCT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE COUNT(DISTINCT
             CASE
-                WHEN analyzed_table.`target_column` IN (2, 3)
+                WHEN analyzed_table.`target_column` IN (2, 3
+    )
                     THEN analyzed_table.`target_column`
                 ELSE NULL
             END
-        ) AS actual_value,
+        )
+        END AS actual_value,
         MAX(2) AS expected_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -1044,7 +1065,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1103,7 +1124,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1162,7 +1183,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1221,7 +1242,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT_BIG(DISTINCT
             CASE
@@ -1333,7 +1354,7 @@ spec:
         
         {%- macro actual_value() -%}
             {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-            NULL
+            0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -1381,12 +1402,12 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
-            {{ values_list|join(', ') -}}
+            {{values_list|join(', ')}}
         {% endmacro %}
         
-        {%- macro actual_value() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            NULL
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -1399,7 +1420,10 @@ spec:
         {% endmacro -%}
         
         SELECT
-            {{ actual_value() }} AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{render_else()}}
+            END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
             {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1411,13 +1435,17 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            COUNT(DISTINCT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
                 CASE
-                    WHEN analyzed_table.`target_column` IN (2, 3)
+                    WHEN analyzed_table.`target_column` IN (2, 3
+        )
                         THEN analyzed_table.`target_column`
                     ELSE NULL
                 END
-            ) AS actual_value,
+            )
+            END AS actual_value,
             MAX(2) AS expected_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
@@ -1439,7 +1467,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -1499,7 +1527,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -1559,7 +1587,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -1619,7 +1647,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT_BIG(DISTINCT
                 CASE
@@ -1778,7 +1806,7 @@ spec:
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1825,12 +1853,12 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
+        {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro actual_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1843,7 +1871,10 @@ spec:
     {% endmacro -%}
     
     SELECT
-        {{ actual_value() }} AS actual_value,
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1856,13 +1887,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(DISTINCT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE COUNT(DISTINCT
             CASE
-                WHEN analyzed_table.`target_column` IN (2, 3)
+                WHEN analyzed_table.`target_column` IN (2, 3
+    )
                     THEN analyzed_table.`target_column`
                 ELSE NULL
             END
-        ) AS actual_value,
+        )
+        END AS actual_value,
         MAX(2) AS expected_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -1882,7 +1917,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1941,7 +1976,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2000,7 +2035,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2059,7 +2094,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT_BIG(DISTINCT
             CASE
@@ -2171,7 +2206,7 @@ spec:
         
         {%- macro actual_value() -%}
             {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-            NULL
+            0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -2219,12 +2254,12 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
-            {{ values_list|join(', ') -}}
+            {{values_list|join(', ')}}
         {% endmacro %}
         
-        {%- macro actual_value() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            NULL
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -2237,7 +2272,10 @@ spec:
         {% endmacro -%}
         
         SELECT
-            {{ actual_value() }} AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{render_else()}}
+            END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
             {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2249,13 +2287,17 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            COUNT(DISTINCT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
                 CASE
-                    WHEN analyzed_table.`target_column` IN (2, 3)
+                    WHEN analyzed_table.`target_column` IN (2, 3
+        )
                         THEN analyzed_table.`target_column`
                     ELSE NULL
                 END
-            ) AS actual_value,
+            )
+            END AS actual_value,
             MAX(2) AS expected_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
@@ -2277,7 +2319,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -2337,7 +2379,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -2397,7 +2439,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -2457,7 +2499,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT_BIG(DISTINCT
                 CASE
@@ -2616,7 +2658,7 @@ spec:
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2663,12 +2705,12 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
+        {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro actual_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2681,7 +2723,10 @@ spec:
     {% endmacro -%}
     
     SELECT
-        {{ actual_value() }} AS actual_value,
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2694,13 +2739,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(DISTINCT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE COUNT(DISTINCT
             CASE
-                WHEN analyzed_table.`target_column` IN (2, 3)
+                WHEN analyzed_table.`target_column` IN (2, 3
+    )
                     THEN analyzed_table.`target_column`
                 ELSE NULL
             END
-        ) AS actual_value,
+        )
+        END AS actual_value,
         MAX(2) AS expected_value,
         DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -2720,7 +2769,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2779,7 +2828,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2838,7 +2887,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2897,7 +2946,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT_BIG(DISTINCT
             CASE
@@ -3013,7 +3062,7 @@ spec:
         
         {%- macro actual_value() -%}
             {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-            NULL
+            0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3061,12 +3110,12 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
-            {{ values_list|join(', ') -}}
+            {{values_list|join(', ')}}
         {% endmacro %}
         
-        {%- macro actual_value() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            NULL
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3079,7 +3128,10 @@ spec:
         {% endmacro -%}
         
         SELECT
-            {{ actual_value() }} AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{render_else()}}
+            END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
             {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3091,13 +3143,17 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            COUNT(DISTINCT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
                 CASE
-                    WHEN analyzed_table.`target_column` IN (2, 3)
+                    WHEN analyzed_table.`target_column` IN (2, 3
+        )
                         THEN analyzed_table.`target_column`
                     ELSE NULL
                 END
-            ) AS actual_value,
+            )
+            END AS actual_value,
             MAX(2) AS expected_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
@@ -3119,7 +3175,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3179,7 +3235,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3239,7 +3295,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3299,7 +3355,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT_BIG(DISTINCT
                 CASE
@@ -3456,7 +3512,7 @@ spec:
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -3503,12 +3559,12 @@ spec:
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
+        {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro actual_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -3521,7 +3577,10 @@ spec:
     {% endmacro -%}
     
     SELECT
-        {{ actual_value() }} AS actual_value,
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3534,13 +3593,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(DISTINCT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE COUNT(DISTINCT
             CASE
-                WHEN analyzed_table.`target_column` IN (2, 3)
+                WHEN analyzed_table.`target_column` IN (2, 3
+    )
                     THEN analyzed_table.`target_column`
                 ELSE NULL
             END
-        ) AS actual_value,
+        )
+        END AS actual_value,
         MAX(2) AS expected_value,
         DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -3560,7 +3623,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -3619,7 +3682,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -3678,7 +3741,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -3737,7 +3800,7 @@ spec:
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+            0
         {%- else -%}
         COUNT_BIG(DISTINCT
             CASE
@@ -3853,7 +3916,7 @@ spec:
         
         {%- macro actual_value() -%}
             {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-            NULL
+            0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3901,12 +3964,12 @@ spec:
         {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
         
         {%- macro extract_in_list(values_list) -%}
-            {{ values_list|join(', ') -}}
+            {{values_list|join(', ')}}
         {% endmacro %}
         
-        {%- macro actual_value() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            NULL
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3919,7 +3982,10 @@ spec:
         {% endmacro -%}
         
         SELECT
-            {{ actual_value() }} AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{render_else()}}
+            END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
             {{- lib.render_data_grouping_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3931,13 +3997,17 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            COUNT(DISTINCT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
                 CASE
-                    WHEN analyzed_table.`target_column` IN (2, 3)
+                    WHEN analyzed_table.`target_column` IN (2, 3
+        )
                         THEN analyzed_table.`target_column`
                     ELSE NULL
                 END
-            ) AS actual_value,
+            )
+            END AS actual_value,
             MAX(2) AS expected_value,
             analyzed_table.`country` AS grouping_level_1,
             analyzed_table.`state` AS grouping_level_2,
@@ -3959,7 +4029,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -4019,7 +4089,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -4079,7 +4149,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -4139,7 +4209,7 @@ spec:
         
         {%- macro render_else() -%}
             {%- if parameters.expected_values|length == 0 -%}
-                NULL
+                0
             {%- else -%}
             COUNT_BIG(DISTINCT
                 CASE

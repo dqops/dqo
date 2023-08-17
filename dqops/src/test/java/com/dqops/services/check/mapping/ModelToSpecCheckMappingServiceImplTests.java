@@ -97,11 +97,11 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
     @Test
     void updateAllChecksSpec_whenChangesAppliedToDefaultProfilingObservabilityChecks_thenEnablesCheck() {
         DefaultProfilingObservabilityCheckSettingsSpec profilingObservabilityChecksSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.specToUiMapper.createModel(profilingObservabilityChecksSpec, null,
+        CheckContainerModel uiModel = this.specToUiMapper.createModel(profilingObservabilityChecksSpec.getTable(), null,
                 null, null, null, null);
 
         QualityCategoryModel tableVolumeCategoryModel = uiModel.getCategories().stream()
-                .filter(cm -> cm.getCategory().equals("table_volume")).findFirst().get();
+                .filter(cm -> cm.getCategory().equals("volume")).findFirst().get();
         CheckModel profileRowCountModel = tableVolumeCategoryModel.getChecks().stream()
                 .filter(cm -> cm.getCheckName().equals("profile_row_count")).findFirst().get();
 
@@ -109,10 +109,10 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         profileRowCountModel.getRule().getWarning().setConfigured(true);
 
 
-        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec);
+        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec.getTable());
 
-        Assertions.assertNotNull(profilingObservabilityChecksSpec.getTableVolume());
-        TableRowCountCheckSpec profileRowCountCheck = profilingObservabilityChecksSpec.getTableVolume().getProfileRowCount();
+        Assertions.assertNotNull(profilingObservabilityChecksSpec.getTable().getVolume());
+        TableRowCountCheckSpec profileRowCountCheck = profilingObservabilityChecksSpec.getTable().getVolume().getProfileRowCount();
         Assertions.assertNotNull(profileRowCountCheck);
         Assertions.assertNotNull(profileRowCountCheck.getWarning());
     }

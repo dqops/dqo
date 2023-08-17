@@ -20,6 +20,8 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
@@ -60,6 +62,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
     private ParquetPartitionStorageService parquetPartitionStorageService;
     private FileStorageSettings errorsStorageSettings;
     private ErrorsTableFactory errorsTableFactory;
+    private LocalFileSystemCache localFileSystemCache;
 
     /**
      * Called before each test.
@@ -76,7 +79,9 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(userConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
-        LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager, synchronizationStatusTracker);
+        localFileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
+        LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
+                homeLocationFindService, newLockManager, synchronizationStatusTracker, localFileSystemCache);
 
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
 

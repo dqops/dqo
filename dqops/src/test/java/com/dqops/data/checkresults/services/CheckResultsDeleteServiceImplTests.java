@@ -20,6 +20,8 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
@@ -60,6 +62,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     private ParquetPartitionStorageService parquetPartitionStorageService;
     private FileStorageSettings checkResultsStorageSettings;
     private CheckResultsTableFactory checkResultsTableFactory;
+    private LocalFileSystemCache localFileSystemCache;
 
     /**
      * Called before each test.
@@ -76,8 +79,9 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
 
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoUserConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
+        localFileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
-                homeLocationFindService, newLockManager, synchronizationStatusTracker);
+                homeLocationFindService, newLockManager, synchronizationStatusTracker, localFileSystemCache);
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(
