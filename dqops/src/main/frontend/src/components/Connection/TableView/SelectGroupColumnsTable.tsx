@@ -68,12 +68,13 @@ export const SelectGroupColumnsTable = ({
   useEffect(() => {
     if (fetched === false && responseList?.length !== 0) {
       fillArray(9);
+    }else{
+      fillArray(0)
     }
   }, [
     connection,
     schema,
     table,
-    responseList,
     refConnection,
     refSchema,
     refTable
@@ -96,6 +97,7 @@ export const SelectGroupColumnsTable = ({
   const [options, setOptions] = useState<Option[]>([]);
 
   const [ref, setRef] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -148,7 +150,7 @@ export const SelectGroupColumnsTable = ({
     };
 
     fetchData();
-  }, [connection, schema, table, refConnection, refSchema, refTable, ref]);
+  }, [connection, schema, table, refTable, ref]);
 
   return (
     <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
@@ -161,9 +163,9 @@ export const SelectGroupColumnsTable = ({
                   triggerClassName={clsx(
                     object && object[index] === 1
                       ? 'my-0.5 border border-red-500'
-                      : 'my-0.5'
+                      : options.find((x) => x.label === listOfColumns[index] || listOfColumns[index].length === 0) ?'my-0.5' :  "my-0.5 text-red-500"  
                   )}
-                  value={listOfColumns[index]}
+                  value={listOfColumns[index] ?? ""}
                   onChange={(value: string) =>
                     handleColumnSelectChange(value, index)
                   }

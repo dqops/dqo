@@ -9,7 +9,8 @@ import {
 import {
   DeleteStoredDataQueueJobParameters,
   DqoJobHistoryEntryModelStatusEnum,
-  TableComparisonGroupingColumnPairModel
+  TableComparisonGroupingColumnPairModel,
+  TableComparisonModel
 } from '../../../api';
 import Button from '../../Button';
 import Input from '../../Input';
@@ -44,6 +45,10 @@ type EditReferenceTableProps = {
   combinedFunc: (name: string) => void;
   cleanDataTemplate: DeleteStoredDataQueueJobParameters | undefined;
   onChangeIsDataDeleted: (arg: boolean) => void;
+  onChange: (obj: Partial<TableComparisonModel>) => void
+  isDataDeleted : boolean
+  onChangeRefTableChanged: (arg: boolean) => void
+  refTableChanged: boolean
 };
 
 const EditReferenceTable = ({
@@ -58,7 +63,11 @@ const EditReferenceTable = ({
   onChangeUpdatedParent,
   combinedFunc,
   cleanDataTemplate,
-  onChangeIsDataDeleted
+  onChangeIsDataDeleted,
+  onChange,
+  isDataDeleted,
+  onChangeRefTableChanged,
+  refTableChanged
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -139,7 +148,7 @@ const EditReferenceTable = ({
         setTrueArray(res.data.grouping_columns ?? []);
       });
     }
-  }, [selectedReference]);
+  }, [selectedReference, refTable]);
 
   useEffect(() => {
     if (refConnection) {
@@ -391,26 +400,30 @@ const EditReferenceTable = ({
     if (selectedReference === undefined || selectedReference.length === 0) {
       setName(e.target.value);
       setIsUpdated(true);
+ 
     }
   };
 
   const changePropsTable = (value: string) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setRefTable(value);
       setIsUpdated(true);
-    }
+      if(isCreating === false){
+        onChange({reference_connection : refConnection, 
+          reference_table: {schema_name: refSchema, table_name: value}},
+          )
+          if(value !== refTable){
+            setDeleteDataDialogOpened(true)
+            onChangeRefTableChanged(!refTableChanged)
+           }   
+        }
   };
   const changePropsSchema = (value: string) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setRefSchema(value);
       setIsUpdated(true);
-    }
   };
   const changePropsConnection = (value: string) => {
-    if (selectedReference === undefined || selectedReference.length === 0) {
       setRefConnection(value);
-      setIsUpdated(true);
-    }
+      setIsUpdated(true); 
   };
 
   const workOnMyObj = (
@@ -418,22 +431,24 @@ const EditReferenceTable = ({
   ): { [key: number]: number } => {
     const initialObject: { [key: number]: number } = {};
     let check = false;
+    if(listOfColumns && listOfColumns.length){
 
-    for (let i = listOfColumns.length - 1; i >= 0; i--) {
-      if (listOfColumns[i].length === 0 && !check) {
-        initialObject[i] = 2;
-      } else if (listOfColumns[i].length !== 0 && !check) {
+      for (let i = listOfColumns.length - 1; i >= 0; i--) {
+        if (listOfColumns[i]?.length === 0 && !check) {
+          initialObject[i] = 2;
+      } else if (listOfColumns[i]?.length !== 0 && !check) {
         check = true;
         initialObject[i] = 2;
-      } else if (check && listOfColumns[i].length === 0) {
+      } else if (check && listOfColumns[i]?.length === 0) {
         initialObject[i] = 1;
-      } else if (check && listOfColumns[i].length !== 0) {
+      } else if (check && listOfColumns[i]?.length !== 0) {
         initialObject[i] = 2;
       }
-      if (listOfColumns[i].length !== 0) {
+      if (listOfColumns[i]?.length !== 0) {
         initialObject[i] = 3;
       }
     }
+  }
     return initialObject;
   };
 
@@ -484,6 +499,7 @@ const EditReferenceTable = ({
           item.compared_table_column_name !== '' ||
           item.reference_table_column_name !== ''
       );
+      
       setDoubleArray(trim);
       if (
         trim.find(
@@ -498,7 +514,9 @@ const EditReferenceTable = ({
       } else {
         setBool(true);
       }
+      return trim
     }
+    return []
   };
 
   const splitArrays = () => {
@@ -508,19 +526,19 @@ const EditReferenceTable = ({
           ? x.compared_table_column_name
           : ''
       );
-      const refArr = trueArray.map((x) =>
+        const refArr = trueArray.map((x) =>
         typeof x.reference_table_column_name === 'string'
-          ? x.reference_table_column_name
-          : ''
-      );
-      return { comparedArr, refArr };
+        ? x.reference_table_column_name
+        : ''
+        );
+        return { comparedArr, refArr };
     }
   };
 
   useEffect(() => {
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
-    combinedArray();
     splitArrays();
+    onChange({grouping_columns: combinedArray()})
   }, [normalList, refList]);
 
   const saveRun = () => {
@@ -551,7 +569,7 @@ const EditReferenceTable = ({
   }) => {
     setDeleteDataDialogOpened(false);
     try {
-      setDeletingData(true);
+      setDeletingData(!isDataDeleted);
       const res = await JobApiClient.deleteStoredData({
         ...(cleanDataTemplate || {}),
         ...params
@@ -578,7 +596,7 @@ const EditReferenceTable = ({
       job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
-      onChangeIsDataDeleted(true);
+      onChangeIsDataDeleted(!isDataDeleted);
       setDeletingData(false);
     }
   }, [job?.status]);
@@ -587,7 +605,7 @@ const EditReferenceTable = ({
     <div className="w-full">
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={isButtonEnabled}
+        isUpdated={true}
         isDisabled={!isButtonEnabled}
         isUpdating={isUpdating}
       />
@@ -611,12 +629,15 @@ const EditReferenceTable = ({
               disabledDeleting || deletingData ? 'animate-spin' : 'hidden'
             )}
           />
-          <Button
+          {isCreating === false &&
+            <Button
             color="primary"
             variant="contained"
+            disabled={  disabledDeleting || deletingData || disabled}
             label="Delete results"
             onClick={() => setDeleteDataDialogOpened(true)}
-          />
+            />
+          }
           <SvgIcon
             name="sync"
             className={clsx(
@@ -630,7 +651,7 @@ const EditReferenceTable = ({
               color="primary"
               variant="contained"
               onClick={saveRun}
-              disabled={disabled}
+              disabled={disabledDeleting || deletingData || disabled}
             />
           )}
           <Button
@@ -744,6 +765,7 @@ const EditReferenceTable = ({
               onSetRefList={onSetRefList}
               object={refObj}
               responseList={splitArrays()?.refArr}
+              
             />
           </div>
         ) : (
