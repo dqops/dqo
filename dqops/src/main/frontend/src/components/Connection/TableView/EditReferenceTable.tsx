@@ -601,8 +601,6 @@ const EditReferenceTable = ({
     }
   }, [job?.status]);
 
-  console.log(doubleArray)
-
   return (
     <div className="w-full">
       <TableActionGroup

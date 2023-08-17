@@ -282,7 +282,6 @@ export const EditProfilingReferenceTable = ({
     obj: Partial<ColumnComparisonModel>,
     columnIndex: number
   ) => {
-    console.log(obj)
     const newColumns = reference?.columns?.map((item, index) =>
       index === columnIndex
         ? {
@@ -291,7 +290,6 @@ export const EditProfilingReferenceTable = ({
           }
         : item
     );
-    console.log(newColumns)
     onChange({
       columns: newColumns
     });
@@ -451,9 +449,7 @@ export const EditProfilingReferenceTable = ({
       getResultsData();
   }, [isDataDeleted]);
 
-
-
-function replaceStringWithUndefined(arr: TableComparisonModel): TableComparisonModel {
+const replaceStringWithUndefined = (arr: TableComparisonModel): TableComparisonModel => {
   // const columnValues = columnOptions.map((x) => x.value)
   if (arr.columns) {
     arr.columns = arr.columns.map(obj => {
@@ -469,9 +465,6 @@ function replaceStringWithUndefined(arr: TableComparisonModel): TableComparisonM
   useEffect(() => {
     setReference(replaceStringWithUndefined(reference ?? {}))
 }, [refTableChanged]);
-
-console.log(refTableChanged)
-console.log(reference)
 
   return (
     <div className="text-sm">
@@ -497,7 +490,7 @@ console.log(reference)
           refTableChanged ={refTableChanged}
         />
       </div>
-      {reference && (
+      {reference && reference.columns !== undefined && Object.keys(reference).length > 0 && (
         <div>
           <div className="px-8 py-4">
             <SectionWrapper title="">
