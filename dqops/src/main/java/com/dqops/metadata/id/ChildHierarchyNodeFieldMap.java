@@ -15,6 +15,8 @@
  */
 package com.dqops.metadata.id;
 
+import com.dqops.utils.reflection.ClassInfo;
+
 /**
  * Interface implemented by a property dictionary map that is not generic and provides uniform access (type independent) to all property maps.
  */
@@ -27,6 +29,12 @@ public interface ChildHierarchyNodeFieldMap {
     static ChildHierarchyNodeFieldMap empty() {
         return ChildHierarchyNodeFieldMapImpl.empty();
     }
+
+    /**
+     * Returns the reflection class info - a reflected information about the class, its fields.
+     * @return Reflection class info.
+     */
+    ClassInfo getReflectionClassInfo();
 
     /**
      * Returns a field getter delegate to read values from a field.
