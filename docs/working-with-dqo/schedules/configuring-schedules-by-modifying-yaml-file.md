@@ -6,7 +6,7 @@ Instructions on how to configure the schedule using the graphical interface can 
 ## Configuring a schedule at the connection level
 
 To schedule a check on an entire connection, you first need to open the YAML file of that connection. To do this, simply
-use the [connection edit]((../../command-line-interface/connection/#dqo-connection-edit)) command, which will launch the
+use the [connection edit](../../../command-line-interface/connection/#dqo-connection-edit) command, which will launch the
 YAML file in Visual Studio Code. To make working with the YAML file even easier, we recommend installing the YAML
 extension by RedHat and the Better Jinja extension by Samuel Colvin.
 
@@ -17,7 +17,7 @@ connection edit -c=testconnection
 
 To add a schedule to the YAML file, start by including the `schedules:` parameter at the end of the document. Then, specify the check type you want
 to run (`profiling`, `recurring_daily`, `recurring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
-Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md)..
+Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md).
 
 For example, to schedule checks to run every day at 12:00 for all check types, the YAML file will look like the one provided below:
 
@@ -48,7 +48,7 @@ spec:
 
 To schedule a check on a table or check level you first need to open the YAML file of that table.
 
-To do this, simply use the [table edit]((../../command-line-interface/table/#dqo-table-edit)) command, which will launch the
+To do this, simply use the [table edit](../../../command-line-interface/table/#dqo-table-edit) command, which will launch the
 YAML file in Visual Studio Code. To make working with the YAML file even easier, we recommend installing the YAML
 extension by RedHat and the Better Jinja extension by Samuel Colvin.
 
