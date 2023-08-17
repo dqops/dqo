@@ -19,6 +19,7 @@ package com.dqops.core.filesystem.cache;
 import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import org.springframework.beans.factory.DisposableBean;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.function.Function;
 /**
  * Local file system cache.
  */
-public interface LocalFileSystemCache {
+public interface LocalFileSystemCache extends DisposableBean {
     /**
      * Retrieves a list of folders, calling the load callback to load the data if it is missing in the cache.
      *
@@ -91,4 +92,10 @@ public interface LocalFileSystemCache {
      * @param filePath File path.
      */
     void invalidateFile(Path filePath);
+
+    /**
+     * Process file changes that happened since the last time.
+     * @param force When true, the changes are processed even if the delay has not passed yet.
+     */
+    void processFileChanges(boolean force);
 }

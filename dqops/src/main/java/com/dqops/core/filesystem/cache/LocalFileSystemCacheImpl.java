@@ -23,6 +23,7 @@ import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -43,11 +44,11 @@ import java.util.function.Function;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
+public class LocalFileSystemCacheImpl implements LocalFileSystemCache, DisposableBean {
     private final Cache<Path, List<HomeFolderPath>> foldersCache;
     private final Cache<Path, List<HomeFilePath>> filesCache;
     private final Cache<Path, FileContent> textFilesCache;
-    private final WatchService watchService;
+    private WatchService watchService;
     private final Map<Path, WatchKey> directoryWatchers = new LinkedHashMap<>();
     private final Object directoryWatchersLock = new Object();
     private final DqoCacheSpecConfigurationProperties dqoCacheSpecConfigurationProperties;
@@ -58,7 +59,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
         this.dqoCacheSpecConfigurationProperties = dqoCacheSpecConfigurationProperties;
 
         WatchService newWatchService = null;
-        if (dqoCacheSpecConfigurationProperties.isWatchFileSystemChanges()) {
+        if (dqoCacheSpecConfigurationProperties.isEnable() && dqoCacheSpecConfigurationProperties.isWatchFileSystemChanges()) {
             try {
                 newWatchService = FileSystems.getDefault().newWatchService();
             } catch (IOException ioe) {
@@ -79,6 +80,18 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
                 .maximumSize(dqoCacheSpecConfigurationProperties.getMaximumSize())
                 .expireAfterWrite(dqoCacheSpecConfigurationProperties.getExpireAfterSeconds(), TimeUnit.SECONDS)
                 .build();
+    }
+
+    /**
+     * Called when the object is destroyed. Stops the watcher.
+     * @throws Exception
+     */
+    @Override
+    public void destroy() throws Exception {
+        if (this.watchService != null) {
+            this.watchService.close();
+            this.watchService = null;
+        }
     }
 
     /**
@@ -133,8 +146,9 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
 
     /**
      * Process file changes that happened since the last time.
+     * @param force When true, the changes are processed even if the delay has not passed yet.
      */
-    public void processFileChanges() {
+    public void processFileChanges(boolean force) {
         if (!this.dqoCacheSpecConfigurationProperties.isWatchFileSystemChanges() || this.watchService == null) {
             return;
         }
@@ -144,7 +158,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
             nextFileChangeDetectionAt = this.nextFileChangeDetectionAt;
         }
 
-        if (nextFileChangeDetectionAt.isAfter(Instant.now())) {
+        if (!force && nextFileChangeDetectionAt.isAfter(Instant.now())) {
             return;
         }
 
@@ -174,7 +188,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
     public List<HomeFolderPath> getListOfFolders(Path folderPath, Function<Path, List<HomeFolderPath>> listingFunction) {
         if (this.dqoCacheSpecConfigurationProperties.isEnable()) {
             this.startFolderWatcher(folderPath);
-            this.processFileChanges();
+            this.processFileChanges(false);
             return this.foldersCache.get(folderPath, listingFunction);
         }
 
@@ -191,7 +205,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
     public List<HomeFilePath> getListOfFiles(Path folderPath, Function<Path, List<HomeFilePath>> listingFunction) {
         if (this.dqoCacheSpecConfigurationProperties.isEnable()) {
             this.startFolderWatcher(folderPath);
-            this.processFileChanges();
+            this.processFileChanges(false);
             return this.filesCache.get(folderPath, listingFunction);
         }
 
@@ -207,7 +221,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache {
     public FileContent loadFileContent(Path filePath, Function<Path, FileContent> readFunction) {
         if (this.dqoCacheSpecConfigurationProperties.isEnable()) {
             this.startFolderWatcher(filePath.getParent());
-            this.processFileChanges();
+            this.processFileChanges(false);
             return this.textFilesCache.get(filePath, readFunction);
         }
 

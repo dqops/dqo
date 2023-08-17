@@ -37,7 +37,10 @@ public class DqoHomeDirectFactory {
      * @return DQO Home context.
      */
     public static DqoHomeContext openDqoHome(Path dqoHomePath) {
-        LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(new DqoCacheSpecConfigurationProperties());
+        DqoCacheSpecConfigurationProperties dqoCacheSpecConfigurationProperties = new DqoCacheSpecConfigurationProperties();
+        dqoCacheSpecConfigurationProperties.setEnable(false);
+        dqoCacheSpecConfigurationProperties.setWatchFileSystemChanges(false);
+        LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(dqoCacheSpecConfigurationProperties);
         LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString(), localFileSystemCache);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);
         LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath());
