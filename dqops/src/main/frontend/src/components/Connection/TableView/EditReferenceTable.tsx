@@ -415,9 +415,7 @@ const EditReferenceTable = ({
             setDeleteDataDialogOpened(true)
             onChangeRefTableChanged(!refTableChanged)
            }   
-           
         }
-   
   };
   const changePropsSchema = (value: string) => {
       setRefSchema(value);
@@ -501,6 +499,7 @@ const EditReferenceTable = ({
           item.compared_table_column_name !== '' ||
           item.reference_table_column_name !== ''
       );
+      
       setDoubleArray(trim);
       if (
         trim.find(
@@ -515,7 +514,9 @@ const EditReferenceTable = ({
       } else {
         setBool(true);
       }
+      return trim
     }
+    return []
   };
 
   const splitArrays = () => {
@@ -525,24 +526,19 @@ const EditReferenceTable = ({
           ? x.compared_table_column_name
           : ''
       );
-   
-
         const refArr = trueArray.map((x) =>
         typeof x.reference_table_column_name === 'string'
         ? x.reference_table_column_name
         : ''
         );
         return { comparedArr, refArr };
-     
     }
   };
 
   useEffect(() => {
     algorith(workOnMyObj(normalList ?? []), workOnMyObj(refList ?? []));
-    combinedArray();
     splitArrays();
-
-    onChange({grouping_columns: doubleArray})
+    onChange({grouping_columns: combinedArray()})
   }, [normalList, refList]);
 
   const saveRun = () => {

@@ -144,9 +144,9 @@ export const EditProfilingReferenceTable = ({
     }
     if (reference !== undefined && Object.keys(reference).length > 0 && isCreating ===false) {
       ColumnApiClient.getColumns(
-        reference.reference_connection ?? '',
-        reference.reference_table?.schema_name ?? '',
-        reference.reference_table?.table_name ?? ''
+        reference.reference_connection ?? connection,
+        reference.reference_table?.schema_name ?? schema,
+        reference.reference_table?.table_name ?? table
       ).then((columnRes) => {
         setColumnOptions(
           columnRes.data.map((item) => ({
@@ -161,9 +161,9 @@ export const EditProfilingReferenceTable = ({
   useEffect(() => {
     if (reference !== undefined && Object.keys(reference).length > 0 && isCreating ===false) {
       ColumnApiClient.getColumns(
-        reference.reference_connection ?? '',
-        reference.reference_table?.schema_name ?? '',
-        reference.reference_table?.table_name ?? ''
+        reference.reference_connection ?? connection,
+        reference.reference_table?.schema_name ?? schema,
+        reference.reference_table?.table_name ?? table
       ).then((columnRes) => {
         setColumnOptions(
           columnRes.data.map((item) => ({
@@ -448,20 +448,20 @@ export const EditProfilingReferenceTable = ({
   }, [reference, table, schema, connection]);
 
   useEffect(() => {
-
       getResultsData();
   }, [isDataDeleted]);
 
 
+
 function replaceStringWithUndefined(arr: TableComparisonModel): TableComparisonModel {
-  const columnValues = columnOptions.map((x) => x.value)
+  // const columnValues = columnOptions.map((x) => x.value)
   if (arr.columns) {
     arr.columns = arr.columns.map(obj => {
-      if(!columnValues.includes(obj.reference_column_name)){
+      // if(!columnValues.includes(obj.reference_column_name)){
         return { ...obj, reference_column_name: undefined };
-      }else{
-        return {...obj}
-      }
+      // }else{
+      //   return {...obj}
+      // }
     });
   }
   return arr;
@@ -469,6 +469,9 @@ function replaceStringWithUndefined(arr: TableComparisonModel): TableComparisonM
   useEffect(() => {
     setReference(replaceStringWithUndefined(reference ?? {}))
 }, [refTableChanged]);
+
+console.log(refTableChanged)
+console.log(reference)
 
   return (
     <div className="text-sm">
