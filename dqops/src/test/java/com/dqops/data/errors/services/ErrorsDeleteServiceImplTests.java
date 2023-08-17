@@ -76,6 +76,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         DqoUserConfigurationProperties userConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(userConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
 
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(userConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
@@ -91,7 +92,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
                 newLockManager,
                 HadoopConfigurationProviderObjectMother.getDefault(),
                 localUserHomeFileStorageService,
-                synchronizationStatusTracker);
+                synchronizationStatusTracker,
+                fileSystemCache);
 
         this.errorsStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
         this.errorsTableFactory = new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());

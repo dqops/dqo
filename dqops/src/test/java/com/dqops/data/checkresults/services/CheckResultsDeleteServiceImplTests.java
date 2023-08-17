@@ -76,6 +76,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         DqoUserConfigurationProperties dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
 
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoUserConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
@@ -90,7 +91,8 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
                 newLockManager,
                 HadoopConfigurationProviderObjectMother.getDefault(),
                 localUserHomeFileStorageService,
-                synchronizationStatusTracker);
+                synchronizationStatusTracker,
+                fileSystemCache);
 
         this.checkResultsStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
         this.checkResultsTableFactory = new CheckResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());

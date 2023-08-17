@@ -84,8 +84,8 @@ const labels = [
   'Imported data type',
   'Length',
   'Scale',
-  'Minimal value',
-  'Maximum value',
+  'Min value',
+  'Max value',
   'Null count'
 ];
 
@@ -495,10 +495,10 @@ const TableColumns = ({
       case 'Null count':
         sortData<MyData>('null_count');
         break;
-      case 'Minimal value':
+      case 'Min value':
         sortDataByMinimalValue('minimalValue');
         break;
-      case 'Maximum value':
+      case 'Max value':
         sortDataByMinimalValue('maximumValue');
         break  
     }
@@ -750,7 +750,7 @@ const TableColumns = ({
                   className="flex"
                   style={{
                     justifyContent:
-                      x === 'Minimal value' || x === 'Null count' || x==="Maximum value"
+                      x === 'Min value' || x === 'Null count' || x==="Max value"
                         ? 'flex-end'
                         : 'flex-start'
                   }}

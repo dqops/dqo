@@ -15,6 +15,7 @@
  */
 package com.dqops.data.storage;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
@@ -49,11 +50,11 @@ public class ParquetPartitionStorageServiceObjectMother {
         ParquetPartitionMetadataServiceImpl parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
                 userHomeLockManager, localUserHomeFileStorageService);
         HadoopConfigurationProvider hadoopConfigurationProvider = HadoopConfigurationProviderObjectMother.getDefault();
-
+        LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewWithCachingDisabled();
 
         ParquetPartitionStorageServiceImpl parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(
                 parquetPartitionMetadataService, localDqoUserHomePathProviderStub, userHomeLockManager,
-                hadoopConfigurationProvider, localUserHomeFileStorageService, synchronizationStatusTracker);
+                hadoopConfigurationProvider, localUserHomeFileStorageService, synchronizationStatusTracker, fileSystemCache);
         return parquetPartitionStorageService;
     }
 }

@@ -21,22 +21,38 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for the dqo.cache.spec - for configuring how long the yaml files and file lists are cached.
+ * Configuration POJO with the configuration for the dqo.cache - for configuring how long the yaml files, parquet files and file lists are cached.
  */
 @Configuration
-@ConfigurationProperties(prefix = "dqo.cache.spec")
+@ConfigurationProperties(prefix = "dqo.cache")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class DqoCacheSpecConfigurationProperties implements Cloneable {
+public class DqoCacheConfigurationProperties implements Cloneable {
     /**
      * The time in seconds to expire the cache entries since they were added to the cache.
      */
-    private long expireAfterSeconds = 3600;
+    private long expireAfterSeconds = 86400;  // 24h
 
     /**
-     * The maximum number of objects to cache.
+     * The maximum number of specification files to cache.
      */
-    private long maximumSize = 1000000;
+    private long yamlFilesLimit = 1000000;
+
+    /**
+     * The maximum number of folders for which the list of files are cached to avoid listing the files.
+     */
+    private long fileListsLimit = 1000000;
+
+    /**
+     * The maximum fraction of the JVM heap memory (configured using the -Xmx java parameter) that is used to cache parquet files in memory. The default value 0.6 means that up to 50% of the JVM heap memory could be used for caching files.
+     * The value of the reserved-heap-memory-bytes is subtracted from the total memory size (-Xmx parameter value) before the memory fraction is calculated.
+     */
+    private double parquetCacheMemoryFraction = 0.6;
+
+    /**
+     * The memory size (in bytes) that is not subtracted from the total JVM heap memory before the memory fraction dedicated for the parquet cache is calculated.
+     */
+    private long reservedHeapMemoryBytes = 200L * 1000 * 1000;
 
     /**
      * Enables or disables the specification cache.
@@ -51,16 +67,16 @@ public class DqoCacheSpecConfigurationProperties implements Cloneable {
     /**
      * The delay in milliseconds between processing file changes.
      */
-    private long processFileChangesDelayMs = 100;
+    private long processFileChangesDelayMillis = 100;
 
     /**
      * Creates a clone of the object.
      * @return Cloned instance.
      */
     @Override
-    public DqoCacheSpecConfigurationProperties clone() {
+    public DqoCacheConfigurationProperties clone() {
         try {
-            DqoCacheSpecConfigurationProperties cloned = (DqoCacheSpecConfigurationProperties) super.clone();
+            DqoCacheConfigurationProperties cloned = (DqoCacheConfigurationProperties) super.clone();
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
