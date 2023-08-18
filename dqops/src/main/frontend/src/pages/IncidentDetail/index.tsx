@@ -242,21 +242,21 @@ export const IncidentDetail = () => {
               <div className="flex-1">First seen:</div>
               <div className="flex-[2] font-bold">
                 <span className="mr-2">{moment(incidentDetail?.firstSeen).format("YYYY-MM-DD")}</span>
-                ({getDaysString(incidentDetail?.firstSeen || 0)})
+                {Number(getDaysString(incidentDetail?.firstSeen || 0).match(/[-]{0,1}\d+/gm)) >=1 && ("(" + getDaysString(incidentDetail?.firstSeen || 0) + ")") }
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Last seen:</div>
               <div className="flex-[2] font-bold">
                 <span className="mr-2">{moment(incidentDetail?.lastSeen).format("YYYY-MM-DD")}</span>
-                ({getDaysString(incidentDetail?.lastSeen || 0)})
+                {Number(getDaysString(incidentDetail?.lastSeen || 0).match(/[-]{0,1}\d+/gm)) >=1 && ("(" + getDaysString(incidentDetail?.lastSeen || 0) + ")") }
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Valid until</div>
               <div className="flex-[2] font-bold">
                 <span className="mr-2">{moment(incidentDetail?.incidentUntil).format("YYYY-MM-DD")}</span>
-                {Number(getDaysString(incidentDetail?.incidentUntil || 0)) >=1 && ("(" + getDaysString(incidentDetail?.incidentUntil || 0) + ")") }
+                {Number(getDaysString(incidentDetail?.incidentUntil || 0).match(/[-]{0,1}\d+/gm)) >=1 && ("(" + getDaysString(incidentDetail?.incidentUntil || 0) + ")") }
               </div>
             </div>
           </SectionWrapper>
