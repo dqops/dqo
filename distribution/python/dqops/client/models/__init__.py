@@ -1351,6 +1351,7 @@ from .mono_dqo_queue_job_id import MonoDqoQueueJobId
 from .mono_object import MonoObject
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
+from .mysql_parameters_spec_sslmode import MysqlParametersSpecSslmode
 from .optional import Optional
 from .optional_check_container_model import OptionalCheckContainerModel
 from .optional_column_daily_partitioned_check_categories_spec import (
@@ -1402,6 +1403,7 @@ from .partition_incremental_time_window_spec import PartitionIncrementalTimeWind
 from .physical_table_name import PhysicalTableName
 from .postgresql_parameters_spec import PostgresqlParametersSpec
 from .postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
+from .postgresql_parameters_spec_sslmode import PostgresqlParametersSpecSslmode
 from .provider_sensor_basic_model import ProviderSensorBasicModel
 from .provider_sensor_basic_model_provider_type import (
     ProviderSensorBasicModelProviderType,
@@ -2370,6 +2372,7 @@ __all__ = (
     "MonoObject",
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
+    "MysqlParametersSpecSslmode",
     "Optional",
     "OptionalCheckContainerModel",
     "OptionalColumnDailyPartitionedCheckCategoriesSpec",
@@ -2397,6 +2400,7 @@ __all__ = (
     "PhysicalTableName",
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
+    "PostgresqlParametersSpecSslmode",
     "ProviderSensorBasicModel",
     "ProviderSensorBasicModelProviderType",
     "ProviderSensorDefinitionSpec",

@@ -19,7 +19,7 @@ class OracleParametersSpec:
     Attributes:
         host (Union[Unset, str]): Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom
             environment variable.
-        port (Union[Unset, str]): Oracle port name. The default port is 1521. Supports also a ${ORACLE_PORT}
+        port (Union[Unset, str]): Oracle port number. The default port is 1521. Supports also a ${ORACLE_PORT}
             configuration with a custom environment variable.
         database (Union[Unset, str]): Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format
             to use dynamic substitution.
@@ -30,7 +30,8 @@ class OracleParametersSpec:
         options (Union[Unset, str]): Oracle connection 'options' initialization parameter. For example setting this to
             -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also
             a ${ORACLE_OPTIONS} configuration with a custom environment variable.
-        ssl (Union[Unset, bool]): Connect to Oracle using SSL. The default value is false.
+        initialization_sql (Union[Unset, str]): Custom SQL that is executed after connecting to Oracle. This SQL script
+            can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'
         properties (Union[Unset, OracleParametersSpecProperties]):
     """
 
@@ -40,7 +41,7 @@ class OracleParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
-    ssl: Union[Unset, bool] = UNSET
+    initialization_sql: Union[Unset, str] = UNSET
     properties: Union[Unset, "OracleParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -51,7 +52,7 @@ class OracleParametersSpec:
         user = self.user
         password = self.password
         options = self.options
-        ssl = self.ssl
+        initialization_sql = self.initialization_sql
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -71,8 +72,8 @@ class OracleParametersSpec:
             field_dict["password"] = password
         if options is not UNSET:
             field_dict["options"] = options
-        if ssl is not UNSET:
-            field_dict["ssl"] = ssl
+        if initialization_sql is not UNSET:
+            field_dict["initialization_sql"] = initialization_sql
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -97,7 +98,7 @@ class OracleParametersSpec:
 
         options = d.pop("options", UNSET)
 
-        ssl = d.pop("ssl", UNSET)
+        initialization_sql = d.pop("initialization_sql", UNSET)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, OracleParametersSpecProperties]
@@ -113,7 +114,7 @@ class OracleParametersSpec:
             user=user,
             password=password,
             options=options,
-            ssl=ssl,
+            initialization_sql=initialization_sql,
             properties=properties,
         )
 

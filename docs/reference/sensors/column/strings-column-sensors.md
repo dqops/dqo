@@ -845,21 +845,21 @@ Column level sensor that calculates the number of rows with a boolean placeholde
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER({{ lib.render_target_column('grouping_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
-        END AS actual_value,
-        time_period,
-        time_period_utc
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1547,21 +1547,21 @@ Column level sensor that calculates the number of rows with an empty string.
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('grouping_table')}} = ''
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}} ) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1757,22 +1757,22 @@ Column level sensor that calculates the percentage of rows with an empty string.
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('grouping_table')}} = ''
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table')}} = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
-        END AS actual_value,
-        time_period,
-        time_period_utc
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -2495,20 +2495,20 @@ Column level sensor that calculates the count of values that are longer than a g
     SELECT
         SUM(
             CASE
-                WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) >= {{(parameters.max_length)}}
+                WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -2707,21 +2707,21 @@ Column level sensor that calculates the percentage of values that are longer tha
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) >= {{(parameters.max_length)}}
+                    WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
             )/ COUNT(*)
-        END AS actual_value,
-       time_period,
-       time_period_utc
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
-       SELECT
-           {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -2924,20 +2924,20 @@ Column level sensor that calculates the count of values that are shorter than a 
     SELECT
         SUM(
             CASE
-                WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) <= {{(parameters.min_length)}}
+                WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-         {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3136,21 +3136,21 @@ Column level sensor that calculates the percentage of values that are shorter th
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH({{ lib.render_target_column('grouping_table')}}) <= {{(parameters.min_length)}}
+                    WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
             )/ COUNT(*)
-        END AS actual_value,
-        time_period,
-        time_period_utc
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-        {{ lib.render_target_column('analyzed_table')}}
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3349,24 +3349,24 @@ Column level sensor that calculates percentage of strings with a length below th
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('grouping_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_target_column('grouping_table')}} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table')}} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
-            ) / COUNT({{ lib.render_target_column('grouping_table') }})
-        END AS actual_value,
-        time_period,
-        time_period_utc
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -4146,17 +4146,17 @@ Column level sensor that ensures that the length of string in a column does not 
     
     SELECT
         MAX(
-            LENGTH({{ lib.render_target_column('grouping_table') }})
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -4315,17 +4315,17 @@ Column level sensor that ensures that the length of string in a column does not 
     
     SELECT
         AVG(
-            LENGTH({{ lib.render_target_column('grouping_table') }})
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -4484,17 +4484,17 @@ Column level sensor that ensures that the length of string in a column does not 
     
     SELECT
         MIN(
-            LENGTH({{ lib.render_target_column('grouping_table') }})
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -5106,20 +5106,20 @@ Column level sensor that calculates the number of rows with a null placeholder s
     SELECT
         SUM(
             CASE
-                WHEN LOWER({{ lib.render_target_column('grouping_table') }}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '''', '-', '')
+                WHEN LOWER({{ lib.render_target_column('analyzed_table') }}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '''', '-', '')
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -5316,16 +5316,16 @@ Column level sensor that calculates the percentage of rows with a null placehold
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -5482,18 +5482,18 @@ Column level sensor that calculates the percentage of rows with parsable to floa
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                {{ lib.render_target_column('grouping_table') }}
+                {{ lib.render_target_column('analyzed_table') }}
             ) / COUNT(*)
-        END AS actual_value,
-        time_period,
-        time_period_utc
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-           {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -7135,22 +7135,22 @@ Column level sensor that calculates the number of rows with an whitespace string
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('grouping_table') }} <> ''
-                AND TRIM({{ lib.render_target_column('grouping_table') }}) = ''
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table') }} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table') }}) = ''
                     THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
-        time_period,
-        time_period_utc
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }}  analyzed_table
-        {{- lib.render_where_clause() -}} ) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -7354,23 +7354,23 @@ Column level sensor that calculates the percentage of rows with a whitespace str
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('grouping_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('grouping_table') }} <> ''
-                    AND TRIM({{ lib.render_target_column('grouping_table') }}) = ''
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table') }} <> ''
+                    AND TRIM({{ lib.render_target_column('analyzed_table') }}) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
-        END AS actual_value,
-        time_period,
-        time_period_utc
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
-            {{ lib.render_target_column('analyzed_table')}}
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}}) grouping_table
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

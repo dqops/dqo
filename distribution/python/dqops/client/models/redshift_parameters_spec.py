@@ -19,7 +19,7 @@ class RedshiftParametersSpec:
     Attributes:
         host (Union[Unset, str]): Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom
             environment variable.
-        port (Union[Unset, str]): Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT}
+        port (Union[Unset, str]): Redshift port number. The default port is 5432. Supports also a ${REDSHIFT_PORT}
             configuration with a custom environment variable.
         database (Union[Unset, str]): Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
@@ -30,7 +30,6 @@ class RedshiftParametersSpec:
         options (Union[Unset, str]): Redshift connection 'options' initialization parameter. For example setting this to
             -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also
             a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.
-        ssl (Union[Unset, bool]): Connect to Redshift using SSL. The default value is false.
         properties (Union[Unset, RedshiftParametersSpecProperties]):
     """
 
@@ -40,7 +39,6 @@ class RedshiftParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
-    ssl: Union[Unset, bool] = UNSET
     properties: Union[Unset, "RedshiftParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -51,7 +49,6 @@ class RedshiftParametersSpec:
         user = self.user
         password = self.password
         options = self.options
-        ssl = self.ssl
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -71,8 +68,6 @@ class RedshiftParametersSpec:
             field_dict["password"] = password
         if options is not UNSET:
             field_dict["options"] = options
-        if ssl is not UNSET:
-            field_dict["ssl"] = ssl
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -97,8 +92,6 @@ class RedshiftParametersSpec:
 
         options = d.pop("options", UNSET)
 
-        ssl = d.pop("ssl", UNSET)
-
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, RedshiftParametersSpecProperties]
         if isinstance(_properties, Unset):
@@ -113,7 +106,6 @@ class RedshiftParametersSpec:
             user=user,
             password=password,
             options=options,
-            ssl=ssl,
             properties=properties,
         )
 

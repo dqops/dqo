@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.postgresql_parameters_spec_sslmode import PostgresqlParametersSpecSslmode
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -19,7 +20,7 @@ class PostgresqlParametersSpec:
     Attributes:
         host (Union[Unset, str]): PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom
             environment variable.
-        port (Union[Unset, str]): PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT}
+        port (Union[Unset, str]): PostgreSQL port number. The default port is 5432. Supports also a ${POSTGRESQL_PORT}
             configuration with a custom environment variable.
         database (Union[Unset, str]): PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
@@ -30,7 +31,8 @@ class PostgresqlParametersSpec:
         options (Union[Unset, str]): PostgreSQL connection 'options' initialization parameter. For example setting this
             to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
             also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.
-        ssl (Union[Unset, bool]): Connect to PostgreSQL using SSL. The default value is false.
+        sslmode (Union[Unset, PostgresqlParametersSpecSslmode]): Sslmode PostgreSQL connection parameter. The default
+            value is disabled.
         properties (Union[Unset, PostgresqlParametersSpecProperties]):
     """
 
@@ -40,7 +42,7 @@ class PostgresqlParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
-    ssl: Union[Unset, bool] = UNSET
+    sslmode: Union[Unset, PostgresqlParametersSpecSslmode] = UNSET
     properties: Union[Unset, "PostgresqlParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -51,7 +53,10 @@ class PostgresqlParametersSpec:
         user = self.user
         password = self.password
         options = self.options
-        ssl = self.ssl
+        sslmode: Union[Unset, str] = UNSET
+        if not isinstance(self.sslmode, Unset):
+            sslmode = self.sslmode.value
+
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -71,8 +76,8 @@ class PostgresqlParametersSpec:
             field_dict["password"] = password
         if options is not UNSET:
             field_dict["options"] = options
-        if ssl is not UNSET:
-            field_dict["ssl"] = ssl
+        if sslmode is not UNSET:
+            field_dict["sslmode"] = sslmode
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -97,7 +102,12 @@ class PostgresqlParametersSpec:
 
         options = d.pop("options", UNSET)
 
-        ssl = d.pop("ssl", UNSET)
+        _sslmode = d.pop("sslmode", UNSET)
+        sslmode: Union[Unset, PostgresqlParametersSpecSslmode]
+        if isinstance(_sslmode, Unset):
+            sslmode = UNSET
+        else:
+            sslmode = PostgresqlParametersSpecSslmode(_sslmode)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, PostgresqlParametersSpecProperties]
@@ -113,7 +123,7 @@ class PostgresqlParametersSpec:
             user=user,
             password=password,
             options=options,
-            ssl=ssl,
+            sslmode=sslmode,
             properties=properties,
         )
 
