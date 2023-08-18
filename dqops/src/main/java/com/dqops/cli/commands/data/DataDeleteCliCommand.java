@@ -117,6 +117,9 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (volume, nulls, numeric, etc.)")
     private String checkCategory;
 
+    @CommandLine.Option(names = {"-tc", "--table-comparison"}, description = "Table comparison name.")
+    private String tableComparison;
+
     @CommandLine.Option(names = {"-sc", "--statistics-collector"}, description = "Data quality statistics collector name")
     private String statisticsCollector;
 
@@ -166,6 +169,10 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
 
         if (!Strings.isNullOrEmpty(this.check)) {
             deleteStoredDataJobParameters.setCheckName(this.check);
+        }
+
+        if (!Strings.isNullOrEmpty(this.tableComparison)) {
+            deleteStoredDataJobParameters.setTableComparisonName(this.tableComparison);
         }
 
         if (!Strings.isNullOrEmpty(this.statisticsCategory)) {

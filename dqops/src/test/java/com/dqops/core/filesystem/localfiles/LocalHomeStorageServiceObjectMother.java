@@ -15,6 +15,7 @@
  */
 package com.dqops.core.filesystem.localfiles;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
@@ -31,12 +32,15 @@ public final class LocalHomeStorageServiceObjectMother {
      * @return Local home storage service.
      */
     public static LocalUserHomeFileStorageServiceImpl createLocalUserHomeStorageServiceForTestableHome(boolean recreateHomeDirectory) {
+        LocalFileSystemCacheObjectMother.invalidateAll();
+
         try {
             HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getWithTestUserHome(recreateHomeDirectory);
             UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
             LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(
-                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub());
-            LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
+                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub(),
+                    LocalFileSystemCacheObjectMother.getRealCache());
+            LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomeRootDirectory());
 
             return localHomeStorageService;
         }
@@ -52,12 +56,15 @@ public final class LocalHomeStorageServiceObjectMother {
      * @return Local home storage service.
      */
     public static LocalUserHomeFileStorageServiceImpl createDefaultHomeStorageService(boolean recreateHomeDirectory) {
+        LocalFileSystemCacheObjectMother.invalidateAll();
+
         try {
             HomeLocationFindService homeLocationFindService = HomeLocationFindServiceObjectMother.getDefaultHomeFinder(recreateHomeDirectory);
             UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
             LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(
-                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub());
-            LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
+                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub(),
+                    LocalFileSystemCacheObjectMother.getRealCache());
+            LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomeRootDirectory());
 
             return localHomeStorageService;
         }

@@ -37,6 +37,7 @@ To add BigQuery data source connection to DQO you need the following:
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
+
     ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery-envvar.jpg)
 
 4. After filling in the connection settings, click the **Test Connection** button to test the connection.
@@ -53,6 +54,7 @@ To add BigQuery data source connection to DQO you need the following:
 ## Adding BigQuery connection using DQO Shell
 
 To add a connection run the following command in DQO Shell.
+
 ```
 dqo> connection add
 ```
@@ -68,6 +70,7 @@ Database provider type (--provider):
  [ 4] redshift
  [ 5] sqlserver
  [ 6] mysql
+ [ 7] oracle
 Please enter one of the [] values: 1
 Source GCP project ID (--bigquery-source-project-id") [dqo-ai-testing]: dqo-ai-testing
 Billing GCP project ID (--bigquery-billing-project-id), leave null to use the default GCP project from credentials (dqo-ai-testing):

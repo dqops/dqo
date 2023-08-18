@@ -80,11 +80,12 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
      */
     protected DefaultDailyRecurringObservabilityCheckSettingsSpec createDefaultDailyRecurringChecks() {
         DefaultDailyRecurringObservabilityCheckSettingsSpec defaultSettings = new DefaultDailyRecurringObservabilityCheckSettingsSpec();
+
         TableAvailabilityDailyRecurringChecksSpec tableAvailability = new TableAvailabilityDailyRecurringChecksSpec();
         tableAvailability.setDailyTableAvailability(new TableAvailabilityCheckSpec() {{
             setWarning(new MaxFailuresRule0ParametersSpec());
         }});
-        defaultSettings.setTableAvailability(tableAvailability);
+        defaultSettings.getTable().setAvailability(tableAvailability);
 
         TableVolumeDailyRecurringChecksSpec tableVolume = new TableVolumeDailyRecurringChecksSpec();
         tableVolume.setDailyRowCount(new TableRowCountCheckSpec()); // no rules, just monitoring
@@ -94,13 +95,13 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableVolume.setDailyRowCountAnomalyDifferencing30Days(new TableAnomalyDifferencingRowCount30DaysCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec());
         }});
-        defaultSettings.setTableVolume(tableVolume);
+        defaultSettings.getTable().setVolume(tableVolume);
 
         ColumnDatatypeDailyRecurringChecksSpec columnDatatype = new ColumnDatatypeDailyRecurringChecksSpec();
         columnDatatype.setDailyStringDatatypeChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        defaultSettings.setColumnDatatype(columnDatatype);
+        defaultSettings.getColumn().setDatatype(columnDatatype);
 
         ColumnAnomalyDailyRecurringChecksSpec columnAnomaly = new ColumnAnomalyDailyRecurringChecksSpec();
         columnAnomaly.setDailySumAnomalyDifferencing(new ColumnAnomalyDifferencingSumCheckSpec() {{
@@ -109,7 +110,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnAnomaly.setDailyMeanAnomalyStationary(new ColumnAnomalyStationaryMeanCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
-        defaultSettings.setColumnAnomaly(columnAnomaly);
+        defaultSettings.getColumn().setAnomaly(columnAnomaly);
 
         TableSchemaDailyRecurringChecksSpec tableSchema = new TableSchemaDailyRecurringChecksSpec();
         tableSchema.setDailyColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
@@ -124,7 +125,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableSchema.setDailyColumnTypesChanged(new TableSchemaColumnTypesChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        defaultSettings.setTableSchema(tableSchema);
+        defaultSettings.getTable().setSchema(tableSchema);
 
         ColumnSchemaDailyRecurringChecksSpec columnSchema = new ColumnSchemaDailyRecurringChecksSpec();
         columnSchema.setDailyColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
@@ -133,7 +134,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnSchema.setDailyColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        defaultSettings.setColumnSchema(columnSchema);
+        defaultSettings.getColumn().setSchema(columnSchema);
 
         ColumnNullsDailyRecurringChecksSpec columnNulls = new ColumnNullsDailyRecurringChecksSpec();
         columnNulls.setDailyNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
@@ -142,7 +143,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnNulls.setDailyNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
         }});
-        defaultSettings.setColumnNulls(columnNulls);
+        defaultSettings.getColumn().setNulls(columnNulls);
 
         return defaultSettings;
     }
@@ -157,11 +158,11 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableAvailability.setProfileTableAvailability(new TableAvailabilityCheckSpec() {{
             setWarning(new MaxFailuresRule0ParametersSpec());
         }});
-        defaultSettings.setTableAvailability(tableAvailability);
+        defaultSettings.getTable().setAvailability(tableAvailability);
 
         TableVolumeProfilingChecksSpec tableVolume = new TableVolumeProfilingChecksSpec();
         tableVolume.setProfileRowCount(new TableRowCountCheckSpec()); // no rules, just monitoring
-        defaultSettings.setTableVolume(tableVolume);
+        defaultSettings.getTable().setVolume(tableVolume);
 
         TableSchemaProfilingChecksSpec tableSchema = new TableSchemaProfilingChecksSpec();
         tableSchema.setProfileColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
@@ -176,7 +177,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableSchema.setProfileColumnTypesChanged(new TableSchemaColumnTypesChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        defaultSettings.setTableSchema(tableSchema);
+        defaultSettings.getTable().setSchema(tableSchema);
 
         ColumnSchemaProfilingChecksSpec columnSchema = new ColumnSchemaProfilingChecksSpec();
         columnSchema.setProfileColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
@@ -185,7 +186,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnSchema.setProfileColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
             setWarning(new ValueChangedParametersSpec());
         }});
-        defaultSettings.setColumnSchema(columnSchema);
+        defaultSettings.getColumn().setSchema(columnSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
         columnNulls.setProfileNullsPercentAnomalyStationary30Days(new ColumnAnomalyStationaryNullPercent30DaysCheckSpec() {{
@@ -194,7 +195,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnNulls.setProfileNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
         }});
-        defaultSettings.setColumnNulls(columnNulls);
+        defaultSettings.getColumn().setNulls(columnNulls);
 
         return defaultSettings;
     }

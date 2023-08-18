@@ -77,7 +77,7 @@ The highlighted fragments in the YAML file below represent the segment where the
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="7-20"
+```yaml hl_lines="9-20"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -86,7 +86,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     availability:
-      table_availability:
+      profile_table_availability:
         comments:
         - date: 2023-05-09T11:05:06.960+00:00
           comment_by: user
@@ -145,7 +145,11 @@ To execute the check prepared in the example using the [graphical interface](../
 7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
    located in the upper right corner of the graphical interface.
 
-8. You can now [review the results on the data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
+   the results displayed on the Current table status by dimension dashboard showing results by connection, schema, dimension and data group.
+
+   ![Table-availability check results on Current table status by dimension dashboard](https://dqops.com/docs/images/examples/table-availability-check-results-on-current-table-status-by-dimension-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 

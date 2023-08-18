@@ -57,12 +57,6 @@ const RedshiftConnection = ({
         value={redshift?.password}
         onChange={(value) => handleChange({ password: value })}
       />
-      <Checkbox
-        checked={redshift?.ssl}
-        onChange={(checked) => handleChange({ ssl: checked })}
-        label="Use SSL"
-        labelPosition="left"
-      />
 
       <JdbcPropertiesView
         properties={redshift?.properties}

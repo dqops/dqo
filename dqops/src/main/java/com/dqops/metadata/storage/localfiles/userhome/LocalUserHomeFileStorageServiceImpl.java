@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileStorageServiceImpl;
 import com.dqops.core.filesystem.virtual.FileContent;
@@ -26,6 +27,7 @@ import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
 import com.dqops.core.synchronization.status.SynchronizationStatusTracker;
+import com.dqops.metadata.storage.localfiles.HomeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,20 +40,24 @@ import java.util.List;
 public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageServiceImpl implements LocalUserHomeFileStorageService {
     private final UserHomeLockManager userHomeLockManager;
     private final SynchronizationStatusTracker synchronizationStatusTracker;
+    private final LocalFileSystemCache localFileSystemCache;
 
     /**
      * Creates a local file storage service that uses the DQO_USER_HOME folder.
      * @param homeLocationFindService User home location finder.
      * @param userHomeLockManager User home lock manager.
      * @param synchronizationStatusTracker Synchronization status tracker.
+     * @param localFileSystemCache Local file system cache.
      */
     @Autowired
     public LocalUserHomeFileStorageServiceImpl(HomeLocationFindService homeLocationFindService,
                                                UserHomeLockManager userHomeLockManager,
-                                               SynchronizationStatusTracker synchronizationStatusTracker) {
-        super(homeLocationFindService.getUserHomePath());
+                                               SynchronizationStatusTracker synchronizationStatusTracker,
+                                               LocalFileSystemCache localFileSystemCache) {
+        super(homeLocationFindService.getUserHomePath(), HomeType.USER_HOME, localFileSystemCache);
         this.userHomeLockManager = userHomeLockManager;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
+        this.localFileSystemCache = localFileSystemCache;
     }
 
     @Override

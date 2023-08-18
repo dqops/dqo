@@ -16,6 +16,7 @@
 package com.dqops.data.storage;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.virtual.FolderName;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
@@ -35,6 +36,7 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.tables.TableColumnUtility;
 import com.dqops.utils.tables.TableCompressUtility;
 import com.dqops.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
@@ -58,10 +60,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
@@ -69,11 +68,12 @@ import java.util.Objects;
 @Service
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
     private final ParquetPartitionMetadataService parquetPartitionMetadataService;
-    private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
+    private final LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
-    private HadoopConfigurationProvider hadoopConfigurationProvider;
-    private LocalUserHomeFileStorageService localUserHomeFileStorageService;
-    private SynchronizationStatusTracker synchronizationStatusTracker;
+    private final HadoopConfigurationProvider hadoopConfigurationProvider;
+    private final LocalUserHomeFileStorageService localUserHomeFileStorageService;
+    private final SynchronizationStatusTracker synchronizationStatusTracker;
+    private final LocalFileSystemCache localFileSystemCache;
 
     /**
      * Dependency injection constructor.
@@ -83,6 +83,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param hadoopConfigurationProvider Hadoop configuration provider.
      * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.
      * @param synchronizationStatusTracker File synchronization status tracker.
+     * @param localFileSystemCache Local file system cache.
      */
     @Autowired
     public ParquetPartitionStorageServiceImpl(
@@ -91,13 +92,15 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             UserHomeLockManager userHomeLockManager,
             HadoopConfigurationProvider hadoopConfigurationProvider,
             LocalUserHomeFileStorageService localUserHomeFileStorageService,
-            SynchronizationStatusTracker synchronizationStatusTracker) {
+            SynchronizationStatusTracker synchronizationStatusTracker,
+            LocalFileSystemCache localFileSystemCache) {
         this.parquetPartitionMetadataService = parquetPartitionMetadataService;
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
         this.userHomeLockManager = userHomeLockManager;
         this.hadoopConfigurationProvider = hadoopConfigurationProvider;
         this.localUserHomeFileStorageService = localUserHomeFileStorageService;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
+        this.localFileSystemCache = localFileSystemCache;
     }
 
 
@@ -114,8 +117,22 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         File targetParquetFile = targetParquetFilePath.toFile();
 
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+            LoadedMonthlyPartition cachedParquetFile = this.localFileSystemCache.getParquetFile(targetParquetFilePath);
+            if (cachedParquetFile != null) {
+                if (cachedParquetFile.getData() == null || columnNames == null) {
+                    return cachedParquetFile;
+                }
+
+                HashSet<String> columnNamesHashSet = new HashSet<>(cachedParquetFile.getData().columnNames());
+                if (Arrays.stream(columnNames).allMatch(columnNamesHashSet::contains)) {
+                    return cachedParquetFile;
+                }
+            }
+
             if (!targetParquetFile.exists()) {
-                return new LoadedMonthlyPartition(partitionId, 0L, null);
+                LoadedMonthlyPartition loadedMonthlyPartitionEmpty = new LoadedMonthlyPartition(partitionId, 0L, null);
+                this.localFileSystemCache.storeParquetFile(targetParquetFilePath, loadedMonthlyPartitionEmpty);
+                return loadedMonthlyPartitionEmpty;
             }
 
             TablesawParquetReadOptions.Builder optionsBuilder = TablesawParquetReadOptions
@@ -129,6 +146,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             TableCompressUtility.internStrings(data);
 
             LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
+            this.localFileSystemCache.storeParquetFile(targetParquetFilePath, loadedPartition);
             return loadedPartition;
         }
         catch (RuntimeIOException ex) {
@@ -162,7 +180,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
         String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
         Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
-        Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+        Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName()).toAbsolutePath().normalize();
         return targetParquetFilePath;
     }
 
@@ -358,6 +376,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 // ensure the partition data is deleted
                 if (targetParquetFile.exists()) {
                     boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                    this.localFileSystemCache.removeFile(targetParquetFilePath);
+
                     if (success) {
                         return true;
                     }
@@ -377,6 +397,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
             new DqoTablesawParquetWriter(hadoopConfiguration).write(dataToSave, writeOptions);
+            this.localFileSystemCache.removeFile(targetParquetFilePath);
 
             return true;
         }

@@ -48,7 +48,7 @@ public class LocalFileTreeNodeTests extends BaseTest {
         FileTreeNode sut = this.folder.addChildFile("file1.txt", new FileContent("content"));
         Path physicalAbsolutePath = sut.getPhysicalAbsolutePath();
         Assertions.assertNotNull(physicalAbsolutePath);
-        Assertions.assertEquals(this.folder.getContext().getStorageService().getHomePath().replace('\\', '/') + "/file1.txt",
+        Assertions.assertEquals(this.folder.getContext().getStorageService().getHomeRootDirectory().replace('\\', '/') + "/file1.txt",
                 physicalAbsolutePath.toString().replace('\\', '/'));
     }
 

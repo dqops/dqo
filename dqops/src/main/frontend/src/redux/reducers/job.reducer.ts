@@ -23,6 +23,7 @@ import {
   DqoJobQueueInitialSnapshotModel,
   ImportTablesQueueJobParameters
 } from '../../api';
+import moment from 'moment';
 
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
@@ -107,19 +108,41 @@ const schemaReducer = (state = initialState, action: any) => {
       };
     case JOB_ACTION.GET_JOBS_CHANGES_SUCCESS: {
       const jobChanges: DqoJobChangeModel[] = action.data.jobChanges || [];
-      const job_dictionary_state = Object.assign(
+      const not_filtered_job_dictionary_state = Object.assign(
         {},
         state.job_dictionary_state
       );
 
+      const filterObject = <T extends Record<string, DqoJobHistoryEntryModel>>(
+        obj: T
+      ): Record<string, DqoJobHistoryEntryModel> => {
+        const filteredObject: Record<string, DqoJobHistoryEntryModel> =
+          Object.assign({}, obj);
+          const nowDate = moment();
+        for (const key in obj) {
+          if (
+            nowDate.diff(obj[key].statusChangedAt, 'minutes') > 30 &&
+            obj[key].status !== 'running' &&
+            obj[key].status !== 'queued' &&
+            obj[key].status !== 'waiting'
+          ) {
+            delete filteredObject[key];
+          } else {
+            break;
+          }
+        }
+        return filteredObject;
+      };
+
       jobChanges.forEach((jobChange) => {
         if (!jobChange.jobId?.jobId) return;
-        if (job_dictionary_state[jobChange.jobId?.jobId]) {
+        if (not_filtered_job_dictionary_state[jobChange.jobId?.jobId]) {
           const newJobState = Object.assign(
             {},
-            job_dictionary_state[jobChange.jobId?.jobId]
+            not_filtered_job_dictionary_state[jobChange.jobId?.jobId]
           );
-          job_dictionary_state[jobChange.jobId?.jobId] = newJobState;
+          not_filtered_job_dictionary_state[jobChange.jobId?.jobId] =
+            newJobState;
 
           if (jobChange.status) {
             newJobState.status = jobChange.status;
@@ -136,9 +159,13 @@ const schemaReducer = (state = initialState, action: any) => {
             Object.assign(newJobState, jobChange.updatedModel);
             delete newJobState.updatedModel;
           }
-          job_dictionary_state[jobChange.jobId.jobId] = newJobState;
+          not_filtered_job_dictionary_state[jobChange.jobId.jobId] =
+            newJobState;
         }
       });
+      const job_dictionary_state =
+        filterObject(not_filtered_job_dictionary_state) ??
+        not_filtered_job_dictionary_state;
 
       return {
         ...state,

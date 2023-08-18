@@ -17,7 +17,8 @@ $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=
              [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
              [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
              [-sc=<statisticsCollector>] [-stc=<statisticsCategory>]
-             [-stt=<statisticsTarget>] [-t=<table>] [-tg=<timeGradient>]
+             [-stt=<statisticsTarget>] [-t=<table>] [-tc=<tableComparison>]
+             [-tg=<timeGradient>]
 
 ```
 **DQO Shell synopsis**
@@ -27,7 +28,8 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
              [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
              [-sc=<statisticsCollector>] [-stc=<statisticsCategory>]
-             [-stt=<statisticsTarget>] [-t=<table>] [-tg=<timeGradient>]
+             [-stt=<statisticsTarget>] [-t=<table>] [-tc=<tableComparison>]
+             [-tg=<timeGradient>]
 
 ```
 
@@ -57,6 +59,7 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 |`-sc`<br/>`--statistics-collector`<br/>|Data quality statistics collector name| ||
 |`-stt`<br/>`--statistics-target`<br/>|Data quality statistics target (table, column)| |table<br/>column<br/>|
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|`-tc`<br/>`--table-comparison`<br/>|Table comparison name.| ||
 |`-tg`<br/>`--time-gradient`<br/>|Time gradient of the sensor| ||
 
 

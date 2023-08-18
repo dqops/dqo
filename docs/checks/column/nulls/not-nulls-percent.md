@@ -151,20 +151,20 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM (
-             SELECT
-                     {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                     {{- lib.render_data_grouping_projections('analyzed_table') }}
-                     {{- lib.render_time_dimension_projection('analyzed_table') }}
-             FROM {{ lib.render_target_table() }} analyzed_table
-             {{- lib.render_where_clause() -}}
-    ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+       FROM (
+           SELECT
+               original_table.*
+               {{- lib.render_data_grouping_projections('original_table') }}
+               {{- lib.render_time_dimension_projection('original_table') }}
+           FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+       ) analyzed_table
+       {{- lib.render_group_by() -}}
+       {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
@@ -172,16 +172,17 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
         END AS actual_value,
         time_period,
         time_period_utc
-    FROM (
-             SELECT
-                     analyzed_table."target_column" AS actual_value,
+       FROM (
+           SELECT
+               original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-             FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+           FROM "<target_schema>"."<target_table>" original_table
+       ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -429,43 +430,44 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
             END AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-                 SELECT
-                         {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                         {{- lib.render_data_grouping_projections('analyzed_table') }}
-                         {{- lib.render_time_dimension_projection('analyzed_table') }}
-                 FROM {{ lib.render_target_table() }} analyzed_table
-                 {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+               {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+           FROM (
+               SELECT
+                   original_table.*
+                   {{- lib.render_data_grouping_projections('original_table') }}
+                   {{- lib.render_time_dimension_projection('original_table') }}
+               FROM {{ lib.render_target_table() }} original_table
+               {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+           {{- lib.render_group_by() -}}
+           {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Oracle"
         ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
             END AS actual_value,
         
-                        grouping_table.grouping_level_1,
+                        analyzed_table.grouping_level_1,
         
-                        grouping_table.grouping_level_2
+                        analyzed_table.grouping_level_2
         ,
             time_period,
             time_period_utc
-        FROM (
-                 SELECT
-                         analyzed_table."target_column" AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
+           FROM (
+               SELECT
+                   original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
             TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
             CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+               FROM "<target_schema>"."<target_table>" original_table
+           ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -758,20 +760,20 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM (
-             SELECT
-                     {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                     {{- lib.render_data_grouping_projections('analyzed_table') }}
-                     {{- lib.render_time_dimension_projection('analyzed_table') }}
-             FROM {{ lib.render_target_table() }} analyzed_table
-             {{- lib.render_where_clause() -}}
-    ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+       FROM (
+           SELECT
+               original_table.*
+               {{- lib.render_data_grouping_projections('original_table') }}
+               {{- lib.render_time_dimension_projection('original_table') }}
+           FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+       ) analyzed_table
+       {{- lib.render_group_by() -}}
+       {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
@@ -779,16 +781,17 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
         END AS actual_value,
         time_period,
         time_period_utc
-    FROM (
-             SELECT
-                     analyzed_table."target_column" AS actual_value,
+       FROM (
+           SELECT
+               original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-             FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+           FROM "<target_schema>"."<target_table>" original_table
+       ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1037,43 +1040,44 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
             END AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-                 SELECT
-                         {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                         {{- lib.render_data_grouping_projections('analyzed_table') }}
-                         {{- lib.render_time_dimension_projection('analyzed_table') }}
-                 FROM {{ lib.render_target_table() }} analyzed_table
-                 {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+               {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+           FROM (
+               SELECT
+                   original_table.*
+                   {{- lib.render_data_grouping_projections('original_table') }}
+                   {{- lib.render_time_dimension_projection('original_table') }}
+               FROM {{ lib.render_target_table() }} original_table
+               {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+           {{- lib.render_group_by() -}}
+           {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Oracle"
         ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
             END AS actual_value,
         
-                        grouping_table.grouping_level_1,
+                        analyzed_table.grouping_level_1,
         
-                        grouping_table.grouping_level_2
+                        analyzed_table.grouping_level_2
         ,
             time_period,
             time_period_utc
-        FROM (
-                 SELECT
-                         analyzed_table."target_column" AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
+           FROM (
+               SELECT
+                   original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
             TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
             CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+               FROM "<target_schema>"."<target_table>" original_table
+           ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -1366,20 +1370,20 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM (
-             SELECT
-                     {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                     {{- lib.render_data_grouping_projections('analyzed_table') }}
-                     {{- lib.render_time_dimension_projection('analyzed_table') }}
-             FROM {{ lib.render_target_table() }} analyzed_table
-             {{- lib.render_where_clause() -}}
-    ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+       FROM (
+           SELECT
+               original_table.*
+               {{- lib.render_data_grouping_projections('original_table') }}
+               {{- lib.render_time_dimension_projection('original_table') }}
+           FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+       ) analyzed_table
+       {{- lib.render_group_by() -}}
+       {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
@@ -1387,16 +1391,17 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
         END AS actual_value,
         time_period,
         time_period_utc
-    FROM (
-             SELECT
-                     analyzed_table."target_column" AS actual_value,
+       FROM (
+           SELECT
+               original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-             FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+           FROM "<target_schema>"."<target_table>" original_table
+       ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1645,43 +1650,44 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
             END AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-                 SELECT
-                         {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                         {{- lib.render_data_grouping_projections('analyzed_table') }}
-                         {{- lib.render_time_dimension_projection('analyzed_table') }}
-                 FROM {{ lib.render_target_table() }} analyzed_table
-                 {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+               {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+           FROM (
+               SELECT
+                   original_table.*
+                   {{- lib.render_data_grouping_projections('original_table') }}
+                   {{- lib.render_time_dimension_projection('original_table') }}
+               FROM {{ lib.render_target_table() }} original_table
+               {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+           {{- lib.render_group_by() -}}
+           {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Oracle"
         ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
             END AS actual_value,
         
-                        grouping_table.grouping_level_1,
+                        analyzed_table.grouping_level_1,
         
-                        grouping_table.grouping_level_2
+                        analyzed_table.grouping_level_2
         ,
             time_period,
             time_period_utc
-        FROM (
-                 SELECT
-                         analyzed_table."target_column" AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
+           FROM (
+               SELECT
+                   original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
             TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
             CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+               FROM "<target_schema>"."<target_table>" original_table
+           ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -1974,20 +1980,20 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM (
-             SELECT
-                     {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                     {{- lib.render_data_grouping_projections('analyzed_table') }}
-                     {{- lib.render_time_dimension_projection('analyzed_table') }}
-             FROM {{ lib.render_target_table() }} analyzed_table
-             {{- lib.render_where_clause() -}}
-    ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+       FROM (
+           SELECT
+               original_table.*
+               {{- lib.render_data_grouping_projections('original_table') }}
+               {{- lib.render_time_dimension_projection('original_table') }}
+           FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+       ) analyzed_table
+       {{- lib.render_group_by() -}}
+       {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
@@ -1995,16 +2001,17 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
         END AS actual_value,
         time_period,
         time_period_utc
-    FROM (
-             SELECT
-                     analyzed_table."target_column" AS actual_value,
-        TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-             FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+       FROM (
+           SELECT
+               original_table.*,
+        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+           FROM "<target_schema>"."<target_table>" original_table
+       ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -2257,43 +2264,44 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
             END AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-                 SELECT
-                         {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                         {{- lib.render_data_grouping_projections('analyzed_table') }}
-                         {{- lib.render_time_dimension_projection('analyzed_table') }}
-                 FROM {{ lib.render_target_table() }} analyzed_table
-                 {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+               {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+           FROM (
+               SELECT
+                   original_table.*
+                   {{- lib.render_data_grouping_projections('original_table') }}
+                   {{- lib.render_time_dimension_projection('original_table') }}
+               FROM {{ lib.render_target_table() }} original_table
+               {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+           {{- lib.render_group_by() -}}
+           {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Oracle"
         ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
             END AS actual_value,
         
-                        grouping_table.grouping_level_1,
+                        analyzed_table.grouping_level_1,
         
-                        grouping_table.grouping_level_2
+                        analyzed_table.grouping_level_2
         ,
             time_period,
             time_period_utc
-        FROM (
-                 SELECT
-                         analyzed_table."target_column" AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+           FROM (
+               SELECT
+                   original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+               FROM "<target_schema>"."<target_table>" original_table
+           ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -2584,20 +2592,20 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM (
-             SELECT
-                     {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                     {{- lib.render_data_grouping_projections('analyzed_table') }}
-                     {{- lib.render_time_dimension_projection('analyzed_table') }}
-             FROM {{ lib.render_target_table() }} analyzed_table
-             {{- lib.render_where_clause() -}}
-    ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+       FROM (
+           SELECT
+               original_table.*
+               {{- lib.render_data_grouping_projections('original_table') }}
+               {{- lib.render_time_dimension_projection('original_table') }}
+           FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+       ) analyzed_table
+       {{- lib.render_group_by() -}}
+       {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for Oracle"
       
@@ -2605,16 +2613,17 @@ spec:
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
         END AS actual_value,
         time_period,
         time_period_utc
-    FROM (
-             SELECT
-                     analyzed_table."target_column" AS actual_value,
-        TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
-        CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-             FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+       FROM (
+           SELECT
+               original_table.*,
+        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+           FROM "<target_schema>"."<target_table>" original_table
+       ) analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -2867,43 +2876,44 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
             END AS actual_value
-            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-        FROM (
-                 SELECT
-                         {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                         {{- lib.render_data_grouping_projections('analyzed_table') }}
-                         {{- lib.render_time_dimension_projection('analyzed_table') }}
-                 FROM {{ lib.render_target_table() }} analyzed_table
-                 {{- lib.render_where_clause() -}}
-        ) grouping_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+               {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+           FROM (
+               SELECT
+                   original_table.*
+                   {{- lib.render_data_grouping_projections('original_table') }}
+                   {{- lib.render_time_dimension_projection('original_table') }}
+               FROM {{ lib.render_target_table() }} original_table
+               {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+           ) analyzed_table
+           {{- lib.render_group_by() -}}
+           {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Oracle"
         ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+                ELSE 100.0 * COUNT(analyzed_table."target_column") / COUNT(*)
             END AS actual_value,
         
-                        grouping_table.grouping_level_1,
+                        analyzed_table.grouping_level_1,
         
-                        grouping_table.grouping_level_2
+                        analyzed_table.grouping_level_2
         ,
             time_period,
             time_period_utc
-        FROM (
-                 SELECT
-                         analyzed_table."target_column" AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+           FROM (
+               SELECT
+                   original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+               FROM "<target_schema>"."<target_table>" original_table
+           ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```

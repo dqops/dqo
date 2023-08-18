@@ -19,7 +19,7 @@ class SqlServerParametersSpec:
     Attributes:
         host (Union[Unset, str]): SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom
             environment variable.
-        port (Union[Unset, str]): SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT}
+        port (Union[Unset, str]): SQL Server port number. The default port is 1433. Supports also a ${SQLSERVER_PORT}
             configuration with a custom environment variable.
         database (Union[Unset, str]): SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
@@ -30,7 +30,8 @@ class SqlServerParametersSpec:
         options (Union[Unset, str]): SQL Server connection 'options' initialization parameter. For example setting this
             to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
             also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.
-        ssl (Union[Unset, bool]): Connecting to SQL Server with SSL disabled. The default value is false.
+        disable_encryption (Union[Unset, bool]): Disable SSL encryption parameter. The default value is false. You may
+            need to disable encryption when SQL Server is started in Docker.
         properties (Union[Unset, SqlServerParametersSpecProperties]):
     """
 
@@ -40,7 +41,7 @@ class SqlServerParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
-    ssl: Union[Unset, bool] = UNSET
+    disable_encryption: Union[Unset, bool] = UNSET
     properties: Union[Unset, "SqlServerParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -51,7 +52,7 @@ class SqlServerParametersSpec:
         user = self.user
         password = self.password
         options = self.options
-        ssl = self.ssl
+        disable_encryption = self.disable_encryption
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -71,8 +72,8 @@ class SqlServerParametersSpec:
             field_dict["password"] = password
         if options is not UNSET:
             field_dict["options"] = options
-        if ssl is not UNSET:
-            field_dict["ssl"] = ssl
+        if disable_encryption is not UNSET:
+            field_dict["disable_encryption"] = disable_encryption
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -97,7 +98,7 @@ class SqlServerParametersSpec:
 
         options = d.pop("options", UNSET)
 
-        ssl = d.pop("ssl", UNSET)
+        disable_encryption = d.pop("disable_encryption", UNSET)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, SqlServerParametersSpecProperties]
@@ -113,7 +114,7 @@ class SqlServerParametersSpec:
             user=user,
             password=password,
             options=options,
-            ssl=ssl,
+            disable_encryption=disable_encryption,
             properties=properties,
         )
 

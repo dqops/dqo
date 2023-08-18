@@ -625,6 +625,7 @@ const CheckListItem = ({
               onClose={closeCheckDetails}
               category={category}
               comparisonName={comparisonName}
+              data_clean_job_template={check.data_clean_job_template}
             />
           </td>
         </tr>

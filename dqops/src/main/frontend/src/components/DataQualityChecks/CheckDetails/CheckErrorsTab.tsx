@@ -48,12 +48,18 @@ const CheckErrorsTab = ({
   ];
 
   const monthOptions = useMemo(() => {
-    return Array(24)
-      .fill('')
-      .map((item, index) => ({
-        label: moment().subtract(index, 'months').format('MMMM YYYY'),
-        value: moment().subtract(index, 'months').format('MMMM YYYY')
-      }));
+    return [
+      {
+        label: 'Last 3 months',
+        value: 'Last 3 months'
+      },
+      ...Array(24)
+        .fill('')
+        .map((item, index) => ({
+          label: moment().subtract(index, 'months').format('MMMM YYYY'),
+          value: moment().subtract(index, 'months').format('MMMM YYYY')
+        }))
+    ];
   }, []);
 
   return (
@@ -65,7 +71,7 @@ const CheckErrorsTab = ({
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group</div>
           <Select
-            value={dataGroup}
+            value={ dataGroup || errors[0]?.dataGroup}
             options={
               (errors[0]?.dataGroupsNames || []).map((item) => ({
                 label: item,

@@ -60,11 +60,22 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                DashboardYaml deserialized = this.yamlSerializer.deserialize(textContent, DashboardYaml.class, fileNode.getPhysicalAbsolutePath());
-                DashboardsFolderListSpec deserializedSpec = deserialized.getSpec();
-                deserializedSpec.setFileLastModified(fileContent.getLastModified());
-                if (deserialized.getKind() != SpecificationKind.DASHBOARDS) {
-                    throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                DashboardsFolderListSpec deserializedSpec = (DashboardsFolderListSpec) fileContent.getCachedObjectInstance();
+
+                if (deserializedSpec == null) {
+                    DashboardYaml deserialized = this.yamlSerializer.deserialize(textContent, DashboardYaml.class, fileNode.getPhysicalAbsolutePath());
+                    deserializedSpec = deserialized.getSpec();
+                    if (deserializedSpec == null) {
+                        deserializedSpec = new DashboardsFolderListSpec();
+                    }
+
+                    deserializedSpec.setFileLastModified(fileContent.getLastModified());
+                    if (deserialized.getKind() != SpecificationKind.DASHBOARDS) {
+                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                    }
+                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                } else {
+                    deserializedSpec = deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
                 deserializedSpec.clearDirty(true);

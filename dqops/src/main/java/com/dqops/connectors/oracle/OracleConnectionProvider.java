@@ -108,12 +108,12 @@ public class OracleConnectionProvider extends AbstractSqlConnectionProvider {
             oracleSpec.setHost(terminalReader.prompt("Oracle host name (--oracle-host)", "${ORACLE_HOST}", false));
         }
 
-        if (oracleSpec.getSsl() == null) {
+        if (Strings.isNullOrEmpty(oracleSpec.getPort())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--oracle-ssl");
+                throw new CliRequiredParameterMissingException("--oracle-port");
             }
 
-            oracleSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--oracle-ssl)", true));
+            oracleSpec.setPort(terminalReader.prompt("Oracle port number (--oracle-port)", "${ORACLE_PORT}", false));
         }
 
         if (Strings.isNullOrEmpty(oracleSpec.getDatabase())) {

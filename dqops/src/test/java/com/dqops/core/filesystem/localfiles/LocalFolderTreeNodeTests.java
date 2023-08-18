@@ -44,7 +44,7 @@ public class LocalFolderTreeNodeTests extends BaseTest {
     void getPhysicalAbsolutePath_whenCalledForRootFolder_thenReturnsHomePath() {
         Path physicalAbsolutePath = this.sut.getPhysicalAbsolutePath();
         Assertions.assertNotNull(physicalAbsolutePath);
-        Assertions.assertEquals(this.sut.getContext().getStorageService().getHomePath().replace('\\', '/'),
+        Assertions.assertEquals(this.sut.getContext().getStorageService().getHomeRootDirectory().replace('\\', '/'),
                 physicalAbsolutePath.toString().replace('\\', '/'));
     }
 
@@ -53,7 +53,7 @@ public class LocalFolderTreeNodeTests extends BaseTest {
         FolderTreeNode subfolder = this.sut.getOrAddDirectFolder("subfolder");
         Path physicalAbsolutePath = subfolder.getPhysicalAbsolutePath();
         Assertions.assertNotNull(physicalAbsolutePath);
-        Assertions.assertEquals(this.sut.getContext().getStorageService().getHomePath().replace('\\', '/') + "/subfolder",
+        Assertions.assertEquals(this.sut.getContext().getStorageService().getHomeRootDirectory().replace('\\', '/') + "/subfolder",
                 physicalAbsolutePath.toString().replace('\\', '/'));
     }
 

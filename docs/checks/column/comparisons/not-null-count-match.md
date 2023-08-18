@@ -165,18 +165,18 @@ spec:
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM(
-        SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}
-    ) grouping_table
-    WHERE actual_value IS NOT NULL
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+       SELECT
+           original_table.*
+           {{- lib.render_data_grouping_projections('original_table') }}
+           {{- lib.render_time_dimension_projection('original_table') }}
+       FROM {{ lib.render_target_table() }} original_table
+       {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    WHERE ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -184,16 +184,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(*) AS actual_value,
+        COUNT(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                analyzed_table."target_column" AS actual_value,
+    FROM (
+       SELECT
+           original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-    WHERE actual_value IS NOT NULL
+       FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    WHERE (analyzed_table."target_column") IS NOT NULL
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -467,18 +468,18 @@ spec:
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM(
-        SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}
-    ) grouping_table
-    WHERE actual_value IS NOT NULL
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+       SELECT
+           original_table.*
+           {{- lib.render_data_grouping_projections('original_table') }}
+           {{- lib.render_time_dimension_projection('original_table') }}
+       FROM {{ lib.render_target_table() }} original_table
+       {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    WHERE ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -486,16 +487,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(*) AS actual_value,
+        COUNT(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                analyzed_table."target_column" AS actual_value,
+    FROM (
+       SELECT
+           original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-    WHERE actual_value IS NOT NULL
+       FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    WHERE (analyzed_table."target_column") IS NOT NULL
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -769,18 +771,18 @@ spec:
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM(
-        SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}
-    ) grouping_table
-    WHERE actual_value IS NOT NULL
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+       SELECT
+           original_table.*
+           {{- lib.render_data_grouping_projections('original_table') }}
+           {{- lib.render_time_dimension_projection('original_table') }}
+       FROM {{ lib.render_target_table() }} original_table
+       {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    WHERE ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -788,16 +790,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(*) AS actual_value,
+        COUNT(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                analyzed_table."target_column" AS actual_value,
+    FROM (
+       SELECT
+           original_table.*,
         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-    WHERE actual_value IS NOT NULL
+       FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    WHERE (analyzed_table."target_column") IS NOT NULL
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1071,18 +1074,18 @@ spec:
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM(
-        SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}
-    ) grouping_table
-    WHERE actual_value IS NOT NULL
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+       SELECT
+           original_table.*
+           {{- lib.render_data_grouping_projections('original_table') }}
+           {{- lib.render_time_dimension_projection('original_table') }}
+       FROM {{ lib.render_target_table() }} original_table
+       {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    WHERE ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1090,16 +1093,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(*) AS actual_value,
+        COUNT(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                analyzed_table."target_column" AS actual_value,
-        TRUNC(CAST(analyzed_table."" AS DATE)) AS time_period,
-        CAST(TRUNC(CAST(analyzed_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-    WHERE actual_value IS NOT NULL
+    FROM (
+       SELECT
+           original_table.*,
+        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+       FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    WHERE (analyzed_table."target_column") IS NOT NULL
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
@@ -1377,18 +1381,18 @@ spec:
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM(
-        SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}
-    ) grouping_table
-    WHERE actual_value IS NOT NULL
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+       SELECT
+           original_table.*
+           {{- lib.render_data_grouping_projections('original_table') }}
+           {{- lib.render_time_dimension_projection('original_table') }}
+       FROM {{ lib.render_target_table() }} original_table
+       {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    WHERE ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1396,16 +1400,17 @@ spec:
       
     ```sql
     SELECT
-        COUNT(*) AS actual_value,
+        COUNT(analyzed_table."target_column") AS actual_value,
         time_period,
         time_period_utc
-    FROM(
-        SELECT
-                analyzed_table."target_column" AS actual_value,
-        TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS time_period,
-        CAST(TRUNC(CAST(analyzed_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
-    WHERE actual_value IS NOT NULL
+    FROM (
+       SELECT
+           original_table.*,
+        TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+       FROM "<target_schema>"."<target_table>" original_table
+    ) analyzed_table
+    WHERE (analyzed_table."target_column") IS NOT NULL
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```

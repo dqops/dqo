@@ -227,28 +227,30 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         if (filteredTable.isEmpty()) {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
-
+        Table filteredTableByDataGroup = filteredTable;
         if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
             TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTable = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
 
-        if (filteredTable.isEmpty()) {
+        if (filteredTableByDataGroup.isEmpty()) {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
 
-        Table sortedTable = filteredTable.sortDescendingOn(
+        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
                 SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                 CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
 
         LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn dataGroupSortedColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        LongColumn checkHashColumnUnsorted = filteredTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+        TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         int rowCount = sortedTable.rowCount();
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
             Long checkHash = checkHashColumn.get(rowIndex);
-            String dataGroupNameForCheck = dataGroupSortedColumn.get(rowIndex);
+            String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
             CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(checkHash);
 
             CheckResultDetailedSingleModel singleModel = null;
@@ -271,9 +273,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 checkResultsDetailedDataModel.setCheckDisplayName(singleModel.getCheckDisplayName());
                 checkResultsDetailedDataModel.setDataGroup(dataGroupNameForCheck);
 
-                Selection resultsForCheckHash = checkHashColumn.isIn(checkHash);
-                List<String> dataGroupsForCheck = dataGroupSortedColumn.where(resultsForCheckHash)
-                        .unique().asList().stream().sorted().collect(Collectors.toList());
+                Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
+                List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
 
                 if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
                     dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);

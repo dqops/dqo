@@ -292,6 +292,11 @@ public class ChecksController {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
             checkSpecFolderBasicModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true);
         }
+
+        if (!checkSpecFolderBasicModel.getFolders().containsKey("custom")) {
+            checkSpecFolderBasicModel.getFolders().put("custom", new CheckSpecFolderBasicModel());
+        }
+
         return checkSpecFolderBasicModel;
     }
 

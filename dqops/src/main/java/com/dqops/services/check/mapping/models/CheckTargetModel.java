@@ -37,6 +37,10 @@ public enum CheckTargetModel {
      * @return Check target model.
      */
     public static CheckTargetModel fromCheckTarget(CheckTarget checkTarget) {
+        if (checkTarget == null) {
+            return null;
+        }
+
         switch (checkTarget) {
             case table:
                 return table;

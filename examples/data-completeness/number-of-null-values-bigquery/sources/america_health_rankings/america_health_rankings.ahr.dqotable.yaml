@@ -44,18 +44,18 @@ spec:
         nullable: true
       profiling_checks:
         nulls:
-          nulls_count:
+          profile_nulls_count:
             comments:
             - date: 2023-05-08T12:08:21.558+00:00
               comment_by: user
               comment: "In this example, values in the `source ` column are verified\
                 \ whether the number of null values does not exceed the set thresholds."
             warning:
-              max_count: 5
+              max_count: 3
             error:
-              max_count: 10
+              max_count: 5
             fatal:
-              max_count: 15
+              max_count: 10
     source_date:
       type_snapshot:
         column_type: STRING

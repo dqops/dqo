@@ -321,17 +321,6 @@ function TreeProvider(props: any) {
         open: false
       }
     ];
-    if (checkTypes === CheckTypes.SOURCES) {
-      items.push({
-        id: `${node.id}.incidents`,
-        label: `Incident Configuration`,
-        level: TREE_LEVEL.TABLE_INCIDENTS,
-        parentId: node.id,
-        items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} incidents`,
-        open: false
-      });
-    }
     if (checkTypes === CheckTypes.PROFILING) {
       items.push({
         id: `${node.id}.checks`,

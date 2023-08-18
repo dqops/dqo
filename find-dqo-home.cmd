@@ -25,7 +25,7 @@ if "x%DQO_USER_HOME%"=="x" (
 )
 
 if "x%DQO_JAVA_OPTS%"=="x" (
-    set DQO_JAVA_OPTS=-Xmx2048m
+    set DQO_JAVA_OPTS=-Xmx2048m -Djavax.net.ssl.trustStoreType=WINDOWS-ROOT
 )
 
 if not exist "%DQO_USER_HOME%" (

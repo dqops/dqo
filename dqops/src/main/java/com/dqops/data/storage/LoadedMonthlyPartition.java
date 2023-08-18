@@ -70,4 +70,12 @@ public class LoadedMonthlyPartition {
     public Table getData() {
         return data;
     }
+
+    /**
+     * Changes the data object.
+     * @param data New table.
+     */
+    public void setData(Table data) {
+        this.data = data;
+    }
 }

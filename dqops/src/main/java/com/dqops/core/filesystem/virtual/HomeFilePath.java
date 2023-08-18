@@ -15,6 +15,7 @@
  */
 package com.dqops.core.filesystem.virtual;
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +27,7 @@ import java.util.Objects;
  * Virtual file path to a file.
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class HomeFilePath {
+public class HomeFilePath implements Cloneable {
     private HomeFolderPath folder;
     private String fileName;
 
@@ -132,5 +133,23 @@ public class HomeFilePath {
     @Override
     public int hashCode() {
         return Objects.hash(folder, fileName);
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public HomeFilePath clone() {
+        try {
+            HomeFilePath cloned = (HomeFilePath) super.clone();
+            if (cloned.folder != null) {
+                cloned.folder = cloned.folder.clone();
+            }
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 }
