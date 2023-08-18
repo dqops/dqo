@@ -211,10 +211,16 @@ export const DefinitionTree = () => {
         {renderSensorFolderTree(sensorFolderTree, [])}
       </div>
 
-      <div>
+      <div className='mb-4'>
         <div className="text-sm text-gray-700 font-semibold mb-2">Rules:</div>
         {renderRuleFolderTree(ruleFolderTree, [])}
       </div>
+
+      <div>
+        <div className="text-sm text-gray-700 font-semibold mb-2">Data Quality Checks: </div>
+        {renderRuleFolderTree(ruleFolderTree, [])}
+      </div>
+
     </div>
   );
 };
