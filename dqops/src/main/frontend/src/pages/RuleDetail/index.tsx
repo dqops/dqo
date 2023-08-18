@@ -20,6 +20,10 @@ const tabs = [
     label: 'Python code',
     value: 'python_code'
   },
+  {
+    label: "Data quality checks",
+    value: "data_quailty_checks"
+  }
 ];
 
 export const SensorDetail = () => {
