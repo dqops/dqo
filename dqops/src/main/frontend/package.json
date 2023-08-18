@@ -1,6 +1,6 @@
 {
   "name": "DQO",
-  "version": "0.2.0-beta4",
+  "version": "0.2.0-beta5",
   "private": true,
   "dependencies": {
     "@codemirror/lang-python": "^6.1.2",
