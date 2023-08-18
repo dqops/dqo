@@ -1,8 +1,8 @@
-import { QualityCategoryModel } from "../../api";
-import { DATA_QUALITY_CHECKS_ACTION } from "../types/dataQualityChecks";
+import { CheckContainerModel, QualityCategoryModel } from "../../api";
+import { DATA_QUALITY_CHECKS_ACTION } from "../types/dataQualityChecks.types";
 
 export interface IdataQualityChecks{
-    arrayOfChecks ?: Array<QualityCategoryModel>
+    arrayOfChecks ?: CheckContainerModel
     loading: boolean
     error: any
     dataQualityChecksState: Record<string, boolean>
