@@ -289,8 +289,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         this.startFolderWatcher(filePath.getParent());
-
         this.parquetFilesCache.put(filePath, table);
+
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
         for (; parentFolderPath != null; parentFolderPath = parentFolderPath.getParent()) {
@@ -300,14 +300,19 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
     /**
      * Removes a file from the cache. Invalidates the cached list of files from the parent folder.
-     * @param key Cache key.
+     * @param filePath Cache key.
      */
     @Override
-    public void removeFile(Path key) {
-        this.textFilesCache.invalidate(key);
-        this.parquetFilesCache.invalidate(key);
-        Path parentFolderPath = key.getParent();
+    public void removeFile(Path filePath) {
+        this.textFilesCache.invalidate(filePath);
+        this.parquetFilesCache.invalidate(filePath);
+
+        Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
+        for (; parentFolderPath != null; parentFolderPath = parentFolderPath.getParent()) {
+            this.folderListsCache.invalidate(parentFolderPath);
+        }
+
     }
 
     /**
