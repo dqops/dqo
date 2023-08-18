@@ -466,6 +466,7 @@ const replaceStringWithUndefined = (arr: TableComparisonModel): TableComparisonM
     setReference(replaceStringWithUndefined(reference ?? {}))
 }, [refTableChanged]);
 
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
