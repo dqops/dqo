@@ -42,6 +42,7 @@ type EditProfilingReferenceTableProps = {
   isCreating?: boolean;
   getNewTableComparison: () => void;
   onChangeSelectedReference: (arg: string) => void;
+  listOfExistingReferences: Array<string | undefined>
 };
 
 export const EditProfilingReferenceTable = ({
@@ -52,7 +53,8 @@ export const EditProfilingReferenceTable = ({
   categoryCheck,
   isCreating,
   getNewTableComparison,
-  onChangeSelectedReference
+  onChangeSelectedReference,
+  listOfExistingReferences
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -489,6 +491,7 @@ const replaceStringWithUndefined = (arr: TableComparisonModel): TableComparisonM
           isDataDeleted = {isDataDeleted}
           onChangeRefTableChanged = {onChangeRefTableChanged}
           refTableChanged ={refTableChanged}
+          listOfExistingReferences={listOfExistingReferences}
         />
       </div>
       {reference && reference.columns !== undefined && Object.keys(reference).length > 0 && (
