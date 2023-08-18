@@ -49,6 +49,7 @@ type EditReferenceTableProps = {
   isDataDeleted : boolean
   onChangeRefTableChanged: (arg: boolean) => void
   refTableChanged: boolean
+  listOfExistingReferences: Array<string | undefined>
 };
 
 const EditReferenceTable = ({
@@ -67,7 +68,8 @@ const EditReferenceTable = ({
   onChange,
   isDataDeleted,
   onChangeRefTableChanged,
-  refTableChanged
+  refTableChanged,
+  listOfExistingReferences
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
@@ -108,6 +110,7 @@ const EditReferenceTable = ({
     (state: IRootState) => state.job || {}
   );
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const [popUp, setPopUp] = useState(false)
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
@@ -247,6 +250,10 @@ const EditReferenceTable = ({
           setIsUpdating(false);
         });
     } else {
+      if (listOfExistingReferences.includes(name.toString())) {
+        setPopUp(true)
+      }
+      else{
       if (checkTypes === CheckTypes.PROFILING) {
         await TableComparisonsApi.createTableComparisonProfiling(
           connection,
@@ -391,7 +398,9 @@ const EditReferenceTable = ({
           });
       }
       combinedFunc(name);
+      setPopUp(false)
     }
+  }
     setIsButtonEnabled(false);
     onChangeUpdatedParent(false);
   };
@@ -622,6 +631,7 @@ const EditReferenceTable = ({
             placeholder="Table comparison configuration name"
           />
         </div>
+        { popUp===true && <div className='bg-red-300 p-4 rounded-lg text-white border-2 border-red-500'>A table comparison with this name already exists</div>}
         <div className="flex justify-center items-center gap-x-2">
           <SvgIcon
             name="sync"

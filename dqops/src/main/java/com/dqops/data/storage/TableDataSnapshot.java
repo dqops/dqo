@@ -21,6 +21,7 @@ import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.google.common.collect.Lists;
 import jakarta.validation.constraints.NotNull;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DateTimeColumn;
@@ -35,6 +36,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Contains a snapshot of data for one parquet table (such as sensor_readouts or rule_results) that was loaded
@@ -194,29 +196,38 @@ public class TableDataSnapshot {
      */
     public void updateSchemaForLoadedPartitions(Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions) {
         if (this.columnNames != null) {
-            for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : new ArrayList<>(loadedPartitions.values())) {
                 Table partitionData = loadedMonthlyPartition.getData();
                 if (partitionData == null) {
                     continue;
                 }
 
                 HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
-                Table updatedPartitionData = null;
+
+                if (this.columnNames.length == columnNamesInPartitionData.size() &&
+                        columnNamesInPartitionData.containsAll(Lists.newArrayList(this.columnNames))) {
+                    continue; // this partition is ok
+                }
+
+                Table newTableWithLimitedColumns = Table.create(partitionData.name());
+                Map<String, ? extends Column<?>> existingColumnsByName = partitionData.columns().stream()
+                        .collect(Collectors.toMap(c -> c.name(), c -> c));
 
                 for (String expectedColumnName : this.columnNames) {
-                    if (!columnNamesInPartitionData.contains(expectedColumnName)) {
+                    if (!existingColumnsByName.containsKey(expectedColumnName)) {
                         Column<?> expectedColumn = this.newResultsTable.column(expectedColumnName);
                         Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
-                        if (updatedPartitionData == null) {
-                            updatedPartitionData = partitionData.copy();
-                        }
-                        updatedPartitionData.addColumns(emptyColumnToAdd);
+                        newTableWithLimitedColumns.addColumns(emptyColumnToAdd);
+                    } else {
+                        Column<?> column = existingColumnsByName.get(expectedColumnName);
+                        newTableWithLimitedColumns.addColumns(column);
                     }
                 }
 
-                if (updatedPartitionData != null) {
-                    loadedMonthlyPartition.setData(updatedPartitionData); // this is not perfect, because we are updating a table in the cache
-                }
+                LoadedMonthlyPartition newLoadedPartition = new LoadedMonthlyPartition(
+                        loadedMonthlyPartition.getPartitionId(), loadedMonthlyPartition.getLastModified(), newTableWithLimitedColumns);
+
+                loadedPartitions.put(loadedMonthlyPartition.getPartitionId(),newLoadedPartition);
             }
         }
         else {
@@ -240,7 +251,8 @@ public class TableDataSnapshot {
                     }
                 }
 
-                if (partitionData.columnCount() != emptyTableSample.columnCount()) {
+                if ((updatedPartitionData == null && partitionData.columnCount() != emptyTableSample.columnCount()) ||
+                        (updatedPartitionData != null && updatedPartitionData.columnCount() != emptyTableSample.columnCount())) {
                     // remove old columns
                     HashSet<String> expectedColumnNames = new HashSet<>(emptyTableSample.columnNames());
 
