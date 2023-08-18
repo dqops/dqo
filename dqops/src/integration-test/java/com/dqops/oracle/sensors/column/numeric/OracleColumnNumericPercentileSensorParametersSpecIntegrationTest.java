@@ -15,6 +15,7 @@
  */
 package com.dqops.oracle.sensors.column.numeric;
 
+import com.dqops.oracle.BaseOracleIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.numeric.ColumnPercentileInRangeCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -24,7 +25,6 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.oracle.BaseOracleIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;

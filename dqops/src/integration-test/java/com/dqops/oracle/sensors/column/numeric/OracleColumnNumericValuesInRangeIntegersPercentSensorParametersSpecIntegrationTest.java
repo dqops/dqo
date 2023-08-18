@@ -16,7 +16,7 @@
 package com.dqops.oracle.sensors.column.numeric;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.numeric.ColumnSumInRangeCheckSpec;
+import com.dqops.checks.column.checkspecs.numeric.ColumnValuesInRangeIntegersPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,19 +29,18 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-
 @SpringBootTest
-public class OracleColumnNumericSumSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
-    private ColumnNumericSumSensorParametersSpec sut;
+public class OracleColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
+    private ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSumInRangeCheckSpec checkSpec;
+    private ColumnValuesInRangeIntegersPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,13 +48,16 @@ public class OracleColumnNumericSumSensorParametersSpecIntegrationTest extends B
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.oracle);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericSumSensorParametersSpec();
-		this.checkSpec = new ColumnSumInRangeCheckSpec();
+		this.sut = new ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec();
+		this.checkSpec = new ColumnValuesInRangeIntegersPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "negative", this.checkSpec);
 
@@ -64,11 +66,14 @@ public class OracleColumnNumericSumSensorParametersSpecIntegrationTest extends B
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962, (double) resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+        this.sut.setMinValue(-2L);
+        this.sut.setMaxValue(2L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
 
@@ -77,11 +82,14 @@ public class OracleColumnNumericSumSensorParametersSpecIntegrationTest extends B
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962, (double) resultTable.column(0).get(0));
+        Assertions.assertEquals(24.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+        this.sut.setMinValue(0L);
+        this.sut.setMaxValue(25L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly);
 
@@ -90,11 +98,14 @@ public class OracleColumnNumericSumSensorParametersSpecIntegrationTest extends B
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962, (double) resultTable.column(0).get(0));
+        Assertions.assertEquals(28.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -103,11 +114,14 @@ public class OracleColumnNumericSumSensorParametersSpecIntegrationTest extends B
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3, (double) resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -116,6 +130,6 @@ public class OracleColumnNumericSumSensorParametersSpecIntegrationTest extends B
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962, (double) resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }
