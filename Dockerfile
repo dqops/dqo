@@ -12,14 +12,13 @@ COPY VERSION VERSION
 
 # resolve dependencies
 ENV USER_HOME="/user/mvn"
-RUN mkdir -p "${USER_HOME}/.m2" && ./mvnw.sh dependency:resolve -pl !distribution && ./mvnw.sh dependency:resolve-plugins -pl !distribution
+RUN mkdir -p "${USER_HOME}/.m2" && ./mvnw.sh dependency:go-offline -Prun-npm
 RUN ./mvnw.sh frontend:install-node-and-npm -pl dqops
 
 # npm install
 COPY dqops/src/main/frontend/package.json dqops/src/main/frontend/
 ENV PATH="/workspace/app/dqops/src/main/frontend/node:${PATH}"
-WORKDIR /workspace/app/dqops/src/main/frontend
-RUN npm install --legacy-peer-deps
+RUN ./mvnw.sh frontend:npm@npm-install -pl dqops -Prun-npm
 
 WORKDIR /workspace/app
 
