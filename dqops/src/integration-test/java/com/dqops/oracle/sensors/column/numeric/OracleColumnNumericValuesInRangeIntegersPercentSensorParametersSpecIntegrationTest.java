@@ -16,7 +16,7 @@
 package com.dqops.oracle.sensors.column.numeric;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.numeric.ColumnMeanInRangeCheckSpec;
+import com.dqops.checks.column.checkspecs.numeric.ColumnValuesInRangeIntegersPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,36 +29,35 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.numeric.ColumnNumericMeanSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootTest
-public class OracleColumnNumericMeanSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
-    private ColumnNumericMeanSensorParametersSpec sut;
+public class OracleColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
+    private ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMeanInRangeCheckSpec checkSpec;
+    private ColumnValuesInRangeIntegersPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother
-                .createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.oracle);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.oracle);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericMeanSensorParametersSpec();
-		this.checkSpec = new ColumnMeanInRangeCheckSpec();
+		this.sut = new ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec();
+		this.checkSpec = new ColumnValuesInRangeIntegersPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "negative", this.checkSpec);
 
@@ -67,11 +66,14 @@ public class OracleColumnNumericMeanSensorParametersSpecIntegrationTest extends 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+        this.sut.setMinValue(-2L);
+        this.sut.setMaxValue(2L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
 
@@ -80,11 +82,14 @@ public class OracleColumnNumericMeanSensorParametersSpecIntegrationTest extends 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(24.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+        this.sut.setMinValue(0L);
+        this.sut.setMaxValue(25L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly);
 
@@ -93,11 +98,14 @@ public class OracleColumnNumericMeanSensorParametersSpecIntegrationTest extends 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(28.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -106,11 +114,14 @@ public class OracleColumnNumericMeanSensorParametersSpecIntegrationTest extends 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -119,6 +130,6 @@ public class OracleColumnNumericMeanSensorParametersSpecIntegrationTest extends 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }
