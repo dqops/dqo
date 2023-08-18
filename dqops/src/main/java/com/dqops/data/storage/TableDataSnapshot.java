@@ -240,7 +240,8 @@ public class TableDataSnapshot {
                     }
                 }
 
-                if (partitionData.columnCount() != emptyTableSample.columnCount()) {
+                if ((updatedPartitionData == null && partitionData.columnCount() != emptyTableSample.columnCount()) ||
+                        (updatedPartitionData != null && updatedPartitionData.columnCount() != emptyTableSample.columnCount())) {
                     // remove old columns
                     HashSet<String> expectedColumnNames = new HashSet<>(emptyTableSample.columnNames());
 
