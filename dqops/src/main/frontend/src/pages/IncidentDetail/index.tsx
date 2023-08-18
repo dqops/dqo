@@ -256,7 +256,7 @@ export const IncidentDetail = () => {
               <div className="flex-1">Valid until</div>
               <div className="flex-[2] font-bold">
                 <span className="mr-2">{moment(incidentDetail?.incidentUntil).format("YYYY-MM-DD")}</span>
-                ({getDaysString(incidentDetail?.incidentUntil || 0)})
+                {Number(getDaysString(incidentDetail?.incidentUntil || 0)) >=1 && ("(" + getDaysString(incidentDetail?.incidentUntil || 0) + ")") }
               </div>
             </div>
           </SectionWrapper>
