@@ -42,6 +42,7 @@ type EditProfilingReferenceTableProps = {
   isCreating?: boolean;
   getNewTableComparison: () => void;
   onChangeSelectedReference: (arg: string) => void;
+  listOfExistingReferences: Array<string | undefined>
 };
 
 export const EditProfilingReferenceTable = ({
@@ -52,7 +53,8 @@ export const EditProfilingReferenceTable = ({
   categoryCheck,
   isCreating,
   getNewTableComparison,
-  onChangeSelectedReference
+  onChangeSelectedReference,
+  listOfExistingReferences
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -466,6 +468,7 @@ const replaceStringWithUndefined = (arr: TableComparisonModel): TableComparisonM
     setReference(replaceStringWithUndefined(reference ?? {}))
 }, [refTableChanged]);
 
+
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
@@ -488,6 +491,7 @@ const replaceStringWithUndefined = (arr: TableComparisonModel): TableComparisonM
           isDataDeleted = {isDataDeleted}
           onChangeRefTableChanged = {onChangeRefTableChanged}
           refTableChanged ={refTableChanged}
+          listOfExistingReferences={listOfExistingReferences}
         />
       </div>
       {reference && reference.columns !== undefined && Object.keys(reference).length > 0 && (
