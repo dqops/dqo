@@ -119,7 +119,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
             }
 
             String columnValue = dataGroupingLevelColumn.get(rowIndex);
-            if (columnValue != null) {
+            if (!Strings.isNullOrEmpty(columnValue)) {
                 HashCode stringHashCode = Hashing.farmHashFingerprint64().hashString(columnValue, StandardCharsets.UTF_8);
                 hashCodes.add(HashCode.fromLong(stringHashCode.asLong() + i));
             } else if (i != 0) {
