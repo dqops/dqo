@@ -51,7 +51,7 @@ const Tree = () => {
         const id = [job.parameters?.importTableParameters?.connectionName, job.parameters?.importTableParameters?.schemaName].join('.');
         const schemaNode = findTreeNode(treeData, id);
 
-        refreshNode(schemaNode, false);
+        refreshNode(schemaNode, true);
       }
     })
   }, [job_dictionary_state]);

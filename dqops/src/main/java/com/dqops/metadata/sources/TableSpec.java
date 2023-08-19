@@ -932,4 +932,12 @@ public class TableSpec extends AbstractSpec {
 
         return hierarchyId.getConnectionName() + "." + hierarchyId.getPhysicalTableName().toString();
     }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public TableSpec deepClone() {
+        return (TableSpec)super.deepClone();
+    }
 }

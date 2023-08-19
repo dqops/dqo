@@ -108,12 +108,12 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
             postgresqlSpec.setHost(terminalReader.prompt("PostgreSQL host name (--postgresql-host)", "${POSTGRESQL_HOST}", false));
         }
 
-        if (postgresqlSpec.getSsl() == null) {
+        if (Strings.isNullOrEmpty(postgresqlSpec.getPort())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-ssl");
+                throw new CliRequiredParameterMissingException("--postgresql-port");
             }
 
-            postgresqlSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--postgresql-ssl)", true));
+            postgresqlSpec.setPort(terminalReader.prompt("PostgreSQL port number (--postgresql-port)", "${POSTGRESQL_PORT}", false));
         }
 
         if (Strings.isNullOrEmpty(postgresqlSpec.getDatabase())) {

@@ -108,13 +108,14 @@ public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
             redshiftSpec.setHost(terminalReader.prompt("Redshift host name (--redshift-host)", "${REDSHIFT_HOST}", false));
         }
 
-        if (redshiftSpec.getSsl() == null) {
+        if (Strings.isNullOrEmpty(redshiftSpec.getPort())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--redshift-ssl");
+                throw new CliRequiredParameterMissingException("--redshift-port");
             }
 
-            redshiftSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--redshift-ssl)", true));
+            redshiftSpec.setPort(terminalReader.prompt("Redshift port number (--redshift-port)", "${REDSHIFT_PORT}", false));
         }
+
 
         if (Strings.isNullOrEmpty(redshiftSpec.getDatabase())) {
             if (isHeadless) {
@@ -139,6 +140,7 @@ public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
 
             redshiftSpec.setPassword(terminalReader.prompt("Redshift user password (--redshift-password)", "${REDSHIFT_PASSWORD}", false));
         }
+
     }
 
     /**

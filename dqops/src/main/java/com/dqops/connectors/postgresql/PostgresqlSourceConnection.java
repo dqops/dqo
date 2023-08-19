@@ -84,6 +84,11 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
+
+        if (postgresqlSpec.getSslmode() != null){
+            dataSourceProperties.put("sslmode", postgresqlSpec.getSslmode().getValue());
+        }
+
         if (postgresqlSpec.getProperties() != null) {
             dataSourceProperties.putAll(postgresqlSpec.getProperties());
         }

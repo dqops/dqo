@@ -81,6 +81,10 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
      * @return Delete stored data job parameters based on the filters.
      */
     public static DeleteStoredDataQueueJobParameters fromCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
+        if (checkSearchFilters == null) {
+            return null;
+        }
+
         return new DeleteStoredDataQueueJobParameters() {{
             setConnectionName(checkSearchFilters.getConnectionName());
             setSchemaTableName(checkSearchFilters.getSchemaTableName());

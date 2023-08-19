@@ -7,7 +7,7 @@ spec:
     monthly_partitioning_recent_months: 1
   profiling_checks:
     availability:
-      table_availability:
+      profile_table_availability:
         warning:
           max_failures: 1
         error:

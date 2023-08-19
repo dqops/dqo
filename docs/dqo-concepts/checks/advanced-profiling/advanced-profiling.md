@@ -7,23 +7,20 @@ Advanced profiling is a type of check that should be used to profile data and ru
 of [recurring checks](../recurring-checks/recurring-checks.md) or [partition checks](../partition-checks/partition-checks.md)
 are the most appropriate for monitoring the quality of data.
 
-When the advanced profiling data quality check is run, all sensor readouts are saved. As an illustration, if the check 
-is run three times, the table with the results could look like this:
+When the advanced profiling data quality check is run, only one sensor readout is saved per month. As an illustration, if the check 
+is run three times in April, and one time in May the table with the results could look like this:
 
 | actual_value |              time_period |
 |-------------:|-------------------------:|
-|       95.51% | 2023-04-05T09:07:03.578Z |
-|       94.52% | 2023-04-06T09:08:50.635Z |
-|       96.06% | 2023-04-07T09:10:44.386Z |
+|       95.51% | 2023-04-30T09:07:03.578Z |
+|       94.52% | 2023-05-01T09:08:50.635Z |
 
-If there was a change in the data, and we run the check again, the table will be updated and the newest result will be added at the bottom.
+If there was a change in the data, and we run the check again in May, the result for May will be updated.
 
 | actual_value |                  time_period |
 |-------------:|-----------------------------:|
 |       95.51% |     2023-04-05T09:07:03.578Z |
-|       94.52% |     2023-04-06T09:08:50.635Z |
-|       96.06% |     2023-04-07T09:10:44.386Z |
-|   **95.79%** | **2023-04-07T11:47:20.843Z** |
+|   **95.79%** | **2023-05-02T11:47:20.843Z** |
 
 
 ## Checks configuration in the YAML file
@@ -47,7 +44,7 @@ spec:
     target_column:
       checks:
         nulls:
-          nulls_percent:
+          profile_nulls_percent:
             error:
               max_percent: 1.0
             warning:
@@ -68,7 +65,7 @@ The `spec` section contains the details of the table, including the target schem
 The `timestamp_columns` section specifies the column names for various timestamps in the data.
 
 The `columns` section lists the columns in the table which has configured checks. In this example the column named
-`target_column` has a configured check `nulls_percent`. This means that the sensor reads the percentage of null
+`target_column` has a configured check `profile_nulls_percent`. This means that the sensor reads the percentage of null
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.
 

@@ -44,9 +44,11 @@ public class LocalUserHomeCreatorObjectMother {
         UserHomeContextFactory userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
         DefaultSchedulesProviderImpl defaultSchedulesProvider = new DefaultSchedulesProviderImpl(defaultSchedulesConfigurationProperties,
                 userHomeContextFactory);
+        DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties = DqoInstanceConfigurationPropertiesObjectMother.getDefault();
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
                 homeLocationFindService, userHomeContextFactory, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration,
-                YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider, new DefaultObservabilityCheckSettingsFactoryImpl());
+                dqoInstanceConfigurationProperties, YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider,
+                new DefaultObservabilityCheckSettingsFactoryImpl());
         return localUserHomeCreator;
     }
 

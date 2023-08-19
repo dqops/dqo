@@ -46,8 +46,8 @@ const SensorReadoutsTab = ({
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Executed At',
-      value: 'executedAt',
+      label: 'Time Period',
+      value: 'timePeriod',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
@@ -76,12 +76,18 @@ const SensorReadoutsTab = ({
   ];
 
   const monthOptions = useMemo(() => {
-    return Array(24)
-      .fill('')
-      .map((item, index) => ({
-        label: moment().subtract(index, 'months').format('MMMM YYYY'),
-        value: moment().subtract(index, 'months').format('MMMM YYYY')
-      }));
+    return [
+      {
+        label: 'Last 3 months',
+        value: 'Last 3 months'
+      },
+      ...Array(24)
+        .fill('')
+        .map((item, index) => ({
+          label: moment().subtract(index, 'months').format('MMMM YYYY'),
+          value: moment().subtract(index, 'months').format('MMMM YYYY')
+        }))
+    ];
   }, []);
 
   return (
@@ -93,7 +99,7 @@ const SensorReadoutsTab = ({
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group</div>
           <Select
-            value={dataGroup}
+            value={ dataGroup || sensorReadouts[0]?.dataGroup}
             options={
               (sensorReadouts[0]?.dataGroupNames || []).map((item) => ({
                 label: item,

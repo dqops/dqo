@@ -17,6 +17,8 @@ package com.dqops.services.check.mapping;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.core.scheduler.quartz.*;
@@ -29,11 +31,14 @@ import com.dqops.metadata.sources.TableSpecObjectMother;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mapping.models.QualityCategoryModel;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.dqops.utils.serialization.JsonSerializerObjectMother;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -87,5 +92,28 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
                 this.bigQueryConnectionSpec, this.tableSpec, null, null);
 
         this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec);
+    }
+
+    @Test
+    void updateAllChecksSpec_whenChangesAppliedToDefaultProfilingObservabilityChecks_thenEnablesCheck() {
+        DefaultProfilingObservabilityCheckSettingsSpec profilingObservabilityChecksSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
+        CheckContainerModel uiModel = this.specToUiMapper.createModel(profilingObservabilityChecksSpec.getTable(), null,
+                null, null, null, null);
+
+        QualityCategoryModel tableVolumeCategoryModel = uiModel.getCategories().stream()
+                .filter(cm -> cm.getCategory().equals("volume")).findFirst().get();
+        CheckModel profileRowCountModel = tableVolumeCategoryModel.getChecks().stream()
+                .filter(cm -> cm.getCheckName().equals("profile_row_count")).findFirst().get();
+
+        profileRowCountModel.setConfigured(true);
+        profileRowCountModel.getRule().getWarning().setConfigured(true);
+
+
+        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec.getTable());
+
+        Assertions.assertNotNull(profilingObservabilityChecksSpec.getTable().getVolume());
+        TableRowCountCheckSpec profileRowCountCheck = profilingObservabilityChecksSpec.getTable().getVolume().getProfileRowCount();
+        Assertions.assertNotNull(profileRowCountCheck);
+        Assertions.assertNotNull(profileRowCountCheck.getWarning());
     }
 }

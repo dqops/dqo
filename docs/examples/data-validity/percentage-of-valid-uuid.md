@@ -66,7 +66,7 @@ The highlighted fragments in the YAML file below represent the segment where the
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="8-26"
+```yaml hl_lines="14-26"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -80,7 +80,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_valid_uuid_percent:
+          profile_string_valid_uuid_percent:
             comments:
             - date: 2023-05-22T12:08:09.275+00:00
               comment_by: user
@@ -131,7 +131,11 @@ To execute the check prepared in the example using the [graphical interface](../
 7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
    located in the upper right corner of the graphical interface.
 
-8. You can now [review the results on the data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
+   the results displayed on the Issues per check dashboard showing results by check category, check and failed tests.
+
+   ![String-valid-uuid-percent check results on Issues per check dashboard](https://dqops.com/docs/images/examples/string-valid-uuid-percent-check-results-on-issues-per-check-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 

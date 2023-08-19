@@ -66,7 +66,6 @@ public class MysqlConnectionSpecObjectMother {
                 setDatabase(testContainer.getDatabaseName());
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
-                setSsl(false);
             }});
         }};
         return connectionSpec;

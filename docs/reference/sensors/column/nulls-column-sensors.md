@@ -44,18 +44,18 @@ Column-level sensor that calculates the number of rows with not null values.
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM(
-        SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} analyzed_table
-        {{- lib.render_where_clause() -}}
-    ) grouping_table
-    WHERE actual_value IS NOT NULL
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+       SELECT
+           original_table.*
+           {{- lib.render_data_grouping_projections('original_table') }}
+           {{- lib.render_time_dimension_projection('original_table') }}
+       FROM {{ lib.render_target_table() }} original_table
+       {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    WHERE ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -165,20 +165,20 @@ Column level sensor that calculates the percentage of not null values in a colum
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN NULL
-            ELSE 100.0 * COUNT(actual_value) / COUNT(*)
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
         END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
-        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
-    FROM (
-             SELECT
-                     {{ lib.render_target_column('analyzed_table') }} AS actual_value
-                     {{- lib.render_data_grouping_projections('analyzed_table') }}
-                     {{- lib.render_time_dimension_projection('analyzed_table') }}
-             FROM {{ lib.render_target_table() }} analyzed_table
-             {{- lib.render_where_clause() -}}
-    ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+           {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+       FROM (
+           SELECT
+               original_table.*
+               {{- lib.render_data_grouping_projections('original_table') }}
+               {{- lib.render_time_dimension_projection('original_table') }}
+           FROM {{ lib.render_target_table() }} original_table
+           {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+       ) analyzed_table
+       {{- lib.render_group_by() -}}
+       {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
       
@@ -301,19 +301,20 @@ Column-level sensor that calculates the number of rows with null values.
     SELECT
         SUM(
             CASE
-                WHEN actual_value IS NULL THEN 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
                 ELSE 0
             END
-        ) actual_value,
-        time_period,
-        time_period_utc
-    FROM(
-             SELECT
-                {{ lib.render_target_column('analyzed_table')}} actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}}) grouping_table
+        ) actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+      SELECT
+          original_table.*
+          {{- lib.render_data_grouping_projections('original_table') }}
+          {{- lib.render_time_dimension_projection('original_table') }}
+      FROM {{ lib.render_target_table() }} original_table
+      {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -454,20 +455,21 @@ Column-level sensor that calculates the percentage of rows with null values.
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN actual_value IS NULL THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
-        END AS actual_value,
-        time_period,
-        time_period_utc
-    FROM(
-             SELECT
-                {{ lib.render_target_column('analyzed_table')}} actual_value
-                {{- lib.render_data_grouping_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} analyzed_table
-    {{- lib.render_where_clause() -}}) grouping_table
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+       SELECT
+           original_table.*
+           {{- lib.render_data_grouping_projections('original_table') }}
+           {{- lib.render_time_dimension_projection('original_table') }}
+       FROM {{ lib.render_target_table() }} original_table
+       {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

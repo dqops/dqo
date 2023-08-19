@@ -61,6 +61,9 @@ const ResultBox = ({
       });
   };
 
+  console.log(item)
+  console.log(secondBool)
+
   return (
     <tr className="flex flex-col text-xs font-light justify-start items-start  absolute top-0">
       {secondBool && (

@@ -51,7 +51,6 @@ public class HomeFolderPath extends ArrayList<FolderName> {
      * @param folders Array of folder names.
      */
     public HomeFolderPath(FolderName... folders) {
-
 		for (FolderName folderName : folders) {
 			this.add(folderName);
         }
@@ -67,6 +66,18 @@ public class HomeFolderPath extends ArrayList<FolderName> {
         }
 
         return null;
+    }
+
+    /**
+     * Returns a folder path to the parent folder.
+     * @return Parent folder path or null if this is the root folder.
+     */
+    public HomeFolderPath getParentFolder() {
+        if (this.size() == 0) {
+            return null;
+        }
+
+        return new HomeFolderPath(this.subList(0, this.size() - 1));
     }
 
     /**

@@ -21,6 +21,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
+import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapperImpl;
@@ -84,13 +85,24 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
             FileTreeNode fileNode = this.connectionFolderNode.getChildFileByFileName(fileNameWithExt);
             FileContent fileContent = fileNode.getContent();
             String textContent = fileContent.getTextContent();
-            TableYaml deserialized = this.yamlSerializer.deserialize(textContent, TableYaml.class, fileNode.getPhysicalAbsolutePath());
-            TableSpec deserializedSpec = deserialized.getSpec();
-            if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
-                throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
-            }
-            if (deserialized.getKind() != SpecificationKind.TABLE) {
-                throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+            TableSpec deserializedSpec = (TableSpec) fileContent.getCachedObjectInstance();
+
+            if (deserializedSpec == null) {
+                TableYaml deserialized = this.yamlSerializer.deserialize(textContent, TableYaml.class, fileNode.getPhysicalAbsolutePath());
+                deserializedSpec = deserialized.getSpec();
+                if (deserializedSpec == null) {
+                    deserializedSpec = new TableSpec();
+                }
+
+                if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
+                    throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
+                }
+                if (deserialized.getKind() != SpecificationKind.TABLE) {
+                    throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                }
+                fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+            } else {
+                deserializedSpec = deserializedSpec.deepClone();
             }
 
 			this.setSpec(deserializedSpec);

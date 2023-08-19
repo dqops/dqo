@@ -195,4 +195,12 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     public ProviderSensorDefinitionSpec trim() {
         return this; // returns self
     }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ProviderSensorDefinitionSpec deepClone() {
+        return (ProviderSensorDefinitionSpec)super.deepClone();
+    }
 }

@@ -146,12 +146,18 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         String database = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getDatabase());
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);
+        } else {
+            throw new ConnectorOperationFailedException("Cannot create a connection to MySQL, the database name is not provided");
         }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
         hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
+        if (mysqlParametersSpec.getSslmode() != null){
+            dataSourceProperties.put("sslmode", mysqlParametersSpec.getSslmode().toString());
+        }
+
         if (mysqlParametersSpec.getProperties() != null) {
             dataSourceProperties.putAll(mysqlParametersSpec.getProperties());
         }
