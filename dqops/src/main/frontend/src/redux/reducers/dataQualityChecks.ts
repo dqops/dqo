@@ -37,7 +37,7 @@ const initialState: IdataQualityChecks= {
         case DATA_QUALITY_CHECKS_ACTION.TOGGLE_DATA_QUALITY_CHECKS_FOLDER:
           return {
             ...state,
-            DATA_QUALITY_CHECKSState: {
+            dataQualityChecksState: {
               ...state.dataQualityChecksState,
               [action.key]: !state.dataQualityChecksState[action.key]
             }

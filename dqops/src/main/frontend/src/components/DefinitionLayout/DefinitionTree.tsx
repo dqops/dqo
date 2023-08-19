@@ -9,6 +9,8 @@ import {
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
+  CheckContainerModel,
+  QualityCategoryModel,
   RuleBasicFolderModel,
   RuleBasicModel,
   SensorBasicFolderModel,
@@ -23,6 +25,8 @@ import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
+import { SettingsApi } from '../../services/apiClient';
+import { getdataQualityChecksFolderTree } from '../../redux/actions/dataQualityChecks';
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -32,14 +36,52 @@ export const DefinitionTree = () => {
   const { ruleFolderTree, ruleState } = useSelector(
     (state: IRootState) => state.rule || {}
   );
+
+    const {arrayOfChecks, dataQualityChecksState} = useSelector((state: IRootState) => state.dataQualityChecks || {})
+
   const [selected, setSelected] = useState('');
+
+  const [checksContainerData, setChecksContainerData ] = useState<CheckContainerModel>({})
+  
+    
+  const fetchChecks =async  () =>{
+    await SettingsApi.getDefaultProfilingTableChecks().then((res) => setChecksContainerData(res.data))
+  } 
+  // const fetchChecksCol =async  () =>{
+  //   await SettingsApi.getDefaultProfilingColumnChecks().then((res) => console.log(res.data))
+  // } 
+  // const fetchChecks2 =async  () =>{
+  //   await SettingsApi.getDefaultDataObservabilityDailyRecurringTableChecks().then((res) => console.log(res.data))
+  // } 
+  // const fetchChecksCol2 =async  () =>{
+  //   await SettingsApi.getDefaultDataObservabilityDailyRecurringColumnChecks().then((res) => console.log(res.data))
+  // } 
+
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
+    dispatch(getdataQualityChecksFolderTree())
   }, []);
 
+  
+
+  
+  // useEffect(() => {
+  //   fetchChecks()
+  //   fetchChecksCol()
+  //   fetchChecks2()
+  //   fetchChecksCol2()
+  // }, [])
+
+  console.log(arrayOfChecks)
+
+  // console.log(checksContainerData)
+  // console.log(Object.values(checksContainerData))
+  // console.log((Object.values(checksContainerData).at(0) as Array<QualityCategoryModel>)?.map((x) => x.checks))
+
+
   const toggleSensorFolder = (key: string) => {
-    dispatch(toggleSensorFolderTree(key));
+    dispatch(toggleSensorFolderTree(key));4
   };
 
   const toggleRuleFolder = (key: string) => {
@@ -71,6 +113,7 @@ export const DefinitionTree = () => {
       })
     );
   };
+
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -144,6 +187,8 @@ export const DefinitionTree = () => {
   ) => {
     if (!folder) return null;
 
+
+
     return (
       <div className="text-sm">
         {folder.folders &&
@@ -204,6 +249,73 @@ export const DefinitionTree = () => {
     );
   };
 
+  const renderDataQualityChecksFolderTree = (
+    folder?: CheckContainerModel,
+    secondFolder?: Array<QualityCategoryModel>,
+    path?: string[]
+  ) => {
+    if (!folder) return null;
+
+    return (
+      <div className="text-sm">
+        {folder &&
+          Object.values(folder)?.at(0)?.map((value : any, index : number) => {
+            return (
+              <div key={index}>
+                <div
+                  className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
+                  onClick={() => toggleSensorFolder(value)}
+                >
+                  <SvgIcon
+                    name={sensorState[value] ? 'folder' : 'closed-folder'}
+                    className="w-4 h-4 min-w-4"
+                  />
+                  <div className="text-[13px] leading-1.5 truncate">{value.category}</div>
+        
+                </div>
+                {sensorState[value] && (
+                  <div className="ml-2">
+                    {/* {folder?.folders &&
+                      renderSensorFolderTree(folder?.folders[key], [
+                        ...(path || []),
+                        key
+                      ])} */}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        <div className="ml-2">
+          {secondFolder && secondFolder?.map((check, index) => (
+            check.checks?.map((x) => 
+            <div
+              key={index}
+              className={clsx(
+                'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300'
+              
+              )}
+              // onClick={() => {
+              //   openSensorFirstLevelTab(sensor),
+              //     setSelected(sensor.sensor_name ? sensor.sensor_name : '');
+              // }}
+            >
+              <SvgIcon
+                name="definitionssensors"
+                className="w-4 h-4 min-w-4 shrink-0"
+              />
+              <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                {x.check_name}
+              </div>
+            </div>
+            )
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  
+
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
       <div className="mb-4">
@@ -218,7 +330,7 @@ export const DefinitionTree = () => {
 
       <div>
         <div className="text-sm text-gray-700 font-semibold mb-2">Data Quality Checks: </div>
-        {renderRuleFolderTree(ruleFolderTree, [])}
+        {renderDataQualityChecksFolderTree(arrayOfChecks, Object.values(arrayOfChecks || {}).at(0) as Array<QualityCategoryModel>,  [])}
       </div>
 
     </div>

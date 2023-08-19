@@ -25,6 +25,7 @@ export const getdataQualityChecksFolderTree = () => async (dispatch: Dispatch) =
     const res: AxiosResponse<CheckContainerModel> =
       await SettingsApi.getDefaultProfilingTableChecks()
     dispatch(getdataQualityChecksFolderTreeSuccess(res.data));
+    console.log(res.data)
   } catch (err) {
     dispatch(getdataQualityChecksFolderTreeFailed(err));
   }
