@@ -55,6 +55,10 @@ export const DefinitionTree = () => {
   console.log(dataQualityChecksState)
   console.log(ruleState)
 
+  console.log(checksFolderTree?.folders && Object.values(checksFolderTree?.folders).map((check) => check.folders))
+
+
+
   // console.log(checksContainerData)
   // console.log(Object.values(checksContainerData))
   // console.log((Object.values(checksContainerData).at(0) as Array<QualityCategoryModel>)?.map((x) => x.checks))
@@ -233,71 +237,6 @@ export const DefinitionTree = () => {
     );
   };
 
-  // const renderDataQualityChecksFolderTree = (
-  //   folder?: CheckContainerModel,
-  //   secondFolder?: Array<QualityCategoryModel>,
-  //   path?: string[]
-  // ) => {
-  //   if (!folder) return null;
-
-  //   return (
-  //     <div className="text-sm">
-  //       {folder &&
-  //         Object.values(folder)?.at(0)?.map((value : any, index : number) => {
-  //           return (
-  //             <div key={index}>
-  //               <div
-  //                 className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
-  //                 onClick={() => toggleDataQualityChecksFolder(value)}
-  //               >
-  //                 <SvgIcon
-  //                   name={dataQualityChecksState[value] ? 'folder' : 'closed-folder'}
-  //                   className="w-4 h-4 min-w-4"
-  //                 />
-  //                 <div className="text-[13px] leading-1.5 truncate">{value.category}</div>
-        
-  //               </div>
-  //               {sensorState[value] && (
-  //                 <div className="ml-2">
-  //                   {/* {folder?.folders &&
-  //                     renderSensorFolderTree(folder?.folders[key], [
-  //                       ...(path || []),
-  //                       key
-  //                     ])} */}
-  //                 </div>
-  //               )}
-  //             </div>
-  //           );
-  //         })}
-  //       <div className="ml-2">
-  //         {secondFolder && secondFolder?.map((check, index) => (
-  //           check.checks?.map((x) => 
-  //           <div
-  //             key={index}
-  //             className={clsx(
-  //               'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300'
-              
-  //             )}
-  //             // onClick={() => {
-  //             //   openSensorFirstLevelTab(sensor),
-  //             //     setSelected(sensor.sensor_name ? sensor.sensor_name : '');
-  //             // }}
-  //           >
-  //             <SvgIcon
-  //               name="definitionssensors"
-  //               className="w-4 h-4 min-w-4 shrink-0"
-  //             />
-  //             <div className="text-[13px] leading-1.5 whitespace-nowrap">
-  //               {x.check_name}
-  //             </div>
-  //           </div>
-  //           )
-  //         ))}
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
   const renderChecksFolderTree = (
     folder?: CheckSpecFolderBasicModel,
     path?: string[]
@@ -337,28 +276,28 @@ export const DefinitionTree = () => {
             );
           })}
         <div className="ml-2">
-        {/* {Object.keys(folder.folders).map((sensor) => (
+        {folder.checks && folder?.checks.map((check) => (
             <div
-              key={sensor.full_sensor_name}
+              key={check.check_name}
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
-                sensor.custom ? 'font-bold' : '',
-                selected == sensor.sensor_name ? 'bg-gray-300' : ''
+                // check.custom ? 'font-bold' : '',
+                // selected == check.sensor_name ? 'bg-gray-300' : ''
               )}
-              onClick={() => {
-                openSensorFirstLevelTab(sensor),
-                  setSelected(sensor.sensor_name ? sensor.sensor_name : '');
-              }}
+              // onClick={() => {
+              //   openSensorFirstLevelTab(check),
+              //     setSelected(sensor.sensor_name ? sensor.sensor_name : '');
+              // }}
             >
               <SvgIcon
                 name="definitionssensors"
                 className="w-4 h-4 min-w-4 shrink-0"
               />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                {sensor.sensor_name}
+                {check.check_name}
               </div>
             </div>
-          ))} */}
+          ))}
         </div>
       </div>
     );
