@@ -15,6 +15,7 @@
  */
 package com.dqops.core.filesystem.localfiles;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
@@ -35,8 +36,8 @@ public class LocalHomeTestUtilities {
             HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
             UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
             LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(
-                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub());
-            LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
+                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub(), LocalFileSystemCacheObjectMother.createNewWithCachingDisabled());
+            LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomeRootDirectory());
         }
         catch( Exception ex) {
             throw new RuntimeException(ex);

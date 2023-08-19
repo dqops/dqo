@@ -105,6 +105,15 @@ dqo:
   core:
     lock-wait-timeout-seconds: 900
     print-stack-trace: false
+  cache:
+    enable: true
+    expire-after-seconds: 86400
+    yaml-files-limit: 1000000
+    file-lists-limit: 1000000
+    parquet-cache-memory-fraction: 0.6
+    reserved-heap-memory-bytes: 200000000
+    watch-file-system-changes: true
+    process-file-changes-delay-millis: 100
   instance:
     authentication-token-expiration-minutes: 10080
   sensor:

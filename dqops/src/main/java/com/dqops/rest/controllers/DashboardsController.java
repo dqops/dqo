@@ -93,7 +93,7 @@ public class DashboardsController {
      * @return Dashboard model with the authenticated url.
      */
     @GetMapping(value = "/{folder}/{dashboardName}", produces = "application/json")
-    @ApiOperation(value = "getDashboardLevel1", notes = "Returns a single dashboard in one folder with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ApiOperation(value = "getDashboardLevel1", notes = "Returns a single dashboard in the tree of folder with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
@@ -140,7 +140,7 @@ public class DashboardsController {
      * @return Dashboard model with the authenticated url.
      */
     @GetMapping(value = "/{folder1}/{folder2}/{dashboardName}", produces = "application/json")
-    @ApiOperation(value = "getDashboardLevel2", notes = "Returns a single dashboard in two folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ApiOperation(value = "getDashboardLevel2", notes = "Returns a single dashboard in the tree of folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
@@ -195,7 +195,7 @@ public class DashboardsController {
      * @return Dashboard model with the authenticated url.
      */
     @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{dashboardName}", produces = "application/json")
-    @ApiOperation(value = "getDashboardLevel3", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ApiOperation(value = "getDashboardLevel3", notes = "Returns a single dashboard in the tree of folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
@@ -257,7 +257,7 @@ public class DashboardsController {
      * @return Dashboard model with the authenticated url.
      */
     @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}", produces = "application/json")
-    @ApiOperation(value = "getDashboardLevel4", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ApiOperation(value = "getDashboardLevel4", notes = "Returns a single dashboard in the tree of folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
@@ -306,6 +306,81 @@ public class DashboardsController {
             String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
             AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                     folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4, dashboard, authenticatedDashboardUrl);
+            return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+        }
+        catch (DqoCloudInvalidKeyException invalidKeyException) {
+            log.warn("DQO Cloud API Key was invalid, please run \"cloud login\" again from the DQO shell", invalidKeyException);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.UNAUTHORIZED); // 401
+        }
+    }
+
+    /**
+     * Retrieves a model of a single dashboard in fifth level folder, generating also an authenticated url.
+     * @param folder1 Folder name.
+     * @param folder2 Folder name.
+     * @param folder3 Folder name.
+     * @param folder4 Folder name.
+     * @param folder5 Folder name.
+     * @param windowLocationOrigin The value of the window.location.origin
+     * @param dashboardName Dashboard name.
+     * @return Dashboard model with the authenticated url.
+     */
+    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{folder4}/{folder5}/{dashboardName}", produces = "application/json")
+    @ApiOperation(value = "getDashboardLevel5", notes = "Returns a single dashboard in the tree of folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 401, message = "Unauthorized, DQO Cloud API key is outdated, please run \"cloud login\" from the DQO shell to update the API key"),
+            @ApiResponse(code = 404, message = "Dashboard not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel5(
+            @ApiParam("Root folder name") @PathVariable String folder1,
+            @ApiParam("Second level folder name") @PathVariable String folder2,
+            @ApiParam("Third level folder name") @PathVariable String folder3,
+            @ApiParam("Fourth level folder name") @PathVariable String folder4,
+            @ApiParam("Fifth level folder name") @PathVariable String folder5,
+            @ApiParam("Dashboard name") @PathVariable String dashboardName,
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @RequestParam(required = false) Optional<String> windowLocationOrigin) {
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
+
+        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
+        if (folder1Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
+        if (folder2Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder3Spec = folder2Spec.getFolders().getFolderByName(folder3);
+        if (folder3Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder4Spec = folder3Spec.getFolders().getFolderByName(folder4);
+        if (folder4Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder5Spec = folder4Spec.getFolders().getFolderByName(folder4);
+        if (folder5Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardSpec dashboard = folder5Spec.getDashboards().getDashboardByName(dashboardName);
+        if (dashboard == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        String dqoUrlOrigin = windowLocationOrigin.orElse(null);
+
+        try {
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
+                    folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4 + "/" + folder5, dashboard, authenticatedDashboardUrl);
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
         }
         catch (DqoCloudInvalidKeyException invalidKeyException) {

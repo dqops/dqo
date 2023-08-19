@@ -5,7 +5,8 @@ transaction processing, business intelligence and analytics applications in corp
 
 ## Prerequisite credentials
 
-You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol options for a specific IP address. In case of restrictions, you need to add the IP address used by DQO to [Allowed IP Addresses in SQL Server Network Policies](https://learn.microsoft.com/en-us/sql/tools/configuration-manager/tcp-ip-properties-ip-addresses-tab?view=sql-server-ver16).
+You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol 
+options for a specific IP address. In case of restrictions, you need to add the IP address used by DQO to [Allowed IP Addresses in SQL Server Network Policies](https://learn.microsoft.com/en-us/sql/tools/configuration-manager/tcp-ip-properties-ip-addresses-tab?view=sql-server-ver16).
 
 ## Adding SQL Server connection using the graphical interface
 
@@ -21,8 +22,8 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
 
    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-sql-server.jpg)
 
-    | SQL Server connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                      | 
-    |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | SQL Server connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                      |
+    |--------------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
     | Connection name                |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                          |
     | Host                           | host                                     | SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.                                                                                                                                                                        |
     | Port                           | port                                     | SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.                                                                                                                                              |
@@ -30,22 +31,24 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
     | User name                      | user                                     | SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                                   |
     | Password                       | password                                 | SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                           |
     | Options                        | options                                  | SQL Server connection 'options' initialization parameter. For example, setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable. |
-    | Disable SSL                    | ssl                                      | Connecting to SQL Server with SSL disabled. The default value is true.                                                                                                                                                                                                           |
+    | Disable SSL encryption         | disable_encryption                       | Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.                                                                                                                                           |
     | JDBC connection property       |                                          | Optional setting. DQO supports using JDBC driver to access SQL Server. [See the SQL Server documentation for JDBC connection parameter references.](https://learn.microsoft.com/en-us/sql/connect/jdbc/overview-of-the-jdbc-driver?view=sql-server-ver16).                       |
-    
+   
     DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
+
     ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg)
 
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
     For example:
+
     ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
 
-    To remove the property click on the trash icon add the end of the input field.
+    To remove the property click on the trash icon at the end of the input field.
 
 4. After filling in the connection settings, click the **Test Connection** button to test the connection.
 5. Click the **Save** connection button when the test is successful otherwise you can check the details of what went wrong.
@@ -61,6 +64,7 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
 ## Adding SQL Server connection using DQO Shell
 
 To add a connection run the following command in DQO Shell.
+
 ```
 dqo> connection add
 ```
@@ -76,6 +80,7 @@ Database provider type (--provider):
 [ 4] redshift
 [ 5] sqlserver
 [ 6] mysql
+[ 7] oracle
 Please enter one of the [] values: 5
 SQL Server host (--sqlserver-host)[${SQLSERVER_HOST}]: localhost
 SQL Server port (--sqlserver-port) [${SQLSERVER_PORT}]: 1433
@@ -96,8 +101,6 @@ dqo> connection add --name=connection1
 --sqlserver-database=TESTING
 --sqlserver-username=testing
 --sqlserver-password=xxx
-
-!!!!!
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -133,7 +136,6 @@ spec:
     database: TESTING
     user: testing
     password: xxx
-    ssl: true
     properties:
       lastUpdateCount: "false"
   incident_grouping:

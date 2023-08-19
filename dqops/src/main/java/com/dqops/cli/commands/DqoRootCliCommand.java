@@ -302,6 +302,43 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The maximum number of queries that are merged into a bigger query, to calculate multiple sensors on the same table and to analyze multiple columns from the same table.", defaultValue = "100")
     private int dqoSensorLimitMaxMergedQueries;
 
+    @CommandLine.Option(names = {"--dqo.cache.expire-after-seconds"},
+            description = "The time in seconds to expire the cache entries since they were added to the cache.", defaultValue = "86400")
+    private long dqoCacheExpireAfterSeconds = 86400;  // 24h
+
+    @CommandLine.Option(names = {"--dqo.cache.yaml-files-limit"},
+            description = "The maximum number of specification files to cache.", defaultValue = "1000000")
+    private long dqoCacheYamlFilesLimit = 1000000;
+
+    @CommandLine.Option(names = {"--dqo.cache.file-lists-limit"},
+            description = "The maximum number of folders for which the list of files are cached to avoid listing the files.", defaultValue = "1000000")
+    private long dqoCacheFileListsLimit = 1000000;
+
+    @CommandLine.Option(names = {"--dqo.cache.parquet-cache-memory-fraction"},
+            description = "The maximum fraction of the JVM heap memory (configured using the -Xmx java parameter) that is used to cache parquet files in memory. " +
+                    "The default value 0.6 means that up to 50%% of the JVM heap memory could be used for caching files. " +
+                     "The value of the reserved-heap-memory-bytes is subtracted from the total memory size (-Xmx parameter value) before the memory fraction is calculated.", defaultValue = "0.6")
+    private double dqoCacheParquetCacheMemoryFraction = 0.6;
+
+    @CommandLine.Option(names = {"--dqo.cache.reserved-heap-memory-bytes"},
+            description = "The memory size (in bytes) that is not subtracted from the total JVM heap memory before the memory fraction dedicated for the parquet cache is calculated.", defaultValue = "200000000")
+    private long dqoCacheReservedHeapMemoryBytes = 200L * 1000 * 1000;
+
+    @CommandLine.Option(names = {"--dqo.cache.enabled"},
+            description = "Enables or disables the specification cache.", defaultValue = "true")
+    private boolean dqoCacheEnable = true;
+
+    @CommandLine.Option(names = {"--dqo.cache.watch-file-system-changes"},
+            description = "Use a file watcher to detect file system changes and invalidate the in-memory file cache.", defaultValue = "true")
+    private boolean dqoCacheWatchFileSystemChanges = true;
+
+    /**
+     * The delay in milliseconds between processing file changes that would invalidate the cache.
+     */
+    @CommandLine.Option(names = {"--dqo.cache.process-file-changes-delay-millis"},
+            description = "The delay in milliseconds between processing file changes that would invalidate the cache.", defaultValue = "100")
+    private long dqoCacheProcessFileChangesDelayMillis = 100;
+
     @CommandLine.Option(names = {"--spring.config.location"},
             description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +
                     "The format of this value is: --spring.config.location=file:./foldername/,file:./alternativeapplication.yml")

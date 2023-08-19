@@ -43,7 +43,7 @@ const App = () => {
       if (event?.reason?.request?.responseURL?.indexOf('api/logs/error') < 0) {
         LogErrorsApi.logError({
           window_location: window.location.href,
-          message: event.reason
+          message: event.reason?.toString()
         });
       }
     };
@@ -51,7 +51,7 @@ const App = () => {
     window.onerror = function (message) {
       LogErrorsApi.logError({
         window_location: window.location.href,
-        message: message.toString()
+        message: message?.toString()
       });
     };
   }, []);

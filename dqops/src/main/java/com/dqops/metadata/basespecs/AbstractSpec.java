@@ -217,8 +217,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
             }
         }
 
-        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
-        ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+        ClassInfo myClassInfo = this.getChildMap().getReflectionClassInfo();
 
         List<FieldInfo> fields = myClassInfo.getFields();
         for (FieldInfo fieldInfo : fields) {
@@ -251,8 +250,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
             return;
         }
 
-        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
-        ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+        ClassInfo myClassInfo = this.getChildMap().getReflectionClassInfo();
 
         List<FieldInfo> fields = myClassInfo.getFields();
         for (FieldInfo fieldInfo : fields) {
@@ -339,8 +337,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
                 cloned.additionalProperties = cloner.deepClone(this.additionalProperties);
             }
 
-            ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
-            ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+            ClassInfo myClassInfo = this.getChildMap().getReflectionClassInfo();
 
             List<FieldInfo> fields = myClassInfo.getFields();
             for (FieldInfo fieldInfo : fields) {

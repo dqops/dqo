@@ -20,6 +20,8 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
@@ -57,6 +59,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
     private ParquetPartitionStorageServiceImpl sut;
     private DqoConfigurationProperties dqoConfigurationProperties;
     private FileStorageSettings sensorReadoutsStorageSettings;
+    private LocalFileSystemCache localFileSystemCache;
 
     @BeforeEach
     void setUp() {
@@ -64,11 +67,13 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         DqoUserConfigurationProperties dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
 
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoUserConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
+        localFileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
-                homeLocationFindService, newLockManager, synchronizationStatusTracker);
+                homeLocationFindService, newLockManager, synchronizationStatusTracker, localFileSystemCache);
 
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
         this.sut = new ParquetPartitionStorageServiceImpl(parquetPartitionMetadataService,
@@ -76,7 +81,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
                                                           newLockManager,
                                                           HadoopConfigurationProviderObjectMother.getDefault(),
                                                           localUserHomeFileStorageService,
-                                                          synchronizationStatusTracker);
+                                                          synchronizationStatusTracker,
+                                                          fileSystemCache);
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
     }
 

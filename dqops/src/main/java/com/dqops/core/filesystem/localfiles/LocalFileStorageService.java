@@ -29,7 +29,7 @@ public interface LocalFileStorageService {
      * Returns a path to the home folder on the local machine.
      * @return Path to the home folder.
      */
-    String getHomePath();
+    String getHomeRootDirectory();
 
     /**
      * Checks if a file exists.

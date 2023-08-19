@@ -34,6 +34,6 @@ public class LocalDqoHomeFileStorageServiceImplTests extends BaseTest {
     @Test
     void getHome_whenDefaultDqoHomeStorageServiceCreated_thenReturnsDQO_HOME() {
         String dqo_home = System.getenv("DQO_HOME").replace('\\', '/');
-        Assertions.assertEquals(dqo_home, this.sut.getHomePath().replace('\\', '/'));
+        Assertions.assertEquals(dqo_home, this.sut.getHomeRootDirectory().replace('\\', '/'));
     }
 }

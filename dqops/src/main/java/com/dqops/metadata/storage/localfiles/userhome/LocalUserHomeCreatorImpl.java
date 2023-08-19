@@ -20,6 +20,7 @@ import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFacto
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoDockerUserhomeConfigurationProperties;
+import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
@@ -47,6 +48,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.stream.Stream;
 
 /**
@@ -60,6 +63,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
     private DqoUserConfigurationProperties userConfigurationProperties;
     private DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties;
+    private DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
     private YamlSerializer yamlSerializer;
     private DefaultSchedulesProvider defaultSchedulesProvider;
     private DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory;
@@ -73,6 +77,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
      * @param userConfigurationProperties DQO user home configuration parameters.
      * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
+     * @param dqoInstanceConfigurationProperties DQO instance configuration parameters.
      * @param yamlSerializer Yaml serializer.
      * @param defaultSchedulesProvider Default cron schedules provider.
      * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
@@ -84,6 +89,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                                     DqoLoggingConfigurationProperties loggingConfigurationProperties,
                                     DqoUserConfigurationProperties userConfigurationProperties,
                                     DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties,
+                                    DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                     YamlSerializer yamlSerializer,
                                     DefaultSchedulesProvider defaultSchedulesProvider,
                                     DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory) {
@@ -93,6 +99,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         this.loggingConfigurationProperties = loggingConfigurationProperties;
         this.userConfigurationProperties = userConfigurationProperties;
         this.dockerUserhomeConfigurationProperties = dockerUserhomeConfigurationProperties;
+        this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.yamlSerializer = yamlSerializer;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
         this.defaultObservabilityCheckSettingsFactory = defaultObservabilityCheckSettingsFactory;
@@ -301,7 +308,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         SettingsSpec settingsSpec = userHome.getSettings().getSpec();
         if (settingsSpec != null &&
                 settingsSpec.getDefaultDataObservabilityChecks() != null &&
-                settingsSpec.getDefaultSchedules() != null) {
+                settingsSpec.getDefaultSchedules() != null &&
+                (settingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
             return;
         }
 
@@ -318,6 +326,15 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         if (settingsSpec.getDefaultSchedules() == null) {
             RecurringSchedulesSpec defaultRecurringSchedules = this.defaultSchedulesProvider.createDefaultRecurringSchedules();
             settingsSpec.setDefaultSchedules(defaultRecurringSchedules);
+        }
+
+        if (settingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {
+            SecureRandom secureRandom = new SecureRandom();
+            byte[] instanceKeyBytes = new byte[32];
+            secureRandom.nextBytes(instanceKeyBytes);
+
+            String encodedNewKey = Base64.getEncoder().encodeToString(instanceKeyBytes);
+            settingsSpec.setInstanceSignatureKey(encodedNewKey);
         }
 
         userHomeContext.flush();

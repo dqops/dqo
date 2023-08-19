@@ -15,7 +15,9 @@
  */
 package com.dqops.metadata.storage.localfiles.dqohome;
 
+import com.dqops.core.configuration.DqoCacheConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationProperties;
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheImpl;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.virtual.FileSystemContext;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
@@ -35,7 +37,11 @@ public class DqoHomeDirectFactory {
      * @return DQO Home context.
      */
     public static DqoHomeContext openDqoHome(Path dqoHomePath) {
-        LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString());
+        DqoCacheConfigurationProperties dqoCacheConfigurationProperties = new DqoCacheConfigurationProperties();
+        dqoCacheConfigurationProperties.setEnable(false);
+        dqoCacheConfigurationProperties.setWatchFileSystemChanges(false);
+        LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(dqoCacheConfigurationProperties);
+        LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString(), localFileSystemCache);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);
         LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath());
         DqoHomeContext dqoHomeContext = new DqoHomeContext(dqoHomeFolder);

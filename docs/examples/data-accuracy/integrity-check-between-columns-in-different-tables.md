@@ -90,7 +90,7 @@ check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="21-39"
+```yaml hl_lines="23-39"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -113,7 +113,7 @@ spec:
         nullable: true
       profiling_checks:
         integrity:
-          foreign_key_match_percent:
+          profile_foreign_key_match_percent:
             comments:
             - date: 2023-04-27T09:46:53.075+00:00
               comment_by: user
@@ -180,7 +180,11 @@ To execute the check prepared in the example using the [graphical interface](../
 7. After executing the checks, synchronize the results with your DQO cloud account sing the **Synchronize** button
    located in the upper right corner of the graphical interface.
 
-8. You can now [review the results on the data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in Working with DQO section.
+8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. Below you can see
+   the results displayed on the KPI day by day dashboard showing results by check, schema, table, column.
+
+   ![Foreign-key-match-percent results on KPI day by day dashboard](https://dqops.com/docs/images/examples/foreign-key-match-percent-check-results-on-KPI-day-by-day-dashboard.png)
 
 ## Running the checks in the example and evaluating the results using DQO Shell
 The detailed explanation of how to run the example is described [here](../#running-the-examples).

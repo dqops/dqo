@@ -20,7 +20,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_most_popular_values:
+          profile_string_most_popular_values:
             parameters:
               expected_values:
               - Gender Pay Gap

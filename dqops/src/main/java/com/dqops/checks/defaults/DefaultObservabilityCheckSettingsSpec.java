@@ -157,21 +157,20 @@ public class DefaultObservabilityCheckSettingsSpec extends AbstractSpec {
         }
     }
 
-
     /**
      * Applies the checks on a target column.
      * @param targetColumn Target column.
      * @param dialectSettings Dialect settings, to decide if the checks are applicable.
      */
     public void applyOnColumn(ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
-        if (this.profiling != null) {
-            this.profiling.applyOnColumn(targetColumn, dialectSettings);
+        if (this.profiling != null && this.profiling.getColumn() != null) {
+            this.profiling.getColumn().applyOnColumn(targetColumn, dialectSettings);
         }
-        if (this.recurringDaily != null) {
-            this.recurringDaily.applyOnColumn(targetColumn, dialectSettings);
+        if (this.recurringDaily != null && this.recurringDaily.getColumn() != null) {
+            this.recurringDaily.getColumn().applyOnColumn(targetColumn, dialectSettings);
         }
-        if (this.recurringMonthly != null) {
-            this.recurringMonthly.applyOnColumn(targetColumn, dialectSettings);
+        if (this.recurringMonthly != null && this.recurringMonthly.getColumn() != null) {
+            this.recurringMonthly.getColumn().applyOnColumn(targetColumn, dialectSettings);
         }
     }
 }

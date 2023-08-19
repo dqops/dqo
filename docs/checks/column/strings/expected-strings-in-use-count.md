@@ -168,8 +168,8 @@ spec:
     {% endmacro -%}
     
     {%- macro render_else() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            MAX(NULL)
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -183,7 +183,7 @@ spec:
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -199,7 +199,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE COUNT(DISTINCT
             CASE
                 WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -599,8 +599,8 @@ spec:
         {% endmacro -%}
         
         {%- macro render_else() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                MAX(NULL)
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -614,7 +614,7 @@ spec:
         
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE {{render_else()}}
             END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -629,7 +629,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE COUNT(DISTINCT
                 CASE
                     WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -1082,8 +1082,8 @@ spec:
     {% endmacro -%}
     
     {%- macro render_else() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            MAX(NULL)
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1097,7 +1097,7 @@ spec:
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -1113,7 +1113,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE COUNT(DISTINCT
             CASE
                 WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -1514,8 +1514,8 @@ spec:
         {% endmacro -%}
         
         {%- macro render_else() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                MAX(NULL)
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -1529,7 +1529,7 @@ spec:
         
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE {{render_else()}}
             END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -1544,7 +1544,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE COUNT(DISTINCT
                 CASE
                     WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -1997,8 +1997,8 @@ spec:
     {% endmacro -%}
     
     {%- macro render_else() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            MAX(NULL)
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2012,7 +2012,7 @@ spec:
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -2028,7 +2028,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE COUNT(DISTINCT
             CASE
                 WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -2429,8 +2429,8 @@ spec:
         {% endmacro -%}
         
         {%- macro render_else() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                MAX(NULL)
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -2444,7 +2444,7 @@ spec:
         
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE {{render_else()}}
             END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -2459,7 +2459,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE COUNT(DISTINCT
                 CASE
                     WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -2912,8 +2912,8 @@ spec:
     {% endmacro -%}
     
     {%- macro render_else() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            MAX(NULL)
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -2927,7 +2927,7 @@ spec:
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -2943,7 +2943,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE COUNT(DISTINCT
             CASE
                 WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -3348,8 +3348,8 @@ spec:
         {% endmacro -%}
         
         {%- macro render_else() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                MAX(NULL)
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -3363,7 +3363,7 @@ spec:
         
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE {{render_else()}}
             END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -3378,7 +3378,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE COUNT(DISTINCT
                 CASE
                     WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -3829,8 +3829,8 @@ spec:
     {% endmacro -%}
     
     {%- macro render_else() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            MAX(NULL)
+        {%- if parameters.expected_values|length == 0 -%}
+            0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -3844,7 +3844,7 @@ spec:
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE {{render_else()}}
         END AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -3860,7 +3860,7 @@ spec:
     ```sql
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN MAX(NULL)
+            WHEN COUNT(*) = 0 THEN MAX(0)
             ELSE COUNT(DISTINCT
             CASE
                 WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')
@@ -4265,8 +4265,8 @@ spec:
         {% endmacro -%}
         
         {%- macro render_else() -%}
-            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                MAX(NULL)
+            {%- if parameters.expected_values|length == 0 -%}
+                0
             {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -4280,7 +4280,7 @@ spec:
         
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE {{render_else()}}
             END AS actual_value,
             MAX({{ parameters.expected_values | length }}) AS expected_value
@@ -4295,7 +4295,7 @@ spec:
         ```sql
         SELECT
             CASE
-                WHEN COUNT(*) = 0 THEN MAX(NULL)
+                WHEN COUNT(*) = 0 THEN MAX(0)
                 ELSE COUNT(DISTINCT
                 CASE
                     WHEN analyzed_table.`target_column` IN ('USD', 'GBP', 'EUR')

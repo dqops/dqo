@@ -68,14 +68,26 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                ProviderSensorYaml deserialized = this.yamlSerializer.deserialize(textContent, ProviderSensorYaml.class, fileNode.getPhysicalAbsolutePath());
-                ProviderSensorDefinitionSpec deserializedSpec = deserialized.getSpec();
-                if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
-                    throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
+                ProviderSensorDefinitionSpec deserializedSpec = (ProviderSensorDefinitionSpec) fileContent.getCachedObjectInstance();
+
+                if (deserializedSpec == null) {
+                    ProviderSensorYaml deserialized = this.yamlSerializer.deserialize(textContent, ProviderSensorYaml.class, fileNode.getPhysicalAbsolutePath());
+                    deserializedSpec = deserialized.getSpec();
+                    if (deserializedSpec == null) {
+                        deserializedSpec = new ProviderSensorDefinitionSpec();
+                    }
+                    if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
+                        throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
+                    }
+                    if (deserialized.getKind() != SpecificationKind.PROVIDER_SENSOR) {
+                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                    }
+
+                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                } else {
+                    deserializedSpec = deserializedSpec.deepClone();
                 }
-                if (deserialized.getKind() != SpecificationKind.PROVIDER_SENSOR) {
-                    throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
-                }
+
 				this.setSpec(deserializedSpec);
 				this.clearDirty(true);
                 return deserializedSpec;

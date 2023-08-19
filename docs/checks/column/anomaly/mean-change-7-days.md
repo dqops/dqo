@@ -137,6 +137,43 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
+         {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        AVG(analyzed_table."target_column") AS actual_value,
+        time_period,
+        time_period_utc
+     FROM(
+         SELECT
+             original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -337,6 +374,49 @@ spec:
             DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        SELECT
+            AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+         FROM(
+             SELECT
+                 original_table.*
+                 {{- lib.render_data_grouping_projections('original_table') }}
+                 {{- lib.render_time_dimension_projection('original_table') }}
+             FROM {{ lib.render_target_table() }} original_table
+             {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+         ) analyzed_table
+         {{- lib.render_group_by() -}}
+         {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            AVG(analyzed_table."target_column") AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+         FROM(
+             SELECT
+                 original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+             FROM "<target_schema>"."<target_table>" original_table
+         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -591,6 +671,43 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
+         {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        AVG(analyzed_table."target_column") AS actual_value,
+        time_period,
+        time_period_utc
+     FROM(
+         SELECT
+             original_table.*,
+        TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -792,6 +909,49 @@ spec:
             DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        SELECT
+            AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+         FROM(
+             SELECT
+                 original_table.*
+                 {{- lib.render_data_grouping_projections('original_table') }}
+                 {{- lib.render_time_dimension_projection('original_table') }}
+             FROM {{ lib.render_target_table() }} original_table
+             {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+         ) analyzed_table
+         {{- lib.render_group_by() -}}
+         {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            AVG(analyzed_table."target_column") AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+         FROM(
+             SELECT
+                 original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+             FROM "<target_schema>"."<target_table>" original_table
+         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```
@@ -1046,6 +1206,43 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **Oracle**
+=== "Sensor template for Oracle"
+      
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+     FROM(
+         SELECT
+             original_table.*
+             {{- lib.render_data_grouping_projections('original_table') }}
+             {{- lib.render_time_dimension_projection('original_table') }}
+         FROM {{ lib.render_target_table() }} original_table
+         {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+     ) analyzed_table
+     {{- lib.render_group_by() -}}
+     {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for Oracle"
+      
+    ```sql
+    SELECT
+        AVG(analyzed_table."target_column") AS actual_value,
+        time_period,
+        time_period_utc
+     FROM(
+         SELECT
+             original_table.*,
+        TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+        CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+         FROM "<target_schema>"."<target_table>" original_table
+     ) analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
@@ -1251,6 +1448,49 @@ spec:
             DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
             FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
         FROM `<target_table>` AS analyzed_table
+        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+        ```
+    **Oracle**  
+      
+    === "Sensor template for Oracle"
+        ```sql+jinja
+        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+        SELECT
+            AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+         FROM(
+             SELECT
+                 original_table.*
+                 {{- lib.render_data_grouping_projections('original_table') }}
+                 {{- lib.render_time_dimension_projection('original_table') }}
+             FROM {{ lib.render_target_table() }} original_table
+             {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+         ) analyzed_table
+         {{- lib.render_group_by() -}}
+         {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Oracle"
+        ```sql
+        SELECT
+            AVG(analyzed_table."target_column") AS actual_value,
+        
+                        analyzed_table.grouping_level_1,
+        
+                        analyzed_table.grouping_level_2
+        ,
+            time_period,
+            time_period_utc
+         FROM(
+             SELECT
+                 original_table.*,
+            original_table."country" AS grouping_level_1,
+            original_table."state" AS grouping_level_2,
+            TRUNC(CAST(original_table."" AS DATE)) AS time_period,
+            CAST(TRUNC(CAST(original_table."" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+             FROM "<target_schema>"."<target_table>" original_table
+         ) analyzed_table
         GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
         ```

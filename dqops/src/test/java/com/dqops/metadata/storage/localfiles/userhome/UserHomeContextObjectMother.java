@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
@@ -78,6 +79,8 @@ public final class UserHomeContextObjectMother {
 
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(sampleTableMetadata.getTableSpec().getPhysicalTableName());
         tableWrapper.setSpec(sampleTableMetadata.getTableSpec());
+
+        LocalFileSystemCacheObjectMother.invalidateAll();
     }
 
     /**

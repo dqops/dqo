@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>0.2.0-beta4</version>  <!-- DQO Version, do not touch (changed automatically) -->
+    <version>0.2.0-beta6</version>  <!-- DQO Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQO Data Quality Operations Center</description>
@@ -186,13 +186,13 @@
 						</configuration>
 						<executions>
 							<execution>
-								<id>install node</id>
+								<id>install-node</id>
 								<goals>
 									<goal>install-node-and-npm</goal>
 								</goals>
 							</execution>
 							<execution>
-								<id>npm install</id>
+								<id>npm-install</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
@@ -202,7 +202,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>npm test</id>
+								<id>npm-test</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
@@ -215,7 +215,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>npm build</id>
+								<id>npm-build</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
@@ -521,22 +521,22 @@
 		<dependency>
 			<groupId>com.google.api</groupId>
 			<artifactId>gax</artifactId>
-			<version>2.23.3</version>
+			<version>2.32.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-bigquery</artifactId>
-			<version>2.23.2</version>
+			<version>2.31.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-storage</artifactId>
-			<version>2.20.1</version>
+			<version>2.26.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-secretmanager</artifactId>
-			<version>2.12.0</version>
+			<version>2.23.0</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.tablesaw</groupId>
@@ -708,6 +708,16 @@
 			<artifactId>jsonschema-generator</artifactId>
 			<version>4.29.0</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+			<version>3.1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jbellis</groupId>
+			<artifactId>jamm</artifactId>
+			<version>0.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jetbrains</groupId>

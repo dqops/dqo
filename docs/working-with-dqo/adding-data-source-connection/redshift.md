@@ -23,30 +23,31 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
 
     ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-redshift.jpg)
 
-   | Redshift connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                             |
-   |------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-   | Connection name              |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-   | Host                         | host                                     | Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.                                                                                                                                  |
-   | Port                         | port                                     | Redshift port name. The default port is 5439. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.                                                                                                        |
-   | Database                     | database                                 | Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
-   | User name                    | user                                     | Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
-   | Password                     | password                                 | Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
-   | Use SSL                      | ssl                                      | Connect to Redshift using SSL. The default value is false.                                                                                                                                                                              |
-   | JDBC connection property     |                                          | Optional setting. DQO supports using JDBC driver to access Redshift. [See the Redshift documentation for JDBC connection parameter references.](https://docs.aws.amazon.com/redshift/latest/mgmt/jdbc20-install-driver.html)            |   
+    | Redshift connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                             |
+    |------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Connection name              |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+    | Host                         | host                                     | Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.                                                                                                                                  |
+    | Port                         | port                                     | Redshift port name. The default port is 5439. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.                                                                                                        |
+    | Database                     | database                                 | Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
+    | User name                    | user                                     | Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
+    | Password                     | password                                 | Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
+    | JDBC connection property     |                                          | Optional setting. DQO supports using JDBC driver to access Redshift. [See the Redshift documentation for JDBC connection parameter references.](https://docs.aws.amazon.com/redshift/latest/mgmt/jdbc20-install-driver.html)            |
    
     DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
+
     ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
     For example:
+
     ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
     
-    To remove the property click on the trash icon add the end of the input field.
+    To remove the property click on the trash icon at the end of the input field.
     
     
 4. After filling in the connection settings, click the **Test Connection** button to test the connection.
@@ -63,6 +64,7 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
 ## Adding Redshift connection using DQO Shell
 
 To add a connection run the following command in DQO Shell.
+
 ```
 dqo> connection add
 ```
@@ -78,6 +80,7 @@ Database provider type (--provider):
 [ 4] redshift
 [ 5] sqlserver
 [ 6] mysql
+[ 7] oracle
 Please enter one of the [] values: 4
 Redshift host (--redshift-host)[${REDSHIFT_HOST}]: localhost
 Redshift port (--redshift-port) [${REDSHIFT_PORT}]: 5439
@@ -133,7 +136,6 @@ spec:
     database: testing
     user: testing
     password: xxx
-    ssl: false
     properties:
       'connectTimeout': 15
   incident_grouping:

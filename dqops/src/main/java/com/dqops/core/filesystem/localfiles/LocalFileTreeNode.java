@@ -109,7 +109,7 @@ public class LocalFileTreeNode extends FileTreeNode {
      */
     @Override
     public Path getPhysicalAbsolutePath() {
-        String homePath = this.context.getStorageService().getHomePath();
+        String homePath = this.context.getStorageService().getHomeRootDirectory();
         if (homePath == null) {
             return null;
         }

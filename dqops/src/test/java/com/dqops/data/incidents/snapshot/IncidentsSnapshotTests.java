@@ -20,6 +20,8 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
@@ -67,6 +69,7 @@ public class IncidentsSnapshotTests extends BaseTest {
         dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
         // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
 
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
@@ -77,7 +80,8 @@ public class IncidentsSnapshotTests extends BaseTest {
                 newLockManager,
                 HadoopConfigurationProviderObjectMother.getDefault(),
                 null,
-                new SynchronizationStatusTrackerStub());
+                new SynchronizationStatusTrackerStub(),
+                fileSystemCache);
         Table newRows = IncidentsTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new IncidentsSnapshot("conn", this.parquetStorageService, newRows);
         this.incidentsTableFactory = new IncidentsTableFactoryImpl();

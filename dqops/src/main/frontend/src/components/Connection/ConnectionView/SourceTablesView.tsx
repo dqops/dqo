@@ -8,6 +8,12 @@ import Checkbox from '../../Checkbox';
 import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { toggleAdvisor } from '../../../redux/actions/job.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { setCurrentJobId } from '../../../redux/actions/source.actions';
+import { useParams } from 'react-router-dom';
+import { CheckTypes } from '../../../shared/routes';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
 
 interface ISourceSchemasViewProps {
   connectionName: string;
@@ -20,10 +26,21 @@ const SourceTablesView = ({
   schemaName,
   onBack
 }: ISourceSchemasViewProps) => {
+  const {
+    checkTypes,
+  }: {
+    checkTypes: CheckTypes;
+  } = useParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
+ 
   const dispatch = useActionDispatch();
+  const { job_dictionary_state } =
+  useSelector((state: IRootState) => state.job);
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const fetchSourceTables = async () => {
     setLoading(true);
@@ -50,24 +67,36 @@ const SourceTablesView = ({
   };
 
   const importSelectedTables = async () => {
-    JobApiClient.importTables({
+    const res = await JobApiClient.importTables({
       connectionName,
       schemaName,
       tableNames: selectedTables
-    }).then(() => {
-      fetchSourceTables();
-    });
-    dispatch(toggleAdvisor(true));
+    })
+      dispatch(
+        setCurrentJobId(
+          checkTypes,
+          firstLevelActiveTab,
+          (res.data as any)?.jobId?.jobId
+        )
+      );
+      setJobId((res.data as any)?.jobId);
+    dispatch(toggleAdvisor(true)); 
   };
 
   const importAllTables = async () => {
-    JobApiClient.importTables({
+    const res = await JobApiClient.importTables({
       connectionName,
       schemaName,
       tableNames: tables.map((item) => item.tableName ?? '')
-    }).then(() => {
-      fetchSourceTables();
-    });
+    })
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        (res.data as any)?.jobId?.jobId
+      )
+    );
+    setJobId((res.data as any)?.jobId);
     dispatch(toggleAdvisor(true));
   };
 
@@ -78,6 +107,12 @@ const SourceTablesView = ({
       setSelectedTables([...selectedTables, tableName]);
     }
   };
+
+  useEffect(() => {
+    if(jobId !== 0 && jobId!== undefined && job?.status==="succeeded"){
+      fetchSourceTables()
+    }
+  }, [job?.status])
 
   return (
     <div className="py-4 px-8">
