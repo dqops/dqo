@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -26,8 +26,10 @@ import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
-import { SettingsApi } from '../../services/apiClient';
+import { RulesApi, SensorsApi, SettingsApi } from '../../services/apiClient';
 import { getdataQualityChecksFolderTree, toggledataQualityChecksFolderTree } from '../../redux/actions/dataQualityChecks';
+import DataQualityContextMenu from './DataQualityContextMenu';
+import Select, { Option } from '../Select';
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -38,31 +40,55 @@ export const DefinitionTree = () => {
     (state: IRootState) => state.rule || {}
   );
 
-    const {checksFolderTree, dataQualityChecksState} = useSelector((state: IRootState) => state.dataQualityChecks || {})
-
+const {checksFolderTree, dataQualityChecksState} = useSelector(
+  (state: IRootState) => state.dataQualityChecks || {}
+  )
   const [selected, setSelected] = useState('');
+
+  const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
+  const [allRules, setAllRules] = useState<RuleBasicModel[]>()
 
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
     dispatch(getdataQualityChecksFolderTree())
+    getAllSensors()
+    getAllRules()
   }, []);
 
-  console.log(checksFolderTree)
-  console.log(sensorFolderTree)
+  const memoizedData = useMemo(() => {
+    return {
+      sensors: allSensors,
+      rules: allRules,
+    };
+  }, [allSensors, allRules]);
 
-  console.log(dataQualityChecksState)
-  console.log(ruleState)
 
-  console.log(checksFolderTree?.folders && Object.values(checksFolderTree?.folders).map((check) => check.folders))
+  // console.log(checksFolderTree)
+  // console.log(sensorFolderTree)
 
+  // console.log(dataQualityChecksState)
+  // console.log(ruleState)
+
+  // console.log(checksFolderTree?.folders && Object.values(checksFolderTree?.folders).map((check) => check.folders))
+console.log(memoizedData)
 
 
   // console.log(checksContainerData)
   // console.log(Object.values(checksContainerData))
   // console.log((Object.values(checksContainerData).at(0) as Array<QualityCategoryModel>)?.map((x) => x.checks))
 
+  const getAllSensors =async () => {
+    await SensorsApi.getAllSensors().then((res) => setAllSensors(res.data))
+    console.log("is")
+  }
+
+  
+  const getAllRules =async () => {
+    await RulesApi.getAllRules().then((res) => setAllRules(res.data))
+    console.log("ir")
+  }
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
@@ -177,6 +203,7 @@ export const DefinitionTree = () => {
 
 
 
+
     return (
       <div className="text-sm">
         {folder.folders &&
@@ -258,7 +285,7 @@ export const DefinitionTree = () => {
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
-                  <SensorContextMenu
+                  <DataQualityContextMenu
                     folder={folder?.folders?.[key] || {}}
                     path={[...(path || []), key]}
                   />
@@ -277,8 +304,8 @@ export const DefinitionTree = () => {
           })}
         <div className="ml-2">
         {folder.checks && folder?.checks.map((check) => (
-            <div
-              key={check.check_name}
+          <div  key={check.check_name}>
+            <div  
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                 // check.custom ? 'font-bold' : '',
@@ -296,6 +323,16 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {check.check_name}
               </div>
+            </div>
+            <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
+            label: x.rule_name ?? "", 
+            value: x.rule_name ?? ""
+            })) || []}/>
+            <Select placeholder='Rule'  
+            options={memoizedData.sensors && memoizedData.sensors.map((x) => ({
+            label: x.sensor_name ?? "", 
+            value: x.sensor_name ?? ""
+            })) || []}/>
             </div>
           ))}
         </div>

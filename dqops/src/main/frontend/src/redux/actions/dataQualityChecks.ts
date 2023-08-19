@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux';
 
-import { ChecksApi, SettingsApi } from '../../services/apiClient';
+import { ChecksApi } from '../../services/apiClient';
 import {  DATA_QUALITY_CHECKS_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { CheckContainerModel, CheckSpecFolderBasicModel } from '../../api';
+import {CheckSpecFolderBasicModel } from '../../api';
 
 export const getdataQualityChecksFolderTreeRequest = () => ({
   type: DATA_QUALITY_CHECKS_ACTION.GET_DATA_QUALITY_CHECKS_FOLDER_TREE
@@ -25,7 +25,6 @@ export const getdataQualityChecksFolderTree = () => async (dispatch: Dispatch) =
     const res: AxiosResponse<CheckSpecFolderBasicModel> =
       await ChecksApi.getCheckFolderTree()
     dispatch(getdataQualityChecksFolderTreeSuccess(res.data));
-    console.log(res.data)
   } catch (err) {
     dispatch(getdataQualityChecksFolderTreeFailed(err));
   }
