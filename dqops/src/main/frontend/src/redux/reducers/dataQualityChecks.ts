@@ -2,7 +2,7 @@ import { CheckContainerModel, CheckSpecFolderBasicModel, QualityCategoryModel } 
 import { DATA_QUALITY_CHECKS_ACTION } from "../types/dataQualityChecks.types";
 
 export interface IdataQualityChecks{
-    arrayOfChecks ?: CheckSpecFolderBasicModel
+    checksFolderTree ?: CheckSpecFolderBasicModel
     loading: boolean
     error: any
     dataQualityChecksState: Record<string, boolean>
@@ -25,7 +25,7 @@ const initialState: IdataQualityChecks= {
           return {
             ...state,
             loading: false,
-            arrayOfChecks: action.data,
+            checksFolderTree: action.data,
             error: null
           };
         case DATA_QUALITY_CHECKS_ACTION.GET_DATA_QUALITY_CHECKS_FOLDER_TREE_ERROR:
@@ -45,7 +45,7 @@ const initialState: IdataQualityChecks= {
         case DATA_QUALITY_CHECKS_ACTION.UPDATE_DATA_QUALITY_CHECKS_FOLDER_TREE:
           return {
             ...state,
-            arrayOfChecks: action.data,
+            checksFolderTree: action.data,
           }
         default:
           return state;

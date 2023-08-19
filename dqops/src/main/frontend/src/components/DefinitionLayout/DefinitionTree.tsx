@@ -10,6 +10,7 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
   CheckContainerModel,
+  CheckSpecFolderBasicModel,
   QualityCategoryModel,
   RuleBasicFolderModel,
   RuleBasicModel,
@@ -37,7 +38,7 @@ export const DefinitionTree = () => {
     (state: IRootState) => state.rule || {}
   );
 
-    const {arrayOfChecks, dataQualityChecksState} = useSelector((state: IRootState) => state.dataQualityChecks || {})
+    const {checksFolderTree, dataQualityChecksState} = useSelector((state: IRootState) => state.dataQualityChecks || {})
 
   const [selected, setSelected] = useState('');
 
@@ -48,7 +49,7 @@ export const DefinitionTree = () => {
     dispatch(getdataQualityChecksFolderTree())
   }, []);
 
-  console.log(arrayOfChecks)
+  console.log(checksFolderTree)
   console.log(sensorFolderTree)
 
   console.log(dataQualityChecksState)
@@ -60,7 +61,7 @@ export const DefinitionTree = () => {
 
 
   const toggleSensorFolder = (key: string) => {
-    dispatch(toggleSensorFolderTree(key));4
+    dispatch(toggleSensorFolderTree(key));
   };
 
   const toggleRuleFolder = (key: string) => {
@@ -297,6 +298,72 @@ export const DefinitionTree = () => {
   //   );
   // };
 
+  const renderChecksFolderTree = (
+    folder?: CheckSpecFolderBasicModel,
+    path?: string[]
+  ) => {
+    if (!folder) return null;
+
+    return (
+      <div className="text-sm">
+        {folder.folders &&
+          Object.keys(folder.folders).map((key, index) => {
+            return (
+              <div key={index}>
+                <div
+                  className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer hover:bg-gray-300"
+                  onClick={() => toggleDataQualityChecksFolder(key)}
+                >
+                  <SvgIcon
+                    name={dataQualityChecksState[key] ? 'folder' : 'closed-folder'}
+                    className="w-4 h-4 min-w-4"
+                  />
+                  <div className="text-[13px] leading-1.5 truncate">{key}</div>
+                  <SensorContextMenu
+                    folder={folder?.folders?.[key] || {}}
+                    path={[...(path || []), key]}
+                  />
+                </div>
+                {dataQualityChecksState[key] && (
+                  <div className="ml-2">
+                    {folder?.folders &&
+                      renderChecksFolderTree(folder?.folders[key], [
+                        ...(path || []),
+                        key
+                      ])}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        <div className="ml-2">
+        {/* {Object.keys(folder.folders).map((sensor) => (
+            <div
+              key={sensor.full_sensor_name}
+              className={clsx(
+                'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
+                sensor.custom ? 'font-bold' : '',
+                selected == sensor.sensor_name ? 'bg-gray-300' : ''
+              )}
+              onClick={() => {
+                openSensorFirstLevelTab(sensor),
+                  setSelected(sensor.sensor_name ? sensor.sensor_name : '');
+              }}
+            >
+              <SvgIcon
+                name="definitionssensors"
+                className="w-4 h-4 min-w-4 shrink-0"
+              />
+              <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                {sensor.sensor_name}
+              </div>
+            </div>
+          ))} */}
+        </div>
+      </div>
+    );
+  };
+
   
 
   return (
@@ -313,7 +380,7 @@ export const DefinitionTree = () => {
 
       <div>
         <div className="text-sm text-gray-700 font-semibold mb-2">Data Quality Checks: </div>
-        {/* {renderDataQualityChecksFolderTree(arrayOfChecks, Object.values(arrayOfChecks || {}).at(0) as Array<QualityCategoryModel>,  [])} */}
+        {renderChecksFolderTree(checksFolderTree, [])}
       </div>
 
     </div>
