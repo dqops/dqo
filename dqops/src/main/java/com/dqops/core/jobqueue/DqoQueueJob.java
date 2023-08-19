@@ -33,6 +33,7 @@ public abstract class DqoQueueJob<T> {
     private final JobCancellationToken cancellationToken;
     private final Object lock = new Object();
     private DqoQueueJobId jobId;
+    private Throwable jobExecutionException;
 
     /**
      * Creates and configures a new job.
@@ -132,7 +133,8 @@ public abstract class DqoQueueJob<T> {
             assert this.finishedFuture.isCancelled();
             throw new DqoQueueJobCancelledException(jobExecutionContext.getJobId());
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
+            this.jobExecutionException = ex;
             this.finishedFuture.completeExceptionally(ex);
             throw new DqoQueueJobExecutionException(ex);
         }
@@ -213,6 +215,14 @@ public abstract class DqoQueueJob<T> {
      */
     public JobCancellationToken getCancellationToken() {
         return cancellationToken;
+    }
+
+    /**
+     * Returns the exception that was thrown by the job code when the job failed.
+     * @return The exception that was thrown by the job implementation or null when no exception was thrown.
+     */
+    public Throwable getJobExecutionException() {
+        return jobExecutionException;
     }
 
     /**
