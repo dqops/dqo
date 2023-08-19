@@ -15,7 +15,7 @@
 @REM limitations under the License.
 @REM
 
-set DQO_VERSION=0.2.0-beta5
+set DQO_VERSION=0.2.0-beta6
 
 rem Configure local development environment overrides
 if exist "%~dp0set-dqo-envs.cmd" (
