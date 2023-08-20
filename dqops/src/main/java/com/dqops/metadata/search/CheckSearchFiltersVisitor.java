@@ -19,6 +19,7 @@ import com.dqops.checks.*;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.custom.CustomCheckSpecMap;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
@@ -301,7 +302,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         String checkNameFilter = this.filters.getCheckName();
         if (!Strings.isNullOrEmpty(checkNameFilter)) {
-            String checkName = abstractCheckSpec.getHierarchyId().getLast().toString();
+            String checkName = abstractCheckSpec.getCheckName();
             if (!StringPatternComparer.matchSearchPattern(checkName, checkNameFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
@@ -400,6 +401,24 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         }
 
         return super.accept(abstractCheckCategorySpec, parameter);
+    }
+
+    /**
+     * Accepts a dictionary of custom checks. The keys must be names of configured custom checks.
+     *
+     * @param customCheckSpecMap Dictionary of custom checks.
+     * @param parameter          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CustomCheckSpecMap customCheckSpecMap, SearchParameterObject parameter) {
+        String checkCategoryFilter = this.filters.getCheckCategory();
+        if (!Strings.isNullOrEmpty(checkCategoryFilter)) {
+            if (!StringPatternComparer.matchSearchPattern("custom", checkCategoryFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+        return super.accept(customCheckSpecMap, parameter);
     }
 
     /**

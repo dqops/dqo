@@ -17,6 +17,7 @@ package com.dqops.utils.docs.sensors;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.ProviderType;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -52,7 +53,7 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
         this.dqoHome = dqoHomeContext.getDqoHome();
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
         this.linkageStore = new HandledClassesLinkageStore();
 

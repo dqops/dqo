@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.checks;
 
 import com.dqops.BaseTest;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -51,7 +52,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
         Path projectRoot = Path.of(".");
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SpecToModelCheckMappingService specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                reflectionService, new SensorDefinitionFindServiceImpl());
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService,
                 DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory());

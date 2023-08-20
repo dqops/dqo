@@ -18,11 +18,14 @@ package com.dqops.checks.custom;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.rules.CustomRuleParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -202,5 +205,24 @@ public class CustomCheckSpec extends AbstractCheckSpec<CustomSensorParametersSpe
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Validity; // this is just the default
+    }
+
+    /**
+     * Returns the data quality category name retrieved from the category field name used to store a container of check categories
+     * in the metadata.
+     * @return Check category name.
+     */
+    @JsonIgnore
+    public String getCategoryName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+
+        if (Objects.equals(hierarchyId.get(hierarchyId.size() - 2), "custom_checks")) {
+            return hierarchyId.get(hierarchyId.size() - 3).toString();
+        }
+
+        return super.getCategoryName();
     }
 }

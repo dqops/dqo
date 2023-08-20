@@ -19,17 +19,26 @@ import com.dqops.checks.*;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.checks.custom.CustomParametersSpecObject;
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.core.scheduler.quartz.SchedulesUtilityService;
 import com.dqops.execution.ExecutionContext;
+import com.dqops.execution.rules.finder.RuleDefinitionFindResult;
+import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
 import com.dqops.metadata.basespecs.AbstractSpec;
+import com.dqops.metadata.definitions.checks.CheckDefinitionList;
+import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
+import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
+import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import com.dqops.metadata.scheduling.RecurringScheduleSpec;
@@ -38,7 +47,9 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.rules.CustomRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.services.check.mapping.basicmodels.CheckBasicModel;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
 import com.dqops.services.check.mapping.models.*;
@@ -47,6 +58,7 @@ import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ReflectionService;
 import com.google.common.base.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,9 +75,11 @@ import java.util.stream.Collectors;
  * enabling transformation from the storage model (YAML compliant) to a UI friendly model.
  */
 @Service
+@Slf4j
 public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappingService {
     private final ReflectionService reflectionService;
     private final SensorDefinitionFindService sensorDefinitionFindService;
+    private final RuleDefinitionFindService ruleDefinitionFindService;
     private final SchedulesUtilityService schedulesUtilityService;
     private final SimilarCheckCache similarCheckCache;
 
@@ -73,16 +87,19 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * Creates a check mapping service that exchanges the data for data quality checks between models and the data quality check specifications.
      * @param reflectionService Reflection service used to read the list of checks.
      * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
+     * @param ruleDefinitionFindService Service that finds the definition of rules, used to look up the fields for rules used in custom checks.
      * @param schedulesUtilityService Schedule specs utility service to get detailed info about CRON expressions.
      * @param similarCheckCache Similar checks cache.
      */
     @Autowired
     public SpecToModelCheckMappingServiceImpl(ReflectionService reflectionService,
                                               SensorDefinitionFindService sensorDefinitionFindService,
+                                              RuleDefinitionFindService ruleDefinitionFindService,
                                               SchedulesUtilityService schedulesUtilityService,
                                               SimilarCheckCache similarCheckCache) {
         this.reflectionService = reflectionService;
         this.sensorDefinitionFindService = sensorDefinitionFindService;
+        this.ruleDefinitionFindService = ruleDefinitionFindService;
         this.schedulesUtilityService = schedulesUtilityService;
         this.similarCheckCache = similarCheckCache;
     }
@@ -93,10 +110,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * It is used for generating the documentation.
      * @param reflectionService Reflection service used to read the list of checks.
      * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
+     * @param ruleDefinitionFindService Rule definition find service.
      */
     public static SpecToModelCheckMappingServiceImpl createInstanceUnsafe(ReflectionService reflectionService,
-                                                                          SensorDefinitionFindService sensorDefinitionFindService) {
-        return new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, null, null);
+                                                                          SensorDefinitionFindService sensorDefinitionFindService,
+                                                                          RuleDefinitionFindService ruleDefinitionFindService) {
+        return new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, null, null);
     }
 
     /**
@@ -127,39 +146,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         }
 
         if (tableSpec != null) {
-            checkContainerModel.setPartitionByColumn(tableSpec.getTimestampColumns() != null ?
-                    tableSpec.getTimestampColumns().getPartitionByColumn() : null);
-
-            EffectiveScheduleModel effectiveScheduleModel = getEffectiveScheduleModel(
-                    tableSpec.getSchedulesOverride(),
-                    checkCategoriesSpec.getSchedulingGroup(),
-                    EffectiveScheduleLevelModel.table_override
-            );
-            ScheduleEnabledStatusModel scheduleEnabledStatus = getScheduleEnabledStatus(
-                    tableSpec.getSchedulesOverride() != null ?
-                            tableSpec.getSchedulesOverride()
-                                    .getScheduleForCheckSchedulingGroup(
-                                            checkCategoriesSpec.getSchedulingGroup()
-                                    )
-                            : null
-            );
-            if (effectiveScheduleModel == null && connectionSpec != null) {
-                effectiveScheduleModel = getEffectiveScheduleModel(
-                        connectionSpec.getSchedules(),
-                        checkCategoriesSpec.getSchedulingGroup(),
-                        EffectiveScheduleLevelModel.connection
-                );
-                scheduleEnabledStatus = getScheduleEnabledStatus(
-                        connectionSpec.getSchedules() != null ?
-                                connectionSpec.getSchedules()
-                                        .getScheduleForCheckSchedulingGroup(
-                                                checkCategoriesSpec.getSchedulingGroup()
-                                        )
-                                : null
-                );
-            }
-            checkContainerModel.setEffectiveSchedule(effectiveScheduleModel);
-            checkContainerModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
+            identifyEffectiveSchedulesAndPartitioning(checkCategoriesSpec, connectionSpec, tableSpec, checkContainerModel);
         }
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
@@ -263,6 +250,53 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
+     * Extracts the effective schedule and partitioning from the connection and table configuration.
+     * Stores the information in the check container model.
+     * @param checkCategoriesSpec Source check categories configuration.
+     * @param connectionSpec Connection specification.
+     * @param tableSpec Table specification.
+     * @param targetCheckContainerModel Target check container model to update.
+     */
+    private void identifyEffectiveSchedulesAndPartitioning(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                                           ConnectionSpec connectionSpec,
+                                                           TableSpec tableSpec,
+                                                           CheckContainerModel targetCheckContainerModel) {
+        targetCheckContainerModel.setPartitionByColumn(tableSpec.getTimestampColumns() != null ?
+                tableSpec.getTimestampColumns().getPartitionByColumn() : null);
+
+        EffectiveScheduleModel effectiveScheduleModel = getEffectiveScheduleModel(
+                tableSpec.getSchedulesOverride(),
+                checkCategoriesSpec.getSchedulingGroup(),
+                EffectiveScheduleLevelModel.table_override
+        );
+        ScheduleEnabledStatusModel scheduleEnabledStatus = getScheduleEnabledStatus(
+                tableSpec.getSchedulesOverride() != null ?
+                        tableSpec.getSchedulesOverride()
+                                .getScheduleForCheckSchedulingGroup(
+                                        checkCategoriesSpec.getSchedulingGroup()
+                                )
+                        : null
+        );
+        if (effectiveScheduleModel == null && connectionSpec != null) {
+            effectiveScheduleModel = getEffectiveScheduleModel(
+                    connectionSpec.getSchedules(),
+                    checkCategoriesSpec.getSchedulingGroup(),
+                    EffectiveScheduleLevelModel.connection
+            );
+            scheduleEnabledStatus = getScheduleEnabledStatus(
+                    connectionSpec.getSchedules() != null ?
+                            connectionSpec.getSchedules()
+                                    .getScheduleForCheckSchedulingGroup(
+                                            checkCategoriesSpec.getSchedulingGroup()
+                                    )
+                            : null
+            );
+        }
+        targetCheckContainerModel.setEffectiveSchedule(effectiveScheduleModel);
+        targetCheckContainerModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
+    }
+
+    /**
      * Creates a simplistic model of every data quality check on table level or column level, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, recurring or partitioned check (for a specific timescale).
@@ -288,6 +322,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             Object checkCategoryParentNode = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             if (checkCategoryParentNode instanceof AbstractComparisonCheckCategorySpecMap<?>) {
                 continue; // not supported
+            }
+
+            if (checkCategoryParentNode instanceof CustomCheckSpecMap) {
+                continue; // custom checks not returned in the basic model yet
             }
 
             ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
@@ -360,43 +398,130 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 )
         );
 
-        ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
-        Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate()).map(ct -> ct.getCheckName());
-        List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
+        if (checkCategoryParentNode instanceof AbstractCheckCategorySpec) {
+            ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
+            Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate()).map(ct -> ct.getCheckName());
+            List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
 
-        for (FieldInfo checkFieldInfo : checksFields) {
-            if (checkFieldInfo.getDataType() != ParameterDataType.object_type) {
-                continue;
+            for (FieldInfo checkFieldInfo : checksFields) {
+                if (checkFieldInfo.getDataType() != ParameterDataType.object_type) {
+                    continue;
+                }
+
+                AbstractSpec checkSpecObjectNullable = (AbstractSpec) checkFieldInfo.getFieldValue(checkCategoryParentNode);
+                AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
+                        (AbstractSpec) checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
+                AbstractCheckSpec<?, ?, ?, ?> checkFieldValue = (AbstractCheckSpec<?, ?, ?, ?>) checkSpecObject;
+                CheckModel checkModel = createCheckModel(checkFieldInfo,
+                        null,
+                        checkFieldValue,
+                        scheduleGroup,
+                        runChecksCategoryTemplate,
+                        tableSpec,
+                        executionContext,
+                        providerType,
+                        checkTarget,
+                        checkType,
+                        checkTimeScale);
+                if (checkModel == null) {
+                    continue;
+                }
+
+                checkModel.setConfigured(checkSpecObjectNullable != null);
+                categoryModel.getChecks().add(checkModel);
             }
+        }
 
-            AbstractSpec checkSpecObjectNullable = (AbstractSpec)checkFieldInfo.getFieldValue(checkCategoryParentNode);
-            AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
-                    (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
-            AbstractCheckSpec<?,?,?,?> checkFieldValue = (AbstractCheckSpec<?,?,?,?>) checkSpecObject;
-            CheckModel checkModel = createCheckModel(checkFieldInfo,
-                    checkFieldValue,
+        CustomCheckSpecMap customCheckSpecMap = null;
+        if (checkCategoryParentNode instanceof CustomCheckSpecMap) {
+            customCheckSpecMap = (CustomCheckSpecMap)checkCategoryParentNode;
+        } else if (checkCategoryParentNode instanceof AbstractCheckCategorySpec) {
+            AbstractCheckCategorySpec abstractCheckCategorySpec = (AbstractCheckCategorySpec)checkCategoryParentNode;
+            customCheckSpecMap = abstractCheckCategorySpec.getCustomChecks();
+        }
+
+        if (customCheckSpecMap != null) {
+            addCustomChecksToCategoryModel(customCheckSpecMap,
+                    categoryModel,
                     scheduleGroup,
-                    runChecksCategoryTemplate,
                     tableSpec,
                     executionContext,
                     providerType,
                     checkTarget,
                     checkType,
                     checkTimeScale);
-            if (checkModel == null) {
-                continue;
-            }
-
-            checkModel.setConfigured(checkSpecObjectNullable != null);
-            categoryModel.getChecks().add(checkModel);
         }
 
         return categoryModel;
     }
 
     /**
+     * Adds the models of custom checks to the category model, showing these checks together with other checks.
+     * @param customCheckSpecMap Custom check specification map.
+     * @param targetCategoryModel Target category model to add checks.
+     * @param scheduleGroup Scheduling group.
+     * @param tableSpec Table specification.
+     * @param executionContext Execution context.
+     * @param providerType Provider type.
+     * @param checkTarget Check target.
+     * @param checkType Check type.
+     * @param checkTimeScale Check time scale.
+     */
+    protected void addCustomChecksToCategoryModel(CustomCheckSpecMap customCheckSpecMap,
+                                                  QualityCategoryModel targetCategoryModel,
+                                                  CheckRunRecurringScheduleGroup scheduleGroup,
+                                                  TableSpec tableSpec,
+                                                  ExecutionContext executionContext,
+                                                  ProviderType providerType,
+                                                  CheckTarget checkTarget,
+                                                  CheckType checkType,
+                                                  CheckTimeScale checkTimeScale) {
+        String category = targetCategoryModel.getCategory();
+        if (executionContext == null || executionContext.getUserHomeContext() == null) {
+            return;
+        }
+
+        CheckDefinitionList checkDefinitionList = executionContext.getUserHomeContext().getUserHome().getChecks();
+        Collection<CheckDefinitionSpec> customChecksInCategory = checkDefinitionList.getChecksAtLevel(checkTarget, checkType, checkTimeScale, category);
+        if (customChecksInCategory.isEmpty()) {
+            return;
+        }
+
+        for (CheckDefinitionSpec customCheckDefinitionSpec : customChecksInCategory) {
+            String checkName = customCheckDefinitionSpec.getCheckName();
+            CustomCheckSpec customCheckSpec = customCheckSpecMap.get(checkName);
+            boolean checkIsConfigured = false;
+            if (customCheckSpec == null) {
+                customCheckSpec = new CustomCheckSpec();
+            } else {
+                checkIsConfigured = true;
+            }
+
+            CheckModel customCheckModel = createCheckModel(null,
+                    customCheckDefinitionSpec,
+                    customCheckSpec,
+                    scheduleGroup,
+                    targetCategoryModel.getRunChecksJobTemplate(),
+                    tableSpec,
+                    executionContext,
+                    providerType,
+                    checkTarget,
+                    checkType,
+                    checkTimeScale);
+
+            if (customCheckModel == null) {
+                continue;
+            }
+
+            customCheckModel.setConfigured(checkIsConfigured);
+            targetCategoryModel.getChecks().add(customCheckModel);
+        }
+    }
+
+    /**
      * Creates a model for a single data quality check.
      * @param checkFieldInfo            Reflection info of the field in the parent object that stores the check specification field value.
+     * @param customCheckDefinitionSpec Check definition specification for custom checks. When it is given, the <code>checkFieldInfo</code> parameter is null and the check specification is used instead.
      * @param checkSpec                 Check specification instance retrieved from the object.
      * @param scheduleGroup             Scheduling group relevant to this check.
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
@@ -410,24 +535,26 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      */
     @Override
     public CheckModel createCheckModel(FieldInfo checkFieldInfo,
-                                          AbstractCheckSpec<?,?,?,?> checkSpec,
-                                          CheckRunRecurringScheduleGroup scheduleGroup,
-                                          CheckSearchFilters runChecksCategoryTemplate,
-                                          TableSpec tableSpec,
-                                          ExecutionContext executionContext,
-                                          ProviderType providerType,
-                                          CheckTarget checkTarget,
-                                          CheckType checkType,
-                                          CheckTimeScale checkTimeScale) {
+                                       CheckDefinitionSpec customCheckDefinitionSpec,
+                                       AbstractCheckSpec<?,?,?,?> checkSpec,
+                                       CheckRunRecurringScheduleGroup scheduleGroup,
+                                       CheckSearchFilters runChecksCategoryTemplate,
+                                       TableSpec tableSpec,
+                                       ExecutionContext executionContext,
+                                       ProviderType providerType,
+                                       CheckTarget checkTarget,
+                                       CheckType checkType,
+                                       CheckTimeScale checkTimeScale) {
         CheckModel checkModel = new CheckModel();
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
         AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
         checkModel.setFilter(parametersSpec.getFilter());
-        String sensorDefinitionName = parametersSpec.getSensorDefinitionName();
+        String sensorDefinitionName = customCheckDefinitionSpec == null ? parametersSpec.getSensorDefinitionName() : customCheckDefinitionSpec.getSensorName();
         checkModel.setSensorName(sensorDefinitionName);
         checkModel.setSensorParametersSpec(parametersSpec);
+        SensorDefinitionSpec sensorDefinitionSpec = null;
 
         if (executionContext != null && providerType != null) {
             SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
@@ -436,6 +563,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             if (providerSensorDefinition == null) {
                 return null; // skip this check
             }
+
+            sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
 
             ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
             if (providerSensorDefinitionSpec == null) {
@@ -449,7 +578,6 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
             checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
 
-            SensorDefinitionSpec sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
             if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getEventTimestampColumn())) {
                 if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
@@ -465,9 +593,9 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 }
             }
         }
-        String checkName = checkFieldInfo.getYamlFieldName();
+        String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() : customCheckDefinitionSpec.getCheckName();
         checkModel.setCheckName(checkName);
-        checkModel.setHelpText(checkFieldInfo.getHelpText());
+        checkModel.setHelpText(checkFieldInfo != null ? checkFieldInfo.getHelpText() : customCheckDefinitionSpec.getHelpText());
 
         if (runChecksCategoryTemplate != null) {
             CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();
@@ -479,7 +607,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
         }
 
-        if (checkTarget != null && this.similarCheckCache != null) {
+        if (checkTarget != null && this.similarCheckCache != null && customCheckDefinitionSpec == null) {
             checkModel.setSimilarChecks(this.similarCheckCache.findSimilarChecksTo(checkTarget, checkName));
         }
 
@@ -506,11 +634,22 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setCheckSpec(checkSpec);
         checkModel.setCheckTarget(CheckTargetModel.fromCheckTarget(checkTarget));
 
-        List<FieldModel> fieldsForParameterSpec = createFieldsForSensorParameters(parametersSpec);
-        checkModel.setSensorParameters(fieldsForParameterSpec);
+        if (customCheckDefinitionSpec == null) {
+            List<FieldModel> fieldsForParameterSpec = createFieldsForSensorParameters(parametersSpec);
+            checkModel.setSensorParameters(fieldsForParameterSpec);
 
-        RuleThresholdsModel ruleModel = createRuleThresholdsModel(checkSpec);
-        checkModel.setRule(ruleModel);
+            RuleThresholdsModel ruleModel = createRuleThresholdsModel(checkSpec);
+            checkModel.setRule(ruleModel);
+        } else {
+            CustomSensorParametersSpec customSensorParametersSpec = (CustomSensorParametersSpec)parametersSpec;
+            List<FieldModel> customFieldsForParameterSpec = createFieldsForSensorParametersCustomCheck(
+                    customSensorParametersSpec, sensorDefinitionSpec.getFields());
+            checkModel.setSensorParameters(customFieldsForParameterSpec);
+
+            RuleThresholdsModel ruleModel = createRuleThresholdsModelCustomCheck(
+                    (CustomCheckSpec)checkSpec, customCheckDefinitionSpec, executionContext);
+            checkModel.setRule(ruleModel);
+        }
 
         return checkModel;
     }
@@ -588,6 +727,58 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
+     * Create the rules model for a custom check.
+     * @param checkSpec Check specification object.
+     * @param customCheckDefinitionSpec Custom check definition.
+     * @param executionContext Execution context with access to the dqo user home and dqo system home.
+     * @return Rule thresholds model for the custom check.
+     */
+    protected RuleThresholdsModel createRuleThresholdsModelCustomCheck(CustomCheckSpec checkSpec,
+                                                                       CheckDefinitionSpec customCheckDefinitionSpec,
+                                                                       ExecutionContext executionContext) {
+        RuleThresholdsModel thresholdsModel = new RuleThresholdsModel();
+        RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(
+                executionContext, customCheckDefinitionSpec.getRuleName());
+        if (ruleDefinitionFindResult == null) {
+            // rule not found
+            log.warn("Rule " + customCheckDefinitionSpec.getRuleName() + " referenced by a custom check " + customCheckDefinitionSpec.getFullCheckName() +
+                    " was not found.");
+            return thresholdsModel;
+        }
+
+        CustomRuleParametersSpec warningRuleParametersSpec = checkSpec.getWarning();
+        thresholdsModel.setWarning(createRuleParametersModelCustomCheck(warningRuleParametersSpec, ruleDefinitionFindResult.getRuleDefinitionSpec()));
+
+        CustomRuleParametersSpec errorRuleParametersSpec = checkSpec.getError();
+        thresholdsModel.setError(createRuleParametersModelCustomCheck(errorRuleParametersSpec, ruleDefinitionFindResult.getRuleDefinitionSpec()));
+
+        CustomRuleParametersSpec fatalRuleParametersSpec = checkSpec.getFatal();
+        thresholdsModel.setFatal(createRuleParametersModelCustomCheck(fatalRuleParametersSpec, ruleDefinitionFindResult.getRuleDefinitionSpec()));
+
+        return thresholdsModel;
+    }
+
+    /**
+     * Creates a rule parameters model for a custom check.
+     * @param fatalRuleParametersSpec Rule parameters object or null.
+     * @param ruleDefinitionSpec Rule definition specification with the list of fields.
+     * @return Rule parameters model.
+     */
+    protected RuleParametersModel createRuleParametersModelCustomCheck(
+            CustomRuleParametersSpec fatalRuleParametersSpec, RuleDefinitionSpec ruleDefinitionSpec) {
+        RuleParametersModel parametersModel = new RuleParametersModel();
+
+        parametersModel.setConfigured(fatalRuleParametersSpec != null);
+        parametersModel.setRuleName(ruleDefinitionSpec.getRuleName());
+        parametersModel.setRuleParametersSpec(fatalRuleParametersSpec);
+
+        List<FieldModel> fieldModels = createFieldsForRuleParametersCustomCheck(fatalRuleParametersSpec, ruleDefinitionSpec.getFields());
+        parametersModel.setRuleParameters(fieldModels);
+
+        return parametersModel;
+    }
+
+    /**
      * Creates a list of fields used to edit a single rule severity level.
      * @param severityFieldInfo Reflection info of the field - used to retrieve the help text.
      * @param abstractCheckSpec Rule thresholds specification object (parent object).
@@ -646,6 +837,48 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             }
 
             FieldModel fieldModel = createFieldModel(parameterField, parametersSpec);
+            fieldModels.add(fieldModel);
+        }
+
+        return fieldModels;
+    }
+
+    /**
+     * Creates a list of fields to edit all values in the sensor parameters specification.
+     * @param parametersSpec Sensor parameters specification.
+     * @param parameterDefinitionsListSpec List of custom parameters available on the check.
+     * @return List of fields for all sensor parameter fields.
+     */
+    public List<FieldModel> createFieldsForSensorParametersCustomCheck(CustomSensorParametersSpec parametersSpec,
+                                                                       ParameterDefinitionsListSpec parameterDefinitionsListSpec) {
+        List<FieldModel> fieldModels = new ArrayList<>();
+        if (parameterDefinitionsListSpec == null || parameterDefinitionsListSpec.isEmpty()) {
+            return fieldModels;
+        }
+
+        for (ParameterDefinitionSpec parameterDefinitionSpec : parameterDefinitionsListSpec) {
+            FieldModel fieldModel = createFieldModelCustomCheck(parameterDefinitionSpec, parametersSpec);
+            fieldModels.add(fieldModel);
+        }
+
+        return fieldModels;
+    }
+
+    /**
+     * Creates a list of fields to edit all values in the rule parameters specification.
+     * @param parametersSpec Sensor parameters specification.
+     * @param parameterDefinitionsListSpec List of custom parameters available on the rule.
+     * @return List of fields for all rule parameter fields.
+     */
+    public List<FieldModel> createFieldsForRuleParametersCustomCheck(CustomRuleParametersSpec parametersSpec,
+                                                                     ParameterDefinitionsListSpec parameterDefinitionsListSpec) {
+        List<FieldModel> fieldModels = new ArrayList<>();
+        if (parameterDefinitionsListSpec == null || parameterDefinitionsListSpec.isEmpty()) {
+            return fieldModels;
+        }
+
+        for (ParameterDefinitionSpec parameterDefinitionSpec : parameterDefinitionsListSpec) {
+            FieldModel fieldModel = createFieldModelCustomCheck(parameterDefinitionSpec, parametersSpec);
             fieldModels.add(fieldModel);
         }
 
@@ -726,6 +959,26 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
+     * Creates a field model for a single field in an object for a custom check.
+     * @param parameterDefinitionSpec    Reflection field information about the field.
+     * @param parentObject Parent object to retrieve the field value from.
+     * @return A field model with properly typed field value.
+     */
+    public FieldModel createFieldModelCustomCheck(ParameterDefinitionSpec parameterDefinitionSpec, CustomParametersSpecObject parentObject) {
+        Object fieldValue = parentObject != null ? parentObject.getParameter(parameterDefinitionSpec.getFieldName()) : null;
+        FieldModel fieldModel = new FieldModel();
+        fieldModel.setDefinition(parameterDefinitionSpec);
+
+        // TODO: support the parameterDefinitionSpec.required using javax.validation annotations like @NotNull
+
+        if (fieldValue != null) {
+            fieldModel.setValue(fieldModel);
+        }
+
+        return fieldModel;
+    }
+
+    /**
      * Gets a list of field infos from class info, with an optional filter for field's YAML name.
      * @param classInfo     ClassInfo object.
      * @param requiredField Name of the requested field.
@@ -742,7 +995,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         } else {
             classInfo.getFields().stream()
                     // skipping custom checks for the moment
-                    .filter(fieldInfo -> !fieldInfo.getClassFieldName().equals("custom"))
+                    .filter(fieldInfo -> !fieldInfo.getClassFieldName().equals("customChecks"))
                     .forEachOrdered(fields::add);
         }
 

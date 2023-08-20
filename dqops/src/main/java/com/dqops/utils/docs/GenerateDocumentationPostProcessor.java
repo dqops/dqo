@@ -29,6 +29,7 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.incidents.IncidentNotificationMessage;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
@@ -146,7 +147,7 @@ public class GenerateDocumentationPostProcessor {
      */
     private static SensorDocumentationModelFactory createSensorDocumentationModelFactory(DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
         return sensorDocumentationModelFactory;
     }
@@ -181,7 +182,7 @@ public class GenerateDocumentationPostProcessor {
      */
     private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
         return ruleDocumentationModelFactory;
     }
@@ -257,7 +258,7 @@ public class GenerateDocumentationPostProcessor {
 
     public static SimilarCheckMatchingService createSimilarCheckMatchingService(ReflectionService reflectionService, DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                reflectionService, new SensorDefinitionFindServiceImpl());
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         return new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, new DqoHomeContextFactory() {
             @Override
             public DqoHomeContext openLocalDqoHome() {

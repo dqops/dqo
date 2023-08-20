@@ -20,6 +20,7 @@ import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -64,11 +65,14 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
+        RuleDefinitionFindServiceImpl ruleDefinitionFindService = new RuleDefinitionFindServiceImpl();
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
         SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(
                 reflectionService,
                 sensorDefinitionFindService,
+                ruleDefinitionFindService,
                 schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+                similarCheckCache);
 
         ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(
                 UserHomeContextFactoryObjectMother.createWithInMemoryContext(),

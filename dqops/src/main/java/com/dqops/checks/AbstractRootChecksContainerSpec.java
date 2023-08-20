@@ -49,7 +49,7 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Dictionary of custom checks. The keys are check names.")
+    @JsonPropertyDescription("Dictionary of custom checks. The keys are check names within this category.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CustomCheckSpecMap custom;

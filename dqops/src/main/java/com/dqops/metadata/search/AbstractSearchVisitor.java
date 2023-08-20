@@ -21,6 +21,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
@@ -765,6 +766,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(CustomCheckSpecMap customCheckSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of custom checks configured as a child of a category.
+     *
+     * @param customCategoryCheckSpecMap Dictionary of custom checks at a category level.
+     * @param parameter                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CustomCategoryCheckSpecMap customCategoryCheckSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
