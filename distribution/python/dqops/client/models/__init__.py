@@ -1524,6 +1524,9 @@ from .table_availability_sensor_parameters_spec import (
     TableAvailabilitySensorParametersSpec,
 )
 from .table_basic_model import TableBasicModel
+from .table_basic_model_advanced_profiling_result_truncation import (
+    TableBasicModelAdvancedProfilingResultTruncation,
+)
 from .table_change_row_count_check_spec import TableChangeRowCountCheckSpec
 from .table_change_row_count_since_7_days_check_spec import (
     TableChangeRowCountSince7DaysCheckSpec,
@@ -2477,6 +2480,7 @@ __all__ = (
     "TableAvailabilityProfilingChecksSpec",
     "TableAvailabilitySensorParametersSpec",
     "TableBasicModel",
+    "TableBasicModelAdvancedProfilingResultTruncation",
     "TableChangeRowCountCheckSpec",
     "TableChangeRowCountSince30DaysCheckSpec",
     "TableChangeRowCountSince7DaysCheckSpec",
