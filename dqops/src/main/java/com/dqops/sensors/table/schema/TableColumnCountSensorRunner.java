@@ -29,6 +29,7 @@ import com.dqops.execution.sensors.grouping.TableMetadataSensorExecutor;
 import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.execution.sensors.runners.AbstractSensorRunner;
+import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
@@ -116,13 +117,15 @@ public class TableColumnCountSensorRunner extends AbstractSensorRunner {
 
             if (introspectedTableSpec == null) {
                 // table not found
-                Table table = createResultTableWithResult((Double) null);
+                Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
+                        this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                 return new SensorExecutionResult(sensorRunParameters, table);
             }
 
             int columnCount = introspectedTableSpec.getColumns().size();
 
-            Table table = createResultTableWithResult(columnCount);
+            Table table = GenericSensorResultsFactory.createResultTableWithResult(columnCount,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
             return new SensorExecutionResult(sensorRunParameters, table);
         }
         catch (Throwable exception) {
@@ -168,19 +171,22 @@ public class TableColumnCountSensorRunner extends AbstractSensorRunner {
 
                     if (retrievedTableSpecList.size() == 0) {
                         // table not found
-                        Table table = createResultTableWithResult((Double) null);
+                        Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
+                                this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                         return new SensorExecutionResult(sensorRunParameters, table);
                     }
 
                     TableSpec introspectedTableSpec = retrievedTableSpecList.get(0);
                     int columnCount = introspectedTableSpec.getColumns().size();
 
-                    Table table = createResultTableWithResult(columnCount);
+                    Table table = GenericSensorResultsFactory.createResultTableWithResult(columnCount,
+                            this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                     return new SensorExecutionResult(sensorRunParameters, table);
                 }
             }
 
-            Table dummyResultTable = createDummyResultTable(sensorRunParameters);
+            Table dummyResultTable = GenericSensorResultsFactory.createDummyResultTable(sensorRunParameters,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId());
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
