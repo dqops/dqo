@@ -16,7 +16,8 @@ import {
   RuleBasicFolderModel,
   RuleBasicModel,
   SensorBasicFolderModel,
-  SensorBasicModel
+  SensorBasicModel,
+  CheckSpecBasicModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import {
@@ -32,6 +33,13 @@ import { getdataQualityChecksFolderTree, toggledataQualityChecksFolderTree } fro
 import DataQualityContextMenu from './DataQualityContextMenu';
 import Select, { Option } from '../Select';
 import CreateCheckDialog from './CreateChecksDialog';
+import CheckContextMenu from './CheckContextMenu';
+
+interface RuleSensorCheckName{
+  checkName: string,
+  rule: string, 
+  sensor: string
+}
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -50,6 +58,7 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
   const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
   const [allRules, setAllRules] = useState<RuleBasicModel[]>()
   const [isOpen, setIsOpen] = useState(false)
+  const [selectedCheck, setSelectedCheck] = useState<RuleSensorCheckName>({checkName: "", sensor: "", rule: ""})
 
 
   useEffect(() => {
@@ -68,14 +77,32 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
   }, [allSensors, allRules]);
 
 
-console.log(checksFolderTree)
+// console.log(checksFolderTree)
+
+// console.log(checksFolderTree?.checks)
+
+// console.log(checksFolderTree?.folders && checksFolderTree.folders.custom)
+
+const onChangeSensor = (value: string)=> {
+  setSelectedCheck({...selectedCheck, sensor: value})
+}
+
+const onChangeRule = (value: string)=> {
+  setSelectedCheck({...selectedCheck, rule: value})
+}
+
+const onChangeNameOfCheck = (value: string)=> {
+  setSelectedCheck({...selectedCheck, checkName: value})
+}
+
+
   // console.log(sensorFolderTree)
 
   // console.log(dataQualityChecksState)
   // console.log(ruleState)
 
   // console.log(checksFolderTree?.folders && Object.values(checksFolderTree?.folders).map((check) => check.folders))
-console.log(memoizedData)
+// console.log(memoizedData)
 
 
   // console.log(checksContainerData)
@@ -136,6 +163,7 @@ console.log(memoizedData)
     );
   };
 
+  console.log(selectedCheck)
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -208,9 +236,6 @@ console.log(memoizedData)
     path?: string[]
   ) => {
     if (!folder) return null;
-
-
-
 
     return (
       <div className="text-sm">
@@ -312,7 +337,7 @@ console.log(memoizedData)
           })}
         <div className="ml-2">
         {folder.checks && folder?.checks.map((check) => (
-          <div  key={check.check_name}>
+          <div key={check.check_name}>
             <div  
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
@@ -328,8 +353,9 @@ console.log(memoizedData)
                 name="definitionssensors"
                 className="w-4 h-4 min-w-4 shrink-0"
               />
-              <div className="text-[13px] leading-1.5 whitespace-nowrap">
+              <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                 {check.check_name}
+                <CheckContextMenu />
               </div>
             </div>
             {check.custom === true && 
@@ -337,12 +363,23 @@ console.log(memoizedData)
             <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
               label: x.rule_name ?? "", 
               value: x.rule_name ?? ""
-            })) || []}/>
+            })) || []}
+            value={selectedCheck.sensor}
+            onChange={(selectedOption) => { 
+              onChangeNameOfCheck(check.check_name || "");
+              onChangeSensor(String(selectedOption));
+            }}
+            />
             <Select placeholder='Rule'  
             options={memoizedData.sensors && memoizedData.sensors.map((x) => ({
             label: x.sensor_name ?? "", 
             value: x.sensor_name ?? ""
             })) || []}
+            onChange={(selectedOption) => {
+              onChangeNameOfCheck(check.check_name || "");
+              onChangeRule(String(selectedOption));
+            }}
+            value={selectedCheck.rule}
             />
             </>
             }

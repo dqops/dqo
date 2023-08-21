@@ -18,8 +18,8 @@ const CreateCheckDialog = ({
   onConfirm
 }: CreateCheckProps) => {
   const handleSubmit = () => {
-    onConfirm(nameOfCheck,
-    {check_name: nameOfCheck,rule_name: selectedRule, sensor_name: selectedSensor, custom: true});
+    onConfirm("custom/" + nameOfCheck,
+    {check_name: nameOfCheck, rule_name: selectedRule, sensor_name: selectedSensor, custom: true});
     onClose();
   };
 
@@ -60,11 +60,6 @@ const CreateCheckDialog = ({
       rules: allRules,
     };
   }, [allSensors, allRules]);
-
-  console.log(nameOfCheck)
-  console.log(selectedRule)
-  console.log(selectedSensor)
-
 
   return (
     <div>

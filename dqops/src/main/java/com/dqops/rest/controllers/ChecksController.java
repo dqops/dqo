@@ -128,6 +128,11 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
+        String[] fullCheckNameSplit = fullCheckName.split("/");
+        if (!fullCheckNameSplit[fullCheckNameSplit.length - 1].equals(checkSpecModel.getCheckName())) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+        }
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -138,7 +143,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(checkSpecModel.getRuleName());
+        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(checkSpecModel.getCheckName());
         checkDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
         userHomeContext.flush();
 
