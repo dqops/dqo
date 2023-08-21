@@ -23,6 +23,7 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createPopUp, setCreatePopUp] = useState(false)
+  const dispatch = useActionDispatch();
   
 
   const openPopover = (e: MouseEvent) => {
@@ -39,11 +40,21 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
     setOpen(false);
   };
 
-  
-
     const createCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
     await ChecksApi.createCheck(fullCheckName, body)
   }
+
+  const openAddNewCheck = () => {
+    dispatch(addFirstLevelTab({
+      url: ROUTES.CHECK_DETAIL([...path || [], "new_rule"].join("-")),
+      value: ROUTES.CHECK_DETAIL_VALUE([...path || [], "new_rule"].join("-")),
+      state: {
+        type: "create",
+        path
+      },
+      label: "New check"
+    }));
+  };
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -56,7 +67,7 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
         <div onClick={(e) => e.stopPropagation()}>
           <div
             className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={() => setCreatePopUp(true)}
+            onClick={openAddNewCheck}
           >
             Add new check
           </div>

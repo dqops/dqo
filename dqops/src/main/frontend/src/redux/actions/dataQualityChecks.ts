@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { ChecksApi } from '../../services/apiClient';
 import {  DATA_QUALITY_CHECKS_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import {CheckSpecFolderBasicModel } from '../../api';
+import {CheckSpecFolderBasicModel, CheckSpecModel } from '../../api';
 
 export const getdataQualityChecksFolderTreeRequest = () => ({
   type: DATA_QUALITY_CHECKS_ACTION.GET_DATA_QUALITY_CHECKS_FOLDER_TREE
@@ -39,3 +39,34 @@ export const updatedataQualityChecksFolderTree = (data: CheckSpecFolderBasicMode
   type: DATA_QUALITY_CHECKS_ACTION.UPDATE_DATA_QUALITY_CHECKS_FOLDER_TREE,
   data
 });
+
+export const createCheckRequest = () => ({
+  type: DATA_QUALITY_CHECKS_ACTION.CREATE_CHECK_DETAIL
+});
+
+export const updateCheckRequest = () => ({
+  type: DATA_QUALITY_CHECKS_ACTION.UPDATE_CHECK_DETAIL
+})
+
+
+export const createCheck = (fullCheckName: string, body: CheckSpecModel) => async (dispatch: Dispatch) => {
+  dispatch(createCheckRequest());
+  try {
+    const checkName = fullCheckName.split("/") 
+    const newObject = Object.assign({}, {...body, check_name: checkName[checkName.length-1], custom: true})
+      await ChecksApi.createCheck(fullCheckName, newObject);
+  } catch (err) {
+  console.error(err)
+  }
+};
+
+export const updateCheck = (fullCheckName: string, body: CheckSpecModel) => async (dispatch: Dispatch) => {
+  dispatch(updateCheckRequest());
+  try {
+    const checkName = fullCheckName.split("/") 
+    const newObject = Object.assign({}, {...body, check_name: checkName[checkName.length-1], custom: true})
+      await ChecksApi.updateCheck(fullCheckName, newObject);
+  } catch (err) {
+  console.error(err)
+  }
+};

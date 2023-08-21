@@ -161,7 +161,7 @@ const onChangeNameOfCheck = (value: string)=> {
         url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
         value: ROUTES.CHECK_DETAIL_VALUE(check.check_name ?? ''),
         state: {
-          full_rule_name: check.full_check_name
+          fullCheckName: check.full_check_name
         },
         label: check.check_name
       })
@@ -350,8 +350,7 @@ const onChangeNameOfCheck = (value: string)=> {
                 selected == check.check_name ? 'bg-gray-300' : ''
               )}
               onClick={() => {
-                openCheckFirstLevelTab(check),
-                  setSelected(check.check_name ? check.check_name : '');
+                openCheckFirstLevelTab(check)
               }}
             >
               <SvgIcon
@@ -360,12 +359,12 @@ const onChangeNameOfCheck = (value: string)=> {
               />
               <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                 {check.check_name}
-                {check.custom === true && 
+                {/* {check.custom === true && 
                 <CheckContextMenu
                  onChangeSelected={onChangeSelected} 
                  checkName={check.check_name ?? ""} 
                  deleteCheck={deleteCheck}
-                 />}
+                 />} */}
               </div>
             </div>
             {/* {selectedCheck.checkName === check.check_name && 
