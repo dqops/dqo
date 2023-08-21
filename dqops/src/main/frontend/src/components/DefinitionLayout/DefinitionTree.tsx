@@ -114,7 +114,7 @@ const onChangeNameOfCheck = (value: string)=> {
   }
 
   const deleteCheck =async (checkName: string) => {
-    await ChecksApi.deleteCheck("custom/" + checkName)
+    await ChecksApi.deleteCheck(checkName)
   }
 
   const toggleSensorFolder = (key: string) => {
@@ -151,6 +151,19 @@ const onChangeNameOfCheck = (value: string)=> {
           full_rule_name: rule.full_rule_name
         },
         label: rule.rule_name
+      })
+    );
+  };
+
+  const openCheckFirstLevelTab = (check: CheckSpecBasicModel) => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
+        value: ROUTES.CHECK_DETAIL_VALUE(check.check_name ?? ''),
+        state: {
+          full_rule_name: check.full_check_name
+        },
+        label: check.check_name
       })
     );
   };
@@ -333,13 +346,13 @@ const onChangeNameOfCheck = (value: string)=> {
             <div  
               className={clsx(
                 'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
-                // check.custom ? 'font-bold' : '',
-                // selected == check.sensor_name ? 'bg-gray-300' : ''
+                check.custom ? 'font-bold' : '',
+                selected == check.check_name ? 'bg-gray-300' : ''
               )}
-              // onClick={() => {
-              //   openSensorFirstLevelTab(check),
-              //     setSelected(sensor.sensor_name ? sensor.sensor_name : '');
-              // }}
+              onClick={() => {
+                openCheckFirstLevelTab(check),
+                  setSelected(check.check_name ? check.check_name : '');
+              }}
             >
               <SvgIcon
                 name="definitionssensors"
@@ -355,7 +368,7 @@ const onChangeNameOfCheck = (value: string)=> {
                  />}
               </div>
             </div>
-            {selectedCheck.checkName === check.check_name && 
+            {/* {selectedCheck.checkName === check.check_name && 
             <div >
             <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
               label: x.rule_name ?? "", 
@@ -383,7 +396,7 @@ const onChangeNameOfCheck = (value: string)=> {
             (selectedCheck.rule.length !==0 || selectedCheck.sensor.length !==0) &&
             <Button className='mt-2 mb-2' color='primary' label='Update check' onClick={updateCheck}></Button>}
             </div>
-            }
+            } */}
             </div>
           ))}
         </div>

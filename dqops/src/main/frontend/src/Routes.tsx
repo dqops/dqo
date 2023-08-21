@@ -37,6 +37,7 @@ import IncidentConnection from "./pages/IncidentConnection";
 import IncidentDetail from "./pages/IncidentDetail";
 import NotFound from "./pages/NotFound";
 import TableIncidents from "./pages/TableIncidents";
+import CheckDetail from "./pages/CheckDetail";
 
 const Routes = () => {
   return (
@@ -68,6 +69,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.DASHBOARDS} component={Dashboards} />
       <Route exact path={ROUTES.PATTERNS.SENSOR_DETAIL} component={SensorDetail} />
       <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} component={RuleDetail} />
+      <Route exact path={ROUTES.PATTERNS.CHECK_DETAIL} component={CheckDetail} />
       <Route exact path={ROUTES.PATTERNS.DEFINITIONS} component={Definitions} />
       <Route exact path={ROUTES.PATTERNS.INCIDENT_DETAIL} component={IncidentDetail} />
       <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} component={IncidentConnection} />
