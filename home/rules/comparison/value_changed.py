@@ -68,11 +68,11 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'previous_readouts'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None and rule_parameters.actual_value is not None]
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None and hasattr(readouts, 'sensor_readout') and rule_parameters.actual_value is not None]
 
-    expected_value = None
-    lower_bound = None
-    upper_bound = None
-    passed = (filtered[-1] is not None and filtered[-1] == rule_parameters.actual_value) or filtered[-1] == None
+    expected_value = filtered[-1].sensor_readout if len(filtered) > 0 else None
+    lower_bound = expected_value
+    upper_bound = expected_value
+    passed = len(filtered) == 0 or (filtered[-1] is not None and filtered[-1] == rule_parameters.actual_value) or filtered[-1] == None
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

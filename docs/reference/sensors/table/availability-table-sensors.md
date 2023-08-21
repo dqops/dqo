@@ -5,7 +5,7 @@
 table/availability/table_availability
 ```
 **Description**  
-Table availability sensor that executes a row count query.
+Table availability sensor that executes a row count query. This sensor returns 0.0 when no failure was detected or 1.0 when a failure was detected.
 
 
 

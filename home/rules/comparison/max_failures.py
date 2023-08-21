@@ -48,12 +48,14 @@ class RuleExecutionRunParameters:
 # what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
 class RuleExecutionResult:
     passed: bool
+    new_actual_value: float
     expected_value: float
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=True, new_actual_value=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
+        self.new_actual_value = new_actual_value
         self.expected_value = expected_value
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
@@ -72,16 +74,16 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     filtered.reverse()
 
-    recent_failures  = 0
+    recent_failures = 0
     for i in filtered:
-        if i == 0:
+        if i > 0:
             recent_failures += 1
         else:
             break
 
-    expected_value = None
+    expected_value = 0
     lower_bound = None
     upper_bound = rule_parameters.parameters.max_failures
-    passed = recent_failures <= upper_bound
+    passed = recent_failures <= rule_parameters.parameters.max_failures
 
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+    return RuleExecutionResult(passed, recent_failures, expected_value, lower_bound, upper_bound)

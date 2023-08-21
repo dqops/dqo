@@ -105,8 +105,8 @@ public class CheckResultsOverviewDataModel {
         }
 
         if (this.timePeriodsUtc.get(this.timePeriodsUtc.size() - 1).equals(timePeriodUtc)) {
-            if (severity > this.statuses.get(this.statuses.size() - 1).getSeverity()) {
-                // another result with a higher severity, replacing the current one, we found a bigger issue
+            if (severity != 4 && severity > this.statuses.get(this.statuses.size() - 1).getSeverity()) {
+                // another result with a higher severity, replacing the current one, we found a bigger issue, but we are ignoring errors
                 this.executedAtTimestamps.set(this.statuses.size() - 1, executedAt);
                 this.timePeriodDisplayTexts.set(this.statuses.size() - 1, makeTimePeriodDisplayText(timePeriod, timePeriodUtc, checkTimeScale));
                 this.statuses.set(this.statuses.size() - 1, CheckResultStatus.fromSeverity(severity));
@@ -139,6 +139,10 @@ public class CheckResultsOverviewDataModel {
     protected String makeTimePeriodDisplayText(LocalDateTime timePeriod, Instant timePeriodUtc, CheckTimeScale checkTimeScale) {
         Instant timePeriodForcedUtc = timePeriod.toInstant(ZoneOffset.UTC);
         long timeOffsetSeconds = timePeriodForcedUtc.getEpochSecond() - timePeriodUtc.getEpochSecond();
+        if (timeOffsetSeconds > 18L * 3600L || timeOffsetSeconds < -18L * 3600L) {
+            timeOffsetSeconds = timeOffsetSeconds % (24L * 3600L);
+        }
+
         ZoneOffset zoneOffset = ZoneOffset.ofTotalSeconds((int) timeOffsetSeconds);
 
         if (checkTimeScale != null) {

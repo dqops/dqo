@@ -21,12 +21,15 @@ import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.SensorPrepareResult;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import tech.tablesaw.api.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 /**
  * Implementation of the sensor executor. It is used for grouping similar sensors that can
@@ -61,11 +64,14 @@ public abstract class AbstractGroupedSensorExecutor {
 
     /**
      * Creates a local date time of NOW, using the default configured time zone.
+     * @param timePeriodGradient Time period gradient to truncate the results.
      * @return The local date time of NOW, based on the configured default time zone.
      */
-    protected LocalDateTime getNowAtDefaultTimeZone() {
+    protected LocalDateTime getNowAtDefaultTimeZone(TimePeriodGradient timePeriodGradient) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
-        return Instant.now().atZone(defaultTimeZoneId).toLocalDateTime();
+        LocalDateTime localDateTime = Instant.now().atZone(defaultTimeZoneId).toLocalDateTime();
+        LocalDateTime truncatedDateTime = LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timePeriodGradient);
+        return truncatedDateTime;
     }
 
     /**
@@ -92,8 +98,12 @@ public abstract class AbstractGroupedSensorExecutor {
             row.setInt(sensorPrepareResult.getActualValueAlias(), actualValue);
         }
 
-        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
-        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
+        SensorPrepareResult firstPrepareResult = preparedSensorsGroup.getPreparedSensors().get(0);
+        TimePeriodGradient timePeriodGradient = firstPrepareResult.getSensorRunParameters().getTimePeriodGradient();
+
+        LocalDateTime truncatedTimePeriod = getNowAtDefaultTimeZone(timePeriodGradient);
+        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, truncatedTimePeriod);
+        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, truncatedTimePeriod.toInstant(ZoneOffset.UTC));
 
         return dummyResultTable;
     }
@@ -122,8 +132,12 @@ public abstract class AbstractGroupedSensorExecutor {
             row.setLong(sensorPrepareResult.getActualValueAlias(), actualValue);
         }
 
-        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
-        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
+        SensorPrepareResult firstPrepareResult = preparedSensorsGroup.getPreparedSensors().get(0);
+        TimePeriodGradient timePeriodGradient = firstPrepareResult.getSensorRunParameters().getTimePeriodGradient();
+
+        LocalDateTime truncatedTimePeriod = getNowAtDefaultTimeZone(timePeriodGradient);
+        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, truncatedTimePeriod);
+        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, truncatedTimePeriod.toInstant(ZoneOffset.UTC));
 
         return dummyResultTable;
     }
@@ -152,8 +166,12 @@ public abstract class AbstractGroupedSensorExecutor {
             row.setDouble(sensorPrepareResult.getActualValueAlias(), actualValue);
         }
 
-        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
-        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
+        SensorPrepareResult firstPrepareResult = preparedSensorsGroup.getPreparedSensors().get(0);
+        TimePeriodGradient timePeriodGradient = firstPrepareResult.getSensorRunParameters().getTimePeriodGradient();
+
+        LocalDateTime truncatedTimePeriod = getNowAtDefaultTimeZone(timePeriodGradient);
+        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, truncatedTimePeriod);
+        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, truncatedTimePeriod.toInstant(ZoneOffset.UTC));
 
         return dummyResultTable;
     }

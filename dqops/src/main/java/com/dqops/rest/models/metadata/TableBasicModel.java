@@ -16,6 +16,8 @@
 package com.dqops.rest.models.metadata;
 
 import com.dqops.checks.CheckType;
+import com.dqops.checks.ProfilingTimePeriod;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
@@ -87,6 +89,15 @@ public class TableBasicModel {
      */
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
+
+    /**
+     * Defines how many advanced profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent
+     * advanced profiling result executed during the month. By changing this value, it is possible to store one value per day or even store all advanced profiling results.
+     */
+    @JsonPropertyDescription("Defines how many advanced profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent " +
+            "advanced profiling result executed during the month. By changing this value, it is possible to store one value per day or even store all advanced profiling results.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ProfilingTimePeriod advancedProfilingResultTruncation;
 
     /**
      * True when the table has any checks configured.
@@ -172,6 +183,7 @@ public class TableBasicModel {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());
             setDisabled(tableSpec.isDisabled());
+            setAdvancedProfilingResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
@@ -230,6 +242,7 @@ public class TableBasicModel {
             setFilter(tableSpec.getFilter());
             setPriority(tableSpec.getPriority());
             setOwner(tableSpec.getOwner());
+            setAdvancedProfilingResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
@@ -289,5 +302,10 @@ public class TableBasicModel {
         targetTableSpec.setFilter(this.getFilter());
         targetTableSpec.setPriority(this.getPriority());
         targetTableSpec.setOwner(this.getOwner());
+
+        if (targetTableSpec.getProfilingChecks() == null) {
+            targetTableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
+        }
+        targetTableSpec.getProfilingChecks().setResultTruncation(this.advancedProfilingResultTruncation);
     }
 }

@@ -31,6 +31,7 @@ import com.dqops.execution.sensors.grouping.GroupedSensorExecutionResult;
 import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.execution.sensors.runners.AbstractSensorRunner;
+import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -145,7 +146,8 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                 }
             }
 
-            Table dummyResultTable = createDummyResultTable(sensorRunParameters);
+            Table dummyResultTable = GenericSensorResultsFactory.createDummyResultTable(sensorRunParameters,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId());
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
