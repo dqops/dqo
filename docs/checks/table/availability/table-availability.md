@@ -1,7 +1,7 @@
 **table availability** checks  
 
 **Description**  
-Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it.
+Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
 
 ___
 

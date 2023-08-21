@@ -1004,12 +1004,14 @@ class RuleExecutionRunParameters:
 # what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
 class RuleExecutionResult:
     passed: bool
+    new_actual_value: float
     expected_value: float
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=True, new_actual_value=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
+        self.new_actual_value = new_actual_value
         self.expected_value = expected_value
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
@@ -1028,19 +1030,19 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     filtered.reverse()
 
-    recent_failures  = 0
+    recent_failures = 0
     for i in filtered:
-        if i == 0:
+        if i > 0:
             recent_failures += 1
         else:
             break
 
-    expected_value = None
+    expected_value = 0
     lower_bound = None
     upper_bound = rule_parameters.parameters.max_failures
-    passed = recent_failures <= upper_bound
+    passed = recent_failures <= rule_parameters.parameters.max_failures
 
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+    return RuleExecutionResult(passed, recent_failures, expected_value, lower_bound, upper_bound)
 
 ```
 ___
@@ -1760,7 +1762,7 @@ spec:
   type: python
   mode: previous_readouts
   time_window:
-    prediction_time_window: 30
+    prediction_time_window: 60
     min_periods_with_readouts: 0
     historic_data_point_grouping: last_n_readouts
 ```
@@ -1823,12 +1825,12 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'previous_readouts'):
         return RuleExecutionResult()
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None and rule_parameters.actual_value is not None]
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None and hasattr(readouts, 'sensor_readout') and rule_parameters.actual_value is not None]
 
-    expected_value = None
-    lower_bound = None
-    upper_bound = None
-    passed = (filtered[-1] is not None and filtered[-1] == rule_parameters.actual_value) or filtered[-1] == None
+    expected_value = filtered[-1].sensor_readout if len(filtered) > 0 else None
+    lower_bound = expected_value
+    upper_bound = expected_value
+    passed = len(filtered) == 0 or (filtered[-1] is not None and filtered[-1] == rule_parameters.actual_value) or filtered[-1] == None
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 ```

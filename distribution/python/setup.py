@@ -130,8 +130,7 @@ try:
                           'scipy>=1.10.1'],
         python_requires='>=3.8',
         classifiers=[
-#            'Development Status :: 5 - Production/Stable',
-            'Development Status :: 4 - Beta',
+            'Development Status :: 5 - Production/Stable',
             'License :: OSI Approved :: Apache Software License',
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9',
