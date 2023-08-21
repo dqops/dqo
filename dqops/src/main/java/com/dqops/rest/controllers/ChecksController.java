@@ -143,7 +143,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(checkSpecModel.getCheckName());
+        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
         checkDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
         userHomeContext.flush();
 

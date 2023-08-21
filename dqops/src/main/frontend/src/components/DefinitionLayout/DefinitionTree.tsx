@@ -34,11 +34,13 @@ import DataQualityContextMenu from './DataQualityContextMenu';
 import Select, { Option } from '../Select';
 import CreateCheckDialog from './CreateChecksDialog';
 import CheckContextMenu from './CheckContextMenu';
+import Button from '../Button';
 
-interface RuleSensorCheckName{
+export interface RuleSensorCheckName{
   checkName: string,
   rule: string, 
   sensor: string
+  toUpdateVar: boolean
 }
 
 export const DefinitionTree = () => {
@@ -58,7 +60,14 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
   const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
   const [allRules, setAllRules] = useState<RuleBasicModel[]>()
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedCheck, setSelectedCheck] = useState<RuleSensorCheckName>({checkName: "", sensor: "", rule: ""})
+  const [selectedCheck, setSelectedCheck] = useState<RuleSensorCheckName>({checkName: "", sensor: "", rule: "", toUpdateVar: false})
+  const [toUpdate, setToUpdate] = useState(false)
+
+  const onChangeSelected = (obj: Partial<RuleSensorCheckName>) : void => {
+    setSelectedCheck({
+      ...selectedCheck, ...obj
+    })
+  }
 
 
   useEffect(() => {
@@ -76,13 +85,6 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
     };
   }, [allSensors, allRules]);
 
-
-// console.log(checksFolderTree)
-
-// console.log(checksFolderTree?.checks)
-
-// console.log(checksFolderTree?.folders && checksFolderTree.folders.custom)
-
 const onChangeSensor = (value: string)=> {
   setSelectedCheck({...selectedCheck, sensor: value})
 }
@@ -94,21 +96,6 @@ const onChangeRule = (value: string)=> {
 const onChangeNameOfCheck = (value: string)=> {
   setSelectedCheck({...selectedCheck, checkName: value})
 }
-
-
-  // console.log(sensorFolderTree)
-
-  // console.log(dataQualityChecksState)
-  // console.log(ruleState)
-
-  // console.log(checksFolderTree?.folders && Object.values(checksFolderTree?.folders).map((check) => check.folders))
-// console.log(memoizedData)
-
-
-  // console.log(checksContainerData)
-  // console.log(Object.values(checksContainerData))
-  // console.log((Object.values(checksContainerData).at(0) as Array<QualityCategoryModel>)?.map((x) => x.checks))
-
   const getAllSensors =async () => {
     await SensorsApi.getAllSensors().then((res) => setAllSensors(res.data))
   }
@@ -121,8 +108,13 @@ const onChangeNameOfCheck = (value: string)=> {
     await ChecksApi.createCheck(fullCheckName, body)
   }
 
-  const updateCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
-    await ChecksApi.updateCheck(fullCheckName, body)
+  const updateCheck = async () => {
+    await ChecksApi.updateCheck("custom/" + selectedCheck.checkName,
+    {check_name: selectedCheck.checkName, rule_name: selectedCheck.rule, sensor_name: selectedCheck.sensor})
+  }
+
+  const deleteCheck =async (checkName: string) => {
+    await ChecksApi.deleteCheck("custom/" + checkName)
   }
 
   const toggleSensorFolder = (key: string) => {
@@ -355,11 +347,16 @@ const onChangeNameOfCheck = (value: string)=> {
               />
               <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                 {check.check_name}
-                <CheckContextMenu />
+                {check.custom === true && 
+                <CheckContextMenu
+                 onChangeSelected={onChangeSelected} 
+                 checkName={check.check_name ?? ""} 
+                 deleteCheck={deleteCheck}
+                 />}
               </div>
             </div>
-            {check.custom === true && 
-            <>
+            {selectedCheck.checkName === check.check_name && 
+            <div >
             <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
               label: x.rule_name ?? "", 
               value: x.rule_name ?? ""
@@ -369,6 +366,7 @@ const onChangeNameOfCheck = (value: string)=> {
               onChangeNameOfCheck(check.check_name || "");
               onChangeSensor(String(selectedOption));
             }}
+            className='mt-2 mb-2'
             />
             <Select placeholder='Rule'  
             options={memoizedData.sensors && memoizedData.sensors.map((x) => ({
@@ -381,7 +379,10 @@ const onChangeNameOfCheck = (value: string)=> {
             }}
             value={selectedCheck.rule}
             />
-            </>
+            {
+            (selectedCheck.rule.length !==0 || selectedCheck.sensor.length !==0) &&
+            <Button className='mt-2 mb-2' color='primary' label='Update check' onClick={updateCheck}></Button>}
+            </div>
             }
             </div>
           ))}

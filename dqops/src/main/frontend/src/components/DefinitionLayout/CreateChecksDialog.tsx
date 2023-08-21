@@ -67,7 +67,7 @@ const CreateCheckDialog = ({
       <div className='z-1 fixed w-300 border border-gray-300 bg-white' style={{left: "20%", top: "40%"}}>
         <div className="pt-10 pb-2 px-8 z-1">
           <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
-         Create a check
+         Create a custom check
           </div>
           Check Name:
           <Input value={nameOfCheck} onChange={onChangeNameOfCheck}/>

@@ -13,13 +13,19 @@ import { ROUTES } from "../../shared/routes";
 import AddFolderDialog from "./AddFolderDialog";
 import { ChecksApi } from '../../services/apiClient';
 import CreateCheckDialog from './CreateChecksDialog';
+import { RuleSensorCheckName } from './DefinitionTree';
+
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
+  onChangeSelected: (obj: Partial<RuleSensorCheckName>) => void
+  deleteCheck: (checkName: string) => Promise<void>
+  checkName: string;
+
 }
 
-const CheckContextMenu = ({ folder, path }: RuleContextMenuProps) => {
+const CheckContextMenu = ({ folder, path, onChangeSelected, checkName, deleteCheck }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createPopUp, setCreatePopUp] = useState(false)
@@ -38,9 +44,7 @@ const CheckContextMenu = ({ folder, path }: RuleContextMenuProps) => {
     setIsOpen(false);
     setOpen(false);
   };
-
   
-
     const createCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
     await ChecksApi.createCheck(fullCheckName, body)
   }
@@ -56,7 +60,7 @@ const CheckContextMenu = ({ folder, path }: RuleContextMenuProps) => {
         <div onClick={(e) => e.stopPropagation()}>
           <div
             className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={() => setCreatePopUp(true)}
+            onClick={() => {onChangeSelected({checkName: checkName}), setIsOpen(false)}}
           >
             Update check
           </div>
@@ -64,9 +68,9 @@ const CheckContextMenu = ({ folder, path }: RuleContextMenuProps) => {
         <div onClick={(e) => e.stopPropagation()}>
           <div
             className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewFolder}
+            onClick={() => deleteCheck(checkName)}
           >
-           Delete check
+           Delete
           </div>
           <AddFolderDialog
             open={isOpen}
