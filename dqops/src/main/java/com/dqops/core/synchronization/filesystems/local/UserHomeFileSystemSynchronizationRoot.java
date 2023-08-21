@@ -29,7 +29,7 @@ public class UserHomeFileSystemSynchronizationRoot extends FileSystemSynchroniza
      * @param rootPath Absolute path to a local file system.
      */
     public UserHomeFileSystemSynchronizationRoot(Path rootPath) {
-        super(rootPath);
+        super(rootPath.toAbsolutePath().normalize());
         assert rootPath != null && rootPath.isAbsolute();
     }
 }
