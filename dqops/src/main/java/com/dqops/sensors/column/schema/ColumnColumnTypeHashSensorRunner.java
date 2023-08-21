@@ -29,6 +29,7 @@ import com.dqops.execution.sensors.grouping.TableMetadataSensorExecutor;
 import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.execution.sensors.runners.AbstractSensorRunner;
+import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.metadata.sources.*;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.google.common.hash.HashCode;
@@ -117,7 +118,8 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
 
             if (introspectedTableSpec == null) {
                 // table not found
-                Table table = createResultTableWithResult((Double) null);
+                Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
+                        this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                 return new SensorExecutionResult(sensorRunParameters, table);
             }
 
@@ -125,7 +127,8 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
 
             if (introspectedColumnSpec == null || introspectedColumnSpec.getTypeSnapshot() == null) {
                 // column not found
-                Table table = createResultTableWithResult((Double) null);
+                Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
+                        this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                 return new SensorExecutionResult(sensorRunParameters, table);
             }
 
@@ -133,7 +136,8 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
             long typeSnapshotHash = typeSnapshot.hashCode64();
             long hashFitInDoubleExponent = typeSnapshotHash & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
 
-            Table table = createResultTableWithResult(hashFitInDoubleExponent);
+            Table table = GenericSensorResultsFactory.createResultTableWithResult(hashFitInDoubleExponent,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
             return new SensorExecutionResult(sensorRunParameters, table);
         }
         catch (Throwable exception) {
@@ -179,7 +183,8 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
 
                     if (retrievedTableSpecList.size() == 0) {
                         // table not found
-                        Table table = createResultTableWithResult((Double) null);
+                        Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
+                                this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                         return new SensorExecutionResult(sensorRunParameters, table);
                     }
 
@@ -188,7 +193,8 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
 
                     if (introspectedColumnSpec == null || introspectedColumnSpec.getTypeSnapshot() == null) {
                         // column not found
-                        Table table = createResultTableWithResult((Double) null);
+                        Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
+                                this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                         return new SensorExecutionResult(sensorRunParameters, table);
                     }
 
@@ -196,12 +202,14 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
                     long typeSnapshotHash = typeSnapshot.hashCode64();
                     long hashFitInDoubleExponent = typeSnapshotHash & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
 
-                    Table table = createResultTableWithResult(hashFitInDoubleExponent);
+                    Table table = GenericSensorResultsFactory.createResultTableWithResult(hashFitInDoubleExponent,
+                            this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
                     return new SensorExecutionResult(sensorRunParameters, table);
                 }
             }
 
-            Table dummyResultTable = createDummyResultTable(sensorRunParameters);
+            Table dummyResultTable = GenericSensorResultsFactory.createDummyResultTable(sensorRunParameters,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId());
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {

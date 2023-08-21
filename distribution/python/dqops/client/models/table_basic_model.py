@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
+from ..models.table_basic_model_advanced_profiling_result_truncation import (
+    TableBasicModelAdvancedProfilingResultTruncation,
+)
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -36,6 +39,11 @@ class TableBasicModel:
             grouping of more and less important tables during a data quality improvement project, when the data quality
             issues on higher priority tables are fixed before data quality issues on less important tables.
         owner (Union[Unset, TableOwnerSpec]):
+        advanced_profiling_result_truncation (Union[Unset, TableBasicModelAdvancedProfilingResultTruncation]): Defines
+            how many advanced profiling results are stored for the table monthly. By default, DQO will use the
+            'one_per_month' configuration and store only the most recent advanced profiling result executed during the
+            month. By changing this value, it is possible to store one value per day or even store all advanced profiling
+            results.
         has_any_configured_checks (Union[Unset, bool]): True when the table has any checks configured.
         has_any_configured_profiling_checks (Union[Unset, bool]): True when the table has any profiling checks
             configured.
@@ -65,6 +73,9 @@ class TableBasicModel:
     filter_: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
+    advanced_profiling_result_truncation: Union[
+        Unset, TableBasicModelAdvancedProfilingResultTruncation
+    ] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
     has_any_configured_recurring_checks: Union[Unset, bool] = UNSET
@@ -94,6 +105,12 @@ class TableBasicModel:
         owner: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.owner, Unset):
             owner = self.owner.to_dict()
+
+        advanced_profiling_result_truncation: Union[Unset, str] = UNSET
+        if not isinstance(self.advanced_profiling_result_truncation, Unset):
+            advanced_profiling_result_truncation = (
+                self.advanced_profiling_result_truncation.value
+            )
 
         has_any_configured_checks = self.has_any_configured_checks
         has_any_configured_profiling_checks = self.has_any_configured_profiling_checks
@@ -151,6 +168,10 @@ class TableBasicModel:
             field_dict["priority"] = priority
         if owner is not UNSET:
             field_dict["owner"] = owner
+        if advanced_profiling_result_truncation is not UNSET:
+            field_dict[
+                "advanced_profiling_result_truncation"
+            ] = advanced_profiling_result_truncation
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
@@ -230,6 +251,21 @@ class TableBasicModel:
             owner = UNSET
         else:
             owner = TableOwnerSpec.from_dict(_owner)
+
+        _advanced_profiling_result_truncation = d.pop(
+            "advanced_profiling_result_truncation", UNSET
+        )
+        advanced_profiling_result_truncation: Union[
+            Unset, TableBasicModelAdvancedProfilingResultTruncation
+        ]
+        if isinstance(_advanced_profiling_result_truncation, Unset):
+            advanced_profiling_result_truncation = UNSET
+        else:
+            advanced_profiling_result_truncation = (
+                TableBasicModelAdvancedProfilingResultTruncation(
+                    _advanced_profiling_result_truncation
+                )
+            )
 
         has_any_configured_checks = d.pop("has_any_configured_checks", UNSET)
 
@@ -322,6 +358,7 @@ class TableBasicModel:
             filter_=filter_,
             priority=priority,
             owner=owner,
+            advanced_profiling_result_truncation=advanced_profiling_result_truncation,
             has_any_configured_checks=has_any_configured_checks,
             has_any_configured_profiling_checks=has_any_configured_profiling_checks,
             has_any_configured_recurring_checks=has_any_configured_recurring_checks,

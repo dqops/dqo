@@ -24,6 +24,7 @@ import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.execution.sensors.grouping.GroupedSensorExecutionResult;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.execution.sensors.runners.AbstractSensorRunner;
+import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +72,9 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
                                              SensorExecutionRunParameters sensorRunParameters,
                                              SensorDefinitionFindResult sensorDefinition,
                                              SensorExecutionProgressListener progressListener) {
-        return this.jinjaSqlTemplateSensorRunner.prepareSensor(executionContext, sensorRunParameters, sensorDefinition, progressListener);
+        SensorPrepareResult sensorPrepareResult = this.jinjaSqlTemplateSensorRunner.prepareSensor(executionContext, sensorRunParameters, sensorDefinition, progressListener);
+        sensorPrepareResult.setSensorRunner(this);
+        return sensorPrepareResult;
     }
 
     /**
@@ -97,17 +100,20 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
         if (sensorExecutionResult.isSuccess()) {
             try {
                 if (sensorExecutionResult.getResultTable().column(0).get(0) == null) {
-                    Table resultTableWithResult = createResultTableWithResult(1.0);
+                    Table resultTableWithResult = GenericSensorResultsFactory.createResultTableWithResult(0.0,
+                            this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
                     return new SensorExecutionResult(sensorRunParameters, resultTableWithResult);
                 }
             } catch (Exception exception) {
-                Table resultTable = createResultTableWithResult(0.0);
+                Table resultTable = GenericSensorResultsFactory.createResultTableWithResult(1.0,
+                        this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
                 return new SensorExecutionResult(sensorRunParameters, resultTable);
             }
             return sensorExecutionResult;
         }
 
-        Table resultTable = createResultTableWithResult(0.0);
+        Table resultTable = GenericSensorResultsFactory.createResultTableWithResult(1.0,
+                this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
         return new SensorExecutionResult(sensorRunParameters, resultTable);
     }
 
@@ -134,17 +140,20 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
         if (sensorExecutionResult.isSuccess()) {
             try {
                 if (sensorExecutionResult.getResultTable().column(0).get(0) == null) {
-                    Table resultTableWithResult = createResultTableWithResult(1.0);
+                    Table resultTableWithResult = GenericSensorResultsFactory.createResultTableWithResult(0.0,
+                            this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
                     return new SensorExecutionResult(sensorRunParameters, resultTableWithResult);
                 }
             } catch (Exception exception) {
-                Table resultTable = createResultTableWithResult(0.0);
+                Table resultTable = GenericSensorResultsFactory.createResultTableWithResult(1.0,
+                        this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
                 return new SensorExecutionResult(sensorRunParameters, resultTable);
             }
             return sensorExecutionResult;
         }
 
-        Table resultTable = createResultTableWithResult(0.0);
+        Table resultTable = GenericSensorResultsFactory.createResultTableWithResult(1.0,
+                this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
         return new SensorExecutionResult(sensorRunParameters, resultTable);
     }
 }

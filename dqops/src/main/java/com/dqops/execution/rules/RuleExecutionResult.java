@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RuleExecutionResult {
     private boolean passed;
+    private Double newActualValue;
     private Double expectedValue;
     private Double lowerBound;
     private Double upperBound;
@@ -43,6 +44,22 @@ public class RuleExecutionResult {
      */
     public void setPassed(boolean passed) {
         this.passed = passed;
+    }
+
+    /**
+     * Returns a new (updated) actual value that was recalculated be the rule and should be stored in the check result instead of the value returned from the sensor.
+     * @return New updated actual value to store.
+     */
+    public Double getNewActualValue() {
+        return newActualValue;
+    }
+
+    /**
+     * Stores a new updated actual value that should be stored in the check result.
+     * @param newActualValue New updated check result.
+     */
+    public void setNewActualValue(Double newActualValue) {
+        this.newActualValue = newActualValue;
     }
 
     /**
