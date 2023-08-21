@@ -6,11 +6,13 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { SensorBasicFolderModel } from "../../api";
+import { CheckSpecModel, SensorBasicFolderModel } from "../../api";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { addFirstLevelTab } from "../../redux/actions/sensor.actions";
 import { ROUTES } from "../../shared/routes";
 import AddFolderDialog from "./AddFolderDialog";
+import { ChecksApi } from '../../services/apiClient';
+import CreateCheckDialog from './CreateChecksDialog';
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
@@ -19,24 +21,13 @@ interface RuleContextMenuProps {
 
 const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useActionDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const [createPopUp, setCreatePopUp] = useState(false)
+  
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
     e.stopPropagation();
-  };
-
-  const openAddNewRule = () => {
-    dispatch(addFirstLevelTab({
-      url: ROUTES.RULE_DETAIL([...path || [], "new_rule"].join("-")),
-      value: ROUTES.RULE_DETAIL_VALUE([...path || [], "new_rule"].join("-")),
-      state: {
-        type: "create",
-        path
-      },
-      label: "New rule"
-    }));
   };
 
   const openAddNewFolder = () => {
@@ -47,6 +38,12 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
     setIsOpen(false);
     setOpen(false);
   };
+
+  
+
+    const createCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
+    await ChecksApi.createCheck(fullCheckName, body)
+  }
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -59,7 +56,7 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
         <div onClick={(e) => e.stopPropagation()}>
           <div
             className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewRule}
+            onClick={() => setCreatePopUp(true)}
           >
             Add new check
           </div>
@@ -77,7 +74,12 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
             path={path}
             folder={folder}
             type="rule"
-          />
+           />
+            <CreateCheckDialog
+            open={createPopUp}
+            onClose={() => setCreatePopUp(false)}
+            onConfirm={createCheck}
+            />
         </div>
       </PopoverContent>
     </Popover>

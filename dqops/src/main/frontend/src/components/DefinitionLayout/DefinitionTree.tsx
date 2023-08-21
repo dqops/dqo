@@ -11,6 +11,7 @@ import { IRootState } from '../../redux/reducers';
 import {
   CheckContainerModel,
   CheckSpecFolderBasicModel,
+  CheckSpecModel,
   QualityCategoryModel,
   RuleBasicFolderModel,
   RuleBasicModel,
@@ -26,10 +27,11 @@ import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
-import { RulesApi, SensorsApi, SettingsApi } from '../../services/apiClient';
+import { ChecksApi, RulesApi, SensorsApi, SettingsApi } from '../../services/apiClient';
 import { getdataQualityChecksFolderTree, toggledataQualityChecksFolderTree } from '../../redux/actions/dataQualityChecks';
 import DataQualityContextMenu from './DataQualityContextMenu';
 import Select, { Option } from '../Select';
+import CreateCheckDialog from './CreateChecksDialog';
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -47,6 +49,7 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
 
   const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
   const [allRules, setAllRules] = useState<RuleBasicModel[]>()
+  const [isOpen, setIsOpen] = useState(false)
 
 
   useEffect(() => {
@@ -65,7 +68,7 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
   }, [allSensors, allRules]);
 
 
-  // console.log(checksFolderTree)
+console.log(checksFolderTree)
   // console.log(sensorFolderTree)
 
   // console.log(dataQualityChecksState)
@@ -81,13 +84,18 @@ console.log(memoizedData)
 
   const getAllSensors =async () => {
     await SensorsApi.getAllSensors().then((res) => setAllSensors(res.data))
-    console.log("is")
   }
 
-  
   const getAllRules =async () => {
     await RulesApi.getAllRules().then((res) => setAllRules(res.data))
-    console.log("ir")
+  }
+
+  const createCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
+    await ChecksApi.createCheck(fullCheckName, body)
+  }
+
+  const updateCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
+    await ChecksApi.updateCheck(fullCheckName, body)
   }
 
   const toggleSensorFolder = (key: string) => {
@@ -324,15 +332,20 @@ console.log(memoizedData)
                 {check.check_name}
               </div>
             </div>
+            {check.custom === true && 
+            <>
             <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
-            label: x.rule_name ?? "", 
-            value: x.rule_name ?? ""
+              label: x.rule_name ?? "", 
+              value: x.rule_name ?? ""
             })) || []}/>
             <Select placeholder='Rule'  
             options={memoizedData.sensors && memoizedData.sensors.map((x) => ({
             label: x.sensor_name ?? "", 
             value: x.sensor_name ?? ""
-            })) || []}/>
+            })) || []}
+            />
+            </>
+            }
             </div>
           ))}
         </div>
@@ -358,7 +371,11 @@ console.log(memoizedData)
         <div className="text-sm text-gray-700 font-semibold mb-2">Data Quality Checks: </div>
         {renderChecksFolderTree(checksFolderTree, [])}
       </div>
-
+      <CreateCheckDialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        onConfirm={createCheck}
+      />
     </div>
   );
 };
