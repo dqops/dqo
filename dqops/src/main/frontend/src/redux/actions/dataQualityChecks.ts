@@ -48,6 +48,10 @@ export const updateCheckRequest = () => ({
   type: DATA_QUALITY_CHECKS_ACTION.UPDATE_CHECK_DETAIL
 })
 
+export const deleteCheckRequest = () => ({
+  type: DATA_QUALITY_CHECKS_ACTION.DELETE_CHECK_DETAIL
+})
+
 
 export const createCheck = (fullCheckName: string, body: CheckSpecModel) => async (dispatch: Dispatch) => {
   dispatch(createCheckRequest());
@@ -70,3 +74,14 @@ export const updateCheck = (fullCheckName: string, body: CheckSpecModel) => asyn
   console.error(err)
   }
 };
+
+export const deleteCheck = (fullCheckName: string) => async (dispatch: Dispatch) => {
+  dispatch(deleteCheckRequest());
+  try {
+      await ChecksApi.deleteCheck(fullCheckName);
+  } catch (err) {
+  console.error(err)
+  }
+};
+
+

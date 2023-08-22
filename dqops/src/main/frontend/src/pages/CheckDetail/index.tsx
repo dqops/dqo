@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getFirstLevelSensorState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 // import { createRule, getRule, setUpdatedRule } from "../../redux/actions/sensor.actions";
-import { createCheck, updateCheck } from "../../redux/actions/dataQualityChecks";
+import { createCheck, updateCheck, deleteCheck } from "../../redux/actions/dataQualityChecks";
 import Tabs from "../../components/Tabs";
 
 import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
@@ -21,7 +21,8 @@ const tabs = [
 ];
 
 export const SensorDetail = () => {
-  const { fullCheckName, ruleDetail, path, type } = useSelector(getFirstLevelSensorState);
+  const { fullCheckName, ruleDetail, path, type,
+  custom } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('check_editor');
   const [checkName, setcheckName] = useState("");
@@ -52,9 +53,13 @@ export const SensorDetail = () => {
     }
   };
 
+  const onDeleteCheck =async () => {
+    await dispatch(deleteCheck(fullCheckName))
+  }
+
   const onChangecheckName = (e: ChangeEvent<HTMLInputElement>) => {
     setcheckName(e.target.value);
-    const fullName = [...path || [], e.target.value].join('/')
+    // const fullName = [...path || [], e.target.value].join('/')
 
     // dispatch(setUpdatedRule({
     //   ...ruleDetail,
@@ -67,12 +72,13 @@ export const SensorDetail = () => {
     <DefinitionLayout>
       <div className="relative">
       <div className="flex space-x-4 items-center absolute right-2 top-2">
-      {ruleDetail?.custom && (
+      {custom === true && (
         <Button
           color="primary"
           variant="outlined"
-          label="Delete rule"
+          label="Delete check"
           className="w-40 !h-10"
+          onClick={onDeleteCheck}
         />
       )}
       <Button
