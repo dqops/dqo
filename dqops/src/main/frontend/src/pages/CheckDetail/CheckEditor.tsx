@@ -9,6 +9,7 @@ interface CreateCheckProps {
   onChangeRule: (arg: string ) => void
   selectedRule: string,
   selectedSensor: string
+  setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CheckEditor = ({
@@ -16,6 +17,7 @@ const CheckEditor = ({
   onChangeSensor,
   selectedRule,
   selectedSensor,
+  setIsUpdated
 }: CreateCheckProps) => {
   const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
   const [allRules, setAllRules] = useState<RuleBasicModel[]>()
@@ -44,12 +46,6 @@ const CheckEditor = ({
     <div>
       <div>
         <div className="pt-10 pb-2 px-8 z-1">
-          <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
-          </div>
-          {/* {create=== false && <div>
-          Check Name:
-          <Input value={nameOfCheck} onChange={onChangeNameOfCheck}/>
-          </div>} */}
           Sensor Name: 
           <Select
             placeholder='Sensor'
@@ -58,7 +54,7 @@ const CheckEditor = ({
               value: x.rule_name ?? ""
             })) || []}
             value={selectedSensor}
-            onChange={onChangeSensor}
+            onChange={(selected) => {onChangeSensor(selected), setIsUpdated(true)}}
             />
             Rule name: 
             <Select placeholder='Rule'  
@@ -67,7 +63,7 @@ const CheckEditor = ({
             value: x.sensor_name ?? ""
             })) || []}
             value={selectedRule}
-            onChange={onChangeRule}
+            onChange={(selected) => {onChangeRule(selected), setIsUpdated(true)}}
             />
         </div>
       </div>

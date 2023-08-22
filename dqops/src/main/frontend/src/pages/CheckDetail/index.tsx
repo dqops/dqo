@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import DefinitionLayout from "../../components/DefinitionLayout";
 import SvgIcon from "../../components/SvgIcon";
 import { useSelector } from "react-redux";
@@ -26,6 +26,9 @@ export const SensorDetail = () => {
   const [checkName, setcheckName] = useState("");
   const [selectedSensor, setSelectedSensor] = useState("")
   const [selectedRule, setSelectedRule] = useState("")
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [isCreating, setIsCreating] = useState(false)
+  const [isUpdated, setIsUpdated] = useState(false)
 
   const onChangeSensor = (value: string)=> {
     setSelectedSensor(value)
@@ -35,20 +38,26 @@ export const SensorDetail = () => {
     setSelectedRule(value)
   }
 
-  // useEffect(() => {
-  //   if (!ruleDetail && type !== 'create') {
-  //     dispatch(getRule(full_rule_name))
-  //   }
-  // }, [full_rule_name, ruleDetail, type]);
+  useEffect(() => {
+    if(type === "create"){
+      setIsCreating(true)
+    }else{
+      setIsCreating(false)
+    }
+  }, [fullCheckName, path, type, custom])
 
   const onCreateUpdateCheck = async () => {
     const fullName = [...path || [], checkName].join('/')
-    console.log(fullName)
+    setIsUpdating(true)
     if(type === "create"){
       await dispatch(createCheck(fullName, { sensor_name: selectedSensor, rule_name: selectedRule }));
+      setIsUpdating(false)
+      setIsCreating(false)
     }else {
       await dispatch(updateCheck(fullCheckName, { sensor_name: selectedSensor, rule_name: selectedRule }));
+      setIsUpdating(false)
     }
+    setIsUpdated(false)
   };
 
   const onDeleteCheck =async () => {
@@ -64,8 +73,9 @@ export const SensorDetail = () => {
     //   full_rule_name: fullName
     // }));
   };
+  
 
-  console.log(fullCheckName)
+console.log(isUpdated)
   return (
     <DefinitionLayout>
       <div className="relative">
@@ -84,12 +94,12 @@ export const SensorDetail = () => {
         variant="contained"
         label="Save"
         className="w-40 !h-10"
-        // disabled={!isUpdatedRuleDetail}
+         disabled={!isUpdated}
         onClick={onCreateUpdateCheck}
-        // loading={isUpdating}
+        loading={isUpdating}
       />
     </div>
-        {type !== 'create' ? (
+        {isCreating ===false ? (
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
@@ -114,7 +124,7 @@ export const SensorDetail = () => {
         </div>
         {activeTab === 'check_editor' && (
           <CheckEditor create={type === "create" ? true : false} onChangeRule={onChangeRule} onChangeSensor={onChangeSensor}
-           selectedRule={selectedRule} selectedSensor={selectedSensor}
+           selectedRule={selectedRule} selectedSensor={selectedSensor} setIsUpdated={setIsUpdated}
            />
         )}
       
