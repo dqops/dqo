@@ -129,70 +129,66 @@ export const SensorDetail = () => {
   console.log(check);
   return (
     <DefinitionLayout>
-      {(fullCheckName || path || type) && (
-        <div className="relative">
-          <div className="flex space-x-4 items-center absolute right-2 top-2">
-            {custom !== false && (
-              <Button
-                color="primary"
-                variant="outlined"
-                label="Delete check"
-                className="w-40 !h-10"
-                onClick={onDeleteCheck}
-              />
-            )}
+      <div className="relative">
+        <div className="flex space-x-4 items-center absolute right-2 top-2">
+          {custom !== false && (
             <Button
               color="primary"
-              variant="contained"
-              label={isCreating === true ? 'Create' : 'Update'}
+              variant="outlined"
+              label="Delete check"
               className="w-40 !h-10"
-              disabled={!isUpdated}
-              onClick={onCreateUpdateCheck}
-              loading={isUpdating}
-            />
-          </div>
-          {isCreating === false ? (
-            <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
-              <div className="flex items-center space-x-2 max-w-full">
-                <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-                <div className="text-xl font-semibold truncate">
-                  Check:{' '}
-                  {fullCheckName
-                    ? fullCheckName
-                    : Array.from(path).join('/') + '/' + checkName}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
-              <div className="flex items-center space-x-2 max-w-full">
-                <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-                <div className="text-xl font-semibold truncate">
-                  Check: {[...(path || []), ''].join('/')}
-                </div>
-                <Input
-                  value={checkName}
-                  onChange={onChangecheckName}
-                  error={!checkName}
-                />
-              </div>
-            </div>
-          )}
-          <div className="border-b border-gray-300 relative">
-            <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-          </div>
-          {activeTab === 'check_editor' && (
-            <CheckEditor
-              create={type === 'create' ? true : false}
-              onChangeRule={onChangeRule}
-              onChangeSensor={onChangeSensor}
-              selectedRule={selectedRule}
-              selectedSensor={selectedSensor}
-              setIsUpdated={setIsUpdated}
+              onClick={onDeleteCheck}
             />
           )}
+          <Button
+            color="primary"
+            variant="contained"
+            label={isCreating === true ? 'Create' : 'Update'}
+            className="w-40 !h-10"
+            disabled={!isUpdated}
+            onClick={onCreateUpdateCheck}
+            loading={isUpdating}
+          />
         </div>
-      )}
+        {isCreating === false ? (
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
+            <div className="flex items-center space-x-2 max-w-full">
+              <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
+              <div className="text-xl font-semibold truncate">
+                Check: {fullCheckName}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
+            <div className="flex items-center space-x-2 max-w-full">
+              <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
+              <div className="text-xl font-semibold truncate">
+                Check: {[...(path || []), ''].join('/')}
+              </div>
+              <Input
+                value={checkName}
+                onChange={onChangecheckName}
+                error={!checkName}
+              />
+            </div>
+          </div>
+        )}
+        {/* <div className="border-b border-gray-300 relative">
+          <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
+        {activeTab === 'check_editor' && ( */}
+        <CheckEditor
+          create={type === 'create' ? true : false}
+          onChangeRule={onChangeRule}
+          onChangeSensor={onChangeSensor}
+          selectedRule={selectedRule}
+          selectedSensor={selectedSensor}
+          setIsUpdated={setIsUpdated}
+          custom={custom}
+        />
+        {/* )} */}
+      </div>
     </DefinitionLayout>
   );
 };

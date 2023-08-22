@@ -8,7 +8,7 @@ import {
 import SvgIcon from '../SvgIcon';
 import { CheckSpecModel, SensorBasicFolderModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/dataQualityChecks';
+import { addFirstLevelTab } from '../../redux/actions/sensor.actions';
 import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
 import { ChecksApi } from '../../services/apiClient';

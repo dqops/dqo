@@ -25,7 +25,10 @@ import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
-import { getdataQualityChecksFolderTree, toggledataQualityChecksFolderTree } from '../../redux/actions/dataQualityChecks';
+import {
+  getdataQualityChecksFolderTree,
+  toggledataQualityChecksFolderTree
+} from '../../redux/actions/dataQualityChecks';
 import DataQualityContextMenu from './DataQualityContextMenu';
 
 export const DefinitionTree = () => {
@@ -37,18 +40,16 @@ export const DefinitionTree = () => {
     (state: IRootState) => state.rule || {}
   );
 
-const {checksFolderTree, dataQualityChecksState} = useSelector(
-  (state: IRootState) => state.dataQualityChecks || {}
-  )
+  const { checksFolderTree, dataQualityChecksState } = useSelector(
+    (state: IRootState) => state.dataQualityChecks || {}
+  );
   const [selected, setSelected] = useState('');
-
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
-    dispatch(getdataQualityChecksFolderTree())
+    dispatch(getdataQualityChecksFolderTree());
   }, []);
-
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
@@ -59,8 +60,8 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
   };
 
   const toggleDataQualityChecksFolder = (key: string) => {
-    dispatch(toggledataQualityChecksFolderTree(key))
-  }
+    dispatch(toggledataQualityChecksFolderTree(key));
+  };
 
   const openSensorFirstLevelTab = (sensor: SensorBasicModel) => {
     dispatch(
@@ -251,7 +252,9 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
                   onClick={() => toggleDataQualityChecksFolder(key)}
                 >
                   <SvgIcon
-                    name={dataQualityChecksState[key] ? 'folder' : 'closed-folder'}
+                    name={
+                      dataQualityChecksState[key] ? 'folder' : 'closed-folder'
+                    }
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
@@ -273,33 +276,34 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
             );
           })}
         <div className="ml-2">
-        {folder.checks && folder?.checks.map((check) => (
-          <div key={check.check_name}>
-            <div  
-              className={clsx(
-                'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
-                check.custom ? 'font-bold' : '',
-                selected == check.check_name ? 'bg-gray-300' : ''
-              )}
-              onClick={() => {
-                openCheckFirstLevelTab(check)
-              }}
-            >
-              <SvgIcon
-                name="definitionssensors"
-                className="w-4 h-4 min-w-4 shrink-0"
-              />
-              <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                {check.check_name}
-                {/* {check.custom === true && 
+          {folder.checks &&
+            folder?.checks.map((check) => (
+              <div key={check.check_name}>
+                <div
+                  className={clsx(
+                    'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
+                    check.custom ? 'font-bold' : '',
+                    selected == check.check_name ? 'bg-gray-300' : ''
+                  )}
+                  onClick={() => {
+                    openCheckFirstLevelTab(check);
+                  }}
+                >
+                  <SvgIcon
+                    name="definitionssensors"
+                    className="w-4 h-4 min-w-4 shrink-0"
+                  />
+                  <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+                    {check.check_name}
+                    {/* {check.custom === true && 
                 <CheckContextMenu
                  onChangeSelected={onChangeSelected} 
                  checkName={check.check_name ?? ""} 
                  deleteCheck={deleteCheck}
                  />} */}
-              </div>
-            </div>
-            {/* {selectedCheck.checkName === check.check_name && 
+                  </div>
+                </div>
+                {/* {selectedCheck.checkName === check.check_name && 
             <div >
             <Select placeholder='Sensor' options={memoizedData.rules && memoizedData.rules.map((x) => ({
               label: x.rule_name ?? "", 
@@ -328,14 +332,12 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
             <Button className='mt-2 mb-2' color='primary' label='Update check' onClick={updateCheck}></Button>}
             </div>
             } */}
-            </div>
-          ))}
+              </div>
+            ))}
         </div>
       </div>
     );
   };
-
-  
 
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
@@ -344,13 +346,15 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
         {renderSensorFolderTree(sensorFolderTree, [])}
       </div>
 
-      <div className='mb-4'>
+      <div className="mb-4">
         <div className="text-sm text-gray-700 font-semibold mb-2">Rules:</div>
         {renderRuleFolderTree(ruleFolderTree, [])}
       </div>
 
       <div>
-        <div className="text-sm text-gray-700 font-semibold mb-2">Data Quality Checks: </div>
+        <div className="text-sm text-gray-700 font-semibold mb-2">
+          Data Quality Checks:{' '}
+        </div>
         {renderChecksFolderTree(checksFolderTree, [])}
       </div>
     </div>
