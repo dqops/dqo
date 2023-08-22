@@ -123,10 +123,6 @@ export const SensorDetail = () => {
     );
   };
 
-  console.log(path);
-  console.log(fullCheckName);
-
-  console.log(check);
   return (
     <DefinitionLayout>
       <div className="relative">

@@ -13,13 +13,19 @@ import { ROUTES } from '../../shared/routes';
 import AddFolderDialog from './AddFolderDialog';
 import { ChecksApi } from '../../services/apiClient';
 import CreateCheckDialog from './CreateChecksDialog';
+import clsx from 'clsx';
 
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
+  canCreateCheckHere: boolean;
 }
 
-const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
+const DataQualityContextMenu = ({
+  folder,
+  path,
+  canCreateCheckHere
+}: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createPopUp, setCreatePopUp] = useState(false);
@@ -69,8 +75,11 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
         <div onClick={(e) => e.stopPropagation()}>
           <div
-            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewCheck}
+            className={clsx(
+              'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded',
+              canCreateCheckHere ? 'text-gray-900' : 'text-red-500'
+            )}
+            onClick={canCreateCheckHere ? openAddNewCheck : undefined}
           >
             Add new check
           </div>

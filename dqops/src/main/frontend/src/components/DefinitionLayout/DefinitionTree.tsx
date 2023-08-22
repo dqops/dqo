@@ -261,6 +261,11 @@ export const DefinitionTree = () => {
                   <DataQualityContextMenu
                     folder={folder?.folders?.[key] || {}}
                     path={[...(path || []), key]}
+                    canCreateCheckHere={
+                      folder?.folders?.[key].folders === undefined
+                        ? true
+                        : false
+                    }
                   />
                 </div>
                 {dataQualityChecksState[key] && (
