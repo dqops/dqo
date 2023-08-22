@@ -24,7 +24,7 @@ import {
   TableColumnsStatisticsModel
 } from '../../../api';
 
-import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import {
   ColumnApiClient,

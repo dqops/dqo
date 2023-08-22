@@ -4,7 +4,7 @@ import { RulesApi, SensorsApi } from '../../services/apiClient';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/sensor.actions';
+import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 
 interface CreateCheckProps {

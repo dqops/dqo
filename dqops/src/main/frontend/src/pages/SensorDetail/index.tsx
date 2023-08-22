@@ -8,7 +8,7 @@ import {
   createSensor,
   getSensor,
   setUpdatedSensor
-} from '../../redux/actions/sensor.actions';
+} from '../../redux/actions/definition.actions';
 import Tabs from '../../components/Tabs';
 import SensorDefinition from './SensorDefinition';
 import {

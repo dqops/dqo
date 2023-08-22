@@ -5,7 +5,7 @@ import {
   addFirstLevelTab,
   getSensorFolderTree,
   toggleSensorFolderTree
-} from '../../redux/actions/sensor.actions';
+} from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
@@ -20,7 +20,7 @@ import SvgIcon from '../SvgIcon';
 import {
   getRuleFolderTree,
   toggleRuleFolderTree
-} from '../../redux/actions/rule.actions';
+} from '../../redux/actions/definition.actions';
 import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
@@ -28,20 +28,20 @@ import RuleContextMenu from './RuleContextMenu';
 import {
   getdataQualityChecksFolderTree,
   toggledataQualityChecksFolderTree
-} from '../../redux/actions/dataQualityChecks';
+} from '../../redux/actions/definition.actions';
 import DataQualityContextMenu from './DataQualityContextMenu';
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
   const { sensorFolderTree, sensorState } = useSelector(
-    (state: IRootState) => state.sensor
+    (state: IRootState) => state.definition
   );
   const { ruleFolderTree, ruleState } = useSelector(
-    (state: IRootState) => state.rule || {}
+    (state: IRootState) => state.definition || {}
   );
 
   const { checksFolderTree, dataQualityChecksState } = useSelector(
-    (state: IRootState) => state.dataQualityChecks || {}
+    (state: IRootState) => state.definition || {}
   );
   const [selected, setSelected] = useState('');
 

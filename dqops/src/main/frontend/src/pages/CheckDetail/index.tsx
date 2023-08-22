@@ -6,15 +6,15 @@ import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
   addFirstLevelTab,
   closeFirstLevelTab
-} from '../../redux/actions/sensor.actions';
+} from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-// import { createRule, getRule, setUpdatedRule } from "../../redux/actions/sensor.actions";
+// import { createRule, getRule, setUpdatedRule } from "../../redux/actions/definition.actions";
 import {
   createCheck,
   updateCheck,
   deleteCheck,
   getCheck
-} from '../../redux/actions/dataQualityChecks';
+} from '../../redux/actions/definition.actions';
 import Input from '../../components/Input';
 import CheckEditor from './CheckEditor';
 import Button from '../../components/Button';

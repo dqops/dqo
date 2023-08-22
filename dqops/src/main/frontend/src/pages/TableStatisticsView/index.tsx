@@ -14,7 +14,7 @@ import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { formatNumber } from '../../shared/constants';
-import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 
 export default function TableStatisticsView({
   connectionName,

@@ -6,7 +6,7 @@ import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
+import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
 import { IRootState } from '../../../redux/reducers';
 import qs from 'query-string';
 

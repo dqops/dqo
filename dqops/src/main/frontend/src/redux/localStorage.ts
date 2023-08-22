@@ -1,11 +1,11 @@
-import { INestTab, ISourceState } from "./reducers/source.reducer";
-import { CheckTypes } from "../shared/routes";
-import { ISensorState } from "./reducers/sensor.reducer";
-import { IIncidentsState } from "./reducers/incidents.reducer";
-import { IRootState } from "./reducers";
+import { INestTab, ISourceState } from './reducers/source.reducer';
+import { CheckTypes } from '../shared/routes';
+import { ISensorState } from './reducers/sensor.reducer';
+import { IIncidentsState } from './reducers/incidents.reducer';
+import { IRootState } from './reducers';
 
 const transformSourceState = (state: ISourceState): ISourceState => {
-  const newState = {...state};
+  const newState = { ...state };
 
   return {
     [CheckTypes.SOURCES]: {
@@ -88,13 +88,13 @@ export const saveState = (state: IRootState) => {
   try {
     const newState = {
       incidents: transformIncidentsState(state.incidents),
-      sensor: transformSensorState(state.sensor),
+      sensor: transformSensorState(state.definition),
       source: transformSourceState(state.source)
-    }
+    };
     const serializedState = JSON.stringify(newState);
 
-    localStorage.setItem('root', serializedState)
+    localStorage.setItem('root', serializedState);
   } catch (err) {
     // Ignore write error
   }
-}
+};
