@@ -1,10 +1,7 @@
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import { CheckSpecModel, ColumnBasicModel, RuleBasicModel, SensorBasicModel } from '../../api';
+import React, { useEffect, useMemo, useState } from 'react';
+import {RuleBasicModel, SensorBasicModel } from '../../api';
 import { RulesApi, SensorsApi } from '../../services/apiClient';
 import Select from '../../components/Select';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
 
 interface CreateCheckProps {
   create: boolean;
@@ -15,31 +12,20 @@ interface CreateCheckProps {
 }
 
 const CheckEditor = ({
-  create,
   onChangeRule,
   onChangeSensor,
   selectedRule,
   selectedSensor,
 }: CreateCheckProps) => {
-  const handleSubmit = () => {
-    //onConfirm("custom/" + nameOfCheck,
-    //{check_name: nameOfCheck, rule_name: selectedRule, sensor_name: selectedSensor, custom: true});
-  };
-
   const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
   const [allRules, setAllRules] = useState<RuleBasicModel[]>()
-  const [nameOfCheck, setNameOfCheck] = useState("")
 
-  
   const getAllSensors =async () => {
     await SensorsApi.getAllSensors().then((res) => setAllSensors(res.data))
   }
 
   const getAllRules =async () => {
     await RulesApi.getAllRules().then((res) => setAllRules(res.data))
-  }
-  const onChangeNameOfCheck = (e: ChangeEvent<HTMLInputElement>)=> {
-    setNameOfCheck(e.target.value)
   }
 
   useEffect(() => {

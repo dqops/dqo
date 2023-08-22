@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -9,10 +9,7 @@ import {
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
-  CheckContainerModel,
   CheckSpecFolderBasicModel,
-  CheckSpecModel,
-  QualityCategoryModel,
   RuleBasicFolderModel,
   RuleBasicModel,
   SensorBasicFolderModel,
@@ -28,20 +25,8 @@ import clsx from 'clsx';
 import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
-import { ChecksApi, RulesApi, SensorsApi, SettingsApi } from '../../services/apiClient';
 import { getdataQualityChecksFolderTree, toggledataQualityChecksFolderTree } from '../../redux/actions/dataQualityChecks';
 import DataQualityContextMenu from './DataQualityContextMenu';
-import Select, { Option } from '../Select';
-import CreateCheckDialog from './CreateChecksDialog';
-import CheckContextMenu from './CheckContextMenu';
-import Button from '../Button';
-
-export interface RuleSensorCheckName{
-  checkName: string,
-  rule: string, 
-  sensor: string
-  toUpdateVar: boolean
-}
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -57,65 +42,13 @@ const {checksFolderTree, dataQualityChecksState} = useSelector(
   )
   const [selected, setSelected] = useState('');
 
-  const [allSensors, setAllSensors] = useState<SensorBasicModel[]>()
-  const [allRules, setAllRules] = useState<RuleBasicModel[]>()
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedCheck, setSelectedCheck] = useState<RuleSensorCheckName>({checkName: "", sensor: "", rule: "", toUpdateVar: false})
-  const [toUpdate, setToUpdate] = useState(false)
-
-  const onChangeSelected = (obj: Partial<RuleSensorCheckName>) : void => {
-    setSelectedCheck({
-      ...selectedCheck, ...obj
-    })
-  }
-
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
     dispatch(getRuleFolderTree());
     dispatch(getdataQualityChecksFolderTree())
-    getAllSensors()
-    getAllRules()
   }, []);
 
-  const memoizedData = useMemo(() => {
-    return {
-      sensors: allSensors,
-      rules: allRules,
-    };
-  }, [allSensors, allRules]);
-
-const onChangeSensor = (value: string)=> {
-  setSelectedCheck({...selectedCheck, sensor: value})
-}
-
-const onChangeRule = (value: string)=> {
-  setSelectedCheck({...selectedCheck, rule: value})
-}
-
-const onChangeNameOfCheck = (value: string)=> {
-  setSelectedCheck({...selectedCheck, checkName: value})
-}
-  const getAllSensors =async () => {
-    await SensorsApi.getAllSensors().then((res) => setAllSensors(res.data))
-  }
-
-  const getAllRules =async () => {
-    await RulesApi.getAllRules().then((res) => setAllRules(res.data))
-  }
-
-  const createCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
-    await ChecksApi.createCheck(fullCheckName, body)
-  }
-
-  const updateCheck = async () => {
-    await ChecksApi.updateCheck("custom/" + selectedCheck.checkName,
-    {check_name: selectedCheck.checkName, rule_name: selectedCheck.rule, sensor_name: selectedCheck.sensor})
-  }
-
-  const deleteCheck =async (checkName: string) => {
-    await ChecksApi.deleteCheck(checkName)
-  }
 
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
@@ -168,8 +101,6 @@ const onChangeNameOfCheck = (value: string)=> {
       })
     );
   };
-
-  console.log(selectedCheck)
 
   const renderSensorFolderTree = (
     folder?: SensorBasicFolderModel,
@@ -422,11 +353,6 @@ const onChangeNameOfCheck = (value: string)=> {
         <div className="text-sm text-gray-700 font-semibold mb-2">Data Quality Checks: </div>
         {renderChecksFolderTree(checksFolderTree, [])}
       </div>
-      <CreateCheckDialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        onConfirm={createCheck}
-      />
     </div>
   );
 };

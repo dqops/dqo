@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import DefinitionLayout from "../../components/DefinitionLayout";
 import SvgIcon from "../../components/SvgIcon";
 import { useSelector } from "react-redux";
@@ -7,8 +7,6 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 // import { createRule, getRule, setUpdatedRule } from "../../redux/actions/sensor.actions";
 import { createCheck, updateCheck, deleteCheck } from "../../redux/actions/dataQualityChecks";
 import Tabs from "../../components/Tabs";
-
-import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
 import Input from "../../components/Input";
 import CheckEditor from "./CheckEditor";
 import Button from "../../components/Button";
@@ -21,7 +19,7 @@ const tabs = [
 ];
 
 export const SensorDetail = () => {
-  const { fullCheckName, ruleDetail, path, type,
+  const { fullCheckName, path, type,
   custom } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('check_editor');
