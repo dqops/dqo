@@ -22,20 +22,25 @@ import sourceReducer, { INestTab, ISourceState } from './source.reducer';
 import sensorReducer, { ISensorState } from './sensor.reducer';
 import ruleReducer, { IRuleState } from './rule.reducer';
 import incidentsReducer, { IIncidentsState } from './incidents.reducer';
-import dataQualityChecksReducer, { IdataQualityChecks } from './dataQualityChecks';
+import dataQualityChecksReducer, {
+  IdataQualityChecks
+} from './dataQualityChecks';
+import definitionReducer, { IDefinitionState } from './definition.reducer';
 export interface IRootState {
   job: IJobsState;
   dashboard: IDashboardState;
+  definition: IDefinitionState;
   source: ISourceState;
   sensor: ISensorState;
   rule: IRuleState;
-  dataQualityChecks: IdataQualityChecks
+  dataQualityChecks: IdataQualityChecks;
   incidents: IIncidentsState;
 }
 
 const rootReducer = combineReducers({
   job: jobReducer,
   dashboard: dashboardReducer,
+  definition: definitionReducer,
   source: sourceReducer,
   sensor: sensorReducer,
   rule: ruleReducer,
