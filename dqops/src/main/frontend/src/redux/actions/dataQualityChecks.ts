@@ -72,6 +72,29 @@ export const closeFirstLevelTab = (data: any) => ({
   data
 });
 
+export const getCheckRequest = () => ({
+  type: DATA_QUALITY_CHECKS_ACTION.GET_CHECK_DETAIL
+});
+
+export const getCheckSuccess = (data: CheckSpecModel) => ({
+  type: DATA_QUALITY_CHECKS_ACTION.GET_CHECK_DETAIL_SUCCESS,
+  data
+});
+
+export const getCheck = (checkName: string) => async (dispatch: Dispatch) => {
+  dispatch(getCheckRequest());
+  console.log(1);
+  try {
+    const res: AxiosResponse<CheckSpecModel> = await ChecksApi.getCheck(
+      checkName
+    );
+    console.log(res.data);
+    dispatch(getCheckSuccess(res.data));
+  } catch (err) {
+    // dispatch(getSensorFailed(err));
+  }
+};
+
 export const createCheck =
   (fullCheckName: string, body: CheckSpecModel) =>
   async (dispatch: Dispatch) => {

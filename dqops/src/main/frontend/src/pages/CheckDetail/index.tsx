@@ -12,28 +12,23 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   createCheck,
   updateCheck,
-  deleteCheck
+  deleteCheck,
+  getCheck
 } from '../../redux/actions/dataQualityChecks';
-import Tabs from '../../components/Tabs';
 import Input from '../../components/Input';
 import CheckEditor from './CheckEditor';
 import Button from '../../components/Button';
 import { ROUTES } from '../../shared/routes';
 import { useParams } from 'react-router';
-
-const tabs = [
-  {
-    label: 'Check Editor',
-    value: 'check_editor'
-  }
-];
+import { CheckSpecModel } from '../../api';
 
 export const SensorDetail = () => {
-  const { fullCheckName, path, type, custom } = useSelector(
+  const { fullCheckName, path, type, custom, checkDetail } = useSelector(
     getFirstLevelSensorState
   );
+
   const dispatch = useActionDispatch();
-  const [activeTab, setActiveTab] = useState('check_editor');
+
   const [checkName, setcheckName] = useState('');
   const [selectedSensor, setSelectedSensor] = useState('');
   const [selectedRule, setSelectedRule] = useState('');
@@ -62,7 +57,19 @@ export const SensorDetail = () => {
     } else if ((fullCheckName as string).length === 0) {
       dispatch(closeFirstLevelTab(path));
     }
+    dispatch(getCheck(fullCheckName));
   }, [fullCheckName, path, type, custom]);
+
+  useEffect(() => {
+    if (fullCheckName !== undefined && type !== 'create') {
+      dispatch(getCheck(fullCheckName));
+    }
+  }, [fullCheckName, type]);
+
+  useEffect(() => {
+    setSelectedRule((checkDetail as CheckSpecModel)?.rule_name ?? '');
+    setSelectedSensor((checkDetail as CheckSpecModel)?.sensor_name ?? '');
+  }, [checkDetail]);
 
   const onCreateUpdateCheck = async () => {
     const fullName = [...(path || []), checkName].join('/');
@@ -122,6 +129,9 @@ export const SensorDetail = () => {
       })
     );
   };
+
+  console.log(checkDetail);
+  console.log(fullCheckName);
 
   return (
     <DefinitionLayout>

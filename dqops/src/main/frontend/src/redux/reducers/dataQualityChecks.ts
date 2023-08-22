@@ -1,6 +1,7 @@
 import {
   CheckContainerModel,
   CheckSpecFolderBasicModel,
+  CheckSpecModel,
   QualityCategoryModel
 } from '../../api';
 import { DATA_QUALITY_CHECKS_ACTION } from '../types/dataQualityChecks.types';
@@ -13,13 +14,15 @@ export interface IdataQualityChecks {
   dataQualityChecksState: Record<string, boolean>;
   tabs: INestTab[];
   activeTab?: string;
+  checkDetail?: CheckSpecModel;
 }
 
 const initialState: IdataQualityChecks = {
   loading: false,
   error: null,
   dataQualityChecksState: {},
-  tabs: []
+  tabs: [],
+  checkDetail: {}
 };
 
 const setActiveTabState = (
@@ -128,6 +131,15 @@ const dataQualityChecksReducer = (state = initialState, action: any) => {
         activeTab
       };
     }
+    case DATA_QUALITY_CHECKS_ACTION.GET_CHECK_DETAIL_SUCCESS: {
+      console.log('here');
+      console.log(action.data);
+      return {
+        ...state,
+        checkDetail: action.data,
+        isUpdatedSensorDetail: false
+      };
+    }
     case DATA_QUALITY_CHECKS_ACTION.UPDATE_CHECK_DETAIL: {
       return setActiveTabState(state, action, {});
     }
@@ -135,6 +147,9 @@ const dataQualityChecksReducer = (state = initialState, action: any) => {
       return setActiveTabState(state, action, {});
     }
     case DATA_QUALITY_CHECKS_ACTION.DELETE_CHECK_DETAIL: {
+      return setActiveTabState(state, action, {});
+    }
+    case DATA_QUALITY_CHECKS_ACTION.GET_CHECK_DETAIL: {
       return setActiveTabState(state, action, {});
     }
   }
