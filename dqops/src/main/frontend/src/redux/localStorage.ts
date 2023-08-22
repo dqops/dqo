@@ -1,6 +1,6 @@
 import { INestTab, ISourceState } from './reducers/source.reducer';
 import { CheckTypes } from '../shared/routes';
-import { ISensorState } from './reducers/sensor.reducer';
+import { IDefinitionState } from './reducers/definition.reducer';
 import { IIncidentsState } from './reducers/incidents.reducer';
 import { IRootState } from './reducers';
 
@@ -47,9 +47,11 @@ const transformSourceState = (state: ISourceState): ISourceState => {
   };
 };
 
-const transformSensorState = (state: ISensorState): ISensorState => {
+const transformSensorState = (state: IDefinitionState): IDefinitionState => {
   return {
     sensorState: {},
+    ruleState: {},
+    dataQualityChecksState: {},
     tabs: state.tabs.map((item: INestTab) => ({
       url: item.url,
       value: item.value,
