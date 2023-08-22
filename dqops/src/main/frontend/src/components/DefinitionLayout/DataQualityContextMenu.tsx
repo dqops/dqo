@@ -6,11 +6,11 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import { CheckSpecModel, SensorBasicFolderModel } from "../../api";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { addFirstLevelTab } from "../../redux/actions/sensor.actions";
-import { ROUTES } from "../../shared/routes";
-import AddFolderDialog from "./AddFolderDialog";
+import { CheckSpecModel, SensorBasicFolderModel } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/dataQualityChecks';
+import { ROUTES } from '../../shared/routes';
+import AddFolderDialog from './AddFolderDialog';
 import { ChecksApi } from '../../services/apiClient';
 import CreateCheckDialog from './CreateChecksDialog';
 
@@ -22,9 +22,8 @@ interface RuleContextMenuProps {
 const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [createPopUp, setCreatePopUp] = useState(false)
+  const [createPopUp, setCreatePopUp] = useState(false);
   const dispatch = useActionDispatch();
-  
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
@@ -40,20 +39,24 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
     setOpen(false);
   };
 
-    const createCheck = async (fullCheckName: string, body ?: CheckSpecModel) => {
-    await ChecksApi.createCheck(fullCheckName, body)
-  }
+  const createCheck = async (fullCheckName: string, body?: CheckSpecModel) => {
+    await ChecksApi.createCheck(fullCheckName, body);
+  };
 
   const openAddNewCheck = () => {
-    dispatch(addFirstLevelTab({
-      url: ROUTES.CHECK_DETAIL([...path || [], "new_rule"].join("-")),
-      value: ROUTES.CHECK_DETAIL_VALUE([...path || [], "new_rule"].join("-")),
-      state: {
-        type: "create",
-        path
-      },
-      label: "New check"
-    }));
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.CHECK_DETAIL([...(path || []), 'new_check'].join('-')),
+        value: ROUTES.CHECK_DETAIL_VALUE(
+          [...(path || []), 'new_check'].join('-')
+        ),
+        state: {
+          type: 'create',
+          path
+        },
+        label: 'New check'
+      })
+    );
   };
 
   return (
@@ -85,12 +88,12 @@ const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
             path={path}
             folder={folder}
             type="rule"
-           />
-            <CreateCheckDialog
+          />
+          <CreateCheckDialog
             open={createPopUp}
             onClose={() => setCreatePopUp(false)}
             onConfirm={createCheck}
-            />
+          />
         </div>
       </PopoverContent>
     </Popover>
