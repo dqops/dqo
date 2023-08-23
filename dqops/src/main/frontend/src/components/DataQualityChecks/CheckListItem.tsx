@@ -540,7 +540,7 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-yellow-100">
+        <td className="py-2 px-4 bg-yellow-100 relative">
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.warning}
@@ -557,6 +557,7 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
