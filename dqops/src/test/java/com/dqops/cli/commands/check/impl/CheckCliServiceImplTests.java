@@ -33,6 +33,8 @@ import com.dqops.core.jobqueue.*;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindService;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceObjectMother;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -82,11 +84,13 @@ public class CheckCliServiceImplTests extends BaseTest {
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
 
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
+        RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
         JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
-        SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
+        SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(reflectionService,
+                sensorDefinitionFindService, ruleDefinitionFindService, schedulesUtilityService, similarCheckCache);
         AllChecksModelFactory allChecksModelFactory = new AllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToModelCheckMappingService);
 
         ModelToSpecCheckMappingService modelToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);

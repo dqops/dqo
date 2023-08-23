@@ -110,12 +110,14 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
      * @param checkTarget Check target (table or column).
      * @param checkType      Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
-     * @return Collection of custom checks defined at that level.
+     * @param category Check category.
+     * @return Collection of checks defined at that level.
      */
     public Collection<CheckDefinitionSpec> getChecksAtLevel(CheckTarget checkTarget,
                                                             CheckType checkType,
-                                                            CheckTimeScale checkTimeScale) {
-        String checkFolderPrefix = CheckDefinitionList.makeCheckFolderPrefix(checkTarget, checkType, checkTimeScale);
+                                                            CheckTimeScale checkTimeScale,
+                                                            String category) {
+        String checkFolderPrefix = CheckDefinitionList.makeCheckFolderPrefix(checkTarget, checkType, checkTimeScale, category);
         ArrayList<CheckDefinitionSpec> checksInFolder = new ArrayList<>();
 
         for (CheckDefinitionWrapper checkWrapper : this) {

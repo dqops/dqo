@@ -18,7 +18,8 @@ package com.dqops.services.check.mapping;
 import com.dqops.checks.*;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.ExecutionContext;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -73,9 +74,25 @@ public interface SpecToModelCheckMappingService {
      */
     List<FieldModel> createFieldsForSensorParameters(AbstractSensorParametersSpec parametersSpec);
 
+    /**
+     * Creates a model for a single data quality check.
+     * @param checkFieldInfo            Reflection info of the field in the parent object that stores the check specification field value.
+     * @param customCheckDefinitionSpec Check definition specification for custom checks. When it is given, the <code>checkFieldInfo</code> parameter is null and the check specification is used instead.
+     * @param checkSpec                 Check specification instance retrieved from the object.
+     * @param scheduleGroup             Scheduling group relevant to this check.
+     * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
+     * @param tableSpec                 Table specification with the configuration of the parent table.
+     * @param executionContext          Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param providerType              Provider type from the parent connection.
+     * @param checkTarget               Check target.
+     * @param checkType                 Check type (profiling, recurring, ...).
+     * @param checkTimeScale            Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
+     * @return Check model.
+     */
     CheckModel createCheckModel(FieldInfo checkFieldInfo,
+                                CheckDefinitionSpec customCheckDefinitionSpec,
                                 AbstractCheckSpec<?, ?, ?, ?> checkSpec,
-                                CheckRunMonitoringScheduleGroup scheduleGroup,
+                                CheckRunScheduleGroup scheduleGroup,
                                 CheckSearchFilters runChecksCategoryTemplate,
                                 TableSpec tableSpec,
                                 ExecutionContext executionContext,

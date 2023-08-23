@@ -18,7 +18,7 @@ package com.dqops.metadata.scheduling;
 /**
  * The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.
  */
-public enum CheckRunMonitoringScheduleGroup {
+public enum CheckRunScheduleGroup {
     /**
      * Schedule for profiling checks.
      */

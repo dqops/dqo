@@ -25,6 +25,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -75,11 +76,15 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
+        RuleDefinitionFindServiceImpl ruleDefinitionFindService = new RuleDefinitionFindServiceImpl();
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService,
+                sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
         this.sut = new SpecToModelCheckMappingServiceImpl(
                 reflectionService,
                 sensorDefinitionFindService,
+                ruleDefinitionFindService,
                 schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+                similarCheckCache);
         
         this.bigQueryConnectionSpec = BigQueryConnectionSpecObjectMother.create();
         this.tableSpec = TableSpecObjectMother.create("public", "tab1");

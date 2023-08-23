@@ -17,11 +17,10 @@ package com.dqops.checks.table.profiling;
 
 import com.dqops.checks.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -305,7 +304,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      */
     @Override
     @JsonIgnore
-    public CheckRunMonitoringScheduleGroup getSchedulingGroup() {
-        return CheckRunMonitoringScheduleGroup.profiling;
+    public CheckRunScheduleGroup getSchedulingGroup() {
+        return CheckRunScheduleGroup.profiling;
     }
 }

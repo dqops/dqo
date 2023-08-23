@@ -37,7 +37,7 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -344,7 +344,7 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunMonitoringScheduleGroup schedulingGroup) {
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -1915,7 +1915,7 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunMonitoringScheduleGroup schedulingGroup,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
                 @RequestBody Optional<MonitoringScheduleSpec> monitoringScheduleSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||

@@ -16,7 +16,7 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -56,23 +56,23 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
 
         if (schedules != null) {
             if (Objects.equals(schedules.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.profiling, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, connectionWrapper));
             }
 
             if (Objects.equals(schedules.getMonitoringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.monitoring_daily, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, connectionWrapper));
             }
 
             if (Objects.equals(schedules.getMonitoringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.monitoring_monthly, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, connectionWrapper));
             }
 
             if (Objects.equals(schedules.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.partitioned_daily, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, connectionWrapper));
             }
 
             if (Objects.equals(schedules.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.partitioned_monthly, connectionWrapper));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, connectionWrapper));
             }
         }
 
@@ -101,23 +101,23 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
 
         if (schedulesOverride != null) {
             if (Objects.equals(schedulesOverride.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.profiling, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, tableSpec));
             }
 
             if (Objects.equals(schedulesOverride.getMonitoringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.monitoring_daily, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, tableSpec));
             }
 
             if (Objects.equals(schedulesOverride.getMonitoringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.monitoring_monthly, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, tableSpec));
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.partitioned_daily, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, tableSpec));
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunMonitoringScheduleGroup.partitioned_monthly, tableSpec));
+                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, tableSpec));
             }
         }
 
