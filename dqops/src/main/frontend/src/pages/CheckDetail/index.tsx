@@ -21,6 +21,7 @@ import Button from '../../components/Button';
 import { ROUTES } from '../../shared/routes';
 import { useParams } from 'react-router';
 import { CheckSpecModel } from '../../api';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 export const SensorDetail = () => {
   const { fullCheckName, path, type, custom, checkDetail } = useSelector(
@@ -35,6 +36,7 @@ export const SensorDetail = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { check }: { check: string } = useParams();
 
@@ -99,6 +101,7 @@ export const SensorDetail = () => {
   };
 
   const onDeleteCheck = async () => {
+    closeFirstLevelTab(path);
     await dispatch(
       deleteCheck(
         fullCheckName
@@ -140,7 +143,7 @@ export const SensorDetail = () => {
               variant="outlined"
               label="Delete check"
               className="w-40 !h-10"
-              onClick={onDeleteCheck}
+              onClick={() => setDialogOpen(true)}
             />
           )}
           <Button
@@ -192,6 +195,12 @@ export const SensorDetail = () => {
         />
         {/* )} */}
       </div>
+      <ConfirmDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onConfirm={onDeleteCheck}
+        message={`Are you sure you want to delete the check ${fullCheckName}`}
+      />
     </DefinitionLayout>
   );
 };

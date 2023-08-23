@@ -18,14 +18,9 @@ import clsx from 'clsx';
 interface RuleContextMenuProps {
   folder?: SensorBasicFolderModel;
   path?: string[];
-  canCreateCheckHere: boolean;
 }
 
-const DataQualityContextMenu = ({
-  folder,
-  path,
-  canCreateCheckHere
-}: RuleContextMenuProps) => {
+const DataQualityContextMenu = ({ folder, path }: RuleContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createPopUp, setCreatePopUp] = useState(false);
@@ -36,9 +31,9 @@ const DataQualityContextMenu = ({
     e.stopPropagation();
   };
 
-  const openAddNewFolder = () => {
-    setIsOpen(true);
-  };
+  // const openAddNewFolder = () => {
+  //   setIsOpen(true);
+  // };
 
   const closeModal = () => {
     setIsOpen(false);
@@ -76,21 +71,14 @@ const DataQualityContextMenu = ({
         <div onClick={(e) => e.stopPropagation()}>
           <div
             className={clsx(
-              'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded',
-              canCreateCheckHere ? 'text-gray-900' : 'text-red-500'
+              'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded'
             )}
-            onClick={canCreateCheckHere ? openAddNewCheck : undefined}
+            onClick={openAddNewCheck}
           >
             Add new check
           </div>
         </div>
         <div onClick={(e) => e.stopPropagation()}>
-          <div
-            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-            onClick={openAddNewFolder}
-          >
-            Add new folder
-          </div>
           <AddFolderDialog
             open={isOpen}
             onClose={closeModal}

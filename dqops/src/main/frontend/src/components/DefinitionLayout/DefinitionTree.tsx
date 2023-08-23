@@ -258,15 +258,12 @@ export const DefinitionTree = () => {
                     className="w-4 h-4 min-w-4"
                   />
                   <div className="text-[13px] leading-1.5 truncate">{key}</div>
-                  <DataQualityContextMenu
-                    folder={folder?.folders?.[key] || {}}
-                    path={[...(path || []), key]}
-                    canCreateCheckHere={
-                      folder?.folders?.[key].folders === undefined
-                        ? true
-                        : false
-                    }
-                  />
+                  {folder?.folders?.[key].folders === undefined && (
+                    <DataQualityContextMenu
+                      folder={folder?.folders?.[key] || {}}
+                      path={[...(path || []), key]}
+                    />
+                  )}
                 </div>
                 {dataQualityChecksState[key] && (
                   <div className="ml-2">
