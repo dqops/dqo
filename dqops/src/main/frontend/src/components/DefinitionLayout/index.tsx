@@ -21,8 +21,6 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
     (state: IRootState) => state.definition
   );
 
-  console.log(pageTabs);
-
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
