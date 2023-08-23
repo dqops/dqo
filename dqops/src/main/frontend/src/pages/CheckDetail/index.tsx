@@ -131,12 +131,6 @@ export const SensorDetail = () => {
     );
   };
 
-  // console.log(checkDetail);
-  // console.log(fullCheckName);
-
-  console.log(selectedSensor);
-  console.log(selectedRule);
-
   return (
     <DefinitionLayout>
       <div className="relative">

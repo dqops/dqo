@@ -81,9 +81,6 @@ const CheckEditor = ({
     );
   };
 
-  // console.log(selectedRule);
-  // console.log(selectedSensor);
-
   return (
     <div>
       <div>
@@ -93,7 +90,7 @@ const CheckEditor = ({
               Sensor Name:
               <div className="flex items-center gap-x-4 pt-2">
                 <Select
-                  placeholder="Sensor"
+                  placeholder={selectedSensor}
                   options={
                     (memoizedData.sensors &&
                       memoizedData.sensors.map((x) => ({
@@ -120,7 +117,7 @@ const CheckEditor = ({
               Rule name:
               <div className="flex items-center gap-x-4 pt-2">
                 <Select
-                  placeholder="Rule"
+                  placeholder={selectedRule}
                   options={
                     (memoizedData.rules &&
                       memoizedData.rules.map((x) => ({
