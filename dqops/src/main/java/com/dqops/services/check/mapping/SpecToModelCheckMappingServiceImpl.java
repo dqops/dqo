@@ -438,6 +438,9 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         } else if (checkCategoryParentNode instanceof AbstractCheckCategorySpec) {
             AbstractCheckCategorySpec abstractCheckCategorySpec = (AbstractCheckCategorySpec)checkCategoryParentNode;
             customCheckSpecMap = abstractCheckCategorySpec.getCustomChecks();
+            if (customCheckSpecMap == null) {
+                customCheckSpecMap = new CustomCheckSpecMap();
+            }
         }
 
         if (customCheckSpecMap != null) {
@@ -969,10 +972,14 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         FieldModel fieldModel = new FieldModel();
         fieldModel.setDefinition(parameterDefinitionSpec);
 
-        // TODO: support the parameterDefinitionSpec.required using javax.validation annotations like @NotNull
-
         if (fieldValue != null) {
-            fieldModel.setValue(fieldModel);
+            try {
+                fieldModel.setValue(fieldValue);
+            }
+            catch (Exception ex) {
+                // invalid value, not matching the data type, clearing
+                log.warn("Cannot set the value " + fieldValue + " as a custom check model for the parameter " + parameterDefinitionSpec.getFieldName());
+            }
         }
 
         return fieldModel;
@@ -995,7 +1002,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         } else {
             classInfo.getFields().stream()
                     // skipping custom checks for the moment
-                    .filter(fieldInfo -> !fieldInfo.getClassFieldName().equals("customChecks"))
+                    .filter(fieldInfo -> !fieldInfo.getYamlFieldName().equals("custom_checks"))
                     .forEachOrdered(fields::add);
         }
 

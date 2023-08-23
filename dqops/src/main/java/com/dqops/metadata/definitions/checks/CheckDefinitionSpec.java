@@ -181,7 +181,7 @@ public class CheckDefinitionSpec extends AbstractSpec {
         if (hierarchyId == null) {
             return null;
         }
-        String fullCheckName = (String)hierarchyId.getLast();
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
         String[] checkNameElements = StringUtils.split(fullCheckName, '/');
 
         return checkNameElements[checkNameElements.length - 1];
@@ -197,7 +197,7 @@ public class CheckDefinitionSpec extends AbstractSpec {
         if (hierarchyId == null) {
             return null;
         }
-        String fullCheckName = (String)hierarchyId.getLast();
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
         String[] checkNameElements = StringUtils.split(fullCheckName, '/');
 
         return checkNameElements[checkNameElements.length - 2];
