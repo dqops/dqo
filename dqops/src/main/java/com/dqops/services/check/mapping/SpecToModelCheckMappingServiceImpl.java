@@ -52,8 +52,8 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -699,8 +699,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 case double_type:
                     fieldModel.setDoubleValue((Double) fieldValue);
                     break;
-                case instant_type:
-                    fieldModel.setDateTimeValue((Instant) fieldValue);
+                case datetime_type:
+                    fieldModel.setDatetimeValue((LocalDateTime) fieldValue);
                     break;
                 case column_name_type:
                     fieldModel.setColumnNameValue((String) fieldValue);
