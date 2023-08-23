@@ -20,6 +20,9 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.definition
   );
+
+  console.log(pageTabs);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();

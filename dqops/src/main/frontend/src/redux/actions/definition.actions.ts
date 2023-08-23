@@ -330,12 +330,10 @@ export const getCheckSuccess = (data: CheckSpecModel) => ({
 
 export const getCheck = (checkName: string) => async (dispatch: Dispatch) => {
   dispatch(getCheckRequest());
-  console.log(1);
   try {
     const res: AxiosResponse<CheckSpecModel> = await ChecksApi.getCheck(
       checkName
     );
-    console.log(res.data);
     dispatch(getCheckSuccess(res.data));
   } catch (err) {
     // dispatch(getSensorFailed(err));

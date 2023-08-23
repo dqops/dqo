@@ -90,7 +90,7 @@ export const saveState = (state: IRootState) => {
   try {
     const newState = {
       incidents: transformIncidentsState(state.incidents),
-      sensor: transformSensorState(state.definition),
+      definition: transformSensorState(state.definition),
       source: transformSourceState(state.source)
     };
     const serializedState = JSON.stringify(newState);

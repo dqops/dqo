@@ -346,13 +346,10 @@ const definitionReducer = (state = initialState, action: any) => {
     //     };
     //   }
     case DEFINITION_ACTION.GET_CHECK_DETAIL_SUCCESS: {
-      console.log('here');
-      console.log(action.data);
-      return {
-        ...state,
+      return setActiveTabState(state, action, {
         checkDetail: action.data,
         isUpdatedSensorDetail: false
-      };
+      });
     }
     case DEFINITION_ACTION.UPDATE_CHECK_DETAIL: {
       return setActiveTabState(state, action, {});
