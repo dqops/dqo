@@ -18,7 +18,7 @@ package com.dqops.services.check.mapping;
 import com.dqops.checks.*;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.ExecutionContext;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -92,7 +92,7 @@ public interface SpecToModelCheckMappingService {
     CheckModel createCheckModel(FieldInfo checkFieldInfo,
                                 CheckDefinitionSpec customCheckDefinitionSpec,
                                 AbstractCheckSpec<?, ?, ?, ?> checkSpec,
-                                CheckRunMonitoringScheduleGroup scheduleGroup,
+                                CheckRunScheduleGroup scheduleGroup,
                                 CheckSearchFilters runChecksCategoryTemplate,
                                 TableSpec tableSpec,
                                 ExecutionContext executionContext,

@@ -38,7 +38,7 @@ import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -466,7 +466,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
      */
     @Override
     @JsonIgnore
-    public CheckRunMonitoringScheduleGroup getSchedulingGroup() {
-        return CheckRunMonitoringScheduleGroup.monitoring_daily;
+    public CheckRunScheduleGroup getSchedulingGroup() {
+        return CheckRunScheduleGroup.monitoring_daily;
     }
 }

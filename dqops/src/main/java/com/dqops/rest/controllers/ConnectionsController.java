@@ -22,7 +22,7 @@ import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.sources.*;
@@ -176,7 +176,7 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<MonitoringScheduleSpec>> getConnectionSchedulingGroup(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunMonitoringScheduleGroup schedulingGroup) {
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -544,7 +544,7 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<?>> updateConnectionSchedulingGroup(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunMonitoringScheduleGroup schedulingGroup,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Monitoring schedule definition to store") @RequestBody Optional<MonitoringScheduleSpec> monitoringScheduleSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();

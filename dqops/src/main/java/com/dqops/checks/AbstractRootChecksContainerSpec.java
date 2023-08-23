@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildFieldEntry;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -110,7 +110,7 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
      * @return Monitoring schedule group (named schedule) that is used to schedule the checks in this root.
      */
     @JsonIgnore
-    public abstract CheckRunMonitoringScheduleGroup getSchedulingGroup();
+    public abstract CheckRunScheduleGroup getSchedulingGroup();
 
     /**
      * Returns the comparisons container for table comparison checks, indexed by the reference table configuration name.

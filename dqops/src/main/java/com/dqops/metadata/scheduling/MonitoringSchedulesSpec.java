@@ -93,7 +93,7 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
     public void setProfiling(MonitoringScheduleSpec profiling) {
         this.setDirtyIf(!Objects.equals(this.profiling, profiling));
         this.profiling = profiling;
-        propagateHierarchyIdToField(profiling, CheckRunMonitoringScheduleGroup.profiling.name());
+        propagateHierarchyIdToField(profiling, CheckRunScheduleGroup.profiling.name());
     }
 
     /**
@@ -111,7 +111,7 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
     public void setMonitoringDaily(MonitoringScheduleSpec monitoringDaily) {
         this.setDirtyIf(!Objects.equals(this.monitoringDaily, monitoringDaily));
         this.monitoringDaily = monitoringDaily;
-        propagateHierarchyIdToField(monitoringDaily, CheckRunMonitoringScheduleGroup.monitoring_daily.name());
+        propagateHierarchyIdToField(monitoringDaily, CheckRunScheduleGroup.monitoring_daily.name());
     }
 
     /**
@@ -129,7 +129,7 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
     public void setMonitoringMonthly(MonitoringScheduleSpec monitoringMonthly) {
         this.setDirtyIf(!Objects.equals(this.monitoringMonthly, monitoringMonthly));
         this.monitoringMonthly = monitoringMonthly;
-        propagateHierarchyIdToField(monitoringMonthly, CheckRunMonitoringScheduleGroup.monitoring_monthly.name());
+        propagateHierarchyIdToField(monitoringMonthly, CheckRunScheduleGroup.monitoring_monthly.name());
     }
 
     /**
@@ -147,7 +147,7 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
     public void setPartitionedDaily(MonitoringScheduleSpec partitionedDaily) {
         this.setDirtyIf(!Objects.equals(this.partitionedDaily, partitionedDaily));
         this.partitionedDaily = partitionedDaily;
-        propagateHierarchyIdToField(partitionedDaily, CheckRunMonitoringScheduleGroup.partitioned_daily.name());
+        propagateHierarchyIdToField(partitionedDaily, CheckRunScheduleGroup.partitioned_daily.name());
     }
 
     /**
@@ -165,7 +165,7 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
     public void setPartitionedMonthly(MonitoringScheduleSpec partitionedMonthly) {
         this.setDirtyIf(!Objects.equals(this.partitionedMonthly, partitionedMonthly));
         this.partitionedMonthly = partitionedMonthly;
-        propagateHierarchyIdToField(partitionedMonthly, CheckRunMonitoringScheduleGroup.partitioned_monthly.name());
+        propagateHierarchyIdToField(partitionedMonthly, CheckRunScheduleGroup.partitioned_monthly.name());
     }
 
     /**
@@ -195,7 +195,7 @@ public class MonitoringSchedulesSpec extends AbstractSpec {
      * @param checkSchedulingGroup Check run scheduling group.
      * @return Configuration of a monitoring schedule (cron expression) for the given scheduling group.
      */
-    public MonitoringScheduleSpec getScheduleForCheckSchedulingGroup(CheckRunMonitoringScheduleGroup checkSchedulingGroup) {
+    public MonitoringScheduleSpec getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup checkSchedulingGroup) {
         return (MonitoringScheduleSpec)this.getChild(checkSchedulingGroup.name());
     }
 

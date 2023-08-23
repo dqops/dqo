@@ -15,7 +15,7 @@
  */
 package com.dqops.services.check.mapping.models;
 
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,7 +38,7 @@ import java.util.function.Function;
 @ApiModel(value = "EffectiveScheduleModel", description = "Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.")
 public class EffectiveScheduleModel {
     @JsonPropertyDescription("Field value for a schedule group to which this schedule belongs.")
-    private CheckRunMonitoringScheduleGroup scheduleGroup;
+    private CheckRunScheduleGroup scheduleGroup;
 
     @JsonPropertyDescription("Field value for the level at which the schedule has been configured.")
     private EffectiveScheduleLevelModel scheduleLevel;
@@ -66,7 +66,7 @@ public class EffectiveScheduleModel {
      */
     public static EffectiveScheduleModel fromMonitoringScheduleSpec(
             MonitoringScheduleSpec scheduleSpec,
-            CheckRunMonitoringScheduleGroup scheduleGroup,
+            CheckRunScheduleGroup scheduleGroup,
             EffectiveScheduleLevelModel scheduleLevel,
             Function<MonitoringScheduleSpec, ZonedDateTime> specToZonedDateTimeConverter) {
         EffectiveScheduleModel effectiveScheduleModel = new EffectiveScheduleModel();

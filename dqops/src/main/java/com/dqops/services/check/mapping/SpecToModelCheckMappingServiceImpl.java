@@ -40,7 +40,7 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -362,7 +362,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      */
     protected QualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
                                                        Object checkCategoryParentNode,
-                                                       CheckRunMonitoringScheduleGroup scheduleGroup,
+                                                       CheckRunScheduleGroup scheduleGroup,
                                                        CheckSearchFilters runChecksTemplate,
                                                        TableSpec tableSpec,
                                                        ExecutionContext executionContext,
@@ -469,7 +469,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      */
     protected void addCustomChecksToCategoryModel(CustomCheckSpecMap customCheckSpecMap,
                                                   QualityCategoryModel targetCategoryModel,
-                                                  CheckRunMonitoringScheduleGroup scheduleGroup,
+                                                  CheckRunScheduleGroup scheduleGroup,
                                                   TableSpec tableSpec,
                                                   ExecutionContext executionContext,
                                                   ProviderType providerType,
@@ -537,7 +537,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     public CheckModel createCheckModel(FieldInfo checkFieldInfo,
                                        CheckDefinitionSpec customCheckDefinitionSpec,
                                        AbstractCheckSpec<?,?,?,?> checkSpec,
-                                       CheckRunMonitoringScheduleGroup scheduleGroup,
+                                       CheckRunScheduleGroup scheduleGroup,
                                        CheckSearchFilters runChecksCategoryTemplate,
                                        TableSpec tableSpec,
                                        ExecutionContext executionContext,
@@ -1022,7 +1022,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @return Effective model of the schedule configuration. If <code>scheduleSpec</code> is null or disabled, returns null.
      */
     protected EffectiveScheduleModel getEffectiveScheduleModel(MonitoringSchedulesSpec schedulesSpec,
-                                                               CheckRunMonitoringScheduleGroup scheduleGroup,
+                                                               CheckRunScheduleGroup scheduleGroup,
                                                                EffectiveScheduleLevelModel scheduleLevel) {
         MonitoringScheduleSpec scheduleSpec = schedulesSpec != null
                 ? schedulesSpec.getScheduleForCheckSchedulingGroup(scheduleGroup)

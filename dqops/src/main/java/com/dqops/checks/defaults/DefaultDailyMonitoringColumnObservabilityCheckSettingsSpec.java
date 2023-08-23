@@ -38,7 +38,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -441,7 +441,7 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
      */
     @Override
     @JsonIgnore
-    public CheckRunMonitoringScheduleGroup getSchedulingGroup() {
+    public CheckRunScheduleGroup getSchedulingGroup() {
         return null;
     }
 

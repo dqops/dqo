@@ -15,7 +15,7 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.scheduling.CheckRunMonitoringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 
 /**
@@ -25,7 +25,7 @@ import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 public class ScheduledChecksSearchFilters {
     private Boolean enabled = true;
     private MonitoringScheduleSpec schedule;
-    private CheckRunMonitoringScheduleGroup scheduleGroup;
+    private CheckRunScheduleGroup scheduleGroup;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -74,7 +74,7 @@ public class ScheduledChecksSearchFilters {
      * The schedule group could be null to return all checks or when the search root object is an abstract check that has an individual schedule.
      * @return Optional schedule group.
      */
-    public CheckRunMonitoringScheduleGroup getScheduleGroup() {
+    public CheckRunScheduleGroup getScheduleGroup() {
         return scheduleGroup;
     }
 
@@ -82,7 +82,7 @@ public class ScheduledChecksSearchFilters {
      * Sets a filter for a schedule group which identifies the expected type of checks.
      * @param scheduleGroup Schedule group.
      */
-    public void setScheduleGroup(CheckRunMonitoringScheduleGroup scheduleGroup) {
+    public void setScheduleGroup(CheckRunScheduleGroup scheduleGroup) {
         this.scheduleGroup = scheduleGroup;
     }
 }
