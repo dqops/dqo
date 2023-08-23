@@ -34,6 +34,7 @@ export interface SelectProps {
   addLabel?: string;
   prefix?: string;
   empty?: boolean;
+  disableIcon?: boolean
 }
 
 const Select = ({
@@ -51,7 +52,8 @@ const Select = ({
   onAdd,
   addLabel,
   prefix,
-  empty
+  empty,
+  disableIcon
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLButtonElement>(null);
@@ -114,10 +116,13 @@ const Select = ({
             ) : (
               placeholder
             )}
+            {disableIcon === true ? 
+            <></> : 
             <SvgIcon
               name="chevron-down"
               className="absolute transform top-1/2 -translate-y-2/4 right-2 w-4"
             />
+            }   
           </div>
         </MenuHandler>
         {!disabled && (

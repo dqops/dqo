@@ -359,6 +359,14 @@ export const DefinitionTree = () => {
         </div>
         {renderChecksFolderTree(checksFolderTree, [])}
       </div>
+      <div className='text-sm'>
+        <div className="text-sm text-gray-700 font-semibold mb-2 mt-4">
+        Default data quality checks:{' '}
+        </div>
+        <div >Advanced profiling</div>
+        <div>Daily recurring checks</div>
+        <div>Monthly recurring checks</div>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { RuleBasicModel, SensorBasicModel } from '../../api';
 import { RulesApi, SensorsApi } from '../../services/apiClient';
 import Select from '../../components/Select';
@@ -14,7 +14,9 @@ interface CreateCheckProps {
   selectedRule: string;
   selectedSensor: string;
   setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+  onChangeHelpText: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   custom: any;
+  helpText?: string;
 }
 
 const CheckEditor = ({
@@ -23,7 +25,9 @@ const CheckEditor = ({
   selectedRule,
   selectedSensor,
   setIsUpdated,
-  custom
+  custom,
+  helpText,
+  onChangeHelpText
 }: CreateCheckProps) => {
   const [allSensors, setAllSensors] = useState<SensorBasicModel[]>();
   const [allRules, setAllRules] = useState<RuleBasicModel[]>();
@@ -50,100 +54,149 @@ const CheckEditor = ({
   }, [allSensors, allRules]);
 
   const openSensorFirstLevelTab = (sensorName: string) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.SENSOR_DETAIL(sensorName ?? ''),
-        value: ROUTES.SENSOR_DETAIL_VALUE(sensorName ?? ''),
-        state: {
-          full_sensor_name:
-            memoizedData.sensors &&
-            memoizedData.sensors.find((x) => x.sensor_name === sensorName)
-              ?.full_sensor_name
-        },
-        label: sensorName
-      })
-    );
+    if (sensorName.includes('/')) {
+      const array = sensorName.split('/');
+      const newSensorName = array[array.length - 1];
+      dispatch(
+        addFirstLevelTab({
+          url: ROUTES.SENSOR_DETAIL(newSensorName ?? ''),
+          value: ROUTES.SENSOR_DETAIL_VALUE(newSensorName ?? ''),
+          state: {
+            full_sensor_name:
+              memoizedData.sensors &&
+              memoizedData.sensors.find((x) => x.sensor_name === newSensorName)
+                ?.full_sensor_name
+          },
+          label: newSensorName
+        })
+      );
+    } else {
+      dispatch(
+        addFirstLevelTab({
+          url: ROUTES.SENSOR_DETAIL(sensorName ?? ''),
+          value: ROUTES.SENSOR_DETAIL_VALUE(sensorName ?? ''),
+          state: {
+            full_sensor_name:
+              memoizedData.sensors &&
+              memoizedData.sensors.find((x) => x.sensor_name === sensorName)
+                ?.full_sensor_name
+          },
+          label: sensorName
+        })
+      );
+    }
   };
 
   const openRuleFirstLevelTab = (ruleName: string) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.RULE_DETAIL(ruleName ?? ''),
-        value: ROUTES.RULE_DETAIL_VALUE(ruleName ?? ''),
-        state: {
-          full_rule_name:
-            memoizedData.rules &&
-            memoizedData.rules.find((x) => x.rule_name === ruleName)
-              ?.full_rule_name
-        },
-        label: ruleName
-      })
-    );
+    if (ruleName.includes('/')) {
+      const array = ruleName.split('/');
+      const newRuleName = array[array.length - 1];
+      dispatch(
+        addFirstLevelTab({
+          url: ROUTES.RULE_DETAIL(newRuleName ?? ''),
+          value: ROUTES.RULE_DETAIL_VALUE(newRuleName ?? ''),
+          state: {
+            full_rule_name:
+              memoizedData.rules &&
+              memoizedData.rules.find((x) => x.rule_name === newRuleName)
+                ?.full_rule_name
+          },
+          label: newRuleName
+        })
+      );
+    } else {
+      dispatch(
+        addFirstLevelTab({
+          url: ROUTES.RULE_DETAIL(ruleName ?? ''),
+          value: ROUTES.RULE_DETAIL_VALUE(ruleName ?? ''),
+          state: {
+            full_rule_name:
+              memoizedData.rules &&
+              memoizedData.rules.find((x) => x.rule_name === ruleName)
+                ?.full_rule_name
+          },
+          label: ruleName
+        })
+      );
+    }
   };
 
   return (
     <div>
       <div>
-        {custom !== false ? (
-          <div className="pt-10 pb-2 px-8 z-1">
-            <div className="pb-4 gap-2">
-              Sensor Name:
-              <div className="flex items-center gap-x-4 pt-2">
-                <Select
-                  placeholder={selectedSensor}
-                  options={
-                    (memoizedData.sensors &&
-                      memoizedData.sensors.map((x) => ({
-                        label: x.sensor_name ?? '',
-                        value: x.sensor_name ?? ''
-                      }))) ||
-                    []
-                  }
-                  value={selectedSensor}
-                  onChange={(selected) => {
-                    onChangeSensor(selected), setIsUpdated(true);
-                  }}
-                  className="w-1/2"
-                />
-                <Button
-                  label="Show definition"
-                  color="primary"
-                  disabled={!selectedSensor}
-                  onClick={() => openSensorFirstLevelTab(selectedSensor)}
-                />
-              </div>
-            </div>
-            <div>
-              Rule name:
-              <div className="flex items-center gap-x-4 pt-2">
-                <Select
-                  placeholder={selectedRule}
-                  options={
-                    (memoizedData.rules &&
-                      memoizedData.rules.map((x) => ({
-                        label: x.rule_name ?? '',
-                        value: x.rule_name ?? ''
-                      }))) ||
-                    []
-                  }
-                  value={selectedRule}
-                  onChange={(selected) => {
-                    onChangeRule(selected), setIsUpdated(true);
-                  }}
-                  className="w-1/2"
-                />
-                <Button
-                  label="Show definition"
-                  color="primary"
-                  disabled={!selectedRule}
-                  onClick={() => openRuleFirstLevelTab(selectedRule)}
-                />
-              </div>
+        <div className="pt-10 pb-2 px-8 z-1">
+          <div className="pb-4 gap-2">
+            Sensor Name:
+            <div className="flex items-center gap-x-4 pt-2">
+              <Select
+                placeholder={selectedSensor}
+                options={
+                  (memoizedData.sensors &&
+                    memoizedData.sensors.map((x) => ({
+                      label: x.sensor_name ?? '',
+                      value: x.sensor_name ?? ''
+                    }))) ||
+                  []
+                }
+                disabled={custom === false ? true : false}
+                value={selectedSensor}
+                onChange={(selected) => {
+                  onChangeSensor(selected), setIsUpdated(true);
+                }}
+                disableIcon={custom === false ? true : false}
+                className="w-1/2"
+              />
+              <Button
+                label="Show definition"
+                color="primary"
+                disabled={!selectedSensor}
+                onClick={() => openSensorFirstLevelTab(selectedSensor)}
+              />
             </div>
           </div>
-        ) : (
-          <div>Default check editor screen</div>
-        )}
+          <div>
+            Rule name:
+            <div className="flex items-center gap-x-4 pt-2">
+              <Select
+                placeholder={selectedRule}
+                options={
+                  (memoizedData.rules &&
+                    memoizedData.rules.map((x) => ({
+                      label: x.rule_name ?? '',
+                      value: x.rule_name ?? ''
+                    }))) ||
+                  []
+                }
+                value={selectedRule}
+                disabled={custom === false ? true : false}
+                onChange={(selected) => {
+                  onChangeRule(selected), setIsUpdated(true);
+                }}
+                disableIcon={custom === false ? true : false}
+                className="w-1/2"
+              />
+              <Button
+                label="Show definition"
+                color="primary"
+                disabled={!selectedRule}
+                onClick={() => openRuleFirstLevelTab(selectedRule)}
+              />
+            </div>
+          </div>
+          <div className="mt-6">
+            Help text:
+            <div className="flex items-center gap-x-4 pt-2 w-1/2">
+              <textarea
+                value={helpText}
+                className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
+                onChange={(e) => {
+                  onChangeHelpText(e), setIsUpdated(true);
+                }}
+                disabled={custom === false ? true : false}
+              ></textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

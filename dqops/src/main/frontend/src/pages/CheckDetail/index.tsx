@@ -36,6 +36,7 @@ export const SensorDetail = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [helpText, setHelpText] = useState('');
 
   const onChangeSensor = (value: string) => {
     setSelectedSensor(value);
@@ -43,6 +44,10 @@ export const SensorDetail = () => {
 
   const onChangeRule = (value: string) => {
     setSelectedRule(value);
+  };
+
+  const onChangeHelpText = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setHelpText(e.target.value);
   };
 
   useEffect(() => {
@@ -68,6 +73,7 @@ export const SensorDetail = () => {
   useEffect(() => {
     setSelectedRule((checkDetail as CheckSpecModel)?.rule_name ?? '');
     setSelectedSensor((checkDetail as CheckSpecModel)?.sensor_name ?? '');
+    setHelpText((checkDetail as CheckSpecModel)?.help_text ?? '');
   }, [checkDetail]);
 
   const onCreateUpdateCheck = async () => {
@@ -89,7 +95,11 @@ export const SensorDetail = () => {
           fullCheckName
             ? fullCheckName
             : Array.from(path).join('/') + '/' + checkName,
-          { sensor_name: selectedSensor, rule_name: selectedRule }
+          {
+            sensor_name: selectedSensor,
+            rule_name: selectedRule,
+            help_text: helpText
+          }
         )
       );
       setIsUpdating(false);
@@ -129,6 +139,9 @@ export const SensorDetail = () => {
       })
     );
   };
+
+  console.log(checkDetail);
+  console.log(helpText);
 
   return (
     <DefinitionLayout>
@@ -189,6 +202,8 @@ export const SensorDetail = () => {
           selectedSensor={selectedSensor}
           setIsUpdated={setIsUpdated}
           custom={custom}
+          helpText={checkDetail?.help_text}
+          onChangeHelpText={onChangeHelpText}
         />
         {/* )} */}
       </div>
